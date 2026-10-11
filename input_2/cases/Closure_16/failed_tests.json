@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.IntegrationTest.testIssue772()",
+    "resolved_signature": "com.google.javascript.jscomp.IntegrationTest.testIssue772()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/IntegrationTest.java",
+    "begin_line": 1864,
+    "end_line": 1886,
+    "comment": "",
+    "snippet": "  public void testIssue772() throws Exception {\n    CompilerOptions options = createCompilerOptions();\n    options.closurePass = true;\n    options.checkTypes = true;\n    test(\n        options,\n        \"/** @const */ var a = {};\" +\n        \"/** @const */ a.b = {};\" +\n        \"/** @const */ a.b.c = {};\" +\n        \"goog.scope(function() {\" +\n        \"  var b = a.b;\" +\n        \"  var c = b.c;\" +\n        \"  /** @typedef {string} */\" +\n        \"  c.MyType;\" +\n        \"  /** @param {c.MyType} x The variable. */\" +\n        \"  c.myFunc = function(x) {};\" +\n        \"});\",\n        \"/** @const */ var a = {};\" +\n        \"/** @const */ a.b = {};\" +\n        \"/** @const */ a.b.c = {};\" +\n        \"a.b.c.MyType;\" +\n        \"a.b.c.myFunc = function(x) {};\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.ScopedAliasesTest.testIssue772()",
+    "resolved_signature": "com.google.javascript.jscomp.ScopedAliasesTest.testIssue772()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/ScopedAliasesTest.java",
+    "begin_line": 406,
+    "end_line": 412,
+    "comment": "",
+    "snippet": "  public void testIssue772() {\n    testTypes(\n        \"var b = a.b;\" +\n        \"var c = b.c;\",\n        \"/** @param {c.MyType} x */ types.actual;\" +\n        \"/** @param {a.b.c.MyType} x */ types.expected;\");\n  }"
+  }
+]

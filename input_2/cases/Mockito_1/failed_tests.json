@@ -1,0 +1,262 @@
+[
+  {
+    "requested_signature": "org.mockito.internal.invocation.InvocationMatcherTest.should_capture_arguments_when_args_count_does_NOT_match()",
+    "resolved_signature": "org.mockito.internal.invocation.InvocationMatcherTest.should_capture_arguments_when_args_count_does_NOT_match()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/internal/invocation/InvocationMatcherTest.java",
+    "begin_line": 157,
+    "end_line": 168,
+    "comment": "",
+    "snippet": "    @Test  // like using several time the captor in the vararg\n    public void should_capture_arguments_when_args_count_does_NOT_match() throws Exception {\n        //given\n        mock.varargs();\n        Invocation invocation = getLastInvocation();\n\n        //when\n        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new LocalizedMatcher(AnyVararg.ANY_VARARG)));\n\n        //then\n        invocationMatcher.captureArgumentsFrom(invocation);\n    }"
+  },
+  {
+    "requested_signature": "org.mockito.internal.util.reflection.FieldInitializerTest.can_instantiate_class_with_parameterized_constructor()",
+    "resolved_signature": "org.mockito.internal.util.reflection.FieldInitializerTest.can_instantiate_class_with_parameterized_constructor()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/internal/util/reflection/FieldInitializerTest.java",
+    "begin_line": 157,
+    "end_line": 165,
+    "comment": "",
+    "snippet": "    @Test\n    public void can_instantiate_class_with_parameterized_constructor() throws Exception {\n        ConstructorArgumentResolver resolver = given(mock(ConstructorArgumentResolver.class).resolveTypeInstances(any(Class[].class)))\n                        .willReturn(new Object[]{null}).getMock();\n\n        new FieldInitializer(this, field(\"noDefaultConstructor\"), resolver).initialize();\n\n        assertNotNull(noDefaultConstructor);\n    }"
+  },
+  {
+    "requested_signature": "org.mockito.internal.util.reflection.ParameterizedConstructorInstantiatorTest.should_report_failure_if_constructor_throws_exception()",
+    "resolved_signature": "org.mockito.internal.util.reflection.ParameterizedConstructorInstantiatorTest.should_report_failure_if_constructor_throws_exception()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/internal/util/reflection/ParameterizedConstructorInstantiatorTest.java",
+    "begin_line": 96,
+    "end_line": 106,
+    "comment": "",
+    "snippet": "    @Test\n    public void should_report_failure_if_constructor_throws_exception() throws Exception {\n        given(resolver.resolveTypeInstances(Matchers.<Class<?>[]>anyVararg())).willReturn(new Object[]{ null });\n\n        try {\n            new ParameterizedConstructorInstantiator(this, field(\"withThrowingConstructor\"), resolver).instantiate();\n            fail();\n        } catch (MockitoException e) {\n            assertThat(e.getMessage()).contains(\"constructor\").contains(\"raised an exception\");\n        }\n    }"
+  },
+  {
+    "requested_signature": "org.mockito.internal.util.reflection.ParameterizedConstructorInstantiatorTest.should_fail_if_an_argument_instance_type_do_not_match_wanted_type()",
+    "resolved_signature": "org.mockito.internal.util.reflection.ParameterizedConstructorInstantiatorTest.should_fail_if_an_argument_instance_type_do_not_match_wanted_type()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/internal/util/reflection/ParameterizedConstructorInstantiatorTest.java",
+    "begin_line": 82,
+    "end_line": 94,
+    "comment": "",
+    "snippet": "    @Test\n    public void should_fail_if_an_argument_instance_type_do_not_match_wanted_type() throws Exception {\n        Observer observer = mock(Observer.class);\n        Set wrongArg = mock(Set.class);\n        given(resolver.resolveTypeInstances(Matchers.<Class<?>[]>anyVararg())).willReturn(new Object[]{ observer, wrongArg });\n\n        try {\n            new ParameterizedConstructorInstantiator(this, field(\"withMultipleConstructor\"), resolver).instantiate();\n            fail();\n        } catch (MockitoException e) {\n            assertThat(e.getMessage()).contains(\"argResolver\").contains(\"incorrect types\");\n        }\n    }"
+  },
+  {
+    "requested_signature": "org.mockito.internal.util.reflection.ParameterizedConstructorInstantiatorTest.should_instantiate_type_with_vararg_constructor()",
+    "resolved_signature": "org.mockito.internal.util.reflection.ParameterizedConstructorInstantiatorTest.should_instantiate_type_with_vararg_constructor()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/internal/util/reflection/ParameterizedConstructorInstantiatorTest.java",
+    "begin_line": 108,
+    "end_line": 116,
+    "comment": "",
+    "snippet": "    @Test\n    public void should_instantiate_type_with_vararg_constructor() throws Exception {\n        Observer[] vararg = new Observer[] {  };\n        given(resolver.resolveTypeInstances(Matchers.<Class<?>[]>anyVararg())).willReturn(new Object[]{ \"\", vararg});\n\n        new ParameterizedConstructorInstantiator(this, field(\"withVarargConstructor\"), resolver).instantiate();\n\n        assertNotNull(withVarargConstructor);\n    }"
+  },
+  {
+    "requested_signature": "org.mockito.internal.util.reflection.ParameterizedConstructorInstantiatorTest.should_instantiate_type_if_resolver_provide_matching_types()",
+    "resolved_signature": "org.mockito.internal.util.reflection.ParameterizedConstructorInstantiatorTest.should_instantiate_type_if_resolver_provide_matching_types()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/internal/util/reflection/ParameterizedConstructorInstantiatorTest.java",
+    "begin_line": 69,
+    "end_line": 80,
+    "comment": "",
+    "snippet": "    @Test\n    public void should_instantiate_type_if_resolver_provide_matching_types() throws Exception {\n        Observer observer = mock(Observer.class);\n        Map map = mock(Map.class);\n        given(resolver.resolveTypeInstances(Matchers.<Class<?>[]>anyVararg())).willReturn(new Object[]{ observer, map });\n\n        new ParameterizedConstructorInstantiator(this, field(\"withMultipleConstructor\"), resolver).instantiate();\n\n        assertNotNull(withMultipleConstructor);\n        assertNotNull(withMultipleConstructor.observer);\n        assertNotNull(withMultipleConstructor.map);\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.basicapi.ResetTest.shouldRemoveAllStubbing()",
+    "resolved_signature": "org.mockitousage.basicapi.ResetTest.shouldRemoveAllStubbing()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/basicapi/ResetTest.java",
+    "begin_line": 45,
+    "end_line": 52,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldRemoveAllStubbing() throws Exception {\n        when(mock.objectReturningMethod(isA(Integer.class))).thenReturn(100);\n        when(mock.objectReturningMethod(200)).thenReturn(200);\n        reset(mock);\n        assertNull(mock.objectReturningMethod(200));\n        assertEquals(\"default behavior should return null\", null, mock.objectReturningMethod(\"blah\"));\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldVerifyWithNullVarArgArray()",
+    "resolved_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldVerifyWithNullVarArgArray()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/basicapi/UsingVarargsTest.java",
+    "begin_line": 125,
+    "end_line": 131,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldVerifyWithNullVarArgArray() {\n        Foo foo = Mockito.mock(Foo.class);\n        foo.varArgs((String[]) null);    \n        Mockito.verify(foo).varArgs((String[]) Mockito.anyObject());\n        Mockito.verify(foo).varArgs((String[]) null);\n    }  "
+  },
+  {
+    "requested_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldVerifyWithAnyObject()",
+    "resolved_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldVerifyWithAnyObject()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/basicapi/UsingVarargsTest.java",
+    "begin_line": 117,
+    "end_line": 123,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldVerifyWithAnyObject() {\n        Foo foo = Mockito.mock(Foo.class);\n        foo.varArgs(\"\");        \n        Mockito.verify(foo).varArgs((String[]) Mockito.anyObject());\n        Mockito.verify(foo).varArgs((String) Mockito.anyObject());\n    }   "
+  },
+  {
+    "requested_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldStubBooleanVarargs()",
+    "resolved_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldStubBooleanVarargs()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/basicapi/UsingVarargsTest.java",
+    "begin_line": 60,
+    "end_line": 73,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldStubBooleanVarargs() {\n        when(mock.withBooleanVarargs(1)).thenReturn(true);\n        when(mock.withBooleanVarargs(1, true, false)).thenReturn(true);\n        \n        assertEquals(true, mock.withBooleanVarargs(1));\n        assertEquals(false, mock.withBooleanVarargs(9999));\n        \n        assertEquals(true, mock.withBooleanVarargs(1, true, false));\n        assertEquals(false, mock.withBooleanVarargs(1, true, false, true));\n        assertEquals(false, mock.withBooleanVarargs(2, true, false));\n        assertEquals(false, mock.withBooleanVarargs(1, true));\n        assertEquals(false, mock.withBooleanVarargs(1, false, false));\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldMatchEasilyEmptyVararg()",
+    "resolved_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldMatchEasilyEmptyVararg()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/basicapi/UsingVarargsTest.java",
+    "begin_line": 167,
+    "end_line": 175,
+    "comment": "",
+    "snippet": "    @Test\n    //See bug #157\n    public void shouldMatchEasilyEmptyVararg() throws Exception {\n        //when\n        when(mock.foo(anyVararg())).thenReturn(-1);\n\n        //then\n        assertEquals(-1, mock.foo());\n    } "
+  },
+  {
+    "requested_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldVerifyBooleanVarargs()",
+    "resolved_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldVerifyBooleanVarargs()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/basicapi/UsingVarargsTest.java",
+    "begin_line": 103,
+    "end_line": 115,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldVerifyBooleanVarargs() {\n        mock.withBooleanVarargs(1);\n        mock.withBooleanVarargs(2, true, false, true);\n        mock.withBooleanVarargs(3, true, true, true);\n\n        verify(mock).withBooleanVarargs(1);\n        verify(mock).withBooleanVarargs(2, true, false, true);\n        try {\n            verify(mock).withBooleanVarargs(3, true, true, true, true);\n            fail();\n        } catch (ArgumentsAreDifferent e) {}\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldStubCorrectlyWhenMixedVarargsUsed()",
+    "resolved_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldStubCorrectlyWhenMixedVarargsUsed()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/basicapi/UsingVarargsTest.java",
+    "begin_line": 142,
+    "end_line": 154,
+    "comment": "",
+    "snippet": "    @SuppressWarnings(\"all\")\n    @Test\n    //See bug #31\n    public void shouldStubCorrectlyWhenMixedVarargsUsed() {\n        MixedVarargs mixedVarargs = mock(MixedVarargs.class);\n        when(mixedVarargs.doSomething(\"hello\", (String[])null)).thenReturn(\"hello\");\n        when(mixedVarargs.doSomething(\"goodbye\", (String[])null)).thenReturn(\"goodbye\");\n\n        String result = mixedVarargs.doSomething(\"hello\",(String[]) null);\n        assertEquals(\"hello\", result);\n        \n        verify(mixedVarargs).doSomething(\"hello\", (String[])null);\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldStubStringVarargs()",
+    "resolved_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldStubStringVarargs()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/basicapi/UsingVarargsTest.java",
+    "begin_line": 32,
+    "end_line": 58,
+    "comment": "",
+    "snippet": "    @SuppressWarnings(\"deprecation\")\n    @Test\n    public void shouldStubStringVarargs() {\n        when(mock.withStringVarargsReturningString(1)).thenReturn(\"1\");\n        when(mock.withStringVarargsReturningString(2, \"1\", \"2\", \"3\")).thenReturn(\"2\");\n        \n        RuntimeException expected = new RuntimeException();\n        stubVoid(mock).toThrow(expected).on().withStringVarargs(3, \"1\", \"2\", \"3\", \"4\");\n\n        assertEquals(\"1\", mock.withStringVarargsReturningString(1));\n        assertEquals(null, mock.withStringVarargsReturningString(2));\n        \n        assertEquals(\"2\", mock.withStringVarargsReturningString(2, \"1\", \"2\", \"3\"));\n        assertEquals(null, mock.withStringVarargsReturningString(2, \"1\", \"2\"));\n        assertEquals(null, mock.withStringVarargsReturningString(2, \"1\", \"2\", \"3\", \"4\"));\n        assertEquals(null, mock.withStringVarargsReturningString(2, \"1\", \"2\", \"9999\"));\n        \n        mock.withStringVarargs(3, \"1\", \"2\", \"3\", \"9999\");\n        mock.withStringVarargs(9999, \"1\", \"2\", \"3\", \"4\");\n        \n        try {\n            mock.withStringVarargs(3, \"1\", \"2\", \"3\", \"4\");\n            fail();\n        } catch (Exception e) {\n            assertEquals(expected, e);\n        }\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldStubCorrectlyWhenDoubleStringAndMixedVarargsUsed()",
+    "resolved_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldStubCorrectlyWhenDoubleStringAndMixedVarargsUsed()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/basicapi/UsingVarargsTest.java",
+    "begin_line": 156,
+    "end_line": 165,
+    "comment": "",
+    "snippet": "    @SuppressWarnings(\"all\")\n    @Test\n    public void shouldStubCorrectlyWhenDoubleStringAndMixedVarargsUsed() {\n        MixedVarargs mixedVarargs = mock(MixedVarargs.class);\n        when(mixedVarargs.doSomething(\"one\", \"two\", (String[])null)).thenReturn(\"hello\");\n        when(mixedVarargs.doSomething(\"1\", \"2\", (String[])null)).thenReturn(\"goodbye\");\n\n        String result = mixedVarargs.doSomething(\"one\", \"two\", (String[])null);\n        assertEquals(\"hello\", result);\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldVerifyStringVarargs()",
+    "resolved_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldVerifyStringVarargs()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/basicapi/UsingVarargsTest.java",
+    "begin_line": 75,
+    "end_line": 87,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldVerifyStringVarargs() {\n        mock.withStringVarargs(1);\n        mock.withStringVarargs(2, \"1\", \"2\", \"3\");\n        mock.withStringVarargs(3, \"1\", \"2\", \"3\", \"4\");\n\n        verify(mock).withStringVarargs(1);\n        verify(mock).withStringVarargs(2, \"1\", \"2\", \"3\");\n        try {\n            verify(mock).withStringVarargs(2, \"1\", \"2\", \"79\", \"4\");\n            fail();\n        } catch (ArgumentsAreDifferent e) {}\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldVerifyObjectVarargs()",
+    "resolved_signature": "org.mockitousage.basicapi.UsingVarargsTest.shouldVerifyObjectVarargs()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/basicapi/UsingVarargsTest.java",
+    "begin_line": 89,
+    "end_line": 101,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldVerifyObjectVarargs() {\n        mock.withObjectVarargs(1);\n        mock.withObjectVarargs(2, \"1\", new ArrayList<Object>(), new Integer(1));\n        mock.withObjectVarargs(3, new Integer(1));\n\n        verify(mock).withObjectVarargs(1);\n        verify(mock).withObjectVarargs(2, \"1\", new ArrayList<Object>(), new Integer(1));\n        try {\n            verifyNoMoreInteractions(mock);\n            fail();\n        } catch (NoInteractionsWanted e) {}\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.bugs.VarargsErrorWhenCallingRealMethodTest.shouldNotThrowAnyException()",
+    "resolved_signature": "org.mockitousage.bugs.VarargsErrorWhenCallingRealMethodTest.shouldNotThrowAnyException()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/bugs/VarargsErrorWhenCallingRealMethodTest.java",
+    "begin_line": 20,
+    "end_line": 27,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldNotThrowAnyException() throws Exception {\n        Foo foo = mock(Foo.class);\n\n        when(foo.blah(anyString(), anyString())).thenCallRealMethod();\n\n        assertEquals(1, foo.blah(\"foo\", \"bar\"));\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.bugs.varargs.VarargsAndAnyObjectPicksUpExtraInvocationsTest.shouldVerifyCorrectlyWithAnyVarargs()",
+    "resolved_signature": "org.mockitousage.bugs.varargs.VarargsAndAnyObjectPicksUpExtraInvocationsTest.shouldVerifyCorrectlyWithAnyVarargs()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/bugs/varargs/VarargsAndAnyObjectPicksUpExtraInvocationsTest.java",
+    "begin_line": 23,
+    "end_line": 31,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldVerifyCorrectlyWithAnyVarargs() {\n        //when\n        table.newRow(\"qux\", \"foo\", \"bar\", \"baz\");\n        table.newRow(\"abc\", \"def\");\n        \n        //then\n        verify(table, times(2)).newRow(anyString(), (String[]) anyVararg());\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.bugs.varargs.VarargsAndAnyObjectPicksUpExtraInvocationsTest.shouldVerifyCorrectlyNumberOfInvocationsUsingAnyVarargAndEqualArgument()",
+    "resolved_signature": "org.mockitousage.bugs.varargs.VarargsAndAnyObjectPicksUpExtraInvocationsTest.shouldVerifyCorrectlyNumberOfInvocationsUsingAnyVarargAndEqualArgument()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/bugs/varargs/VarargsAndAnyObjectPicksUpExtraInvocationsTest.java",
+    "begin_line": 33,
+    "end_line": 41,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldVerifyCorrectlyNumberOfInvocationsUsingAnyVarargAndEqualArgument() {\n        //when\n        table.newRow(\"x\", \"foo\", \"bar\", \"baz\");\n        table.newRow(\"x\", \"def\");\n\n        //then\n        verify(table, times(2)).newRow(eq(\"x\"), (String[]) anyVararg());\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.bugs.varargs.VarargsNotPlayingWithAnyObjectTest.shouldStubUsingAnyVarargs()",
+    "resolved_signature": "org.mockitousage.bugs.varargs.VarargsNotPlayingWithAnyObjectTest.shouldStubUsingAnyVarargs()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/bugs/varargs/VarargsNotPlayingWithAnyObjectTest.java",
+    "begin_line": 49,
+    "end_line": 54,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldStubUsingAnyVarargs() {\n        when(mock.run((String[]) anyVararg())).thenReturn(\"foo\");\n        \n        assertEquals(\"foo\", mock.run(\"a\", \"b\"));\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.matchers.VerificationAndStubbingUsingMatchersTest.shouldVerifyUsingMatchers()",
+    "resolved_signature": "org.mockitousage.matchers.VerificationAndStubbingUsingMatchersTest.shouldVerifyUsingMatchers()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/matchers/VerificationAndStubbingUsingMatchersTest.java",
+    "begin_line": 50,
+    "end_line": 79,
+    "comment": "",
+    "snippet": "    @SuppressWarnings(\"deprecation\")\n    @Test\n    public void shouldVerifyUsingMatchers() {\n        stubVoid(one).toThrow(new RuntimeException()).on().oneArg(true);\n        when(three.varargsObject(5, \"first arg\", \"second arg\")).thenReturn(\"stubbed\");\n\n        try {\n            one.oneArg(true);\n            fail();\n        } catch (RuntimeException e) {}\n\n        one.simpleMethod(100);\n        two.simpleMethod(\"test Mockito\");\n        three.varargsObject(10, \"first arg\", \"second arg\");\n        \n        assertEquals(\"stubbed\", three.varargsObject(5, \"first arg\", \"second arg\"));\n\n        verify(one).oneArg(eq(true));\n        verify(one).simpleMethod(anyInt());\n        verify(two).simpleMethod(startsWith(\"test\"));\n        verify(three).varargsObject(5, \"first arg\", \"second arg\");\n        verify(three).varargsObject(eq(10), eq(\"first arg\"), startsWith(\"second\"));\n        \n        verifyNoMoreInteractions(one, two, three);\n        \n        try {\n            verify(three).varargsObject(eq(10), eq(\"first arg\"), startsWith(\"third\"));\n            fail();\n        } catch (WantedButNotInvoked e) {}\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.stubbing.BasicStubbingTest.test_stub_only_not_verifiable()",
+    "resolved_signature": "org.mockitousage.stubbing.BasicStubbingTest.test_stub_only_not_verifiable()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/stubbing/BasicStubbingTest.java",
+    "begin_line": 99,
+    "end_line": 114,
+    "comment": "",
+    "snippet": "    @Test\n    public void test_stub_only_not_verifiable() throws Exception {\n        IMethods localMock = mock(IMethods.class, withSettings().stubOnly());\n\n        when(localMock.objectReturningMethod(isA(Integer.class))).thenReturn(100);\n        when(localMock.objectReturningMethod(200)).thenReturn(200);\n\n        assertEquals(200, localMock.objectReturningMethod(200));\n        assertEquals(100, localMock.objectReturningMethod(666));\n        assertEquals(\"default behavior should return null\", null, localMock.objectReturningMethod(\"blah\"));\n\n        try {\n            verify(localMock, atLeastOnce()).objectReturningMethod(eq(200));\n            fail();\n        } catch (CannotVerifyStubOnlyMock e) {}\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.stubbing.BasicStubbingTest.should_evaluate_latest_stubbing_first()",
+    "resolved_signature": "org.mockitousage.stubbing.BasicStubbingTest.should_evaluate_latest_stubbing_first()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/stubbing/BasicStubbingTest.java",
+    "begin_line": 28,
+    "end_line": 36,
+    "comment": "",
+    "snippet": "    @Test\n    public void should_evaluate_latest_stubbing_first() throws Exception {\n        when(mock.objectReturningMethod(isA(Integer.class))).thenReturn(100);\n        when(mock.objectReturningMethod(200)).thenReturn(200);\n        \n        assertEquals(200, mock.objectReturningMethod(200));\n        assertEquals(100, mock.objectReturningMethod(666));\n        assertEquals(\"default behavior should return null\", null, mock.objectReturningMethod(\"blah\"));\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.stubbing.DeprecatedStubbingTest.shouldEvaluateLatestStubbingFirst()",
+    "resolved_signature": "org.mockitousage.stubbing.DeprecatedStubbingTest.shouldEvaluateLatestStubbingFirst()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/stubbing/DeprecatedStubbingTest.java",
+    "begin_line": 28,
+    "end_line": 36,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldEvaluateLatestStubbingFirst() throws Exception {\n        stub(mock.objectReturningMethod(isA(Integer.class))).toReturn(100);\n        stub(mock.objectReturningMethod(200)).toReturn(200);\n        \n        assertEquals(200, mock.objectReturningMethod(200));\n        assertEquals(100, mock.objectReturningMethod(666));\n        assertEquals(\"default behavior should return null\", null, mock.objectReturningMethod(\"blah\"));\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.verification.VerificationInOrderMixedWithOrdiraryVerificationTest.shouldUseEqualsToVerifyMethodVarargs()",
+    "resolved_signature": "org.mockitousage.verification.VerificationInOrderMixedWithOrdiraryVerificationTest.shouldUseEqualsToVerifyMethodVarargs()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/verification/VerificationInOrderMixedWithOrdiraryVerificationTest.java",
+    "begin_line": 145,
+    "end_line": 162,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldUseEqualsToVerifyMethodVarargs() {\n        mockOne = mock(IMethods.class);\n        \n        String textOne = \"test\";\n        String textTwo = new String(textOne);\n        \n        assertEquals(textOne, textTwo);\n        assertNotSame(textOne, textTwo);\n        \n        mockOne.varargsObject(1, textOne, textOne);\n        mockOne.varargsObject(1, textTwo, textTwo);\n        \n        verify(mockOne, times(2)).varargsObject(1, textOne, textOne);\n        \n        inOrder = inOrder(mockOne);\n        inOrder.verify(mockOne, times(2)).varargsObject(1, textOne, textOne);\n    } "
+  }
+]

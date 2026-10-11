@@ -1,0 +1,2067 @@
+===== M0001 =====
+Signature: org.apache.commons.math.ode.nonstiff.DormandPrince853Integrator.DormandPrince853Integrator(double,double,double,double)
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/DormandPrince853Integrator.java
+Original range: 213-219
+Documentation:
+/** Simple constructor.
+   * Build an eighth order Dormand-Prince integrator with the given step bounds
+   * @param minStep minimal step (must be positive even for backward
+   * integration), the last step can be smaller than this
+   * @param maxStep maximal step (must be positive even for backward
+   * integration)
+   * @param scalAbsoluteTolerance allowed absolute error
+   * @param scalRelativeTolerance allowed relative error
+   */
+Method code:
+213 |   public DormandPrince853Integrator(final double minStep, final double maxStep,
+214 |                                     final double scalAbsoluteTolerance,
+215 |                                     final double scalRelativeTolerance) {
+216 |     super(METHOD_NAME, true, STATIC_C, STATIC_A, STATIC_B,
+217 |           new DormandPrince853StepInterpolator(),
+218 |           minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+219 |   }
+
+===== M0002 =====
+Signature: org.apache.commons.math.ConvergingAlgorithmImpl.setAbsoluteAccuracy(double)
+Source: src/main/java/org/apache/commons/math/ConvergingAlgorithmImpl.java
+Original range: 77-79
+Documentation:
+/** {@inheritDoc} */
+Method code:
+77 |     public void setAbsoluteAccuracy(double accuracy) {
+78 |         absoluteAccuracy = accuracy;
+79 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverImpl.clearResult()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverImpl.java
+Original range: 164-167
+Documentation:
+/**
+     * Convenience function for implementations.
+     */
+Method code:
+164 |     protected final void clearResult() {
+165 |         this.iterationCount = 0;
+166 |         this.resultComputed = false;
+167 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.ode.events.CombinedEventsManager.stepAccepted(double,double[])
+Source: src/main/java/org/apache/commons/math/ode/events/CombinedEventsManager.java
+Original range: 199-208
+Documentation:
+/** Inform the event handlers that the step has been accepted
+     * by the integrator.
+     * @param t value of the independent <i>time</i> variable at the
+     * end of the step
+     * @param y array containing the current value of the state vector
+     * at the end of the step
+     * @exception IntegratorException if the value of one of the
+     * events states cannot be evaluated
+     */
+Method code:
+199 |     public void stepAccepted(final double t, final double[] y)
+200 |     throws IntegratorException {
+201 |         try {
+202 |             for (EventState state : states) {
+203 |                 state.stepAccepted(t, y);
+204 |             }
+205 |         } catch (EventException se) {
+206 |             throw new IntegratorException(se);
+207 |         }
+208 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.ode.AbstractIntegrator.EndTimeChecker.g(double,double[])
+Source: src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+Original range: 266-268
+Documentation:
+/** {@inheritDoc} */
+Method code:
+266 |         public double g(double t, double[] y) {
+267 |             return t - endTime;
+268 |         }
+
+===== M0006 =====
+Signature: org.apache.commons.math.ode.nonstiff.DormandPrince853Integrator.estimateError(double[][],double[],double[],double)
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/DormandPrince853Integrator.java
+Original range: 245-279
+Documentation:
+/** {@inheritDoc} */
+Method code:
+245 |   @Override
+246 |   protected double estimateError(final double[][] yDotK,
+247 |                                  final double[] y0, final double[] y1,
+248 |                                  final double h) {
+249 |     double error1 = 0;
+250 |     double error2 = 0;
+251 | 
+252 |     for (int j = 0; j < y0.length; ++j) {
+253 |       final double errSum1 = E1_01 * yDotK[0][j]  + E1_06 * yDotK[5][j] +
+254 |                              E1_07 * yDotK[6][j]  + E1_08 * yDotK[7][j] +
+255 |                              E1_09 * yDotK[8][j]  + E1_10 * yDotK[9][j] +
+256 |                              E1_11 * yDotK[10][j] + E1_12 * yDotK[11][j];
+257 |       final double errSum2 = E2_01 * yDotK[0][j]  + E2_06 * yDotK[5][j] +
+258 |                              E2_07 * yDotK[6][j]  + E2_08 * yDotK[7][j] +
+259 |                              E2_09 * yDotK[8][j]  + E2_10 * yDotK[9][j] +
+260 |                              E2_11 * yDotK[10][j] + E2_12 * yDotK[11][j];
+261 | 
+262 |       final double yScale = Math.max(Math.abs(y0[j]), Math.abs(y1[j]));
+263 |       final double tol = (vecAbsoluteTolerance == null) ?
+264 |                          (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
+265 |                          (vecAbsoluteTolerance[j] + vecRelativeTolerance[j] * yScale);
+266 |       final double ratio1  = errSum1 / tol;
+267 |       error1        += ratio1 * ratio1;
+268 |       final double ratio2  = errSum2 / tol;
+269 |       error2        += ratio2 * ratio2;
+270 |     }
+271 | 
+272 |     double den = error1 + 0.01 * error2;
+273 |     if (den <= 0.0) {
+274 |       den = 1.0;
+275 |     }
+276 | 
+277 |     return Math.abs(h) * error1 / Math.sqrt(y0.length * den);
+278 | 
+279 |   }
+
+===== M0007 =====
+Signature: org.apache.commons.math.ode.events.EventState.anonymous_L214.value(double)
+Source: src/main/java/org/apache/commons/math/ode/events/EventState.java
+Original range: 215-224
+Documentation:
+
+Method code:
+215 |                         public double value(final double t) throws FunctionEvaluationException {
+216 |                             try {
+217 |                                 interpolator.setInterpolatedTime(t);
+218 |                                 return handler.g(t, interpolator.getInterpolatedState());
+219 |                             } catch (DerivativeException e) {
+220 |                                 throw new FunctionEvaluationException(e, t);
+221 |                             } catch (EventException e) {
+222 |                                 throw new FunctionEvaluationException(e, t);
+223 |                             }
+224 |                         }
+
+===== M0008 =====
+Signature: org.apache.commons.math.ode.events.EventState.evaluateStep(StepInterpolator)
+Source: src/main/java/org/apache/commons/math/ode/events/EventState.java
+Original range: 167-274
+Documentation:
+/** Evaluate the impact of the proposed step on the event handler.
+     * @param interpolator step interpolator for the proposed step
+     * @return true if the event handler triggers an event before
+     * the end of the proposed step (this implies the step should be
+     * rejected)
+     * @exception DerivativeException if the interpolator fails to
+     * compute the switching function somewhere within the step
+     * @exception EventException if the switching function
+     * cannot be evaluated
+     * @exception ConvergenceException if an event cannot be located
+     */
+Method code:
+167 |     public boolean evaluateStep(final StepInterpolator interpolator)
+168 |         throws DerivativeException, EventException, ConvergenceException {
+169 | 
+170 |         try {
+171 | 
+172 |             forward = interpolator.isForward();
+173 |             final double t1 = interpolator.getCurrentTime();
+174 |             final int    n  = Math.max(1, (int) Math.ceil(Math.abs(t1 - t0) / maxCheckInterval));
+175 |             final double h  = (t1 - t0) / n;
+176 | 
+177 |             double ta = t0;
+178 |             double ga = g0;
+179 |             double tb = t0 + (interpolator.isForward() ? convergence : -convergence);
+180 |             for (int i = 0; i < n; ++i) {
+181 | 
+182 |                 // evaluate handler value at the end of the substep
+183 |                 tb += h;
+184 |                 interpolator.setInterpolatedTime(tb);
+185 |                 final double gb = handler.g(tb, interpolator.getInterpolatedState());
+186 | 
+187 |                 // check events occurrence
+188 |                 if (g0Positive ^ (gb >= 0)) {
+189 |                     // there is a sign change: an event is expected during this step
+190 | 
+191 |                     if (ga * gb > 0) {
+192 |                         // this is a corner case:
+193 |                         // - there was an event near ta,
+194 |                         // - there is another event between ta and tb
+195 |                         // - when ta was computed, convergence was reached on the "wrong side" of the interval
+196 |                         // this implies that the real sign of ga is the same as gb, so we need to slightly
+197 |                         // shift ta to make sure ga and gb get opposite signs and the solver won't complain
+198 |                         // about bracketing
+199 |                         final double epsilon = (forward ? 0.25 : -0.25) * convergence;
+200 |                         for (int k = 0; (k < 4) && (ga * gb > 0); ++k) {
+201 |                             ta += epsilon;
+202 |                             interpolator.setInterpolatedTime(ta);
+203 |                             ga = handler.g(ta, interpolator.getInterpolatedState());
+204 |                         }
+205 |                         if (ga * gb > 0) {
+206 |                             // this should never happen
+207 |                             throw MathRuntimeException.createInternalError(null);
+208 |                         }
+209 |                     }
+210 | 
+211 |                     // variation direction, with respect to the integration direction
+212 |                     increasing = gb >= ga;
+213 | 
+214 |                     final UnivariateRealFunction f = new UnivariateRealFunction() {
+215 |                         public double value(final double t) throws FunctionEvaluationException {
+216 |                             try {
+217 |                                 interpolator.setInterpolatedTime(t);
+218 |                                 return handler.g(t, interpolator.getInterpolatedState());
+219 |                             } catch (DerivativeException e) {
+220 |                                 throw new FunctionEvaluationException(e, t);
+221 |                             } catch (EventException e) {
+222 |                                 throw new FunctionEvaluationException(e, t);
+223 |                             }
+224 |                         }
+225 |                     };
+226 |                     final BrentSolver solver = new BrentSolver();
+227 |                     solver.setAbsoluteAccuracy(convergence);
+228 |                     solver.setMaximalIterationCount(maxIterationCount);
+229 |                     final double root = (ta <= tb) ? solver.solve(f, ta, tb) : solver.solve(f, tb, ta);
+230 |                     if ((Math.abs(root - ta) <= convergence) &&
+231 |                          (Math.abs(root - previousEventTime) <= convergence)) {
+232 |                         // we have either found nothing or found (again ?) a past event, we simply ignore it
+233 |                         ta = tb;
+234 |                         ga = gb;
+235 |                     } else if (Double.isNaN(previousEventTime) ||
+236 |                                (Math.abs(previousEventTime - root) > convergence)) {
+237 |                         pendingEventTime = root;
+238 |                         if (pendingEvent && (Math.abs(t1 - pendingEventTime) <= convergence)) {
+239 |                             // we were already waiting for this event which was
+240 |                             // found during a previous call for a step that was
+241 |                             // rejected, this step must now be accepted since it
+242 |                             // properly ends exactly at the event occurrence
+243 |                             return false;
+244 |                         }
+245 |                         // either we were not waiting for the event or it has
+246 |                         // moved in such a way the step cannot be accepted
+247 |                         pendingEvent = true;
+248 |                         return true;
+249 |                     }
+250 | 
+251 |                 } else {
+252 |                     // no sign change: there is no event for now
+253 |                     ta = tb;
+254 |                     ga = gb;
+255 |                 }
+256 | 
+257 |             }
+258 | 
+259 |             // no event during the whole step
+260 |             pendingEvent     = false;
+261 |             pendingEventTime = Double.NaN;
+262 |             return false;
+263 | 
+264 |         } catch (FunctionEvaluationException e) {
+265 |             final Throwable cause = e.getCause();
+266 |             if ((cause != null) && (cause instanceof DerivativeException)) {
+267 |                 throw (DerivativeException) cause;
+268 |             } else if ((cause != null) && (cause instanceof EventException)) {
+269 |                 throw (EventException) cause;
+270 |             }
+271 |             throw new EventException(e);
+272 |         }
+273 | 
+274 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.ode.events.EventState.getEventTime()
+Source: src/main/java/org/apache/commons/math/ode/events/EventState.java
+Original range: 281-283
+Documentation:
+/** Get the occurrence time of the event triggered in the current
+     * step.
+     * @return occurrence time of the event triggered in the current
+     * step.
+     */
+Method code:
+281 |     public double getEventTime() {
+282 |         return pendingEventTime;
+283 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.ode.nonstiff.EmbeddedRungeKuttaIntegrator.setMaxGrowth(double)
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/EmbeddedRungeKuttaIntegrator.java
+Original range: 392-394
+Documentation:
+/** Set the maximal growth factor for stepsize control.
+   * @param maxGrowth maximal growth factor
+   */
+Method code:
+392 |   public void setMaxGrowth(final double maxGrowth) {
+393 |     this.maxGrowth = maxGrowth;
+394 |   }
+
+===== M0011 =====
+Signature: org.apache.commons.math.ode.nonstiff.AdaptiveStepsizeIntegrator.filterStep(double,boolean,boolean)
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/AdaptiveStepsizeIntegrator.java
+Original range: 277-299
+Documentation:
+/** Filter the integration step.
+   * @param h signed step
+   * @param forward forward integration indicator
+   * @param acceptSmall if true, steps smaller than the minimal value
+   * are silently increased up to this value, if false such small
+   * steps generate an exception
+   * @return a bounded integration step (h if no bound is reach, or a bounded value)
+   * @exception IntegratorException if the step is too small and acceptSmall is false
+   */
+Method code:
+277 |   protected double filterStep(final double h, final boolean forward, final boolean acceptSmall)
+278 |     throws IntegratorException {
+279 | 
+280 |       double filteredH = h;
+281 |       if (Math.abs(h) < minStep) {
+282 |           if (acceptSmall) {
+283 |               filteredH = forward ? minStep : -minStep;
+284 |           } else {
+285 |               throw new IntegratorException(
+286 |                       "minimal step size ({0,number,0.00E00}) reached, integration needs {1,number,0.00E00}",
+287 |                       minStep, Math.abs(h));
+288 |           }
+289 |       }
+290 | 
+291 |       if (filteredH > maxStep) {
+292 |           filteredH = maxStep;
+293 |       } else if (filteredH < -maxStep) {
+294 |           filteredH = -maxStep;
+295 |       }
+296 | 
+297 |       return filteredH;
+298 | 
+299 |   }
+
+===== M0012 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverImpl.verifyInterval(double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverImpl.java
+Original range: 207-213
+Documentation:
+/**
+     * Verifies that the endpoints specify an interval,
+     * throws IllegalArgumentException if not
+     *
+     * @param lower  lower endpoint
+     * @param upper upper endpoint
+     * @throws IllegalArgumentException
+     */
+Method code:
+207 |     protected void verifyInterval(final double lower, final double upper) {
+208 |         if (lower >= upper) {
+209 |             throw MathRuntimeException.createIllegalArgumentException(
+210 |                     "endpoints do not specify an interval: [{0}, {1}]",
+211 |                     lower, upper);
+212 |         }
+213 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.ode.AbstractIntegrator.setEquations(FirstOrderDifferentialEquations)
+Source: src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+Original range: 166-168
+Documentation:
+/** Set the differential equations.
+     * @param equations differential equations to integrate
+     * @see #computeDerivatives(double, double[], double[])
+     */
+Method code:
+166 |     protected void setEquations(final FirstOrderDifferentialEquations equations) {
+167 |         this.equations = equations;
+168 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.ode.events.CombinedEventsManager.getEventTime()
+Source: src/main/java/org/apache/commons/math/ode/events/CombinedEventsManager.java
+Original range: 186-188
+Documentation:
+/** Get the occurrence time of the first event triggered in the
+     * last evaluated step.
+     * @return occurrence time of the first event triggered in the last
+     * evaluated step, or </code>Double.NaN</code> if no event is
+     * triggered
+     */
+Method code:
+186 |     public double getEventTime() {
+187 |         return (first == null) ? Double.NaN : first.getEventTime();
+188 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.ode.nonstiff.ClassicalRungeKuttaIntegrator.ClassicalRungeKuttaIntegrator(double)
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/ClassicalRungeKuttaIntegrator.java
+Original range: 70-73
+Documentation:
+/** Simple constructor.
+   * Build a fourth-order Runge-Kutta integrator with the given
+   * step.
+   * @param step integration step
+   */
+Method code:
+70 |   public ClassicalRungeKuttaIntegrator(final double step) {
+71 |     super("classical Runge-Kutta", STATIC_C, STATIC_A, STATIC_B,
+72 |           new ClassicalRungeKuttaStepInterpolator(), step);
+73 |   }
+
+===== M0016 =====
+Signature: org.apache.commons.math.ode.events.CombinedEventsManager.evaluateStep(StepInterpolator)
+Source: src/main/java/org/apache/commons/math/ode/events/CombinedEventsManager.java
+Original range: 122-178
+Documentation:
+/** Evaluate the impact of the proposed step on all managed
+     * event handlers.
+     * @param interpolator step interpolator for the proposed step
+     * @return true if at least one event handler triggers an event
+     * before the end of the proposed step (this implies the step should
+     * be rejected)
+     * @exception DerivativeException if the interpolator fails to
+     * compute the function somewhere within the step
+     * @exception IntegratorException if an event cannot be located
+     */
+Method code:
+122 |     public boolean evaluateStep(final StepInterpolator interpolator)
+123 |     throws DerivativeException, IntegratorException {
+124 | 
+125 |         try {
+126 | 
+127 |             first = null;
+128 |             if (states.isEmpty()) {
+129 |                 // there is nothing to do, return now to avoid setting the
+130 |                 // interpolator time (and hence avoid unneeded calls to the
+131 |                 // user function due to interpolator finalization)
+132 |                 return false;
+133 |             }
+134 | 
+135 |             if (! initialized) {
+136 | 
+137 |                 // initialize the events states
+138 |                 final double t0 = interpolator.getPreviousTime();
+139 |                 interpolator.setInterpolatedTime(t0);
+140 |                 final double [] y = interpolator.getInterpolatedState();
+141 |                 for (EventState state : states) {
+142 |                     state.reinitializeBegin(t0, y);
+143 |                 }
+144 | 
+145 |                 initialized = true;
+146 | 
+147 |             }
+148 | 
+149 |             // check events occurrence
+150 |             for (EventState state : states) {
+151 | 
+152 |                 if (state.evaluateStep(interpolator)) {
+153 |                     if (first == null) {
+154 |                         first = state;
+155 |                     } else {
+156 |                         if (interpolator.isForward()) {
+157 |                             if (state.getEventTime() < first.getEventTime()) {
+158 |                                 first = state;
+159 |                             }
+160 |                         } else {
+161 |                             if (state.getEventTime() > first.getEventTime()) {
+162 |                                 first = state;
+163 |                             }
+164 |                         }
+165 |                     }
+166 |                 }
+167 | 
+168 |             }
+169 | 
+170 |             return first != null;
+171 | 
+172 |         } catch (EventException se) {
+173 |             throw new IntegratorException(se);
+174 |         } catch (ConvergenceException ce) {
+175 |             throw new IntegratorException(ce);
+176 |         }
+177 | 
+178 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math.ode.nonstiff.EmbeddedRungeKuttaIntegrator.EmbeddedRungeKuttaIntegrator(String,boolean,double[],double[][],double[],RungeKuttaStepInterpolator,double,double,double,double)
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/EmbeddedRungeKuttaIntegrator.java
+Original range: 109-131
+Documentation:
+/** Build a Runge-Kutta integrator with the given Butcher array.
+   * @param name name of the method
+   * @param fsal indicate that the method is an <i>fsal</i>
+   * @param c time steps from Butcher array (without the first zero)
+   * @param a internal weights from Butcher array (without the first empty row)
+   * @param b propagation weights for the high order method from Butcher array
+   * @param prototype prototype of the step interpolator to use
+   * @param minStep minimal step (must be positive even for backward
+   * integration), the last step can be smaller than this
+   * @param maxStep maximal step (must be positive even for backward
+   * integration)
+   * @param scalAbsoluteTolerance allowed absolute error
+   * @param scalRelativeTolerance allowed relative error
+   */
+Method code:
+109 |   protected EmbeddedRungeKuttaIntegrator(final String name, final boolean fsal,
+110 |                                          final double[] c, final double[][] a, final double[] b,
+111 |                                          final RungeKuttaStepInterpolator prototype,
+112 |                                          final double minStep, final double maxStep,
+113 |                                          final double scalAbsoluteTolerance,
+114 |                                          final double scalRelativeTolerance) {
+115 | 
+116 |     super(name, minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+117 | 
+118 |     this.fsal      = fsal;
+119 |     this.c         = c;
+120 |     this.a         = a;
+121 |     this.b         = b;
+122 |     this.prototype = prototype;
+123 | 
+124 |     exp = -1.0 / getOrder();
+125 | 
+126 |     // set the default values of the algorithm control parameters
+127 |     setSafety(0.9);
+128 |     setMinReduction(0.2);
+129 |     setMaxGrowth(10.0);
+130 | 
+131 |   }
+
+===== M0018 =====
+Signature: org.apache.commons.math.ode.AbstractIntegrator.addEndTimeChecker(double,double,CombinedEventsManager)
+Source: src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+Original range: 230-245
+Documentation:
+/** Add an event handler for end time checking.
+     * <p>This method can be used to simplify handling of integration end time.
+     * It leverages the nominal stop condition with the exceptional stop
+     * conditions.</p>
+     * @param startTime integration start time
+     * @param endTime desired end time
+     * @param manager manager containing the user-defined handlers
+     * @return a new manager containing all the user-defined handlers plus a
+     * dedicated manager triggering a stop event at entTime
+     */
+Method code:
+230 |     protected CombinedEventsManager addEndTimeChecker(final double startTime,
+231 |                                                       final double endTime,
+232 |                                                       final CombinedEventsManager manager) {
+233 |         CombinedEventsManager newManager = new CombinedEventsManager();
+234 |         for (final EventState state : manager.getEventsStates()) {
+235 |             newManager.addEventHandler(state.getEventHandler(),
+236 |                                        state.getMaxCheckInterval(),
+237 |                                        state.getConvergence(),
+238 |                                        state.getMaxIterationCount());
+239 |         }
+240 |         newManager.addEventHandler(new EndTimeChecker(endTime),
+241 |                                    Double.POSITIVE_INFINITY,
+242 |                                    Math.ulp(Math.max(Math.abs(startTime), Math.abs(endTime))),
+243 |                                    100);
+244 |         return newManager;
+245 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math.ode.AbstractIntegrator.requiresDenseOutput()
+Source: src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+Original range: 122-129
+Documentation:
+/** Check if one of the step handlers requires dense output.
+     * @return true if one of the step handlers requires dense output
+     */
+Method code:
+122 |     protected boolean requiresDenseOutput() {
+123 |         for (StepHandler handler : stepHandlers) {
+124 |             if (handler.requiresDenseOutput()) {
+125 |                 return true;
+126 |             }
+127 |         }
+128 |         return false;
+129 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math.ode.sampling.AbstractStepInterpolator.getPreviousTime()
+Source: src/main/java/org/apache/commons/math/ode/sampling/AbstractStepInterpolator.java
+Original range: 229-231
+Documentation:
+/** {@inheritDoc} */
+Method code:
+229 |   public double getPreviousTime() {
+230 |     return previousTime;
+231 |   }
+
+===== M0021 =====
+Signature: org.apache.commons.math.ode.AbstractIntegrator.sanityChecks(FirstOrderDifferentialEquations,double,double[],double,double[])
+Source: src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+Original range: 193-218
+Documentation:
+/** Perform some sanity checks on the integration parameters.
+     * @param ode differential equations set
+     * @param t0 start time
+     * @param y0 state vector at t0
+     * @param t target time for the integration
+     * @param y placeholder where to put the state vector
+     * @exception IntegratorException if some inconsistency is detected
+     */
+Method code:
+193 |     protected void sanityChecks(final FirstOrderDifferentialEquations ode,
+194 |                                 final double t0, final double[] y0,
+195 |                                 final double t, final double[] y)
+196 |         throws IntegratorException {
+197 | 
+198 |         if (ode.getDimension() != y0.length) {
+199 |             throw new IntegratorException(
+200 |                     "dimensions mismatch: ODE problem has dimension {0}," +
+201 |                     " initial state vector has dimension {1}",
+202 |                     ode.getDimension(), y0.length);
+203 |         }
+204 | 
+205 |         if (ode.getDimension() != y.length) {
+206 |             throw new IntegratorException(
+207 |                     "dimensions mismatch: ODE problem has dimension {0}," +
+208 |                     " final state vector has dimension {1}",
+209 |                     ode.getDimension(), y.length);
+210 |         }
+211 | 
+212 |         if (Math.abs(t - t0) <= 1.0e-12 * Math.max(Math.abs(t0), Math.abs(t))) {
+213 |             throw new IntegratorException(
+214 |                     "too small integration interval: length = {0}",
+215 |                     Math.abs(t - t0));
+216 |         }
+217 | 
+218 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math.ode.events.EventState.EventState(EventHandler,double,double,int)
+Source: src/main/java/org/apache/commons/math/ode/events/EventState.java
+Original range: 94-111
+Documentation:
+/** Simple constructor.
+     * @param handler event handler
+     * @param maxCheckInterval maximal time interval between switching
+     * function checks (this interval prevents missing sign changes in
+     * case the integration steps becomes very large)
+     * @param convergence convergence threshold in the event time search
+     * @param maxIterationCount upper limit of the iteration count in
+     * the event time search
+     */
+Method code:
+94 |     public EventState(final EventHandler handler, final double maxCheckInterval,
+95 |                       final double convergence, final int maxIterationCount) {
+96 |         this.handler           = handler;
+97 |         this.maxCheckInterval  = maxCheckInterval;
+98 |         this.convergence       = Math.abs(convergence);
+99 |         this.maxIterationCount = maxIterationCount;
+100 | 
+101 |         // some dummy values ...
+102 |         t0                = Double.NaN;
+103 |         g0                = Double.NaN;
+104 |         g0Positive        = true;
+105 |         pendingEvent      = false;
+106 |         pendingEventTime  = Double.NaN;
+107 |         previousEventTime = Double.NaN;
+108 |         increasing        = true;
+109 |         nextAction        = EventHandler.CONTINUE;
+110 | 
+111 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math.ode.nonstiff.EmbeddedRungeKuttaIntegrator.integrate(FirstOrderDifferentialEquations,double,double[],double,double[])
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/EmbeddedRungeKuttaIntegrator.java
+Original range: 191-366
+Documentation:
+/** {@inheritDoc} */
+Method code:
+191 |   @Override
+192 |   public double integrate(final FirstOrderDifferentialEquations equations,
+193 |                           final double t0, final double[] y0,
+194 |                           final double t, final double[] y)
+195 |   throws DerivativeException, IntegratorException {
+196 | 
+197 |     sanityChecks(equations, t0, y0, t, y);
+198 |     setEquations(equations);
+199 |     resetEvaluations();
+200 |     final boolean forward = t > t0;
+201 | 
+202 |     // create some internal working arrays
+203 |     final int stages = c.length + 1;
+204 |     if (y != y0) {
+205 |       System.arraycopy(y0, 0, y, 0, y0.length);
+206 |     }
+207 |     final double[][] yDotK = new double[stages][y0.length];
+208 |     final double[] yTmp = new double[y0.length];
+209 | 
+210 |     // set up an interpolator sharing the integrator arrays
+211 |     AbstractStepInterpolator interpolator;
+212 |     if (requiresDenseOutput() || (! eventsHandlersManager.isEmpty())) {
+213 |       final RungeKuttaStepInterpolator rki = (RungeKuttaStepInterpolator) prototype.copy();
+214 |       rki.reinitialize(this, yTmp, yDotK, forward);
+215 |       interpolator = rki;
+216 |     } else {
+217 |       interpolator = new DummyStepInterpolator(yTmp, yDotK[stages - 1], forward);
+218 |     }
+219 |     interpolator.storeTime(t0);
+220 | 
+221 |     // set up integration control objects
+222 |     stepStart         = t0;
+223 |     double  hNew      = 0;
+224 |     boolean firstTime = true;
+225 |     for (StepHandler handler : stepHandlers) {
+226 |         handler.reset();
+227 |     }
+228 |     CombinedEventsManager manager = addEndTimeChecker(t0, t, eventsHandlersManager);
+229 |     boolean lastStep = false;
+230 | 
+231 |     // main integration loop
+232 |     while (!lastStep) {
+233 | 
+234 |       interpolator.shift();
+235 | 
+236 |       double error = 0;
+237 |       for (boolean loop = true; loop;) {
+238 | 
+239 |         if (firstTime || !fsal) {
+240 |           // first stage
+241 |           computeDerivatives(stepStart, y, yDotK[0]);
+242 |         }
+243 | 
+244 |         if (firstTime) {
+245 |           final double[] scale = new double[y0.length];
+246 |           if (vecAbsoluteTolerance == null) {
+247 |               for (int i = 0; i < scale.length; ++i) {
+248 |                 scale[i] = scalAbsoluteTolerance + scalRelativeTolerance * Math.abs(y[i]);
+249 |               }
+250 |             } else {
+251 |               for (int i = 0; i < scale.length; ++i) {
+252 |                 scale[i] = vecAbsoluteTolerance[i] + vecRelativeTolerance[i] * Math.abs(y[i]);
+253 |               }
+254 |             }
+255 |           hNew = initializeStep(equations, forward, getOrder(), scale,
+256 |                                 stepStart, y, yDotK[0], yTmp, yDotK[1]);
+257 |           firstTime = false;
+258 |         }
+259 | 
+260 |         stepSize = hNew;
+261 | 
+262 |         // next stages
+263 |         for (int k = 1; k < stages; ++k) {
+264 | 
+265 |           for (int j = 0; j < y0.length; ++j) {
+266 |             double sum = a[k-1][0] * yDotK[0][j];
+267 |             for (int l = 1; l < k; ++l) {
+268 |               sum += a[k-1][l] * yDotK[l][j];
+269 |             }
+270 |             yTmp[j] = y[j] + stepSize * sum;
+271 |           }
+272 | 
+273 |           computeDerivatives(stepStart + c[k-1] * stepSize, yTmp, yDotK[k]);
+274 | 
+275 |         }
+276 | 
+277 |         // estimate the state at the end of the step
+278 |         for (int j = 0; j < y0.length; ++j) {
+279 |           double sum    = b[0] * yDotK[0][j];
+280 |           for (int l = 1; l < stages; ++l) {
+281 |             sum    += b[l] * yDotK[l][j];
+282 |           }
+283 |           yTmp[j] = y[j] + stepSize * sum;
+284 |         }
+285 | 
+286 |         // estimate the error at the end of the step
+287 |         error = estimateError(yDotK, y, yTmp, stepSize);
+288 |         if (error <= 1.0) {
+289 | 
+290 |           // discrete events handling
+291 |           interpolator.storeTime(stepStart + stepSize);
+292 |           if (manager.evaluateStep(interpolator)) {
+293 |               final double dt = manager.getEventTime() - stepStart;
+294 |               if (Math.abs(dt) <= Math.ulp(stepStart)) {
+295 |                   // we cannot simply truncate the step, reject the current computation
+296 |                   // and let the loop compute another state with the truncated step.
+297 |                   // it is so small (much probably exactly 0 due to limited accuracy)
+298 |                   // that the code above would fail handling it.
+299 |                   // So we set up an artificial 0 size step by copying states
+300 |                   loop     = false;
+301 |               } else {
+302 |                   // reject the step to match exactly the next switch time
+303 |                   hNew = dt;
+304 |               }
+305 |           } else {
+306 |             // accept the step
+307 |             loop = false;
+308 |           }
+309 | 
+310 |         } else {
+311 |           // reject the step and attempt to reduce error by stepsize control
+312 |           final double factor =
+313 |               Math.min(maxGrowth,
+314 |                        Math.max(minReduction, safety * Math.pow(error, exp)));
+315 |           hNew = filterStep(stepSize * factor, forward, false);
+316 |         }
+317 | 
+318 |       }
+319 | 
+320 |       // the step has been accepted
+321 |       final double nextStep = stepStart + stepSize;
+322 |       System.arraycopy(yTmp, 0, y, 0, y0.length);
+323 |       manager.stepAccepted(nextStep, y);
+324 |       lastStep = manager.stop();
+325 | 
+326 |       // provide the step data to the step handler
+327 |       interpolator.storeTime(nextStep);
+328 |       for (StepHandler handler : stepHandlers) {
+329 |           handler.handleStep(interpolator, lastStep);
+330 |       }
+331 |       stepStart = nextStep;
+332 | 
+333 |       if (fsal) {
+334 |         // save the last evaluation for the next step
+335 |         System.arraycopy(yDotK[stages - 1], 0, yDotK[0], 0, y0.length);
+336 |       }
+337 | 
+338 |       if (manager.reset(stepStart, y) && ! lastStep) {
+339 |         // some event handler has triggered changes that
+340 |         // invalidate the derivatives, we need to recompute them
+341 |         computeDerivatives(stepStart, y, yDotK[0]);
+342 |       }
+343 | 
+344 |       if (! lastStep) {
+345 |         // in some rare cases we may get here with stepSize = 0, for example
+346 |         // when an event occurs at integration start, reducing the first step
+347 |         // to zero; we have to reset the step to some safe non zero value
+348 |           stepSize = filterStep(stepSize, forward, true);
+349 | 
+350 |         // stepsize control for next step
+351 |         final double factor = Math.min(maxGrowth,
+352 |                                        Math.max(minReduction,
+353 |                                                 safety * Math.pow(error, exp)));
+354 |         final double  scaledH    = stepSize * factor;
+355 |         final double  nextT      = stepStart + scaledH;
+356 |         final boolean nextIsLast = forward ? (nextT >= t) : (nextT <= t);
+357 |         hNew = filterStep(scaledH, forward, nextIsLast);
+358 |       }
+359 | 
+360 |     }
+361 | 
+362 |     final double stopTime = stepStart;
+363 |     resetInternalState();
+364 |     return stopTime;
+365 | 
+366 |   }
+
+===== M0024 =====
+Signature: org.apache.commons.math.analysis.solvers.BrentSolver.BrentSolver()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java
+Original range: 71-73
+Documentation:
+/**
+     * Construct a solver with default properties.
+     */
+Method code:
+71 |     public BrentSolver() {
+72 |         super(DEFAULT_MAXIMUM_ITERATIONS, DEFAULT_ABSOLUTE_ACCURACY);
+73 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverImpl.UnivariateRealSolverImpl(int,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverImpl.java
+Original range: 91-96
+Documentation:
+/**
+     * Construct a solver with given iteration count and accuracy.
+     *
+     * @param defaultAbsoluteAccuracy maximum absolute error
+     * @param defaultMaximalIterationCount maximum number of iterations
+     * @throws IllegalArgumentException if f is null or the
+     * defaultAbsoluteAccuracy is not valid
+     */
+Method code:
+91 |     protected UnivariateRealSolverImpl(final int defaultMaximalIterationCount,
+92 |                                        final double defaultAbsoluteAccuracy) {
+93 |         super(defaultMaximalIterationCount, defaultAbsoluteAccuracy);
+94 |         this.defaultFunctionValueAccuracy = 1.0e-15;
+95 |         this.functionValueAccuracy = defaultFunctionValueAccuracy;
+96 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math.analysis.solvers.BrentSolver.solve(UnivariateRealFunction,double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java
+Original range: 194-235
+Documentation:
+/**
+     * Find a zero in the given interval.
+     * <p>
+     * Requires that the values of the function at the endpoints have opposite
+     * signs. An <code>IllegalArgumentException</code> is thrown if this is not
+     * the case.</p>
+     *
+     * @param f the function to solve
+     * @param min the lower bound for the interval.
+     * @param max the upper bound for the interval.
+     * @return the value where the function is zero
+     * @throws MaxIterationsExceededException if the maximum iteration count is exceeded
+     * @throws FunctionEvaluationException if an error occurs evaluating the
+     * function
+     * @throws IllegalArgumentException if min is not less than max or the
+     * signs of the values of the function at the endpoints are not opposites
+     */
+Method code:
+194 |     public double solve(final UnivariateRealFunction f,
+195 |                         final double min, final double max)
+196 |         throws MaxIterationsExceededException,
+197 |         FunctionEvaluationException {
+198 | 
+199 |         clearResult();
+200 |         verifyInterval(min, max);
+201 | 
+202 |         double ret = Double.NaN;
+203 | 
+204 |         double yMin = f.value(min);
+205 |         double yMax = f.value(max);
+206 | 
+207 |         // Verify bracketing
+208 |         double sign = yMin * yMax;
+209 |         if (sign > 0) {
+210 |             // check if either value is close to a zero
+211 |             if (Math.abs(yMin) <= functionValueAccuracy) {
+212 |                 setResult(min, 0);
+213 |                 ret = min;
+214 |             } else if (Math.abs(yMax) <= functionValueAccuracy) {
+215 |                 setResult(max, 0);
+216 |                 ret = max;
+217 |             } else {
+218 |                 // neither value is close to zero and min and max do not bracket root.
+219 |                 throw MathRuntimeException.createIllegalArgumentException(
+220 |                         NON_BRACKETING_MESSAGE, min, max, yMin, yMax);
+221 |             }
+222 |         } else if (sign < 0){
+223 |             // solve using only the first endpoint as initial guess
+224 |             ret = solve(f, min, yMin, max, yMax, min, yMin);
+225 |         } else {
+226 |             // either min or max is a root
+227 |             if (yMin == 0.0) {
+228 |                 ret = min;
+229 |             } else {
+230 |                 ret = max;
+231 |             }
+232 |         }
+233 | 
+234 |         return ret;
+235 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math.ode.events.CombinedEventsManager.CombinedEventsManager()
+Source: src/main/java/org/apache/commons/math/ode/events/CombinedEventsManager.java
+Original range: 52-56
+Documentation:
+/** Simple constructor.
+     * Create an empty manager
+     */
+Method code:
+52 |     public CombinedEventsManager() {
+53 |         states      = new ArrayList<EventState>();
+54 |         first       = null;
+55 |         initialized = false;
+56 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math.ode.events.CombinedEventsManager.isEmpty()
+Source: src/main/java/org/apache/commons/math/ode/events/CombinedEventsManager.java
+Original range: 108-110
+Documentation:
+/** Check if the manager does not manage any event handlers.
+     * @return true if manager is empty
+     */
+Method code:
+108 |     public boolean isEmpty() {
+109 |         return states.isEmpty();
+110 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math.ode.nonstiff.RungeKuttaStepInterpolator.RungeKuttaStepInterpolator()
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/RungeKuttaStepInterpolator.java
+Original range: 56-60
+Documentation:
+/** Simple constructor.
+   * This constructor builds an instance that is not usable yet, the
+   * {@link #reinitialize} method should be called before using the
+   * instance in order to initialize the internal arrays. This
+   * constructor is used only in order to delay the initialization in
+   * some cases. The {@link RungeKuttaIntegrator} and {@link
+   * EmbeddedRungeKuttaIntegrator} classes use the prototyping design
+   * pattern to create the step interpolators by cloning an
+   * uninitialized model and latter initializing the copy.
+   */
+Method code:
+56 |   protected RungeKuttaStepInterpolator() {
+57 |     super();
+58 |     yDotK      = null;
+59 |     integrator = null;
+60 |   }
+
+===== M0030 =====
+Signature: org.apache.commons.math.ode.AbstractIntegrator.AbstractIntegrator(String)
+Source: src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+Original range: 64-72
+Documentation:
+/** Build an instance.
+     * @param name name of the method
+     */
+Method code:
+64 |     public AbstractIntegrator(final String name) {
+65 |         this.name = name;
+66 |         stepHandlers = new ArrayList<StepHandler>();
+67 |         stepStart = Double.NaN;
+68 |         stepSize  = Double.NaN;
+69 |         eventsHandlersManager = new CombinedEventsManager();
+70 |         setMaxEvaluations(-1);
+71 |         resetEvaluations();
+72 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math.ode.sampling.AbstractStepInterpolator.AbstractStepInterpolator()
+Source: src/main/java/org/apache/commons/math/ode/sampling/AbstractStepInterpolator.java
+Original range: 89-100
+Documentation:
+/** Simple constructor.
+   * This constructor builds an instance that is not usable yet, the
+   * {@link #reinitialize} method should be called before using the
+   * instance in order to initialize the internal arrays. This
+   * constructor is used only in order to delay the initialization in
+   * some cases. As an example, the {@link
+   * org.apache.commons.math.ode.nonstiff.EmbeddedRungeKuttaIntegrator}
+   * class uses the prototyping design pattern to create the step
+   * interpolators by cloning an uninitialized model and latter
+   * initializing the copy.
+   */
+Method code:
+89 |   protected AbstractStepInterpolator() {
+90 |     previousTime            = Double.NaN;
+91 |     currentTime             = Double.NaN;
+92 |     h                       = Double.NaN;
+93 |     interpolatedTime        = Double.NaN;
+94 |     currentState            = null;
+95 |     interpolatedState       = null;
+96 |     interpolatedDerivatives = null;
+97 |     finalized               = false;
+98 |     this.forward            = true;
+99 |     this.dirtyState         = true;
+100 |   }
+
+===== M0032 =====
+Signature: org.apache.commons.math.ode.sampling.AbstractStepInterpolator.shift()
+Source: src/main/java/org/apache/commons/math/ode/sampling/AbstractStepInterpolator.java
+Original range: 210-212
+Documentation:
+/** Shift one step forward.
+   * Copy the current time into the previous time, hence preparing the
+   * interpolator for future calls to {@link #storeTime storeTime}
+   */
+Method code:
+210 |   public void shift() {
+211 |     previousTime = currentTime;
+212 |   }
+
+===== M0033 =====
+Signature: org.apache.commons.math.ode.events.EventState.stop()
+Source: src/main/java/org/apache/commons/math/ode/events/EventState.java
+Original range: 314-316
+Documentation:
+/** Check if the integration should be stopped at the end of the
+     * current step.
+     * @return true if the integration should be stopped
+     */
+Method code:
+314 |     public boolean stop() {
+315 |         return nextAction == EventHandler.STOP;
+316 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math.ode.sampling.AbstractStepInterpolator.getInterpolatedState()
+Source: src/main/java/org/apache/commons/math/ode/sampling/AbstractStepInterpolator.java
+Original range: 269-281
+Documentation:
+/** {@inheritDoc} */
+Method code:
+269 |   public double[] getInterpolatedState() throws DerivativeException {
+270 | 
+271 |       // lazy evaluation of the state
+272 |       if (dirtyState) {
+273 |           final double oneMinusThetaH = currentTime - interpolatedTime;
+274 |           final double theta = (h == 0) ? 0 : (h - oneMinusThetaH) / h;
+275 |           computeInterpolatedStateAndDerivatives(theta, oneMinusThetaH);
+276 |           dirtyState = false;
+277 |       }
+278 | 
+279 |       return interpolatedState;
+280 | 
+281 |   }
+
+===== M0035 =====
+Signature: org.apache.commons.math.ConvergingAlgorithmImpl.setMaximalIterationCount(int)
+Source: src/main/java/org/apache/commons/math/ConvergingAlgorithmImpl.java
+Original range: 92-94
+Documentation:
+/** {@inheritDoc} */
+Method code:
+92 |     public void setMaximalIterationCount(int count) {
+93 |         maximalIterationCount = count;
+94 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math.ode.events.CombinedEventsManager.reset(double,double[])
+Source: src/main/java/org/apache/commons/math/ode/events/CombinedEventsManager.java
+Original range: 232-245
+Documentation:
+/** Let the event handlers reset the state if they want.
+     * @param t value of the independent <i>time</i> variable at the
+     * beginning of the next step
+     * @param y array were to put the desired state vector at the beginning
+     * of the next step
+     * @return true if the integrator should reset the derivatives too
+     * @exception IntegratorException if one of the events states
+     * that should reset the state fails to do it
+     */
+Method code:
+232 |     public boolean reset(final double t, final double[] y)
+233 |         throws IntegratorException {
+234 |         try {
+235 |             boolean resetDerivatives = false;
+236 |             for (EventState state : states) {
+237 |                 if (state.reset(t, y)) {
+238 |                     resetDerivatives = true;
+239 |                 }
+240 |             }
+241 |             return resetDerivatives;
+242 |         } catch (EventException se) {
+243 |             throw new IntegratorException(se);
+244 |         }
+245 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math.ode.events.EventState.stepAccepted(double,double[])
+Source: src/main/java/org/apache/commons/math/ode/events/EventState.java
+Original range: 293-308
+Documentation:
+/** Acknowledge the fact the step has been accepted by the integrator.
+     * @param t value of the independent <i>time</i> variable at the
+     * end of the step
+     * @param y array containing the current value of the state vector
+     * at the end of the step
+     * @exception EventException if the value of the event
+     * handler cannot be evaluated
+     */
+Method code:
+293 |     public void stepAccepted(final double t, final double[] y)
+294 |         throws EventException {
+295 | 
+296 |         t0 = t;
+297 |         g0 = handler.g(t, y);
+298 | 
+299 |         if (pendingEvent) {
+300 |             // force the sign to its value "just after the event"
+301 |             previousEventTime = t;
+302 |             g0Positive        = increasing;
+303 |             nextAction        = handler.eventOccurred(t, y, !(increasing ^ forward));
+304 |         } else {
+305 |             g0Positive = g0 >= 0;
+306 |             nextAction = EventHandler.CONTINUE;
+307 |         }
+308 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math.ode.AbstractIntegrator.EndTimeChecker.eventOccurred(double,double[],boolean)
+Source: src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+Original range: 261-263
+Documentation:
+/** {@inheritDoc} */
+Method code:
+261 |         public int eventOccurred(double t, double[] y, boolean increasing) {
+262 |             return STOP;
+263 |         }
+
+===== M0039 =====
+Signature: org.apache.commons.math.ode.nonstiff.RungeKuttaIntegrator.RungeKuttaIntegrator(String,double[],double[][],double[],RungeKuttaStepInterpolator,double)
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/RungeKuttaIntegrator.java
+Original range: 82-92
+Documentation:
+/** Simple constructor.
+   * Build a Runge-Kutta integrator with the given
+   * step. The default step handler does nothing.
+   * @param name name of the method
+   * @param c time steps from Butcher array (without the first zero)
+   * @param a internal weights from Butcher array (without the first empty row)
+   * @param b propagation weights for the high order method from Butcher array
+   * @param prototype prototype of the step interpolator to use
+   * @param step integration step
+   */
+Method code:
+82 |   protected RungeKuttaIntegrator(final String name,
+83 |                                  final double[] c, final double[][] a, final double[] b,
+84 |                                  final RungeKuttaStepInterpolator prototype,
+85 |                                  final double step) {
+86 |     super(name);
+87 |     this.c          = c;
+88 |     this.a          = a;
+89 |     this.b          = b;
+90 |     this.prototype  = prototype;
+91 |     this.step       = Math.abs(step);
+92 |   }
+
+===== M0040 =====
+Signature: org.apache.commons.math.ode.AbstractIntegrator.setMaxEvaluations(int)
+Source: src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+Original range: 142-144
+Documentation:
+/** {@inheritDoc} */
+Method code:
+142 |     public void setMaxEvaluations(int maxEvaluations) {
+143 |         this.maxEvaluations = (maxEvaluations < 0) ? Integer.MAX_VALUE : maxEvaluations;
+144 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math.ode.nonstiff.RungeKuttaIntegrator.integrate(FirstOrderDifferentialEquations,double,double[],double,double[])
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/RungeKuttaIntegrator.java
+Original range: 95-220
+Documentation:
+/** {@inheritDoc} */
+Method code:
+95 |   public double integrate(final FirstOrderDifferentialEquations equations,
+96 |                           final double t0, final double[] y0,
+97 |                           final double t, final double[] y)
+98 |   throws DerivativeException, IntegratorException {
+99 | 
+100 |     sanityChecks(equations, t0, y0, t, y);
+101 |     setEquations(equations);
+102 |     resetEvaluations();
+103 |     final boolean forward = t > t0;
+104 | 
+105 |     // create some internal working arrays
+106 |     final int stages = c.length + 1;
+107 |     if (y != y0) {
+108 |       System.arraycopy(y0, 0, y, 0, y0.length);
+109 |     }
+110 |     final double[][] yDotK = new double[stages][];
+111 |     for (int i = 0; i < stages; ++i) {
+112 |       yDotK [i] = new double[y0.length];
+113 |     }
+114 |     final double[] yTmp = new double[y0.length];
+115 | 
+116 |     // set up an interpolator sharing the integrator arrays
+117 |     AbstractStepInterpolator interpolator;
+118 |     if (requiresDenseOutput() || (! eventsHandlersManager.isEmpty())) {
+119 |       final RungeKuttaStepInterpolator rki = (RungeKuttaStepInterpolator) prototype.copy();
+120 |       rki.reinitialize(this, yTmp, yDotK, forward);
+121 |       interpolator = rki;
+122 |     } else {
+123 |       interpolator = new DummyStepInterpolator(yTmp, yDotK[stages - 1], forward);
+124 |     }
+125 |     interpolator.storeTime(t0);
+126 | 
+127 |     // set up integration control objects
+128 |     stepStart = t0;
+129 |     stepSize  = forward ? step : -step;
+130 |     for (StepHandler handler : stepHandlers) {
+131 |         handler.reset();
+132 |     }
+133 |     CombinedEventsManager manager = addEndTimeChecker(t0, t, eventsHandlersManager);
+134 |     boolean lastStep = false;
+135 | 
+136 |     // main integration loop
+137 |     while (!lastStep) {
+138 | 
+139 |       interpolator.shift();
+140 | 
+141 |       for (boolean loop = true; loop;) {
+142 | 
+143 |         // first stage
+144 |         computeDerivatives(stepStart, y, yDotK[0]);
+145 | 
+146 |         // next stages
+147 |         for (int k = 1; k < stages; ++k) {
+148 | 
+149 |           for (int j = 0; j < y0.length; ++j) {
+150 |             double sum = a[k-1][0] * yDotK[0][j];
+151 |             for (int l = 1; l < k; ++l) {
+152 |               sum += a[k-1][l] * yDotK[l][j];
+153 |             }
+154 |             yTmp[j] = y[j] + stepSize * sum;
+155 |           }
+156 | 
+157 |           computeDerivatives(stepStart + c[k-1] * stepSize, yTmp, yDotK[k]);
+158 | 
+159 |         }
+160 | 
+161 |         // estimate the state at the end of the step
+162 |         for (int j = 0; j < y0.length; ++j) {
+163 |           double sum    = b[0] * yDotK[0][j];
+164 |           for (int l = 1; l < stages; ++l) {
+165 |             sum    += b[l] * yDotK[l][j];
+166 |           }
+167 |           yTmp[j] = y[j] + stepSize * sum;
+168 |         }
+169 | 
+170 |         // discrete events handling
+171 |         interpolator.storeTime(stepStart + stepSize);
+172 |         if (manager.evaluateStep(interpolator)) {
+173 |             final double dt = manager.getEventTime() - stepStart;
+174 |             if (Math.abs(dt) <= Math.ulp(stepStart)) {
+175 |                 // we cannot simply truncate the step, reject the current computation
+176 |                 // and let the loop compute another state with the truncated step.
+177 |                 // it is so small (much probably exactly 0 due to limited accuracy)
+178 |                 // that the code above would fail handling it.
+179 |                 // So we set up an artificial 0 size step by copying states
+180 |                 loop     = false;
+181 |             } else {
+182 |                 // reject the step to match exactly the next switch time
+183 |                 stepSize = dt;
+184 |             }
+185 |         } else {
+186 |           loop = false;
+187 |         }
+188 | 
+189 |       }
+190 | 
+191 |       // the step has been accepted
+192 |       final double nextStep = stepStart + stepSize;
+193 |       System.arraycopy(yTmp, 0, y, 0, y0.length);
+194 |       manager.stepAccepted(nextStep, y);
+195 |       lastStep = manager.stop();
+196 | 
+197 |       // provide the step data to the step handler
+198 |       interpolator.storeTime(nextStep);
+199 |       for (StepHandler handler : stepHandlers) {
+200 |           handler.handleStep(interpolator, lastStep);
+201 |       }
+202 |       stepStart = nextStep;
+203 | 
+204 |       if (manager.reset(stepStart, y) && ! lastStep) {
+205 |         // some events handler has triggered changes that
+206 |         // invalidate the derivatives, we need to recompute them
+207 |         computeDerivatives(stepStart, y, yDotK[0]);
+208 |       }
+209 | 
+210 |       // make sure step size is set to default before next step
+211 |       stepSize = forward ? step : -step;
+212 | 
+213 |     }
+214 | 
+215 |     final double stopTime = stepStart;
+216 |     stepStart = Double.NaN;
+217 |     stepSize  = Double.NaN;
+218 |     return stopTime;
+219 | 
+220 |   }
+
+===== M0042 =====
+Signature: org.apache.commons.math.ode.sampling.DummyStepInterpolator.DummyStepInterpolator(double[],double[],boolean)
+Source: src/main/java/org/apache/commons/math/ode/sampling/DummyStepInterpolator.java
+Original range: 71-74
+Documentation:
+/** Simple constructor.
+   * @param y reference to the integrator array holding the state at
+   * the end of the step
+   * @param yDot reference to the integrator array holding the state
+   * derivative at some arbitrary point within the step
+   * @param forward integration direction indicator
+   */
+Method code:
+71 |   public DummyStepInterpolator(final double[] y, final double[] yDot, final boolean forward) {
+72 |     super(y, forward);
+73 |     currentDerivative = yDot;
+74 |   }
+
+===== M0043 =====
+Signature: org.apache.commons.math.ode.nonstiff.AdaptiveStepsizeIntegrator.setInitialStepSize(double)
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/AdaptiveStepsizeIntegrator.java
+Original range: 149-155
+Documentation:
+/** Set the initial step size.
+   * <p>This method allows the user to specify an initial positive
+   * step size instead of letting the integrator guess it by
+   * itself. If this method is not called before integration is
+   * started, the initial step size will be estimated by the
+   * integrator.</p>
+   * @param initialStepSize initial step size to use (must be positive even
+   * for backward integration ; providing a negative value or a value
+   * outside of the min/max step interval will lead the integrator to
+   * ignore the value and compute the initial step size by itself)
+   */
+Method code:
+149 |   public void setInitialStepSize(final double initialStepSize) {
+150 |     if ((initialStepSize < minStep) || (initialStepSize > maxStep)) {
+151 |       initialStep = -1.0;
+152 |     } else {
+153 |       initialStep = initialStepSize;
+154 |     }
+155 |   }
+
+===== M0044 =====
+Signature: org.apache.commons.math.ode.nonstiff.ClassicalRungeKuttaStepInterpolator.ClassicalRungeKuttaStepInterpolator()
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/ClassicalRungeKuttaStepInterpolator.java
+Original range: 64-65
+Documentation:
+/** Simple constructor.
+     * This constructor builds an instance that is not usable yet, the
+     * {@link RungeKuttaStepInterpolator#reinitialize} method should be
+     * called before using the instance in order to initialize the
+     * internal arrays. This constructor is used only in order to delay
+     * the initialization in some cases. The {@link RungeKuttaIntegrator}
+     * class uses the prototyping design pattern to create the step
+     * interpolators by cloning an uninitialized model and latter initializing
+     * the copy.
+     */
+Method code:
+64 |     public ClassicalRungeKuttaStepInterpolator() {
+65 |     }
+
+===== M0045 =====
+Signature: org.apache.commons.math.ode.AbstractIntegrator.EndTimeChecker.EndTimeChecker(double)
+Source: src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+Original range: 256-258
+Documentation:
+/** Build an instance.
+         * @param endTime desired time
+         */
+Method code:
+256 |         public EndTimeChecker(final double endTime) {
+257 |             this.endTime = endTime;
+258 |         }
+
+===== M0046 =====
+Signature: org.apache.commons.math.ode.events.EventState.reinitializeBegin(double,double[])
+Source: src/main/java/org/apache/commons/math/ode/events/EventState.java
+Original range: 149-154
+Documentation:
+/** Reinitialize the beginning of the step.
+     * @param tStart value of the independent <i>time</i> variable at the
+     * beginning of the step
+     * @param yStart array containing the current value of the state vector
+     * at the beginning of the step
+     * @exception EventException if the event handler
+     * value cannot be evaluated at the beginning of the step
+     */
+Method code:
+149 |     public void reinitializeBegin(final double tStart, final double[] yStart)
+150 |         throws EventException {
+151 |         t0 = tStart;
+152 |         g0 = handler.g(tStart, yStart);
+153 |         g0Positive = g0 >= 0;
+154 |     }
+
+===== M0047 =====
+Signature: org.apache.commons.math.ConvergingAlgorithmImpl.ConvergingAlgorithmImpl(int,double)
+Source: src/main/java/org/apache/commons/math/ConvergingAlgorithmImpl.java
+Original range: 60-69
+Documentation:
+/**
+     * Construct an algorithm with given iteration count and accuracy.
+     *
+     * @param defaultAbsoluteAccuracy maximum absolute error
+     * @param defaultMaximalIterationCount maximum number of iterations
+     * @throws IllegalArgumentException if f is null or the
+     * defaultAbsoluteAccuracy is not valid
+     */
+Method code:
+60 |     protected ConvergingAlgorithmImpl(final int defaultMaximalIterationCount,
+61 |                                       final double defaultAbsoluteAccuracy) {
+62 |         this.defaultAbsoluteAccuracy = defaultAbsoluteAccuracy;
+63 |         this.defaultRelativeAccuracy = 1.0e-14;
+64 |         this.absoluteAccuracy = defaultAbsoluteAccuracy;
+65 |         this.relativeAccuracy = defaultRelativeAccuracy;
+66 |         this.defaultMaximalIterationCount = defaultMaximalIterationCount;
+67 |         this.maximalIterationCount = defaultMaximalIterationCount;
+68 |         this.iterationCount = 0;
+69 |     }
+
+===== M0048 =====
+Signature: org.apache.commons.math.ode.sampling.AbstractStepInterpolator.AbstractStepInterpolator(double[],boolean)
+Source: src/main/java/org/apache/commons/math/ode/sampling/AbstractStepInterpolator.java
+Original range: 107-122
+Documentation:
+/** Simple constructor.
+   * @param y reference to the integrator array holding the state at
+   * the end of the step
+   * @param forward integration direction indicator
+   */
+Method code:
+107 |   protected AbstractStepInterpolator(final double[] y, final boolean forward) {
+108 | 
+109 |     previousTime      = Double.NaN;
+110 |     currentTime       = Double.NaN;
+111 |     h                 = Double.NaN;
+112 |     interpolatedTime  = Double.NaN;
+113 | 
+114 |     currentState            = y;
+115 |     interpolatedState       = new double[y.length];
+116 |     interpolatedDerivatives = new double[y.length];
+117 | 
+118 |     finalized         = false;
+119 |     this.forward      = forward;
+120 |     this.dirtyState   = true;
+121 | 
+122 |   }
+
+===== M0049 =====
+Signature: org.apache.commons.math.ode.AbstractIntegrator.resetEvaluations()
+Source: src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+Original range: 158-160
+Documentation:
+/** Reset the number of evaluations to zero.
+     */
+Method code:
+158 |     protected void resetEvaluations() {
+159 |         evaluations = 0;
+160 |     }
+
+===== M0050 =====
+Signature: org.apache.commons.math.ode.nonstiff.DormandPrince853StepInterpolator.DormandPrince853StepInterpolator()
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/DormandPrince853StepInterpolator.java
+Original range: 231-236
+Documentation:
+/** Simple constructor.
+   * This constructor builds an instance that is not usable yet, the
+   * {@link #reinitialize} method should be called before using the
+   * instance in order to initialize the internal arrays. This
+   * constructor is used only in order to delay the initialization in
+   * some cases. The {@link EmbeddedRungeKuttaIntegrator} uses the
+   * prototyping design pattern to create the step interpolators by
+   * cloning an uninitialized model and latter initializing the copy.
+   */
+Method code:
+231 |   public DormandPrince853StepInterpolator() {
+232 |     super();
+233 |     yDotKLast = null;
+234 |     v         = null;
+235 |     vectorsInitialized = false;
+236 |   }
+
+===== M0051 =====
+Signature: org.apache.commons.math.ode.sampling.DummyStepInterpolator.computeInterpolatedStateAndDerivatives(double,double)
+Source: src/main/java/org/apache/commons/math/ode/sampling/DummyStepInterpolator.java
+Original range: 104-109
+Documentation:
+/** Compute the state at the interpolated time.
+   * In this class, this method does nothing: the interpolated state
+   * is always the state at the end of the current step.
+   * @param theta normalized interpolation abscissa within the step
+   * (theta is zero at the previous time step and one at the current time step)
+   * @param oneMinusThetaH time gap between the interpolated time and
+   * the current time
+   * @throws DerivativeException this exception is propagated to the caller if the
+   * underlying user function triggers one
+   */
+Method code:
+104 |   @Override
+105 |   protected void computeInterpolatedStateAndDerivatives(final double theta, final double oneMinusThetaH)
+106 |     throws DerivativeException {
+107 |       System.arraycopy(currentState,      0, interpolatedState,       0, currentState.length);
+108 |       System.arraycopy(currentDerivative, 0, interpolatedDerivatives, 0, currentDerivative.length);
+109 |   }
+
+===== M0052 =====
+Signature: org.apache.commons.math.ode.nonstiff.AdaptiveStepsizeIntegrator.initializeStep(FirstOrderDifferentialEquations,boolean,int,double[],double,double[],double[],double[],double[])
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/AdaptiveStepsizeIntegrator.java
+Original range: 203-266
+Documentation:
+/** Initialize the integration step.
+   * @param equations differential equations set
+   * @param forward forward integration indicator
+   * @param order order of the method
+   * @param scale scaling vector for the state vector
+   * @param t0 start time
+   * @param y0 state vector at t0
+   * @param yDot0 first time derivative of y0
+   * @param y1 work array for a state vector
+   * @param yDot1 work array for the first time derivative of y1
+   * @return first integration step
+   * @exception DerivativeException this exception is propagated to
+   * the caller if the underlying user function triggers one
+   */
+Method code:
+203 |   public double initializeStep(final FirstOrderDifferentialEquations equations,
+204 |                                final boolean forward, final int order, final double[] scale,
+205 |                                final double t0, final double[] y0, final double[] yDot0,
+206 |                                final double[] y1, final double[] yDot1)
+207 |       throws DerivativeException {
+208 | 
+209 |     if (initialStep > 0) {
+210 |       // use the user provided value
+211 |       return forward ? initialStep : -initialStep;
+212 |     }
+213 | 
+214 |     // very rough first guess : h = 0.01 * ||y/scale|| / ||y'/scale||
+215 |     // this guess will be used to perform an Euler step
+216 |     double ratio;
+217 |     double yOnScale2 = 0;
+218 |     double yDotOnScale2 = 0;
+219 |     for (int j = 0; j < y0.length; ++j) {
+220 |       ratio         = y0[j] / scale[j];
+221 |       yOnScale2    += ratio * ratio;
+222 |       ratio         = yDot0[j] / scale[j];
+223 |       yDotOnScale2 += ratio * ratio;
+224 |     }
+225 | 
+226 |     double h = ((yOnScale2 < 1.0e-10) || (yDotOnScale2 < 1.0e-10)) ?
+227 |                1.0e-6 : (0.01 * Math.sqrt(yOnScale2 / yDotOnScale2));
+228 |     if (! forward) {
+229 |       h = -h;
+230 |     }
+231 | 
+232 |     // perform an Euler step using the preceding rough guess
+233 |     for (int j = 0; j < y0.length; ++j) {
+234 |       y1[j] = y0[j] + h * yDot0[j];
+235 |     }
+236 |     computeDerivatives(t0 + h, y1, yDot1);
+237 | 
+238 |     // estimate the second derivative of the solution
+239 |     double yDDotOnScale = 0;
+240 |     for (int j = 0; j < y0.length; ++j) {
+241 |       ratio         = (yDot1[j] - yDot0[j]) / scale[j];
+242 |       yDDotOnScale += ratio * ratio;
+243 |     }
+244 |     yDDotOnScale = Math.sqrt(yDDotOnScale) / h;
+245 | 
+246 |     // step size is computed such that
+247 |     // h^order * max (||y'/tol||, ||y''/tol||) = 0.01
+248 |     final double maxInv2 = Math.max(Math.sqrt(yDotOnScale2), yDDotOnScale);
+249 |     final double h1 = (maxInv2 < 1.0e-15) ?
+250 |                       Math.max(1.0e-6, 0.001 * Math.abs(h)) :
+251 |                       Math.pow(0.01 / maxInv2, 1.0 / order);
+252 |     h = Math.min(100.0 * Math.abs(h), h1);
+253 |     h = Math.max(h, 1.0e-12 * Math.abs(t0));  // avoids cancellation when computing t1 - t0
+254 |     if (h < getMinStep()) {
+255 |       h = getMinStep();
+256 |     }
+257 |     if (h > getMaxStep()) {
+258 |       h = getMaxStep();
+259 |     }
+260 |     if (! forward) {
+261 |       h = -h;
+262 |     }
+263 | 
+264 |     return h;
+265 | 
+266 |   }
+
+===== M0053 =====
+Signature: org.apache.commons.math.ode.sampling.AbstractStepInterpolator.storeTime(double)
+Source: src/main/java/org/apache/commons/math/ode/sampling/AbstractStepInterpolator.java
+Original range: 217-226
+Documentation:
+/** Store the current step time.
+   * @param t current time
+   */
+Method code:
+217 |   public void storeTime(final double t) {
+218 | 
+219 |     currentTime = t;
+220 |     h           = currentTime - previousTime;
+221 |     setInterpolatedTime(t);
+222 | 
+223 |     // the step is not finalized anymore
+224 |     finalized  = false;
+225 | 
+226 |   }
+
+===== M0054 =====
+Signature: org.apache.commons.math.ode.sampling.AbstractStepInterpolator.isForward()
+Source: src/main/java/org/apache/commons/math/ode/sampling/AbstractStepInterpolator.java
+Original range: 250-252
+Documentation:
+/** {@inheritDoc} */
+Method code:
+250 |   public boolean isForward() {
+251 |     return forward;
+252 |   }
+
+===== M0055 =====
+Signature: org.apache.commons.math.ode.nonstiff.AdaptiveStepsizeIntegrator.resetInternalState()
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/AdaptiveStepsizeIntegrator.java
+Original range: 314-317
+Documentation:
+/** Reset internal state to dummy values. */
+Method code:
+314 |   protected void resetInternalState() {
+315 |     stepStart = Double.NaN;
+316 |     stepSize  = Math.sqrt(minStep * maxStep);
+317 |   }
+
+===== M0056 =====
+Signature: org.apache.commons.math.ode.sampling.AbstractStepInterpolator.getCurrentTime()
+Source: src/main/java/org/apache/commons/math/ode/sampling/AbstractStepInterpolator.java
+Original range: 234-236
+Documentation:
+/** {@inheritDoc} */
+Method code:
+234 |   public double getCurrentTime() {
+235 |     return currentTime;
+236 |   }
+
+===== M0057 =====
+Signature: org.apache.commons.math.analysis.solvers.BrentSolver.solve(UnivariateRealFunction,double,double,double,double,double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java
+Original range: 254-349
+Documentation:
+/**
+     * Find a zero starting search according to the three provided points.
+     * @param f the function to solve
+     * @param x0 old approximation for the root
+     * @param y0 function value at the approximation for the root
+     * @param x1 last calculated approximation for the root
+     * @param y1 function value at the last calculated approximation
+     * for the root
+     * @param x2 bracket point (must be set to x0 if no bracket point is
+     * known, this will force starting with linear interpolation)
+     * @param y2 function value at the bracket point.
+     * @return the value where the function is zero
+     * @throws MaxIterationsExceededException if the maximum iteration count
+     * is exceeded
+     * @throws FunctionEvaluationException if an error occurs evaluating
+     * the function
+     */
+Method code:
+254 |     private double solve(final UnivariateRealFunction f,
+255 |                          double x0, double y0,
+256 |                          double x1, double y1,
+257 |                          double x2, double y2)
+258 |     throws MaxIterationsExceededException, FunctionEvaluationException {
+259 | 
+260 |         double delta = x1 - x0;
+261 |         double oldDelta = delta;
+262 | 
+263 |         int i = 0;
+264 |         while (i < maximalIterationCount) {
+265 |             if (Math.abs(y2) < Math.abs(y1)) {
+266 |                 // use the bracket point if is better than last approximation
+267 |                 x0 = x1;
+268 |                 x1 = x2;
+269 |                 x2 = x0;
+270 |                 y0 = y1;
+271 |                 y1 = y2;
+272 |                 y2 = y0;
+273 |             }
+274 |             if (Math.abs(y1) <= functionValueAccuracy) {
+275 |                 // Avoid division by very small values. Assume
+276 |                 // the iteration has converged (the problem may
+277 |                 // still be ill conditioned)
+278 |                 setResult(x1, i);
+279 |                 return result;
+280 |             }
+281 |             double dx = x2 - x1;
+282 |             double tolerance =
+283 |                 Math.max(relativeAccuracy * Math.abs(x1), absoluteAccuracy);
+284 |             if (Math.abs(dx) <= tolerance) {
+285 |                 setResult(x1, i);
+286 |                 return result;
+287 |             }
+288 |             if ((Math.abs(oldDelta) < tolerance) ||
+289 |                     (Math.abs(y0) <= Math.abs(y1))) {
+290 |                 // Force bisection.
+291 |                 delta = 0.5 * dx;
+292 |                 oldDelta = delta;
+293 |             } else {
+294 |                 double r3 = y1 / y0;
+295 |                 double p;
+296 |                 double p1;
+297 |                 // the equality test (x0 == x2) is intentional,
+298 |                 // it is part of the original Brent's method,
+299 |                 // it should NOT be replaced by proximity test
+300 |                 if (x0 == x2) {
+301 |                     // Linear interpolation.
+302 |                     p = dx * r3;
+303 |                     p1 = 1.0 - r3;
+304 |                 } else {
+305 |                     // Inverse quadratic interpolation.
+306 |                     double r1 = y0 / y2;
+307 |                     double r2 = y1 / y2;
+308 |                     p = r3 * (dx * r1 * (r1 - r2) - (x1 - x0) * (r2 - 1.0));
+309 |                     p1 = (r1 - 1.0) * (r2 - 1.0) * (r3 - 1.0);
+310 |                 }
+311 |                 if (p > 0.0) {
+312 |                     p1 = -p1;
+313 |                 } else {
+314 |                     p = -p;
+315 |                 }
+316 |                 if (2.0 * p >= 1.5 * dx * p1 - Math.abs(tolerance * p1) ||
+317 |                         p >= Math.abs(0.5 * oldDelta * p1)) {
+318 |                     // Inverse quadratic interpolation gives a value
+319 |                     // in the wrong direction, or progress is slow.
+320 |                     // Fall back to bisection.
+321 |                     delta = 0.5 * dx;
+322 |                     oldDelta = delta;
+323 |                 } else {
+324 |                     oldDelta = delta;
+325 |                     delta = p / p1;
+326 |                 }
+327 |             }
+328 |             // Save old X1, Y1
+329 |             x0 = x1;
+330 |             y0 = y1;
+331 |             // Compute new X1, Y1
+332 |             if (Math.abs(delta) > tolerance) {
+333 |                 x1 = x1 + delta;
+334 |             } else if (dx > 0.0) {
+335 |                 x1 = x1 + 0.5 * tolerance;
+336 |             } else if (dx <= 0.0) {
+337 |                 x1 = x1 - 0.5 * tolerance;
+338 |             }
+339 |             y1 = f.value(x1);
+340 |             if ((y1 > 0) == (y2 > 0)) {
+341 |                 x2 = x0;
+342 |                 y2 = y0;
+343 |                 delta = x1 - x0;
+344 |                 oldDelta = delta;
+345 |             }
+346 |             i++;
+347 |         }
+348 |         throw new MaxIterationsExceededException(maximalIterationCount);
+349 |     }
+
+===== M0058 =====
+Signature: org.apache.commons.math.ode.sampling.AbstractStepInterpolator.setInterpolatedTime(double)
+Source: src/main/java/org/apache/commons/math/ode/sampling/AbstractStepInterpolator.java
+Original range: 244-247
+Documentation:
+/** {@inheritDoc} */
+Method code:
+244 |   public void setInterpolatedTime(final double time) {
+245 |       interpolatedTime = time;
+246 |       dirtyState       = true;
+247 |   }
+
+===== M0059 =====
+Signature: org.apache.commons.math.ode.nonstiff.AdaptiveStepsizeIntegrator.AdaptiveStepsizeIntegrator(String,double,double,double,double)
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/AdaptiveStepsizeIntegrator.java
+Original range: 88-106
+Documentation:
+/** Build an integrator with the given stepsize bounds.
+   * The default step handler does nothing.
+   * @param name name of the method
+   * @param minStep minimal step (must be positive even for backward
+   * integration), the last step can be smaller than this
+   * @param maxStep maximal step (must be positive even for backward
+   * integration)
+   * @param scalAbsoluteTolerance allowed absolute error
+   * @param scalRelativeTolerance allowed relative error
+   */
+Method code:
+88 |   public AdaptiveStepsizeIntegrator(final String name,
+89 |                                     final double minStep, final double maxStep,
+90 |                                     final double scalAbsoluteTolerance,
+91 |                                     final double scalRelativeTolerance) {
+92 | 
+93 |     super(name);
+94 | 
+95 |     this.minStep     = Math.abs(minStep);
+96 |     this.maxStep     = Math.abs(maxStep);
+97 |     this.initialStep = -1.0;
+98 | 
+99 |     this.scalAbsoluteTolerance = scalAbsoluteTolerance;
+100 |     this.scalRelativeTolerance = scalRelativeTolerance;
+101 |     this.vecAbsoluteTolerance  = null;
+102 |     this.vecRelativeTolerance  = null;
+103 | 
+104 |     resetInternalState();
+105 | 
+106 |   }
+
+===== M0060 =====
+Signature: org.apache.commons.math.ode.nonstiff.AdaptiveStepsizeIntegrator.sanityChecks(FirstOrderDifferentialEquations,double,double[],double,double[])
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/AdaptiveStepsizeIntegrator.java
+Original range: 165-187
+Documentation:
+/** Perform some sanity checks on the integration parameters.
+   * @param equations differential equations set
+   * @param t0 start time
+   * @param y0 state vector at t0
+   * @param t target time for the integration
+   * @param y placeholder where to put the state vector
+   * @exception IntegratorException if some inconsistency is detected
+   */
+Method code:
+165 |   @Override
+166 |   protected void sanityChecks(final FirstOrderDifferentialEquations equations,
+167 |                               final double t0, final double[] y0,
+168 |                               final double t, final double[] y)
+169 |       throws IntegratorException {
+170 | 
+171 |       super.sanityChecks(equations, t0, y0, t, y);
+172 | 
+173 |       if ((vecAbsoluteTolerance != null) && (vecAbsoluteTolerance.length != y0.length)) {
+174 |           throw new IntegratorException(
+175 |                   "dimensions mismatch: state vector has dimension {0}," +
+176 |                   " absolute tolerance vector has dimension {1}",
+177 |                   y0.length, vecAbsoluteTolerance.length);
+178 |       }
+179 | 
+180 |       if ((vecRelativeTolerance != null) && (vecRelativeTolerance.length != y0.length)) {
+181 |           throw new IntegratorException(
+182 |                   "dimensions mismatch: state vector has dimension {0}," +
+183 |                   " relative tolerance vector has dimension {1}",
+184 |                   y0.length, vecRelativeTolerance.length);
+185 |       }
+186 | 
+187 |   }
+
+===== M0061 =====
+Signature: org.apache.commons.math.ode.events.CombinedEventsManager.addEventHandler(EventHandler,double,double,int)
+Source: src/main/java/org/apache/commons/math/ode/events/CombinedEventsManager.java
+Original range: 69-73
+Documentation:
+/** Add an events handler.
+     * @param handler event handler
+     * @param maxCheckInterval maximal time interval between events
+     * checks (this interval prevents missing sign changes in
+     * case the integration steps becomes very large)
+     * @param convergence convergence threshold in the event time search
+     * @param maxIterationCount upper limit of the iteration count in
+     * the event time search
+     * @see #getEventsHandlers()
+     * @see #clearEventsHandlers()
+     */
+Method code:
+69 |     public void addEventHandler(final EventHandler handler, final double maxCheckInterval,
+70 |                                 final double convergence, final int maxIterationCount) {
+71 |         states.add(new EventState(handler, maxCheckInterval,
+72 |                                   convergence, maxIterationCount));
+73 |     }
+
+===== M0062 =====
+Signature: org.apache.commons.math.ode.nonstiff.DormandPrince853Integrator.getOrder()
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/DormandPrince853Integrator.java
+Original range: 239-242
+Documentation:
+/** {@inheritDoc} */
+Method code:
+239 |   @Override
+240 |   public int getOrder() {
+241 |     return 8;
+242 |   }
+
+===== M0063 =====
+Signature: org.apache.commons.math.ode.events.EventState.reset(double,double[])
+Source: src/main/java/org/apache/commons/math/ode/events/EventState.java
+Original range: 327-343
+Documentation:
+/** Let the event handler reset the state if it wants.
+     * @param t value of the independent <i>time</i> variable at the
+     * beginning of the next step
+     * @param y array were to put the desired state vector at the beginning
+     * of the next step
+     * @return true if the integrator should reset the derivatives too
+     * @exception EventException if the state cannot be reseted by the event
+     * handler
+     */
+Method code:
+327 |     public boolean reset(final double t, final double[] y)
+328 |         throws EventException {
+329 | 
+330 |         if (! pendingEvent) {
+331 |             return false;
+332 |         }
+333 | 
+334 |         if (nextAction == EventHandler.RESET_STATE) {
+335 |             handler.resetState(t, y);
+336 |         }
+337 |         pendingEvent      = false;
+338 |         pendingEventTime  = Double.NaN;
+339 | 
+340 |         return (nextAction == EventHandler.RESET_STATE) ||
+341 |                (nextAction == EventHandler.RESET_DERIVATIVES);
+342 | 
+343 |     }
+
+===== M0064 =====
+Signature: org.apache.commons.math.ode.nonstiff.EmbeddedRungeKuttaIntegrator.setMinReduction(double)
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/EmbeddedRungeKuttaIntegrator.java
+Original range: 378-380
+Documentation:
+/** Set the minimal reduction factor for stepsize control.
+   * @param minReduction minimal reduction factor
+   */
+Method code:
+378 |   public void setMinReduction(final double minReduction) {
+379 |     this.minReduction = minReduction;
+380 |   }
+
+===== M0065 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverImpl.setResult(double,int)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverImpl.java
+Original range: 140-144
+Documentation:
+/**
+     * Convenience function for implementations.
+     *
+     * @param newResult the result to set
+     * @param iterationCount the iteration count to set
+     */
+Method code:
+140 |     protected final void setResult(final double newResult, final int iterationCount) {
+141 |         this.result         = newResult;
+142 |         this.iterationCount = iterationCount;
+143 |         this.resultComputed = true;
+144 |     }
+
+===== M0066 =====
+Signature: org.apache.commons.math.ode.events.CombinedEventsManager.stop()
+Source: src/main/java/org/apache/commons/math/ode/events/CombinedEventsManager.java
+Original range: 214-221
+Documentation:
+/** Check if the integration should be stopped at the end of the
+     * current step.
+     * @return true if the integration should be stopped
+     */
+Method code:
+214 |     public boolean stop() {
+215 |         for (EventState state : states) {
+216 |             if (state.stop()) {
+217 |                 return true;
+218 |             }
+219 |         }
+220 |         return false;
+221 |     }
+
+===== M0067 =====
+Signature: org.apache.commons.math.ode.events.CombinedEventsManager.getEventsStates()
+Source: src/main/java/org/apache/commons/math/ode/events/CombinedEventsManager.java
+Original range: 101-103
+Documentation:
+/** Get all the events state wrapping the handlers that have been added to the manager.
+     * @return a collection of the events states
+     * @see #getEventsHandlers()
+     */
+Method code:
+101 |     public Collection<EventState> getEventsStates() {
+102 |         return states;
+103 |     }
+
+===== M0068 =====
+Signature: org.apache.commons.math.ode.nonstiff.EmbeddedRungeKuttaIntegrator.setSafety(double)
+Source: src/main/java/org/apache/commons/math/ode/nonstiff/EmbeddedRungeKuttaIntegrator.java
+Original range: 186-188
+Documentation:
+/** Set the safety factor for stepsize control.
+   * @param safety safety factor
+   */
+Method code:
+186 |   public void setSafety(final double safety) {
+187 |     this.safety = safety;
+188 |   }
+
+===== M0069 =====
+Signature: org.apache.commons.math.ode.AbstractIntegrator.computeDerivatives(double,double[],double[])
+Source: src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+Original range: 177-183
+Documentation:
+/** Compute the derivatives and check the number of evaluations.
+     * @param t current value of the independent <I>time</I> variable
+     * @param y array containing the current value of the state vector
+     * @param yDot placeholder array where to put the time derivative of the state vector
+     * @throws DerivativeException this exception is propagated to the caller if the
+     * underlying user function triggers one
+     */
+Method code:
+177 |     public void computeDerivatives(final double t, final double[] y, final double[] yDot)
+178 |         throws DerivativeException {
+179 |         if (++evaluations > maxEvaluations) {
+180 |             throw new DerivativeException(new MaxEvaluationsExceededException(maxEvaluations));
+181 |         }
+182 |         equations.computeDerivatives(t, y, yDot);
+183 |     }
+

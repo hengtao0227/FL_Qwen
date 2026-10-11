@@ -1,0 +1,52 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.LooseTypeCheckTest.testDuplicateLocalVarDecl()",
+    "resolved_signature": "com.google.javascript.jscomp.LooseTypeCheckTest.testDuplicateLocalVarDecl()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/LooseTypeCheckTest.java",
+    "begin_line": 1969,
+    "end_line": 1979,
+    "comment": "",
+    "snippet": "  public void testDuplicateLocalVarDecl() throws Exception {\n    testClosureTypesMultipleWarnings(\n        \"/** @param {number} x */\\n\" +\n        \"function f(x) { /** @type {string} */ var x = ''; }\",\n        Lists.newArrayList(\n            \"variable x redefined with type string, original definition\" +\n            \" at  [testcode] :2 with type number\",\n            \"initializing variable\\n\" +\n            \"found   : string\\n\" +\n            \"required: number\"));\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.LooseTypeCheckTest.testFunctionArguments13()",
+    "resolved_signature": "com.google.javascript.jscomp.LooseTypeCheckTest.testFunctionArguments13()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/LooseTypeCheckTest.java",
+    "begin_line": 1344,
+    "end_line": 1353,
+    "comment": "",
+    "snippet": "  public void testFunctionArguments13() throws Exception {\n    // verifying that the argument type have non-inferrable types\n    testTypes(\n        \"/** @return {boolean} */ function u() { return true; }\" +\n        \"/** @param {boolean} b\\n@return {?boolean} */\" +\n        \"function f(b) { if (u()) { b = null; } return b; }\",\n        \"assignment\\n\" +\n        \"found   : null\\n\" +\n        \"required: boolean\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testScoping12()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testScoping12()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 1420,
+    "end_line": 1433,
+    "comment": "",
+    "snippet": "  public void testScoping12() throws Exception {\n    testTypes(\n        \"/** @constructor */ function F() {}\" +\n        \"/** @type {number} */ F.prototype.bar = 3;\" +\n        \"/** @param {!F} f */ function g(f) {\" +\n        \"  /** @return {string} */\" +\n        \"  function h() {\" +\n        \"    return f.bar;\" +\n        \"  }\" +\n        \"}\",\n        \"inconsistent return type\\n\" +\n        \"found   : number\\n\" +\n        \"required: string\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testDuplicateLocalVarDecl()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testDuplicateLocalVarDecl()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 2146,
+    "end_line": 2156,
+    "comment": "",
+    "snippet": "  public void testDuplicateLocalVarDecl() throws Exception {\n    testClosureTypesMultipleWarnings(\n        \"/** @param {number} x */\\n\" +\n        \"function f(x) { /** @type {string} */ var x = ''; }\",\n        Lists.newArrayList(\n            \"variable x redefined with type string, original definition\" +\n            \" at  [testcode] :2 with type number\",\n            \"initializing variable\\n\" +\n            \"found   : string\\n\" +\n            \"required: number\"));\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testFunctionArguments13()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testFunctionArguments13()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 1512,
+    "end_line": 1521,
+    "comment": "",
+    "snippet": "  public void testFunctionArguments13() throws Exception {\n    // verifying that the argument type have non-inferrable types\n    testTypes(\n        \"/** @return {boolean} */ function u() { return true; }\" +\n        \"/** @param {boolean} b\\n@return {?boolean} */\" +\n        \"function f(b) { if (u()) { b = null; } return b; }\",\n        \"assignment\\n\" +\n        \"found   : null\\n\" +\n        \"required: boolean\");\n  }"
+  }
+]

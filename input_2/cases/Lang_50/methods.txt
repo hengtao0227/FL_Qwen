@@ -1,0 +1,853 @@
+===== M0001 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.getDateTimeInstance(int,int,TimeZone,Locale)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 458-486
+Documentation:
+/**
+     * <p>Gets a date/time formatter instance using the specified style,
+     * time zone and locale.</p>
+     * 
+     * @param dateStyle  date style: FULL, LONG, MEDIUM, or SHORT
+     * @param timeStyle  time style: FULL, LONG, MEDIUM, or SHORT
+     * @param timeZone  optional time zone, overrides time zone of
+     *  formatted date
+     * @param locale  optional locale, overrides system locale
+     * @return a localized standard date/time formatter
+     * @throws IllegalArgumentException if the Locale has no date/time
+     *  pattern defined
+     */
+Method code:
+458 |     public static synchronized FastDateFormat getDateTimeInstance(int dateStyle, int timeStyle, TimeZone timeZone,
+459 |             Locale locale) {
+460 | 
+461 |         Object key = new Pair(new Integer(dateStyle), new Integer(timeStyle));
+462 |         if (timeZone != null) {
+463 |             key = new Pair(key, timeZone);
+464 |         }
+465 |         if (locale != null) {
+466 |             key = new Pair(key, locale);
+467 |         }
+468 | 
+469 |         FastDateFormat format = (FastDateFormat) cDateTimeInstanceCache.get(key);
+470 |         if (format == null) {
+471 |             if (locale == null) {
+472 |                 locale = Locale.getDefault();
+473 |             }
+474 |             try {
+475 |                 SimpleDateFormat formatter = (SimpleDateFormat) DateFormat.getDateTimeInstance(dateStyle, timeStyle,
+476 |                         locale);
+477 |                 String pattern = formatter.toPattern();
+478 |                 format = getInstance(pattern, timeZone, locale);
+479 |                 cDateTimeInstanceCache.put(key, format);
+480 | 
+481 |             } catch (ClassCastException ex) {
+482 |                 throw new IllegalArgumentException("No date time pattern for locale: " + locale);
+483 |             }
+484 |         }
+485 |         return format;
+486 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.selectNumberRule(int,int)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 769-778
+Documentation:
+/**
+     * <p>Gets an appropriate rule for the padding required.</p>
+     * 
+     * @param field  the field to get a rule for
+     * @param padding  the padding required
+     * @return a new rule with the correct padding
+     */
+Method code:
+769 |     protected NumberRule selectNumberRule(int field, int padding) {
+770 |         switch (padding) {
+771 |         case 1:
+772 |             return new UnpaddedNumberField(field);
+773 |         case 2:
+774 |             return new TwoDigitNumberField(field);
+775 |         default:
+776 |             return new PaddedNumberField(field, padding);
+777 |         }
+778 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.getDateInstance(int,Locale)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 248-250
+Documentation:
+/**
+     * <p>Gets a date formatter instance using the specified style and
+     * locale in the default time zone.</p>
+     * 
+     * @param style  date style: FULL, LONG, MEDIUM, or SHORT
+     * @param locale  optional locale, overrides system locale
+     * @return a localized standard date formatter
+     * @throws IllegalArgumentException if the Locale has no date
+     *  pattern defined
+     * @since 2.1
+     */
+Method code:
+248 |     public static FastDateFormat getDateInstance(int style, Locale locale) {
+249 |         return getDateInstance(style, null, locale);
+250 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.Pair.Pair(Object,Object)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1708-1711
+Documentation:
+/**
+         * Constructs an instance of <code>Pair</code> to hold the specified objects.
+         * @param obj1 one object in the pair
+         * @param obj2 second object in the pair
+         */
+Method code:
+1708 |         public Pair(Object obj1, Object obj2) {
+1709 |             mObj1 = obj1;
+1710 |             mObj2 = obj2;
+1711 |         }
+
+===== M0005 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.FastDateFormat(String,TimeZone,Locale)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 537-555
+Documentation:
+/**
+     * <p>Constructs a new FastDateFormat.</p>
+     * 
+     * @param pattern  {@link java.text.SimpleDateFormat} compatible
+     *  pattern
+     * @param timeZone  time zone to use, <code>null</code> means use
+     *  default for <code>Date</code> and value within for
+     *  <code>Calendar</code>
+     * @param locale  locale, <code>null</code> means use system
+     *  default
+     * @throws IllegalArgumentException if pattern is invalid or
+     *  <code>null</code>
+     */
+Method code:
+537 |     protected FastDateFormat(String pattern, TimeZone timeZone, Locale locale) {
+538 |         super();
+539 |         if (pattern == null) {
+540 |             throw new IllegalArgumentException("The pattern must not be null");
+541 |         }
+542 |         mPattern = pattern;
+543 |         
+544 |         mTimeZoneForced = (timeZone != null);
+545 |         if (timeZone == null) {
+546 |             timeZone = TimeZone.getDefault();
+547 |         }
+548 |         mTimeZone = timeZone;
+549 |         
+550 |         mLocaleForced = (locale != null);
+551 |         if (locale == null) {
+552 |             locale = Locale.getDefault();
+553 |         }
+554 |         mLocale = locale;
+555 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.getInstance(String,TimeZone,Locale)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 211-220
+Documentation:
+/**
+     * <p>Gets a formatter instance using the specified pattern, time zone
+     * and locale.</p>
+     * 
+     * @param pattern  {@link java.text.SimpleDateFormat} compatible
+     *  pattern
+     * @param timeZone  optional time zone, overrides time zone of
+     *  formatted date
+     * @param locale  optional locale, overrides system locale
+     * @return a pattern based date/time formatter
+     * @throws IllegalArgumentException if pattern is invalid
+     *  or <code>null</code>
+     */
+Method code:
+211 |     public static synchronized FastDateFormat getInstance(String pattern, TimeZone timeZone, Locale locale) {
+212 |         FastDateFormat emptyFormat = new FastDateFormat(pattern, timeZone, locale);
+213 |         FastDateFormat format = (FastDateFormat) cInstanceCache.get(emptyFormat);
+214 |         if (format == null) {
+215 |             format = emptyFormat;
+216 |             format.init();  // convert shell format into usable one
+217 |             cInstanceCache.put(format, format);  // this is OK!
+218 |         }
+219 |         return format;
+220 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.parseToken(String,int[])
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 710-760
+Documentation:
+/**
+     * <p>Performs the parsing of tokens.</p>
+     * 
+     * @param pattern  the pattern
+     * @param indexRef  index references
+     * @return parsed token
+     */
+Method code:
+710 |     protected String parseToken(String pattern, int[] indexRef) {
+711 |         StringBuffer buf = new StringBuffer();
+712 | 
+713 |         int i = indexRef[0];
+714 |         int length = pattern.length();
+715 | 
+716 |         char c = pattern.charAt(i);
+717 |         if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z') {
+718 |             // Scan a run of the same character, which indicates a time
+719 |             // pattern.
+720 |             buf.append(c);
+721 | 
+722 |             while (i + 1 < length) {
+723 |                 char peek = pattern.charAt(i + 1);
+724 |                 if (peek == c) {
+725 |                     buf.append(c);
+726 |                     i++;
+727 |                 } else {
+728 |                     break;
+729 |                 }
+730 |             }
+731 |         } else {
+732 |             // This will identify token as text.
+733 |             buf.append('\'');
+734 | 
+735 |             boolean inLiteral = false;
+736 | 
+737 |             for (; i < length; i++) {
+738 |                 c = pattern.charAt(i);
+739 | 
+740 |                 if (c == '\'') {
+741 |                     if (i + 1 < length && pattern.charAt(i + 1) == '\'') {
+742 |                         // '' is treated as escaped '
+743 |                         i++;
+744 |                         buf.append(c);
+745 |                     } else {
+746 |                         inLiteral = !inLiteral;
+747 |                     }
+748 |                 } else if (!inLiteral &&
+749 |                          (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z')) {
+750 |                     i--;
+751 |                     break;
+752 |                 } else {
+753 |                     buf.append(c);
+754 |                 }
+755 |             }
+756 |         }
+757 | 
+758 |         indexRef[0] = i;
+759 |         return buf.toString();
+760 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.Pair.equals(Object)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1716-1732
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1716 |         public boolean equals(Object obj) {
+1717 |             if (this == obj) {
+1718 |                 return true;
+1719 |             }
+1720 | 
+1721 |             if (!(obj instanceof Pair)) {
+1722 |                 return false;
+1723 |             }
+1724 | 
+1725 |             Pair key = (Pair)obj;
+1726 | 
+1727 |             return
+1728 |                 (mObj1 == null ?
+1729 |                  key.mObj1 == null : mObj1.equals(key.mObj1)) &&
+1730 |                 (mObj2 == null ?
+1731 |                  key.mObj2 == null : mObj2.equals(key.mObj2));
+1732 |         }
+
+===== M0009 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.getDateInstance(int,TimeZone,Locale)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 279-306
+Documentation:
+/**
+     * <p>Gets a date formatter instance using the specified style, time
+     * zone and locale.</p>
+     * 
+     * @param style  date style: FULL, LONG, MEDIUM, or SHORT
+     * @param timeZone  optional time zone, overrides time zone of
+     *  formatted date
+     * @param locale  optional locale, overrides system locale
+     * @return a localized standard date formatter
+     * @throws IllegalArgumentException if the Locale has no date
+     *  pattern defined
+     */
+Method code:
+279 |     public static synchronized FastDateFormat getDateInstance(int style, TimeZone timeZone, Locale locale) {
+280 |         Object key = new Integer(style);
+281 |         if (timeZone != null) {
+282 |             key = new Pair(key, timeZone);
+283 |         }
+284 | 
+285 |         if (locale != null) {
+286 |             key = new Pair(key, locale);
+287 |         }
+288 | 
+289 | 
+290 |         FastDateFormat format = (FastDateFormat) cDateInstanceCache.get(key);
+291 |         if (format == null) {
+292 |             if (locale == null) {
+293 |                 locale = Locale.getDefault();
+294 |             }
+295 |             try {
+296 |                 SimpleDateFormat formatter = (SimpleDateFormat) DateFormat.getDateInstance(style, locale);
+297 |                 String pattern = formatter.toPattern();
+298 |                 format = getInstance(pattern, timeZone, locale);
+299 |                 cDateInstanceCache.put(key, format);
+300 |                 
+301 |             } catch (ClassCastException ex) {
+302 |                 throw new IllegalArgumentException("No date pattern for locale: " + locale);
+303 |             }
+304 |         }
+305 |         return format;
+306 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.CharacterLiteral.CharacterLiteral(char)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1081-1083
+Documentation:
+/**
+         * Constructs a new instance of <code>CharacterLiteral</code>
+         * to hold the specified value.
+         * 
+         * @param value the character literal
+         */
+Method code:
+1081 |         CharacterLiteral(char value) {
+1082 |             mValue = value;
+1083 |         }
+
+===== M0011 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.hashCode()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1000-1008
+Documentation:
+/**
+     * <p>Returns a hashcode compatible with equals.</p>
+     * 
+     * @return a hashcode compatible with equals
+     */
+Method code:
+1000 |     public int hashCode() {
+1001 |         int total = 0;
+1002 |         total += mPattern.hashCode();
+1003 |         total += mTimeZone.hashCode();
+1004 |         total += (mTimeZoneForced ? 1 : 0);
+1005 |         total += mLocale.hashCode();
+1006 |         total += (mLocaleForced ? 1 : 0);
+1007 |         return total;
+1008 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.CharacterLiteral.estimateLength()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1088-1090
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1088 |         public int estimateLength() {
+1089 |             return 1;
+1090 |         }
+
+===== M0013 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.parsePattern()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 580-701
+Documentation:
+/**
+     * <p>Returns a list of Rules given a pattern.</p>
+     * 
+     * @return a <code>List</code> of Rule objects
+     * @throws IllegalArgumentException if pattern is invalid
+     */
+Method code:
+580 |     protected List parsePattern() {
+581 |         DateFormatSymbols symbols = new DateFormatSymbols(mLocale);
+582 |         List rules = new ArrayList();
+583 | 
+584 |         String[] ERAs = symbols.getEras();
+585 |         String[] months = symbols.getMonths();
+586 |         String[] shortMonths = symbols.getShortMonths();
+587 |         String[] weekdays = symbols.getWeekdays();
+588 |         String[] shortWeekdays = symbols.getShortWeekdays();
+589 |         String[] AmPmStrings = symbols.getAmPmStrings();
+590 | 
+591 |         int length = mPattern.length();
+592 |         int[] indexRef = new int[1];
+593 | 
+594 |         for (int i = 0; i < length; i++) {
+595 |             indexRef[0] = i;
+596 |             String token = parseToken(mPattern, indexRef);
+597 |             i = indexRef[0];
+598 | 
+599 |             int tokenLen = token.length();
+600 |             if (tokenLen == 0) {
+601 |                 break;
+602 |             }
+603 | 
+604 |             Rule rule;
+605 |             char c = token.charAt(0);
+606 | 
+607 |             switch (c) {
+608 |             case 'G': // era designator (text)
+609 |                 rule = new TextField(Calendar.ERA, ERAs);
+610 |                 break;
+611 |             case 'y': // year (number)
+612 |                 if (tokenLen >= 4) {
+613 |                     rule = selectNumberRule(Calendar.YEAR, tokenLen);
+614 |                 } else {
+615 |                     rule = TwoDigitYearField.INSTANCE;
+616 |                 }
+617 |                 break;
+618 |             case 'M': // month in year (text and number)
+619 |                 if (tokenLen >= 4) {
+620 |                     rule = new TextField(Calendar.MONTH, months);
+621 |                 } else if (tokenLen == 3) {
+622 |                     rule = new TextField(Calendar.MONTH, shortMonths);
+623 |                 } else if (tokenLen == 2) {
+624 |                     rule = TwoDigitMonthField.INSTANCE;
+625 |                 } else {
+626 |                     rule = UnpaddedMonthField.INSTANCE;
+627 |                 }
+628 |                 break;
+629 |             case 'd': // day in month (number)
+630 |                 rule = selectNumberRule(Calendar.DAY_OF_MONTH, tokenLen);
+631 |                 break;
+632 |             case 'h': // hour in am/pm (number, 1..12)
+633 |                 rule = new TwelveHourField(selectNumberRule(Calendar.HOUR, tokenLen));
+634 |                 break;
+635 |             case 'H': // hour in day (number, 0..23)
+636 |                 rule = selectNumberRule(Calendar.HOUR_OF_DAY, tokenLen);
+637 |                 break;
+638 |             case 'm': // minute in hour (number)
+639 |                 rule = selectNumberRule(Calendar.MINUTE, tokenLen);
+640 |                 break;
+641 |             case 's': // second in minute (number)
+642 |                 rule = selectNumberRule(Calendar.SECOND, tokenLen);
+643 |                 break;
+644 |             case 'S': // millisecond (number)
+645 |                 rule = selectNumberRule(Calendar.MILLISECOND, tokenLen);
+646 |                 break;
+647 |             case 'E': // day in week (text)
+648 |                 rule = new TextField(Calendar.DAY_OF_WEEK, tokenLen < 4 ? shortWeekdays : weekdays);
+649 |                 break;
+650 |             case 'D': // day in year (number)
+651 |                 rule = selectNumberRule(Calendar.DAY_OF_YEAR, tokenLen);
+652 |                 break;
+653 |             case 'F': // day of week in month (number)
+654 |                 rule = selectNumberRule(Calendar.DAY_OF_WEEK_IN_MONTH, tokenLen);
+655 |                 break;
+656 |             case 'w': // week in year (number)
+657 |                 rule = selectNumberRule(Calendar.WEEK_OF_YEAR, tokenLen);
+658 |                 break;
+659 |             case 'W': // week in month (number)
+660 |                 rule = selectNumberRule(Calendar.WEEK_OF_MONTH, tokenLen);
+661 |                 break;
+662 |             case 'a': // am/pm marker (text)
+663 |                 rule = new TextField(Calendar.AM_PM, AmPmStrings);
+664 |                 break;
+665 |             case 'k': // hour in day (1..24)
+666 |                 rule = new TwentyFourHourField(selectNumberRule(Calendar.HOUR_OF_DAY, tokenLen));
+667 |                 break;
+668 |             case 'K': // hour in am/pm (0..11)
+669 |                 rule = selectNumberRule(Calendar.HOUR, tokenLen);
+670 |                 break;
+671 |             case 'z': // time zone (text)
+672 |                 if (tokenLen >= 4) {
+673 |                     rule = new TimeZoneNameRule(mTimeZone, mTimeZoneForced, mLocale, TimeZone.LONG);
+674 |                 } else {
+675 |                     rule = new TimeZoneNameRule(mTimeZone, mTimeZoneForced, mLocale, TimeZone.SHORT);
+676 |                 }
+677 |                 break;
+678 |             case 'Z': // time zone (value)
+679 |                 if (tokenLen == 1) {
+680 |                     rule = TimeZoneNumberRule.INSTANCE_NO_COLON;
+681 |                 } else {
+682 |                     rule = TimeZoneNumberRule.INSTANCE_COLON;
+683 |                 }
+684 |                 break;
+685 |             case '\'': // literal text
+686 |                 String sub = token.substring(1);
+687 |                 if (sub.length() == 1) {
+688 |                     rule = new CharacterLiteral(sub.charAt(0));
+689 |                 } else {
+690 |                     rule = new StringLiteral(sub);
+691 |                 }
+692 |                 break;
+693 |             default:
+694 |                 throw new IllegalArgumentException("Illegal pattern component: " + token);
+695 |             }
+696 | 
+697 |             rules.add(rule);
+698 |         }
+699 | 
+700 |         return rules;
+701 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.TwelveHourField.estimateLength()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1454-1456
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1454 |         public int estimateLength() {
+1455 |             return mRule.estimateLength();
+1456 |         }
+
+===== M0015 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.StringLiteral.estimateLength()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1119-1121
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1119 |         public int estimateLength() {
+1120 |             return mValue.length();
+1121 |         }
+
+===== M0016 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.TwoDigitNumberField.TwoDigitNumberField(int)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1332-1334
+Documentation:
+/**
+         * Constructs an instance of <code>TwoDigitNumberField</code> with the specified field.
+         * 
+         * @param field the field
+         */
+Method code:
+1332 |         TwoDigitNumberField(int field) {
+1333 |             mField = field;
+1334 |         }
+
+===== M0017 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.getDateTimeInstance(int,int,Locale)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 423-426
+Documentation:
+/**
+     * <p>Gets a date/time formatter instance using the specified style and
+     * locale in the default time zone.</p>
+     * 
+     * @param dateStyle  date style: FULL, LONG, MEDIUM, or SHORT
+     * @param timeStyle  time style: FULL, LONG, MEDIUM, or SHORT
+     * @param locale  optional locale, overrides system locale
+     * @return a localized standard date/time formatter
+     * @throws IllegalArgumentException if the Locale has no date/time
+     *  pattern defined
+     * @since 2.1
+     */
+Method code:
+423 |     public static FastDateFormat getDateTimeInstance(
+424 |             int dateStyle, int timeStyle, Locale locale) {
+425 |         return getDateTimeInstance(dateStyle, timeStyle, null, locale);
+426 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.Pair.hashCode()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1737-1741
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1737 |         public int hashCode() {
+1738 |             return
+1739 |                 (mObj1 == null ? 0 : mObj1.hashCode()) +
+1740 |                 (mObj2 == null ? 0 : mObj2.hashCode());
+1741 |         }
+
+===== M0019 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.TwelveHourField.TwelveHourField(NumberRule)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1447-1449
+Documentation:
+/**
+         * Constructs an instance of <code>TwelveHourField</code> with the specified
+         * <code>NumberRule</code>.
+         * 
+         * @param rule the rule
+         */
+Method code:
+1447 |         TwelveHourField(NumberRule rule) {
+1448 |             mRule = rule;
+1449 |         }
+
+===== M0020 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.TextField.TextField(int,String[])
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1145-1148
+Documentation:
+/**
+         * Constructs an instance of <code>TextField</code>
+         * with the specified field and values.
+         * 
+         * @param field the field
+         * @param values the field values
+         */
+Method code:
+1145 |         TextField(int field, String[] values) {
+1146 |             mField = field;
+1147 |             mValues = values;
+1148 |         }
+
+===== M0021 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.getDateTimeInstance(int,int)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 406-409
+Documentation:
+/**
+     * <p>Gets a date/time formatter instance using the specified style
+     * in the default time zone and locale.</p>
+     * 
+     * @param dateStyle  date style: FULL, LONG, MEDIUM, or SHORT
+     * @param timeStyle  time style: FULL, LONG, MEDIUM, or SHORT
+     * @return a localized standard date/time formatter
+     * @throws IllegalArgumentException if the Locale has no date/time
+     *  pattern defined
+     * @since 2.1
+     */
+Method code:
+406 |     public static FastDateFormat getDateTimeInstance(
+407 |             int dateStyle, int timeStyle) {
+408 |         return getDateTimeInstance(dateStyle, timeStyle, null, null);
+409 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.StringLiteral.StringLiteral(String)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1112-1114
+Documentation:
+/**
+         * Constructs a new instance of <code>StringLiteral</code>
+         * to hold the specified value.
+         * 
+         * @param value the string literal
+         */
+Method code:
+1112 |         StringLiteral(String value) {
+1113 |             mValue = value;
+1114 |         }
+
+===== M0023 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.PaddedNumberField.estimateLength()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1284-1286
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1284 |         public int estimateLength() {
+1285 |             return 4;
+1286 |         }
+
+===== M0024 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.TimeZoneNameRule.estimateLength()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1556-1564
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1556 |         public int estimateLength() {
+1557 |             if (mTimeZoneForced) {
+1558 |                 return Math.max(mStandard.length(), mDaylight.length());
+1559 |             } else if (mStyle == TimeZone.SHORT) {
+1560 |                 return 4;
+1561 |             } else {
+1562 |                 return 40;
+1563 |             }
+1564 |         }
+
+===== M0025 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.TextField.estimateLength()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1153-1162
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1153 |         public int estimateLength() {
+1154 |             int max = 0;
+1155 |             for (int i=mValues.length; --i >= 0; ) {
+1156 |                 int len = mValues[i].length();
+1157 |                 if (len > max) {
+1158 |                     max = len;
+1159 |                 }
+1160 |             }
+1161 |             return max;
+1162 |         }
+
+===== M0026 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.getDateInstance(int)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 233-235
+Documentation:
+/**
+     * <p>Gets a date formatter instance using the specified style in the
+     * default time zone and locale.</p>
+     * 
+     * @param style  date style: FULL, LONG, MEDIUM, or SHORT
+     * @return a localized standard date formatter
+     * @throws IllegalArgumentException if the Locale has no date
+     *  pattern defined
+     * @since 2.1
+     */
+Method code:
+233 |     public static FastDateFormat getDateInstance(int style) {
+234 |         return getDateInstance(style, null, null);
+235 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.PaddedNumberField.PaddedNumberField(int,int)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1272-1279
+Documentation:
+/**
+         * Constructs an instance of <code>PaddedNumberField</code>.
+         * 
+         * @param field the field
+         * @param size size of the output field
+         */
+Method code:
+1272 |         PaddedNumberField(int field, int size) {
+1273 |             if (size < 3) {
+1274 |                 // Should use UnpaddedNumberField or TwoDigitNumberField.
+1275 |                 throw new IllegalArgumentException();
+1276 |             }
+1277 |             mField = field;
+1278 |             mSize = size;
+1279 |         }
+
+===== M0028 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.TimeZoneNameRule.TimeZoneNameRule(TimeZone,boolean,Locale,int)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1538-1551
+Documentation:
+/**
+         * Constructs an instance of <code>TimeZoneNameRule</code> with the specified properties.
+         * 
+         * @param timeZone the time zone
+         * @param timeZoneForced if <code>true</code> the time zone is forced into standard and daylight
+         * @param locale the locale
+         * @param style the style
+         */
+Method code:
+1538 |         TimeZoneNameRule(TimeZone timeZone, boolean timeZoneForced, Locale locale, int style) {
+1539 |             mTimeZone = timeZone;
+1540 |             mTimeZoneForced = timeZoneForced;
+1541 |             mLocale = locale;
+1542 |             mStyle = style;
+1543 | 
+1544 |             if (timeZoneForced) {
+1545 |                 mStandard = getTimeZoneDisplay(timeZone, false, style, locale);
+1546 |                 mDaylight = getTimeZoneDisplay(timeZone, true, style, locale);
+1547 |             } else {
+1548 |                 mStandard = null;
+1549 |                 mDaylight = null;
+1550 |             }
+1551 |         }
+
+===== M0029 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.UnpaddedNumberField.estimateLength()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1192-1194
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1192 |         public int estimateLength() {
+1193 |             return 4;
+1194 |         }
+
+===== M0030 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.UnpaddedNumberField.UnpaddedNumberField(int)
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1185-1187
+Documentation:
+/**
+         * Constructs an instance of <code>UnpadedNumberField</code> with the specified field.
+         * 
+         * @param field the field
+         */
+Method code:
+1185 |         UnpaddedNumberField(int field) {
+1186 |             mField = field;
+1187 |         }
+
+===== M0031 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.TwoDigitNumberField.estimateLength()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 1339-1341
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1339 |         public int estimateLength() {
+1340 |             return 2;
+1341 |         }
+
+===== M0032 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.getLocale()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 953-955
+Documentation:
+/**
+     * <p>Gets the locale used by this formatter.</p>
+     * 
+     * @return the locale
+     */
+Method code:
+953 |     public Locale getLocale() {
+954 |         return mLocale;
+955 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.lang.time.FastDateFormat.init()
+Source: src/java/org/apache/commons/lang/time/FastDateFormat.java
+Original range: 560-570
+Documentation:
+/**
+     * <p>Initializes the instance for first use.</p>
+     */
+Method code:
+560 |     protected void init() {
+561 |         List rulesList = parsePattern();
+562 |         mRules = (Rule[]) rulesList.toArray(new Rule[rulesList.size()]);
+563 | 
+564 |         int len = 0;
+565 |         for (int i=mRules.length; --i >= 0; ) {
+566 |             len += mRules[i].estimateLength();
+567 |         }
+568 | 
+569 |         mMaxLengthEstimate = len;
+570 |     }
+

@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testIssue700()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testIssue700()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 5776,
+    "end_line": 5816,
+    "comment": "",
+    "snippet": "  public void testIssue700() throws Exception {\n    testTypes(\n        \"/**\\n\" +\n        \" * @param {{text: string}} opt_data\\n\" +\n        \" * @return {string}\\n\" +\n        \" */\\n\" +\n        \"function temp1(opt_data) {\\n\" +\n        \"  return opt_data.text;\\n\" +\n        \"}\\n\" +\n        \"\\n\" +\n        \"/**\\n\" +\n        \" * @param {{activity: (boolean|number|string|null|Object)}} opt_data\\n\" +\n        \" * @return {string}\\n\" +\n        \" */\\n\" +\n        \"function temp2(opt_data) {\\n\" +\n        \"  /** @notypecheck */\\n\" +\n        \"  function __inner() {\\n\" +\n        \"    return temp1(opt_data.activity);\\n\" +\n        \"  }\\n\" +\n        \"  return __inner();\\n\" +\n        \"}\\n\" +\n        \"\\n\" +\n        \"/**\\n\" +\n        \" * @param {{n: number, text: string, b: boolean}} opt_data\\n\" +\n        \" * @return {string}\\n\" +\n        \" */\\n\" +\n        \"function temp3(opt_data) {\\n\" +\n        \"  return 'n: ' + opt_data.n + ', t: ' + opt_data.text + '.';\\n\" +\n        \"}\\n\" +\n        \"\\n\" +\n        \"function callee() {\\n\" +\n        \"  var output = temp3({\\n\" +\n        \"    n: 0,\\n\" +\n        \"    text: 'a string',\\n\" +\n        \"    b: true\\n\" +\n        \"  })\\n\" +\n        \"  alert(output);\\n\" +\n        \"}\\n\" +\n        \"\\n\" +\n        \"callee();\");\n  }"
+  }
+]

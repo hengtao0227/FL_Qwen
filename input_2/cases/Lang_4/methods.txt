@@ -1,0 +1,63 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.text.translate.LookupTranslator.translate(CharSequence,int,Writer)
+Source: src/main/java/org/apache/commons/lang3/text/translate/LookupTranslator.java
+Original range: 68-84
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+68 |     @Override
+69 |     public int translate(final CharSequence input, final int index, final Writer out) throws IOException {
+70 |         int max = longest;
+71 |         if (index + longest > input.length()) {
+72 |             max = input.length() - index;
+73 |         }
+74 |         // descend so as to get a greedy algorithm
+75 |         for (int i = max; i >= shortest; i--) {
+76 |             final CharSequence subSeq = input.subSequence(index, index + i);
+77 |             final CharSequence result = lookupMap.get(subSeq);
+78 |             if (result != null) {
+79 |                 out.write(result.toString());
+80 |                 return i;
+81 |             }
+82 |         }
+83 |         return 0;
+84 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.text.translate.LookupTranslator.LookupTranslator(CharSequence[]...)
+Source: src/main/java/org/apache/commons/lang3/text/translate/LookupTranslator.java
+Original range: 45-63
+Documentation:
+/**
+     * Define the lookup table to be used in translation
+     *
+     * Note that, as of Lang 3.1, the key to the lookup table is converted to a 
+     * java.lang.String, while the value remains as a java.lang.CharSequence. 
+     * This is because we need the key to support hashCode and equals(Object), 
+     * allowing it to be the key for a HashMap. See LANG-882.
+     *
+     * @param lookup CharSequence[][] table of size [*][2]
+     */
+Method code:
+45 |     public LookupTranslator(final CharSequence[]... lookup) {
+46 |         lookupMap = new HashMap<CharSequence, CharSequence>();
+47 |         int _shortest = Integer.MAX_VALUE;
+48 |         int _longest = 0;
+49 |         if (lookup != null) {
+50 |             for (final CharSequence[] seq : lookup) {
+51 |                 this.lookupMap.put(seq[0], seq[1]);
+52 |                 final int sz = seq[0].length();
+53 |                 if (sz < _shortest) {
+54 |                     _shortest = sz;
+55 |                 }
+56 |                 if (sz > _longest) {
+57 |                     _longest = sz;
+58 |                 }
+59 |             }
+60 |         }
+61 |         shortest = _shortest;
+62 |         longest = _longest;
+63 |     }
+

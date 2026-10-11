@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNullsTest.shouldPrintTheParametersOnSmartNullPointerExceptionMessage()",
+    "resolved_signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNullsTest.shouldPrintTheParametersOnSmartNullPointerExceptionMessage()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNullsTest.java",
+    "begin_line": 60,
+    "end_line": 74,
+    "comment": "",
+    "snippet": "    @Test\n\tpublic void shouldPrintTheParametersOnSmartNullPointerExceptionMessage() throws Throwable {\n    \tAnswer<Object> answer = new ReturnsSmartNulls();\n\n        Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, \"withArgs\", \"oompa\", \"lumpa\"));\n\n        try {\n            smartNull.get();\n            fail();\n        } catch (SmartNullPointerException ex) {\n        \tString message = ex.getMessage();\n        \tassertTrue(\"Exception message should include oompa and lumpa, but was: \" + message,\n        \t\t\tmessage.contains(\"oompa, lumpa\"));\n        }\n\t}"
+  }
+]

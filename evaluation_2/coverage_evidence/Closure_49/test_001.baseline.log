@@ -1,0 +1,121 @@
+junit.framework.AssertionFailedError: 
+Expected: var x=1;var y=2;function foo(a,b){y=a;x=b}function bar(){var b$$inline_1=y;y=x;x=b$$inline_1}
+Result: var x=1;var y=2;function foo(a,b){y=a;x=b}function bar(){var b$$inline_3=y;y=x;x=b$$inline_3}
+Node tree inequality:
+Tree1:
+SCRIPT 1 [synthetic: 1] [source_file:  [testcode] ] [input_id: InputId:  [testcode] ]
+    VAR 1 [source_file:  [testcode] ]
+        NAME x 1 [source_file:  [testcode] ]
+            NUMBER 1.0 1 [source_file:  [testcode] ]
+    VAR 1 [source_file:  [testcode] ]
+        NAME y 1 [source_file:  [testcode] ]
+            NUMBER 2.0 1 [source_file:  [testcode] ]
+    FUNCTION foo 1 [source_file:  [testcode] ]
+        NAME foo 1 [source_file:  [testcode] ]
+        LP 1 [source_file:  [testcode] ]
+            NAME a 1 [source_file:  [testcode] ]
+            NAME b 1 [source_file:  [testcode] ]
+        BLOCK 1 [source_file:  [testcode] ]
+            EXPR_RESULT 1 [source_file:  [testcode] ]
+                ASSIGN 1 [source_file:  [testcode] ]
+                    NAME y 1 [source_file:  [testcode] ]
+                    NAME a 1 [source_file:  [testcode] ]
+            EXPR_RESULT 1 [source_file:  [testcode] ]
+                ASSIGN 1 [source_file:  [testcode] ]
+                    NAME x 1 [source_file:  [testcode] ]
+                    NAME b 1 [source_file:  [testcode] ]
+    EMPTY 1 [source_file:  [testcode] ]
+    FUNCTION bar 1 [source_file:  [testcode] ]
+        NAME bar 1 [source_file:  [testcode] ]
+        LP 1 [source_file:  [testcode] ]
+        BLOCK 1 [source_file:  [testcode] ]
+            BLOCK 1 [source_file:  [testcode] ]
+                VAR 1 [source_file:  [testcode] ]
+                    NAME b$$inline_1 1 [source_file:  [testcode] ]
+                        NAME y 1 [source_file:  [testcode] ]
+                EXPR_RESULT 1 [source_file:  [testcode] ]
+                    ASSIGN 1 [source_file:  [testcode] ]
+                        NAME y 1 [source_file:  [testcode] ]
+                        NAME x 1 [source_file:  [testcode] ]
+                EXPR_RESULT 1 [source_file:  [testcode] ]
+                    ASSIGN 1 [source_file:  [testcode] ]
+                        NAME x 1 [source_file:  [testcode] ]
+                        NAME b$$inline_1 1 [source_file:  [testcode] ]
+
+
+Tree2:
+SCRIPT 1 [synthetic: 1] [source_file: code] [input_id: InputId: code]
+    VAR 1 [source_file: code]
+        NAME x 1 [source_file: code]
+            NUMBER 1.0 1 [source_file: code]
+    VAR 1 [source_file: code]
+        NAME y 1 [source_file: code]
+            NUMBER 2.0 1 [source_file: code]
+    FUNCTION foo 1 [source_file: code]
+        NAME foo 1 [source_file: code]
+        LP 1 [source_file: code]
+            NAME a 1 [source_file: code]
+            NAME b 1 [source_file: code]
+        BLOCK 1 [source_file: code]
+            EXPR_RESULT 1 [source_file: code]
+                ASSIGN 1 [source_file: code]
+                    NAME y 1 [source_file: code]
+                    NAME a 1 [source_file: code]
+            EXPR_RESULT 1 [source_file: code]
+                ASSIGN 1 [source_file: code]
+                    NAME x 1 [source_file: code]
+                    NAME b 1 [source_file: code]
+    EMPTY 1 [source_file: code]
+    FUNCTION bar 1 [source_file: code]
+        NAME bar 1 [source_file: code]
+        LP 1 [source_file: code]
+        BLOCK 1 [source_file: code]
+            BLOCK 1 [source_file: code]
+                VAR 1 [source_file: code]
+                    NAME b$$inline_3 1 [source_file: code]
+                        NAME y 1 [source_file: code]
+                EXPR_RESULT 1 [source_file: code]
+                    ASSIGN 1 [source_file: code]
+                        NAME y 1 [source_file: code]
+                        NAME x 1 [source_file: code]
+                EXPR_RESULT 1 [source_file: code]
+                    ASSIGN 1 [source_file: code]
+                        NAME x 1 [source_file: code]
+                        NAME b$$inline_3 1 [source_file: code]
+
+
+Subtree1: NAME b$$inline_1 1 [source_file:  [testcode] ]
+    NAME y 1 [source_file:  [testcode] ]
+
+
+Subtree2: NAME b$$inline_3 1 [source_file: code]
+    NAME y 1 [source_file: code]
+
+	at junit.framework.Assert.fail(Assert.java:47)
+	at junit.framework.Assert.assertTrue(Assert.java:20)
+	at junit.framework.Assert.assertNull(Assert.java:233)
+	at com.google.javascript.jscomp.FunctionInjectorTest$2.call(FunctionInjectorTest.java:1479)
+	at com.google.javascript.jscomp.FunctionInjectorTest$TestCallback.visit(FunctionInjectorTest.java:1524)
+	at com.google.javascript.jscomp.NodeTraversal.traverseBranch(NodeTraversal.java:498)
+	at com.google.javascript.jscomp.NodeTraversal.traverseBranch(NodeTraversal.java:491)
+	at com.google.javascript.jscomp.NodeTraversal.traverseBranch(NodeTraversal.java:491)
+	at com.google.javascript.jscomp.NodeTraversal.traverseFunction(NodeTraversal.java:536)
+	at com.google.javascript.jscomp.NodeTraversal.traverseBranch(NodeTraversal.java:483)
+	at com.google.javascript.jscomp.NodeTraversal.traverseBranch(NodeTraversal.java:491)
+	at com.google.javascript.jscomp.NodeTraversal.traverseBranch(NodeTraversal.java:491)
+	at com.google.javascript.jscomp.NodeTraversal.traverse(NodeTraversal.java:277)
+	at com.google.javascript.jscomp.NodeTraversal.traverse(NodeTraversal.java:455)
+	at com.google.javascript.jscomp.FunctionInjectorTest.helperInlineReferenceToFunction(FunctionInjectorTest.java:1488)
+	at com.google.javascript.jscomp.FunctionInjectorTest.helperInlineReferenceToFunction(FunctionInjectorTest.java:1393)
+	at com.google.javascript.jscomp.FunctionInjectorTest.testInline19b(FunctionInjectorTest.java:945)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at junit.framework.TestCase.runTest(TestCase.java:168)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:110)
+	at junit.framework.TestResult.runProtected(TestResult.java:128)
+	at junit.framework.TestResult.run(TestResult.java:113)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at TriggerRunner.main(TriggerRunner.java:18)

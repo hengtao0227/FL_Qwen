@@ -1,0 +1,263 @@
+===== M0001 =====
+Signature: org.mockito.internal.util.Checks.checkNotNull(T,String)
+Source: src/org/mockito/internal/util/Checks.java
+Original range: 13-18
+Documentation:
+
+Method code:
+13 |     public static <T> T checkNotNull(T value, String checkedValue) {
+14 |         if(value == null) {
+15 |             throw new NullPointerException(checkedValue + " should not be null");
+16 |         }
+17 |         return value;
+18 |     }
+
+===== M0002 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.TypeVariableReturnType.TypeVariableReturnType(GenericMetadataSupport,TypeVariable[],TypeVariable)
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 362-369
+Documentation:
+
+Method code:
+362 |         public TypeVariableReturnType(GenericMetadataSupport source, TypeVariable[] typeParameters, TypeVariable typeVariable) {
+363 |             this.typeParameters = typeParameters;
+364 |             this.typeVariable = typeVariable;
+365 |             this.contextualActualTypeParameters = source.contextualActualTypeParameters;
+366 | 
+367 |             readTypeParameters();
+368 |             readTypeVariables();
+369 |         }
+
+===== M0003 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.registerTypeVariableIfNotPresent(TypeVariable)
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 92-97
+Documentation:
+
+Method code:
+92 |     private void registerTypeVariableIfNotPresent(TypeVariable typeVariable) {
+93 |         if (!contextualActualTypeParameters.containsKey(typeVariable)) {
+94 |             contextualActualTypeParameters.put(typeVariable, boundsOf(typeVariable));
+95 |             // logger.log("For '" + typeVariable.getGenericDeclaration() + "' found type variable : { '" + typeVariable + "(" + System.identityHashCode(typeVariable) + ")" + "' : '" + boundsOf(typeVariable) + "' }");
+96 |         }
+97 |     }
+
+===== M0004 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom(Type)
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 228-238
+Documentation:
+/**
+     * Create an new instance of {@link GenericMetadataSupport} inferred from a {@link Type}.
+     *
+     * <p>
+     *     At the moment <code>type</code> can only be a {@link Class} or a {@link ParameterizedType}, otherwise
+     *     it'll throw a {@link MockitoException}.
+     * </p>
+     *
+     * @param type The class from which the {@link GenericMetadataSupport} should be built.
+     * @return The new {@link GenericMetadataSupport}.
+     * @throws MockitoException Raised if type is not a {@link Class} or a {@link ParameterizedType}.
+     */
+Method code:
+228 |     public static GenericMetadataSupport inferFrom(Type type) {
+229 |         Checks.checkNotNull(type, "type");
+230 |         if (type instanceof Class) {
+231 |             return new FromClassGenericMetadataSupport((Class<?>) type);
+232 |         }
+233 |         if (type instanceof ParameterizedType) {
+234 |             return new FromParameterizedTypeGenericMetadataSupport((ParameterizedType) type);
+235 |         }
+236 | 
+237 |         throw new MockitoException("Type meta-data for this Type (" + type.getClass().getCanonicalName() + ") is not supported : " + type);
+238 |     }
+
+===== M0005 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.boundsOf(TypeVariable)
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 104-109
+Documentation:
+/**
+     * @param typeParameter The TypeVariable parameter
+     * @return A {@link BoundedType} for easy bound information, if first bound is a TypeVariable
+     *         then retrieve BoundedType of this TypeVariable
+     */
+Method code:
+104 |     private BoundedType boundsOf(TypeVariable typeParameter) {
+105 |         if (typeParameter.getBounds()[0] instanceof TypeVariable) {
+106 |             return boundsOf((TypeVariable) typeParameter.getBounds()[0]);
+107 |         }
+108 |         return new TypeVarBoundedType(typeParameter);
+109 |     }
+
+===== M0006 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.TypeVariableReturnType.readTypeParameters()
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 371-373
+Documentation:
+
+Method code:
+371 |         private void readTypeParameters() {
+372 |             registerTypeParametersOn(typeParameters);
+373 |         }
+
+===== M0007 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.registerTypeVariablesOn(Type)
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 66-84
+Documentation:
+
+Method code:
+66 |     protected void registerTypeVariablesOn(Type classType) {
+67 |         if (!(classType instanceof ParameterizedType)) {
+68 |             return;
+69 |         }
+70 |         ParameterizedType parameterizedType = (ParameterizedType) classType;
+71 |         TypeVariable[] typeParameters = ((Class<?>) parameterizedType.getRawType()).getTypeParameters();
+72 |         Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+73 |         for (int i = 0; i < actualTypeArguments.length; i++) {
+74 |             TypeVariable typeParameter = typeParameters[i];
+75 |             Type actualTypeArgument = actualTypeArguments[i];
+76 | 
+77 |             if (actualTypeArgument instanceof WildcardType) {
+78 |                 contextualActualTypeParameters.put(typeParameter, boundsOf((WildcardType) actualTypeArgument));
+79 |             } else {
+80 |                 contextualActualTypeParameters.put(typeParameter, actualTypeArgument);
+81 |             }
+82 |             // logger.log("For '" + parameterizedType + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualTypeArgument + "(" + System.identityHashCode(typeParameter) + ")" + "' }");
+83 |         }
+84 |     }
+
+===== M0008 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.resolveGenericReturnType(Method)
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 199-214
+Documentation:
+/**
+     * Resolve current method generic return type to a {@link GenericMetadataSupport}.
+     *
+     * @param method Method to resolve the return type.
+     * @return {@link GenericMetadataSupport} representing this generic return type.
+     */
+Method code:
+199 |     public GenericMetadataSupport resolveGenericReturnType(Method method) {
+200 |         Type genericReturnType = method.getGenericReturnType();
+201 |         // logger.log("Method '" + method.toGenericString() + "' has return type : " + genericReturnType.getClass().getInterfaces()[0].getSimpleName() + " : " + genericReturnType);
+202 | 
+203 |         if (genericReturnType instanceof Class) {
+204 |             return new NotGenericReturnTypeSupport(genericReturnType);
+205 |         }
+206 |         if (genericReturnType instanceof ParameterizedType) {
+207 |             return new ParameterizedReturnType(this, method.getTypeParameters(), (ParameterizedType) method.getGenericReturnType());
+208 |         }
+209 |         if (genericReturnType instanceof TypeVariable) {
+210 |             return new TypeVariableReturnType(this, method.getTypeParameters(), (TypeVariable) genericReturnType);
+211 |         }
+212 | 
+213 |         throw new MockitoException("Ouch, it shouldn't happen, type '" + genericReturnType.getClass().getCanonicalName() + "' on method : '" + method.toGenericString() + "' is not supported : " + genericReturnType);
+214 |     }
+
+===== M0009 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.TypeVariableReturnType.readTypeVariables()
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 375-380
+Documentation:
+
+Method code:
+375 |         private void readTypeVariables() {
+376 |             for (Type type : typeVariable.getBounds()) {
+377 |                 registerTypeVariablesOn(type);
+378 |             }
+379 |             registerTypeVariablesOn(getActualTypeArgumentFor(typeVariable));
+380 |         }
+
+===== M0010 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.TypeVarBoundedType.TypeVarBoundedType(TypeVariable)
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 519-521
+Documentation:
+
+Method code:
+519 |         public TypeVarBoundedType(TypeVariable typeVariable) {
+520 |             this.typeVariable = typeVariable;
+521 |         }
+
+===== M0011 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.FromClassGenericMetadataSupport.superClassOf(Class)
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 265-272
+Documentation:
+
+Method code:
+265 |         private Class superClassOf(Class currentExploredClass) {
+266 |             Type genericSuperclass = currentExploredClass.getGenericSuperclass();
+267 |             if (genericSuperclass instanceof ParameterizedType) {
+268 |                 Type rawType = ((ParameterizedType) genericSuperclass).getRawType();
+269 |                 return (Class) rawType;
+270 |             }
+271 |             return (Class) genericSuperclass;
+272 |         }
+
+===== M0012 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.FromClassGenericMetadataSupport.readActualTypeParametersOnDeclaringClass(Class<?>)
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 274-280
+Documentation:
+
+Method code:
+274 |         private void readActualTypeParametersOnDeclaringClass(Class<?> clazz) {
+275 |             registerTypeParametersOn(clazz.getTypeParameters());
+276 |             registerTypeVariablesOn(clazz.getGenericSuperclass());
+277 |             for (Type genericInterface : clazz.getGenericInterfaces()) {
+278 |                 registerTypeVariablesOn(genericInterface);
+279 |             }
+280 |         }
+
+===== M0013 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.FromClassGenericMetadataSupport.FromClassGenericMetadataSupport(Class<?>)
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 254-263
+Documentation:
+
+Method code:
+254 |         public FromClassGenericMetadataSupport(Class<?> clazz) {
+255 |             this.clazz = clazz;
+256 | 
+257 |             for (Class currentExploredClass = clazz;
+258 |                  currentExploredClass != null && currentExploredClass != Object.class;
+259 |                  currentExploredClass = superClassOf(currentExploredClass)
+260 |                 ) {
+261 |                 readActualTypeParametersOnDeclaringClass(currentExploredClass);
+262 |             }
+263 |         }
+
+===== M0014 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.getActualTypeArgumentFor(TypeVariable)
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 181-189
+Documentation:
+
+Method code:
+181 |     protected Type getActualTypeArgumentFor(TypeVariable typeParameter) {
+182 |         Type type = this.contextualActualTypeParameters.get(typeParameter);
+183 |         if (type instanceof TypeVariable) {
+184 |             TypeVariable typeVariable = (TypeVariable) type;
+185 |             return getActualTypeArgumentFor(typeVariable);
+186 |         }
+187 | 
+188 |         return type;
+189 |     }
+
+===== M0015 =====
+Signature: org.mockito.internal.util.reflection.GenericMetadataSupport.registerTypeParametersOn(TypeVariable[])
+Source: src/org/mockito/internal/util/reflection/GenericMetadataSupport.java
+Original range: 86-90
+Documentation:
+
+Method code:
+86 |     protected void registerTypeParametersOn(TypeVariable[] typeParameters) {
+87 |         for (TypeVariable typeVariable : typeParameters) {
+88 |             registerTypeVariableIfNotPresent(typeVariable);
+89 |         }
+90 |     }
+

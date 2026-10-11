@@ -1,0 +1,32 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.FlowSensitiveInlineVariablesTest.testInlineAcrossSideEffect1()",
+    "resolved_signature": "com.google.javascript.jscomp.FlowSensitiveInlineVariablesTest.testInlineAcrossSideEffect1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FlowSensitiveInlineVariablesTest.java",
+    "begin_line": 324,
+    "end_line": 331,
+    "comment": "",
+    "snippet": "  public void testInlineAcrossSideEffect1() {\n    // This can't be inlined because print() has side-effects and might change\n    // the definition of noSFX.\n    //\n    // noSFX must be both const and pure in order to inline it.\n    noInline(\"var y; var x = noSFX(y); print(x)\");\n    //inline(\"var y; var x = noSFX(y); print(x)\", \"var y;var x;print(noSFX(y))\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FlowSensitiveInlineVariablesTest.testCanInlineAcrossNoSideEffect()",
+    "resolved_signature": "com.google.javascript.jscomp.FlowSensitiveInlineVariablesTest.testCanInlineAcrossNoSideEffect()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FlowSensitiveInlineVariablesTest.java",
+    "begin_line": 359,
+    "end_line": 368,
+    "comment": "",
+    "snippet": "  public void testCanInlineAcrossNoSideEffect() {\n    // This can't be inlined because print() has side-effects and might change\n    // the definition of noSFX. We should be able to mark noSFX as const\n    // in some way.\n    noInline(\n        \"var y; var x = noSFX(y), z = noSFX(); noSFX(); noSFX(), print(x)\");\n    //inline(\n    //    \"var y; var x = noSFX(y), z = noSFX(); noSFX(); noSFX(), print(x)\",\n    //    \"var y; var x, z = noSFX(); noSFX(); noSFX(), print(noSFX(y))\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FlowSensitiveInlineVariablesTest.testIssue698()",
+    "resolved_signature": "com.google.javascript.jscomp.FlowSensitiveInlineVariablesTest.testIssue698()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FlowSensitiveInlineVariablesTest.java",
+    "begin_line": 419,
+    "end_line": 436,
+    "comment": "",
+    "snippet": "  public void testIssue698() {\n    // Most of the flow algorithms operate on Vars. We want to make\n    // sure the algorithm bails out appropriately if it sees\n    // a var that it doesn't know about.\n    inline(\n        \"var x = ''; \"\n        + \"unknown.length < 2 && (unknown='0' + unknown);\"\n        + \"x = x + unknown; \"\n        + \"unknown.length < 3 && (unknown='0' + unknown);\"\n        + \"x = x + unknown; \"\n        + \"return x;\",\n        \"var x; \"\n        + \"unknown.length < 2 && (unknown='0' + unknown);\"\n        + \"x = '' + unknown; \"\n        + \"unknown.length < 3 && (unknown='0' + unknown);\"\n        + \"x = x + unknown; \"\n        + \"return x;\");\n  }"
+  }
+]

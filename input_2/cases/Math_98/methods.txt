@@ -1,0 +1,207 @@
+===== M0001 =====
+Signature: org.apache.commons.math.linear.BigMatrixImpl.operate(BigDecimal[])
+Source: src/java/org/apache/commons/math/linear/BigMatrixImpl.java
+Original range: 985-1000
+Documentation:
+/**
+     * Returns the result of multiplying this by the vector <code>v</code>.
+     *
+     * @param v the vector to operate on
+     * @return this*v
+     * @throws IllegalArgumentException if columnDimension != v.size()
+     */
+Method code:
+985 |     public BigDecimal[] operate(BigDecimal[] v) throws IllegalArgumentException {
+986 |         if (v.length != this.getColumnDimension()) {
+987 |             throw new IllegalArgumentException("vector has wrong length");
+988 |         }
+989 |         final int nRows = this.getRowDimension();
+990 |         final int nCols = this.getColumnDimension();
+991 |         final BigDecimal[] out = new BigDecimal[v.length];
+992 |         for (int row = 0; row < nRows; row++) {
+993 |             BigDecimal sum = ZERO;
+994 |             for (int i = 0; i < nCols; i++) {
+995 |                 sum = sum.add(data[row][i].multiply(v[i]));
+996 |             }
+997 |             out[row] = sum;
+998 |         }
+999 |         return out;
+1000 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.linear.BigMatrixImpl.BigMatrixImpl(BigDecimal[][],boolean)
+Source: src/java/org/apache/commons/math/linear/BigMatrixImpl.java
+Original range: 138-161
+Documentation:
+/**
+     * Create a new BigMatrix using the input array as the underlying
+     * data array.
+     * <p>If an array is built specially in order to be embedded in a
+     * BigMatrix and not used directly, the <code>copyArray</code> may be
+     * set to <code>false</code. This will prevent the copying and improve
+     * performance as no new array will be built and no data will be copied.</p>
+     * @param d data for new matrix
+     * @param copyArray if true, the input array will be copied, otherwise
+     * it will be referenced
+     * @throws IllegalArgumentException if <code>d</code> is not rectangular
+     *  (not all rows have the same length) or empty
+     * @throws NullPointerException if <code>d</code> is null
+     * @see #BigMatrixImpl(BigDecimal[][])
+     */
+Method code:
+138 |     public BigMatrixImpl(BigDecimal[][] d, boolean copyArray) {
+139 |         if (copyArray) {
+140 |             copyIn(d);
+141 |         } else {
+142 |             if (d == null) {
+143 |                 throw new NullPointerException();
+144 |             }   
+145 |             final int nRows = d.length;
+146 |             if (nRows == 0) {
+147 |                 throw new IllegalArgumentException("Matrix must have at least one row."); 
+148 |             }
+149 |             final int nCols = d[0].length;
+150 |             if (nCols == 0) {
+151 |                 throw new IllegalArgumentException("Matrix must have at least one column."); 
+152 |             }
+153 |             for (int r = 1; r < nRows; r++) {
+154 |                 if (d[r].length != nCols) {
+155 |                     throw new IllegalArgumentException("All input rows must have the same length.");
+156 |                 }
+157 |             }       
+158 |             data = d;
+159 |         }
+160 |         lu = null;
+161 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.getRowDimension()
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 742-744
+Documentation:
+/**
+     * @return rowDimension
+     */
+Method code:
+742 |     public int getRowDimension() {
+743 |         return data.length;
+744 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.operate(double[])
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 773-789
+Documentation:
+/**
+     * @param v vector to operate on
+     * @throws IllegalArgumentException if columnDimension != v.length
+     * @return resulting vector
+     */
+Method code:
+773 |     public double[] operate(double[] v) throws IllegalArgumentException {
+774 |         final int nRows = this.getRowDimension();
+775 |         final int nCols = this.getColumnDimension();
+776 |         if (v.length != nCols) {
+777 |             throw new IllegalArgumentException("vector has wrong length");
+778 |         }
+779 |         final double[] out = new double[v.length];
+780 |         for (int row = 0; row < nRows; row++) {
+781 |             final double[] dataRow = data[row];
+782 |             double sum = 0;
+783 |             for (int i = 0; i < nCols; i++) {
+784 |                 sum += dataRow[i] * v[i];
+785 |             }
+786 |             out[row] = sum;
+787 |         }
+788 |         return out;
+789 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.linear.BigMatrixImpl.getColumnDimension()
+Source: src/java/org/apache/commons/math/linear/BigMatrixImpl.java
+Original range: 955-957
+Documentation:
+/**
+     * Returns the number of columns in the matrix.
+     *
+     * @return columnDimension
+     */
+Method code:
+955 |     public int getColumnDimension() {
+956 |         return data[0].length;
+957 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.getColumnDimension()
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 749-751
+Documentation:
+/**
+     * @return columnDimension
+     */
+Method code:
+749 |     public int getColumnDimension() {
+750 |         return data[0].length;
+751 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.RealMatrixImpl(double[][],boolean)
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 130-153
+Documentation:
+/**
+     * Create a new RealMatrix using the input array as the underlying
+     * data array.
+     * <p>If an array is built specially in order to be embedded in a
+     * RealMatrix and not used directly, the <code>copyArray</code> may be
+     * set to <code>false</code. This will prevent the copying and improve
+     * performance as no new array will be built and no data will be copied.</p>
+     * @param d data for new matrix
+     * @param copyArray if true, the input array will be copied, otherwise
+     * it will be referenced
+     * @throws IllegalArgumentException if <code>d</code> is not rectangular
+     *  (not all rows have the same length) or empty
+     * @throws NullPointerException if <code>d</code> is null
+     * @see #RealMatrixImpl(double[][])
+     */
+Method code:
+130 |     public RealMatrixImpl(double[][] d, boolean copyArray) {
+131 |         if (copyArray) {
+132 |             copyIn(d);
+133 |         } else {
+134 |             if (d == null) {
+135 |                 throw new NullPointerException();
+136 |             }   
+137 |             final int nRows = d.length;
+138 |             if (nRows == 0) {
+139 |                 throw new IllegalArgumentException("Matrix must have at least one row."); 
+140 |             }
+141 |             final int nCols = d[0].length;
+142 |             if (nCols == 0) {
+143 |                 throw new IllegalArgumentException("Matrix must have at least one column."); 
+144 |             }
+145 |             for (int r = 1; r < nRows; r++) {
+146 |                 if (d[r].length != nCols) {
+147 |                     throw new IllegalArgumentException("All input rows must have the same length.");
+148 |                 }
+149 |             }       
+150 |             data = d;
+151 |         }
+152 |         lu = null;
+153 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.linear.BigMatrixImpl.getRowDimension()
+Source: src/java/org/apache/commons/math/linear/BigMatrixImpl.java
+Original range: 946-948
+Documentation:
+/**
+     * Returns the number of rows in the matrix.
+     *
+     * @return rowDimension
+     */
+Method code:
+946 |     public int getRowDimension() {
+947 |         return data.length;
+948 |     }
+

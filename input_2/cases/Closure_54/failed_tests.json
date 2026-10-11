@@ -1,0 +1,32 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testIssue537a()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testIssue537a()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 5263,
+    "end_line": 5284,
+    "comment": "",
+    "snippet": "  public void testIssue537a() throws Exception {\n    testTypes(\n        \"/** @constructor */ function Foo() {}\" +\n        \"Foo.prototype = {method: function() {}};\" +\n        \"/**\\n\" +\n        \" * @constructor\\n\" +\n        \" * @extends {Foo}\\n\" +\n        \" */\\n\" +\n        \"function Bar() {\" +\n        \"  Foo.call(this);\" +\n        \"  if (this.baz()) this.method(1);\" +\n        \"}\" +\n        \"Bar.prototype = {\" +\n        \"  baz: function() {\" +\n        \"    return true;\" +\n        \"  }\" +\n        \"};\" +\n        \"Bar.prototype.__proto__ = Foo.prototype;\",\n        \"Function Foo.prototype.method: called with 1 argument(s). \" +\n        \"Function requires at least 0 argument(s) \" +\n        \"and no more than 0 argument(s).\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testIssue537b()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testIssue537b()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 5286,
+    "end_line": 5307,
+    "comment": "",
+    "snippet": "  public void testIssue537b() throws Exception {\n    testTypes(\n        \"/** @constructor */ function Foo() {}\" +\n        \"Foo.prototype = {method: function() {}};\" +\n        \"/**\\n\" +\n        \" * @constructor\\n\" +\n        \" * @extends {Foo}\\n\" +\n        \" */\\n\" +\n        \"function Bar() {\" +\n        \"  Foo.call(this);\" +\n        \"  if (this.baz(1)) this.method();\" +\n        \"}\" +\n        \"Bar.prototype = {\" +\n        \"  baz: function() {\" +\n        \"    return true;\" +\n        \"  }\" +\n        \"};\" +\n        \"Bar.prototype.__proto__ = Foo.prototype;\",\n        \"Function Bar.prototype.baz: called with 1 argument(s). \" +\n        \"Function requires at least 0 argument(s) \" +\n        \"and no more than 0 argument(s).\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypedScopeCreatorTest.testPropertyOnUnknownSuperClass2()",
+    "resolved_signature": "com.google.javascript.jscomp.TypedScopeCreatorTest.testPropertyOnUnknownSuperClass2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypedScopeCreatorTest.java",
+    "begin_line": 365,
+    "end_line": 379,
+    "comment": "",
+    "snippet": "  public void testPropertyOnUnknownSuperClass2() {\n    testSame(\n        \"var goog = this.foo();\" +\n        \"/** @constructor \\n * @extends {goog.Unknown} */\" +\n        \"function Foo() {}\" +\n        \"Foo.prototype = {bar: 1};\" +\n        \"var x = new Foo();\",\n        RhinoErrorReporter.TYPE_PARSE_ERROR);\n    ObjectType x = (ObjectType) findNameType(\"x\", globalScope);\n    assertEquals(\"Foo\", x.toString());\n    assertEquals(\"Foo.prototype\", x.getImplicitPrototype().toString());\n    assertTrue(x.getImplicitPrototype().hasOwnProperty(\"bar\"));\n    assertEquals(\"?\", x.getPropertyType(\"bar\").toString());\n    assertTrue(x.isPropertyTypeInferred(\"bar\"));\n  }"
+  }
+]

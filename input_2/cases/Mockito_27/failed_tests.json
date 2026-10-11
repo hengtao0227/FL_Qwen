@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.mockitousage.bugs.ListenersLostOnResetMockTest.listener()",
+    "resolved_signature": "org.mockitousage.bugs.ListenersLostOnResetMockTest.listener()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/bugs/ListenersLostOnResetMockTest.java",
+    "begin_line": 14,
+    "end_line": 24,
+    "comment": "",
+    "snippet": "    @Test\n    public void listener() throws Exception {\n        InvocationListener invocationListener = mock(InvocationListener.class);\n\n        List mockedList = mock(List.class, withSettings().invocationListeners(invocationListener));\n        reset(mockedList);\n\n        mockedList.clear();\n\n        verify(invocationListener).reportInvocation(any(MethodInvocationReport.class));\n    }"
+  }
+]

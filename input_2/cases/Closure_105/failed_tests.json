@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.FoldConstantsTest.testStringJoinAdd()",
+    "resolved_signature": "com.google.javascript.jscomp.FoldConstantsTest.testStringJoinAdd()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FoldConstantsTest.java",
+    "begin_line": 623,
+    "end_line": 658,
+    "comment": "",
+    "snippet": "  public void testStringJoinAdd() {\n    fold(\"x = ['a', 'b', 'c'].join('')\", \"x = \\\"abc\\\"\");\n    fold(\"x = [].join(',')\", \"x = \\\"\\\"\");\n    fold(\"x = ['a'].join(',')\", \"x = \\\"a\\\"\");\n    fold(\"x = ['a', 'b', 'c'].join(',')\", \"x = \\\"a,b,c\\\"\");\n    fold(\"x = ['a', foo, 'b', 'c'].join(',')\", \"x = [\\\"a\\\",foo,\\\"b,c\\\"].join(\\\",\\\")\");\n    fold(\"x = [foo, 'a', 'b', 'c'].join(',')\", \"x = [foo,\\\"a,b,c\\\"].join(\\\",\\\")\");\n    fold(\"x = ['a', 'b', 'c', foo].join(',')\", \"x = [\\\"a,b,c\\\",foo].join(\\\",\\\")\");\n\n    // Works with numbers\n    fold(\"x = ['a=', 5].join('')\", \"x = \\\"a=5\\\"\");\n    fold(\"x = ['a', '5'].join(7)\", \"x = \\\"a75\\\"\");\n\n    // Works on boolean\n    fold(\"x = ['a=', false].join('')\", \"x = \\\"a=false\\\"\");\n    fold(\"x = ['a', '5'].join(true)\", \"x = \\\"atrue5\\\"\");\n    fold(\"x = ['a', '5'].join(false)\", \"x = \\\"afalse5\\\"\");\n\n    // Only optimize if it's a size win.\n    fold(\"x = ['a', '5', 'c'].join('a very very very long chain')\",\n         \"x = [\\\"a\\\",\\\"5\\\",\\\"c\\\"].join(\\\"a very very very long chain\\\")\");\n    \n    // TODO(user): Its possible to fold this better.\n    foldSame(\"x = ['', foo].join(',')\");\n    foldSame(\"x = ['', foo, ''].join(',')\");\n    \n    fold(\"x = ['', '', foo, ''].join(',')\", \"x = [',', foo, ''].join(',')\");\n    fold(\"x = ['', '', foo, '', ''].join(',')\",\n         \"x = [',', foo, ','].join(',')\");\n    \n    fold(\"x = ['', '', foo, '', '', bar].join(',')\",\n         \"x = [',', foo, ',', bar].join(',')\");\n    \n    fold(\"x = [1,2,3].join('abcdef')\",\n         \"x = '1abcdef2abcdef3'\");\n  }"
+  }
+]

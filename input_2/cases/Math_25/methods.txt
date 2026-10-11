@@ -1,0 +1,725 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.optimization.fitting.HarmonicFitter.ParameterGuesser.guess()
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/HarmonicFitter.java
+Original range: 214-219
+Documentation:
+/**
+         * Estimate a first guess of the coefficients.
+         *
+         * @return the guessed coefficients, in the following order:
+         * <ul>
+         *  <li>Amplitude</li>
+         *  <li>Angular frequency</li>
+         *  <li>Phase</li>
+         * </ul>
+         */
+Method code:
+214 |         public double[] guess() {
+215 |             sortObservations();
+216 |             guessAOmega();
+217 |             guessPhi();
+218 |             return new double[] { a, omega, phi };
+219 |         }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.util.FastMath.sqrt(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 374-376
+Documentation:
+/** Compute the square root of a number.
+     * <p><b>Note:</b> this implementation currently delegates to {@link Math#sqrt}
+     * @param a number on which evaluation is done
+     * @return square root of a
+     */
+Method code:
+374 |     public static double sqrt(final double a) {
+375 |         return Math.sqrt(a);
+376 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.optimization.fitting.WeightedObservedPoint.WeightedObservedPoint(double,double,double)
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/WeightedObservedPoint.java
+Original range: 47-51
+Documentation:
+/** Simple constructor.
+     * @param weight weight of the measurement in the fitting process
+     * @param x abscissa of the measurement
+     * @param y ordinate of the measurement
+     */
+Method code:
+47 |     public WeightedObservedPoint(final double weight, final double x, final double y) {
+48 |         this.weight = weight;
+49 |         this.x      = x;
+50 |         this.y      = y;
+51 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.util.FastMath.sinQ(double,double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1691-1806
+Documentation:
+/**
+     *  Compute sine over the first quadrant (0 < x < pi/2).
+     *  Use combination of table lookup and rational polynomial expansion.
+     *  @param xa number from which sine is requested
+     *  @param xb extra bits for x (may be 0.0)
+     *  @return sin(xa + xb)
+     */
+Method code:
+1691 |     private static double sinQ(double xa, double xb) {
+1692 |         int idx = (int) ((xa * 8.0) + 0.5);
+1693 |         final double epsilon = xa - EIGHTHS[idx]; //idx*0.125;
+1694 | 
+1695 |         // Table lookups
+1696 |         final double sintA = SINE_TABLE_A[idx];
+1697 |         final double sintB = SINE_TABLE_B[idx];
+1698 |         final double costA = COSINE_TABLE_A[idx];
+1699 |         final double costB = COSINE_TABLE_B[idx];
+1700 | 
+1701 |         // Polynomial eval of sin(epsilon), cos(epsilon)
+1702 |         double sinEpsA = epsilon;
+1703 |         double sinEpsB = polySine(epsilon);
+1704 |         final double cosEpsA = 1.0;
+1705 |         final double cosEpsB = polyCosine(epsilon);
+1706 | 
+1707 |         // Split epsilon   xa + xb = x
+1708 |         final double temp = sinEpsA * HEX_40000000;
+1709 |         double temp2 = (sinEpsA + temp) - temp;
+1710 |         sinEpsB +=  sinEpsA - temp2;
+1711 |         sinEpsA = temp2;
+1712 | 
+1713 |         /* Compute sin(x) by angle addition formula */
+1714 |         double result;
+1715 | 
+1716 |         /* Compute the following sum:
+1717 |          *
+1718 |          * result = sintA + costA*sinEpsA + sintA*cosEpsB + costA*sinEpsB +
+1719 |          *          sintB + costB*sinEpsA + sintB*cosEpsB + costB*sinEpsB;
+1720 |          *
+1721 |          * Ranges of elements
+1722 |          *
+1723 |          * xxxtA   0            PI/2
+1724 |          * xxxtB   -1.5e-9      1.5e-9
+1725 |          * sinEpsA -0.0625      0.0625
+1726 |          * sinEpsB -6e-11       6e-11
+1727 |          * cosEpsA  1.0
+1728 |          * cosEpsB  0           -0.0625
+1729 |          *
+1730 |          */
+1731 | 
+1732 |         //result = sintA + costA*sinEpsA + sintA*cosEpsB + costA*sinEpsB +
+1733 |         //          sintB + costB*sinEpsA + sintB*cosEpsB + costB*sinEpsB;
+1734 | 
+1735 |         //result = sintA + sintA*cosEpsB + sintB + sintB * cosEpsB;
+1736 |         //result += costA*sinEpsA + costA*sinEpsB + costB*sinEpsA + costB * sinEpsB;
+1737 |         double a = 0;
+1738 |         double b = 0;
+1739 | 
+1740 |         double t = sintA;
+1741 |         double c = a + t;
+1742 |         double d = -(c - a - t);
+1743 |         a = c;
+1744 |         b = b + d;
+1745 | 
+1746 |         t = costA * sinEpsA;
+1747 |         c = a + t;
+1748 |         d = -(c - a - t);
+1749 |         a = c;
+1750 |         b = b + d;
+1751 | 
+1752 |         b = b + sintA * cosEpsB + costA * sinEpsB;
+1753 |         /*
+1754 |     t = sintA*cosEpsB;
+1755 |     c = a + t;
+1756 |     d = -(c - a - t);
+1757 |     a = c;
+1758 |     b = b + d;
+1759 | 
+1760 |     t = costA*sinEpsB;
+1761 |     c = a + t;
+1762 |     d = -(c - a - t);
+1763 |     a = c;
+1764 |     b = b + d;
+1765 |          */
+1766 | 
+1767 |         b = b + sintB + costB * sinEpsA + sintB * cosEpsB + costB * sinEpsB;
+1768 |         /*
+1769 |     t = sintB;
+1770 |     c = a + t;
+1771 |     d = -(c - a - t);
+1772 |     a = c;
+1773 |     b = b + d;
+1774 | 
+1775 |     t = costB*sinEpsA;
+1776 |     c = a + t;
+1777 |     d = -(c - a - t);
+1778 |     a = c;
+1779 |     b = b + d;
+1780 | 
+1781 |     t = sintB*cosEpsB;
+1782 |     c = a + t;
+1783 |     d = -(c - a - t);
+1784 |     a = c;
+1785 |     b = b + d;
+1786 | 
+1787 |     t = costB*sinEpsB;
+1788 |     c = a + t;
+1789 |     d = -(c - a - t);
+1790 |     a = c;
+1791 |     b = b + d;
+1792 |          */
+1793 | 
+1794 |         if (xb != 0.0) {
+1795 |             t = ((costA + costB) * (cosEpsA + cosEpsB) -
+1796 |                  (sintA + sintB) * (sinEpsA + sinEpsB)) * xb;  // approximate cosine*xb
+1797 |             c = a + t;
+1798 |             d = -(c - a - t);
+1799 |             a = c;
+1800 |             b = b + d;
+1801 |         }
+1802 | 
+1803 |         result = a + b;
+1804 | 
+1805 |         return result;
+1806 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math3.util.FastMath.cos(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 2267-2313
+Documentation:
+/**
+     * Cosine function.
+     *
+     * @param x Argument.
+     * @return cos(x)
+     */
+Method code:
+2267 |     public static double cos(double x) {
+2268 |         int quadrant = 0;
+2269 | 
+2270 |         /* Take absolute value of the input */
+2271 |         double xa = x;
+2272 |         if (x < 0) {
+2273 |             xa = -xa;
+2274 |         }
+2275 | 
+2276 |         if (xa != xa || xa == Double.POSITIVE_INFINITY) {
+2277 |             return Double.NaN;
+2278 |         }
+2279 | 
+2280 |         /* Perform any argument reduction */
+2281 |         double xb = 0;
+2282 |         if (xa > 3294198.0) {
+2283 |             // PI * (2**20)
+2284 |             // Argument too big for CodyWaite reduction.  Must use
+2285 |             // PayneHanek.
+2286 |             double reduceResults[] = new double[3];
+2287 |             reducePayneHanek(xa, reduceResults);
+2288 |             quadrant = ((int) reduceResults[0]) & 3;
+2289 |             xa = reduceResults[1];
+2290 |             xb = reduceResults[2];
+2291 |         } else if (xa > 1.5707963267948966) {
+2292 |             final CodyWaite cw = new CodyWaite(xa, xb);
+2293 |             quadrant = cw.getK() & 3;
+2294 |             xa = cw.getRemA();
+2295 |             xb = cw.getRemB();
+2296 |         }
+2297 | 
+2298 |         //if (negative)
+2299 |         //  quadrant = (quadrant + 2) % 4;
+2300 | 
+2301 |         switch (quadrant) {
+2302 |             case 0:
+2303 |                 return cosQ(xa, xb);
+2304 |             case 1:
+2305 |                 return -sinQ(xa, xb);
+2306 |             case 2:
+2307 |                 return -cosQ(xa, xb);
+2308 |             case 3:
+2309 |                 return sinQ(xa, xb);
+2310 |             default:
+2311 |                 return Double.NaN;
+2312 |         }
+2313 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math3.optimization.fitting.WeightedObservedPoint.getX()
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/WeightedObservedPoint.java
+Original range: 63-65
+Documentation:
+/** Get the abscissa of the point.
+     * @return abscissa of the point
+     */
+Method code:
+63 |     public double getX() {
+64 |         return x;
+65 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math3.util.FastMath.polySine(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1651-1664
+Documentation:
+/**
+     *  Computes sin(x) - x, where |x| < 1/16.
+     *  Use a Remez polynomial approximation.
+     *  @param x a number smaller than 1/16
+     *  @return sin(x) - x
+     */
+Method code:
+1651 |     private static double polySine(final double x)
+1652 |     {
+1653 |         double x2 = x*x;
+1654 | 
+1655 |         double p = 2.7553817452272217E-6;
+1656 |         p = p * x2 + -1.9841269659586505E-4;
+1657 |         p = p * x2 + 0.008333333333329196;
+1658 |         p = p * x2 + -0.16666666666666666;
+1659 |         //p *= x2;
+1660 |         //p *= x;
+1661 |         p = p * x2 * x;
+1662 | 
+1663 |         return p;
+1664 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math3.util.FastMath.cosQ(double,double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1815-1824
+Documentation:
+/**
+     * Compute cosine in the first quadrant by subtracting input from PI/2 and
+     * then calling sinQ.  This is more accurate as the input approaches PI/2.
+     *  @param xa number from which cosine is requested
+     *  @param xb extra bits for x (may be 0.0)
+     *  @return cos(xa + xb)
+     */
+Method code:
+1815 |     private static double cosQ(double xa, double xb) {
+1816 |         final double pi2a = 1.5707963267948966;
+1817 |         final double pi2b = 6.123233995736766E-17;
+1818 | 
+1819 |         final double a = pi2a - xa;
+1820 |         double b = -(a - pi2a + xa);
+1821 |         b += pi2b - xb;
+1822 | 
+1823 |         return sinQ(a, b);
+1824 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math3.optimization.fitting.HarmonicFitter.ParameterGuesser.guessPhi()
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/HarmonicFitter.java
+Original range: 334-357
+Documentation:
+/**
+         * Estimate a first guess of the phase.
+         */
+Method code:
+334 |         private void guessPhi() {
+335 |             // initialize the means
+336 |             double fcMean = 0;
+337 |             double fsMean = 0;
+338 | 
+339 |             double currentX = observations[0].getX();
+340 |             double currentY = observations[0].getY();
+341 |             for (int i = 1; i < observations.length; ++i) {
+342 |                 // one step forward
+343 |                 final double previousX = currentX;
+344 |                 final double previousY = currentY;
+345 |                 currentX = observations[i].getX();
+346 |                 currentY = observations[i].getY();
+347 |                 final double currentYPrime = (currentY - previousY) / (currentX - previousX);
+348 | 
+349 |                 double omegaX = omega * currentX;
+350 |                 double cosine = FastMath.cos(omegaX);
+351 |                 double sine = FastMath.sin(omegaX);
+352 |                 fcMean += omega * currentY * cosine - currentYPrime * sine;
+353 |                 fsMean += omega * currentY * sine + currentYPrime * cosine;
+354 |             }
+355 | 
+356 |             phi = FastMath.atan2(-fsMean, fcMean);
+357 |         }
+
+===== M0010 =====
+Signature: org.apache.commons.math3.util.FastMath.polyCosine(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1672-1682
+Documentation:
+/**
+     *  Computes cos(x) - 1, where |x| < 1/16.
+     *  Use a Remez polynomial approximation.
+     *  @param x a number smaller than 1/16
+     *  @return cos(x) - 1
+     */
+Method code:
+1672 |     private static double polyCosine(double x) {
+1673 |         double x2 = x*x;
+1674 | 
+1675 |         double p = 2.479773539153719E-5;
+1676 |         p = p * x2 + -0.0013888888689039883;
+1677 |         p = p * x2 + 0.041666666666621166;
+1678 |         p = p * x2 + -0.49999999999999994;
+1679 |         p *= x2;
+1680 | 
+1681 |         return p;
+1682 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math3.optimization.fitting.HarmonicFitter.ParameterGuesser.guessAOmega()
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/HarmonicFitter.java
+Original range: 257-329
+Documentation:
+/**
+         * Estimate a first guess of the amplitude and angular frequency.
+         * This method assumes that the {@link #sortObservations()} method
+         * has been called previously.
+         *
+         * @throws ZeroException if the abscissa range is zero.
+         * @throws MathIllegalStateException when the guessing procedure cannot
+         * produce sensible results.
+         */
+Method code:
+257 |         private void guessAOmega() {
+258 |             // initialize the sums for the linear model between the two integrals
+259 |             double sx2 = 0;
+260 |             double sy2 = 0;
+261 |             double sxy = 0;
+262 |             double sxz = 0;
+263 |             double syz = 0;
+264 | 
+265 |             double currentX = observations[0].getX();
+266 |             double currentY = observations[0].getY();
+267 |             double f2Integral = 0;
+268 |             double fPrime2Integral = 0;
+269 |             final double startX = currentX;
+270 |             for (int i = 1; i < observations.length; ++i) {
+271 |                 // one step forward
+272 |                 final double previousX = currentX;
+273 |                 final double previousY = currentY;
+274 |                 currentX = observations[i].getX();
+275 |                 currentY = observations[i].getY();
+276 | 
+277 |                 // update the integrals of f<sup>2</sup> and f'<sup>2</sup>
+278 |                 // considering a linear model for f (and therefore constant f')
+279 |                 final double dx = currentX - previousX;
+280 |                 final double dy = currentY - previousY;
+281 |                 final double f2StepIntegral =
+282 |                     dx * (previousY * previousY + previousY * currentY + currentY * currentY) / 3;
+283 |                 final double fPrime2StepIntegral = dy * dy / dx;
+284 | 
+285 |                 final double x = currentX - startX;
+286 |                 f2Integral += f2StepIntegral;
+287 |                 fPrime2Integral += fPrime2StepIntegral;
+288 | 
+289 |                 sx2 += x * x;
+290 |                 sy2 += f2Integral * f2Integral;
+291 |                 sxy += x * f2Integral;
+292 |                 sxz += x * fPrime2Integral;
+293 |                 syz += f2Integral * fPrime2Integral;
+294 |             }
+295 | 
+296 |             // compute the amplitude and pulsation coefficients
+297 |             double c1 = sy2 * sxz - sxy * syz;
+298 |             double c2 = sxy * sxz - sx2 * syz;
+299 |             double c3 = sx2 * sy2 - sxy * sxy;
+300 |             if ((c1 / c2 < 0) || (c2 / c3 < 0)) {
+301 |                 final int last = observations.length - 1;
+302 |                 // Range of the observations, assuming that the
+303 |                 // observations are sorted.
+304 |                 final double xRange = observations[last].getX() - observations[0].getX();
+305 |                 if (xRange == 0) {
+306 |                     throw new ZeroException();
+307 |                 }
+308 |                 omega = 2 * Math.PI / xRange;
+309 | 
+310 |                 double yMin = Double.POSITIVE_INFINITY;
+311 |                 double yMax = Double.NEGATIVE_INFINITY;
+312 |                 for (int i = 1; i < observations.length; ++i) {
+313 |                     final double y = observations[i].getY();
+314 |                     if (y < yMin) {
+315 |                         yMin = y;
+316 |                     }
+317 |                     if (y > yMax) {
+318 |                         yMax = y;
+319 |                     }
+320 |                 }
+321 |                 a = 0.5 * (yMax - yMin);
+322 |             } else {
+323 |                     // In some ill-conditioned cases (cf. MATH-844), the guesser
+324 |                     // procedure cannot produce sensible results.
+325 | 
+326 |                 a = FastMath.sqrt(c1 / c2);
+327 |                 omega = FastMath.sqrt(c2 / c3);
+328 |             }
+329 |         }
+
+===== M0012 =====
+Signature: org.apache.commons.math3.optimization.fitting.WeightedObservedPoint.getY()
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/WeightedObservedPoint.java
+Original range: 70-72
+Documentation:
+/** Get the observed value of the function at x.
+     * @return observed value of the function at x
+     */
+Method code:
+70 |     public double getY() {
+71 |         return y;
+72 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math3.optimization.fitting.HarmonicFitter.ParameterGuesser.ParameterGuesser(WeightedObservedPoint[])
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/HarmonicFitter.java
+Original range: 195-202
+Documentation:
+/**
+         * Simple constructor.
+         * @param observations sampled observations
+         * @throws NumberIsTooSmallException if the sample is too short or if
+         * the first guess cannot be computed.
+         */
+Method code:
+195 |         public ParameterGuesser(WeightedObservedPoint[] observations) {
+196 |             if (observations.length < 4) {
+197 |                 throw new NumberIsTooSmallException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE,
+198 |                                                     observations.length, 4, true);
+199 |             }
+200 | 
+201 |             this.observations = observations.clone();
+202 |         }
+
+===== M0014 =====
+Signature: org.apache.commons.math3.optimization.fitting.HarmonicFitter.ParameterGuesser.sortObservations()
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/HarmonicFitter.java
+Original range: 224-246
+Documentation:
+/**
+         * Sort the observations with respect to the abscissa.
+         */
+Method code:
+224 |         private void sortObservations() {
+225 |             // Since the samples are almost always already sorted, this
+226 |             // method is implemented as an insertion sort that reorders the
+227 |             // elements in place. Insertion sort is very efficient in this case.
+228 |             WeightedObservedPoint curr = observations[0];
+229 |             for (int j = 1; j < observations.length; ++j) {
+230 |                 WeightedObservedPoint prec = curr;
+231 |                 curr = observations[j];
+232 |                 if (curr.getX() < prec.getX()) {
+233 |                     // the current element should be inserted closer to the beginning
+234 |                     int i = j - 1;
+235 |                     WeightedObservedPoint mI = observations[i];
+236 |                     while ((i >= 0) && (curr.getX() < mI.getX())) {
+237 |                         observations[i + 1] = mI;
+238 |                         if (i-- != 0) {
+239 |                             mI = observations[i];
+240 |                         }
+241 |                     }
+242 |                     observations[i + 1] = curr;
+243 |                     curr = observations[j];
+244 |                 }
+245 |             }
+246 |         }
+
+===== M0015 =====
+Signature: org.apache.commons.math3.util.FastMath.sin(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 2200-2259
+Documentation:
+/**
+     * Sine function.
+     *
+     * @param x Argument.
+     * @return sin(x)
+     */
+Method code:
+2200 |     public static double sin(double x) {
+2201 |         boolean negative = false;
+2202 |         int quadrant = 0;
+2203 |         double xa;
+2204 |         double xb = 0.0;
+2205 | 
+2206 |         /* Take absolute value of the input */
+2207 |         xa = x;
+2208 |         if (x < 0) {
+2209 |             negative = true;
+2210 |             xa = -xa;
+2211 |         }
+2212 | 
+2213 |         /* Check for zero and negative zero */
+2214 |         if (xa == 0.0) {
+2215 |             long bits = Double.doubleToLongBits(x);
+2216 |             if (bits < 0) {
+2217 |                 return -0.0;
+2218 |             }
+2219 |             return 0.0;
+2220 |         }
+2221 | 
+2222 |         if (xa != xa || xa == Double.POSITIVE_INFINITY) {
+2223 |             return Double.NaN;
+2224 |         }
+2225 | 
+2226 |         /* Perform any argument reduction */
+2227 |         if (xa > 3294198.0) {
+2228 |             // PI * (2**20)
+2229 |             // Argument too big for CodyWaite reduction.  Must use
+2230 |             // PayneHanek.
+2231 |             double reduceResults[] = new double[3];
+2232 |             reducePayneHanek(xa, reduceResults);
+2233 |             quadrant = ((int) reduceResults[0]) & 3;
+2234 |             xa = reduceResults[1];
+2235 |             xb = reduceResults[2];
+2236 |         } else if (xa > 1.5707963267948966) {
+2237 |             final CodyWaite cw = new CodyWaite(xa, xb);
+2238 |             quadrant = cw.getK() & 3;
+2239 |             xa = cw.getRemA();
+2240 |             xb = cw.getRemB();
+2241 |         }
+2242 | 
+2243 |         if (negative) {
+2244 |             quadrant ^= 2;  // Flip bit 1
+2245 |         }
+2246 | 
+2247 |         switch (quadrant) {
+2248 |             case 0:
+2249 |                 return sinQ(xa, xb);
+2250 |             case 1:
+2251 |                 return cosQ(xa, xb);
+2252 |             case 2:
+2253 |                 return -sinQ(xa, xb);
+2254 |             case 3:
+2255 |                 return -cosQ(xa, xb);
+2256 |             default:
+2257 |                 return Double.NaN;
+2258 |         }
+2259 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math3.util.FastMath.atan2(double,double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 2554-2669
+Documentation:
+/**
+     * Two arguments arctangent function
+     * @param y ordinate
+     * @param x abscissa
+     * @return phase angle of point (x,y) between {@code -PI} and {@code PI}
+     */
+Method code:
+2554 |     public static double atan2(double y, double x) {
+2555 |         if (x != x || y != y) {
+2556 |             return Double.NaN;
+2557 |         }
+2558 | 
+2559 |         if (y == 0) {
+2560 |             final double result = x * y;
+2561 |             final double invx = 1d / x;
+2562 |             final double invy = 1d / y;
+2563 | 
+2564 |             if (invx == 0) { // X is infinite
+2565 |                 if (x > 0) {
+2566 |                     return y; // return +/- 0.0
+2567 |                 } else {
+2568 |                     return copySign(Math.PI, y);
+2569 |                 }
+2570 |             }
+2571 | 
+2572 |             if (x < 0 || invx < 0) {
+2573 |                 if (y < 0 || invy < 0) {
+2574 |                     return -Math.PI;
+2575 |                 } else {
+2576 |                     return Math.PI;
+2577 |                 }
+2578 |             } else {
+2579 |                 return result;
+2580 |             }
+2581 |         }
+2582 | 
+2583 |         // y cannot now be zero
+2584 | 
+2585 |         if (y == Double.POSITIVE_INFINITY) {
+2586 |             if (x == Double.POSITIVE_INFINITY) {
+2587 |                 return Math.PI * F_1_4;
+2588 |             }
+2589 | 
+2590 |             if (x == Double.NEGATIVE_INFINITY) {
+2591 |                 return Math.PI * F_3_4;
+2592 |             }
+2593 | 
+2594 |             return Math.PI * F_1_2;
+2595 |         }
+2596 | 
+2597 |         if (y == Double.NEGATIVE_INFINITY) {
+2598 |             if (x == Double.POSITIVE_INFINITY) {
+2599 |                 return -Math.PI * F_1_4;
+2600 |             }
+2601 | 
+2602 |             if (x == Double.NEGATIVE_INFINITY) {
+2603 |                 return -Math.PI * F_3_4;
+2604 |             }
+2605 | 
+2606 |             return -Math.PI * F_1_2;
+2607 |         }
+2608 | 
+2609 |         if (x == Double.POSITIVE_INFINITY) {
+2610 |             if (y > 0 || 1 / y > 0) {
+2611 |                 return 0d;
+2612 |             }
+2613 | 
+2614 |             if (y < 0 || 1 / y < 0) {
+2615 |                 return -0d;
+2616 |             }
+2617 |         }
+2618 | 
+2619 |         if (x == Double.NEGATIVE_INFINITY)
+2620 |         {
+2621 |             if (y > 0.0 || 1 / y > 0.0) {
+2622 |                 return Math.PI;
+2623 |             }
+2624 | 
+2625 |             if (y < 0 || 1 / y < 0) {
+2626 |                 return -Math.PI;
+2627 |             }
+2628 |         }
+2629 | 
+2630 |         // Neither y nor x can be infinite or NAN here
+2631 | 
+2632 |         if (x == 0) {
+2633 |             if (y > 0 || 1 / y > 0) {
+2634 |                 return Math.PI * F_1_2;
+2635 |             }
+2636 | 
+2637 |             if (y < 0 || 1 / y < 0) {
+2638 |                 return -Math.PI * F_1_2;
+2639 |             }
+2640 |         }
+2641 | 
+2642 |         // Compute ratio r = y/x
+2643 |         final double r = y / x;
+2644 |         if (Double.isInfinite(r)) { // bypass calculations that can create NaN
+2645 |             return atan(r, 0, x < 0);
+2646 |         }
+2647 | 
+2648 |         double ra = doubleHighPart(r);
+2649 |         double rb = r - ra;
+2650 | 
+2651 |         // Split x
+2652 |         final double xa = doubleHighPart(x);
+2653 |         final double xb = x - xa;
+2654 | 
+2655 |         rb += (y - ra * xa - ra * xb - rb * xa - rb * xb) / x;
+2656 | 
+2657 |         final double temp = ra + rb;
+2658 |         rb = -(temp - ra - rb);
+2659 |         ra = temp;
+2660 | 
+2661 |         if (ra == 0) { // Fix up the sign so atan works correctly
+2662 |             ra = copySign(0d, y);
+2663 |         }
+2664 | 
+2665 |         // Call atan
+2666 |         final double result = atan(ra, rb, x < 0);
+2667 | 
+2668 |         return result;
+2669 |     }
+

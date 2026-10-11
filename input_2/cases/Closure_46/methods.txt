@@ -1,0 +1,5106 @@
+===== M0001 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.isNativeObjectType()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 510-513
+Documentation:
+/** Whether this is a built-in object. */
+Method code:
+510 |   @Override
+511 |   public boolean isNativeObjectType() {
+512 |     return nativeType;
+513 |   }
+
+===== M0002 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.Property.Property(String,JSType,boolean,Node)
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 599-605
+Documentation:
+
+Method code:
+599 |     Property(String name, JSType type, boolean inferred,
+600 |         Node propertyNode) {
+601 |       this.name = name;
+602 |       this.type = type;
+603 |       this.inferred = inferred;
+604 |       this.propertyNode = propertyNode;
+605 |     }
+
+===== M0003 =====
+Signature: com.google.javascript.rhino.jstype.ErrorFunctionType.ErrorFunctionType(JSTypeRegistry,String)
+Source: src/com/google/javascript/rhino/jstype/ErrorFunctionType.java
+Original range: 50-74
+Documentation:
+
+Method code:
+50 |   ErrorFunctionType(JSTypeRegistry registry, String name) {
+51 |     super(
+52 |         registry, name, null,
+53 |         registry.createArrowType(
+54 |             registry.createOptionalParameters(
+55 |                 registry.getNativeType(ALL_TYPE),
+56 |                 registry.getNativeType(ALL_TYPE),
+57 |                 registry.getNativeType(ALL_TYPE)),
+58 |             null),
+59 |         null, null, true, true);
+60 | 
+61 |     // NOTE(nicksantos): Errors have the weird behavior in that they can
+62 |     // be called as functions, and they will return instances of themselves.
+63 |     // Error('x') instanceof Error => true
+64 |     //
+65 |     // In user-defined types, we would deal with this case by creating
+66 |     // a NamedType with the name "Error" and then resolve it later.
+67 |     //
+68 |     // For native types, we don't really want the native types to
+69 |     // depend on type-resolution. So we just set the return type manually
+70 |     // at the end of construction.
+71 |     //
+72 |     // There's similar logic in JSTypeRegistry for Array and RegExp.
+73 |     getInternalArrowType().returnType = getInstanceType();
+74 |   }
+
+===== M0004 =====
+Signature: com.google.javascript.rhino.jstype.ProxyObjectType.getReferencedObjTypeInternal()
+Source: src/com/google/javascript/rhino/jstype/ProxyObjectType.java
+Original range: 80-82
+Documentation:
+
+Method code:
+80 |   ObjectType getReferencedObjTypeInternal() {
+81 |     return referencedObjType;
+82 |   }
+
+===== M0005 =====
+Signature: com.google.javascript.rhino.jstype.NoType.NoType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/NoType.java
+Original range: 64-66
+Documentation:
+
+Method code:
+64 |   NoType(JSTypeRegistry registry) {
+65 |     super(registry);
+66 |   }
+
+===== M0006 =====
+Signature: com.google.javascript.rhino.jstype.FunctionParamBuilder.FunctionParamBuilder(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/FunctionParamBuilder.java
+Original range: 54-56
+Documentation:
+
+Method code:
+54 |   public FunctionParamBuilder(JSTypeRegistry registry) {
+55 |     this.registry = registry;
+56 |   }
+
+===== M0007 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.hashCode()
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 173-180
+Documentation:
+/**
+   * If this is equal to a NamedType object, its hashCode must be equal
+   * to the hashCode of the NamedType object.
+   */
+Method code:
+173 |   @Override
+174 |   public int hashCode() {
+175 |     if (hasReferenceName()) {
+176 |       return getReferenceName().hashCode();
+177 |     } else {
+178 |       return super.hashCode();
+179 |     }
+180 |   }
+
+===== M0008 =====
+Signature: com.google.javascript.rhino.jstype.NumberType.toString()
+Source: src/com/google/javascript/rhino/jstype/NumberType.java
+Original range: 95-98
+Documentation:
+
+Method code:
+95 |   @Override
+96 |   public String toString() {
+97 |     return getDisplayName();
+98 |   }
+
+===== M0009 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isFunctionType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 264-266
+Documentation:
+/** Returns true if toMaybeFunctionType returns a non-null FunctionType. */
+Method code:
+264 |   public final boolean isFunctionType() {
+265 |     return toMaybeFunctionType() != null;
+266 |   }
+
+===== M0010 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.getOwnerFunction()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 520-523
+Documentation:
+
+Method code:
+520 |   @Override
+521 |   public FunctionType getOwnerFunction() {
+522 |     return ownerFunction;
+523 |   }
+
+===== M0011 =====
+Signature: com.google.javascript.rhino.jstype.RecordTypeBuilder.RecordProperty.getType()
+Source: src/com/google/javascript/rhino/jstype/RecordTypeBuilder.java
+Original range: 101-103
+Documentation:
+
+Method code:
+101 |     public JSType getType() {
+102 |       return type;
+103 |     }
+
+===== M0012 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.resolveInternal(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 1029-1078
+Documentation:
+
+Method code:
+1029 |   @Override
+1030 |   JSType resolveInternal(ErrorReporter t, StaticScope<JSType> scope) {
+1031 |     setResolvedTypeInternal(this);
+1032 | 
+1033 |     call = (ArrowType) safeResolve(call, t, scope);
+1034 |     if (prototypeSlot != null) {
+1035 |       prototypeSlot.setType(
+1036 |           safeResolve(prototypeSlot.getType(), t, scope));
+1037 |     }
+1038 | 
+1039 |     // Warning about typeOfThis if it doesn't resolve to an ObjectType
+1040 |     // is handled further upstream.
+1041 |     //
+1042 |     // TODO(nicksantos): Handle this correctly if we have a UnionType.
+1043 |     //
+1044 |     // TODO(nicksantos): In ES3, the runtime coerces "null" to the global
+1045 |     // activation object. In ES5, it leaves it as null. Just punt on this
+1046 |     // issue for now by coercing out null. This is complicated by the
+1047 |     // fact that when most people write @this {Foo}, they really don't
+1048 |     // mean "nullable Foo". For certain tags (like @extends) we de-nullify
+1049 |     // the name for them.
+1050 |     JSType maybeTypeOfThis = safeResolve(typeOfThis, t, scope);
+1051 |     if (maybeTypeOfThis != null) {
+1052 |       maybeTypeOfThis = maybeTypeOfThis.restrictByNotNullOrUndefined();
+1053 |     }
+1054 |     if (maybeTypeOfThis instanceof ObjectType) {
+1055 |       typeOfThis = (ObjectType) maybeTypeOfThis;
+1056 |     }
+1057 | 
+1058 |     boolean changed = false;
+1059 |     ImmutableList.Builder<ObjectType> resolvedInterfaces =
+1060 |         ImmutableList.builder();
+1061 |     for (ObjectType iface : implementedInterfaces) {
+1062 |       ObjectType resolvedIface = (ObjectType) iface.resolve(t, scope);
+1063 |       resolvedInterfaces.add(resolvedIface);
+1064 |       changed |= (resolvedIface != iface);
+1065 |     }
+1066 |     if (changed) {
+1067 |       implementedInterfaces = resolvedInterfaces.build();
+1068 |     }
+1069 | 
+1070 |     if (subTypes != null) {
+1071 |       for (int i = 0; i < subTypes.size(); i++) {
+1072 |         subTypes.set(
+1073 |             i, JSType.toMaybeFunctionType(subTypes.get(i).resolve(t, scope)));
+1074 |       }
+1075 |     }
+1076 | 
+1077 |     return super.resolveInternal(t, scope);
+1078 |   }
+
+===== M0013 =====
+Signature: com.google.javascript.rhino.Node.putIntProp(int,int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 841-846
+Documentation:
+
+Method code:
+841 |   public void putIntProp(int propType, int value) {
+842 |     removeProp(propType);
+843 |     if (value != 0) {
+844 |       propListHead = createProp(propType, value, propListHead);
+845 |     }
+846 |   }
+
+===== M0014 =====
+Signature: com.google.javascript.rhino.testing.MapBasedScope.emptyScope()
+Source: src/com/google/javascript/rhino/testing/MapBasedScope.java
+Original range: 64-66
+Documentation:
+
+Method code:
+64 |   public static MapBasedScope emptyScope() {
+65 |     return new MapBasedScope(ImmutableMap.<String, JSType>of());
+66 |   }
+
+===== M0015 =====
+Signature: com.google.javascript.rhino.jstype.FunctionBuilder.build()
+Source: src/com/google/javascript/rhino/jstype/FunctionBuilder.java
+Original range: 158-162
+Documentation:
+/** Construct a new function type. */
+Method code:
+158 |   public FunctionType build() {
+159 |     return new FunctionType(registry, name, sourceNode,
+160 |         new ArrowType(registry, parametersNode, returnType, inferredReturnType),
+161 |         typeOfThis, templateTypeName, isConstructor, isNativeType);
+162 |   }
+
+===== M0016 =====
+Signature: com.google.javascript.rhino.Node.putBooleanProp(int,boolean)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 837-839
+Documentation:
+
+Method code:
+837 |   public void putBooleanProp(int propType, boolean value) {
+838 |     putIntProp(propType, value ? 1 : 0);
+839 |   }
+
+===== M0017 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.isConstructor()
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 182-185
+Documentation:
+
+Method code:
+182 |   @Override
+183 |   public boolean isConstructor() {
+184 |     return kind == Kind.CONSTRUCTOR;
+185 |   }
+
+===== M0018 =====
+Signature: com.google.javascript.rhino.jstype.NumberType.NumberType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/NumberType.java
+Original range: 52-54
+Documentation:
+
+Method code:
+52 |   NumberType(JSTypeRegistry registry) {
+53 |     super(registry);
+54 |   }
+
+===== M0019 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isAllType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 233-235
+Documentation:
+
+Method code:
+233 |   public boolean isAllType() {
+234 |     return false;
+235 |   }
+
+===== M0020 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.resolveViaProperties(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 257-282
+Documentation:
+/**
+   * Resolves a named type by looking up its first component in the scope, and
+   * subsequent components as properties. The scope must have been fully
+   * parsed and a symbol table constructed.
+   */
+Method code:
+257 |   private void resolveViaProperties(ErrorReporter t,
+258 |                                     StaticScope<JSType> enclosing) {
+259 |     JSType value = lookupViaProperties(t, enclosing);
+260 |     // last component of the chain
+261 |     if (value != null && value.isFunctionType() &&
+262 |         (value.isConstructor() || value.isInterface())) {
+263 |       FunctionType functionType = value.toMaybeFunctionType();
+264 |       setReferencedAndResolvedType(
+265 |           functionType.getInstanceType(), t, enclosing);
+266 |     } else if (value != null && value.isNoObjectType()) {
+267 |       setReferencedAndResolvedType(
+268 |           registry.getNativeFunctionType(
+269 |               JSTypeNative.NO_OBJECT_TYPE).getInstanceType(), t, enclosing);
+270 |     } else if (value instanceof EnumType) {
+271 |       setReferencedAndResolvedType(
+272 |           ((EnumType) value).getElementsType(), t, enclosing);
+273 |     } else {
+274 |       // We've been running into issues where people forward-declare
+275 |       // non-named types. (This is legitimate...our dependency management
+276 |       // code doubles as our forward-declaration code.)
+277 |       //
+278 |       // So if the type does resolve to an actual value, but it's not named,
+279 |       // then don't respect the forward declaration.
+280 |       handleUnresolvedType(t, value == null || value.isUnknownType());
+281 |     }
+282 |   }
+
+===== M0021 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.PrototypeObjectType(JSTypeRegistry,String,ObjectType,boolean)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 113-125
+Documentation:
+/**
+   * Creates an object type, allowing specification of the implicit prototype
+   * when creating native objects.
+   */
+Method code:
+113 |   PrototypeObjectType(JSTypeRegistry registry, String className,
+114 |       ObjectType implicitPrototype, boolean nativeType) {
+115 |     super(registry);
+116 |     this.properties = Maps.newTreeMap();
+117 |     this.className = className;
+118 |     this.nativeType = nativeType;
+119 |     if (nativeType || implicitPrototype != null) {
+120 |       setImplicitPrototype(implicitPrototype);
+121 |     } else {
+122 |       setImplicitPrototype(
+123 |           registry.getNativeObjectType(JSTypeNative.OBJECT_TYPE));
+124 |     }
+125 |   }
+
+===== M0022 =====
+Signature: com.google.javascript.rhino.jstype.RecordType.getGreatestSubtypeHelper(JSType)
+Source: src/com/google/javascript/rhino/jstype/RecordType.java
+Original range: 156-215
+Documentation:
+
+Method code:
+156 |   JSType getGreatestSubtypeHelper(JSType that) {
+157 |     if (that.isRecordType()) {
+158 |       RecordType thatRecord = that.toMaybeRecordType();
+159 |       RecordTypeBuilder builder = new RecordTypeBuilder(registry);
+160 | 
+161 |       // The greatest subtype consists of those *unique* properties of both
+162 |       // record types. If any property conflicts, then the NO_TYPE type
+163 |       // is returned.
+164 |       for (String property : properties.keySet()) {
+165 |         if (thatRecord.hasProperty(property) &&
+166 |             !thatRecord.getPropertyType(property).isEquivalentTo(
+167 |                 getPropertyType(property))) {
+168 |           return registry.getNativeObjectType(JSTypeNative.NO_TYPE);
+169 |         }
+170 | 
+171 |         builder.addProperty(property, getPropertyType(property),
+172 |             getPropertyNode(property));
+173 |       }
+174 | 
+175 |       for (String property : thatRecord.properties.keySet()) {
+176 |         if (!hasProperty(property)) {
+177 |           builder.addProperty(property, thatRecord.getPropertyType(property),
+178 |               thatRecord.getPropertyNode(property));
+179 |         }
+180 |       }
+181 | 
+182 |       return builder.build();
+183 |     }
+184 | 
+185 |     JSType greatestSubtype = registry.getNativeType(
+186 |         JSTypeNative.NO_OBJECT_TYPE);
+187 |     JSType thatRestrictedToObj =
+188 |         registry.getNativeType(JSTypeNative.OBJECT_TYPE)
+189 |         .getGreatestSubtype(that);
+190 |     if (!thatRestrictedToObj.isEmptyType()) {
+191 |       // In this branch, the other type is some object type. We find
+192 |       // the greatest subtype with the following algorithm:
+193 |       // 1) For each property "x" of this record type, take the union
+194 |       //    of all classes with a property "x" with a compatible property type.
+195 |       //    and which are a subtype of {@code that}.
+196 |       // 2) Take the intersection of all of these unions.
+197 |       for (Map.Entry<String, JSType> entry : properties.entrySet()) {
+198 |         String propName = entry.getKey();
+199 |         JSType propType = entry.getValue();
+200 |         UnionTypeBuilder builder = new UnionTypeBuilder(registry);
+201 |         for (ObjectType alt :
+202 |                  registry.getEachReferenceTypeWithProperty(propName)) {
+203 |           JSType altPropType = alt.getPropertyType(propName);
+204 |           if (altPropType != null && !alt.isEquivalentTo(this) &&
+205 |               alt.isSubtype(that) &&
+206 |               (propType.isUnknownType() || altPropType.isUnknownType() ||
+207 |                   altPropType.isEquivalentTo(propType))) {
+208 |             builder.addAlternate(alt);
+209 |           }
+210 |         }
+211 |         greatestSubtype = greatestSubtype.getLeastSupertype(builder.build());
+212 |       }
+213 |     }
+214 |     return greatestSubtype;
+215 |   }
+
+===== M0023 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createNullableType(JSType)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 977-979
+Documentation:
+/**
+   * Creates a type representing nullable values of the given type.
+   * @return the union of the type and the Null type
+   */
+Method code:
+977 |   public JSType createNullableType(JSType type) {
+978 |     return createUnionType(type, getNativeType(JSTypeNative.NULL_TYPE));
+979 |   }
+
+===== M0024 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.registerTypeImplementingInterface(FunctionType,ObjectType)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 798-801
+Documentation:
+/**
+   * Tells the type system that {@code type} implements interface {@code
+   * InterfaceInstance}.
+   * {@code inter} must be an ObjectType for the instance of the interface as it
+   * could be a named type and not yet have the constructor.
+   */
+Method code:
+798 |   void registerTypeImplementingInterface(
+799 |       FunctionType type, ObjectType interfaceInstance) {
+800 |     interfaceToImplementors.put(interfaceInstance.getReferenceName(), type);
+801 |   }
+
+===== M0025 =====
+Signature: com.google.javascript.rhino.testing.MapBasedScope.getSlot(String)
+Source: src/com/google/javascript/rhino/testing/MapBasedScope.java
+Original range: 68-71
+Documentation:
+
+Method code:
+68 |   @Override
+69 |   public StaticSlot<JSType> getSlot(String name) {
+70 |     return slots.get(name);
+71 |   }
+
+===== M0026 =====
+Signature: com.google.javascript.rhino.jstype.RecordType.isSubtype(JSType)
+Source: src/com/google/javascript/rhino/jstype/RecordType.java
+Original range: 222-242
+Documentation:
+
+Method code:
+222 |   @Override
+223 |   public boolean isSubtype(JSType that) {
+224 |     if (JSType.isSubtypeHelper(this, that)) {
+225 |       return true;
+226 |     }
+227 | 
+228 |     // Top of the record types is the empty record, or OBJECT_TYPE.
+229 |     if (registry.getNativeObjectType(
+230 |             JSTypeNative.OBJECT_TYPE).isSubtype(that)) {
+231 |       return true;
+232 |     }
+233 | 
+234 |     // A type is a subtype of a record type if it itself is a record
+235 |     // type and it has at least the same members as the parent record type
+236 |     // with the same types.
+237 |     if (!that.isRecordType()) {
+238 |       return false;
+239 |     }
+240 | 
+241 |     return RecordType.isSubtype(this, that.toMaybeRecordType());
+242 |   }
+
+===== M0027 =====
+Signature: com.google.javascript.rhino.jstype.ArrowType.resolveInternal(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/ArrowType.java
+Original range: 231-241
+Documentation:
+
+Method code:
+231 |   @Override
+232 |   JSType resolveInternal(ErrorReporter t, StaticScope<JSType> scope) {
+233 |     returnType = safeResolve(returnType, t, scope);
+234 |     if (parameters != null) {
+235 |       for (Node paramNode = parameters.getFirstChild();
+236 |            paramNode != null; paramNode = paramNode.getNext()) {
+237 |         paramNode.setJSType(paramNode.getJSType().resolve(t, scope));
+238 |       }
+239 |     }
+240 |     return this;
+241 |   }
+
+===== M0028 =====
+Signature: com.google.javascript.rhino.Node.getJSType()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1800-1802
+Documentation:
+// Custom annotations
+Method code:
+1800 |   public JSType getJSType() {
+1801 |       return jsType;
+1802 |   }
+
+===== M0029 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.isLastGeneration()
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 780-782
+Documentation:
+
+Method code:
+780 |   boolean isLastGeneration() {
+781 |     return lastGeneration;
+782 |   }
+
+===== M0030 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.NamedType(JSTypeRegistry,String,String,int,int)
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 103-112
+Documentation:
+/**
+   * Create a named type based on the reference.
+   */
+Method code:
+103 |   NamedType(JSTypeRegistry registry, String reference,
+104 |       String sourceName, int lineno, int charno) {
+105 |     super(registry, registry.getNativeObjectType(JSTypeNative.UNKNOWN_TYPE));
+106 | 
+107 |     Preconditions.checkNotNull(reference);
+108 |     this.reference = reference;
+109 |     this.sourceName = sourceName;
+110 |     this.lineno = lineno;
+111 |     this.charno = charno;
+112 |   }
+
+===== M0031 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.toMaybeFunctionType()
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 197-200
+Documentation:
+
+Method code:
+197 |   @Override
+198 |   public FunctionType toMaybeFunctionType() {
+199 |     return this;
+200 |   }
+
+===== M0032 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.hasReferenceName()
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 160-163
+Documentation:
+
+Method code:
+160 |   @Override
+161 |   public boolean hasReferenceName() {
+162 |     return true;
+163 |   }
+
+===== M0033 =====
+Signature: com.google.javascript.rhino.jstype.EnumElementType.EnumElementType(JSTypeRegistry,JSType,String)
+Source: src/com/google/javascript/rhino/jstype/EnumElementType.java
+Original range: 69-75
+Documentation:
+
+Method code:
+69 |   EnumElementType(JSTypeRegistry registry, JSType elementType,
+70 |       String name) {
+71 |     super(registry);
+72 |     this.primitiveType = elementType;
+73 |     this.primitiveObjectType = elementType.toObjectType();
+74 |     this.name = name;
+75 |   }
+
+===== M0034 =====
+Signature: com.google.javascript.rhino.jstype.ProxyObjectType.resolveInternal(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/ProxyObjectType.java
+Original range: 396-400
+Documentation:
+
+Method code:
+396 |   @Override
+397 |   JSType resolveInternal(ErrorReporter t, StaticScope<JSType> scope) {
+398 |     setReferencedType(referencedType.resolve(t, scope));
+399 |     return this;
+400 |   }
+
+===== M0035 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.setPrototypeBasedOn(ObjectType)
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 327-329
+Documentation:
+/**
+   * Sets the prototype, creating the prototype object from the given
+   * base type.
+   * @param baseType The base type.
+   */
+Method code:
+327 |   public void setPrototypeBasedOn(ObjectType baseType) {
+328 |     setPrototypeBasedOn(baseType, null);
+329 |   }
+
+===== M0036 =====
+Signature: com.google.javascript.rhino.jstype.NoResolvedType.NoResolvedType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/NoResolvedType.java
+Original range: 58-60
+Documentation:
+
+Method code:
+58 |   NoResolvedType(JSTypeRegistry registry) {
+59 |     super(registry);
+60 |   }
+
+===== M0037 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.hasCachedValues()
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 521-523
+Documentation:
+/**
+   * Returns true if any cached values have been set for this type.  If true,
+   * then the prototype chain should not be changed, as it might invalidate the
+   * cached values.
+   */
+Method code:
+521 |   public boolean hasCachedValues() {
+522 |     return !unknown;
+523 |   }
+
+===== M0038 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.implicitPrototypeChainIsUnknown()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 493-502
+Documentation:
+
+Method code:
+493 |   private boolean implicitPrototypeChainIsUnknown() {
+494 |     ObjectType p = getImplicitPrototype();
+495 |     while (p != null) {
+496 |       if (p.isUnknownType()) {
+497 |         return true;
+498 |       }
+499 |       p = p.getImplicitPrototype();
+500 |     }
+501 |     return false;
+502 |   }
+
+===== M0039 =====
+Signature: com.google.javascript.rhino.jstype.UnknownType.resolveInternal(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/UnknownType.java
+Original range: 194-197
+Documentation:
+
+Method code:
+194 |   @Override
+195 |   JSType resolveInternal(ErrorReporter t, StaticScope<JSType> scope) {
+196 |     return this;
+197 |   }
+
+===== M0040 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createRecordType(Map<String, RecordProperty>)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 1313-1315
+Documentation:
+/**
+   * Creates a record type.
+   */
+Method code:
+1313 |   public RecordType createRecordType(Map<String, RecordProperty> properties) {
+1314 |     return new RecordType(this, properties);
+1315 |   }
+
+===== M0041 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createArrowType(Node,JSType)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 1029-1031
+Documentation:
+/**
+   * Creates an arrow type, an abstract representation of the parameters
+   * and return value of a function.
+   *
+   * @param parametersNode the parameters' types, formatted as a Node with
+   *     param names and optionality info.
+   * @param returnType the function's return type
+   */
+Method code:
+1029 |   ArrowType createArrowType(Node parametersNode, JSType returnType) {
+1030 |     return new ArrowType(this, parametersNode, returnType);
+1031 |   }
+
+===== M0042 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.getNativeFunctionType(JSTypeNative)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 882-884
+Documentation:
+
+Method code:
+882 |   public FunctionType getNativeFunctionType(JSTypeNative typeId) {
+883 |     return (FunctionType) getNativeType(typeId);
+884 |   }
+
+===== M0043 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.Property.getType()
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 632-635
+Documentation:
+
+Method code:
+632 |     @Override
+633 |     public JSType getType() {
+634 |       return type;
+635 |     }
+
+===== M0044 =====
+Signature: com.google.javascript.rhino.jstype.ProxyObjectType.setReferencedType(JSType)
+Source: src/com/google/javascript/rhino/jstype/ProxyObjectType.java
+Original range: 84-91
+Documentation:
+
+Method code:
+84 |   void setReferencedType(JSType referencedType) {
+85 |     this.referencedType = referencedType;
+86 |     if (referencedType instanceof ObjectType) {
+87 |       this.referencedObjType = (ObjectType) referencedType;
+88 |     } else {
+89 |       this.referencedObjType = null;
+90 |     }
+91 |   }
+
+===== M0045 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.resetForTypeCheck()
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 237-244
+Documentation:
+/**
+   * Reset to run the TypeCheck pass.
+   */
+Method code:
+237 |   public void resetForTypeCheck() {
+238 |     typesIndexedByProperty.clear();
+239 |     eachRefTypeIndexedByProperty.clear();
+240 |     initializeBuiltInTypes();
+241 |     namesToTypes.clear();
+242 |     namespaces.clear();
+243 |     initializeRegistry();
+244 |   }
+
+===== M0046 =====
+Signature: com.google.javascript.rhino.jstype.ArrowType.ArrowType(JSTypeRegistry,Node,JSType)
+Source: src/com/google/javascript/rhino/jstype/ArrowType.java
+Original range: 62-65
+Documentation:
+
+Method code:
+62 |   ArrowType(JSTypeRegistry registry, Node parameters,
+63 |       JSType returnType) {
+64 |     this(registry, parameters, returnType, false);
+65 |   }
+
+===== M0047 =====
+Signature: com.google.javascript.rhino.jstype.JSType.resolve(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 1078-1091
+Documentation:
+/**
+   * Resolve this type in the given scope.
+   *
+   * The returned value must be equal to {@code this}, as defined by
+   * {@link #isEquivalentTo}. It may or may not be the same object. This method
+   * may modify the internal state of {@code this}, as long as it does
+   * so in a way that preserves Object equality.
+   *
+   * For efficiency, we should only resolve a type once per compilation job.
+   * For incremental compilations, one compilation job may need the
+   * artifacts from a previous generation, so we will eventually need
+   * a generational flag instead of a boolean one.
+   */
+Method code:
+1078 |   public final JSType resolve(ErrorReporter t, StaticScope<JSType> scope) {
+1079 |     if (resolved) {
+1080 |       // TODO(nicksantos): Check to see if resolve() looped back on itself.
+1081 |       // Preconditions.checkNotNull(resolveResult);
+1082 |       if (resolveResult == null) {
+1083 |         return registry.getNativeType(JSTypeNative.UNKNOWN_TYPE);
+1084 |       }
+1085 |       return resolveResult;
+1086 |     }
+1087 |     resolved = true;
+1088 |     resolveResult = resolveInternal(t, scope);
+1089 |     resolveResult.setResolvedTypeInternal(resolveResult);
+1090 |     return resolveResult;
+1091 |   }
+
+===== M0048 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.getNativeObjectType(JSTypeNative)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 878-880
+Documentation:
+
+Method code:
+878 |   public ObjectType getNativeObjectType(JSTypeNative typeId) {
+879 |     return (ObjectType) getNativeType(typeId);
+880 |   }
+
+===== M0049 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.InstanceObjectType(JSTypeRegistry,FunctionType)
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 54-56
+Documentation:
+
+Method code:
+54 |   InstanceObjectType(JSTypeRegistry registry, FunctionType constructor) {
+55 |     this(registry, constructor, false);
+56 |   }
+
+===== M0050 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.getSuperClassConstructor()
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 710-717
+Documentation:
+/**
+   * Given a constructor or an interface type, get its superclass constructor
+   * or {@code null} if none exists.
+   */
+Method code:
+710 |   public FunctionType getSuperClassConstructor() {
+711 |     Preconditions.checkArgument(isConstructor() || isInterface());
+712 |     ObjectType maybeSuperInstanceType = getPrototype().getImplicitPrototype();
+713 |     if (maybeSuperInstanceType == null) {
+714 |       return null;
+715 |     }
+716 |     return maybeSuperInstanceType.getConstructor();
+717 |   }
+
+===== M0051 =====
+Signature: com.google.javascript.rhino.jstype.UnionTypeBuilder.build()
+Source: src/com/google/javascript/rhino/jstype/UnionTypeBuilder.java
+Original range: 247-255
+Documentation:
+/**
+   * Creates a union.
+   * @return A UnionType if it has two or more alternates, the
+   *    only alternate if it has one and otherwise {@code NO_TYPE}.
+   */
+Method code:
+247 |   JSType build() {
+248 |     if (result == null) {
+249 |       result = reduceAlternatesWithoutUnion();
+250 |       if (result == null) {
+251 |         result = new UnionType(registry, getAlternateListCopy());
+252 |       }
+253 |     }
+254 |     return result;
+255 |   }
+
+===== M0052 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.isSubtype(JSType)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 443-491
+Documentation:
+
+Method code:
+443 |   @Override
+444 |   public boolean isSubtype(JSType that) {
+445 |     if (JSType.isSubtypeHelper(this, that)) {
+446 |       return true;
+447 |     }
+448 | 
+449 |     // Union types
+450 |     if (that.isUnionType()) {
+451 |       // The static {@code JSType.isSubtype} check already decomposed
+452 |       // union types, so we don't need to check those again.
+453 |       return false;
+454 |     }
+455 | 
+456 |     // record types
+457 |     if (that.isRecordType()) {
+458 |       return RecordType.isSubtype(this, that.toMaybeRecordType());
+459 |     }
+460 | 
+461 |     // Interfaces
+462 |     // Find all the interfaces implemented by this class and compare each one
+463 |     // to the interface instance.
+464 |     ObjectType thatObj = that.toObjectType();
+465 |     ObjectType thatCtor = thatObj == null ? null : thatObj.getConstructor();
+466 |     if (thatCtor != null && thatCtor.isInterface()) {
+467 |       Iterable<ObjectType> thisInterfaces = getCtorImplementedInterfaces();
+468 |       for (ObjectType thisInterface : thisInterfaces) {
+469 |         if (thisInterface.isSubtype(that)) {
+470 |           return true;
+471 |         }
+472 |       }
+473 |     }
+474 | 
+475 |     if (getConstructor() != null && getConstructor().isInterface()) {
+476 |       for (ObjectType thisInterface : getCtorExtendedInterfaces()) {
+477 |         if (thisInterface.isSubtype(that)) {
+478 |           return true;
+479 |         }
+480 |       }
+481 |     }
+482 | 
+483 |     // other prototype based objects
+484 |     if (isUnknownType() || implicitPrototypeChainIsUnknown()) {
+485 |       // If unsure, say 'yes', to avoid spurious warnings.
+486 |       // TODO(user): resolve the prototype chain completely in all cases,
+487 |       // to avoid guessing.
+488 |       return true;
+489 |     }
+490 |     return this.isImplicitPrototype(thatObj);
+491 |   }
+
+===== M0053 =====
+Signature: com.google.javascript.rhino.jstype.NullType.toString()
+Source: src/com/google/javascript/rhino/jstype/NullType.java
+Original range: 102-105
+Documentation:
+
+Method code:
+102 |   @Override
+103 |   public String toString() {
+104 |     return getDisplayName();
+105 |   }
+
+===== M0054 =====
+Signature: com.google.javascript.rhino.jstype.RecordTypeBuilder.RecordTypeBuilder(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/RecordTypeBuilder.java
+Original range: 57-59
+Documentation:
+
+Method code:
+57 |   public RecordTypeBuilder(JSTypeRegistry registry) {
+58 |     this.registry = registry;
+59 |   }
+
+===== M0055 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.addSubType(FunctionType)
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 980-985
+Documentation:
+/** Adds a type to the list of subtypes for this type. */
+Method code:
+980 |   private void addSubType(FunctionType subType) {
+981 |     if (subTypes == null) {
+982 |       subTypes = Lists.newArrayList();
+983 |     }
+984 |     subTypes.add(subType);
+985 |   }
+
+===== M0056 =====
+Signature: com.google.javascript.rhino.jstype.FunctionParamBuilder.build()
+Source: src/com/google/javascript/rhino/jstype/FunctionParamBuilder.java
+Original range: 129-131
+Documentation:
+
+Method code:
+129 |   public Node build() {
+130 |     return root;
+131 |   }
+
+===== M0057 =====
+Signature: com.google.javascript.rhino.Node.createProp(int,int,PropListItem)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 852-854
+Documentation:
+
+Method code:
+852 |   PropListItem createProp(int propType, int value, PropListItem next) {
+853 |     return new IntPropListItem(propType, value, next);
+854 |   }
+
+===== M0058 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.hasProperty(String)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 166-170
+Documentation:
+
+Method code:
+166 |   @Override
+167 |   public boolean hasProperty(String propertyName) {
+168 |     // Unknown types have all properties.
+169 |     return isUnknownType() || getSlot(propertyName) != null;
+170 |   }
+
+===== M0059 =====
+Signature: com.google.javascript.rhino.jstype.SimpleSlot.SimpleSlot(String,JSType,boolean)
+Source: src/com/google/javascript/rhino/jstype/SimpleSlot.java
+Original range: 58-62
+Documentation:
+
+Method code:
+58 |   public SimpleSlot(String name, JSType type, boolean inferred) {
+59 |     this.name = name;
+60 |     this.type = type;
+61 |     this.inferred = inferred;
+62 |   }
+
+===== M0060 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createArrowType(Node)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 1039-1041
+Documentation:
+/**
+   * Creates an arrow type with an unknown return type.
+   *
+   * @param parametersNode the parameters' types, formatted as a Node with
+   *     param names and optionality info.
+   */
+Method code:
+1039 |   ArrowType createArrowType(Node parametersNode) {
+1040 |     return new ArrowType(this, parametersNode, null);
+1041 |   }
+
+===== M0061 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.checkEnumElementCycle(ErrorReporter)
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 344-350
+Documentation:
+
+Method code:
+344 |   private void checkEnumElementCycle(ErrorReporter t) {
+345 |     JSType referencedType = getReferencedType();
+346 |     if (referencedType instanceof EnumElementType &&
+347 |         ((EnumElementType) referencedType).getPrimitiveType() == this) {
+348 |       handleTypeCycle(t);
+349 |     }
+350 |   }
+
+===== M0062 =====
+Signature: com.google.javascript.rhino.jstype.FunctionParamBuilder.addVarArgs(JSType)
+Source: src/com/google/javascript/rhino/jstype/FunctionParamBuilder.java
+Original range: 94-109
+Documentation:
+/**
+   * Add variable arguments to the end of the parameter list.
+   * @return False if this is called after var args are added.
+   */
+Method code:
+94 |   public boolean addVarArgs(JSType type) {
+95 |     if (hasVarArgs()) {
+96 |       return false;
+97 |     }
+98 | 
+99 |     // There are two types of variable argument functions:
+100 |     // 1) Programmer-defined var args
+101 |     // 2) Native bottom types that can accept any argument.
+102 |     // For the first one, "undefined" is a valid value for all arguments.
+103 |     // For the second, we do not want to cast it up to undefined.
+104 |     if (!type.isEmptyType()) {
+105 |       type = registry.createOptionalType(type);
+106 |     }
+107 |     newParameter(type).setVarArgs(true);
+108 |     return true;
+109 |   }
+
+===== M0063 =====
+Signature: com.google.javascript.rhino.jstype.ProxyObjectType.ProxyObjectType(JSTypeRegistry,JSType)
+Source: src/com/google/javascript/rhino/jstype/ProxyObjectType.java
+Original range: 63-66
+Documentation:
+
+Method code:
+63 |   ProxyObjectType(JSTypeRegistry registry, JSType referencedType) {
+64 |     super(registry);
+65 |     setReferencedType(referencedType);
+66 |   }
+
+===== M0064 =====
+Signature: com.google.javascript.rhino.jstype.SimpleSlot.getType()
+Source: src/com/google/javascript/rhino/jstype/SimpleSlot.java
+Original range: 69-72
+Documentation:
+
+Method code:
+69 |   @Override
+70 |   public JSType getType() {
+71 |     return type;
+72 |   }
+
+===== M0065 =====
+Signature: com.google.javascript.rhino.jstype.FunctionParamBuilder.newParameter(JSType)
+Source: src/com/google/javascript/rhino/jstype/FunctionParamBuilder.java
+Original range: 122-127
+Documentation:
+// Add a parameter to the list with the given type.
+Method code:
+122 |   private Node newParameter(JSType type) {
+123 |     Node paramNode = Node.newString(Token.NAME, "");
+124 |     paramNode.setJSType(type);
+125 |     root.addChildToBack(paramNode);
+126 |     return paramNode;
+127 |   }
+
+===== M0066 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createFunctionType(JSType,Node)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 1279-1285
+Documentation:
+/**
+   * @param parameters the function's parameters or {@code null}
+   *        to indicate that the parameter types are unknown.
+   * @param returnType the function's return type or {@code null} to indicate
+   *        that the return type is unknown.
+   */
+Method code:
+1279 |   public FunctionType createFunctionType(
+1280 |       JSType returnType, Node parameters) {
+1281 |     return new FunctionBuilder(this)
+1282 |         .withParamsNode(parameters)
+1283 |         .withReturnType(returnType)
+1284 |         .build();
+1285 |   }
+
+===== M0067 =====
+Signature: com.google.javascript.rhino.Node.setVarArgs(boolean)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1858-1860
+Documentation:
+/**
+   * Sets whether this node is a variable length argument node. This
+   * method is meaningful only on {@link Token#NAME} nodes
+   * used to define a {@link Token#FUNCTION}'s argument list.
+   */
+Method code:
+1858 |   public void setVarArgs(boolean varArgs) {
+1859 |     putBooleanProp(VAR_ARGS_NAME, varArgs);
+1860 |   }
+
+===== M0068 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.getPropertyNode(String)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 256-267
+Documentation:
+
+Method code:
+256 |   @Override
+257 |   public Node getPropertyNode(String propertyName) {
+258 |     Property p = properties.get(propertyName);
+259 |     if (p != null) {
+260 |       return p.getNode();
+261 |     }
+262 |     ObjectType implicitPrototype = getImplicitPrototype();
+263 |     if (implicitPrototype != null) {
+264 |       return implicitPrototype.getPropertyNode(propertyName);
+265 |     }
+266 |     return null;
+267 |   }
+
+===== M0069 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.isForwardDeclaredType(String)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 850-852
+Documentation:
+/**
+   * Whether this is a forward-declared type name.
+   */
+Method code:
+850 |   public boolean isForwardDeclaredType(String name) {
+851 |     return forwardDeclaredTypes.contains(name);
+852 |   }
+
+===== M0070 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.hasCachedValues()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 504-507
+Documentation:
+
+Method code:
+504 |   @Override
+505 |   public boolean hasCachedValues() {
+506 |     return super.hasCachedValues();
+507 |   }
+
+===== M0071 =====
+Signature: com.google.javascript.rhino.jstype.JSType.setResolvedTypeInternal(JSType)
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 1098-1101
+Documentation:
+
+Method code:
+1098 |   void setResolvedTypeInternal(JSType type) {
+1099 |     resolveResult = type;
+1100 |     resolved = true;
+1101 |   }
+
+===== M0072 =====
+Signature: com.google.javascript.rhino.jstype.JSType.anonymous_L90.compare(JSType,JSType)
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 91-94
+Documentation:
+
+Method code:
+91 |     @Override
+92 |     public int compare(JSType t1, JSType t2) {
+93 |       return t1.toString().compareTo(t2.toString());
+94 |     }
+
+===== M0073 =====
+Signature: com.google.javascript.rhino.jstype.FunctionBuilder.withParamsNode(Node)
+Source: src/com/google/javascript/rhino/jstype/FunctionBuilder.java
+Original range: 89-92
+Documentation:
+/**
+   * Set the parameters of the function type with a specially-formatted node.
+   */
+Method code:
+89 |   public FunctionBuilder withParamsNode(Node parametersNode) {
+90 |     this.parametersNode = parametersNode;
+91 |     return this;
+92 |   }
+
+===== M0074 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createParameters(boolean,JSType...)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 1216-1227
+Documentation:
+/**
+   * Creates a tree hierarchy representing a typed argument list.
+   *
+   * @param lastVarArgs whether the last type should considered as a variable
+   *     length argument.
+   * @param parameterTypes the parameter types. The last element of this array
+   *     is considered a variable length argument is {@code lastVarArgs} is
+   *     {@code true}.
+   * @return a tree hierarchy representing a typed argument list
+   */
+Method code:
+1216 |   private Node createParameters(boolean lastVarArgs, JSType... parameterTypes) {
+1217 |     FunctionParamBuilder builder = new FunctionParamBuilder(this);
+1218 |     int max = parameterTypes.length - 1;
+1219 |     for (int i = 0; i <= max; i++) {
+1220 |       if (lastVarArgs && i == max) {
+1221 |         builder.addVarArgs(parameterTypes[i]);
+1222 |       } else {
+1223 |         builder.addRequiredParams(parameterTypes[i]);
+1224 |       }
+1225 |     }
+1226 |     return builder.build();
+1227 |   }
+
+===== M0075 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createAnonymousObjectType()
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 1328-1333
+Documentation:
+/**
+   * Create an anonymous object type.
+   */
+Method code:
+1328 |   public ObjectType createAnonymousObjectType() {
+1329 |     PrototypeObjectType type =
+1330 |         new PrototypeObjectType(this, null, null);
+1331 |     type.setPrettyPrint(true);
+1332 |     return type;
+1333 |   }
+
+===== M0076 =====
+Signature: com.google.javascript.rhino.jstype.VoidType.getDisplayName()
+Source: src/com/google/javascript/rhino/jstype/VoidType.java
+Original range: 99-102
+Documentation:
+
+Method code:
+99 |   @Override
+100 |   public String getDisplayName() {
+101 |     return "undefined";
+102 |   }
+
+===== M0077 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.setImplementedInterfaces(List<ObjectType>)
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 453-459
+Documentation:
+
+Method code:
+453 |   public void setImplementedInterfaces(List<ObjectType> implementedInterfaces) {
+454 |     // Records this type for each implemented interface.
+455 |     for (ObjectType type : implementedInterfaces) {
+456 |       registry.registerTypeImplementingInterface(this, type);
+457 |     }
+458 |     this.implementedInterfaces = ImmutableList.copyOf(implementedInterfaces);
+459 |   }
+
+===== M0078 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.registerNativeType(JSTypeNative,JSType)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 601-603
+Documentation:
+
+Method code:
+601 |   private void registerNativeType(JSTypeNative typeId, JSType type) {
+602 |     nativeTypes[typeId.ordinal()] = type;
+603 |   }
+
+===== M0079 =====
+Signature: com.google.javascript.rhino.Node.newString(int,String)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 507-509
+Documentation:
+
+Method code:
+507 |   public static Node newString(int type, String str) {
+508 |     return new StringNode(type, str);
+509 |   }
+
+===== M0080 =====
+Signature: com.google.javascript.rhino.jstype.StringType.toString()
+Source: src/com/google/javascript/rhino/jstype/StringType.java
+Original range: 90-93
+Documentation:
+
+Method code:
+90 |   @Override
+91 |   public String toString() {
+92 |     return getDisplayName();
+93 |   }
+
+===== M0081 =====
+Signature: com.google.javascript.rhino.Node.removeProp(PropListItem,int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 773-786
+Documentation:
+/**
+   * @param item The item to inspect
+   * @param propType The property to look for
+   * @return The replacement list if the property was removed, or
+   *   'item' otherwise.
+   */
+Method code:
+773 |   private PropListItem removeProp(PropListItem item, int propType) {
+774 |     if (item == null) {
+775 |       return null;
+776 |     } else if (item.getType() == propType) {
+777 |       return item.getNext();
+778 |     } else {
+779 |       PropListItem result = removeProp(item.getNext(), propType);
+780 |       if (result != item.getNext()) {
+781 |         return item.chain(result);
+782 |       } else {
+783 |         return item;
+784 |       }
+785 |     }
+786 |   }
+
+===== M0082 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.getImplicitPrototype()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 411-414
+Documentation:
+
+Method code:
+411 |   @Override
+412 |   public ObjectType getImplicitPrototype() {
+413 |     return implicitPrototypeFallback;
+414 |   }
+
+===== M0083 =====
+Signature: com.google.javascript.rhino.Node.setOptionalArg(boolean)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1876-1878
+Documentation:
+/**
+   * Sets whether this node is an optional argument node. This
+   * method is meaningful only on {@link Token#NAME} nodes
+   * used to define a {@link Token#FUNCTION}'s argument list.
+   */
+Method code:
+1876 |   public void setOptionalArg(boolean optionalArg) {
+1877 |     putBooleanProp(OPT_ARG_NAME, optionalArg);
+1878 |   }
+
+===== M0084 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.hasOwnProperty(String)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 172-175
+Documentation:
+
+Method code:
+172 |   @Override
+173 |   public boolean hasOwnProperty(String propertyName) {
+174 |     return properties.get(propertyName) != null;
+175 |   }
+
+===== M0085 =====
+Signature: com.google.javascript.rhino.Node.AbstractPropListItem.AbstractPropListItem(int,PropListItem)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 268-271
+Documentation:
+
+Method code:
+268 |     AbstractPropListItem(int propType, PropListItem next) {
+269 |       this.propType = propType;
+270 |       this.next = next;
+271 |     }
+
+===== M0086 =====
+Signature: com.google.javascript.rhino.jstype.JSType.hashCode()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 430-433
+Documentation:
+
+Method code:
+430 |   @Override
+431 |   public int hashCode() {
+432 |     return System.identityHashCode(this);
+433 |   }
+
+===== M0087 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isNoResolvedType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 148-150
+Documentation:
+
+Method code:
+148 |   public boolean isNoResolvedType() {
+149 |     return false;
+150 |   }
+
+===== M0088 =====
+Signature: com.google.javascript.rhino.jstype.StringType.StringType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/StringType.java
+Original range: 52-54
+Documentation:
+
+Method code:
+52 |   StringType(JSTypeRegistry registry) {
+53 |     super(registry);
+54 |   }
+
+===== M0089 =====
+Signature: com.google.javascript.rhino.jstype.ProxyObjectType.getReferencedTypeInternal()
+Source: src/com/google/javascript/rhino/jstype/ProxyObjectType.java
+Original range: 76-78
+Documentation:
+
+Method code:
+76 |   JSType getReferencedTypeInternal() {
+77 |     return referencedType;
+78 |   }
+
+===== M0090 =====
+Signature: com.google.javascript.rhino.jstype.UnionTypeBuilder.UnionTypeBuilder(JSTypeRegistry,int)
+Source: src/com/google/javascript/rhino/jstype/UnionTypeBuilder.java
+Original range: 104-107
+Documentation:
+
+Method code:
+104 |   UnionTypeBuilder(JSTypeRegistry registry, int maxUnionSize) {
+105 |     this.registry = registry;
+106 |     this.maxUnionSize = maxUnionSize;
+107 |   }
+
+===== M0091 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.setPrototypeBasedOn(ObjectType,Node)
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 331-358
+Documentation:
+
+Method code:
+331 |   void setPrototypeBasedOn(ObjectType baseType, Node propertyNode) {
+332 |     // This is a bit weird. We need to successfully handle these
+333 |     // two cases:
+334 |     // Foo.prototype = new Bar();
+335 |     // and
+336 |     // Foo.prototype = {baz: 3};
+337 |     // In the first case, we do not want new properties to get
+338 |     // added to Bar. In the second case, we do want new properties
+339 |     // to get added to the type of the anonymous object.
+340 |     //
+341 |     // We handle this by breaking it into two cases:
+342 |     //
+343 |     // In the first case, we create a new PrototypeObjectType and set
+344 |     // its implicit prototype to the type being assigned. This ensures
+345 |     // that Bar will not get any properties of Foo.prototype, but properties
+346 |     // later assigned to Bar will get inherited properly.
+347 |     //
+348 |     // In the second case, we just use the anonymous object as the prototype.
+349 |     if (baseType.hasReferenceName() ||
+350 |         isNativeObjectType() ||
+351 |         baseType.isFunctionPrototypeType() ||
+352 |         !(baseType instanceof PrototypeObjectType)) {
+353 | 
+354 |       baseType = new PrototypeObjectType(
+355 |           registry, this.getReferenceName() + ".prototype", baseType);
+356 |     }
+357 |     setPrototype((PrototypeObjectType) baseType, propertyNode);
+358 |   }
+
+===== M0092 =====
+Signature: com.google.javascript.rhino.jstype.UnionType.isEquivalentTo(JSType)
+Source: src/com/google/javascript/rhino/jstype/UnionType.java
+Original range: 313-332
+Documentation:
+/**
+   * Two union types are equal if they have the same number of alternates
+   * and all alternates are equal.
+   */
+Method code:
+313 |   @Override
+314 |   public boolean isEquivalentTo(JSType object) {
+315 |     if (object == null) {
+316 |       return false;
+317 |     }
+318 |     if (object.isUnionType()) {
+319 |       UnionType that = object.toMaybeUnionType();
+320 |       if (alternates.size() != that.alternates.size()) {
+321 |         return false;
+322 |       }
+323 |       for (JSType alternate : that.alternates) {
+324 |         if (!hasAlternate(alternate)) {
+325 |           return false;
+326 |         }
+327 |       }
+328 |       return true;
+329 |     } else {
+330 |       return false;
+331 |     }
+332 |   }
+
+===== M0093 =====
+Signature: com.google.javascript.rhino.jstype.UnionType.toString()
+Source: src/com/google/javascript/rhino/jstype/UnionType.java
+Original range: 404-420
+Documentation:
+
+Method code:
+404 |   @Override public String toString() {
+405 |     StringBuilder result = new StringBuilder();
+406 |     boolean firstAlternate = true;
+407 | 
+408 |     result.append("(");
+409 |     SortedSet<JSType> sorted = new TreeSet<JSType>(ALPHA);
+410 |     sorted.addAll(alternates);
+411 |     for (JSType t : sorted) {
+412 |       if (!firstAlternate) {
+413 |         result.append("|");
+414 |       }
+415 |       result.append(t.toString());
+416 |       firstAlternate = false;
+417 |     }
+418 |     result.append(")");
+419 |     return result.toString();
+420 |   }
+
+===== M0094 =====
+Signature: com.google.javascript.rhino.jstype.BooleanType.toString()
+Source: src/com/google/javascript/rhino/jstype/BooleanType.java
+Original range: 101-104
+Documentation:
+
+Method code:
+101 |   @Override
+102 |   public String toString() {
+103 |     return getDisplayName();
+104 |   }
+
+===== M0095 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isResolved()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 1104-1106
+Documentation:
+/** Whether the type has been resolved. */
+Method code:
+1104 |   public final boolean isResolved() {
+1105 |     return resolved;
+1106 |   }
+
+===== M0096 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.register(JSType,String)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 591-599
+Documentation:
+
+Method code:
+591 |   private void register(JSType type, String name) {
+592 |     namesToTypes.put(name, type);
+593 | 
+594 |     // Add all the namespaces in which this name lives.
+595 |     while (name.indexOf('.') > 0) {
+596 |       name = name.substring(0, name.lastIndexOf('.'));
+597 |       namespaces.add(name);
+598 |     }
+599 |   }
+
+===== M0097 =====
+Signature: com.google.javascript.rhino.jstype.ArrowType.ArrowType(JSTypeRegistry,Node,JSType,boolean)
+Source: src/com/google/javascript/rhino/jstype/ArrowType.java
+Original range: 67-77
+Documentation:
+
+Method code:
+67 |   ArrowType(JSTypeRegistry registry, Node parameters,
+68 |       JSType returnType, boolean returnTypeInferred) {
+69 |     super(registry);
+70 | 
+71 |     this.parameters = parameters == null ?
+72 |         registry.createParametersWithVarArgs(getNativeType(UNKNOWN_TYPE)) :
+73 |         parameters;
+74 |     this.returnType = returnType == null ?
+75 |         getNativeType(UNKNOWN_TYPE) : returnType;
+76 |     this.returnTypeInferred = returnTypeInferred;
+77 |   }
+
+===== M0098 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.FunctionType(JSTypeRegistry,String,Node)
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 156-168
+Documentation:
+/** Creates an instance for a function that is an interface. */
+Method code:
+156 |   private FunctionType(JSTypeRegistry registry, String name, Node source) {
+157 |     super(registry, name,
+158 |         registry.getNativeObjectType(JSTypeNative.FUNCTION_INSTANCE_TYPE));
+159 |     setPrettyPrint(true);
+160 | 
+161 |     Preconditions.checkArgument(source == null ||
+162 |         Token.FUNCTION == source.getType());
+163 |     Preconditions.checkArgument(name != null);
+164 |     this.source = source;
+165 |     this.call = new ArrowType(registry, new Node(Token.PARAM_LIST), null);
+166 |     this.kind = Kind.INTERFACE;
+167 |     this.typeOfThis = new InstanceObjectType(registry, this);
+168 |   }
+
+===== M0099 =====
+Signature: com.google.javascript.rhino.jstype.FunctionBuilder.withReturnType(JSType)
+Source: src/com/google/javascript/rhino/jstype/FunctionBuilder.java
+Original range: 95-98
+Documentation:
+/** Set the return type. */
+Method code:
+95 |   public FunctionBuilder withReturnType(JSType returnType) {
+96 |     this.returnType = returnType;
+97 |     return this;
+98 |   }
+
+===== M0100 =====
+Signature: com.google.javascript.rhino.jstype.NoObjectType.resolveInternal(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/NoObjectType.java
+Original range: 189-192
+Documentation:
+
+Method code:
+189 |   @Override
+190 |   JSType resolveInternal(ErrorReporter t, StaticScope<JSType> scope) {
+191 |     return this;
+192 |   }
+
+===== M0101 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.hasCachedValues()
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 1017-1020
+Documentation:
+
+Method code:
+1017 |   @Override
+1018 |   public boolean hasCachedValues() {
+1019 |     return prototypeSlot != null || super.hasCachedValues();
+1020 |   }
+
+===== M0102 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.resolveInternal(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 207-236
+Documentation:
+/**
+   * Resolve the referenced type within the enclosing scope.
+   */
+Method code:
+207 |   @Override
+208 |   JSType resolveInternal(ErrorReporter t, StaticScope<JSType> enclosing) {
+209 |     // TODO(user): Investigate whether it is really necessary to keep two
+210 |     // different mechanisms for resolving named types, and if so, which order
+211 |     // makes more sense. Now, resolution via registry is first in order to
+212 |     // avoid triggering the warnings built into the resolution via properties.
+213 |     boolean resolved = resolveViaRegistry(t, enclosing);
+214 |     if (detectImplicitPrototypeCycle()) {
+215 |       handleTypeCycle(t);
+216 |     }
+217 | 
+218 |     if (resolved) {
+219 |       super.resolveInternal(t, enclosing);
+220 |       finishPropertyContinuations();
+221 |       return registry.isLastGeneration() ?
+222 |           getReferencedType() : this;
+223 |     }
+224 | 
+225 |     resolveViaProperties(t, enclosing);
+226 |     if (detectImplicitPrototypeCycle()) {
+227 |       handleTypeCycle(t);
+228 |     }
+229 | 
+230 |     super.resolveInternal(t, enclosing);
+231 |     if (isResolved()) {
+232 |       finishPropertyContinuations();
+233 |     }
+234 |     return registry.isLastGeneration() ?
+235 |         getReferencedType() : this;
+236 |   }
+
+===== M0103 =====
+Signature: com.google.javascript.rhino.jstype.NullType.NullType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/NullType.java
+Original range: 53-55
+Documentation:
+
+Method code:
+53 |   NullType(JSTypeRegistry registry) {
+54 |     super(registry);
+55 |   }
+
+===== M0104 =====
+Signature: com.google.javascript.rhino.jstype.NoObjectType.getImplicitPrototype()
+Source: src/com/google/javascript/rhino/jstype/NoObjectType.java
+Original range: 93-96
+Documentation:
+
+Method code:
+93 |   @Override
+94 |   public ObjectType getImplicitPrototype() {
+95 |     return null;
+96 |   }
+
+===== M0105 =====
+Signature: com.google.javascript.rhino.jstype.JSType.toMaybeFunctionType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 280-282
+Documentation:
+/**
+   * Downcasts this to a FunctionType, or returns null if this is not
+   * a function.
+   *
+   * For the purposes of this function, we define a MaybeFunctionType as any
+   * type in the sub-lattice
+   * { x | LEAST_FUNCTION_TYPE <= x <= GREATEST_FUNCTION_TYPE }
+   * This definition excludes bottom types like NoType and NoObjectType.
+   *
+   * This definition is somewhat arbitrary and axiomatic, but this is the
+   * definition that makes the most sense for the most callers.
+   */
+Method code:
+280 |   public FunctionType toMaybeFunctionType() {
+281 |     return null;
+282 |   }
+
+===== M0106 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.JSTypeRegistry(ErrorReporter,boolean)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 205-212
+Documentation:
+/**
+   * Constructs a new type registry populated with the built-in types.
+   */
+Method code:
+205 |   public JSTypeRegistry(
+206 |       ErrorReporter reporter, boolean tolerateUndefinedValues) {
+207 |     this.reporter = reporter;
+208 |     nativeTypes = new JSType[JSTypeNative.values().length];
+209 |     namesToTypes = new HashMap<String, JSType>();
+210 |     resetForTypeCheck();
+211 |     this.tolerateUndefinedValues = tolerateUndefinedValues;
+212 |   }
+
+===== M0107 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.hasInstanceType()
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 941-943
+Documentation:
+/**
+   * Returns whether this function type has an instance type.
+   */
+Method code:
+941 |   public boolean hasInstanceType() {
+942 |     return isConstructor() || isInterface();
+943 |   }
+
+===== M0108 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.getInstanceType()
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 925-928
+Documentation:
+/**
+   * Gets the type of instance of this function.
+   * @throws IllegalStateException if this function is not a constructor
+   *         (see {@link #isConstructor()}).
+   */
+Method code:
+925 |   public ObjectType getInstanceType() {
+926 |     Preconditions.checkState(hasInstanceType());
+927 |     return typeOfThis;
+928 |   }
+
+===== M0109 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.defineProperty(String,JSType,boolean,Node)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 233-249
+Documentation:
+
+Method code:
+233 |   @Override
+234 |   boolean defineProperty(String name, JSType type, boolean inferred,
+235 |       Node propertyNode) {
+236 |     if (hasOwnDeclaredProperty(name)) {
+237 |       return false;
+238 |     }
+239 |     Property newProp = new Property(
+240 |         name, type, inferred, propertyNode);
+241 |     Property oldProp = properties.get(name);
+242 |     if (oldProp != null) {
+243 |       // This is to keep previously inferred jsdoc info, e.g., in a
+244 |       // replaceScript scenario.
+245 |       newProp.setJSDocInfo(oldProp.getJSDocInfo());
+246 |     }
+247 |     properties.put(name, newProp);
+248 |     return true;
+249 |   }
+
+===== M0110 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.isFunctionPrototypeType()
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 545-548
+Documentation:
+
+Method code:
+545 |   @Override
+546 |   public final boolean isFunctionPrototypeType() {
+547 |     return getOwnerFunction() != null;
+548 |   }
+
+===== M0111 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.getReferenceName()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 427-436
+Documentation:
+
+Method code:
+427 |   @Override
+428 |   public String getReferenceName() {
+429 |     if (className != null) {
+430 |       return className;
+431 |     } else if (ownerFunction != null) {
+432 |       return ownerFunction.getReferenceName() + ".prototype";
+433 |     } else {
+434 |       return null;
+435 |     }
+436 |   }
+
+===== M0112 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.defineDeclaredProperty(String,JSType,Node)
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 271-283
+Documentation:
+/**
+   * Defines a property whose type is synthesized (i.e. not inferred).
+   * @param propertyName the property's name
+   * @param type the type
+   * @param propertyNode the node corresponding to the declaration of property
+   *        which might later be accessed using {@code getPropertyNode}.
+   */
+Method code:
+271 |   public final boolean defineDeclaredProperty(String propertyName,
+272 |       JSType type, Node propertyNode) {
+273 |     boolean result = defineProperty(propertyName, type, false,
+274 |         propertyNode);
+275 | 
+276 |     // All property definitions go through this method
+277 |     // or defineDeclaredProperty. Because the properties defined an an
+278 |     // object can affect subtyping, it's slightly more efficient
+279 |     // to register this after defining the property.
+280 |     registry.registerPropertyOnType(propertyName, this);
+281 | 
+282 |     return result;
+283 |   }
+
+===== M0113 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createFunctionTypeWithVarArgs(JSType,JSType...)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 1085-1089
+Documentation:
+/**
+   * Creates a function type. The last parameter type of the function is
+   * considered a variable length argument.
+   *
+   * @param returnType the function's return type
+   * @param parameterTypes the parameters' types
+   */
+Method code:
+1085 |   public FunctionType createFunctionTypeWithVarArgs(
+1086 |       JSType returnType, JSType... parameterTypes) {
+1087 |     return createFunctionType(
+1088 |         returnType, createParametersWithVarArgs(parameterTypes));
+1089 |   }
+
+===== M0114 =====
+Signature: com.google.javascript.rhino.testing.TestErrorReporter.TestErrorReporter(String[],String[])
+Source: src/com/google/javascript/rhino/testing/TestErrorReporter.java
+Original range: 64-67
+Documentation:
+
+Method code:
+64 |   public TestErrorReporter(String[] errors, String[] warnings) {
+65 |     this.errors = errors;
+66 |     this.warnings = warnings;
+67 |   }
+
+===== M0115 =====
+Signature: com.google.javascript.rhino.testing.BaseJSTypeTestCase.assertTypeEquals(JSType,JSType)
+Source: src/com/google/javascript/rhino/testing/BaseJSTypeTestCase.java
+Original range: 572-574
+Documentation:
+
+Method code:
+572 |   protected final void assertTypeEquals(JSType a, JSType b) {
+573 |     Asserts.assertTypeEquals(a, b);
+574 |   }
+
+===== M0116 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.getTypedefType(ErrorReporter,StaticSlot<JSType>,String)
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 379-386
+Documentation:
+
+Method code:
+379 |   JSType getTypedefType(ErrorReporter t, StaticSlot<JSType> slot, String name) {
+380 |     JSType type = slot.getType();
+381 |     if (type != null) {
+382 |       return type;
+383 |     }
+384 |     handleUnresolvedType(t, true);
+385 |     return null;
+386 |   }
+
+===== M0117 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.isImplicitPrototype(ObjectType)
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 469-478
+Documentation:
+/**
+   * Checks that the prototype is an implicit prototype of this object. Since
+   * each object has an implicit prototype, an implicit prototype's
+   * implicit prototype is also this implicit prototype's.
+   *
+   * @param prototype any prototype based object
+   *
+   * @return {@code true} if {@code prototype} is {@code equal} to any
+   *         object in this object's implicit prototype chain.
+   */
+Method code:
+469 |   final boolean isImplicitPrototype(ObjectType prototype) {
+470 |     for (ObjectType current = this;
+471 |          current != null;
+472 |          current = current.getImplicitPrototype()) {
+473 |       if (current.isEquivalentTo(prototype)) {
+474 |         return true;
+475 |       }
+476 |     }
+477 |     return false;
+478 |   }
+
+===== M0118 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.setReferencedAndResolvedType(JSType,ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 326-334
+Documentation:
+
+Method code:
+326 |   private void setReferencedAndResolvedType(JSType type, ErrorReporter t,
+327 |       StaticScope<JSType> enclosing) {
+328 |     if (validator != null) {
+329 |       validator.apply(type);
+330 |     }
+331 |     setReferencedType(type);
+332 |     checkEnumElementCycle(t);
+333 |     setResolvedTypeInternal(getReferencedType());
+334 |   }
+
+===== M0119 =====
+Signature: com.google.javascript.rhino.jstype.UnionType.UnionType(JSTypeRegistry,Collection<JSType>)
+Source: src/com/google/javascript/rhino/jstype/UnionType.java
+Original range: 81-85
+Documentation:
+/**
+   * Creates a union type.
+   *
+   * @param alternates the alternates of the union
+   */
+Method code:
+81 |   UnionType(JSTypeRegistry registry, Collection<JSType> alternates) {
+82 |     super(registry);
+83 |     this.alternates = alternates;
+84 |     this.hashcode = this.alternates.hashCode();
+85 |   }
+
+===== M0120 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isNominalType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 353-355
+Documentation:
+/**
+   * Whether this type is a nominal type (a named instance object or
+   * a named enum).
+   */
+Method code:
+353 |   public boolean isNominalType() {
+354 |     return false;
+355 |   }
+
+===== M0121 =====
+Signature: com.google.javascript.rhino.Node.removeProp(int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 760-765
+Documentation:
+
+Method code:
+760 |   public void removeProp(int propType) {
+761 |     PropListItem result = removeProp(propListHead, propType);
+762 |     if (result != propListHead) {
+763 |       propListHead = result;
+764 |     }
+765 |   }
+
+===== M0122 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.toString()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 352-396
+Documentation:
+
+Method code:
+352 |   @Override
+353 |   public String toString() {
+354 |     if (hasReferenceName()) {
+355 |       return getReferenceName();
+356 |     } else if (prettyPrint) {
+357 |       // Don't pretty print recursively.
+358 |       prettyPrint = false;
+359 | 
+360 |       // Use a tree set so that the properties are sorted.
+361 |       Set<String> propertyNames = Sets.newTreeSet();
+362 |       for (ObjectType current = this;
+363 |            current != null && !current.isNativeObjectType() &&
+364 |                propertyNames.size() <= MAX_PRETTY_PRINTED_PROPERTIES;
+365 |            current = current.getImplicitPrototype()) {
+366 |         propertyNames.addAll(current.getOwnPropertyNames());
+367 |       }
+368 | 
+369 |       StringBuilder sb = new StringBuilder();
+370 |       sb.append("{");
+371 | 
+372 |       int i = 0;
+373 |       for (String property : propertyNames) {
+374 |         if (i > 0) {
+375 |           sb.append(", ");
+376 |         }
+377 | 
+378 |         sb.append(property);
+379 |         sb.append(": ");
+380 |         sb.append(getPropertyType(property).toString());
+381 | 
+382 |         ++i;
+383 |         if (i == MAX_PRETTY_PRINTED_PROPERTIES) {
+384 |           sb.append(", ...");
+385 |           break;
+386 |         }
+387 |       }
+388 | 
+389 |       sb.append("}");
+390 | 
+391 |       prettyPrint = true;
+392 |       return sb.toString();
+393 |     } else {
+394 |       return "{...}";
+395 |     }
+396 |   }
+
+===== M0123 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.ObjectType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 88-90
+Documentation:
+
+Method code:
+88 |   ObjectType(JSTypeRegistry registry) {
+89 |     super(registry);
+90 |   }
+
+===== M0124 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.isNominalType()
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 151-154
+Documentation:
+
+Method code:
+151 |   @Override
+152 |   public boolean isNominalType() {
+153 |     return hasReferenceName();
+154 |   }
+
+===== M0125 =====
+Signature: com.google.javascript.rhino.jstype.FunctionBuilder.FunctionBuilder(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/FunctionBuilder.java
+Original range: 64-66
+Documentation:
+
+Method code:
+64 |   public FunctionBuilder(JSTypeRegistry registry) {
+65 |     this.registry = registry;
+66 |   }
+
+===== M0126 =====
+Signature: com.google.javascript.rhino.jstype.ValueType.resolveInternal(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/ValueType.java
+Original range: 52-55
+Documentation:
+
+Method code:
+52 |   @Override
+53 |   final JSType resolveInternal(ErrorReporter t, StaticScope<JSType> scope) {
+54 |     return this;
+55 |   }
+
+===== M0127 =====
+Signature: com.google.javascript.rhino.jstype.VoidType.VoidType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/VoidType.java
+Original range: 53-55
+Documentation:
+
+Method code:
+53 |   VoidType(JSTypeRegistry registry) {
+54 |     super(registry);
+55 |   }
+
+===== M0128 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isRecordType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 317-319
+Documentation:
+
+Method code:
+317 |   public boolean isRecordType() {
+318 |     return toMaybeRecordType() != null;
+319 |   }
+
+===== M0129 =====
+Signature: com.google.javascript.rhino.jstype.RecordTypeBuilder.RecordProperty.RecordProperty(JSType,Node)
+Source: src/com/google/javascript/rhino/jstype/RecordTypeBuilder.java
+Original range: 96-99
+Documentation:
+
+Method code:
+96 |     RecordProperty(JSType type, Node propertyNode) {
+97 |       this.type = type;
+98 |       this.propertyNode = propertyNode;
+99 |     }
+
+===== M0130 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.getSlot(String)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 127-146
+Documentation:
+
+Method code:
+127 |   @Override
+128 |   public Property getSlot(String name) {
+129 |     if (properties.containsKey(name)) {
+130 |       return properties.get(name);
+131 |     }
+132 |     ObjectType implicitPrototype = getImplicitPrototype();
+133 |     if (implicitPrototype != null) {
+134 |       Property prop = implicitPrototype.getSlot(name);
+135 |       if (prop != null) {
+136 |         return prop;
+137 |       }
+138 |     }
+139 |     for (ObjectType interfaceType : getCtorExtendedInterfaces()) {
+140 |       Property prop = interfaceType.getSlot(name);
+141 |       if (prop != null) {
+142 |         return prop;
+143 |       }
+144 |     }
+145 |     return null;
+146 |   }
+
+===== M0131 =====
+Signature: com.google.javascript.rhino.jstype.RecordType.getImplicitPrototype()
+Source: src/com/google/javascript/rhino/jstype/RecordType.java
+Original range: 120-123
+Documentation:
+
+Method code:
+120 |   @Override
+121 |   public ObjectType getImplicitPrototype() {
+122 |     return registry.getNativeObjectType(JSTypeNative.OBJECT_TYPE);
+123 |   }
+
+===== M0132 =====
+Signature: com.google.javascript.rhino.jstype.StringType.getDisplayName()
+Source: src/com/google/javascript/rhino/jstype/StringType.java
+Original range: 95-98
+Documentation:
+
+Method code:
+95 |   @Override
+96 |   public String getDisplayName() {
+97 |     return "string";
+98 |   }
+
+===== M0133 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.getPropertiesCount()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 151-164
+Documentation:
+/**
+   * Gets the number of properties of this object.
+   */
+Method code:
+151 |   @Override
+152 |   public int getPropertiesCount() {
+153 |     ObjectType implicitPrototype = getImplicitPrototype();
+154 |     if (implicitPrototype == null) {
+155 |       return this.properties.size();
+156 |     }
+157 |     int localCount = 0;
+158 |     for (String property : properties.keySet()) {
+159 |       if (!implicitPrototype.hasProperty(property)) {
+160 |         localCount++;
+161 |       }
+162 |     }
+163 |     return implicitPrototype.getPropertiesCount() + localCount;
+164 |   }
+
+===== M0134 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isEquivalentTo(JSType)
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 408-417
+Documentation:
+/**
+   * Checks if two types are equivalent.
+   */
+Method code:
+408 |   public boolean isEquivalentTo(JSType jsType) {
+409 |     if (jsType instanceof ProxyObjectType) {
+410 |       return jsType.isEquivalentTo(this);
+411 |     }
+412 |     // Relies on the fact that for the base {@link JSType}, only one
+413 |     // instance of each sub-type will ever be created in a given registry, so
+414 |     // there is no need to verify members. If the object pointers are not
+415 |     // identical, then the type member must be different.
+416 |     return this == jsType;
+417 |   }
+
+===== M0135 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.registerPropertyOnType(String,JSType)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 617-629
+Documentation:
+/**
+   * Tells the type system that {@code owner} may have a property named
+   * {@code propertyName}. This allows the registry to keep track of what
+   * types a property is defined upon.
+   *
+   * This is NOT the same as saying that {@code owner} must have a property
+   * named type. ObjectType#hasProperty attempts to minimize false positives
+   * ("if we're not sure, then don't type check this property"). The type
+   * registry, on the other hand, should attempt to minimize false negatives
+   * ("if this property is assigned anywhere in the program, it must
+   * show up in the type registry").
+   */
+Method code:
+617 |   public void registerPropertyOnType(String propertyName, JSType type) {
+618 |     UnionTypeBuilder typeSet = typesIndexedByProperty.get(propertyName);
+619 |     if (typeSet == null) {
+620 |       typeSet = new UnionTypeBuilder(this, PROPERTY_CHECKING_UNION_SIZE);
+621 |       typesIndexedByProperty.put(propertyName, typeSet);
+622 |     }
+623 | 
+624 |     typeSet.addAlternate(type);
+625 |     addReferenceTypeIndexedByProperty(propertyName, type);
+626 | 
+627 |     // Clear cached values that depend on typesIndexedByProperty.
+628 |     greatestSubtypeByProperty.remove(propertyName);
+629 |   }
+
+===== M0136 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.forInterface(JSTypeRegistry,String,Node)
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 171-174
+Documentation:
+/** Creates an instance for a function that is an interface. */
+Method code:
+171 |   static FunctionType forInterface(
+172 |       JSTypeRegistry registry, String name, Node source) {
+173 |     return new FunctionType(registry, name, source);
+174 |   }
+
+===== M0137 =====
+Signature: com.google.javascript.rhino.Node.getFirstChild()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 531-533
+Documentation:
+
+Method code:
+531 |   public Node getFirstChild() {
+532 |     return first;
+533 |   }
+
+===== M0138 =====
+Signature: com.google.javascript.rhino.jstype.RecordTypeBuilder.build()
+Source: src/com/google/javascript/rhino/jstype/RecordTypeBuilder.java
+Original range: 83-90
+Documentation:
+/**
+   * Creates a record.
+   * @return The record type.
+   */
+Method code:
+83 |   public JSType build() {
+84 |      // If we have an empty record, simply return the object type.
+85 |     if (isEmpty) {
+86 |        return registry.getNativeObjectType(JSTypeNative.OBJECT_TYPE);
+87 |     }
+88 | 
+89 |     return registry.createRecordType(Collections.unmodifiableMap(properties));
+90 |   }
+
+===== M0139 =====
+Signature: com.google.javascript.rhino.jstype.UnknownType.UnknownType(JSTypeRegistry,boolean)
+Source: src/com/google/javascript/rhino/jstype/UnknownType.java
+Original range: 58-61
+Documentation:
+
+Method code:
+58 |   UnknownType(JSTypeRegistry registry, boolean isChecked) {
+59 |     super(registry);
+60 |     this.isChecked = isChecked;
+61 |   }
+
+===== M0140 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.isUnknownType()
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 489-509
+Documentation:
+/**
+   * We treat this as the unknown type if any of its implicit prototype
+   * properties is unknown.
+   */
+Method code:
+489 |   @Override
+490 |   public boolean isUnknownType() {
+491 |     // If the object is unknown now, check the supertype again,
+492 |     // because it might have been resolved since the last check.
+493 |     if (unknown) {
+494 |       ObjectType implicitProto = getImplicitPrototype();
+495 |       if (implicitProto == null ||
+496 |           implicitProto.isNativeObjectType()) {
+497 |         unknown = false;
+498 |         for (ObjectType interfaceType : getCtorExtendedInterfaces()) {
+499 |           if (interfaceType.isUnknownType()) {
+500 |             unknown = true;
+501 |             break;
+502 |           }
+503 |         }
+504 |       } else {
+505 |         unknown = implicitProto.isUnknownType();
+506 |       }
+507 |     }
+508 |     return unknown;
+509 |   }
+
+===== M0141 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.InstanceObjectType(JSTypeRegistry,FunctionType,boolean)
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 58-63
+Documentation:
+
+Method code:
+58 |   InstanceObjectType(JSTypeRegistry registry, FunctionType constructor,
+59 |                      boolean isNativeType) {
+60 |     super(registry, null, null, isNativeType);
+61 |     Preconditions.checkNotNull(constructor);
+62 |     this.constructor = constructor;
+63 |   }
+
+===== M0142 =====
+Signature: com.google.javascript.rhino.jstype.ProxyObjectType.getImplicitPrototype()
+Source: src/com/google/javascript/rhino/jstype/ProxyObjectType.java
+Original range: 261-265
+Documentation:
+
+Method code:
+261 |   @Override
+262 |   public ObjectType getImplicitPrototype() {
+263 |     return referencedObjType == null ? null :
+264 |         referencedObjType.getImplicitPrototype();
+265 |   }
+
+===== M0143 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.isEquivalentTo(JSType)
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 156-167
+Documentation:
+
+Method code:
+156 |   @Override
+157 |   public boolean isEquivalentTo(JSType that) {
+158 |     if (this == that) {
+159 |       return true;
+160 |     } else if (this.isNominalType()) {
+161 |       ObjectType thatObj = ObjectType.cast(that);
+162 |       if (thatObj != null && thatObj.isNominalType()) {
+163 |         return getReferenceName().equals(thatObj.getReferenceName());
+164 |       }
+165 |     }
+166 |     return false;
+167 |   }
+
+===== M0144 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.getPrototype()
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 308-320
+Documentation:
+/**
+   * Gets the {@code prototype} property of this function type. This is
+   * equivalent to {@code (ObjectType) getPropertyType("prototype")}.
+   */
+Method code:
+308 |   public ObjectType getPrototype() {
+309 |     // lazy initialization of the prototype field
+310 |     if (prototypeSlot == null) {
+311 |       setPrototype(
+312 |           new PrototypeObjectType(
+313 |               registry,
+314 |               this.getReferenceName() + ".prototype",
+315 |               registry.getNativeObjectType(OBJECT_TYPE),
+316 |               isNativeObjectType()),
+317 |           null);
+318 |     }
+319 |     return (ObjectType) prototypeSlot.getType();
+320 |   }
+
+===== M0145 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.toString()
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 95-102
+Documentation:
+
+Method code:
+95 |   @Override
+96 |   public String toString() {
+97 |     if (constructor.hasReferenceName()) {
+98 |       return constructor.getReferenceName();
+99 |     } else {
+100 |       return super.toString();
+101 |     }
+102 |   }
+
+===== M0146 =====
+Signature: com.google.javascript.rhino.jstype.BooleanType.BooleanType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/BooleanType.java
+Original range: 52-54
+Documentation:
+
+Method code:
+52 |   BooleanType(JSTypeRegistry registry) {
+53 |     super(registry);
+54 |   }
+
+===== M0147 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.getCtorExtendedInterfaces()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 532-537
+Documentation:
+
+Method code:
+532 |   @Override
+533 |   public Iterable<ObjectType> getCtorExtendedInterfaces() {
+534 |     return isFunctionPrototypeType()
+535 |         ? getOwnerFunction().getExtendedInterfaces()
+536 |         : ImmutableList.<ObjectType>of();
+537 |   }
+
+===== M0148 =====
+Signature: com.google.javascript.rhino.jstype.NoObjectType.NoObjectType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/NoObjectType.java
+Original range: 66-72
+Documentation:
+
+Method code:
+66 |   NoObjectType(JSTypeRegistry registry) {
+67 |     super(registry, null, null,
+68 |           registry.createArrowType(null, null),
+69 |           null, null, true, true);
+70 |     getInternalArrowType().returnType = this;
+71 |     this.setInstanceType(this);
+72 |   }
+
+===== M0149 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.resolveViaRegistry(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 242-250
+Documentation:
+/**
+   * Resolves a named type by looking it up in the registry.
+   * @return True if we resolved successfully.
+   */
+Method code:
+242 |   private boolean resolveViaRegistry(
+243 |       ErrorReporter t, StaticScope<JSType> enclosing) {
+244 |     JSType type = registry.getType(reference);
+245 |     if (type != null) {
+246 |       setReferencedAndResolvedType(type, t, enclosing);
+247 |       return true;
+248 |     }
+249 |     return false;
+250 |   }
+
+===== M0150 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.JSTypeRegistry(ErrorReporter)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 198-200
+Documentation:
+/**
+   * Constructs a new type registry populated with the built-in types.
+   */
+Method code:
+198 |   public JSTypeRegistry(ErrorReporter reporter) {
+199 |     this(reporter, false);
+200 |   }
+
+===== M0151 =====
+Signature: com.google.javascript.rhino.testing.BaseJSTypeTestCase.addMethod(JSTypeRegistry,ObjectType,String,JSType)
+Source: src/com/google/javascript/rhino/testing/BaseJSTypeTestCase.java
+Original range: 383-389
+Documentation:
+
+Method code:
+383 |   private static void addMethod(
+384 |       JSTypeRegistry registry, ObjectType receivingType, String methodName,
+385 |       JSType returnType) {
+386 |     receivingType.defineDeclaredProperty(methodName,
+387 |         new FunctionBuilder(registry).withReturnType(returnType).build(),
+388 |         null);
+389 |   }
+
+===== M0152 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.getImplicitPrototype()
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 75-78
+Documentation:
+
+Method code:
+75 |   @Override
+76 |   public ObjectType getImplicitPrototype() {
+77 |     return getConstructor().getPrototype();
+78 |   }
+
+===== M0153 =====
+Signature: com.google.javascript.rhino.testing.BaseJSTypeTestCase.setUp()
+Source: src/com/google/javascript/rhino/testing/BaseJSTypeTestCase.java
+Original range: 112-118
+Documentation:
+
+Method code:
+112 |   @Override
+113 |   protected void setUp() throws Exception {
+114 |     super.setUp();
+115 |     errorReporter = new TestErrorReporter(null, null);
+116 |     registry = new JSTypeRegistry(errorReporter);
+117 |     initTypes();
+118 |   }
+
+===== M0154 =====
+Signature: com.google.javascript.rhino.jstype.ProxyObjectType.getConstructor()
+Source: src/com/google/javascript/rhino/jstype/ProxyObjectType.java
+Original range: 373-377
+Documentation:
+
+Method code:
+373 |   @Override
+374 |   public FunctionType getConstructor() {
+375 |     return referencedObjType == null ? null :
+376 |         referencedObjType.getConstructor();
+377 |   }
+
+===== M0155 =====
+Signature: com.google.javascript.rhino.jstype.FunctionParamBuilder.hasOptionalOrVarArgs()
+Source: src/com/google/javascript/rhino/jstype/FunctionParamBuilder.java
+Original range: 133-137
+Documentation:
+
+Method code:
+133 |   private boolean hasOptionalOrVarArgs() {
+134 |     Node lastChild = root.getLastChild();
+135 |     return lastChild != null &&
+136 |         (lastChild.isOptionalArg() || lastChild.isVarArgs());
+137 |   }
+
+===== M0156 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.FunctionType(JSTypeRegistry,String,Node,ArrowType,ObjectType,String,boolean,boolean)
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 130-153
+Documentation:
+/** Creates an instance for a function that might be a constructor. */
+Method code:
+130 |   FunctionType(JSTypeRegistry registry, String name, Node source,
+131 |       ArrowType arrowType, ObjectType typeOfThis,
+132 |       String templateTypeName,  boolean isConstructor, boolean nativeType) {
+133 |     super(registry, name,
+134 |         registry.getNativeObjectType(JSTypeNative.FUNCTION_INSTANCE_TYPE),
+135 |         nativeType);
+136 |     setPrettyPrint(true);
+137 | 
+138 |     Preconditions.checkArgument(source == null ||
+139 |         Token.FUNCTION == source.getType());
+140 |     Preconditions.checkNotNull(arrowType);
+141 |     this.source = source;
+142 |     this.kind = isConstructor ? Kind.CONSTRUCTOR : Kind.ORDINARY;
+143 |     if (isConstructor) {
+144 |       this.typeOfThis = typeOfThis != null ?
+145 |           typeOfThis : new InstanceObjectType(registry, this, nativeType);
+146 |     } else {
+147 |       this.typeOfThis = typeOfThis != null ?
+148 |           typeOfThis :
+149 |           registry.getNativeObjectType(JSTypeNative.UNKNOWN_TYPE);
+150 |     }
+151 |     this.call = arrowType;
+152 |     this.templateTypeName = templateTypeName;
+153 |   }
+
+===== M0157 =====
+Signature: com.google.javascript.rhino.jstype.JSType.restrictByNotNullOrUndefined()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 959-961
+Documentation:
+/**
+   * If this is a union type, returns a union type that does not include
+   * the null or undefined type.
+   */
+Method code:
+959 |   public JSType restrictByNotNullOrUndefined() {
+960 |     return this;
+961 |   }
+
+===== M0158 =====
+Signature: com.google.javascript.rhino.jstype.RecordType.getLeastSupertype(JSType)
+Source: src/com/google/javascript/rhino/jstype/RecordType.java
+Original range: 140-155
+Documentation:
+
+Method code:
+140 |   @Override
+141 |   public JSType getLeastSupertype(JSType that) {
+142 |     if (!that.isRecordType()) {
+143 |       return super.getLeastSupertype(that);
+144 |     }
+145 |     RecordTypeBuilder builder = new RecordTypeBuilder(registry);
+146 |     for (String property : properties.keySet()) {
+147 |       if (that.toMaybeRecordType().hasProperty(property) &&
+148 |           that.toMaybeRecordType().getPropertyType(property).isEquivalentTo(
+149 |               getPropertyType(property))) {
+150 |         builder.addProperty(property, getPropertyType(property),
+151 |             getPropertyNode(property));
+152 |       }
+153 |     }
+154 |     return builder.build();
+155 |   }
+
+===== M0159 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.getExtendedInterfaces()
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 490-492
+Documentation:
+/** Returns interfaces directly extended by an interface */
+Method code:
+490 |   public Iterable<ObjectType> getExtendedInterfaces() {
+491 |     return extendedInterfaces;
+492 |   }
+
+===== M0160 =====
+Signature: com.google.javascript.rhino.Node.setJSType(JSType)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1804-1806
+Documentation:
+
+Method code:
+1804 |   public void setJSType(JSType jsType) {
+1805 |       this.jsType = jsType;
+1806 |   }
+
+===== M0161 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.getReferencedType()
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 146-148
+Documentation:
+/** Returns the type to which this refers (which is unknown if unresolved). */
+Method code:
+146 |   public JSType getReferencedType() {
+147 |     return getReferencedTypeInternal();
+148 |   }
+
+===== M0162 =====
+Signature: com.google.javascript.rhino.jstype.RecordTypeBuilder.RecordProperty.getPropertyNode()
+Source: src/com/google/javascript/rhino/jstype/RecordTypeBuilder.java
+Original range: 105-107
+Documentation:
+
+Method code:
+105 |     public Node getPropertyNode() {
+106 |       return propertyNode;
+107 |     }
+
+===== M0163 =====
+Signature: com.google.javascript.rhino.jstype.FunctionParamBuilder.addRequiredParams(JSType...)
+Source: src/com/google/javascript/rhino/jstype/FunctionParamBuilder.java
+Original range: 62-71
+Documentation:
+/**
+   * Add parameters of the given type to the end of the param list.
+   * @return False if this is called after optional params are added.
+   */
+Method code:
+62 |   public boolean addRequiredParams(JSType ...types) {
+63 |     if (hasOptionalOrVarArgs()) {
+64 |       return false;
+65 |     }
+66 | 
+67 |     for (JSType type : types) {
+68 |       newParameter(type);
+69 |     }
+70 |     return true;
+71 |   }
+
+===== M0164 =====
+Signature: com.google.javascript.rhino.Node.getNext()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 539-541
+Documentation:
+
+Method code:
+539 |   public Node getNext() {
+540 |     return next;
+541 |   }
+
+===== M0165 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.initializeBuiltInTypes()
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 246-559
+Documentation:
+
+Method code:
+246 |   private void initializeBuiltInTypes() {
+247 |     // These locals shouldn't be all caps.
+248 |     BooleanType BOOLEAN_TYPE = new BooleanType(this);
+249 |     registerNativeType(JSTypeNative.BOOLEAN_TYPE, BOOLEAN_TYPE);
+250 | 
+251 |     NullType NULL_TYPE = new NullType(this);
+252 |     registerNativeType(JSTypeNative.NULL_TYPE, NULL_TYPE);
+253 | 
+254 |     NumberType NUMBER_TYPE = new NumberType(this);
+255 |     registerNativeType(JSTypeNative.NUMBER_TYPE, NUMBER_TYPE);
+256 | 
+257 |     StringType STRING_TYPE = new StringType(this);
+258 |     registerNativeType(JSTypeNative.STRING_TYPE, STRING_TYPE);
+259 | 
+260 |     UnknownType UNKNOWN_TYPE = new UnknownType(this, false);
+261 |     registerNativeType(JSTypeNative.UNKNOWN_TYPE, UNKNOWN_TYPE);
+262 |     registerNativeType(
+263 |         JSTypeNative.CHECKED_UNKNOWN_TYPE, new UnknownType(this, true));
+264 | 
+265 |     VoidType VOID_TYPE = new VoidType(this);
+266 |     registerNativeType(JSTypeNative.VOID_TYPE, VOID_TYPE);
+267 | 
+268 |     AllType ALL_TYPE = new AllType(this);
+269 |     registerNativeType(JSTypeNative.ALL_TYPE, ALL_TYPE);
+270 | 
+271 |     // Top Level Prototype (the One)
+272 |     // The initializations of TOP_LEVEL_PROTOTYPE and OBJECT_FUNCTION_TYPE
+273 |     // use each other's results, so at least one of them will get null
+274 |     // instead of an actual type; however, this seems to be benign.
+275 |     PrototypeObjectType TOP_LEVEL_PROTOTYPE =
+276 |         new PrototypeObjectType(this, null, null, true);
+277 |     registerNativeType(JSTypeNative.TOP_LEVEL_PROTOTYPE, TOP_LEVEL_PROTOTYPE);
+278 | 
+279 |     // Object
+280 |     FunctionType OBJECT_FUNCTION_TYPE =
+281 |         new FunctionType(this, "Object", null,
+282 |             createArrowType(createOptionalParameters(ALL_TYPE), UNKNOWN_TYPE),
+283 |             null, null, true, true);
+284 | 
+285 |     OBJECT_FUNCTION_TYPE.setPrototype(TOP_LEVEL_PROTOTYPE, null);
+286 |     registerNativeType(JSTypeNative.OBJECT_FUNCTION_TYPE, OBJECT_FUNCTION_TYPE);
+287 | 
+288 |     ObjectType OBJECT_TYPE = OBJECT_FUNCTION_TYPE.getInstanceType();
+289 |     registerNativeType(JSTypeNative.OBJECT_TYPE, OBJECT_TYPE);
+290 | 
+291 |     ObjectType OBJECT_PROTOTYPE = OBJECT_FUNCTION_TYPE.getPrototype();
+292 |     registerNativeType(JSTypeNative.OBJECT_PROTOTYPE, OBJECT_PROTOTYPE);
+293 | 
+294 |     // Function
+295 |     FunctionType FUNCTION_FUNCTION_TYPE =
+296 |         new FunctionType(this, "Function", null,
+297 |             createArrowType(
+298 |                 createParametersWithVarArgs(ALL_TYPE), UNKNOWN_TYPE),
+299 |             null, null, true, true);
+300 |     FUNCTION_FUNCTION_TYPE.setPrototypeBasedOn(OBJECT_TYPE);
+301 |     registerNativeType(
+302 |         JSTypeNative.FUNCTION_FUNCTION_TYPE, FUNCTION_FUNCTION_TYPE);
+303 | 
+304 |     ObjectType FUNCTION_PROTOTYPE = FUNCTION_FUNCTION_TYPE.getPrototype();
+305 |     registerNativeType(JSTypeNative.FUNCTION_PROTOTYPE, FUNCTION_PROTOTYPE);
+306 | 
+307 |     NoType NO_TYPE = new NoType(this);
+308 |     registerNativeType(JSTypeNative.NO_TYPE, NO_TYPE);
+309 | 
+310 |     NoObjectType NO_OBJECT_TYPE = new NoObjectType(this);
+311 |     registerNativeType(JSTypeNative.NO_OBJECT_TYPE, NO_OBJECT_TYPE);
+312 | 
+313 |     NoObjectType NO_RESOLVED_TYPE = new NoResolvedType(this);
+314 |     registerNativeType(JSTypeNative.NO_RESOLVED_TYPE, NO_RESOLVED_TYPE);
+315 | 
+316 |     // Array
+317 |     FunctionType ARRAY_FUNCTION_TYPE =
+318 |       new FunctionType(this, "Array", null,
+319 |           createArrowType(createParametersWithVarArgs(ALL_TYPE), null),
+320 |           null, null, true, true);
+321 |     ARRAY_FUNCTION_TYPE.getInternalArrowType().returnType =
+322 |         ARRAY_FUNCTION_TYPE.getInstanceType();
+323 | 
+324 |     ObjectType arrayPrototype = ARRAY_FUNCTION_TYPE.getPrototype();
+325 |     registerNativeType(JSTypeNative.ARRAY_FUNCTION_TYPE, ARRAY_FUNCTION_TYPE);
+326 | 
+327 |     ObjectType ARRAY_TYPE = ARRAY_FUNCTION_TYPE.getInstanceType();
+328 |     registerNativeType(JSTypeNative.ARRAY_TYPE, ARRAY_TYPE);
+329 | 
+330 |     // Boolean
+331 |     FunctionType BOOLEAN_OBJECT_FUNCTION_TYPE =
+332 |         new FunctionType(this, "Boolean", null,
+333 |             createArrowType(createParameters(false, ALL_TYPE), BOOLEAN_TYPE),
+334 |             null, null, true, true);
+335 |     ObjectType booleanPrototype = BOOLEAN_OBJECT_FUNCTION_TYPE.getPrototype();
+336 |     registerNativeType(
+337 |         JSTypeNative.BOOLEAN_OBJECT_FUNCTION_TYPE,
+338 |         BOOLEAN_OBJECT_FUNCTION_TYPE);
+339 | 
+340 |     ObjectType BOOLEAN_OBJECT_TYPE =
+341 |         BOOLEAN_OBJECT_FUNCTION_TYPE.getInstanceType();
+342 |     registerNativeType(JSTypeNative.BOOLEAN_OBJECT_TYPE, BOOLEAN_OBJECT_TYPE);
+343 | 
+344 |     // Date
+345 |     FunctionType DATE_FUNCTION_TYPE =
+346 |       new FunctionType(this, "Date", null,
+347 |           createArrowType(
+348 |               createOptionalParameters(UNKNOWN_TYPE, UNKNOWN_TYPE, UNKNOWN_TYPE,
+349 |                   UNKNOWN_TYPE, UNKNOWN_TYPE, UNKNOWN_TYPE, UNKNOWN_TYPE),
+350 |               STRING_TYPE),
+351 |           null, null, true, true);
+352 |     ObjectType datePrototype = DATE_FUNCTION_TYPE.getPrototype();
+353 |     registerNativeType(JSTypeNative.DATE_FUNCTION_TYPE, DATE_FUNCTION_TYPE);
+354 | 
+355 |     ObjectType DATE_TYPE = DATE_FUNCTION_TYPE.getInstanceType();
+356 |     registerNativeType(JSTypeNative.DATE_TYPE, DATE_TYPE);
+357 | 
+358 |     // Error
+359 |     FunctionType ERROR_FUNCTION_TYPE = new ErrorFunctionType(this, "Error");
+360 |     registerNativeType(JSTypeNative.ERROR_FUNCTION_TYPE, ERROR_FUNCTION_TYPE);
+361 | 
+362 |     ObjectType ERROR_TYPE = ERROR_FUNCTION_TYPE.getInstanceType();
+363 |     registerNativeType(JSTypeNative.ERROR_TYPE, ERROR_TYPE);
+364 | 
+365 |     // EvalError
+366 |     FunctionType EVAL_ERROR_FUNCTION_TYPE =
+367 |         new ErrorFunctionType(this, "EvalError");
+368 |     EVAL_ERROR_FUNCTION_TYPE.setPrototypeBasedOn(ERROR_TYPE);
+369 |     registerNativeType(
+370 |         JSTypeNative.EVAL_ERROR_FUNCTION_TYPE, EVAL_ERROR_FUNCTION_TYPE);
+371 | 
+372 |     ObjectType EVAL_ERROR_TYPE = EVAL_ERROR_FUNCTION_TYPE.getInstanceType();
+373 |     registerNativeType(JSTypeNative.EVAL_ERROR_TYPE, EVAL_ERROR_TYPE);
+374 | 
+375 |     // RangeError
+376 |     FunctionType RANGE_ERROR_FUNCTION_TYPE =
+377 |         new ErrorFunctionType(this, "RangeError");
+378 |     RANGE_ERROR_FUNCTION_TYPE.setPrototypeBasedOn(ERROR_TYPE);
+379 |     registerNativeType(
+380 |         JSTypeNative.RANGE_ERROR_FUNCTION_TYPE, RANGE_ERROR_FUNCTION_TYPE);
+381 | 
+382 |     ObjectType RANGE_ERROR_TYPE = RANGE_ERROR_FUNCTION_TYPE.getInstanceType();
+383 |     registerNativeType(JSTypeNative.RANGE_ERROR_TYPE, RANGE_ERROR_TYPE);
+384 | 
+385 |     // ReferenceError
+386 |     FunctionType REFERENCE_ERROR_FUNCTION_TYPE =
+387 |         new ErrorFunctionType(this, "ReferenceError");
+388 |     REFERENCE_ERROR_FUNCTION_TYPE.setPrototypeBasedOn(ERROR_TYPE);
+389 |     registerNativeType(
+390 |         JSTypeNative.REFERENCE_ERROR_FUNCTION_TYPE,
+391 |         REFERENCE_ERROR_FUNCTION_TYPE);
+392 | 
+393 |     ObjectType REFERENCE_ERROR_TYPE =
+394 |         REFERENCE_ERROR_FUNCTION_TYPE.getInstanceType();
+395 |     registerNativeType(JSTypeNative.REFERENCE_ERROR_TYPE, REFERENCE_ERROR_TYPE);
+396 | 
+397 |     // SyntaxError
+398 |     FunctionType SYNTAX_ERROR_FUNCTION_TYPE =
+399 |         new ErrorFunctionType(this, "SyntaxError");
+400 |     SYNTAX_ERROR_FUNCTION_TYPE.setPrototypeBasedOn(ERROR_TYPE);
+401 |     registerNativeType(
+402 |         JSTypeNative.SYNTAX_ERROR_FUNCTION_TYPE, SYNTAX_ERROR_FUNCTION_TYPE);
+403 | 
+404 |     ObjectType SYNTAX_ERROR_TYPE = SYNTAX_ERROR_FUNCTION_TYPE.getInstanceType();
+405 |     registerNativeType(JSTypeNative.SYNTAX_ERROR_TYPE, SYNTAX_ERROR_TYPE);
+406 | 
+407 |     // TypeError
+408 |     FunctionType TYPE_ERROR_FUNCTION_TYPE =
+409 |         new ErrorFunctionType(this, "TypeError");
+410 |     TYPE_ERROR_FUNCTION_TYPE.setPrototypeBasedOn(ERROR_TYPE);
+411 |     registerNativeType(
+412 |         JSTypeNative.TYPE_ERROR_FUNCTION_TYPE, TYPE_ERROR_FUNCTION_TYPE);
+413 | 
+414 |     ObjectType TYPE_ERROR_TYPE = TYPE_ERROR_FUNCTION_TYPE.getInstanceType();
+415 |     registerNativeType(JSTypeNative.TYPE_ERROR_TYPE, TYPE_ERROR_TYPE);
+416 | 
+417 |     // URIError
+418 |     FunctionType URI_ERROR_FUNCTION_TYPE =
+419 |         new ErrorFunctionType(this, "URIError");
+420 |     URI_ERROR_FUNCTION_TYPE.setPrototypeBasedOn(ERROR_TYPE);
+421 |     registerNativeType(
+422 |         JSTypeNative.URI_ERROR_FUNCTION_TYPE, URI_ERROR_FUNCTION_TYPE);
+423 | 
+424 |     ObjectType URI_ERROR_TYPE = URI_ERROR_FUNCTION_TYPE.getInstanceType();
+425 |     registerNativeType(JSTypeNative.URI_ERROR_TYPE, URI_ERROR_TYPE);
+426 | 
+427 |     // Number
+428 |     FunctionType NUMBER_OBJECT_FUNCTION_TYPE =
+429 |         new FunctionType(this, "Number", null,
+430 |             createArrowType(createParameters(false, ALL_TYPE), NUMBER_TYPE),
+431 |             null, null, true, true);
+432 |     ObjectType numberPrototype = NUMBER_OBJECT_FUNCTION_TYPE.getPrototype();
+433 |     registerNativeType(
+434 |         JSTypeNative.NUMBER_OBJECT_FUNCTION_TYPE, NUMBER_OBJECT_FUNCTION_TYPE);
+435 | 
+436 |     ObjectType NUMBER_OBJECT_TYPE =
+437 |         NUMBER_OBJECT_FUNCTION_TYPE.getInstanceType();
+438 |     registerNativeType(JSTypeNative.NUMBER_OBJECT_TYPE, NUMBER_OBJECT_TYPE);
+439 | 
+440 |     // RegExp
+441 |     FunctionType REGEXP_FUNCTION_TYPE =
+442 |       new FunctionType(this, "RegExp", null,
+443 |           createArrowType(createOptionalParameters(ALL_TYPE, ALL_TYPE)),
+444 |           null, null, true, true);
+445 |     REGEXP_FUNCTION_TYPE.getInternalArrowType().returnType =
+446 |         REGEXP_FUNCTION_TYPE.getInstanceType();
+447 | 
+448 |     ObjectType regexpPrototype = REGEXP_FUNCTION_TYPE.getPrototype();
+449 |     registerNativeType(JSTypeNative.REGEXP_FUNCTION_TYPE, REGEXP_FUNCTION_TYPE);
+450 | 
+451 |     ObjectType REGEXP_TYPE = REGEXP_FUNCTION_TYPE.getInstanceType();
+452 |     registerNativeType(JSTypeNative.REGEXP_TYPE, REGEXP_TYPE);
+453 | 
+454 |     // String
+455 |     FunctionType STRING_OBJECT_FUNCTION_TYPE =
+456 |         new FunctionType(this, "String", null,
+457 |             createArrowType(createParameters(false, ALL_TYPE), STRING_TYPE),
+458 |             null, null, true, true);
+459 |     ObjectType stringPrototype = STRING_OBJECT_FUNCTION_TYPE.getPrototype();
+460 |     registerNativeType(
+461 |         JSTypeNative.STRING_OBJECT_FUNCTION_TYPE, STRING_OBJECT_FUNCTION_TYPE);
+462 | 
+463 |     ObjectType STRING_OBJECT_TYPE =
+464 |         STRING_OBJECT_FUNCTION_TYPE.getInstanceType();
+465 |     registerNativeType(
+466 |         JSTypeNative.STRING_OBJECT_TYPE, STRING_OBJECT_TYPE);
+467 | 
+468 |     // (Object,string,number)
+469 |     JSType OBJECT_NUMBER_STRING =
+470 |         createUnionType(OBJECT_TYPE, NUMBER_TYPE, STRING_TYPE);
+471 |     registerNativeType(JSTypeNative.OBJECT_NUMBER_STRING, OBJECT_NUMBER_STRING);
+472 | 
+473 |     // (Object,string,number,boolean)
+474 |     JSType OBJECT_NUMBER_STRING_BOOLEAN =
+475 |         createUnionType(OBJECT_TYPE, NUMBER_TYPE, STRING_TYPE, BOOLEAN_TYPE);
+476 |     registerNativeType(JSTypeNative.OBJECT_NUMBER_STRING_BOOLEAN,
+477 |         OBJECT_NUMBER_STRING_BOOLEAN);
+478 | 
+479 |     // (string,number,boolean)
+480 |     JSType NUMBER_STRING_BOOLEAN =
+481 |         createUnionType(NUMBER_TYPE, STRING_TYPE, BOOLEAN_TYPE);
+482 |     registerNativeType(JSTypeNative.NUMBER_STRING_BOOLEAN,
+483 |         NUMBER_STRING_BOOLEAN);
+484 | 
+485 |     // (string,number)
+486 |     JSType NUMBER_STRING = createUnionType(NUMBER_TYPE, STRING_TYPE);
+487 |     registerNativeType(JSTypeNative.NUMBER_STRING, NUMBER_STRING);
+488 | 
+489 |     // Native object properties are filled in by externs...
+490 | 
+491 |     // (String, string)
+492 |     JSType STRING_VALUE_OR_OBJECT_TYPE =
+493 |         createUnionType(STRING_OBJECT_TYPE, STRING_TYPE);
+494 |     registerNativeType(
+495 |         JSTypeNative.STRING_VALUE_OR_OBJECT_TYPE, STRING_VALUE_OR_OBJECT_TYPE);
+496 | 
+497 |     // (Number, number)
+498 |     JSType NUMBER_VALUE_OR_OBJECT_TYPE =
+499 |         createUnionType(NUMBER_OBJECT_TYPE, NUMBER_TYPE);
+500 |     registerNativeType(
+501 |         JSTypeNative.NUMBER_VALUE_OR_OBJECT_TYPE, NUMBER_VALUE_OR_OBJECT_TYPE);
+502 | 
+503 |     // unknown function type, i.e. (?...) -> ?
+504 |     FunctionType U2U_FUNCTION_TYPE =
+505 |         createFunctionType(UNKNOWN_TYPE, true, UNKNOWN_TYPE);
+506 |     registerNativeType(JSTypeNative.U2U_FUNCTION_TYPE, U2U_FUNCTION_TYPE);
+507 | 
+508 |     // unknown constructor type, i.e. (?...) -> ? with the NoObject type
+509 |     // as instance type
+510 |     FunctionType U2U_CONSTRUCTOR_TYPE =
+511 |         // This is equivalent to
+512 |         // createConstructorType(UNKNOWN_TYPE, true, UNKNOWN_TYPE), but,
+513 |         // in addition, overrides getInstanceType() to return the NoObject type
+514 |         // instead of a new anonymous object.
+515 |         new FunctionType(this, "Function", null,
+516 |             createArrowType(
+517 |                 createParametersWithVarArgs(UNKNOWN_TYPE),
+518 |                 UNKNOWN_TYPE),
+519 |             NO_OBJECT_TYPE, null, true, true) {
+520 |           private static final long serialVersionUID = 1L;
+521 | 
+522 |           @Override public FunctionType getConstructor() {
+523 |             return registry.getNativeFunctionType(
+524 |                 JSTypeNative.FUNCTION_FUNCTION_TYPE);
+525 |           }
+526 |         };
+527 | 
+528 |     // The U2U_CONSTRUCTOR is weird, because it's the supertype of its
+529 |     // own constructor.
+530 |     registerNativeType(JSTypeNative.U2U_CONSTRUCTOR_TYPE, U2U_CONSTRUCTOR_TYPE);
+531 |     registerNativeType(
+532 |         JSTypeNative.FUNCTION_INSTANCE_TYPE, U2U_CONSTRUCTOR_TYPE);
+533 | 
+534 |     FUNCTION_FUNCTION_TYPE.setInstanceType(U2U_CONSTRUCTOR_TYPE);
+535 |     U2U_CONSTRUCTOR_TYPE.setImplicitPrototype(FUNCTION_PROTOTYPE);
+536 | 
+537 |     // least function type, i.e. (All...) -> NoType
+538 |     FunctionType LEAST_FUNCTION_TYPE =
+539 |         createFunctionType(NO_TYPE, true, ALL_TYPE);
+540 |     registerNativeType(JSTypeNative.LEAST_FUNCTION_TYPE, LEAST_FUNCTION_TYPE);
+541 | 
+542 |     // the 'this' object in the global scope
+543 |     FunctionType GLOBAL_THIS_CTOR =
+544 |         new FunctionType(this, "global this", null,
+545 |             createArrowType(createParameters(false, ALL_TYPE), NUMBER_TYPE),
+546 |             null, null, true, true);
+547 |     ObjectType GLOBAL_THIS = GLOBAL_THIS_CTOR.getInstanceType();
+548 |     registerNativeType(JSTypeNative.GLOBAL_THIS, GLOBAL_THIS);
+549 | 
+550 |     // greatest function type, i.e. (NoType...) -> All
+551 |     FunctionType GREATEST_FUNCTION_TYPE =
+552 |       createFunctionType(ALL_TYPE, true, NO_TYPE);
+553 |     registerNativeType(JSTypeNative.GREATEST_FUNCTION_TYPE,
+554 |         GREATEST_FUNCTION_TYPE);
+555 | 
+556 |     // Register the prototype property. See the comments below in
+557 |     // registerPropertyOnType about the bootstrapping process.
+558 |     registerPropertyOnType("prototype", OBJECT_FUNCTION_TYPE);
+559 |   }
+
+===== M0166 =====
+Signature: com.google.javascript.rhino.Node.StringNode.StringNode(int,String)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 187-193
+Documentation:
+
+Method code:
+187 |     StringNode(int type, String str) {
+188 |       super(type);
+189 |       if (null == str) {
+190 |         throw new IllegalArgumentException("StringNode: str is null");
+191 |       }
+192 |       this.str = str;
+193 |     }
+
+===== M0167 =====
+Signature: com.google.javascript.rhino.jstype.RecordType.defineProperty(String,JSType,boolean,Node)
+Source: src/com/google/javascript/rhino/jstype/RecordType.java
+Original range: 125-138
+Documentation:
+
+Method code:
+125 |   @Override
+126 |   boolean defineProperty(String propertyName, JSType type,
+127 |       boolean inferred, Node propertyNode) {
+128 |     if (isFrozen) {
+129 |       return false;
+130 |     }
+131 | 
+132 |     if (!inferred) {
+133 |       properties.put(propertyName, type);
+134 |     }
+135 | 
+136 |     return super.defineProperty(propertyName, type, inferred,
+137 |         propertyNode);
+138 |   }
+
+===== M0168 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isUnknownType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 237-239
+Documentation:
+
+Method code:
+237 |   public boolean isUnknownType() {
+238 |     return false;
+239 |   }
+
+===== M0169 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.setExtendedInterfaces(List<ObjectType>)
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 499-506
+Documentation:
+
+Method code:
+499 |   public void setExtendedInterfaces(List<ObjectType> extendedInterfaces)
+500 |     throws UnsupportedOperationException {
+501 |     if (isInterface()) {
+502 |       this.extendedInterfaces = ImmutableList.copyOf(extendedInterfaces);
+503 |     } else {
+504 |       throw new UnsupportedOperationException();
+505 |     }
+506 |   }
+
+===== M0170 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.hasReferenceName()
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 70-73
+Documentation:
+
+Method code:
+70 |   @Override
+71 |   public boolean hasReferenceName() {
+72 |     return getConstructor().hasReferenceName();
+73 |   }
+
+===== M0171 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.resolveInternal(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 539-552
+Documentation:
+
+Method code:
+539 |   @Override
+540 |   JSType resolveInternal(ErrorReporter t, StaticScope<JSType> scope) {
+541 |     setResolvedTypeInternal(this);
+542 | 
+543 |     ObjectType implicitPrototype = getImplicitPrototype();
+544 |     if (implicitPrototype != null) {
+545 |       implicitPrototypeFallback =
+546 |           (ObjectType) implicitPrototype.resolve(t, scope);
+547 |     }
+548 |     for (Property prop : properties.values()) {
+549 |       prop.setType(safeResolve(prop.getType(), t, scope));
+550 |     }
+551 |     return this;
+552 |   }
+
+===== M0172 =====
+Signature: com.google.javascript.rhino.jstype.UnknownType.getImplicitPrototype()
+Source: src/com/google/javascript/rhino/jstype/UnknownType.java
+Original range: 135-138
+Documentation:
+
+Method code:
+135 |   @Override
+136 |   public ObjectType getImplicitPrototype() {
+137 |     return null;
+138 |   }
+
+===== M0173 =====
+Signature: com.google.javascript.rhino.jstype.AllType.isAllType()
+Source: src/com/google/javascript/rhino/jstype/AllType.java
+Original range: 56-59
+Documentation:
+
+Method code:
+56 |   @Override
+57 |   public boolean isAllType() {
+58 |     return true;
+59 |   }
+
+===== M0174 =====
+Signature: com.google.javascript.rhino.jstype.UnionTypeBuilder.getAlternateListCopy()
+Source: src/com/google/javascript/rhino/jstype/UnionTypeBuilder.java
+Original range: 257-259
+Documentation:
+
+Method code:
+257 |   private Collection<JSType> getAlternateListCopy() {
+258 |     return ImmutableList.copyOf(alternates);
+259 |   }
+
+===== M0175 =====
+Signature: com.google.javascript.rhino.jstype.RecordType.toMaybeRecordType()
+Source: src/com/google/javascript/rhino/jstype/RecordType.java
+Original range: 217-220
+Documentation:
+
+Method code:
+217 |   @Override
+218 |   RecordType toMaybeRecordType() {
+219 |     return this;
+220 |   }
+
+===== M0176 =====
+Signature: com.google.javascript.rhino.testing.BaseJSTypeTestCase.initTypes()
+Source: src/com/google/javascript/rhino/testing/BaseJSTypeTestCase.java
+Original range: 120-225
+Documentation:
+
+Method code:
+120 |   protected void initTypes() {
+121 |     ALL_TYPE =
+122 |         registry.getNativeType(JSTypeNative.ALL_TYPE);
+123 |     NO_OBJECT_TYPE =
+124 |         registry.getNativeObjectType(JSTypeNative.NO_OBJECT_TYPE);
+125 |     NO_TYPE =
+126 |         registry.getNativeObjectType(JSTypeNative.NO_TYPE);
+127 |     NO_RESOLVED_TYPE =
+128 |         registry.getNativeObjectType(JSTypeNative.NO_RESOLVED_TYPE);
+129 |     ARRAY_FUNCTION_TYPE =
+130 |         registry.getNativeType(JSTypeNative.ARRAY_FUNCTION_TYPE);
+131 |     ARRAY_TYPE =
+132 |         registry.getNativeObjectType(JSTypeNative.ARRAY_TYPE);
+133 |     BOOLEAN_OBJECT_FUNCTION_TYPE =
+134 |         registry.getNativeType(JSTypeNative.BOOLEAN_OBJECT_FUNCTION_TYPE);
+135 |     BOOLEAN_OBJECT_TYPE =
+136 |         registry.getNativeObjectType(JSTypeNative.BOOLEAN_OBJECT_TYPE);
+137 |     BOOLEAN_TYPE =
+138 |         registry.getNativeType(JSTypeNative.BOOLEAN_TYPE);
+139 |     CHECKED_UNKNOWN_TYPE =
+140 |         registry.getNativeType(JSTypeNative.CHECKED_UNKNOWN_TYPE);
+141 |     DATE_FUNCTION_TYPE =
+142 |         registry.getNativeType(JSTypeNative.DATE_FUNCTION_TYPE);
+143 |     DATE_TYPE =
+144 |         registry.getNativeObjectType(JSTypeNative.DATE_TYPE);
+145 |     ERROR_FUNCTION_TYPE =
+146 |         registry.getNativeType(JSTypeNative.ERROR_FUNCTION_TYPE);
+147 |     ERROR_TYPE =
+148 |         registry.getNativeObjectType(JSTypeNative.ERROR_TYPE);
+149 |     EVAL_ERROR_FUNCTION_TYPE =
+150 |         registry.getNativeType(JSTypeNative.EVAL_ERROR_FUNCTION_TYPE);
+151 |     EVAL_ERROR_TYPE =
+152 |         registry.getNativeObjectType(JSTypeNative.EVAL_ERROR_TYPE);
+153 |     FUNCTION_FUNCTION_TYPE =
+154 |         registry.getNativeFunctionType(JSTypeNative.FUNCTION_FUNCTION_TYPE);
+155 |     FUNCTION_INSTANCE_TYPE =
+156 |         registry.getNativeFunctionType(JSTypeNative.FUNCTION_INSTANCE_TYPE);
+157 |     FUNCTION_PROTOTYPE =
+158 |         registry.getNativeObjectType(JSTypeNative.FUNCTION_PROTOTYPE);
+159 |     GREATEST_FUNCTION_TYPE =
+160 |         registry.getNativeType(JSTypeNative.GREATEST_FUNCTION_TYPE);
+161 |     LEAST_FUNCTION_TYPE =
+162 |         registry.getNativeType(JSTypeNative.LEAST_FUNCTION_TYPE);
+163 |     NULL_TYPE =
+164 |         registry.getNativeType(JSTypeNative.NULL_TYPE);
+165 |     NUMBER_OBJECT_FUNCTION_TYPE =
+166 |         registry.getNativeType(JSTypeNative.NUMBER_OBJECT_FUNCTION_TYPE);
+167 |     NUMBER_OBJECT_TYPE =
+168 |         registry.getNativeObjectType(JSTypeNative.NUMBER_OBJECT_TYPE);
+169 |     NUMBER_STRING_BOOLEAN =
+170 |         registry.getNativeType(JSTypeNative.NUMBER_STRING_BOOLEAN);
+171 |     NUMBER_TYPE =
+172 |         registry.getNativeType(JSTypeNative.NUMBER_TYPE);
+173 |     OBJECT_FUNCTION_TYPE =
+174 |         registry.getNativeFunctionType(JSTypeNative.OBJECT_FUNCTION_TYPE);
+175 |     OBJECT_NUMBER_STRING =
+176 |         registry.getNativeType(JSTypeNative.OBJECT_NUMBER_STRING);
+177 |     OBJECT_NUMBER_STRING_BOOLEAN =
+178 |         registry.getNativeType(JSTypeNative.OBJECT_NUMBER_STRING_BOOLEAN);
+179 |     OBJECT_PROTOTYPE =
+180 |         registry.getNativeType(JSTypeNative.OBJECT_PROTOTYPE);
+181 |     OBJECT_TYPE =
+182 |         registry.getNativeObjectType(JSTypeNative.OBJECT_TYPE);
+183 |     RANGE_ERROR_FUNCTION_TYPE =
+184 |         registry.getNativeType(JSTypeNative.RANGE_ERROR_FUNCTION_TYPE);
+185 |     RANGE_ERROR_TYPE =
+186 |         registry.getNativeObjectType(JSTypeNative.RANGE_ERROR_TYPE);
+187 |     REFERENCE_ERROR_FUNCTION_TYPE =
+188 |         registry.getNativeType(JSTypeNative.REFERENCE_ERROR_FUNCTION_TYPE);
+189 |     REFERENCE_ERROR_TYPE =
+190 |         registry.getNativeObjectType(JSTypeNative.REFERENCE_ERROR_TYPE);
+191 |     REGEXP_FUNCTION_TYPE =
+192 |         registry.getNativeType(JSTypeNative.REGEXP_FUNCTION_TYPE);
+193 |     REGEXP_TYPE =
+194 |         registry.getNativeObjectType(JSTypeNative.REGEXP_TYPE);
+195 |     STRING_OBJECT_FUNCTION_TYPE =
+196 |         registry.getNativeType(JSTypeNative.STRING_OBJECT_FUNCTION_TYPE);
+197 |     STRING_OBJECT_TYPE =
+198 |         registry.getNativeObjectType(JSTypeNative.STRING_OBJECT_TYPE);
+199 |     STRING_TYPE =
+200 |         registry.getNativeType(JSTypeNative.STRING_TYPE);
+201 |     SYNTAX_ERROR_FUNCTION_TYPE =
+202 |         registry.getNativeType(JSTypeNative.SYNTAX_ERROR_FUNCTION_TYPE);
+203 |     SYNTAX_ERROR_TYPE =
+204 |         registry.getNativeObjectType(JSTypeNative.SYNTAX_ERROR_TYPE);
+205 |     TYPE_ERROR_FUNCTION_TYPE =
+206 |         registry.getNativeType(JSTypeNative.TYPE_ERROR_FUNCTION_TYPE);
+207 |     TYPE_ERROR_TYPE =
+208 |         registry.getNativeObjectType(JSTypeNative.TYPE_ERROR_TYPE);
+209 |     U2U_CONSTRUCTOR_TYPE =
+210 |         registry.getNativeFunctionType(JSTypeNative.U2U_CONSTRUCTOR_TYPE);
+211 |     U2U_FUNCTION_TYPE =
+212 |         registry.getNativeFunctionType(JSTypeNative.U2U_FUNCTION_TYPE);
+213 |     UNKNOWN_TYPE =
+214 |         registry.getNativeObjectType(JSTypeNative.UNKNOWN_TYPE);
+215 |     URI_ERROR_FUNCTION_TYPE =
+216 |         registry.getNativeType(JSTypeNative.URI_ERROR_FUNCTION_TYPE);
+217 |     URI_ERROR_TYPE =
+218 |         registry.getNativeObjectType(JSTypeNative.URI_ERROR_TYPE);
+219 |     VOID_TYPE =
+220 |         registry.getNativeType(JSTypeNative.VOID_TYPE);
+221 | 
+222 |     addNativeProperties(registry);
+223 | 
+224 |     NATIVE_PROPERTIES_COUNT = OBJECT_TYPE.getPropertiesCount();
+225 |   }
+
+===== M0177 =====
+Signature: com.google.javascript.rhino.jstype.UnknownType.getConstructor()
+Source: src/com/google/javascript/rhino/jstype/UnknownType.java
+Original range: 159-162
+Documentation:
+
+Method code:
+159 |   @Override
+160 |   public FunctionType getConstructor() {
+161 |     return null;
+162 |   }
+
+===== M0178 =====
+Signature: com.google.javascript.rhino.jstype.JSType.toObjectType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 554-556
+Documentation:
+/**
+   * Casts this to an ObjectType, or returns null if this is not an ObjectType.
+   *
+   * Does not change the underlying JS type. If you want to simulate JS
+   * autoboxing or dereferencing, you should use autoboxesTo() or dereference().
+   * Those methods may change the underlying JS type.
+   */
+Method code:
+554 |   public ObjectType toObjectType() {
+555 |     return this instanceof ObjectType ? (ObjectType) this : null;
+556 |   }
+
+===== M0179 =====
+Signature: com.google.javascript.rhino.jstype.JSType.JSType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 103-105
+Documentation:
+
+Method code:
+103 |   JSType(JSTypeRegistry registry) {
+104 |     this.registry = registry;
+105 |   }
+
+===== M0180 =====
+Signature: com.google.javascript.rhino.jstype.BooleanType.getDisplayName()
+Source: src/com/google/javascript/rhino/jstype/BooleanType.java
+Original range: 106-109
+Documentation:
+
+Method code:
+106 |   @Override
+107 |   public String getDisplayName() {
+108 |     return "boolean";
+109 |   }
+
+===== M0181 =====
+Signature: com.google.javascript.rhino.Node.IntPropListItem.IntPropListItem(int,int,PropListItem)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 326-329
+Documentation:
+
+Method code:
+326 |     IntPropListItem(int propType, int intValue, PropListItem next) {
+327 |       super(propType, next);
+328 |       this.intValue = intValue;
+329 |     }
+
+===== M0182 =====
+Signature: com.google.javascript.rhino.Node.addChildToBack(Node)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 599-610
+Documentation:
+
+Method code:
+599 |   public void addChildToBack(Node child) {
+600 |     Preconditions.checkArgument(child.parent == null);
+601 |     Preconditions.checkArgument(child.next == null);
+602 |     child.parent = this;
+603 |     child.next = null;
+604 |     if (last == null) {
+605 |       first = last = child;
+606 |       return;
+607 |     }
+608 |     last.next = child;
+609 |     last = child;
+610 |   }
+
+===== M0183 =====
+Signature: com.google.javascript.rhino.jstype.RecordTypeBuilder.addProperty(String,JSType,Node)
+Source: src/com/google/javascript/rhino/jstype/RecordTypeBuilder.java
+Original range: 69-77
+Documentation:
+/**
+   * Adds a property with the given name and type to the record type.
+   * @param name the name of the new property
+   * @param type the JSType of the new property
+   * @param propertyNode the node that holds this property definition
+   * @return The builder itself for chaining purposes, or null if there's
+   *          a duplicate.
+   */
+Method code:
+69 |   public RecordTypeBuilder addProperty(String name, JSType type, Node
+70 |       propertyNode) {
+71 |     isEmpty = false;
+72 |     if (properties.containsKey(name)) {
+73 |       return null;
+74 |     }
+75 |     properties.put(name, new RecordProperty(type, propertyNode));
+76 |     return this;
+77 |   }
+
+===== M0184 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.hasReferenceName()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 438-441
+Documentation:
+
+Method code:
+438 |   @Override
+439 |   public boolean hasReferenceName() {
+440 |     return className != null || ownerFunction != null;
+441 |   }
+
+===== M0185 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isUnionType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 245-247
+Documentation:
+
+Method code:
+245 |   public final boolean isUnionType() {
+246 |     return toMaybeUnionType() != null;
+247 |   }
+
+===== M0186 =====
+Signature: com.google.javascript.rhino.jstype.UnionTypeBuilder.reduceAlternatesWithoutUnion()
+Source: src/com/google/javascript/rhino/jstype/UnionTypeBuilder.java
+Original range: 219-240
+Documentation:
+/**
+   * Reduce the alternates into a non-union type.
+   * If the alternates can't be accurately represented with a non-union
+   * type, return null.
+   */
+Method code:
+219 |   private JSType reduceAlternatesWithoutUnion() {
+220 |     if (isAllType) {
+221 |       return registry.getNativeType(ALL_TYPE);
+222 |     } else if (isNativeUnknownType) {
+223 |       if (areAllUnknownsChecked) {
+224 |         return registry.getNativeType(CHECKED_UNKNOWN_TYPE);
+225 |       } else {
+226 |         return registry.getNativeType(UNKNOWN_TYPE);
+227 |       }
+228 |     } else {
+229 |       int size = alternates.size();
+230 |       if (size > maxUnionSize) {
+231 |         return registry.getNativeType(UNKNOWN_TYPE);
+232 |       } else if (size > 1) {
+233 |         return null;
+234 |       } else if (size == 1) {
+235 |         return alternates.iterator().next();
+236 |       } else {
+237 |         return registry.getNativeType(NO_TYPE);
+238 |       }
+239 |     }
+240 |   }
+
+===== M0187 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.register(JSType)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 587-589
+Documentation:
+
+Method code:
+587 |   private void register(JSType type) {
+588 |     register(type, type.toString());
+589 |   }
+
+===== M0188 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createOptionalParameters(JSType...)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 1200-1204
+Documentation:
+/**
+   * Creates a tree hierarchy representing a typed parameter list in which
+   * every parameter is optional.
+   */
+Method code:
+1200 |   public Node createOptionalParameters(JSType... parameterTypes) {
+1201 |     FunctionParamBuilder builder = new FunctionParamBuilder(this);
+1202 |     builder.addOptionalParams(parameterTypes);
+1203 |     return builder.build();
+1204 |   }
+
+===== M0189 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.hasOwnDeclaredProperty(String)
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 425-427
+Documentation:
+/**
+   * Whether the given property is declared on this object.
+   */
+Method code:
+425 |   boolean hasOwnDeclaredProperty(String name) {
+426 |     return hasOwnProperty(name) && isPropertyTypeDeclared(name);
+427 |   }
+
+===== M0190 =====
+Signature: com.google.javascript.rhino.Node.Node(int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 352-356
+Documentation:
+
+Method code:
+352 |   public Node(int nodeType) {
+353 |     type = nodeType;
+354 |     parent = null;
+355 |     sourcePosition = -1;
+356 |   }
+
+===== M0191 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.Property.isTypeInferred()
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 637-640
+Documentation:
+
+Method code:
+637 |     @Override
+638 |     public boolean isTypeInferred() {
+639 |       return inferred;
+640 |     }
+
+===== M0192 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isEmptyType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 156-160
+Documentation:
+
+Method code:
+156 |   public final boolean isEmptyType() {
+157 |     return isNoType() || isNoObjectType() || isNoResolvedType() ||
+158 |         (registry.getNativeFunctionType(
+159 |              JSTypeNative.LEAST_FUNCTION_TYPE) == this);
+160 |   }
+
+===== M0193 =====
+Signature: com.google.javascript.rhino.jstype.JSType.toMaybeRecordType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 325-327
+Documentation:
+/**
+   * Downcasts this to a RecordType, or returns null if this is not
+   * a RecordType.
+   */
+Method code:
+325 |   RecordType toMaybeRecordType() {
+326 |     return null;
+327 |   }
+
+===== M0194 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createConstructorType(String,Node,Node,JSType)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 1375-1380
+Documentation:
+/**
+   * Creates a constructor function type.
+   * @param name the function's name or {@code null} to indicate that the
+   *     function is anonymous.
+   * @param source the node defining this function. Its type
+   *     ({@link Node#getType()}) must be {@link Token#FUNCTION}.
+   * @param parameters the function's parameters or {@code null}
+   *     to indicate that the parameter types are unknown.
+   * @param returnType the function's return type or {@code null} to indicate
+   *     that the return type is unknown.
+   */
+Method code:
+1375 |   public FunctionType createConstructorType(String name, Node source,
+1376 |       Node parameters, JSType returnType) {
+1377 |     return new FunctionType(this, name, source,
+1378 |         createArrowType(parameters, returnType), null,
+1379 |         null, true, false);
+1380 |   }
+
+===== M0195 =====
+Signature: com.google.javascript.rhino.jstype.RecordType.isEquivalentTo(JSType)
+Source: src/com/google/javascript/rhino/jstype/RecordType.java
+Original range: 95-118
+Documentation:
+
+Method code:
+95 |   @Override
+96 |   public boolean isEquivalentTo(JSType other) {
+97 |     if (!other.isRecordType()) {
+98 |       return false;
+99 |     }
+100 | 
+101 |     // Compare properties.
+102 |     RecordType otherRecord = other.toMaybeRecordType();
+103 |     if (otherRecord == this) {
+104 |       return true;
+105 |     }
+106 | 
+107 |     Set<String> keySet = properties.keySet();
+108 |     Map<String, JSType> otherProps = otherRecord.properties;
+109 |     if (!otherProps.keySet().equals(keySet)) {
+110 |       return false;
+111 |     }
+112 |     for (String key : keySet) {
+113 |       if (!otherProps.get(key).isEquivalentTo(properties.get(key))) {
+114 |         return false;
+115 |       }
+116 |     }
+117 |     return true;
+118 |   }
+
+===== M0196 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.Property.getNode()
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 612-615
+Documentation:
+
+Method code:
+612 |     @Override
+613 |     public Node getNode() {
+614 |       return propertyNode;
+615 |     }
+
+===== M0197 =====
+Signature: com.google.javascript.rhino.jstype.EnumType.EnumType(JSTypeRegistry,String,Node,JSType)
+Source: src/com/google/javascript/rhino/jstype/EnumType.java
+Original range: 76-81
+Documentation:
+/**
+   * Creates an enum type.
+   *
+   * @param name the enum's name
+   * @param elementsType the base type of the individual elements
+   */
+Method code:
+76 |   EnumType(JSTypeRegistry registry, String name, Node source,
+77 |       JSType elementsType) {
+78 |     super(registry, "enum{" + name + "}", null);
+79 |     this.source = source;
+80 |     this.elementsType = new EnumElementType(registry, elementsType, name);
+81 |   }
+
+===== M0198 =====
+Signature: com.google.javascript.rhino.jstype.FunctionBuilder.withTypeOfThis(ObjectType)
+Source: src/com/google/javascript/rhino/jstype/FunctionBuilder.java
+Original range: 115-118
+Documentation:
+/** Set the "this" type. */
+Method code:
+115 |   public FunctionBuilder withTypeOfThis(ObjectType typeOfThis) {
+116 |     this.typeOfThis = typeOfThis;
+117 |     return this;
+118 |   }
+
+===== M0199 =====
+Signature: com.google.javascript.rhino.jstype.FunctionParamBuilder.addOptionalParams(JSType...)
+Source: src/com/google/javascript/rhino/jstype/FunctionParamBuilder.java
+Original range: 79-88
+Documentation:
+/**
+   * Add optional parameters of the given type to the end of the param list.
+   * @param types Types for each optional parameter. The builder will make them
+   *     undefineable.
+   * @return False if this is called after var args are added.
+   */
+Method code:
+79 |   public boolean addOptionalParams(JSType ...types) {
+80 |     if (hasVarArgs()) {
+81 |       return false;
+82 |     }
+83 | 
+84 |     for (JSType type : types) {
+85 |       newParameter(registry.createOptionalType(type)).setOptionalArg(true);
+86 |     }
+87 |     return true;
+88 |   }
+
+===== M0200 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.initializeRegistry()
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 561-585
+Documentation:
+
+Method code:
+561 |   private void initializeRegistry() {
+562 |     register(getNativeType(JSTypeNative.ARRAY_TYPE));
+563 |     register(getNativeType(JSTypeNative.BOOLEAN_OBJECT_TYPE));
+564 |     register(getNativeType(JSTypeNative.BOOLEAN_TYPE));
+565 |     register(getNativeType(JSTypeNative.DATE_TYPE));
+566 |     register(getNativeType(JSTypeNative.NULL_TYPE));
+567 |     register(getNativeType(JSTypeNative.NULL_TYPE), "Null");
+568 |     register(getNativeType(JSTypeNative.NUMBER_OBJECT_TYPE));
+569 |     register(getNativeType(JSTypeNative.NUMBER_TYPE));
+570 |     register(getNativeType(JSTypeNative.OBJECT_TYPE));
+571 |     register(getNativeType(JSTypeNative.ERROR_TYPE));
+572 |     register(getNativeType(JSTypeNative.URI_ERROR_TYPE));
+573 |     register(getNativeType(JSTypeNative.EVAL_ERROR_TYPE));
+574 |     register(getNativeType(JSTypeNative.TYPE_ERROR_TYPE));
+575 |     register(getNativeType(JSTypeNative.RANGE_ERROR_TYPE));
+576 |     register(getNativeType(JSTypeNative.REFERENCE_ERROR_TYPE));
+577 |     register(getNativeType(JSTypeNative.SYNTAX_ERROR_TYPE));
+578 |     register(getNativeType(JSTypeNative.REGEXP_TYPE));
+579 |     register(getNativeType(JSTypeNative.STRING_OBJECT_TYPE));
+580 |     register(getNativeType(JSTypeNative.STRING_TYPE));
+581 |     register(getNativeType(JSTypeNative.VOID_TYPE));
+582 |     register(getNativeType(JSTypeNative.VOID_TYPE), "Undefined");
+583 |     register(getNativeType(JSTypeNative.VOID_TYPE), "void");
+584 |     register(getNativeType(JSTypeNative.FUNCTION_INSTANCE_TYPE), "Function");
+585 |   }
+
+===== M0201 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.getType(String)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 865-872
+Documentation:
+/**
+   * Looks up a type by name.
+   *
+   * @param jsTypeName The name string.
+   * @return the corresponding JSType object or {@code null} it cannot be found
+   */
+Method code:
+865 |   public JSType getType(String jsTypeName) {
+866 |     // TODO(user): Push every local type name out of namesToTypes so that
+867 |     // NamedType#resolve is correct.
+868 |     if (jsTypeName.equals(templateTypeName)) {
+869 |       return templateType;
+870 |     }
+871 |     return namesToTypes.get(jsTypeName);
+872 |   }
+
+===== M0202 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.getPropertyType(String)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 211-218
+Documentation:
+
+Method code:
+211 |   @Override
+212 |   public JSType getPropertyType(String property) {
+213 |     StaticSlot<JSType> slot = getSlot(property);
+214 |     if (slot == null) {
+215 |       return getNativeType(JSTypeNative.UNKNOWN_TYPE);
+216 |     }
+217 |     return slot.getType();
+218 |   }
+
+===== M0203 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.finishPropertyContinuations()
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 133-143
+Documentation:
+
+Method code:
+133 |   private void finishPropertyContinuations() {
+134 |     ObjectType referencedObjType = getReferencedObjTypeInternal();
+135 |     if (referencedObjType != null && !referencedObjType.isUnknownType()) {
+136 |       if (propertyContinuations != null) {
+137 |         for (PropertyContinuation c : propertyContinuations) {
+138 |           c.commit(this);
+139 |         }
+140 |       }
+141 |     }
+142 |     propertyContinuations = null;
+143 |   }
+
+===== M0204 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.forwardDeclareType(String)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 843-845
+Documentation:
+/**
+   * Records a forward-declared type name. We will not emit errors if this
+   * type name never resolves to anything.
+   */
+Method code:
+843 |   public void forwardDeclareType(String name) {
+844 |     forwardDeclaredTypes.add(name);
+845 |   }
+
+===== M0205 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.addReferenceTypeIndexedByProperty(String,JSType)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 631-650
+Documentation:
+
+Method code:
+631 |   private void addReferenceTypeIndexedByProperty(
+632 |       String propertyName, JSType type) {
+633 |     if (type instanceof ObjectType && ((ObjectType) type).hasReferenceName()) {
+634 |       Map<String, ObjectType> typeSet =
+635 |           eachRefTypeIndexedByProperty.get(propertyName);
+636 |       if (typeSet == null) {
+637 |         typeSet = Maps.newHashMap();
+638 |         eachRefTypeIndexedByProperty.put(propertyName, typeSet);
+639 |       }
+640 |       ObjectType objType = (ObjectType) type;
+641 |       typeSet.put(objType.getReferenceName(), objType);
+642 |     } else if (type instanceof NamedType) {
+643 |       addReferenceTypeIndexedByProperty(
+644 |           propertyName, ((NamedType) type).getReferencedType());
+645 |     } else if (type.isUnionType()) {
+646 |       for (JSType alternate : type.toMaybeUnionType().getAlternates()) {
+647 |         addReferenceTypeIndexedByProperty(propertyName, alternate);
+648 |       }
+649 |     }
+650 |   }
+
+===== M0206 =====
+Signature: com.google.javascript.rhino.jstype.UnionTypeBuilder.addAlternate(JSType)
+Source: src/com/google/javascript/rhino/jstype/UnionTypeBuilder.java
+Original range: 121-212
+Documentation:
+/**
+   * Adds an alternate to the union type under construction. Returns this
+   * for easy chaining.
+   */
+Method code:
+121 |   UnionTypeBuilder addAlternate(JSType alternate) {
+122 |     // build() returns the bottom type by default, so we can
+123 |     // just bail out early here.
+124 |     if (alternate.isNoType()) {
+125 |       return this;
+126 |     }
+127 | 
+128 |     isAllType = isAllType || alternate.isAllType();
+129 | 
+130 |     boolean isAlternateUnknown = alternate instanceof UnknownType;
+131 |     isNativeUnknownType = isNativeUnknownType || isAlternateUnknown;
+132 |     if (isAlternateUnknown) {
+133 |       areAllUnknownsChecked = areAllUnknownsChecked &&
+134 |           alternate.isCheckedUnknownType();
+135 |     }
+136 |     if (!isAllType && !isNativeUnknownType) {
+137 |       if (alternate.isUnionType()) {
+138 |         UnionType union = alternate.toMaybeUnionType();
+139 |         for (JSType unionAlt : union.getAlternates()) {
+140 |           addAlternate(unionAlt);
+141 |         }
+142 |       } else {
+143 |         if (alternates.size() > maxUnionSize) {
+144 |           return this;
+145 |         }
+146 | 
+147 |         // Function types are special, because they have their
+148 |         // own bizarro sub-lattice. See the commants on
+149 |         // FunctionType#supAndInf helper and above at functionTypePosition.
+150 |         if (alternate.isFunctionType() && functionTypePosition != -1) {
+151 |           // See the comments on functionTypePosition above.
+152 |           FunctionType other =
+153 |               alternates.get(functionTypePosition).toMaybeFunctionType();
+154 |           FunctionType supremum =
+155 |               alternate.toMaybeFunctionType().supAndInfHelper(other, true);
+156 |           alternates.set(functionTypePosition, supremum);
+157 |           result = null;
+158 |           return this;
+159 |         }
+160 | 
+161 |         // Look through the alternates we've got so far,
+162 |         // and check if any of them are duplicates of
+163 |         // one another.
+164 |         int currentIndex = 0;
+165 |         Iterator<JSType> it = alternates.iterator();
+166 |         while (it.hasNext()) {
+167 |           JSType current = it.next();
+168 | 
+169 |           // Unknown and NoResolved types may just be names that haven't
+170 |           // been resolved yet. So keep these in the union, and just use
+171 |           // equality checking for simple de-duping.
+172 |           if (alternate.isUnknownType() ||
+173 |               current.isUnknownType() ||
+174 |               alternate.isNoResolvedType() ||
+175 |               current.isNoResolvedType()) {
+176 |             if (alternate.isEquivalentTo(current)) {
+177 |               // Alternate is unnecessary.
+178 |               return this;
+179 |             }
+180 |           } else {
+181 |             if (alternate.isSubtype(current)) {
+182 |               // Alternate is unnecessary.
+183 |               return this;
+184 |             } else if (current.isSubtype(alternate)) {
+185 |               // Alternate makes current obsolete
+186 |               it.remove();
+187 | 
+188 |               if (currentIndex == functionTypePosition) {
+189 |                 functionTypePosition = -1;
+190 |               } else if (currentIndex < functionTypePosition) {
+191 |                 functionTypePosition--;
+192 |                 currentIndex--;
+193 |               }
+194 |             }
+195 |           }
+196 |           currentIndex++;
+197 |         }
+198 | 
+199 |         if (alternate.isFunctionType()) {
+200 |           // See the comments on functionTypePosition above.
+201 |           Preconditions.checkState(functionTypePosition == -1);
+202 |           functionTypePosition = alternates.size();
+203 |         }
+204 | 
+205 |         alternates.add(alternate);
+206 |         result = null; // invalidate the memoized result
+207 |       }
+208 |     } else {
+209 |       result = null;
+210 |     }
+211 |     return this;
+212 |   }
+
+===== M0207 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.cast(JSType)
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 541-543
+Documentation:
+/**
+   * A null-safe version of JSType#toObjectType.
+   */
+Method code:
+541 |   public static ObjectType cast(JSType type) {
+542 |     return type == null ? null : type.toObjectType();
+543 |   }
+
+===== M0208 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.getNativeType(JSTypeNative)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 874-876
+Documentation:
+
+Method code:
+874 |   public JSType getNativeType(JSTypeNative typeId) {
+875 |     return nativeTypes[typeId.ordinal()];
+876 |   }
+
+===== M0209 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.getOwnPropertyNames()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 177-180
+Documentation:
+
+Method code:
+177 |   @Override
+178 |   public Set<String> getOwnPropertyNames() {
+179 |     return properties.keySet();
+180 |   }
+
+===== M0210 =====
+Signature: com.google.javascript.rhino.jstype.JSType.getGreatestSubtype(JSType,JSType)
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 722-768
+Documentation:
+/**
+   * A generic implementation meant to be used as a helper for common
+   * getGreatestSubtype implementations.
+   */
+Method code:
+722 |   static JSType getGreatestSubtype(JSType thisType, JSType thatType) {
+723 |     if (thisType.isFunctionType() && thatType.isFunctionType()) {
+724 |       // The FunctionType sub-lattice is not well-defined. i.e., the
+725 |       // proposition
+726 |       // A < B => sup(A, B) == B
+727 |       // does not hold because of unknown parameters and return types.
+728 |       // See the comment in supAndInfHelper for more info on this.
+729 |       return thisType.toMaybeFunctionType().supAndInfHelper(
+730 |           thatType.toMaybeFunctionType(), false);
+731 |     } else if (thisType.isEquivalentTo(thatType)) {
+732 |       return thisType;
+733 |     } else if (thisType.isUnknownType() || thatType.isUnknownType()) {
+734 |       // The greatest subtype with any unknown type is the universal
+735 |       // unknown type, unless the two types are equal.
+736 |       return thisType.isEquivalentTo(thatType) ? thisType :
+737 |           thisType.getNativeType(JSTypeNative.UNKNOWN_TYPE);
+738 |     } else if (thisType.isSubtype(thatType)) {
+739 |       return filterNoResolvedType(thisType);
+740 |     } else if (thatType.isSubtype(thisType)) {
+741 |       return filterNoResolvedType(thatType);
+742 |     } else if (thisType.isUnionType()) {
+743 |       return thisType.toMaybeUnionType().meet(thatType);
+744 |     } else if (thatType.isUnionType()) {
+745 |       return thatType.toMaybeUnionType().meet(thisType);
+746 |     } else if (thisType.isRecordType()) {
+747 |       return thisType.toMaybeRecordType().getGreatestSubtypeHelper(thatType);
+748 |     } else if (thatType.isRecordType()) {
+749 |       return thatType.toMaybeRecordType().getGreatestSubtypeHelper(thisType);
+750 |     }
+751 | 
+752 |     if (thisType.isEnumElementType()) {
+753 |       JSType inf = thisType.toMaybeEnumElementType().meet(thatType);
+754 |       if (inf != null) {
+755 |         return inf;
+756 |       }
+757 |     } else if (thatType.isEnumElementType()) {
+758 |       JSType inf = thatType.toMaybeEnumElementType().meet(thisType);
+759 |       if (inf != null) {
+760 |         return inf;
+761 |       }
+762 |     }
+763 | 
+764 |     if (thisType.isObject() && thatType.isObject()) {
+765 |       return thisType.getNativeType(JSTypeNative.NO_OBJECT_TYPE);
+766 |     }
+767 |     return thisType.getNativeType(JSTypeNative.NO_TYPE);
+768 |   }
+
+===== M0211 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.defineProperty(String,JSType,boolean,Node)
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 85-93
+Documentation:
+
+Method code:
+85 |   @Override
+86 |   boolean defineProperty(String name, JSType type, boolean inferred,
+87 |       Node propertyNode) {
+88 |     ObjectType proto = getImplicitPrototype();
+89 |     if (proto != null && proto.hasOwnDeclaredProperty(name)) {
+90 |       return false;
+91 |     }
+92 |     return super.defineProperty(name, type, inferred, propertyNode);
+93 |   }
+
+===== M0212 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.PrototypeObjectType(JSTypeRegistry,String,ObjectType)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 104-107
+Documentation:
+/**
+   * Creates an object type.
+   *
+   * @param className the name of the class.  May be {@code null} to
+   *        denote an anonymous class.
+   *
+   * @param implicitPrototype the implicit prototype
+   *        (a.k.a. {@code [[Prototype]]}) as defined by ECMA-262. If the
+   *        implicit prototype is {@code null} the implicit prototype will be
+   *        set to the {@link JSTypeNative#OBJECT_TYPE}.
+   */
+Method code:
+104 |   PrototypeObjectType(JSTypeRegistry registry, String className,
+105 |       ObjectType implicitPrototype) {
+106 |     this(registry, className, implicitPrototype, false);
+107 |   }
+
+===== M0213 =====
+Signature: com.google.javascript.rhino.testing.BaseJSTypeTestCase.addNativeProperties(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/testing/BaseJSTypeTestCase.java
+Original range: 228-381
+Documentation:
+/** Adds a basic set of properties to the native types. */
+Method code:
+228 |   public static void addNativeProperties(JSTypeRegistry registry) {
+229 |     JSType booleanType = registry.getNativeType(JSTypeNative.BOOLEAN_TYPE);
+230 |     JSType numberType = registry.getNativeType(JSTypeNative.NUMBER_TYPE);
+231 |     JSType stringType = registry.getNativeType(JSTypeNative.STRING_TYPE);
+232 |     JSType unknownType = registry.getNativeType(JSTypeNative.UNKNOWN_TYPE);
+233 | 
+234 |     ObjectType objectType =
+235 |         registry.getNativeObjectType(JSTypeNative.OBJECT_TYPE);
+236 |     ObjectType arrayType =
+237 |         registry.getNativeObjectType(JSTypeNative.ARRAY_TYPE);
+238 |     ObjectType dateType =
+239 |         registry.getNativeObjectType(JSTypeNative.DATE_TYPE);
+240 |     ObjectType regexpType =
+241 |         registry.getNativeObjectType(JSTypeNative.REGEXP_TYPE);
+242 |     ObjectType booleanObjectType =
+243 |         registry.getNativeObjectType(JSTypeNative.BOOLEAN_OBJECT_TYPE);
+244 |     ObjectType numberObjectType =
+245 |         registry.getNativeObjectType(JSTypeNative.NUMBER_OBJECT_TYPE);
+246 |     ObjectType stringObjectType =
+247 |         registry.getNativeObjectType(JSTypeNative.STRING_OBJECT_TYPE);
+248 | 
+249 |     ObjectType objectPrototype = registry
+250 |         .getNativeFunctionType(JSTypeNative.OBJECT_FUNCTION_TYPE)
+251 |         .getPrototype();
+252 |     addMethod(registry, objectPrototype, "constructor", objectType);
+253 |     addMethod(registry, objectPrototype, "toString", stringType);
+254 |     addMethod(registry, objectPrototype, "toLocaleString", stringType);
+255 |     addMethod(registry, objectPrototype, "valueOf", unknownType);
+256 |     addMethod(registry, objectPrototype, "hasOwnProperty", booleanType);
+257 |     addMethod(registry, objectPrototype, "isPrototypeOf", booleanType);
+258 |     addMethod(registry, objectPrototype, "propertyIsEnumerable", booleanType);
+259 | 
+260 |     ObjectType arrayPrototype = registry
+261 |         .getNativeFunctionType(JSTypeNative.ARRAY_FUNCTION_TYPE)
+262 |         .getPrototype();
+263 |     addMethod(registry, arrayPrototype, "constructor", arrayType);
+264 |     addMethod(registry, arrayPrototype, "toString", stringType);
+265 |     addMethod(registry, arrayPrototype, "toLocaleString", stringType);
+266 |     addMethod(registry, arrayPrototype, "concat", arrayType);
+267 |     addMethod(registry, arrayPrototype, "join", stringType);
+268 |     addMethod(registry, arrayPrototype, "pop", unknownType);
+269 |     addMethod(registry, arrayPrototype, "push", numberType);
+270 |     addMethod(registry, arrayPrototype, "reverse", arrayType);
+271 |     addMethod(registry, arrayPrototype, "shift", unknownType);
+272 |     addMethod(registry, arrayPrototype, "slice", arrayType);
+273 |     addMethod(registry, arrayPrototype, "sort", arrayType);
+274 |     addMethod(registry, arrayPrototype, "splice", arrayType);
+275 |     addMethod(registry, arrayPrototype, "unshift", numberType);
+276 |     arrayType.defineDeclaredProperty("length", numberType, null);
+277 | 
+278 |     ObjectType booleanPrototype = registry
+279 |         .getNativeFunctionType(JSTypeNative.BOOLEAN_OBJECT_FUNCTION_TYPE)
+280 |         .getPrototype();
+281 |     addMethod(registry, booleanPrototype, "constructor", booleanObjectType);
+282 |     addMethod(registry, booleanPrototype, "toString", stringType);
+283 |     addMethod(registry, booleanPrototype, "valueOf", booleanType);
+284 | 
+285 |     ObjectType datePrototype = registry
+286 |         .getNativeFunctionType(JSTypeNative.DATE_FUNCTION_TYPE)
+287 |         .getPrototype();
+288 |     addMethod(registry, datePrototype, "constructor", dateType);
+289 |     addMethod(registry, datePrototype, "toString", stringType);
+290 |     addMethod(registry, datePrototype, "toDateString", stringType);
+291 |     addMethod(registry, datePrototype, "toTimeString", stringType);
+292 |     addMethod(registry, datePrototype, "toLocaleString", stringType);
+293 |     addMethod(registry, datePrototype, "toLocaleDateString", stringType);
+294 |     addMethod(registry, datePrototype, "toLocaleTimeString", stringType);
+295 |     addMethod(registry, datePrototype, "valueOf", numberType);
+296 |     addMethod(registry, datePrototype, "getTime", numberType);
+297 |     addMethod(registry, datePrototype, "getFullYear", numberType);
+298 |     addMethod(registry, datePrototype, "getUTCFullYear", numberType);
+299 |     addMethod(registry, datePrototype, "getMonth", numberType);
+300 |     addMethod(registry, datePrototype, "getUTCMonth", numberType);
+301 |     addMethod(registry, datePrototype, "getDate", numberType);
+302 |     addMethod(registry, datePrototype, "getUTCDate", numberType);
+303 |     addMethod(registry, datePrototype, "getDay", numberType);
+304 |     addMethod(registry, datePrototype, "getUTCDay", numberType);
+305 |     addMethod(registry, datePrototype, "getHours", numberType);
+306 |     addMethod(registry, datePrototype, "getUTCHours", numberType);
+307 |     addMethod(registry, datePrototype, "getMinutes", numberType);
+308 |     addMethod(registry, datePrototype, "getUTCMinutes", numberType);
+309 |     addMethod(registry, datePrototype, "getSeconds", numberType);
+310 |     addMethod(registry, datePrototype, "getUTCSeconds", numberType);
+311 |     addMethod(registry, datePrototype, "getMilliseconds", numberType);
+312 |     addMethod(registry, datePrototype, "getUTCMilliseconds", numberType);
+313 |     addMethod(registry, datePrototype, "getTimezoneOffset", numberType);
+314 |     addMethod(registry, datePrototype, "setTime", numberType);
+315 |     addMethod(registry, datePrototype, "setMilliseconds", numberType);
+316 |     addMethod(registry, datePrototype, "setUTCMilliseconds", numberType);
+317 |     addMethod(registry, datePrototype, "setSeconds", numberType);
+318 |     addMethod(registry, datePrototype, "setUTCSeconds", numberType);
+319 |     addMethod(registry, datePrototype, "setMinutes", numberType);
+320 |     addMethod(registry, datePrototype, "setUTCMinutes", numberType);
+321 |     addMethod(registry, datePrototype, "setHours", numberType);
+322 |     addMethod(registry, datePrototype, "setUTCHours", numberType);
+323 |     addMethod(registry, datePrototype, "setDate", numberType);
+324 |     addMethod(registry, datePrototype, "setUTCDate", numberType);
+325 |     addMethod(registry, datePrototype, "setMonth", numberType);
+326 |     addMethod(registry, datePrototype, "setUTCMonth", numberType);
+327 |     addMethod(registry, datePrototype, "setFullYear", numberType);
+328 |     addMethod(registry, datePrototype, "setUTCFullYear", numberType);
+329 |     addMethod(registry, datePrototype, "toUTCString", stringType);
+330 |     addMethod(registry, datePrototype, "toGMTString", stringType);
+331 | 
+332 |     ObjectType numberPrototype = registry
+333 |         .getNativeFunctionType(JSTypeNative.NUMBER_OBJECT_FUNCTION_TYPE)
+334 |         .getPrototype();
+335 |     addMethod(registry, numberPrototype, "constructor", numberObjectType);
+336 |     addMethod(registry, numberPrototype, "toString", stringType);
+337 |     addMethod(registry, numberPrototype, "toLocaleString", stringType);
+338 |     addMethod(registry, numberPrototype, "valueOf", numberType);
+339 |     addMethod(registry, numberPrototype, "toFixed", stringType);
+340 |     addMethod(registry, numberPrototype, "toExponential", stringType);
+341 |     addMethod(registry, numberPrototype, "toPrecision", stringType);
+342 | 
+343 |     ObjectType regexpPrototype = registry
+344 |         .getNativeFunctionType(JSTypeNative.REGEXP_FUNCTION_TYPE)
+345 |         .getPrototype();
+346 |     addMethod(registry, regexpPrototype, "constructor", regexpType);
+347 |     addMethod(registry, regexpPrototype, "exec",
+348 |         registry.createNullableType(arrayType));
+349 |     addMethod(registry, regexpPrototype, "test", booleanType);
+350 |     addMethod(registry, regexpPrototype, "toString", stringType);
+351 |     regexpType.defineDeclaredProperty("source", stringType, null);
+352 |     regexpType.defineDeclaredProperty("global", booleanType, null);
+353 |     regexpType.defineDeclaredProperty("ignoreCase", booleanType, null);
+354 |     regexpType.defineDeclaredProperty("multiline", booleanType, null);
+355 |     regexpType.defineDeclaredProperty("lastIndex", numberType, null);
+356 | 
+357 |     ObjectType stringPrototype = registry
+358 |         .getNativeFunctionType(JSTypeNative.STRING_OBJECT_FUNCTION_TYPE)
+359 |         .getPrototype();
+360 |     addMethod(registry, stringPrototype, "constructor", stringObjectType);
+361 |     addMethod(registry, stringPrototype, "toString", stringType);
+362 |     addMethod(registry, stringPrototype, "valueOf", stringType);
+363 |     addMethod(registry, stringPrototype, "charAt", stringType);
+364 |     addMethod(registry, stringPrototype, "charCodeAt", numberType);
+365 |     addMethod(registry, stringPrototype, "concat", stringType);
+366 |     addMethod(registry, stringPrototype, "indexOf", numberType);
+367 |     addMethod(registry, stringPrototype, "lastIndexOf", numberType);
+368 |     addMethod(registry, stringPrototype, "localeCompare", numberType);
+369 |     addMethod(registry, stringPrototype, "match",
+370 |         registry.createNullableType(arrayType));
+371 |     addMethod(registry, stringPrototype, "replace", stringType);
+372 |     addMethod(registry, stringPrototype, "search", numberType);
+373 |     addMethod(registry, stringPrototype, "slice", stringType);
+374 |     addMethod(registry, stringPrototype, "split", arrayType);
+375 |     addMethod(registry, stringPrototype, "substring", stringType);
+376 |     addMethod(registry, stringPrototype, "toLowerCase", stringType);
+377 |     addMethod(registry, stringPrototype, "toLocaleLowerCase", stringType);
+378 |     addMethod(registry, stringPrototype, "toUpperCase", stringType);
+379 |     addMethod(registry, stringPrototype, "toLocaleUpperCase", stringType);
+380 |     stringObjectType.defineDeclaredProperty("length", numberType, null);
+381 |   }
+
+===== M0214 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.getCtorExtendedInterfaces()
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 187-190
+Documentation:
+
+Method code:
+187 |   @Override
+188 |   public Iterable<ObjectType> getCtorExtendedInterfaces() {
+189 |     return getConstructor().getExtendedInterfaces();
+190 |   }
+
+===== M0215 =====
+Signature: com.google.javascript.rhino.jstype.RecordType.RecordType(JSTypeRegistry,Map<String, RecordProperty>)
+Source: src/com/google/javascript/rhino/jstype/RecordType.java
+Original range: 78-93
+Documentation:
+/**
+   * Creates a record type.
+   *
+   * @param registry The type registry under which this type lives.
+   * @param properties A map of all the properties of this record type.
+   * @throws IllegalStateException if the {@code RecordProperty} associated
+   *         with a property is null.
+   */
+Method code:
+78 |   RecordType(JSTypeRegistry registry, Map<String, RecordProperty> properties) {
+79 |     super(registry, null, null);
+80 |     setPrettyPrint(true);
+81 | 
+82 |     for (String property : properties.keySet()) {
+83 |       RecordProperty prop = properties.get(property);
+84 |       if (prop == null) {
+85 |         throw new IllegalStateException(
+86 |             "RecordProperty associated with a property should not be null!");
+87 |       }
+88 |       defineDeclaredProperty(property, prop.getType(), prop.getPropertyNode());
+89 |     }
+90 | 
+91 |     // Freeze the record type.
+92 |     isFrozen = true;
+93 |   }
+
+===== M0216 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createUnionType(JSType...)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 993-999
+Documentation:
+/**
+   * Creates a union type whose variants are the arguments.
+   */
+Method code:
+993 |   public JSType createUnionType(JSType... variants) {
+994 |     UnionTypeBuilder builder = new UnionTypeBuilder(this);
+995 |     for (JSType type : variants) {
+996 |       builder.addAlternate(type);
+997 |     }
+998 |     return builder.build();
+999 |   }
+
+===== M0217 =====
+Signature: com.google.javascript.rhino.jstype.JSType.getNativeType(JSTypeNative)
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 110-112
+Documentation:
+/**
+   * Utility method for less verbose code.
+   */
+Method code:
+110 |   JSType getNativeType(JSTypeNative typeId) {
+111 |     return registry.getNativeType(typeId);
+112 |   }
+
+===== M0218 =====
+Signature: com.google.javascript.rhino.jstype.VoidType.toString()
+Source: src/com/google/javascript/rhino/jstype/VoidType.java
+Original range: 94-97
+Documentation:
+
+Method code:
+94 |   @Override
+95 |   public String toString() {
+96 |     return getDisplayName();
+97 |   }
+
+===== M0219 =====
+Signature: com.google.javascript.rhino.testing.Asserts.assertTypeEquals(String,JSType,JSType)
+Source: src/com/google/javascript/rhino/testing/Asserts.java
+Original range: 98-111
+Documentation:
+
+Method code:
+98 |   public static void assertTypeEquals(String message, JSType a, JSType b) {
+99 |     Assert.assertTrue(
+100 |         message +
+101 |         (message.isEmpty() ? "" : "\n") +
+102 |         "Expected: " + a + "\n" +
+103 |         "Actual  : " + b,
+104 |         a.isEquivalentTo(b));
+105 |     Assert.assertTrue(
+106 |         message +
+107 |         " Equals is not symmetric.\n" +
+108 |         "Expected: " + b + "\n" +
+109 |         "Actual  : " + a,
+110 |         b.isEquivalentTo(a));
+111 |   }
+
+===== M0220 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.setPrettyPrint(boolean)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 398-400
+Documentation:
+
+Method code:
+398 |   void setPrettyPrint(boolean prettyPrint) {
+399 |     this.prettyPrint = prettyPrint;
+400 |   }
+
+===== M0221 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.isInterface()
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 187-190
+Documentation:
+
+Method code:
+187 |   @Override
+188 |   public boolean isInterface() {
+189 |     return kind == Kind.INTERFACE;
+190 |   }
+
+===== M0222 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.setOwnerFunction(FunctionType)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 515-518
+Documentation:
+
+Method code:
+515 |   void setOwnerFunction(FunctionType type) {
+516 |     Preconditions.checkState(ownerFunction == null || type == null);
+517 |     ownerFunction = type;
+518 |   }
+
+===== M0223 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isNoType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 144-146
+Documentation:
+
+Method code:
+144 |   public boolean isNoType() {
+145 |     return false;
+146 |   }
+
+===== M0224 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.getConstructor()
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 406-409
+Documentation:
+
+Method code:
+406 |   @Override
+407 |   public FunctionType getConstructor() {
+408 |     return null;
+409 |   }
+
+===== M0225 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.Property.setType(JSType)
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 646-648
+Documentation:
+
+Method code:
+646 |     void setType(JSType type) {
+647 |       this.type = type;
+648 |     }
+
+===== M0226 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isSubtype(JSType)
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 989-991
+Documentation:
+/**
+   * Checks whether {@code this} is a subtype of {@code that}.<p>
+   *
+   * Subtyping rules:
+   * <ul>
+   * <li>(unknown) &mdash; every type is a subtype of the Unknown type.</li>
+   * <li>(no) &mdash; the No type is a subtype of every type.</li>
+   * <li>(no-object) &mdash; the NoObject type is a subtype of every object
+   * type (i.e. subtypes of the Object type).</li>
+   * <li>(ref) &mdash; a type is a subtype of itself.</li>
+   * <li>(union-l) &mdash; A union type is a subtype of a type U if all the
+   * union type's constituents are a subtype of U. Formally<br>
+   * {@code (T<sub>1</sub>, &hellip;, T<sub>n</sub>) &lt;: U} if and only
+   * {@code T<sub>k</sub> &lt;: U} for all {@code k &isin; 1..n}.</li>
+   * <li>(union-r) &mdash; A type U is a subtype of a union type if it is a
+   * subtype of one of the union type's constituents. Formally<br>
+   * {@code U &lt;: (T<sub>1</sub>, &hellip;, T<sub>n</sub>)} if and only
+   * if {@code U &lt;: T<sub>k</sub>} for some index {@code k}.</li>
+   * <li>(objects) &mdash; an Object {@code O<sub>1</sub>} is a subtype
+   * of an object {@code O<sub>2</sub>} if it has more properties
+   * than {@code O<sub>2</sub>} and all common properties are
+   * pairwise subtypes.</li>
+   * </ul>
+   *
+   * @return {@code this &lt;: that}
+   */
+Method code:
+989 |   public boolean isSubtype(JSType that) {
+990 |     return isSubtypeHelper(this, that);
+991 |   }
+
+===== M0227 =====
+Signature: com.google.javascript.rhino.jstype.JSType.getGreatestSubtype(JSType)
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 714-716
+Documentation:
+/**
+   * Gets the greatest subtype of {@code this} and {@code that}.
+   * The greatest subtype is the meet (&#8743;) or infimum of both types in the
+   * type lattice.<p>
+   * Examples
+   * <ul>
+   * <li>{@code Number &#8743; Any} = {@code Any}</li>
+   * <li>{@code number &#8743; Object} = {@code Any}</li>
+   * <li>{@code Number &#8743; Object} = {@code Number}</li>
+   * </ul>
+   * @return {@code this &#8744; that}
+   */
+Method code:
+714 |   public JSType getGreatestSubtype(JSType that) {
+715 |     return getGreatestSubtype(this, that);
+716 |   }
+
+===== M0228 =====
+Signature: com.google.javascript.rhino.jstype.NumberType.getDisplayName()
+Source: src/com/google/javascript/rhino/jstype/NumberType.java
+Original range: 100-103
+Documentation:
+
+Method code:
+100 |   @Override
+101 |   public String getDisplayName() {
+102 |     return "number";
+103 |   }
+
+===== M0229 =====
+Signature: com.google.javascript.rhino.jstype.NoType.isNoType()
+Source: src/com/google/javascript/rhino/jstype/NoType.java
+Original range: 73-76
+Documentation:
+
+Method code:
+73 |   @Override
+74 |   public boolean isNoType() {
+75 |     return true;
+76 |   }
+
+===== M0230 =====
+Signature: com.google.javascript.rhino.jstype.JSType.toMaybeUnionType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 254-256
+Documentation:
+/**
+   * Downcasts this to a UnionType, or returns null if this is not a UnionType.
+   *
+   * Named in honor of Haskell's Maybe type constructor.
+   */
+Method code:
+254 |   public UnionType toMaybeUnionType() {
+255 |     return null;
+256 |   }
+
+===== M0231 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isSubtypeHelper(JSType,JSType)
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 1014-1042
+Documentation:
+/**
+   * A generic implementation meant to be used as a helper for common subtyping
+   * cases.
+   */
+Method code:
+1014 |   static boolean isSubtypeHelper(JSType thisType, JSType thatType) {
+1015 |     // unknown
+1016 |     if (thatType.isUnknownType()) {
+1017 |       return true;
+1018 |     }
+1019 |     // equality
+1020 |     if (thisType.isEquivalentTo(thatType)) {
+1021 |       return true;
+1022 |     }
+1023 |     // all type
+1024 |     if (thatType.isAllType()) {
+1025 |       return true;
+1026 |     }
+1027 |     // unions
+1028 |     if (thatType.isUnionType()) {
+1029 |       UnionType union = thatType.toMaybeUnionType();
+1030 |       for (JSType element : union.alternates) {
+1031 |         if (thisType.isSubtype(element)) {
+1032 |           return true;
+1033 |         }
+1034 |       }
+1035 |     }
+1036 |     // proxy types
+1037 |     if (thatType instanceof ProxyObjectType) {
+1038 |       return thisType.isSubtype(
+1039 |           ((ProxyObjectType) thatType).getReferencedTypeInternal());
+1040 |     }
+1041 |     return false;
+1042 |   }
+
+===== M0232 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.handleUnresolvedType(ErrorReporter,boolean)
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 354-377
+Documentation:
+// type name.
+Method code:
+354 |   private void handleUnresolvedType(
+355 |       ErrorReporter t, boolean ignoreForwardReferencedTypes) {
+356 |     if (registry.isLastGeneration()) {
+357 |       boolean isForwardDeclared =
+358 |           ignoreForwardReferencedTypes &&
+359 |           registry.isForwardDeclaredType(reference);
+360 |       if (!isForwardDeclared && registry.isLastGeneration()) {
+361 |         t.warning("Bad type annotation. Unknown type " + reference,
+362 |             sourceName, lineno, charno);
+363 |       } else {
+364 |         setReferencedType(
+365 |             registry.getNativeObjectType(
+366 |                 JSTypeNative.NO_RESOLVED_TYPE));
+367 | 
+368 |         if (registry.isLastGeneration() && validator != null) {
+369 |           validator.apply(getReferencedType());
+370 |         }
+371 |       }
+372 | 
+373 |       setResolvedTypeInternal(getReferencedType());
+374 |     } else {
+375 |       setResolvedTypeInternal(this);
+376 |     }
+377 |   }
+
+===== M0233 =====
+Signature: com.google.javascript.rhino.jstype.RecordType.isSubtype(ObjectType,RecordType)
+Source: src/com/google/javascript/rhino/jstype/RecordType.java
+Original range: 245-284
+Documentation:
+/** Determines if typeA is a subtype of typeB */
+Method code:
+245 |   static boolean isSubtype(ObjectType typeA, RecordType typeB) {
+246 |     // typeA is a subtype of record type typeB iff:
+247 |     // 1) typeA has all the properties declared in typeB.
+248 |     // 2) And for each property of typeB,
+249 |     //    2a) if the property of typeA is declared, it must be equal
+250 |     //        to the type of the property of typeB,
+251 |     //    2b) otherwise, it must be a subtype of the property of typeB.
+252 |     //
+253 |     // To figure out why this is true, consider the following pseudo-code:
+254 |     // /** @type {{a: (Object,null)}} */ var x;
+255 |     // /** @type {{a: !Object}} */ var y;
+256 |     // var z = {a: {}};
+257 |     // x.a = null;
+258 |     //
+259 |     // y cannot be assigned to x, because line 4 would violate y's declared
+260 |     // properties. But z can be assigned to x. Even though z and y are the
+261 |     // same type, the properties of z are inferred--and so an assignment
+262 |     // to the property of z would not violate any restrictions on it.
+263 |     for (String property : typeB.properties.keySet()) {
+264 |       if (!typeA.hasProperty(property)) {
+265 |         return false;
+266 |       }
+267 | 
+268 |       JSType propA = typeA.getPropertyType(property);
+269 |       JSType propB = typeB.getPropertyType(property);
+270 |       if (!propA.isUnknownType() && !propB.isUnknownType()) {
+271 |         if (typeA.isPropertyTypeDeclared(property)) {
+272 |           if (!propA.isEquivalentTo(propB)) {
+273 |             return false;
+274 |           }
+275 |         } else {
+276 |           if (!propA.isSubtype(propB)) {
+277 |             return false;
+278 |           }
+279 |         }
+280 |       }
+281 |     }
+282 | 
+283 |     return true;
+284 |   }
+
+===== M0234 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.hashCode()
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 792-795
+Documentation:
+
+Method code:
+792 |   @Override
+793 |   public int hashCode() {
+794 |     return isInterface() ? getReferenceName().hashCode() : call.hashCode();
+795 |   }
+
+===== M0235 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.setPrototype(PrototypeObjectType,Node)
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 365-408
+Documentation:
+/**
+   * Sets the prototype.
+   * @param prototype the prototype. If this value is {@code null} it will
+   *        silently be discarded.
+   */
+Method code:
+365 |   boolean setPrototype(PrototypeObjectType prototype, Node propertyNode) {
+366 |     if (prototype == null) {
+367 |       return false;
+368 |     }
+369 |     // getInstanceType fails if the function is not a constructor
+370 |     if (isConstructor() && prototype == getInstanceType()) {
+371 |       return false;
+372 |     }
+373 | 
+374 |     PrototypeObjectType oldPrototype = prototypeSlot == null
+375 |         ? null : (PrototypeObjectType) prototypeSlot.getType();
+376 |     boolean replacedPrototype = oldPrototype != null;
+377 | 
+378 |     this.prototypeSlot = new Property("prototype", prototype, true,
+379 |         propertyNode == null ? source : propertyNode);
+380 |     prototype.setOwnerFunction(this);
+381 | 
+382 |     if (oldPrototype != null) {
+383 |       // Disassociating the old prototype makes this easier to debug--
+384 |       // we don't have to worry about two prototypes running around.
+385 |       oldPrototype.setOwnerFunction(null);
+386 |     }
+387 | 
+388 |     if (isConstructor() || isInterface()) {
+389 |       FunctionType superClass = getSuperClassConstructor();
+390 |       if (superClass != null) {
+391 |         superClass.addSubType(this);
+392 |       }
+393 | 
+394 |       if (isInterface()) {
+395 |         for (ObjectType interfaceType : getExtendedInterfaces()) {
+396 |           if (interfaceType.getConstructor() != null) {
+397 |             interfaceType.getConstructor().addSubType(this);
+398 |           }
+399 |         }
+400 |       }
+401 |     }
+402 | 
+403 |     if (replacedPrototype) {
+404 |       clearCachedValues();
+405 |     }
+406 | 
+407 |     return true;
+408 |   }
+
+===== M0236 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.isPropertyTypeDeclared(String)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 182-189
+Documentation:
+
+Method code:
+182 |   @Override
+183 |   public boolean isPropertyTypeDeclared(String property) {
+184 |     StaticSlot<JSType> slot = getSlot(property);
+185 |     if (slot == null) {
+186 |       return false;
+187 |     }
+188 |     return !slot.isTypeInferred();
+189 |   }
+
+===== M0237 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createParametersWithVarArgs(JSType...)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 1192-1194
+Documentation:
+/**
+   * Creates a tree hierarchy representing a typed argument list. The last
+   * parameter type is considered a variable length argument.
+   *
+   * @param parameterTypes the parameter types. The last element of this array
+   *     is considered a variable length argument.
+   * @return a tree hierarchy representing a typed argument list.
+   */
+Method code:
+1192 |   public Node createParametersWithVarArgs(JSType... parameterTypes) {
+1193 |     return createParameters(true, parameterTypes);
+1194 |   }
+
+===== M0238 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createFunctionType(JSType,boolean,JSType...)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 1236-1243
+Documentation:
+/**
+   * Creates a function type.
+   * @param returnType the function's return type
+   * @param lastVarArgs whether the last parameter type should be considered as
+   * an extensible var_args parameter
+   * @param parameterTypes the parameters' types
+   */
+Method code:
+1236 |   public FunctionType createFunctionType(JSType returnType,
+1237 |       boolean lastVarArgs, JSType... parameterTypes) {
+1238 |     if (lastVarArgs) {
+1239 |       return createFunctionTypeWithVarArgs(returnType, parameterTypes);
+1240 |     } else {
+1241 |       return createFunctionType(returnType, parameterTypes);
+1242 |     }
+1243 |   }
+
+===== M0239 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.detectImplicitPrototypeCycle()
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 164-184
+Documentation:
+/**
+   * Detects a cycle in the implicit prototype chain. This method accesses
+   * the {@link #getImplicitPrototype()} method and must therefore be
+   * invoked only after the object is sufficiently initialized to respond to
+   * calls to this method.<p>
+   *
+   * The method is not thread safe.<p>
+   *
+   * @return True iff an implicit prototype cycle was detected.
+   */
+Method code:
+164 |   final boolean detectImplicitPrototypeCycle() {
+165 |     // detecting cycle
+166 |     this.visited = true;
+167 |     ObjectType p = getImplicitPrototype();
+168 |     while (p != null) {
+169 |       if (p.visited) {
+170 |         return true;
+171 |       } else {
+172 |         p.visited = true;
+173 |       }
+174 |       p = p.getImplicitPrototype();
+175 |     }
+176 | 
+177 |     // clean up
+178 |     p = this;
+179 |     do {
+180 |       p.visited = false;
+181 |       p = p.getImplicitPrototype();
+182 |     } while (p != null);
+183 |     return false;
+184 |   }
+
+===== M0240 =====
+Signature: com.google.javascript.rhino.jstype.NamedType.lookupViaProperties(ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/NamedType.java
+Original range: 290-324
+Documentation:
+/**
+   * Resolves a type by looking up its first component in the scope, and
+   * subsequent components as properties. The scope must have been fully
+   * parsed and a symbol table constructed.
+   * @return The type of the symbol, or null if the type could not be found.
+   */
+Method code:
+290 |   private JSType lookupViaProperties( ErrorReporter t,
+291 |       StaticScope<JSType> enclosing) {
+292 |     String[] componentNames = reference.split("\\.", -1);
+293 |     if (componentNames[0].length() == 0) {
+294 |       return null;
+295 |     }
+296 |     StaticSlot<JSType> slot = enclosing.getSlot(componentNames[0]);
+297 |     if (slot == null) {
+298 |       return null;
+299 |     }
+300 |     // If the first component has a type of 'Unknown', then any type
+301 |     // names using it should be regarded as silently 'Unknown' rather than be
+302 |     // noisy about it.
+303 |     JSType slotType = slot.getType();
+304 |     if (slotType == null || slotType.isAllType() || slotType.isNoType()) {
+305 |       return null;
+306 |     }
+307 |     JSType value = getTypedefType(t, slot, componentNames[0]);
+308 |     if (value == null) {
+309 |       return null;
+310 |     }
+311 | 
+312 |     // resolving component by component
+313 |     for (int i = 1; i < componentNames.length; i++) {
+314 |       ObjectType parentClass = ObjectType.cast(value);
+315 |       if (parentClass == null) {
+316 |         return null;
+317 |       }
+318 |       if (componentNames[i].length() == 0) {
+319 |         return null;
+320 |       }
+321 |       value = parentClass.getPropertyType(componentNames[i]);
+322 |     }
+323 |     return value;
+324 |   }
+
+===== M0241 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.getReferenceName()
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 65-68
+Documentation:
+
+Method code:
+65 |   @Override
+66 |   public String getReferenceName() {
+67 |     return getConstructor().getReferenceName();
+68 |   }
+
+===== M0242 =====
+Signature: com.google.javascript.rhino.jstype.FunctionParamBuilder.hasVarArgs()
+Source: src/com/google/javascript/rhino/jstype/FunctionParamBuilder.java
+Original range: 139-142
+Documentation:
+
+Method code:
+139 |   public boolean hasVarArgs() {
+140 |     Node lastChild = root.getLastChild();
+141 |     return lastChild != null && lastChild.isVarArgs();
+142 |   }
+
+===== M0243 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.getInternalArrowType()
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 274-276
+Documentation:
+/** Gets the internal arrow type. For use by subclasses only. */
+Method code:
+274 |   ArrowType getInternalArrowType() {
+275 |     return call;
+276 |   }
+
+===== M0244 =====
+Signature: com.google.javascript.rhino.jstype.EnumType.getElementsType()
+Source: src/com/google/javascript/rhino/jstype/EnumType.java
+Original range: 123-125
+Documentation:
+/**
+   * Gets the elements' type.
+   */
+Method code:
+123 |   public EnumElementType getElementsType() {
+124 |     return elementsType;
+125 |   }
+
+===== M0245 =====
+Signature: com.google.javascript.rhino.Node.getLastChild()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 535-537
+Documentation:
+
+Method code:
+535 |   public Node getLastChild() {
+536 |     return last;
+537 |   }
+
+===== M0246 =====
+Signature: com.google.javascript.rhino.jstype.JSType.isNoObjectType()
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 152-154
+Documentation:
+
+Method code:
+152 |   public boolean isNoObjectType() {
+153 |     return false;
+154 |   }
+
+===== M0247 =====
+Signature: com.google.javascript.rhino.jstype.InstanceObjectType.getConstructor()
+Source: src/com/google/javascript/rhino/jstype/InstanceObjectType.java
+Original range: 80-83
+Documentation:
+
+Method code:
+80 |   @Override
+81 |   public FunctionType getConstructor() {
+82 |     return constructor;
+83 |   }
+
+===== M0248 =====
+Signature: com.google.javascript.rhino.jstype.AllType.AllType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/AllType.java
+Original range: 52-54
+Documentation:
+
+Method code:
+52 |   AllType(JSTypeRegistry registry) {
+53 |     super(registry);
+54 |   }
+
+===== M0249 =====
+Signature: com.google.javascript.rhino.jstype.UnionTypeBuilder.UnionTypeBuilder(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/UnionTypeBuilder.java
+Original range: 100-102
+Documentation:
+
+Method code:
+100 |   UnionTypeBuilder(JSTypeRegistry registry) {
+101 |     this(registry, DEFAULT_MAX_UNION_SIZE);
+102 |   }
+
+===== M0250 =====
+Signature: com.google.javascript.rhino.testing.MapBasedScope.MapBasedScope(Map<String, ? extends JSType>)
+Source: src/com/google/javascript/rhino/testing/MapBasedScope.java
+Original range: 56-62
+Documentation:
+
+Method code:
+56 |   public MapBasedScope(Map<String, ? extends JSType> namesToTypes) {
+57 |     for (Map.Entry<String, ? extends JSType> entry : namesToTypes.entrySet()) {
+58 |       slots.put(
+59 |           entry.getKey(),
+60 |           new SimpleSlot(entry.getKey(), entry.getValue(), false));
+61 |     }
+62 |   }
+
+===== M0251 =====
+Signature: com.google.javascript.rhino.jstype.JSType.safeResolve(JSType,ErrorReporter,StaticScope<JSType>)
+Source: src/com/google/javascript/rhino/jstype/JSType.java
+Original range: 1118-1121
+Documentation:
+/**
+   * A null-safe resolve.
+   * @see #resolve
+   */
+Method code:
+1118 |   static final JSType safeResolve(
+1119 |       JSType type, ErrorReporter t, StaticScope<JSType> scope) {
+1120 |     return type == null ? null : type.resolve(t, scope);
+1121 |   }
+
+===== M0252 =====
+Signature: com.google.javascript.rhino.jstype.NullType.getDisplayName()
+Source: src/com/google/javascript/rhino/jstype/NullType.java
+Original range: 107-110
+Documentation:
+
+Method code:
+107 |   @Override
+108 |   public String getDisplayName() {
+109 |     return "null";
+110 |   }
+
+===== M0253 =====
+Signature: com.google.javascript.rhino.jstype.ValueType.ValueType(JSTypeRegistry)
+Source: src/com/google/javascript/rhino/jstype/ValueType.java
+Original range: 48-50
+Documentation:
+
+Method code:
+48 |   ValueType(JSTypeRegistry registry) {
+49 |     super(registry);
+50 |   }
+
+===== M0254 =====
+Signature: com.google.javascript.rhino.jstype.ArrowType.hashCode()
+Source: src/com/google/javascript/rhino/jstype/ArrowType.java
+Original range: 184-204
+Documentation:
+
+Method code:
+184 |   @Override
+185 |   public int hashCode() {
+186 |     int hashCode = 0;
+187 |     if (returnType != null) {
+188 |       hashCode += returnType.hashCode();
+189 |     }
+190 |     if (returnTypeInferred) {
+191 |       hashCode += 1;
+192 |     }
+193 |     if (parameters != null) {
+194 |       Node param = parameters.getFirstChild();
+195 |       while (param != null) {
+196 |         JSType paramType = param.getJSType();
+197 |         if (paramType != null) {
+198 |           hashCode += paramType.hashCode();
+199 |         }
+200 |         param = param.getNext();
+201 |       }
+202 |     }
+203 |     return hashCode;
+204 |   }
+
+===== M0255 =====
+Signature: com.google.javascript.rhino.jstype.FunctionType.setInstanceType(ObjectType)
+Source: src/com/google/javascript/rhino/jstype/FunctionType.java
+Original range: 934-936
+Documentation:
+/**
+   * Sets the instance type. This should only be used for special
+   * native types.
+   */
+Method code:
+934 |   void setInstanceType(ObjectType instanceType) {
+935 |     typeOfThis = instanceType;
+936 |   }
+
+===== M0256 =====
+Signature: com.google.javascript.rhino.testing.Asserts.assertTypeEquals(JSType,JSType)
+Source: src/com/google/javascript/rhino/testing/Asserts.java
+Original range: 94-96
+Documentation:
+
+Method code:
+94 |   public static void assertTypeEquals(JSType a, JSType b) {
+95 |     assertTypeEquals("", a, b);
+96 |   }
+
+===== M0257 =====
+Signature: com.google.javascript.rhino.jstype.JSTypeRegistry.createOptionalType(JSType)
+Source: src/com/google/javascript/rhino/jstype/JSTypeRegistry.java
+Original range: 955-961
+Documentation:
+/**
+   * Creates a type representing optional values of the given type.
+   * @return the union of the type and the void type
+   */
+Method code:
+955 |   public JSType createOptionalType(JSType type) {
+956 |     if (type instanceof UnknownType || type.isAllType()) {
+957 |       return type;
+958 |     } else {
+959 |       return createUnionType(type, getNativeType(JSTypeNative.VOID_TYPE));
+960 |     }
+961 |   }
+
+===== M0258 =====
+Signature: com.google.javascript.rhino.jstype.PrototypeObjectType.setImplicitPrototype(ObjectType)
+Source: src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+Original range: 422-425
+Documentation:
+/**
+   * This should only be reset on the FunctionPrototypeType, only to fix an
+   * incorrectly established prototype chain due to the user having a mismatch
+   * in super class declaration, and only before properties on that type are
+   * processed.
+   */
+Method code:
+422 |   final void setImplicitPrototype(ObjectType implicitPrototype) {
+423 |     checkState(!hasCachedValues());
+424 |     this.implicitPrototypeFallback = implicitPrototype;
+425 |   }
+

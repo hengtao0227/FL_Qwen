@@ -1,0 +1,662 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline19b()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline19b()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 944,
+    "end_line": 957,
+    "comment": "",
+    "snippet": "  public void testInline19b() {\n    helperInlineReferenceToFunction(\n        \"var x = 1; var y = 2;\" +\n        \"function foo(a,b){y = a; x = b;}; \" +\n        \"function bar() { foo(x,y); }\",\n        \"var x = 1; var y = 2;\" +\n        \"function foo(a,b){y = a; x = b;}; \" +\n        \"function bar() {\" +\n           \"{var b$$inline_1=y;\" +\n            \"y = x;\" +\n            \"x = b$$inline_1;}\" +\n        \"}\",\n        \"foo\", INLINE_BLOCK);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInlineIntoLoop()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInlineIntoLoop()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 959,
+    "end_line": 985,
+    "comment": "",
+    "snippet": "  public void testInlineIntoLoop() {\n    helperInlineReferenceToFunction(\n        \"function foo(a){var b;return a;}; \" +\n        \"for(;1;){ foo(1); }\",\n        \"function foo(a){var b;return a;}; \" +\n        \"for(;1;){ {\" +\n            \"var b$$inline_1=void 0;1}}\",\n        \"foo\", INLINE_BLOCK);\n\n    helperInlineReferenceToFunction(\n        \"function foo(a){var b;return a;}; \" +\n        \"do{ foo(1); } while(1)\",\n        \"function foo(a){var b;return a;}; \" +\n        \"do{ {\" +\n            \"var b$$inline_1=void 0;1}}while(1)\",\n        \"foo\", INLINE_BLOCK);\n\n    helperInlineReferenceToFunction(\n        \"function foo(a){for(var b in c)return a;}; \" +\n        \"for(;1;){ foo(1); }\",\n        \"function foo(a){var b;for(b in c)return a;}; \" +\n        \"for(;1;){ {JSCompiler_inline_label_foo_2:{\" +\n            \"var b$$inline_1=void 0;for(b$$inline_1 in c){\" +\n              \"1;break JSCompiler_inline_label_foo_2\" +\n            \"}}}}\",\n        \"foo\", INLINE_BLOCK);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline13()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline13()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 864,
+    "end_line": 873,
+    "comment": "",
+    "snippet": "  public void testInline13() {\n    // Parameter has side-effects.\n    helperInlineReferenceToFunction(\n        \"function foo(a){return a;}; \" +\n        \"function x() { foo(x++); }\",\n        \"function foo(a){return a;}; \" +\n        \"function x() {{var a$$inline_0=x++;\" +\n            \"a$$inline_0}}\",\n        \"foo\", INLINE_BLOCK);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline14()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline14()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 875,
+    "end_line": 884,
+    "comment": "",
+    "snippet": "  public void testInline14() {\n    // Parameter has side-effects.\n    helperInlineReferenceToFunction(\n        \"function foo(a){return a+a;}; foo(x++);\",\n        \"function foo(a){return a+a;}; \" +\n            \"{var a$$inline_0=x++;\" +\n            \" a$$inline_0+\" +\n            \"a$$inline_0;}\",\n        \"foo\", INLINE_BLOCK);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline15()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline15()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 886,
+    "end_line": 895,
+    "comment": "",
+    "snippet": "  public void testInline15() {\n    // Parameter has mutable, references more than once.\n    helperInlineReferenceToFunction(\n        \"function foo(a){return a+a;}; foo(new Date());\",\n        \"function foo(a){return a+a;}; \" +\n            \"{var a$$inline_0=new Date();\" +\n            \" a$$inline_0+\" +\n            \"a$$inline_0;}\",\n        \"foo\", INLINE_BLOCK);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline16()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline16()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 897,
+    "end_line": 906,
+    "comment": "",
+    "snippet": "  public void testInline16() {\n    // Parameter is large, references more than once.\n    helperInlineReferenceToFunction(\n        \"function foo(a){return a+a;}; foo(function(){});\",\n        \"function foo(a){return a+a;}; \" +\n            \"{var a$$inline_0=function(){};\" +\n            \" a$$inline_0+\" +\n            \"a$$inline_0;}\",\n        \"foo\", INLINE_BLOCK);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline17()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline17()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 908,
+    "end_line": 915,
+    "comment": "",
+    "snippet": "  public void testInline17() {\n    // Parameter has side-effects.\n    helperInlineReferenceToFunction(\n        \"function foo(a){return true;}; foo(goo());\",\n        \"function foo(a){return true;};\" +\n            \"{var a$$inline_0=goo();true}\",\n        \"foo\", INLINE_BLOCK);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline18()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline18()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 917,
+    "end_line": 926,
+    "comment": "",
+    "snippet": "  public void testInline18() {\n    // This doesn't bring names into the global name space.\n    helperInlineReferenceToFunction(\n        \"function foo(a){var b;return a;}; \" +\n            \"function x() { foo(goo()); }\",\n            \"function foo(a){var b;return a;}; \" +\n            \"function x() {{var a$$inline_0=goo();\" +\n                \"var b$$inline_1;a$$inline_0}}\",\n        \"foo\", INLINE_BLOCK);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline19()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInline19()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 928,
+    "end_line": 942,
+    "comment": "",
+    "snippet": "  public void testInline19() {\n    // Properly alias.\n    helperInlineReferenceToFunction(\n        \"var x = 1; var y = 2;\" +\n        \"function foo(a,b){x = b; y = a;}; \" +\n        \"function bar() { foo(x,y); }\",\n        \"var x = 1; var y = 2;\" +\n        \"function foo(a,b){x = b; y = a;}; \" +\n        \"function bar() {\" +\n           \"{var a$$inline_0=x;\" +\n            \"x = y;\" +\n            \"y = a$$inline_0;}\" +\n        \"}\",\n        \"foo\", INLINE_BLOCK);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testBug1897706()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testBug1897706()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 1314,
+    "end_line": 1330,
+    "comment": "",
+    "snippet": "  public void testBug1897706() {\n    helperInlineReferenceToFunction(\n        \"function foo(a){}; foo(x())\",\n        \"function foo(a){}; {var a$$inline_0=x()}\",\n        \"foo\", INLINE_BLOCK);\n\n    helperInlineReferenceToFunction(\n        \"function foo(a){bar()}; foo(x())\",\n        \"function foo(a){bar()}; {var a$$inline_0=x();bar()}\",\n        \"foo\", INLINE_BLOCK);\n\n    helperInlineReferenceToFunction(\n        \"function foo(a,b){bar()}; foo(x(),y())\",\n        \"function foo(a,b){bar()};\" +\n        \"{var a$$inline_0=x();var b$$inline_1=y();bar()}\",\n        \"foo\", INLINE_BLOCK);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInlineFunctionWithInnerFunction5()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testInlineFunctionWithInnerFunction5()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 1023,
+    "end_line": 1031,
+    "comment": "",
+    "snippet": "  public void testInlineFunctionWithInnerFunction5() {\n    // Call with inner function statement.\n    helperInlineReferenceToFunction(\n        \"function foo(){function x() {var a; return true;} return x}; foo();\",\n        \"function foo(){function x(){var a;return true}return x};\" +\n            \"{var x$$inline_0 = function(){\" +\n            \"var a$$inline_1;return true};x$$inline_0}\",\n        \"foo\", INLINE_BLOCK);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutateWithParameters3()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutateWithParameters3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionToBlockMutatorTest.java",
+    "begin_line": 110,
+    "end_line": 117,
+    "comment": "",
+    "snippet": "  public void testMutateWithParameters3() {\n    // Parameter has side-effects.\n    helperMutate(\n        \"function foo(a){return a;}; \" +\n        \"function x() { foo(x++); }\",\n        \"{var a$$inline_0 = x++; a$$inline_0}\",\n        \"foo\", null);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutateCallInLoopVars1()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutateCallInLoopVars1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionToBlockMutatorTest.java",
+    "begin_line": 148,
+    "end_line": 162,
+    "comment": "",
+    "snippet": "  public void testMutateCallInLoopVars1() {\n    // baseline: outside a loop, the constant remains constant.\n    boolean callInLoop = false;\n    helperMutate(\n        \"function foo(a){var B = bar(); a;}; foo(1);\",\n        \"{var B$$inline_1=bar(); 1;}\",\n        \"foo\", null, false, callInLoop);\n    // ... in a loop, the constant-ness is removed.\n    // TODO(johnlenz): update this test to look for the const annotation.\n    callInLoop = true;\n    helperMutate(\n        \"function foo(a){var B = bar(); a;}; foo(1);\",\n        \"{var B$$inline_1 = bar(); 1;}\",\n        \"foo\", null, false, callInLoop);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutateInitializeUninitializedVars1()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutateInitializeUninitializedVars1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionToBlockMutatorTest.java",
+    "begin_line": 128,
+    "end_line": 133,
+    "comment": "",
+    "snippet": "  public void testMutateInitializeUninitializedVars1() {\n    helperMutate(\n        \"function foo(a){var b;return a;}; foo(1);\",\n        \"{var b$$inline_1=void 0;1}\",\n        \"foo\", null, false, true);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutateInitializeUninitializedVars2()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutateInitializeUninitializedVars2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionToBlockMutatorTest.java",
+    "begin_line": 135,
+    "end_line": 146,
+    "comment": "",
+    "snippet": "  public void testMutateInitializeUninitializedVars2() {\n    helperMutate(\n        \"function foo(a){for(var b in c)return a;}; foo(1);\",\n        \"{JSCompiler_inline_label_foo_2:\" +\n          \"{\" +\n            \"for(var b$$inline_1 in c){\" +\n                \"1;break JSCompiler_inline_label_foo_2\" +\n             \"}\" +\n          \"}\" +\n        \"}\",\n        \"foo\", null);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutateFunctionDefinition()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutateFunctionDefinition()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionToBlockMutatorTest.java",
+    "begin_line": 164,
+    "end_line": 171,
+    "comment": "",
+    "snippet": "  public void testMutateFunctionDefinition() {\n     // function declarations are rewritten as function\n     // expressions\n     helperMutate(\n        \"function foo(a){function g(){}}; foo(1);\",\n        \"{var g$$inline_1=function(){};}\",\n        \"foo\", null);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutate8()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionToBlockMutatorTest.testMutate8()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionToBlockMutatorTest.java",
+    "begin_line": 119,
+    "end_line": 126,
+    "comment": "",
+    "snippet": "  public void testMutate8() {\n    // Parameter has side-effects.\n    helperMutate(\n        \"function foo(a){return a+a;}; foo(x++);\",\n        \"{var a$$inline_0 = x++;\" +\n            \"a$$inline_0 + a$$inline_0;}\",\n        \"foo\", null);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testLoopWithFunctionWithFunction()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testLoopWithFunctionWithFunction()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 2199,
+    "end_line": 2232,
+    "comment": "",
+    "snippet": "  public void testLoopWithFunctionWithFunction() {\n    assumeMinimumCapture = true;\n    test(\"function _testLocalVariableInLoop_() {\\n\" +\n        \"  var result = 0;\\n\" +\n        \"  function foo() {\\n\" +\n        \"    var arr = [1, 2, 3, 4, 5];\\n\" +\n        \"    for (var i = 0, l = arr.length; i < l; i++) {\\n\" +\n        \"      var j = arr[i];\\n\" +\n        // don't inline this function, because the correct behavior depends\n        // captured values.\n        \"      (function() {\\n\" +\n        \"        var k = j;\\n\" +\n        \"        setTimeout(function() { result += k; }, 5 * i);\\n\" +\n        \"      })();\\n\" +\n        \"    }\\n\" +\n        \"  }\\n\" +\n        \"  foo();\\n\" +\n        \"}\",\n        \"function _testLocalVariableInLoop_(){\\n\" +\n        \"  var result=0;\\n\" +\n        \"  {\" +\n        \"  var arr$$inline_0=[1,2,3,4,5];\\n\" +\n        \"  var i$$inline_1=0;\\n\" +\n        \"  var l$$inline_2=arr$$inline_0.length;\\n\" +\n        \"  for(;i$$inline_1<l$$inline_2;i$$inline_1++){\\n\" +\n        \"    var j$$inline_3=arr$$inline_0[i$$inline_1];\\n\" +\n        \"    (function(){\\n\" +\n        \"       var k$$inline_4=j$$inline_3;\\n\" +\n        \"       setTimeout(function(){result+=k$$inline_4},5*i$$inline_1)\\n\" +\n        \"     })()\\n\" +\n        \"  }\\n\" +\n        \"  }\\n\" +\n        \"}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables16()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables16()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 842,
+    "end_line": 861,
+    "comment": "",
+    "snippet": "  public void testShadowVariables16() {\n    assumeMinimumCapture = false;\n    // Inline functions defined as a child of the CALL node.\n    test(\"var a=3;\" +\n         \"function foo(){return a}\" +\n         \"(function(){var a=5;(function(){foo()})()})()\",\n         \"var a=3;\" +\n         \"{var a$$inline_0=5;{a}}\"\n         );\n\n    assumeMinimumCapture = true;\n    // Inline functions defined as a child of the CALL node.\n    test(\"var a=3;\" +\n         \"function foo(){return a}\" +\n         \"(function(){var a=5;(function(){foo()})()})()\",\n         \"var a=3;\" +\n         \"{var a$$inline_1=5;{a}}\"\n         );\n\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables18()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables18()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 873,
+    "end_line": 882,
+    "comment": "",
+    "snippet": "  public void testShadowVariables18() {\n    test(\"var a=0;\" +\n        \"function bar(){return a+a}\" +\n        \"function foo(){var a=3;return bar()}\" +\n        \"function _goo(){var a=2;var x=foo();}\",\n\n        \"var a=0;\" +\n        \"function _goo(){var a$$2=2;var x;\" +\n        \"{var a$$inline_0=3;x=a+a}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testCostBasedInlining11()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testCostBasedInlining11()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 994,
+    "end_line": 1001,
+    "comment": "",
+    "snippet": "  public void testCostBasedInlining11() {\n    // With block inlining\n    test(\"function f(a){return a + a;}\" +\n         \"var a = f(f(1))\",\n         \"var a;\" +\n         \"{var a$$inline_0=1+1;\" +\n         \"a=a$$inline_0+a$$inline_0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testMixedModeInliningCosting3()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testMixedModeInliningCosting3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 527,
+    "end_line": 537,
+    "comment": "",
+    "snippet": "  public void testMixedModeInliningCosting3() {\n    // Do inline here because the function definition can be eliminated.\n    test(\n        \"function foo(a,b){return a+b+a+b+4+5+6+7+8+9+1+2+3+10}\" +\n        \"foo(1,2);\" +\n        \"foo(2,3,x())\",\n\n        \"1+2+1+2+4+5+6+7+8+9+1+2+3+10;\" +\n        \"{var JSCompiler_inline_anon_param_2=x();\" +\n        \"2+3+2+3+4+5+6+7+8+9+1+2+3+10}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineNeverMutateConstants()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineNeverMutateConstants()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 616,
+    "end_line": 620,
+    "comment": "",
+    "snippet": "  public void testInlineNeverMutateConstants() {\n    test(\"function f(x){return x=1}f(undefined)\",\n         \"{var x$$inline_0=undefined;\" +\n         \"x$$inline_0=1}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineWithThis7()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineWithThis7()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1892,
+    "end_line": 1899,
+    "comment": "",
+    "snippet": "  public void testInlineWithThis7() {\n    assumeStrictThis = true;\n    // In strict mode, \"this\" is never coerced so we can use the provided value.\n    test(\"function f(a){a=1;this} f.call();\",\n         \"{var a$$inline_0=void 0; a$$inline_0=1; void 0;}\");\n    test(\"function f(a){a=1;this} f.call(x, x);\",\n         \"{var a$$inline_0=x; a$$inline_0=1; x;}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testAnonymous1()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testAnonymous1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 2167,
+    "end_line": 2179,
+    "comment": "",
+    "snippet": "  public void testAnonymous1() {\n    assumeMinimumCapture = false;\n    test(\"(function(){var a=10;(function(){var b=a;a++;alert(b)})()})();\",\n         \"{var a$$inline_0=10;\" +\n         \"{var b$$inline_1=a$$inline_0;\" +\n         \"a$$inline_0++;alert(b$$inline_1)}}\");\n\n    assumeMinimumCapture = true;\n    test(\"(function(){var a=10;(function(){var b=a;a++;alert(b)})()})();\",\n        \"{var a$$inline_2=10;\" +\n        \"{var b$$inline_0=a$$inline_2;\" +\n        \"a$$inline_2++;alert(b$$inline_0)}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testAnonymous3()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testAnonymous3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 2185,
+    "end_line": 2196,
+    "comment": "",
+    "snippet": "  public void testAnonymous3() {\n    // Introducing a new value into is tricky\n    assumeMinimumCapture = false;\n    testSame(\"(function(){var a=10;(function(){arguments;})()})();\");\n\n    assumeMinimumCapture = true;\n    test(\"(function(){var a=10;(function(){arguments;})()})();\",\n         \"{var a$$inline_0=10;(function(){arguments;})();}\");\n\n    test(\"(function(){(function(){arguments;})()})();\",\n        \"{(function(){arguments;})()}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables1()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 676,
+    "end_line": 689,
+    "comment": "",
+    "snippet": "  public void testShadowVariables1() {\n    // The Normalize pass now guarantees that that globals are never shadowed\n    // by locals.\n\n    // \"foo\" is inlined here as its parameter \"a\" doesn't conflict.\n    // \"bar\" is assigned a new name.\n    test(\"var a=0;\" +\n         \"function foo(a){return 3+a}\" +\n         \"function bar(){var a=foo(4)}\" +\n         \"bar();\",\n\n         \"var a=0;\" +\n         \"{var a$$inline_0=3+4}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables3()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 704,
+    "end_line": 713,
+    "comment": "",
+    "snippet": "  public void testShadowVariables3() {\n    // \"foo\" is inlined into exported \"_bar\", aliasing foo's \"a\".\n    test(\"var a=0;\" +\n        \"function foo(){var a=2;return 3+a}\" +\n        \"function _bar(){a=foo()}\",\n\n        \"var a=0;\" +\n        \"function _bar(){{var a$$inline_0=2;\" +\n        \"a=3+a$$inline_0}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables6()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables6()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 736,
+    "end_line": 744,
+    "comment": "",
+    "snippet": "  public void testShadowVariables6() {\n    test(\"var a=0;\" +\n        \"function foo(){var a=4;return 3+a}\" +\n        \"function _bar(a){a=foo(4)}\",\n\n        \"var a=0;function _bar(a$$2){{\" +\n        \"var a$$inline_0=4;\" +\n        \"a$$2=3+a$$inline_0}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables7()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testShadowVariables7()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 746,
+    "end_line": 762,
+    "comment": "",
+    "snippet": "  public void testShadowVariables7() {\n    assumeMinimumCapture = false;\n    test(\"var a=3;\" +\n         \"function foo(){return a}\" +\n         \"(function(){var a=5;(function(){foo()})()})()\",\n         \"var a=3;\" +\n         \"{var a$$inline_0=5;{a}}\"\n         );\n\n    assumeMinimumCapture = true;\n    test(\"var a=3;\" +\n         \"function foo(){return a}\" +\n         \"(function(){var a=5;(function(){foo()})()})()\",\n         \"var a=3;\" +\n         \"{var a$$inline_1=5;{a}}\"\n         );\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testFunctionExpressionCallInlining11b()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testFunctionExpressionCallInlining11b()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1676,
+    "end_line": 1690,
+    "comment": "",
+    "snippet": "  public void testFunctionExpressionCallInlining11b() {\n    assumeMinimumCapture = false;\n    // Can't inline functions that return inner functions and have local names.\n    testSame(\"((function(){var a; return function(){foo()}})())();\");\n\n    assumeMinimumCapture = true;\n    test(\n        \"((function(){var a; return function(){foo()}})())();\",\n\n        \"{var JSCompiler_inline_result$$0;\" +\n        \"var a$$inline_1;\" +\n        \"JSCompiler_inline_result$$0=function(){foo()};}\" +\n        \"JSCompiler_inline_result$$0()\");\n\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexInlineNoResultNoParamCall3()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexInlineNoResultNoParamCall3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1206,
+    "end_line": 1215,
+    "comment": "",
+    "snippet": "  public void testComplexInlineNoResultNoParamCall3() {\n    // We now allow vars in the global space.\n    //   Don't inline into vars into global scope.\n    //   testSame(\"function f(){a();b();var z=1+1}f()\");\n\n    // But do inline into functions\n    test(\"function f(){a();b();var z=1+1}function _foo(){f()}\",\n         \"function _foo(){{a();b();var z$$inline_0=1+1}}\");\n\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testCostBasedInlining9()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testCostBasedInlining9()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 973,
+    "end_line": 982,
+    "comment": "",
+    "snippet": "  public void testCostBasedInlining9() {\n    // Here both direct and block inlining is used.  The call to f as a\n    // parameter is inlined directly, which the call to f with f as a parameter\n    // is inlined using block inlining.\n    test(\"function f(a){return 1 + a + a;}\" +\n         \"var a = f(f(1));\",\n         \"var a;\" +\n         \"{var a$$inline_0=1+1+1;\" +\n         \"a=1+a$$inline_0+a$$inline_0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testMethodWithFunctionWithFunction()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testMethodWithFunctionWithFunction()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 2234,
+    "end_line": 2258,
+    "comment": "",
+    "snippet": "  public void testMethodWithFunctionWithFunction() {\n    assumeMinimumCapture = true;\n    test(\"function _testLocalVariable_() {\\n\" +\n        \"  var result = 0;\\n\" +\n        \"  function foo() {\\n\" +\n        \"      var j = [i];\\n\" +\n        \"      (function(j) {\\n\" +\n        \"        setTimeout(function() { result += j; }, 5 * i);\\n\" +\n        \"      })(j);\\n\" +\n        \"      j = null;\" +\n        \"  }\\n\" +\n        \"  foo();\\n\" +\n        \"}\",\n        \"function _testLocalVariable_(){\\n\" +\n        \"  var result=0;\\n\" +\n        \"  {\\n\" +\n        \"  var j$$inline_2=[i];\\n\" +\n        \"  {\\n\" +\n        \"  var j$$inline_0=j$$inline_2;\\n\" +  // this temp is needed.\n        \"  setTimeout(function(){result+=j$$inline_0},5*i);\\n\" +\n        \"  }\\n\" +\n        \"  j$$inline_2=null\\n\" + // because this value can be modified later.\n        \"  }\\n\" +\n        \"}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testFunctionExpressionYCombinator()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testFunctionExpressionYCombinator()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1902,
+    "end_line": 1971,
+    "comment": "// http://en.wikipedia.org/wiki/Fixed_point_combinator#Y_combinator\r",
+    "snippet": "  public void testFunctionExpressionYCombinator() {\n    assumeMinimumCapture = false;\n    testSame(\n        \"var factorial = ((function(M) {\\n\" +\n        \"      return ((function(f) {\\n\" +\n        \"                 return M(function(arg) {\\n\" +\n        \"                            return (f(f))(arg);\\n\" +\n        \"                            })\\n\" +\n        \"               })\\n\" +\n        \"              (function(f) {\\n\" +\n        \"                 return M(function(arg) {\\n\" +\n        \"                            return (f(f))(arg);\\n\" +\n        \"                           })\\n\" +\n        \"                 }));\\n\" +\n        \"     })\\n\" +\n        \"    (function(f) {\\n\" +\n        \"       return function(n) {\\n\" +\n        \"        if (n === 0)\\n\" +\n        \"          return 1;\\n\" +\n        \"        else\\n\" +\n        \"          return n * f(n - 1);\\n\" +\n        \"       };\\n\" +\n        \"     }));\\n\" +\n        \"\\n\" +\n        \"factorial(5)\\n\");\n\n    assumeMinimumCapture = true;\n    test(\n        \"var factorial = ((function(M) {\\n\" +\n        \"      return ((function(f) {\\n\" +\n        \"                 return M(function(arg) {\\n\" +\n        \"                            return (f(f))(arg);\\n\" +\n        \"                            })\\n\" +\n        \"               })\\n\" +\n        \"              (function(f) {\\n\" +\n        \"                 return M(function(arg) {\\n\" +\n        \"                            return (f(f))(arg);\\n\" +\n        \"                           })\\n\" +\n        \"                 }));\\n\" +\n        \"     })\\n\" +\n        \"    (function(f) {\\n\" +\n        \"       return function(n) {\\n\" +\n        \"        if (n === 0)\\n\" +\n        \"          return 1;\\n\" +\n        \"        else\\n\" +\n        \"          return n * f(n - 1);\\n\" +\n        \"       };\\n\" +\n        \"     }));\\n\" +\n        \"\\n\" +\n        \"factorial(5)\\n\",\n        \"var factorial;\\n\" +\n        \"{\\n\" +\n        \"var M$$inline_4 = function(f$$2) {\\n\" +\n        \"  return function(n){if(n===0)return 1;else return n*f$$2(n-1)}\\n\" +\n        \"};\\n\" +\n        \"{\\n\" +\n        \"var f$$inline_0=function(f$$inline_7){\\n\" +\n        \"  return M$$inline_4(\\n\" +\n        \"    function(arg$$inline_8){\\n\" +\n        \"      return f$$inline_7(f$$inline_7)(arg$$inline_8)\\n\" +\n        \"     })\\n\" +\n        \"};\\n\" +\n        \"factorial=M$$inline_4(\\n\" +\n        \"  function(arg$$inline_1){\\n\" +\n        \"    return f$$inline_0(f$$inline_0)(arg$$inline_1)\\n\" +\n        \"});\\n\" +\n        \"}\\n\" +\n        \"}\" +\n        \"factorial(5)\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexInlineVars7()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexInlineVars7()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1318,
+    "end_line": 1326,
+    "comment": "",
+    "snippet": "  public void testComplexInlineVars7() {\n    test(\"function f(x,y){if (x) return y(); else return true;}\" +\n         \"var b=1;var z=f(1,b)\",\n         \"var b=1;var z;\" +\n         \"{JSCompiler_inline_label_f_2:{if(1){z=b();\" +\n         \"break JSCompiler_inline_label_f_2\" +\n         \"}else{\" +\n         \"z=true;break JSCompiler_inline_label_f_2}z=void 0}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexFunctionWithFunctionDefinition2a()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexFunctionWithFunctionDefinition2a()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1516,
+    "end_line": 1528,
+    "comment": "",
+    "snippet": "  public void testComplexFunctionWithFunctionDefinition2a() {\n    assumeMinimumCapture = false;\n\n    // Don't inline if local names might be captured.\n    testSame(\"(function(){\" +\n        \"var f = function(a){call(function(){return a})};f()})()\");\n\n    assumeMinimumCapture = true;\n\n    test(\"(function(){\" +\n         \"var f = function(a){call(function(){return a})};f()})()\",\n         \"{{var a$$inline_0=void 0;call(function(){return a$$inline_0})}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexInline7()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexInline7()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1268,
+    "end_line": 1274,
+    "comment": "",
+    "snippet": "  public void testComplexInline7() {\n    test(\"function f(x,y){if (x) return y(); else return true;}\" +\n         \"var b=1;z=f(1,b)\",\n         \"var b=1;{JSCompiler_inline_label_f_2:{if(1){z=b();\" +\n         \"break JSCompiler_inline_label_f_2}else{z=true;\" +\n         \"break JSCompiler_inline_label_f_2}z=void 0}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testFunctionExpressionOmega()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testFunctionExpressionOmega()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1756,
+    "end_line": 1761,
+    "comment": "",
+    "snippet": "  public void testFunctionExpressionOmega() {\n    // ... with unused recursive name.\n    test(\"(function (f){f(f)})(function(f){f(f)})\",\n         \"{var f$$inline_0=function(f$$1){f$$1(f$$1)};\" +\n          \"{{f$$inline_0(f$$inline_0)}}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions15b()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions15b()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 233,
+    "end_line": 258,
+    "comment": "",
+    "snippet": "  public void testInlineFunctions15b() {\n    assumeMinimumCapture = false;\n\n    // closure factories: don't inline closure with locals into global scope.\n    test(\"function foo(){var x;return function(a){return a+1}}\" +\n         \"var b=function(){return c};\" +\n         \"var d=b()+foo()\",\n\n         \"function foo(){var x;return function(a){return a+1}}\" +\n         \"var d=c+foo()\");\n\n    assumeMinimumCapture = true;\n\n    test(\"function foo(){var x;return function(a){return a+1}}\" +\n         \"var b=function(){return c};\" +\n         \"var d=b()+foo()\",\n\n         \"var JSCompiler_temp_const$$0 = c;\\n\" +\n         \"{\\n\" +\n         \"var JSCompiler_inline_result$$1;\\n\" +\n         \"var x$$inline_2;\\n\" +\n         \"JSCompiler_inline_result$$1 = \" +\n         \"    function(a$$inline_3){ return a$$inline_3+1 };\\n\" +\n         \"}\" +\n         \"var d=JSCompiler_temp_const$$0 + JSCompiler_inline_result$$1\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions15d()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions15d()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 282,
+    "end_line": 310,
+    "comment": "",
+    "snippet": "  public void testInlineFunctions15d() {\n    assumeMinimumCapture = false;\n\n    // closure factories: don't inline functions with vars.\n    test(\"function foo(){var x; return function(a){return a+1}}\" +\n         \"var b=function(){return c};\" +\n         \"function _x(){ var d=b()+foo() }\",\n\n         \"function foo(){var x; return function(a){return a+1}}\" +\n         \"function _x(){ var d=c+foo() }\");\n\n    assumeMinimumCapture = true;\n\n    // closure factories: don't inline functions with vars.\n    test(\"function foo(){var x; return function(a){return a+1}}\" +\n         \"var b=function(){return c};\" +\n         \"function _x(){ var d=b()+foo() }\",\n\n         \"function _x() { \\n\" +\n         \"  var JSCompiler_temp_const$$0 = c;\\n\" +\n         \"  {\\n\" +\n         \"  var JSCompiler_inline_result$$1;\\n\" +\n         \"  var x$$inline_2;\\n\" +\n         \"  JSCompiler_inline_result$$1 = \" +\n         \"      function(a$$inline_3) {return a$$inline_3+1};\\n\" +\n         \"  }\\n\" +\n         \"  var d = JSCompiler_temp_const$$0+JSCompiler_inline_result$$1\\n\" +\n         \"}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions16a()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions16a()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 312,
+    "end_line": 325,
+    "comment": "",
+    "snippet": "  public void testInlineFunctions16a() {\n    assumeMinimumCapture = false;\n\n    testSame(\"function foo(b){return window.bar(function(){c(b)})}\" +\n         \"var d=foo(e)\");\n\n    assumeMinimumCapture = true;\n\n    test(\n        \"function foo(b){return window.bar(function(){c(b)})}\" +\n        \"var d=foo(e)\",\n        \"var d;{var b$$inline_0=e;\" +\n        \"d=window.bar(function(){c(b$$inline_0)})}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testBug4944818()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testBug4944818()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 2076,
+    "end_line": 2111,
+    "comment": "",
+    "snippet": "  public void testBug4944818() {\n    test(\n        \"var getDomServices_ = function(self) {\\n\" +\n        \"  if (!self.domServices_) {\\n\" +\n        \"    self.domServices_ = goog$component$DomServices.get(\" +\n        \"        self.appContext_);\\n\" +\n        \"  }\\n\" +\n        \"\\n\" +\n        \"  return self.domServices_;\\n\" +\n        \"};\\n\" +\n        \"\\n\" +\n        \"var getOwnerWin_ = function(self) {\\n\" +\n        \"  return getDomServices_(self).getDomHelper().getWindow();\\n\" +\n        \"};\\n\" +\n        \"\\n\" +\n        \"HangoutStarter.prototype.launchHangout = function() {\\n\" +\n        \"  var self = a.b;\\n\" +\n        \"  var myUrl = new goog.Uri(getOwnerWin_(self).location.href);\\n\" +\n        \"};\",\n        \"HangoutStarter.prototype.launchHangout = function() { \" +\n        \"  var self$$2 = a.b;\" +\n        \"  var JSCompiler_temp_const$$0 = goog.Uri;\" +\n        \"  {\" +\n        \"  var JSCompiler_inline_result$$1;\" +\n        \"  var self$$inline_2 = self$$2;\" +\n        \"  if (!self$$inline_2.domServices_) {\" +\n        \"    self$$inline_2.domServices_ = goog$component$DomServices.get(\" +\n        \"        self$$inline_2.appContext_);\" +\n        \"  }\" +\n        \"  JSCompiler_inline_result$$1=self$$inline_2.domServices_;\" +\n        \"  }\" +\n        \"  var myUrl = new JSCompiler_temp_const$$0(\" +\n        \"      JSCompiler_inline_result$$1.getDomHelper().\" +\n        \"          getWindow().location.href)\" +\n        \"}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexSample()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexSample()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1391,
+    "end_line": 1439,
+    "comment": "",
+    "snippet": "  public void testComplexSample() {\n    String result = \"\" +\n      \"{{\" +\n      \"var styleSheet$$inline_2=null;\" +\n      \"if(goog$userAgent$IE)\" +\n        \"styleSheet$$inline_2=0;\" +\n      \"else \" +\n        \"var head$$inline_3=0;\" +\n      \"{\" +\n        \"var element$$inline_4=\" +\n            \"styleSheet$$inline_2;\" +\n        \"var stylesString$$inline_5=a;\" +\n        \"if(goog$userAgent$IE)\" +\n          \"element$$inline_4.cssText=\" +\n              \"stylesString$$inline_5;\" +\n        \"else \" +\n        \"{\" +\n          \"var propToSet$$inline_6=\" +\n              \"\\\"innerText\\\";\" +\n          \"element$$inline_4[\" +\n              \"propToSet$$inline_6]=\" +\n                  \"stylesString$$inline_5\" +\n        \"}\" +\n      \"}\" +\n      \"styleSheet$$inline_2\" +\n      \"}}\";\n\n    test(\"var foo = function(stylesString, opt_element) { \" +\n        \"var styleSheet = null;\" +\n        \"if (goog$userAgent$IE)\" +\n          \"styleSheet = 0;\" +\n        \"else \" +\n          \"var head = 0;\" +\n        \"\" +\n        \"goo$zoo(styleSheet, stylesString);\" +\n        \"return styleSheet;\" +\n     \" };\\n \" +\n\n     \"var goo$zoo = function(element, stylesString) {\" +\n        \"if (goog$userAgent$IE)\" +\n          \"element.cssText = stylesString;\" +\n        \"else {\" +\n          \"var propToSet = 'innerText';\" +\n          \"element[propToSet] = stylesString;\" +\n        \"}\" +\n      \"};\" +\n      \"(function(){foo(a,b);})();\",\n     result);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified1()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 547,
+    "end_line": 552,
+    "comment": "",
+    "snippet": "  public void testNoInlineIfParametersModified1() {\n    // Assignment\n    test(\"function f(x){return x=1}f(undefined)\",\n         \"{var x$$inline_0=undefined;\" +\n         \"x$$inline_0=1}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified2()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 554,
+    "end_line": 558,
+    "comment": "",
+    "snippet": "  public void testNoInlineIfParametersModified2() {\n    test(\"function f(x){return (x)=1;}f(2)\",\n         \"{var x$$inline_0=2;\" +\n         \"x$$inline_0=1}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified3()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 560,
+    "end_line": 565,
+    "comment": "",
+    "snippet": "  public void testNoInlineIfParametersModified3() {\n    // Assignment variant.\n    test(\"function f(x){return x*=2}f(2)\",\n         \"{var x$$inline_0=2;\" +\n         \"x$$inline_0*=2}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified4()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified4()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 567,
+    "end_line": 573,
+    "comment": "",
+    "snippet": "  public void testNoInlineIfParametersModified4() {\n    // Assignment in if.\n    test(\"function f(x){return x?(x=2):0}f(2)\",\n         \"{var x$$inline_0=2;\" +\n         \"x$$inline_0?(\" +\n         \"x$$inline_0=2):0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified5()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified5()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 575,
+    "end_line": 580,
+    "comment": "",
+    "snippet": "  public void testNoInlineIfParametersModified5() {\n    // Assignment in if, multiple params\n    test(\"function f(x,y){return x?(y=2):0}f(2,undefined)\",\n         \"{var y$$inline_1=undefined;2?(\" +\n         \"y$$inline_1=2):0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified6()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified6()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 582,
+    "end_line": 586,
+    "comment": "",
+    "snippet": "  public void testNoInlineIfParametersModified6() {\n    test(\"function f(x,y){return x?(y=2):0}f(2)\",\n         \"{var y$$inline_1=void 0;2?(\" +\n         \"y$$inline_1=2):0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified7()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified7()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 588,
+    "end_line": 594,
+    "comment": "",
+    "snippet": "  public void testNoInlineIfParametersModified7() {\n    // Increment\n    test(\"function f(a){return++a<++a}f(1)\",\n         \"{var a$$inline_0=1;\" +\n         \"++a$$inline_0<\" +\n         \"++a$$inline_0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testIssue423()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testIssue423()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 2113,
+    "end_line": 2165,
+    "comment": "",
+    "snippet": "  public void testIssue423() {\n    assumeMinimumCapture = false;\n    test(\n        \"(function($) {\\n\" +\n        \"  $.fn.multicheck = function(options) {\\n\" +\n        \"    initialize.call(this, options);\\n\" +\n        \"  };\\n\" +\n        \"\\n\" +\n        \"  function initialize(options) {\\n\" +\n        \"    options.checkboxes = $(this).siblings(':checkbox');\\n\" +\n        \"    preload_check_all.call(this);\\n\" +\n        \"  }\\n\" +\n        \"\\n\" +\n        \"  function preload_check_all() {\\n\" +\n        \"    $(this).data('checkboxes');\\n\" +\n        \"  }\\n\" +\n        \"})(jQuery)\",\n        \"(function($){\" +\n        \"  $.fn.multicheck=function(options$$1){\" +\n        \"    {\" +\n        \"     options$$1.checkboxes=$(this).siblings(\\\":checkbox\\\");\" +\n        \"     {\" +\n        \"       $(this).data(\\\"checkboxes\\\")\" +\n        \"     }\" +\n        \"    }\" +\n        \"  }\" +\n        \"})(jQuery)\");\n\n    assumeMinimumCapture = true;\n    test(\n        \"(function($) {\\n\" +\n        \"  $.fn.multicheck = function(options) {\\n\" +\n        \"    initialize.call(this, options);\\n\" +\n        \"  };\\n\" +\n        \"\\n\" +\n        \"  function initialize(options) {\\n\" +\n        \"    options.checkboxes = $(this).siblings(':checkbox');\\n\" +\n        \"    preload_check_all.call(this);\\n\" +\n        \"  }\\n\" +\n        \"\\n\" +\n        \"  function preload_check_all() {\\n\" +\n        \"    $(this).data('checkboxes');\\n\" +\n        \"  }\\n\" +\n        \"})(jQuery)\",\n        \"{var $$$inline_0=jQuery;\\n\" +\n        \"$$$inline_0.fn.multicheck=function(options$$inline_4){\\n\" +\n        \"  {options$$inline_4.checkboxes=\" +\n            \"$$$inline_0(this).siblings(\\\":checkbox\\\");\\n\" +\n        \"  {$$$inline_0(this).data(\\\"checkboxes\\\")}\" +\n        \"  }\\n\" +\n        \"}\\n\" +\n        \"}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexFunctionWithFunctionDefinition2()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexFunctionWithFunctionDefinition2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1503,
+    "end_line": 1514,
+    "comment": "",
+    "snippet": "  public void testComplexFunctionWithFunctionDefinition2() {\n    assumeMinimumCapture = false;\n\n    // Don't inline if local names might be captured.\n    testSame(\"function f(a){call(function(){return})}f()\");\n\n    assumeMinimumCapture = true;\n\n    test(\"(function(){\" +\n         \"var f = function(a){call(function(){return a})};f()})()\",\n         \"{{var a$$inline_0=void 0;call(function(){return a$$inline_0})}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexFunctionWithFunctionDefinition3()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testComplexFunctionWithFunctionDefinition3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1530,
+    "end_line": 1541,
+    "comment": "",
+    "snippet": "  public void testComplexFunctionWithFunctionDefinition3() {\n    assumeMinimumCapture = false;\n\n    // Don't inline if local names might need to be captured.\n    testSame(\"function f(){var a; call(function(){return a})}f()\");\n\n    assumeMinimumCapture = true;\n\n    test(\"function f(){var a; call(function(){return a})}f()\",\n         \"{var a$$inline_0;call(function(){return a$$inline_0})}\");\n\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testDecomposeFunctionExpressionInCall()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testDecomposeFunctionExpressionInCall()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1552,
+    "end_line": 1573,
+    "comment": "",
+    "snippet": "  public void testDecomposeFunctionExpressionInCall() {\n    test(\n        \"(function(map){descriptions_=map})(\\n\" +\n           \"function(){\\n\" +\n              \"var ret={};\\n\" +\n              \"ret[ONE]='a';\\n\" +\n              \"ret[TWO]='b';\\n\" +\n              \"return ret\\n\" +\n           \"}()\\n\" +\n        \");\",\n        \"{\" +\n        \"var JSCompiler_inline_result$$0;\" +\n        \"var ret$$inline_1={};\\n\" +\n        \"ret$$inline_1[ONE]='a';\\n\" +\n        \"ret$$inline_1[TWO]='b';\\n\" +\n        \"JSCompiler_inline_result$$0 = ret$$inline_1;\\n\" +\n        \"}\" +\n        \"{\" +\n        \"descriptions_=JSCompiler_inline_result$$0;\" +\n        \"}\"\n        );\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineNeverOverrideNewValues()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineNeverOverrideNewValues()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 622,
+    "end_line": 626,
+    "comment": "",
+    "snippet": "  public void testInlineNeverOverrideNewValues() {\n    test(\"function f(a){return++a<++a}f(1)\",\n        \"{var a$$inline_0=1;\" +\n        \"++a$$inline_0<++a$$inline_0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineBlockMutableArgs1()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineBlockMutableArgs1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 652,
+    "end_line": 656,
+    "comment": "",
+    "snippet": "  public void testInlineBlockMutableArgs1() {\n    test(\"function foo(x){x+x}foo([])\",\n         \"{var x$$inline_0=[];\" +\n         \"x$$inline_0+x$$inline_0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineBlockMutableArgs2()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineBlockMutableArgs2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 658,
+    "end_line": 662,
+    "comment": "",
+    "snippet": "  public void testInlineBlockMutableArgs2() {\n    test(\"function foo(x){x+x}foo(new Date)\",\n         \"{var x$$inline_0=new Date;\" +\n         \"x$$inline_0+x$$inline_0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineBlockMutableArgs3()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineBlockMutableArgs3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 664,
+    "end_line": 668,
+    "comment": "",
+    "snippet": "  public void testInlineBlockMutableArgs3() {\n    test(\"function foo(x){x+x}foo(true&&new Date)\",\n         \"{var x$$inline_0=true&&new Date;\" +\n         \"x$$inline_0+x$$inline_0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineBlockMutableArgs4()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineBlockMutableArgs4()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 670,
+    "end_line": 674,
+    "comment": "",
+    "snippet": "  public void testInlineBlockMutableArgs4() {\n    test(\"function foo(x){x+x}foo({})\",\n         \"{var x$$inline_0={};\" +\n         \"x$$inline_0+x$$inline_0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions10()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions10()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 182,
+    "end_line": 190,
+    "comment": "",
+    "snippet": "  public void testInlineFunctions10() {\n    test(\"function INC(x){return x++}\" +\n         \"var y=INC(i);y=INC(i)\",\n         \"var y;\" +\n         \"{var x$$inline_0=i;\" +\n         \"y=x$$inline_0++}\" +\n         \"{var x$$inline_2=i;\" +\n         \"y=x$$inline_2++}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions13()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions13()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 208,
+    "end_line": 213,
+    "comment": "",
+    "snippet": "  public void testInlineFunctions13() {\n    // inline as block if the input parameter has side-effects.\n    test(\"function f(x){return x}\" +\n         \"var y=f(i++)\",\n         \"var y;{var x$$inline_0=i++;y=x$$inline_0}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions22()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions22()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 373,
+    "end_line": 385,
+    "comment": "",
+    "snippet": "  public void testInlineFunctions22() {\n    // Another tricky case ... test nested compiler inlines\n    test(\"function plex(a){if(a) return 0;else return 1;}\" +\n         \"function foo(a, b){return bar(a+b)}\" +\n         \"function bar(d){return plex(d)}\" +\n         \"var d=foo(1,2)\",\n\n         \"var d;{JSCompiler_inline_label_plex_1:{\" +\n         \"if(1+2){\" +\n         \"d=0;break JSCompiler_inline_label_plex_1}\" +\n         \"else{\" +\n         \"d=1;break JSCompiler_inline_label_plex_1}d=void 0}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions23()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions23()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 387,
+    "end_line": 400,
+    "comment": "",
+    "snippet": "  public void testInlineFunctions23() {\n    // Test both orderings again\n    test(\"function complex(a){if(a) return 0;else return 1;}\" +\n         \"function bar(d){return complex(d)}\" +\n         \"function foo(a, b){return bar(a+b)}\" +\n         \"var d=foo(1,2)\",\n\n         \"var d;{JSCompiler_inline_label_complex_1:{\" +\n         \"if(1+2){\" +\n         \"d=0;break JSCompiler_inline_label_complex_1\" +\n         \"}else{\" +\n         \"d=1;break JSCompiler_inline_label_complex_1\" +\n         \"}d=void 0}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions9()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions9()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 174,
+    "end_line": 180,
+    "comment": "",
+    "snippet": "  public void testInlineFunctions9() {\n    // don't inline if the input parameter is modified.\n    test(\"function INC(x){return x++}\" +\n         \"var y=INC(i)\",\n         \"var y;{var x$$inline_0=i;\" +\n         \"y=x$$inline_0++}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.MakeDeclaredNamesUniqueTest.testMakeLocalNamesUniqueWithContext5()",
+    "resolved_signature": "com.google.javascript.jscomp.MakeDeclaredNamesUniqueTest.testMakeLocalNamesUniqueWithContext5()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/MakeDeclaredNamesUniqueTest.java",
+    "begin_line": 208,
+    "end_line": 231,
+    "comment": "",
+    "snippet": "  public void testMakeLocalNamesUniqueWithContext5() {\n    // Set the test type\n    this.useDefaultRenamer = true;\n\n    testWithInversion(\n        \"function f(){var f; f = 1}\",\n        \"function f(){var f$$1; f$$1 = 1}\");\n    testWithInversion(\n        \"function f(f){f = 1}\",\n        \"function f(f$$1){f$$1 = 1}\");\n    testWithInversion(\n        \"function f(f){var f; f = 1}\",\n        \"function f(f$$1){var f$$1; f$$1 = 1}\");\n\n    test(\n        \"var fn = function f(){var f; f = 1}\",\n        \"var fn = function f(){var f$$1; f$$1 = 1}\");\n    test(\n        \"var fn = function f(f){f = 1}\",\n        \"var fn = function f(f$$1){f$$1 = 1}\");\n    test(\n        \"var fn = function f(f){var f; f = 1}\",\n        \"var fn = function f(f$$1){var f$$1; f$$1 = 1}\");\n  }"
+  }
+]

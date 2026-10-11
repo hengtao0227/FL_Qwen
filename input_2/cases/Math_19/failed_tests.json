@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math3.optimization.direct.CMAESOptimizerTest.testBoundaryRangeTooLarge()",
+    "resolved_signature": "org.apache.commons.math3.optimization.direct.CMAESOptimizerTest.testBoundaryRangeTooLarge()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optimization/direct/CMAESOptimizerTest.java",
+    "begin_line": 400,
+    "end_line": 424,
+    "comment": "/**\r\n     * Cf. MATH-865\r\n     */",
+    "snippet": "    @Test(expected=NumberIsTooLargeException.class)\n    public void testBoundaryRangeTooLarge() {\n        final CMAESOptimizer optimizer = new CMAESOptimizer();\n        final MultivariateFunction fitnessFunction = new MultivariateFunction() {\n                public double value(double[] parameters) {\n                    if (Double.isNaN(parameters[0])) {\n                        throw new MathIllegalStateException();\n                    }\n                    final double target = 1;\n                    final double error = target - parameters[0];\n                    return error * error;\n                }\n            };\n\n        final double[] start = { 0 };\n\n        // The difference between upper and lower bounds is used to used\n        // normalize the variables: In case of overflow, NaN is produced.\n        final double max = Double.MAX_VALUE / 2;\n        final double tooLarge = FastMath.nextUp(max);\n        final double[] lower = { -tooLarge };\n        final double[] upper = { tooLarge };\n        final double[] result = optimizer.optimize(10000, fitnessFunction, GoalType.MINIMIZE,\n                                                   start, lower, upper).getPoint();\n    }"
+  }
+]

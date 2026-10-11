@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.IntegrationTest.testDependencySorting()",
+    "resolved_signature": "com.google.javascript.jscomp.IntegrationTest.testDependencySorting()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/IntegrationTest.java",
+    "begin_line": 2102,
+    "end_line": 2121,
+    "comment": "",
+    "snippet": "  public void testDependencySorting() throws Exception {\n    CompilerOptions options = createCompilerOptions();\n    options.setDependencyOptions(\n        new DependencyOptions()\n        .setDependencySorting(true));\n    test(\n        options,\n        new String[] {\n          \"goog.require('x');\",\n          \"goog.provide('x');\",\n        },\n        new String[] {\n          \"goog.provide('x');\",\n          \"goog.require('x');\",\n\n          // For complicated reasons involving modules,\n          // the compiler creates a synthetic source file.\n          \"\",\n        });\n  }"
+  }
+]

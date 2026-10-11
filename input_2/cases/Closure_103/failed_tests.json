@@ -1,0 +1,32 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.CheckUnreachableCodeTest.testInstanceOfThrowsException()",
+    "resolved_signature": "com.google.javascript.jscomp.CheckUnreachableCodeTest.testInstanceOfThrowsException()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java",
+    "begin_line": 139,
+    "end_line": 142,
+    "comment": "",
+    "snippet": "  public void testInstanceOfThrowsException() {\n    testSame(\"function f() {try { if (value instanceof type) return true; } \" +\n             \"catch (e) { }}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.ControlFlowAnalysisTest.testInstanceOf()",
+    "resolved_signature": "com.google.javascript.jscomp.ControlFlowAnalysisTest.testInstanceOf()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java",
+    "begin_line": 1243,
+    "end_line": 1247,
+    "comment": "",
+    "snippet": "  public void testInstanceOf() {\n    String src = \"try { x instanceof 'x' } catch (e) { }\";\n    ControlFlowGraph<Node> cfg = createCfg(src, true);\n    assertCrossEdge(cfg, Token.EXPR_RESULT, Token.BLOCK, Branch.ON_EX);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.DisambiguatePropertiesTest.testSupertypeReferenceOfSubtypeProperty()",
+    "resolved_signature": "com.google.javascript.jscomp.DisambiguatePropertiesTest.testSupertypeReferenceOfSubtypeProperty()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/DisambiguatePropertiesTest.java",
+    "begin_line": 587,
+    "end_line": 607,
+    "comment": "",
+    "snippet": "  public void testSupertypeReferenceOfSubtypeProperty() {\n    String externs = \"\"\n        + \"/** @constructor */ function Ext() {}\"\n        + \"Ext.prototype.a;\";\n    String js = \"\"\n        + \"/** @constructor */ function Foo() {}\\n\"\n        + \"/** @constructor \\n@extends Foo*/ function Bar() {}\\n\"\n        + \"Bar.prototype.a;\\n\"\n        + \"/** @param {Foo} foo */\"\n        + \"function foo(foo) {\\n\"\n        + \"  var x = foo.a;\\n\"\n        + \"}\\n\";\n    String result = \"\"\n        + \"function Foo() {}\\n\"\n        + \"function Bar() {}\\n\"\n        + \"Bar.prototype.Bar_prototype$a;\\n\"\n        + \"function foo(foo) {\\n\"\n        + \"  var x = foo.Bar_prototype$a;\\n\"\n        + \"}\\n\";\n    testSets(false, externs, js, result, \"{a=[[Bar.prototype]]}\");\n  }"
+  }
+]

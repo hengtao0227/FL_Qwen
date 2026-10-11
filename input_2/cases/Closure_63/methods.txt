@@ -1,0 +1,288 @@
+===== M0001 =====
+Signature: com.google.javascript.jscomp.AbstractMessageFormatter.maybeColorize(String,Color)
+Source: src/com/google/javascript/jscomp/AbstractMessageFormatter.java
+Original range: 81-86
+Documentation:
+
+Method code:
+81 |   private String maybeColorize(String text, Color color) {
+82 |     if (!colorize) return text;
+83 | 
+84 |     return color.getControlCharacter() +
+85 |         text + Color.RESET.getControlCharacter();
+86 |   }
+
+===== M0002 =====
+Signature: com.google.javascript.jscomp.JSError.JSError(String,Node,int,int,DiagnosticType,CheckLevel,String...)
+Source: src/com/google/javascript/jscomp/JSError.java
+Original range: 139-149
+Documentation:
+/**
+   * Creates a JSError at a CheckLevel for a source file location.
+   * Private to avoid any entanglement with code outside of the compiler.
+   */
+Method code:
+139 |   private JSError(
+140 |       String sourceName, @Nullable Node node, int lineno, int charno,
+141 |       DiagnosticType type, CheckLevel level, String... arguments) {
+142 |     this.type = type;
+143 |     this.node = node;
+144 |     this.description = type.format.format(arguments);
+145 |     this.lineNumber = lineno;
+146 |     this.charno = charno;
+147 |     this.sourceName = sourceName;
+148 |     this.level = level == null ? type.level : level;
+149 |   }
+
+===== M0003 =====
+Signature: com.google.javascript.jscomp.LightweightMessageFormatter.LineNumberingFormatter.formatLine(String,int)
+Source: src/com/google/javascript/jscomp/LightweightMessageFormatter.java
+Original range: 121-123
+Documentation:
+
+Method code:
+121 |     public String formatLine(String line, int lineNumber) {
+122 |       return line;
+123 |     }
+
+===== M0004 =====
+Signature: com.google.javascript.jscomp.LightweightMessageFormatter.format(JSError,boolean)
+Source: src/com/google/javascript/jscomp/LightweightMessageFormatter.java
+Original range: 66-111
+Documentation:
+
+Method code:
+66 |   private String format(JSError error, boolean warning) {
+67 |     // extract source excerpt
+68 |     SourceExcerptProvider source = getSource();
+69 |     String sourceExcerpt = source == null ? null :
+70 |         excerpt.get(
+71 |             source, error.sourceName, error.lineNumber, excerptFormatter);
+72 | 
+73 |     // formatting the message
+74 |     StringBuilder b = new StringBuilder();
+75 |     if (error.sourceName != null) {
+76 |       b.append(error.sourceName);
+77 |       if (error.lineNumber > 0) {
+78 |         b.append(':');
+79 |         b.append(error.lineNumber);
+80 |       }
+81 |       b.append(": ");
+82 |     }
+83 | 
+84 |     b.append(getLevelName(warning ? CheckLevel.WARNING : CheckLevel.ERROR));
+85 |     b.append(" - ");
+86 | 
+87 |     b.append(error.description);
+88 |     b.append('\n');
+89 |     if (sourceExcerpt != null) {
+90 |       b.append(sourceExcerpt);
+91 |       b.append('\n');
+92 |       int charno = error.getCharno();
+93 | 
+94 |       // padding equal to the excerpt and arrow at the end
+95 |       // charno == sourceExpert.length() means something is missing
+96 |       // at the end of the line
+97 |       if (excerpt.equals(LINE)
+98 |           && 0 <= charno && charno < sourceExcerpt.length()) {
+99 |         for (int i = 0; i < charno; i++) {
+100 |           char c = sourceExcerpt.charAt(i);
+101 |           if (Character.isWhitespace(c)) {
+102 |             b.append(c);
+103 |           } else {
+104 |             b.append(' ');
+105 |           }
+106 |         }
+107 |         b.append("^\n");
+108 |       }
+109 |     }
+110 |     return b.toString();
+111 |   }
+
+===== M0005 =====
+Signature: com.google.javascript.jscomp.JSError.getCharno()
+Source: src/com/google/javascript/jscomp/JSError.java
+Original range: 199-201
+Documentation:
+/**
+   * Get the character number.
+   */
+Method code:
+199 |   public int getCharno() {
+200 |     return charno;
+201 |   }
+
+===== M0006 =====
+Signature: com.google.javascript.jscomp.AbstractMessageFormatter.AbstractMessageFormatter(SourceExcerptProvider)
+Source: src/com/google/javascript/jscomp/AbstractMessageFormatter.java
+Original range: 32-34
+Documentation:
+
+Method code:
+32 |   public AbstractMessageFormatter(SourceExcerptProvider source) {
+33 |     this.source = source;
+34 |   }
+
+===== M0007 =====
+Signature: com.google.javascript.jscomp.AbstractMessageFormatter.getSource()
+Source: src/com/google/javascript/jscomp/AbstractMessageFormatter.java
+Original range: 43-45
+Documentation:
+/**
+   * Get the source excerpt provider.
+   */
+Method code:
+43 |   protected final SourceExcerptProvider getSource() {
+44 |     return source;
+45 |   }
+
+===== M0008 =====
+Signature: com.google.javascript.jscomp.AbstractMessageFormatter.getLevelName(CheckLevel)
+Source: src/com/google/javascript/jscomp/AbstractMessageFormatter.java
+Original range: 73-79
+Documentation:
+
+Method code:
+73 |   String getLevelName(CheckLevel level) {
+74 |     switch (level) {
+75 |       case ERROR: return maybeColorize("ERROR", Color.ERROR);
+76 |       case WARNING: return maybeColorize("WARNING", Color.WARNING);
+77 |       default: return level.toString();
+78 |     }
+79 |   }
+
+===== M0009 =====
+Signature: com.google.javascript.jscomp.LightweightMessageFormatter.LightweightMessageFormatter(SourceExcerptProvider)
+Source: src/com/google/javascript/jscomp/LightweightMessageFormatter.java
+Original range: 43-45
+Documentation:
+
+Method code:
+43 |   public LightweightMessageFormatter(SourceExcerptProvider source) {
+44 |     this(source, LINE);
+45 |   }
+
+===== M0010 =====
+Signature: com.google.javascript.jscomp.AbstractMessageFormatter.Color.Color(String)
+Source: src/com/google/javascript/jscomp/AbstractMessageFormatter.java
+Original range: 64-66
+Documentation:
+
+Method code:
+64 |     Color(String controlCharacter) {
+65 |       this.controlCharacter = controlCharacter;
+66 |     }
+
+===== M0011 =====
+Signature: com.google.javascript.jscomp.LightweightMessageFormatter.formatError(JSError)
+Source: src/com/google/javascript/jscomp/LightweightMessageFormatter.java
+Original range: 58-60
+Documentation:
+
+Method code:
+58 |   public String formatError(JSError error) {
+59 |     return format(error, false);
+60 |   }
+
+===== M0012 =====
+Signature: com.google.javascript.jscomp.SourceExcerptProvider.SourceExcerpt.anonymous_L32.get(SourceExcerptProvider,String,int,ExcerptFormatter)
+Source: src/com/google/javascript/jscomp/SourceExcerptProvider.java
+Original range: 33-38
+Documentation:
+
+Method code:
+33 |       @Override
+34 |       public String get(SourceExcerptProvider source, String sourceName,
+35 |           int lineNumber, ExcerptFormatter formatter) {
+36 |         return formatter.formatLine(
+37 |             source.getSourceLine(sourceName, lineNumber), lineNumber);
+38 |       }
+
+===== M0013 =====
+Signature: com.google.javascript.jscomp.LightweightMessageFormatter.LightweightMessageFormatter(SourceExcerptProvider,SourceExcerpt)
+Source: src/com/google/javascript/jscomp/LightweightMessageFormatter.java
+Original range: 47-52
+Documentation:
+
+Method code:
+47 |   public LightweightMessageFormatter(SourceExcerptProvider source,
+48 |       SourceExcerpt excerpt) {
+49 |     super(source);
+50 |     Preconditions.checkNotNull(source);
+51 |     this.excerpt = excerpt;
+52 |   }
+
+===== M0014 =====
+Signature: com.google.javascript.jscomp.DiagnosticType.DiagnosticType(String,CheckLevel,MessageFormat)
+Source: src/com/google/javascript/jscomp/DiagnosticType.java
+Original range: 97-103
+Documentation:
+/**
+   * Create a DiagnosticType. Private to force use of static factory methods.
+   */
+Method code:
+97 |   private DiagnosticType(String key, CheckLevel level, MessageFormat format) {
+98 |     this.key = key;
+99 |     this.defaultLevel = level;
+100 |     this.format = format;
+101 | 
+102 |     this.level = this.defaultLevel;
+103 |   }
+
+===== M0015 =====
+Signature: com.google.javascript.jscomp.JSError.make(String,int,int,DiagnosticType,String...)
+Source: src/com/google/javascript/jscomp/JSError.java
+Original range: 83-86
+Documentation:
+/**
+   * Creates a JSError at a given source location
+   *
+   * @param sourceName The source file name
+   * @param lineno Line number with source file, or -1 if unknown
+   * @param charno Column number within line, or -1 for whole line.
+   * @param type The DiagnosticType
+   * @param arguments Arguments to be incorporated into the message
+   */
+Method code:
+83 |   public static JSError make(String sourceName, int lineno, int charno,
+84 |                              DiagnosticType type, String... arguments) {
+85 |     return new JSError(sourceName, null, lineno, charno, type, null, arguments);
+86 |   }
+
+===== M0016 =====
+Signature: com.google.javascript.jscomp.DiagnosticType.error(String,String)
+Source: src/com/google/javascript/jscomp/DiagnosticType.java
+Original range: 53-55
+Documentation:
+/**
+   * Create a DiagnosticType at level CheckLevel.ERROR
+   *
+   * @param name An identifier
+   * @param descriptionFormat A format string
+   * @return A new DiagnosticType
+   */
+Method code:
+53 |   public static DiagnosticType error(String name, String descriptionFormat) {
+54 |     return make(name, CheckLevel.ERROR, descriptionFormat);
+55 |   }
+
+===== M0017 =====
+Signature: com.google.javascript.jscomp.DiagnosticType.make(String,CheckLevel,String)
+Source: src/com/google/javascript/jscomp/DiagnosticType.java
+Original range: 88-92
+Documentation:
+/**
+   * Create a DiagnosticType at a given CheckLevel.
+   *
+   * @param name An identifier
+   * @param level Either CheckLevel.ERROR or CheckLevel.WARNING
+   * @param descriptionFormat A format string
+   * @return A new DiagnosticType
+   */
+Method code:
+88 |   public static DiagnosticType make(String name, CheckLevel level,
+89 |                                     String descriptionFormat) {
+90 |     return
+91 |         new DiagnosticType(name, level, new MessageFormat(descriptionFormat));
+92 |   }
+

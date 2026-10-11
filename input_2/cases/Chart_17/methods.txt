@@ -1,0 +1,634 @@
+===== M0001 =====
+Signature: org.jfree.data.general.Series.Series(Comparable)
+Source: source/org/jfree/data/general/Series.java
+Original range: 101-103
+Documentation:
+/**
+     * Creates a new series with the specified key.  
+     *
+     * @param key  the series key (<code>null</code> not permitted).
+     */
+Method code:
+101 |     protected Series(Comparable key) {
+102 |         this(key, null);
+103 |     }
+
+===== M0002 =====
+Signature: org.jfree.data.time.TimeSeriesDataItem.TimeSeriesDataItem(RegularTimePeriod,Number)
+Source: source/org/jfree/data/time/TimeSeriesDataItem.java
+Original range: 92-98
+Documentation:
+/**
+     * Constructs a new data item that associates a value with a time period.
+     *
+     * @param period  the time period (<code>null</code> not permitted).
+     * @param value  the value (<code>null</code> permitted).
+     */
+Method code:
+92 |     public TimeSeriesDataItem(RegularTimePeriod period, Number value) {
+93 |         if (period == null) {
+94 |             throw new IllegalArgumentException("Null 'period' argument.");   
+95 |         }
+96 |         this.period = period;
+97 |         this.value = value;
+98 |     }
+
+===== M0003 =====
+Signature: org.jfree.data.time.TimeSeries.TimeSeries(Comparable,Class)
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 152-155
+Documentation:
+/**
+     * Creates a new (empty) time series with the specified name and class
+     * of {@link RegularTimePeriod}.
+     *
+     * @param name  the series name (<code>null</code> not permitted).
+     * @param timePeriodClass  the type of time period (<code>null</code> not 
+     *                         permitted).
+     */
+Method code:
+152 |     public TimeSeries(Comparable name, Class timePeriodClass) {
+153 |         this(name, DEFAULT_DOMAIN_DESCRIPTION, DEFAULT_RANGE_DESCRIPTION, 
+154 |                 timePeriodClass);
+155 |     }
+
+===== M0004 =====
+Signature: org.jfree.data.time.TimeSeries.createCopy(int,int)
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 873-899
+Documentation:
+/**
+     * Creates a new timeseries by copying a subset of the data in this time
+     * series.
+     *
+     * @param start  the index of the first time period to copy.
+     * @param end  the index of the last time period to copy.
+     *
+     * @return A series containing a copy of this times series from start until
+     *         end.
+     * 
+     * @throws CloneNotSupportedException if there is a cloning problem.
+     */
+Method code:
+873 |     public TimeSeries createCopy(int start, int end) 
+874 |         throws CloneNotSupportedException {
+875 | 
+876 |         if (start < 0) {
+877 |             throw new IllegalArgumentException("Requires start >= 0.");
+878 |         }
+879 |         if (end < start) {
+880 |             throw new IllegalArgumentException("Requires start <= end.");
+881 |         }
+882 |         TimeSeries copy = (TimeSeries) super.clone();
+883 | 
+884 |         copy.data = new java.util.ArrayList();
+885 |         if (this.data.size() > 0) {
+886 |             for (int index = start; index <= end; index++) {
+887 |                 TimeSeriesDataItem item 
+888 |                     = (TimeSeriesDataItem) this.data.get(index);
+889 |                 TimeSeriesDataItem clone = (TimeSeriesDataItem) item.clone();
+890 |                 try {
+891 |                     copy.add(clone);
+892 |                 }
+893 |                 catch (SeriesException e) {
+894 |                     e.printStackTrace();
+895 |                 }
+896 |             }
+897 |         }
+898 |         return copy;
+899 |     }
+
+===== M0005 =====
+Signature: org.jfree.data.time.TimeSeries.add(RegularTimePeriod,Number,boolean)
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 598-602
+Documentation:
+/**
+     * Adds a new data item to the series and sends 
+     * a {@link org.jfree.data.general.SeriesChangeEvent} to all registered 
+     * listeners.
+     *
+     * @param period  the time period (<code>null</code> not permitted).
+     * @param value  the value (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     */
+Method code:
+598 |     public void add(RegularTimePeriod period, Number value, boolean notify) {
+599 |         // defer argument checking...
+600 |         TimeSeriesDataItem item = new TimeSeriesDataItem(period, value);
+601 |         add(item, notify);
+602 |     }
+
+===== M0006 =====
+Signature: org.jfree.data.general.SeriesChangeEvent.SeriesChangeEvent(Object)
+Source: source/org/jfree/data/general/SeriesChangeEvent.java
+Original range: 60-62
+Documentation:
+/**
+     * Constructs a new event.
+     *
+     * @param source  the source of the change event.
+     */
+Method code:
+60 |     public SeriesChangeEvent(Object source) {
+61 |         super(source);
+62 |     }
+
+===== M0007 =====
+Signature: org.jfree.data.general.Series.fireSeriesChanged()
+Source: source/org/jfree/data/general/Series.java
+Original range: 312-316
+Documentation:
+/**
+     * General method for signalling to registered listeners that the series
+     * has been changed.
+     */
+Method code:
+312 |     public void fireSeriesChanged() {
+313 |         if (this.notify) {
+314 |             notifyListeners(new SeriesChangeEvent(this));
+315 |         }
+316 |     }
+
+===== M0008 =====
+Signature: org.jfree.data.time.TimeSeries.TimeSeries(Comparable,String,String,Class)
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 170-179
+Documentation:
+/**
+     * Creates a new time series that contains no data.
+     * <P>
+     * Descriptions can be specified for the domain and range.  One situation
+     * where this is helpful is when generating a chart for the time series -
+     * axis labels can be taken from the domain and range description.
+     *
+     * @param name  the name of the series (<code>null</code> not permitted).
+     * @param domain  the domain description (<code>null</code> permitted).
+     * @param range  the range description (<code>null</code> permitted).
+     * @param timePeriodClass  the type of time period (<code>null</code> not 
+     *                         permitted).
+     */
+Method code:
+170 |     public TimeSeries(Comparable name, String domain, String range, 
+171 |                       Class timePeriodClass) {
+172 |         super(name);
+173 |         this.domain = domain;
+174 |         this.range = range;
+175 |         this.timePeriodClass = timePeriodClass;
+176 |         this.data = new java.util.ArrayList();
+177 |         this.maximumItemCount = Integer.MAX_VALUE;
+178 |         this.maximumItemAge = Long.MAX_VALUE;
+179 |     }
+
+===== M0009 =====
+Signature: org.jfree.data.time.TimeSeries.TimeSeries(Comparable)
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 139-142
+Documentation:
+/**
+     * Creates a new (empty) time series.  By default, a daily time series is 
+     * created.  Use one of the other constructors if you require a different 
+     * time period.
+     *
+     * @param name  the series name (<code>null</code> not permitted).
+     */
+Method code:
+139 |     public TimeSeries(Comparable name) {
+140 |         this(name, DEFAULT_DOMAIN_DESCRIPTION, DEFAULT_RANGE_DESCRIPTION, 
+141 |                 Day.class);
+142 |     }
+
+===== M0010 =====
+Signature: org.jfree.data.time.TimeSeries.getDataItem(int)
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 338-340
+Documentation:
+/**
+     * Returns a data item for the series.
+     *
+     * @param index  the item index (zero-based).
+     *
+     * @return The data item.
+     * 
+     * @see #getDataItem(RegularTimePeriod)
+     */
+Method code:
+338 |     public TimeSeriesDataItem getDataItem(int index) {
+339 |         return (TimeSeriesDataItem) this.data.get(index);
+340 |     }
+
+===== M0011 =====
+Signature: org.jfree.data.general.Series.notifyListeners(SeriesChangeEvent)
+Source: source/org/jfree/data/general/Series.java
+Original range: 324-334
+Documentation:
+/**
+     * Sends a change event to all registered listeners.
+     *
+     * @param event  contains information about the event that triggered the 
+     *               notification.
+     */
+Method code:
+324 |     protected void notifyListeners(SeriesChangeEvent event) {
+325 | 
+326 |         Object[] listenerList = this.listeners.getListenerList();
+327 |         for (int i = listenerList.length - 2; i >= 0; i -= 2) {
+328 |             if (listenerList[i] == SeriesChangeListener.class) {
+329 |                 ((SeriesChangeListener) listenerList[i + 1]).seriesChanged(
+330 |                         event);
+331 |             }
+332 |         }
+333 | 
+334 |     }
+
+===== M0012 =====
+Signature: org.jfree.data.time.Year.getFirstMillisecond(Calendar)
+Source: source/org/jfree/data/time/Year.java
+Original range: 232-238
+Documentation:
+/**
+     * Returns the first millisecond of the year, evaluated using the supplied
+     * calendar (which determines the time zone).
+     *
+     * @param calendar  the calendar (<code>null</code> not permitted).
+     *
+     * @return The first millisecond of the year.
+     *
+     * @throws NullPointerException if <code>calendar</code> is 
+     *     <code>null</code>.
+     */
+Method code:
+232 |     public long getFirstMillisecond(Calendar calendar) {
+233 |         calendar.set(this.year, Calendar.JANUARY, 1, 0, 0, 0);
+234 |         calendar.set(Calendar.MILLISECOND, 0);
+235 |         // in the following line, we'd rather call calendar.getTimeInMillis()
+236 |         // to avoid object creation, but that isn't supported in Java 1.3.1
+237 |         return calendar.getTime().getTime();
+238 |     }
+
+===== M0013 =====
+Signature: org.jfree.data.general.Series.Series(Comparable,String)
+Source: source/org/jfree/data/general/Series.java
+Original range: 111-120
+Documentation:
+/**
+     * Creates a new series with the specified key and description.
+     *
+     * @param key  the series key (<code>null</code> NOT permitted).
+     * @param description  the series description (<code>null</code> permitted).
+     */
+Method code:
+111 |     protected Series(Comparable key, String description) {
+112 |         if (key == null) {
+113 |             throw new IllegalArgumentException("Null 'key' argument.");
+114 |         }
+115 |         this.key = key;
+116 |         this.description = description;
+117 |         this.listeners = new EventListenerList();
+118 |         this.propertyChangeSupport = new PropertyChangeSupport(this);
+119 |         this.notify = true;   
+120 |     }
+
+===== M0014 =====
+Signature: org.jfree.data.time.TimeSeries.removeAgedItems(boolean)
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 735-750
+Documentation:
+/**
+     * Age items in the series.  Ensure that the timespan from the youngest to 
+     * the oldest record in the series does not exceed maximumItemAge time 
+     * periods.  Oldest items will be removed if required.
+     * 
+     * @param notify  controls whether or not a {@link SeriesChangeEvent} is 
+     *                sent to registered listeners IF any items are removed.
+     */
+Method code:
+735 |     public void removeAgedItems(boolean notify) {
+736 |         // check if there are any values earlier than specified by the history 
+737 |         // count...
+738 |         if (getItemCount() > 1) {
+739 |             long latest = getTimePeriod(getItemCount() - 1).getSerialIndex();
+740 |             boolean removed = false;
+741 |             while ((latest - getTimePeriod(0).getSerialIndex()) 
+742 |                     > this.maximumItemAge) {
+743 |                 this.data.remove(0);
+744 |                 removed = true;
+745 |             }
+746 |             if (removed && notify) {
+747 |                 fireSeriesChanged();
+748 |             }
+749 |         }
+750 |     }
+
+===== M0015 =====
+Signature: org.jfree.data.time.Year.getYear()
+Source: source/org/jfree/data/time/Year.java
+Original range: 135-137
+Documentation:
+/**
+     * Returns the year.
+     *
+     * @return The year.
+     */
+Method code:
+135 |     public int getYear() {
+136 |         return this.year;
+137 |     }
+
+===== M0016 =====
+Signature: org.jfree.data.time.TimeSeries.getItemCount()
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 237-239
+Documentation:
+/**
+     * Returns the number of items in the series.
+     *
+     * @return The item count.
+     */
+Method code:
+237 |     public int getItemCount() {
+238 |         return this.data.size();
+239 |     }
+
+===== M0017 =====
+Signature: org.jfree.data.time.Year.getLastMillisecond(Calendar)
+Source: source/org/jfree/data/time/Year.java
+Original range: 251-257
+Documentation:
+/**
+     * Returns the last millisecond of the year, evaluated using the supplied
+     * calendar (which determines the time zone).
+     *
+     * @param calendar  the calendar (<code>null</code> not permitted).
+     *
+     * @return The last millisecond of the year.
+     *
+     * @throws NullPointerException if <code>calendar</code> is 
+     *     <code>null</code>.
+     */
+Method code:
+251 |     public long getLastMillisecond(Calendar calendar) {
+252 |         calendar.set(this.year, Calendar.DECEMBER, 31, 23, 59, 59);
+253 |         calendar.set(Calendar.MILLISECOND, 999);
+254 |         // in the following line, we'd rather call calendar.getTimeInMillis()
+255 |         // to avoid object creation, but that isn't supported in Java 1.3.1
+256 |         return calendar.getTime().getTime();
+257 |     }
+
+===== M0018 =====
+Signature: org.jfree.data.time.TimeSeries.clone()
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 856-859
+Documentation:
+/**
+     * Returns a clone of the time series.
+     * <P>
+     * Notes:
+     * <ul>
+     *   <li>no need to clone the domain and range descriptions, since String 
+     *     object is immutable;</li>
+     *   <li>we pass over to the more general method clone(start, end).</li>
+     * </ul>
+     *
+     * @return A clone of the time series.
+     * 
+     * @throws CloneNotSupportedException not thrown by this class, but 
+     *         subclasses may differ.
+     */
+Method code:
+856 |     public Object clone() throws CloneNotSupportedException {
+857 |         Object clone = createCopy(0, getItemCount() - 1);
+858 |         return clone;
+859 |     }
+
+===== M0019 =====
+Signature: org.jfree.data.time.TimeSeries.getTimePeriod(int)
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 369-371
+Documentation:
+/**
+     * Returns the time period at the specified index.
+     *
+     * @param index  the index of the data item.
+     *
+     * @return The time period.
+     */
+Method code:
+369 |     public RegularTimePeriod getTimePeriod(int index) {
+370 |         return getDataItem(index).getPeriod();
+371 |     }
+
+===== M0020 =====
+Signature: org.jfree.data.time.Year.peg(Calendar)
+Source: source/org/jfree/data/time/Year.java
+Original range: 175-178
+Documentation:
+/** 
+     * Recalculates the start date/time and end date/time for this time period 
+     * relative to the supplied calendar (which incorporates a time zone).
+     * 
+     * @param calendar  the calendar (<code>null</code> not permitted).
+     * 
+     * @since 1.0.3
+     */
+Method code:
+175 |     public void peg(Calendar calendar) {
+176 |         this.firstMillisecond = getFirstMillisecond(calendar);
+177 |         this.lastMillisecond = getLastMillisecond(calendar);
+178 |     }
+
+===== M0021 =====
+Signature: org.jfree.data.time.TimeSeries.add(TimeSeriesDataItem,boolean)
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 488-548
+Documentation:
+/**
+     * Adds a data item to the series and sends a 
+     * {@link org.jfree.data.general.SeriesChangeEvent} to all registered 
+     * listeners.
+     *
+     * @param item  the (timeperiod, value) pair (<code>null</code> not 
+     *              permitted).
+     * @param notify  notify listeners?
+     */
+Method code:
+488 |     public void add(TimeSeriesDataItem item, boolean notify) {
+489 |         if (item == null) {
+490 |             throw new IllegalArgumentException("Null 'item' argument.");
+491 |         }
+492 |         if (!item.getPeriod().getClass().equals(this.timePeriodClass)) {
+493 |             StringBuffer b = new StringBuffer();
+494 |             b.append("You are trying to add data where the time period class ");
+495 |             b.append("is ");
+496 |             b.append(item.getPeriod().getClass().getName());
+497 |             b.append(", but the TimeSeries is expecting an instance of ");
+498 |             b.append(this.timePeriodClass.getName());
+499 |             b.append(".");
+500 |             throw new SeriesException(b.toString());
+501 |         }
+502 | 
+503 |         // make the change (if it's not a duplicate time period)...
+504 |         boolean added = false;
+505 |         int count = getItemCount();
+506 |         if (count == 0) {
+507 |             this.data.add(item);
+508 |             added = true;
+509 |         }
+510 |         else {
+511 |             RegularTimePeriod last = getTimePeriod(getItemCount() - 1);
+512 |             if (item.getPeriod().compareTo(last) > 0) {
+513 |                 this.data.add(item);
+514 |                 added = true;
+515 |             }
+516 |             else {
+517 |                 int index = Collections.binarySearch(this.data, item);
+518 |                 if (index < 0) {
+519 |                     this.data.add(-index - 1, item);
+520 |                     added = true;
+521 |                 }
+522 |                 else {
+523 |                     StringBuffer b = new StringBuffer();
+524 |                     b.append("You are attempting to add an observation for ");
+525 |                     b.append("the time period ");
+526 |                     b.append(item.getPeriod().toString());
+527 |                     b.append(" but the series already contains an observation");
+528 |                     b.append(" for that time period. Duplicates are not ");
+529 |                     b.append("permitted.  Try using the addOrUpdate() method.");
+530 |                     throw new SeriesException(b.toString());
+531 |                 }
+532 |             }
+533 |         }
+534 |         if (added) {
+535 |             // check if this addition will exceed the maximum item count...
+536 |             if (getItemCount() > this.maximumItemCount) {
+537 |                 this.data.remove(0);
+538 |             }
+539 | 
+540 |             removeAgedItems(false);  // remove old items if necessary, but
+541 |                                      // don't notify anyone, because that
+542 |                                      // happens next anyway...
+543 |             if (notify) {
+544 |                 fireSeriesChanged();
+545 |             }
+546 |         }
+547 | 
+548 |     }
+
+===== M0022 =====
+Signature: org.jfree.data.time.TimeSeries.add(RegularTimePeriod,Number)
+Source: source/org/jfree/data/time/TimeSeries.java
+Original range: 584-587
+Documentation:
+/**
+     * Adds a new data item to the series and sends 
+     * a {@link org.jfree.data.general.SeriesChangeEvent} to all registered 
+     * listeners.
+     *
+     * @param period  the time period (<code>null</code> not permitted).
+     * @param value  the value (<code>null</code> permitted).
+     */
+Method code:
+584 |     public void add(RegularTimePeriod period, Number value) {
+585 |         // defer argument checking...
+586 |         add(period, value, true);
+587 |     }
+
+===== M0023 =====
+Signature: org.jfree.data.time.Year.compareTo(Object)
+Source: source/org/jfree/data/time/Year.java
+Original range: 311-338
+Documentation:
+/**
+     * Returns an integer indicating the order of this <code>Year</code> object
+     * relative to the specified object:
+     *
+     * negative == before, zero == same, positive == after.
+     *
+     * @param o1  the object to compare.
+     *
+     * @return negative == before, zero == same, positive == after.
+     */
+Method code:
+311 |     public int compareTo(Object o1) {
+312 | 
+313 |         int result;
+314 | 
+315 |         // CASE 1 : Comparing to another Year object
+316 |         // -----------------------------------------
+317 |         if (o1 instanceof Year) {
+318 |             Year y = (Year) o1;
+319 |             result = this.year - y.getYear();
+320 |         }
+321 | 
+322 |         // CASE 2 : Comparing to another TimePeriod object
+323 |         // -----------------------------------------------
+324 |         else if (o1 instanceof RegularTimePeriod) {
+325 |             // more difficult case - evaluate later...
+326 |             result = 0;
+327 |         }
+328 | 
+329 |         // CASE 3 : Comparing to a non-TimePeriod object
+330 |         // ---------------------------------------------
+331 |         else {
+332 |             // consider time periods to be ordered after general objects
+333 |             result = 1;
+334 |         }
+335 | 
+336 |         return result;
+337 | 
+338 |     }
+
+===== M0024 =====
+Signature: org.jfree.data.time.TimeSeriesDataItem.getPeriod()
+Source: source/org/jfree/data/time/TimeSeriesDataItem.java
+Original range: 115-117
+Documentation:
+/**
+     * Returns the time period.
+     *
+     * @return The time period (never <code>null</code>).
+     */
+Method code:
+115 |     public RegularTimePeriod getPeriod() {
+116 |         return this.period;
+117 |     }
+
+===== M0025 =====
+Signature: org.jfree.data.time.Year.Year(int)
+Source: source/org/jfree/data/time/Year.java
+Original range: 96-105
+Documentation:
+/**
+     * Creates a time period representing a single year.
+     *
+     * @param year  the year.
+     */
+Method code:
+96 |     public Year(int year) {
+97 |         if ((year < SerialDate.MINIMUM_YEAR_SUPPORTED)
+98 |             || (year > SerialDate.MAXIMUM_YEAR_SUPPORTED)) {
+99 | 
+100 |             throw new IllegalArgumentException(
+101 |                 "Year constructor: year (" + year + ") outside valid range.");
+102 |         }
+103 |         this.year = (short) year;
+104 |         peg(Calendar.getInstance());
+105 |     }
+
+===== M0026 =====
+Signature: org.jfree.data.time.Year.getSerialIndex()
+Source: source/org/jfree/data/time/Year.java
+Original range: 217-219
+Documentation:
+/**
+     * Returns a serial index number for the year.
+     * <P>
+     * The implementation simply returns the year number (e.g. 2002).
+     *
+     * @return The serial index number.
+     */
+Method code:
+217 |     public long getSerialIndex() {
+218 |         return this.year;
+219 |     }
+

@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "org.jfree.chart.plot.junit.CategoryPlotTests.testGetRangeAxisIndex()",
+    "resolved_signature": "org.jfree.chart.plot.junit.CategoryPlotTests.testGetRangeAxisIndex()",
+    "resolution": "exact",
+    "src_path": "tests/org/jfree/chart/plot/junit/CategoryPlotTests.java",
+    "begin_line": 741,
+    "end_line": 760,
+    "comment": "/**\n     * Some checks for the getRangeAxisIndex() method.\n     */",
+    "snippet": "    public void testGetRangeAxisIndex() {\n        CategoryAxis domainAxis1 = new CategoryAxis(\"X1\");\n        NumberAxis rangeAxis1 = new NumberAxis(\"Y1\");\n        NumberAxis rangeAxis2 = new NumberAxis(\"Y2\");\n        CategoryPlot plot = new CategoryPlot(null, domainAxis1, rangeAxis1, \n                null);\n        assertEquals(0, plot.getRangeAxisIndex(rangeAxis1));\n        assertEquals(-1, plot.getRangeAxisIndex(rangeAxis2));\n        plot.setRangeAxis(1, rangeAxis2);\n        assertEquals(1, plot.getRangeAxisIndex(rangeAxis2));\n        assertEquals(-1, plot.getRangeAxisIndex(new NumberAxis(\"Y2\")));\n        boolean pass = false;\n        try {\n            plot.getRangeAxisIndex(null);\n        }\n        catch (IllegalArgumentException e) {\n            pass = true;\n        }\n        assertTrue(pass);\n    }"
+  },
+  {
+    "requested_signature": "org.jfree.chart.plot.junit.CategoryPlotTests.testGetDomainAxisIndex()",
+    "resolved_signature": "org.jfree.chart.plot.junit.CategoryPlotTests.testGetDomainAxisIndex()",
+    "resolution": "exact",
+    "src_path": "tests/org/jfree/chart/plot/junit/CategoryPlotTests.java",
+    "begin_line": 717,
+    "end_line": 736,
+    "comment": "/**\n     * Some checks for the getDomainAxisIndex() method.\n     */",
+    "snippet": "    public void testGetDomainAxisIndex() {\n        CategoryAxis domainAxis1 = new CategoryAxis(\"X1\");\n        CategoryAxis domainAxis2 = new CategoryAxis(\"X2\");\n        NumberAxis rangeAxis1 = new NumberAxis(\"Y1\");\n        CategoryPlot plot = new CategoryPlot(null, domainAxis1, rangeAxis1, \n                null);\n        assertEquals(0, plot.getDomainAxisIndex(domainAxis1));\n        assertEquals(-1, plot.getDomainAxisIndex(domainAxis2));\n        plot.setDomainAxis(1, domainAxis2);\n        assertEquals(1, plot.getDomainAxisIndex(domainAxis2));\n        assertEquals(-1, plot.getDomainAxisIndex(new CategoryAxis(\"X2\")));\n        boolean pass = false;\n        try {\n            plot.getDomainAxisIndex(null);\n        }\n        catch (IllegalArgumentException e) {\n            pass = true;\n        }\n        assertTrue(pass);\n    }"
+  }
+]

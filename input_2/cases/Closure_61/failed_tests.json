@@ -1,0 +1,32 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.PeepholeRemoveDeadCodeTest.testCall1()",
+    "resolved_signature": "com.google.javascript.jscomp.PeepholeRemoveDeadCodeTest.testCall1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PeepholeRemoveDeadCodeTest.java",
+    "begin_line": 543,
+    "end_line": 545,
+    "comment": "",
+    "snippet": "  public void testCall1() {\n    test(\"Math.sin(0);\", \"\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.PeepholeRemoveDeadCodeTest.testCall2()",
+    "resolved_signature": "com.google.javascript.jscomp.PeepholeRemoveDeadCodeTest.testCall2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PeepholeRemoveDeadCodeTest.java",
+    "begin_line": 547,
+    "end_line": 549,
+    "comment": "",
+    "snippet": "  public void testCall2() {\n    test(\"1 + Math.sin(0);\", \"\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.PeepholeRemoveDeadCodeTest.testRemoveUselessOps()",
+    "resolved_signature": "com.google.javascript.jscomp.PeepholeRemoveDeadCodeTest.testRemoveUselessOps()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PeepholeRemoveDeadCodeTest.java",
+    "begin_line": 222,
+    "end_line": 278,
+    "comment": "",
+    "snippet": "  public void testRemoveUselessOps() {\n    // There are four place where expression results are discarded:\n    //  - a top level expression EXPR_RESULT\n    //  - the LHS of a COMMA\n    //  - the FOR init expression\n    //  - the FOR increment expression\n\n\n    // Known side-effect free functions calls are removed.\n    fold(\"Math.random()\", \"\");\n    fold(\"Math.random(f() + g())\", \"f(),g();\");\n    fold(\"Math.random(f(),g(),h())\", \"f(),g(),h();\");\n\n    // Calls to functions with unknown side-effects are are left.\n    foldSame(\"f();\");\n    foldSame(\"(function () {})();\");\n\n    // Uncalled function expressions are removed\n    fold(\"(function () {});\", \"\");\n    fold(\"(function f() {});\", \"\");\n    // ... including any code they contain.\n    fold(\"(function () {foo();});\", \"\");\n\n    // Useless operators are removed.\n    fold(\"+f()\", \"f()\");\n    fold(\"a=(+f(),g())\", \"a=(f(),g())\");\n    fold(\"a=(true,g())\", \"a=g()\");\n    fold(\"f(),true\", \"f()\");\n    fold(\"f() + g()\", \"f(),g()\");\n\n    fold(\"for(;;+f()){}\", \"for(;;f()){}\");\n    fold(\"for(+f();;g()){}\", \"for(f();;g()){}\");\n    fold(\"for(;;Math.random(f(),g(),h())){}\", \"for(;;f(),g(),h()){}\");\n\n    // The optimization cascades into conditional expressions:\n    fold(\"g() && +f()\", \"g() && f()\");\n    fold(\"g() || +f()\", \"g() || f()\");\n    fold(\"x ? g() : +f()\", \"x ? g() : f()\");\n\n    fold(\"+x()\", \"x()\");\n    fold(\"+x() * 2\", \"x()\");\n    fold(\"-(+x() * 2)\", \"x()\");\n    fold(\"2 -(+x() * 2)\", \"x()\");\n    fold(\"x().foo\", \"x()\");\n    foldSame(\"x().foo()\");\n\n    foldSame(\"x++\");\n    foldSame(\"++x\");\n    foldSame(\"x--\");\n    foldSame(\"--x\");\n    foldSame(\"x = 2\");\n    foldSame(\"x *= 2\");\n\n    // Sanity check, other expression are left alone.\n    foldSame(\"function f() {}\");\n    foldSame(\"var x;\");\n  }"
+  }
+]

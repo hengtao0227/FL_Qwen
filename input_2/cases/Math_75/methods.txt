@@ -1,0 +1,330 @@
+===== M0001 =====
+Signature: org.apache.commons.math.stat.Frequency.addValue(long)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 176-178
+Documentation:
+/**
+     * Adds 1 to the frequency count for v.
+     *
+     * @param v the value to add.
+     */
+Method code:
+176 |     public void addValue(long v) {
+177 |         addValue(Long.valueOf(v));
+178 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.stat.Frequency.getCumPct(Comparable<?>)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 490-496
+Documentation:
+/**
+     * Returns the cumulative percentage of values less than or equal to v
+     * (as a proportion between 0 and 1).
+     * <p>
+     * Returns <code>Double.NaN</code> if no values have been added.
+     * Returns 0 if at least one value has been added, but v is not comparable
+     * to the values set.</p>
+     *
+     * @param v the value to lookup
+     * @return the proportion of values less than or equal to v
+     */
+Method code:
+490 |     public double getCumPct(Comparable<?> v) {
+491 |         final long sumFreq = getSumFreq();
+492 |         if (sumFreq == 0) {
+493 |             return Double.NaN;
+494 |         }
+495 |         return (double) getCumFreq(v) / (double) sumFreq;
+496 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.stat.Frequency.getPct(long)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 341-343
+Documentation:
+/**
+     * Returns the percentage of values that are equal to v
+     * (as a proportion between 0 and 1).
+     *
+     * @param v the value to lookup
+     * @return the proportion of values equal to v
+     */
+Method code:
+341 |     public double getPct(long v) {
+342 |         return getPct(Long.valueOf(v));
+343 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.stat.Frequency.getSumFreq()
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 214-221
+Documentation:
+/**
+     * Returns the sum of all frequencies.
+     *
+     * @return the total frequency count.
+     */
+Method code:
+214 |     public long getSumFreq() {
+215 |         long result = 0;
+216 |         Iterator<Long> iterator = freqTable.values().iterator();
+217 |         while (iterator.hasNext())  {
+218 |             result += iterator.next().longValue();
+219 |         }
+220 |         return result;
+221 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.stat.Frequency.Frequency()
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 59-61
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+59 |     public Frequency() {
+60 |         freqTable = new TreeMap<Comparable<?>, Long>();
+61 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.stat.Frequency.NaturalComparator.compare(Comparable<T>,Comparable<T>)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 559-562
+Documentation:
+/**
+         * Compare the two {@link Comparable Comparable} arguments.
+         * This method is equivalent to:
+         * <pre>(({@link Comparable Comparable})o1).{@link Comparable#compareTo compareTo}(o2)</pre>
+         *
+         * @param  o1 the first object
+         * @param  o2 the second object
+         * @return  result of comparison
+         * @throws NullPointerException when <i>o1</i> is <code>null</code>,
+         *         or when <code>((Comparable)o1).compareTo(o2)</code> does
+         * @throws ClassCastException when <i>o1</i> is not a {@link Comparable Comparable},
+         *         or when <code>((Comparable)o1).compareTo(o2)</code> does
+         */
+Method code:
+559 |         @SuppressWarnings("unchecked")
+560 |         public int compare(Comparable<T> o1, Comparable<T> o2) {
+561 |             return o1.compareTo((T) o2);
+562 |         }
+
+===== M0007 =====
+Signature: org.apache.commons.math.stat.Frequency.getCount(Comparable<?>)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 243-257
+Documentation:
+/**
+     * Returns the number of values = v.
+     * Returns 0 if the value is not comparable.
+     *
+     * @param v the value to lookup.
+     * @return the frequency of v.
+     */
+Method code:
+243 |     public long getCount(Comparable<?> v) {
+244 |         if (v instanceof Integer) {
+245 |             return getCount(((Integer) v).longValue());
+246 |         }
+247 |         long result = 0;
+248 |         try {
+249 |             Long count =  freqTable.get(v);
+250 |             if (count != null) {
+251 |                 result = count.longValue();
+252 |             }
+253 |         } catch (ClassCastException ex) {
+254 |             // ignore and return 0 -- ClassCastException will be thrown if value is not comparable
+255 |         }
+256 |         return result;
+257 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.stat.Frequency.addValue(int)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 157-159
+Documentation:
+/**
+     * Adds 1 to the frequency count for v.
+     *
+     * @param v the value to add.
+     */
+Method code:
+157 |     public void addValue(int v) {
+158 |         addValue(Long.valueOf(v));
+159 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.stat.Frequency.addValue(Comparable<?>)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 132-150
+Documentation:
+/**
+     * Adds 1 to the frequency count for v.
+     * <p>
+     * If other objects have already been added to this Frequency, v must
+     * be comparable to those that have already been added.
+     * </p>
+     *
+     * @param v the value to add.
+     * @throws IllegalArgumentException if <code>v</code> is not comparable with previous entries
+     */
+Method code:
+132 |     public void addValue(Comparable<?> v){
+133 |         Comparable<?> obj = v;
+134 |         if (v instanceof Integer) {
+135 |            obj = Long.valueOf(((Integer) v).longValue());
+136 |         }
+137 |         try {
+138 |             Long count = freqTable.get(obj);
+139 |             if (count == null) {
+140 |                 freqTable.put(obj, Long.valueOf(1));
+141 |             } else {
+142 |                 freqTable.put(obj, Long.valueOf(count.longValue() + 1));
+143 |             }
+144 |         } catch (ClassCastException ex) {
+145 |             //TreeMap will throw ClassCastException if v is not comparable
+146 |             throw MathRuntimeException.createIllegalArgumentException(
+147 |                   "instance of class {0} not comparable to existing values",
+148 |                   v.getClass().getName());
+149 |         }
+150 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.stat.Frequency.getPct(Object)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 301-304
+Documentation:
+/**
+      * Returns the percentage of values that are equal to v
+     * (as a proportion between 0 and 1).
+     * <p>
+     * Returns <code>Double.NaN</code> if no values have been added.</p>
+     *
+     * @param v the value to lookup
+     * @return the proportion of values equal to v
+     * @deprecated replaced by {@link #getPct(Comparable)} as of 2.0
+     */
+Method code:
+301 |     @Deprecated
+302 |     public double getPct(Object v) {
+303 |         return getCumPct((Comparable<?>) v);
+304 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.stat.Frequency.getCumFreq(Comparable<?>)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 380-421
+Documentation:
+/**
+     * Returns the cumulative frequency of values less than or equal to v.
+     * <p>
+     * Returns 0 if v is not comparable to the values set.</p>
+     *
+     * @param v the value to lookup.
+     * @return the proportion of values equal to v
+     */
+Method code:
+380 |     @SuppressWarnings("unchecked")
+381 |         public long getCumFreq(Comparable<?> v) {
+382 |         if (getSumFreq() == 0) {
+383 |             return 0;
+384 |         }
+385 |         if (v instanceof Integer) {
+386 |             return getCumFreq(((Integer) v).longValue());
+387 |         }
+388 |         Comparator<Comparable<?>> c = (Comparator<Comparable<?>>) freqTable.comparator();
+389 |         if (c == null) {
+390 |             c = new NaturalComparator();
+391 |         }
+392 |         long result = 0;
+393 | 
+394 |         try {
+395 |             Long value = freqTable.get(v);
+396 |             if (value != null) {
+397 |                 result = value.longValue();
+398 |             }
+399 |         } catch (ClassCastException ex) {
+400 |             return result;   // v is not comparable
+401 |         }
+402 | 
+403 |         if (c.compare(v, freqTable.firstKey()) < 0) {
+404 |             return 0;  // v is comparable, but less than first value
+405 |         }
+406 | 
+407 |         if (c.compare(v, freqTable.lastKey()) >= 0) {
+408 |             return getSumFreq();    // v is comparable, but greater than the last value
+409 |         }
+410 | 
+411 |         Iterator<Comparable<?>> values = valuesIterator();
+412 |         while (values.hasNext()) {
+413 |             Comparable<?> nextValue = values.next();
+414 |             if (c.compare(v, nextValue) > 0) {
+415 |                 result += getCount(nextValue);
+416 |             } else {
+417 |                 return result;
+418 |             }
+419 |         }
+420 |         return result;
+421 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.stat.Frequency.getPct(int)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 330-332
+Documentation:
+/**
+     * Returns the percentage of values that are equal to v
+     * (as a proportion between 0 and 1).
+     *
+     * @param v the value to lookup
+     * @return the proportion of values equal to v
+     */
+Method code:
+330 |     public double getPct(int v) {
+331 |         return getPct(Long.valueOf(v));
+332 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.stat.Frequency.getCumFreq(long)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 443-445
+Documentation:
+/**
+     * Returns the cumulative frequency of values less than or equal to v.
+     * <p>
+     * Returns 0 if v is not comparable to the values set.</p>
+     *
+     * @param v the value to lookup
+     * @return the proportion of values equal to v
+     */
+Method code:
+443 |     public long getCumFreq(long v) {
+444 |         return getCumFreq(Long.valueOf(v));
+445 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.stat.Frequency.getPct(Comparable<?>)
+Source: src/main/java/org/apache/commons/math/stat/Frequency.java
+Original range: 315-321
+Documentation:
+/**
+     * Returns the percentage of values that are equal to v
+     * (as a proportion between 0 and 1).
+     * <p>
+     * Returns <code>Double.NaN</code> if no values have been added.</p>
+     *
+     * @param v the value to lookup
+     * @return the proportion of values equal to v
+     */
+Method code:
+315 |     public double getPct(Comparable<?> v) {
+316 |         final long sumFreq = getSumFreq();
+317 |         if (sumFreq == 0) {
+318 |             return Double.NaN;
+319 |         }
+320 |         return (double) getCount(v) / (double) sumFreq;
+321 |     }
+

@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math.ode.nonstiff.DormandPrince853IntegratorTest.testTooLargeFirstStep()",
+    "resolved_signature": "org.apache.commons.math.ode.nonstiff.DormandPrince853IntegratorTest.testTooLargeFirstStep()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math/ode/nonstiff/DormandPrince853IntegratorTest.java",
+    "begin_line": 179,
+    "end_line": 203,
+    "comment": "",
+    "snippet": "  @Test\n  public void testTooLargeFirstStep() {\n\n      AdaptiveStepsizeIntegrator integ =\n              new DormandPrince853Integrator(0, Double.POSITIVE_INFINITY, Double.NaN, Double.NaN);\n      final double start = 0.0;\n      final double end   = 0.001;\n      FirstOrderDifferentialEquations equations = new FirstOrderDifferentialEquations() {\n\n          public int getDimension() {\n              return 1;\n          }\n\n          public void computeDerivatives(double t, double[] y, double[] yDot) {\n              Assert.assertTrue(t >= FastMath.nextAfter(start, Double.NEGATIVE_INFINITY));\n              Assert.assertTrue(t <= FastMath.nextAfter(end,   Double.POSITIVE_INFINITY));\n              yDot[0] = -100.0 * y[0];\n          }\n\n      };\n\n      integ.setStepSizeControl(0, 1.0, 1.0e-6, 1.0e-8);\n      integ.integrate(equations, start, new double[] { 1.0 }, end, new double[1]);\n\n  }"
+  }
+]

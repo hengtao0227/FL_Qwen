@@ -1,0 +1,245 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.math.Fraction.getFraction(int,int)
+Source: src/main/java/org/apache/commons/lang3/math/Fraction.java
+Original range: 146-159
+Documentation:
+/**
+     * <p>Creates a <code>Fraction</code> instance with the 2 parts
+     * of a fraction Y/Z.</p>
+     *
+     * <p>Any negative signs are resolved to be on the numerator.</p>
+     *
+     * @param numerator  the numerator, for example the three in 'three sevenths'
+     * @param denominator  the denominator, for example the seven in 'three sevenths'
+     * @return a new fraction instance
+     * @throws ArithmeticException if the denominator is <code>zero</code>
+     * or the denominator is {@code negative} and the numerator is {@code Integer#MIN_VALUE}
+     */
+Method code:
+146 |     public static Fraction getFraction(int numerator, int denominator) {
+147 |         if (denominator == 0) {
+148 |             throw new ArithmeticException("The denominator must not be zero");
+149 |         }
+150 |         if (denominator < 0) {
+151 |             if (numerator==Integer.MIN_VALUE ||
+152 |                     denominator==Integer.MIN_VALUE) {
+153 |                 throw new ArithmeticException("overflow: can't negate");
+154 |             }
+155 |             numerator = -numerator;
+156 |             denominator = -denominator;
+157 |         }
+158 |         return new Fraction(numerator, denominator);
+159 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.math.Fraction.getNumerator()
+Source: src/main/java/org/apache/commons/lang3/math/Fraction.java
+Original range: 372-374
+Documentation:
+/**
+     * <p>Gets the numerator part of the fraction.</p>
+     *
+     * <p>This method may return a value greater than the denominator, an
+     * improper fraction, such as the seven in 7/4.</p>
+     *
+     * @return the numerator fraction part
+     */
+Method code:
+372 |     public int getNumerator() {
+373 |         return numerator;
+374 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang3.math.Fraction.getReducedFraction(int,int)
+Source: src/main/java/org/apache/commons/lang3/math/Fraction.java
+Original range: 214-238
+Documentation:
+/**
+     * <p>Creates a reduced <code>Fraction</code> instance with the 2 parts
+     * of a fraction Y/Z.</p>
+     *
+     * <p>For example, if the input parameters represent 2/4, then the created
+     * fraction will be 1/2.</p>
+     *
+     * <p>Any negative signs are resolved to be on the numerator.</p>
+     *
+     * @param numerator  the numerator, for example the three in 'three sevenths'
+     * @param denominator  the denominator, for example the seven in 'three sevenths'
+     * @return a new fraction instance, with the numerator and denominator reduced
+     * @throws ArithmeticException if the denominator is <code>zero</code>
+     */
+Method code:
+214 |     public static Fraction getReducedFraction(int numerator, int denominator) {
+215 |         if (denominator == 0) {
+216 |             throw new ArithmeticException("The denominator must not be zero");
+217 |         }
+218 |         if (numerator==0) {
+219 |             return ZERO; // normalize zero.
+220 |         }
+221 |         // allow 2^k/-2^31 as a valid fraction (where k>0)
+222 |         if (denominator==Integer.MIN_VALUE && (numerator&1)==0) {
+223 |             numerator/=2; denominator/=2;
+224 |         }
+225 |         if (denominator < 0) {
+226 |             if (numerator==Integer.MIN_VALUE ||
+227 |                     denominator==Integer.MIN_VALUE) {
+228 |                 throw new ArithmeticException("overflow: can't negate");
+229 |             }
+230 |             numerator = -numerator;
+231 |             denominator = -denominator;
+232 |         }
+233 |         // simplify fraction.
+234 |         int gcd = greatestCommonDivisor(numerator, denominator);
+235 |         numerator /= gcd;
+236 |         denominator /= gcd;
+237 |         return new Fraction(numerator, denominator);
+238 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang3.math.Fraction.greatestCommonDivisor(int,int)
+Source: src/main/java/org/apache/commons/lang3/math/Fraction.java
+Original range: 581-624
+Documentation:
+/**
+     * <p>Gets the greatest common divisor of the absolute value of
+     * two numbers, using the "binary gcd" method which avoids
+     * division and modulo operations.  See Knuth 4.5.2 algorithm B.
+     * This algorithm is due to Josef Stein (1961).</p>
+     *
+     * @param u  a non-zero number
+     * @param v  a non-zero number
+     * @return the greatest common divisor, never zero
+     */
+Method code:
+581 |     private static int greatestCommonDivisor(int u, int v) {
+582 |         // From Commons Math:
+583 |         //if either operand is abs 1, return 1:
+584 |         if (Math.abs(u) <= 1 || Math.abs(v) <= 1) {
+585 |             return 1;
+586 |         }
+587 |         // keep u and v negative, as negative integers range down to
+588 |         // -2^31, while positive numbers can only be as large as 2^31-1
+589 |         // (i.e. we can't necessarily negate a negative number without
+590 |         // overflow)
+591 |         if (u>0) { u=-u; } // make u negative
+592 |         if (v>0) { v=-v; } // make v negative
+593 |         // B1. [Find power of 2]
+594 |         int k=0;
+595 |         while ((u&1)==0 && (v&1)==0 && k<31) { // while u and v are both even...
+596 |             u/=2; v/=2; k++; // cast out twos.
+597 |         }
+598 |         if (k==31) {
+599 |             throw new ArithmeticException("overflow: gcd is 2^31");
+600 |         }
+601 |         // B2. Initialize: u and v have been divided by 2^k and at least
+602 |         //     one is odd.
+603 |         int t = ((u&1)==1) ? v : -(u/2)/*B3*/;
+604 |         // t negative: u was odd, v may be even (t replaces v)
+605 |         // t positive: u was even, v is odd (t replaces u)
+606 |         do {
+607 |             /* assert u<0 && v<0; */
+608 |             // B4/B3: cast out twos from t.
+609 |             while ((t&1)==0) { // while t is even..
+610 |                 t/=2; // cast out twos
+611 |             }
+612 |             // B5 [reset max(u,v)]
+613 |             if (t>0) {
+614 |                 u = -t;
+615 |             } else {
+616 |                 v = t;
+617 |             }
+618 |             // B6/B3. at this point both u and v should be odd.
+619 |             t = (v - u)/2;
+620 |             // |u| larger: t positive (replace u)
+621 |             // |v| larger: t negative (replace v)
+622 |         } while (t!=0);
+623 |         return -u*(1<<k); // gcd is u*2^k
+624 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang3.math.Fraction.Fraction(int,int)
+Source: src/main/java/org/apache/commons/lang3/math/Fraction.java
+Original range: 128-132
+Documentation:
+/**
+     * <p>Constructs a <code>Fraction</code> instance with the 2 parts
+     * of a fraction Y/Z.</p>
+     *
+     * @param numerator  the numerator, for example the three in 'three sevenths'
+     * @param denominator  the denominator, for example the seven in 'three sevenths'
+     */
+Method code:
+128 |     private Fraction(int numerator, int denominator) {
+129 |         super();
+130 |         this.numerator = numerator;
+131 |         this.denominator = denominator;
+132 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.lang3.math.Fraction.getDenominator()
+Source: src/main/java/org/apache/commons/lang3/math/Fraction.java
+Original range: 381-383
+Documentation:
+/**
+     * <p>Gets the denominator part of the fraction.</p>
+     *
+     * @return the denominator fraction part
+     */
+Method code:
+381 |     public int getDenominator() {
+382 |         return denominator;
+383 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.lang3.math.Fraction.reduce()
+Source: src/main/java/org/apache/commons/lang3/math/Fraction.java
+Original range: 474-483
+Documentation:
+/**
+     * <p>Reduce the fraction to the smallest values for the numerator and
+     * denominator, returning the result.</p>
+     * 
+     * <p>For example, if this fraction represents 2/4, then the result
+     * will be 1/2.</p>
+     *
+     * @return a new reduced fraction instance, or this if no simplification possible
+     */
+Method code:
+474 |     public Fraction reduce() {
+475 |         if (numerator == 0) {
+476 |             return equals(ZERO) ? this : ZERO;
+477 |         }
+478 |         int gcd = greatestCommonDivisor(Math.abs(numerator), denominator);
+479 |         if (gcd == 1) {
+480 |             return this;
+481 |         }
+482 |         return Fraction.getFraction(numerator / gcd, denominator / gcd);
+483 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.lang3.math.Fraction.equals(Object)
+Source: src/main/java/org/apache/commons/lang3/math/Fraction.java
+Original range: 842-853
+Documentation:
+/**
+     * <p>Compares this fraction to another object to test if they are equal.</p>.
+     *
+     * <p>To be equal, both values must be equal. Thus 2/4 is not equal to 1/2.</p>
+     *
+     * @param obj the reference object with which to compare
+     * @return <code>true</code> if this object is equal
+     */
+Method code:
+842 |     @Override
+843 |     public boolean equals(Object obj) {
+844 |         if (obj == this) {
+845 |             return true;
+846 |         }
+847 |         if (obj instanceof Fraction == false) {
+848 |             return false;
+849 |         }
+850 |         Fraction other = (Fraction) obj;
+851 |         return (getNumerator() == other.getNumerator() &&
+852 |                 getDenominator() == other.getDenominator());
+853 |     }
+

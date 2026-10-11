@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testIssue1058()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testIssue1058()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 12159,
+    "end_line": 12180,
+    "comment": "",
+    "snippet": "  public void testIssue1058() throws Exception {\n    testTypes(\n        \"/**\\n\" +\n        \"  * @constructor\\n\" +\n        \"  * @template CLASS\\n\" +\n        \"  */\\n\" +\n        \"var Class = function() {};\\n\" +\n        \"\\n\" +\n        \"/**\\n\" +\n        \"  * @param {function(CLASS):CLASS} a\\n\" +\n        \"  * @template T\\n\" +\n        \"  */\\n\" +\n        \"Class.prototype.foo = function(a) {\\n\" +\n        \"  return 'string';\\n\" +\n        \"};\\n\" +\n        \"\\n\" +\n        \"/** @param {number} a\\n\" +\n        \"  * @return {string} */\\n\" +\n        \"var a = function(a) { return '' };\\n\" +\n        \"\\n\" +\n        \"new Class().foo(a);\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testTemplatized11()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testTemplatized11()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 12140,
+    "end_line": 12157,
+    "comment": "",
+    "snippet": "  public void testTemplatized11() throws Exception {\n    testTypes(\n        \"/** \\n\" +\n        \" * @template T\\n\" +\n        \" * @constructor\\n\" +\n        \" */\\n\" +\n        \"function C() {}\\n\" +\n        \"\\n\" +\n        \"/**\\n\" +\n        \" * @param {T|K} a\\n\" +\n        \" * @return {T}\\n\" +\n        \" * @template K\\n\" +\n        \" */\\n\" +\n        \"C.prototype.method = function (a) {};\\n\" +\n        \"\\n\" +\n        // method returns \"?\"\n        \"/** @type {void} */ var x = new C().method(1);\");\n  }"
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.joda.time.field.TestFieldUtils.testSafeMultiplyLongInt()",
+    "resolved_signature": "org.joda.time.field.TestFieldUtils.testSafeMultiplyLongInt()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/joda/time/field/TestFieldUtils.java",
+    "begin_line": 241,
+    "end_line": 282,
+    "comment": "//-----------------------------------------------------------------------\r",
+    "snippet": "    public void testSafeMultiplyLongInt() {\n        assertEquals(0L, FieldUtils.safeMultiply(0L, 0));\n        \n        assertEquals(1L, FieldUtils.safeMultiply(1L, 1));\n        assertEquals(3L, FieldUtils.safeMultiply(1L, 3));\n        assertEquals(3L, FieldUtils.safeMultiply(3L, 1));\n        \n        assertEquals(6L, FieldUtils.safeMultiply(2L, 3));\n        assertEquals(-6L, FieldUtils.safeMultiply(2L, -3));\n        assertEquals(-6L, FieldUtils.safeMultiply(-2L, 3));\n        assertEquals(6L, FieldUtils.safeMultiply(-2L, -3));\n        \n        assertEquals(-1L * Integer.MIN_VALUE, FieldUtils.safeMultiply(-1L, Integer.MIN_VALUE));\n        \n        assertEquals(Long.MAX_VALUE, FieldUtils.safeMultiply(Long.MAX_VALUE, 1));\n        assertEquals(Long.MIN_VALUE, FieldUtils.safeMultiply(Long.MIN_VALUE, 1));\n        assertEquals(-Long.MAX_VALUE, FieldUtils.safeMultiply(Long.MAX_VALUE, -1));\n        \n        try {\n            FieldUtils.safeMultiply(Long.MIN_VALUE, -1);\n            fail();\n        } catch (ArithmeticException e) {\n        }\n        \n        try {\n            FieldUtils.safeMultiply(Long.MIN_VALUE, 100);\n            fail();\n        } catch (ArithmeticException e) {\n        }\n        \n        try {\n            FieldUtils.safeMultiply(Long.MIN_VALUE, Integer.MAX_VALUE);\n            fail();\n        } catch (ArithmeticException e) {\n        }\n        \n        try {\n            FieldUtils.safeMultiply(Long.MAX_VALUE, Integer.MIN_VALUE);\n            fail();\n        } catch (ArithmeticException e) {\n        }\n    }"
+  }
+]

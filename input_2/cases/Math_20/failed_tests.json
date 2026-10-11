@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math3.optimization.direct.CMAESOptimizerTest.testMath864()",
+    "resolved_signature": "org.apache.commons.math3.optimization.direct.CMAESOptimizerTest.testMath864()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optimization/direct/CMAESOptimizerTest.java",
+    "begin_line": 375,
+    "end_line": 394,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMath864() {\n        final CMAESOptimizer optimizer = new CMAESOptimizer();\n        final MultivariateFunction fitnessFunction = new MultivariateFunction() {\n                @Override\n                public double value(double[] parameters) {\n                    final double target = 1;\n                    final double error = target - parameters[0];\n                    return error * error;\n                }\n            };\n\n        final double[] start = { 0 };\n        final double[] lower = { -1e6 };\n        final double[] upper = { 0.5 };\n        final double[] result = optimizer.optimize(10000, fitnessFunction, GoalType.MINIMIZE,\n                                                   start, lower, upper).getPoint();\n        Assert.assertTrue(\"Out of bounds (\" + result[0] + \" > \" + upper[0] + \")\",\n                          result[0] <= upper[0]);\n    }"
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math.optimization.linear.SimplexSolverTest.testMath713NegativeVariable()",
+    "resolved_signature": "org.apache.commons.math.optimization.linear.SimplexSolverTest.testMath713NegativeVariable()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math/optimization/linear/SimplexSolverTest.java",
+    "begin_line": 32,
+    "end_line": 44,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMath713NegativeVariable() {\n        LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] {1.0, 1.0}, 0.0d);\n        ArrayList<LinearConstraint> constraints = new ArrayList<LinearConstraint>();\n        constraints.add(new LinearConstraint(new double[] {1, 0}, Relationship.EQ, 1));\n\n        double epsilon = 1e-6;\n        SimplexSolver solver = new SimplexSolver();\n        RealPointValuePair solution = solver.optimize(f, constraints, GoalType.MINIMIZE, true);\n\n        Assert.assertTrue(Precision.compareTo(solution.getPoint()[0], 0.0d, epsilon) >= 0);\n        Assert.assertTrue(Precision.compareTo(solution.getPoint()[1], 0.0d, epsilon) >= 0);\n    }"
+  }
+]

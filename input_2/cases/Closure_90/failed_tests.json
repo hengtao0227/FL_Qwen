@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testBackwardsTypedefUse8()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testBackwardsTypedefUse8()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 2667,
+    "end_line": 2675,
+    "comment": "",
+    "snippet": "  public void testBackwardsTypedefUse8() throws Exception {\n    // Tehnically, this isn't quite right, because the JS runtime\n    // will coerce null -> the global object. But we'll punt on that for now.\n    testTypes(\n        \"/** @param {!Array} x */ function g(x) {}\" +\n        \"/** @this {goog.MyTypedef} */ function f() { g(this); }\" +\n        \"var goog = {};\" +\n        \"/** @typedef {(Array|null|undefined)} */ goog.MyTypedef;\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testBackwardsTypedefUse9()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testBackwardsTypedefUse9()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 2677,
+    "end_line": 2686,
+    "comment": "",
+    "snippet": "  public void testBackwardsTypedefUse9() throws Exception {\n    testTypes(\n        \"/** @param {!Array} x */ function g(x) {}\" +\n        \"/** @this {goog.MyTypedef} */ function f() { g(this); }\" +\n        \"var goog = {};\" +\n        \"/** @typedef {(Error|null|undefined)} */ goog.MyTypedef;\",\n        \"actual parameter 1 of g does not match formal parameter\\n\" +\n        \"found   : Error\\n\" +\n        \"required: Array\");\n  }"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testQualifiedNameInference5()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testQualifiedNameInference5()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 4760,
+    "end_line": 4769,
+    "comment": "",
+    "snippet": "  public void testQualifiedNameInference5() throws Exception {\n    testTypes(\n        \"var ns = {}; \" +\n        \"(function() { \" +\n        \"    /** @param {number} x */ ns.foo = function(x) {}; })();\" +\n        \"(function() { ns.foo(true); })();\",\n        \"actual parameter 1 of ns.foo does not match formal parameter\\n\" +\n        \"found   : boolean\\n\" +\n        \"required: number\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypedScopeCreatorTest.testGlobalQualifiedNameInLocalScope()",
+    "resolved_signature": "com.google.javascript.jscomp.TypedScopeCreatorTest.testGlobalQualifiedNameInLocalScope()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypedScopeCreatorTest.java",
+    "begin_line": 775,
+    "end_line": 785,
+    "comment": "",
+    "snippet": "  public void testGlobalQualifiedNameInLocalScope() {\n    testSame(\n        \"var ns = {}; \" +\n        \"(function() { \" +\n        \"    /** @param {number} x */ ns.foo = function(x) {}; })();\" +\n        \"(function() { ns.foo(3); })();\");\n    assertNotNull(globalScope.getVar(\"ns.foo\"));\n    assertEquals(\n        \"function (number): undefined\",\n        globalScope.getVar(\"ns.foo\").getType().toString());\n  }"
+  }
+]

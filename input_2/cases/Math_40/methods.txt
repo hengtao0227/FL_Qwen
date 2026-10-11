@@ -1,0 +1,1122 @@
+===== M0001 =====
+Signature: org.apache.commons.math.exception.MathIllegalStateException.getLocalizedMessage()
+Source: src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java
+Original range: 84-87
+Documentation:
+/** {@inheritDoc} */
+Method code:
+84 |     @Override
+85 |     public String getLocalizedMessage() {
+86 |         return context.getLocalizedMessage();
+87 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.solve(int,FUNC,double,double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 185-191
+Documentation:
+/** {@inheritDoc} */
+Method code:
+185 |     public double solve(int maxEval, FUNC f, double min, double max, double startValue) {
+186 |         // Initialization.
+187 |         setup(maxEval, f, min, max, startValue);
+188 | 
+189 |         // Perform computation.
+190 |         return doSolve();
+191 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolver.doSolve()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BracketingNthOrderBrentSolver.java
+Original range: 142-345
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+142 |     @Override
+143 |     protected double doSolve() {
+144 | 
+145 |         // prepare arrays with the first points
+146 |         final double[] x = new double[maximalOrder + 1];
+147 |         final double[] y = new double[maximalOrder + 1];
+148 |         x[0] = getMin();
+149 |         x[1] = getStartValue();
+150 |         x[2] = getMax();
+151 |         verifySequence(x[0], x[1], x[2]);
+152 | 
+153 |         // evaluate initial guess
+154 |         y[1] = computeObjectiveValue(x[1]);
+155 |         if (Precision.equals(y[1], 0.0, 1)) {
+156 |             // return the initial guess if it is a perfect root.
+157 |             return x[1];
+158 |         }
+159 | 
+160 |         // evaluate first  endpoint
+161 |         y[0] = computeObjectiveValue(x[0]);
+162 |         if (Precision.equals(y[0], 0.0, 1)) {
+163 |             // return the first endpoint if it is a perfect root.
+164 |             return x[0];
+165 |         }
+166 | 
+167 |         int nbPoints;
+168 |         int signChangeIndex;
+169 |         if (y[0] * y[1] < 0) {
+170 | 
+171 |             // reduce interval if it brackets the root
+172 |             nbPoints        = 2;
+173 |             signChangeIndex = 1;
+174 | 
+175 |         } else {
+176 | 
+177 |             // evaluate second endpoint
+178 |             y[2] = computeObjectiveValue(x[2]);
+179 |             if (Precision.equals(y[2], 0.0, 1)) {
+180 |                 // return the second endpoint if it is a perfect root.
+181 |                 return x[2];
+182 |             }
+183 | 
+184 |             if (y[1] * y[2] < 0) {
+185 |                 // use all computed point as a start sampling array for solving
+186 |                 nbPoints        = 3;
+187 |                 signChangeIndex = 2;
+188 |             } else {
+189 |                 throw new NoBracketingException(x[0], x[2], y[0], y[2]);
+190 |             }
+191 | 
+192 |         }
+193 | 
+194 |         // prepare a work array for inverse polynomial interpolation
+195 |         final double[] tmpX = new double[x.length];
+196 | 
+197 |         // current tightest bracketing of the root
+198 |         double xA    = x[signChangeIndex - 1];
+199 |         double yA    = y[signChangeIndex - 1];
+200 |         double absYA = FastMath.abs(yA);
+201 |         int agingA   = 0;
+202 |         double xB    = x[signChangeIndex];
+203 |         double yB    = y[signChangeIndex];
+204 |         double absYB = FastMath.abs(yB);
+205 |         int agingB   = 0;
+206 | 
+207 |         // search loop
+208 |         while (true) {
+209 | 
+210 |             // check convergence of bracketing interval
+211 |             final double xTol = getAbsoluteAccuracy() +
+212 |                                 getRelativeAccuracy() * FastMath.max(FastMath.abs(xA), FastMath.abs(xB));
+213 |             if (((xB - xA) <= xTol) || (FastMath.max(absYA, absYB) < getFunctionValueAccuracy())) {
+214 |                 switch (allowed) {
+215 |                 case ANY_SIDE :
+216 |                     return absYA < absYB ? xA : xB;
+217 |                 case LEFT_SIDE :
+218 |                     return xA;
+219 |                 case RIGHT_SIDE :
+220 |                     return xB;
+221 |                 case BELOW_SIDE :
+222 |                     return (yA <= 0) ? xA : xB;
+223 |                 case ABOVE_SIDE :
+224 |                     return (yA <  0) ? xB : xA;
+225 |                 default :
+226 |                     // this should never happen
+227 |                     throw new MathInternalError(null);
+228 |                 }
+229 |             }
+230 | 
+231 |             // target for the next evaluation point
+232 |             double targetY;
+233 |             if (agingA >= MAXIMAL_AGING) {
+234 |                 // we keep updating the high bracket, try to compensate this
+235 |                 targetY = -REDUCTION_FACTOR * yB;
+236 |             } else if (agingB >= MAXIMAL_AGING) {
+237 |                 // we keep updating the low bracket, try to compensate this
+238 |                 targetY = -REDUCTION_FACTOR * yA;
+239 |             } else {
+240 |                 // bracketing is balanced, try to find the root itself
+241 |                 targetY = 0;
+242 |             }
+243 | 
+244 |             // make a few attempts to guess a root,
+245 |             double nextX;
+246 |             int start = 0;
+247 |             int end   = nbPoints;
+248 |             do {
+249 | 
+250 |                 // guess a value for current target, using inverse polynomial interpolation
+251 |                 System.arraycopy(x, start, tmpX, start, end - start);
+252 |                 nextX = guessX(targetY, tmpX, y, start, end);
+253 | 
+254 |                 if (!((nextX > xA) && (nextX < xB))) {
+255 |                     // the guessed root is not strictly inside of the tightest bracketing interval
+256 | 
+257 |                     // the guessed root is either not strictly inside the interval or it
+258 |                     // is a NaN (which occurs when some sampling points share the same y)
+259 |                     // we try again with a lower interpolation order
+260 |                     if (signChangeIndex - start >= end - signChangeIndex) {
+261 |                         // we have more points before the sign change, drop the lowest point
+262 |                         ++start;
+263 |                     } else {
+264 |                         // we have more points after sign change, drop the highest point
+265 |                         --end;
+266 |                     }
+267 | 
+268 |                     // we need to do one more attempt
+269 |                     nextX = Double.NaN;
+270 | 
+271 |                 }
+272 | 
+273 |             } while (Double.isNaN(nextX) && (end - start > 1));
+274 | 
+275 |             if (Double.isNaN(nextX)) {
+276 |                 // fall back to bisection
+277 |                 nextX = xA + 0.5 * (xB - xA);
+278 |                 start = signChangeIndex - 1;
+279 |                 end   = signChangeIndex;
+280 |             }
+281 | 
+282 |             // evaluate the function at the guessed root
+283 |             final double nextY = computeObjectiveValue(nextX);
+284 |             if (Precision.equals(nextY, 0.0, 1)) {
+285 |                 // we have found an exact root, since it is not an approximation
+286 |                 // we don't need to bother about the allowed solutions setting
+287 |                 return nextX;
+288 |             }
+289 | 
+290 |             if ((nbPoints > 2) && (end - start != nbPoints)) {
+291 | 
+292 |                 // we have been forced to ignore some points to keep bracketing,
+293 |                 // they are probably too far from the root, drop them from now on
+294 |                 nbPoints = end - start;
+295 |                 System.arraycopy(x, start, x, 0, nbPoints);
+296 |                 System.arraycopy(y, start, y, 0, nbPoints);
+297 |                 signChangeIndex -= start;
+298 | 
+299 |             } else  if (nbPoints == x.length) {
+300 | 
+301 |                 // we have to drop one point in order to insert the new one
+302 |                 nbPoints--;
+303 | 
+304 |                 // keep the tightest bracketing interval as centered as possible
+305 |                 if (signChangeIndex >= (x.length + 1) / 2) {
+306 |                     // we drop the lowest point, we have to shift the arrays and the index
+307 |                     System.arraycopy(x, 1, x, 0, nbPoints);
+308 |                     System.arraycopy(y, 1, y, 0, nbPoints);
+309 |                     --signChangeIndex;
+310 |                 }
+311 | 
+312 |             }
+313 | 
+314 |             // insert the last computed point
+315 |             //(by construction, we know it lies inside the tightest bracketing interval)
+316 |             System.arraycopy(x, signChangeIndex, x, signChangeIndex + 1, nbPoints - signChangeIndex);
+317 |             x[signChangeIndex] = nextX;
+318 |             System.arraycopy(y, signChangeIndex, y, signChangeIndex + 1, nbPoints - signChangeIndex);
+319 |             y[signChangeIndex] = nextY;
+320 |             ++nbPoints;
+321 | 
+322 |             // update the bracketing interval
+323 |             if (nextY * yA <= 0) {
+324 |                 // the sign change occurs before the inserted point
+325 |                 xB = nextX;
+326 |                 yB = nextY;
+327 |                 absYB = FastMath.abs(yB);
+328 |                 ++agingA;
+329 |                 agingB = 0;
+330 |             } else {
+331 |                 // the sign change occurs after the inserted point
+332 |                 xA = nextX;
+333 |                 yA = nextY;
+334 |                 absYA = FastMath.abs(yA);
+335 |                 agingA = 0;
+336 |                 ++agingB;
+337 | 
+338 |                 // update the sign change index
+339 |                 signChangeIndex++;
+340 | 
+341 |             }
+342 | 
+343 |         }
+344 | 
+345 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.util.Incrementor.incrementCount()
+Source: src/main/java/org/apache/commons/math/util/Incrementor.java
+Original range: 149-153
+Documentation:
+/**
+     * Adds one to the current iteration count.
+     * At counter exhaustion, this method will call the
+     * {@link MaxCountExceededCallback#trigger(int) trigger} method of the
+     * callback object passed to the
+     * {@link #Incrementor(int,MaxCountExceededCallback) constructor}.
+     * If not explictly set, a default callback is used that will throw
+     * a {@code MaxCountExceededException}.
+     *
+     * @throws MaxCountExceededException at counter exhaustion, unless a
+     * custom {@link MaxCountExceededCallback callback} has been set at
+     * construction.
+     */
+Method code:
+149 |     public void incrementCount() {
+150 |         if (++count > maximalCount) {
+151 |             maxCountCallback.trigger(maximalCount);
+152 |         }
+153 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.util.FastMath.abs(long)
+Source: src/main/java/org/apache/commons/math/util/FastMath.java
+Original range: 3004-3006
+Documentation:
+/**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x)
+     */
+Method code:
+3004 |     public static long abs(final long x) {
+3005 |         return (x < 0l) ? -x : x;
+3006 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.util.Precision.equals(double,double,int)
+Source: src/main/java/org/apache/commons/math/util/Precision.java
+Original range: 276-291
+Documentation:
+/**
+     * Returns true if both arguments are equal or within the range of allowed
+     * error (inclusive).
+     * Two float numbers are considered equal if there are {@code (maxUlps - 1)}
+     * (or fewer) floating point numbers between them, i.e. two adjacent floating
+     * point numbers are considered equal.
+     * Adapted from <a
+     * href="http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm">
+     * Bruce Dawson</a>
+     *
+     * @param x first value
+     * @param y second value
+     * @param maxUlps {@code (maxUlps - 1)} is the number of floating point
+     * values between {@code x} and {@code y}.
+     * @return {@code true} if there are fewer than {@code maxUlps} floating
+     * point values between {@code x} and {@code y}.
+     */
+Method code:
+276 |     public static boolean equals(double x, double y, int maxUlps) {
+277 |         long xInt = Double.doubleToLongBits(x);
+278 |         long yInt = Double.doubleToLongBits(y);
+279 | 
+280 |         // Make lexicographically ordered as a two's-complement integer.
+281 |         if (xInt < 0) {
+282 |             xInt = SGN_MASK - xInt;
+283 |         }
+284 |         if (yInt < 0) {
+285 |             yInt = SGN_MASK - yInt;
+286 |         }
+287 | 
+288 |         final boolean isEqual = FastMath.abs(xInt - yInt) <= maxUlps;
+289 | 
+290 |         return isEqual && !Double.isNaN(x) && !Double.isNaN(y);
+291 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.exception.MaxCountExceededException.getMax()
+Source: src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java
+Original range: 61-63
+Documentation:
+/**
+     * @return the maximum number of evaluations.
+     */
+Method code:
+61 |     public Number getMax() {
+62 |         return max;
+63 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.analysis.solvers.AbstractUnivariateRealSolver.AbstractUnivariateRealSolver(double,double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/AbstractUnivariateRealSolver.java
+Original range: 56-60
+Documentation:
+/**
+     * Construct a solver with given accuracies.
+     *
+     * @param relativeAccuracy Maximum relative error.
+     * @param absoluteAccuracy Maximum absolute error.
+     * @param functionValueAccuracy Maximum function value error.
+     */
+Method code:
+56 |     protected AbstractUnivariateRealSolver(final double relativeAccuracy,
+57 |                                            final double absoluteAccuracy,
+58 |                                            final double functionValueAccuracy) {
+59 |         super(relativeAccuracy, absoluteAccuracy, functionValueAccuracy);
+60 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.getStartValue()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 121-123
+Documentation:
+/**
+     * @return the initial guess.
+     */
+Method code:
+121 |     public double getStartValue() {
+122 |         return searchStart;
+123 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.exception.MaxCountExceededException.MaxCountExceededException(Number)
+Source: src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java
+Original range: 41-43
+Documentation:
+/**
+     * Construct the exception.
+     *
+     * @param max Maximum.
+     */
+Method code:
+41 |     public MaxCountExceededException(Number max) {
+42 |         this(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
+43 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.setup(int,FUNC,double,double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 168-182
+Documentation:
+/**
+     * Prepare for computation.
+     * Subclasses must call this method if they override any of the
+     * {@code solve} methods.
+     *
+     * @param f Function to solve.
+     * @param min Lower bound for the interval.
+     * @param max Upper bound for the interval.
+     * @param startValue Start value to use.
+     * @param maxEval Maximum number of evaluations.
+     */
+Method code:
+168 |     protected void setup(int maxEval,
+169 |                          FUNC f,
+170 |                          double min, double max,
+171 |                          double startValue) {
+172 |         // Checks.
+173 |         MathUtils.checkNotNull(f);
+174 | 
+175 |         // Reset.
+176 |         searchMin = min;
+177 |         searchMax = max;
+178 |         searchStart = startValue;
+179 |         function = f;
+180 |         evaluations.setMaximalCount(maxEval);
+181 |         evaluations.resetCount();
+182 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolver.solve(int,UnivariateFunction,double,double,double,AllowedSolution)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BracketingNthOrderBrentSolver.java
+Original range: 390-395
+Documentation:
+/** {@inheritDoc} */
+Method code:
+390 |     public double solve(int maxEval, UnivariateFunction f, double min,
+391 |                         double max, double startValue,
+392 |                         AllowedSolution allowedSolution) {
+393 |         this.allowed = allowedSolution;
+394 |         return super.solve(maxEval, f, min, max, startValue);
+395 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverUtils.verifySequence(double,double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverUtils.java
+Original range: 351-356
+Documentation:
+/**
+     * Check that {@code lower < initial < upper}.
+     *
+     * @param lower Lower endpoint.
+     * @param initial Initial value.
+     * @param upper Upper endpoint.
+     * @throws NumberIsTooLargeException if {@code lower >= initial} or
+     * {@code initial >= upper}.
+     */
+Method code:
+351 |     public static void verifySequence(final double lower,
+352 |                                       final double initial,
+353 |                                       final double upper) {
+354 |         verifyInterval(lower, initial);
+355 |         verifyInterval(initial, upper);
+356 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverUtils.verifyInterval(double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverUtils.java
+Original range: 334-340
+Documentation:
+/**
+     * Check that the endpoints specify an interval.
+     *
+     * @param lower Lower endpoint.
+     * @param upper Upper endpoint.
+     * @throws NumberIsTooLargeException if {@code lower >= upper}.
+     */
+Method code:
+334 |     public static void verifyInterval(final double lower,
+335 |                                       final double upper) {
+336 |         if (lower >= upper) {
+337 |             throw new NumberIsTooLargeException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
+338 |                                                 lower, upper, false);
+339 |         }
+340 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.getAbsoluteAccuracy()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 127-129
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+127 |     public double getAbsoluteAccuracy() {
+128 |         return absoluteAccuracy;
+129 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.verifySequence(double,double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 265-269
+Documentation:
+/**
+     * Check that {@code lower < initial < upper}.
+     *
+     * @param lower Lower endpoint.
+     * @param initial Initial value.
+     * @param upper Upper endpoint.
+     * @throws org.apache.commons.math.exception.NumberIsTooLargeException
+     * if {@code lower >= initial} or {@code initial >= upper}.
+     */
+Method code:
+265 |     protected void verifySequence(final double lower,
+266 |                                   final double initial,
+267 |                                   final double upper) {
+268 |         UnivariateRealSolverUtils.verifySequence(lower, initial, upper);
+269 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math.exception.util.ExceptionContext.getLocalizedMessage()
+Source: src/main/java/org/apache/commons/math/exception/util/ExceptionContext.java
+Original range: 136-138
+Documentation:
+/**
+     * Gets the message in the default locale.
+     *
+     * @return the localized message.
+     */
+Method code:
+136 |     public String getLocalizedMessage() {
+137 |         return getMessage(Locale.getDefault());
+138 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math.exception.util.ExceptionContext.buildMessage(Locale,String)
+Source: src/main/java/org/apache/commons/math/exception/util/ExceptionContext.java
+Original range: 169-187
+Documentation:
+/**
+     * Builds a message string.
+     *
+     * @param locale Locale in which the message should be translated.
+     * @param separator Message separator.
+     * @return a localized message string.
+     */
+Method code:
+169 |     private String buildMessage(Locale locale,
+170 |                                 String separator) {
+171 |         final StringBuilder sb = new StringBuilder();
+172 |         int count = 0;
+173 |         final int len = msgPatterns.size();
+174 |         for (int i = 0; i < len; i++) {
+175 |             final Localizable pat = msgPatterns.get(i);
+176 |             final Object[] args = msgArguments.get(i);
+177 |             final MessageFormat fmt = new MessageFormat(pat.getLocalizedString(locale),
+178 |                                                         locale);
+179 |             sb.append(fmt.format(args));
+180 |             if (++count < len) {
+181 |                 // Add a separator if there are other messages.
+182 |                 sb.append(separator);
+183 |             }
+184 |         }
+185 | 
+186 |         return sb.toString();
+187 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math.exception.util.ExceptionContext.getMessage(Locale)
+Source: src/main/java/org/apache/commons/math/exception/util/ExceptionContext.java
+Original range: 146-148
+Documentation:
+/**
+     * Gets the message in a specified locale.
+     *
+     * @param locale Locale in which the message should be translated.
+     * @return the localized message.
+     */
+Method code:
+146 |     public String getMessage(final Locale locale) {
+147 |         return buildMessage(locale, ": ");
+148 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math.util.Incrementor.setMaximalCount(int)
+Source: src/main/java/org/apache/commons/math/util/Incrementor.java
+Original range: 90-92
+Documentation:
+/**
+     * Sets the upper limit for the counter.
+     * This does not automatically reset the current count to zero (see
+     * {@link #resetCount()}).
+     *
+     * @param max Upper limit of the counter.
+     */
+Method code:
+90 |     public void setMaximalCount(int max) {
+91 |         maximalCount = max;
+92 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math.exception.util.LocalizedFormats.LocalizedFormats(String)
+Source: src/main/java/org/apache/commons/math/exception/util/LocalizedFormats.java
+Original range: 361-363
+Documentation:
+/** Simple constructor.
+     * @param sourceFormat source English format to use when no
+     * localized version is available
+     */
+Method code:
+361 |     private LocalizedFormats(final String sourceFormat) {
+362 |         this.sourceFormat = sourceFormat;
+363 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math.exception.MathIllegalStateException.getContext()
+Source: src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java
+Original range: 73-75
+Documentation:
+/** {@inheritDoc} */
+Method code:
+73 |     public ExceptionContext getContext() {
+74 |         return context;
+75 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math.util.FastMath.abs(double)
+Source: src/main/java/org/apache/commons/math/util/FastMath.java
+Original range: 3022-3024
+Documentation:
+/**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x)
+     */
+Method code:
+3022 |     public static double abs(double x) {
+3023 |         return (x < 0.0) ? -x : (x == 0.0) ? 0.0 : x; // -0.0 => +0.0
+3024 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.BaseAbstractUnivariateRealSolver(double,double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 90-96
+Documentation:
+/**
+     * Construct a solver with given accuracies.
+     *
+     * @param relativeAccuracy Maximum relative error.
+     * @param absoluteAccuracy Maximum absolute error.
+     * @param functionValueAccuracy Maximum function value error.
+     */
+Method code:
+90 |     protected BaseAbstractUnivariateRealSolver(final double relativeAccuracy,
+91 |                                                final double absoluteAccuracy,
+92 |                                                final double functionValueAccuracy) {
+93 |         this.absoluteAccuracy = absoluteAccuracy;
+94 |         this.relativeAccuracy = relativeAccuracy;
+95 |         this.functionValueAccuracy = functionValueAccuracy;
+96 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolver.BracketingNthOrderBrentSolver(double,double,double,int)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BracketingNthOrderBrentSolver.java
+Original range: 119-130
+Documentation:
+/**
+     * Construct a solver.
+     *
+     * @param relativeAccuracy Relative accuracy.
+     * @param absoluteAccuracy Absolute accuracy.
+     * @param functionValueAccuracy Function value accuracy.
+     * @param maximalOrder maximal order.
+     * @exception NumberIsTooSmallException if maximal order is lower than 2
+     */
+Method code:
+119 |     public BracketingNthOrderBrentSolver(final double relativeAccuracy,
+120 |                                          final double absoluteAccuracy,
+121 |                                          final double functionValueAccuracy,
+122 |                                          final int maximalOrder)
+123 |         throws NumberIsTooSmallException {
+124 |         super(relativeAccuracy, absoluteAccuracy, functionValueAccuracy);
+125 |         if (maximalOrder < 2) {
+126 |             throw new NumberIsTooSmallException(maximalOrder, 2, true);
+127 |         }
+128 |         this.maximalOrder = maximalOrder;
+129 |         this.allowed = AllowedSolution.ANY_SIDE;
+130 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolver.guessX(double,double[],double[],int,int)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BracketingNthOrderBrentSolver.java
+Original range: 361-380
+Documentation:
+/** Guess an x value by n<sup>th</sup> order inverse polynomial interpolation.
+     * <p>
+     * The x value is guessed by evaluating polynomial Q(y) at y = targetY, where Q
+     * is built such that for all considered points (x<sub>i</sub>, y<sub>i</sub>),
+     * Q(y<sub>i</sub>) = x<sub>i</sub>.
+     * </p>
+     * @param targetY target value for y
+     * @param x reference points abscissas for interpolation,
+     * note that this array <em>is</em> modified during computation
+     * @param y reference points ordinates for interpolation
+     * @param start start index of the points to consider (inclusive)
+     * @param end end index of the points to consider (exclusive)
+     * @return guessed root (will be a NaN if two points share the same y)
+     */
+Method code:
+361 |     private double guessX(final double targetY, final double[] x, final double[] y,
+362 |                           final int start, final int end) {
+363 | 
+364 |         // compute Q Newton coefficients by divided differences
+365 |         for (int i = start; i < end - 1; ++i) {
+366 |             final int delta = i + 1 - start;
+367 |             for (int j = end - 1; j > i; --j) {
+368 |                 x[j] = (x[j] - x[j-1]) / (y[j] - y[j - delta]);
+369 |             }
+370 |         }
+371 | 
+372 |         // evaluate Q(targetY)
+373 |         double x0 = 0;
+374 |         for (int j = end - 1; j >= start; --j) {
+375 |             x0 = x[j] + x0 * (targetY - y[j]);
+376 |         }
+377 | 
+378 |         return x0;
+379 | 
+380 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math.exception.MathIllegalStateException.MathIllegalStateException(Localizable,Object...)
+Source: src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java
+Original range: 44-48
+Documentation:
+/**
+     * Simple constructor.
+     *
+     * @param pattern Message pattern explaining the cause of the error.
+     * @param args Arguments.
+     */
+Method code:
+44 |     public MathIllegalStateException(Localizable pattern,
+45 |                                      Object ... args) {
+46 |         context = new ExceptionContext(this);
+47 |         context.addMessage(pattern, args);
+48 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math.exception.TooManyEvaluationsException.TooManyEvaluationsException(Number)
+Source: src/main/java/org/apache/commons/math/exception/TooManyEvaluationsException.java
+Original range: 36-39
+Documentation:
+/**
+     * Construct the exception.
+     *
+     * @param max Maximum number of evaluations.
+     */
+Method code:
+36 |     public TooManyEvaluationsException(Number max) {
+37 |         super(max);
+38 |         getContext().addMessage(LocalizedFormats.EVALUATIONS);
+39 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math.exception.MaxCountExceededException.MaxCountExceededException(Localizable,Number,Object...)
+Source: src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java
+Original range: 51-56
+Documentation:
+/**
+     * Construct the exception with a specific context.
+     *
+     * @param specific Specific context pattern.
+     * @param max Maximum.
+     * @param args Additional arguments.
+     */
+Method code:
+51 |     public MaxCountExceededException(Localizable specific,
+52 |                                      Number max,
+53 |                                      Object ... args) {
+54 |         getContext().addMessage(specific, max, args);
+55 |         this.max = max;
+56 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.getMax()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 115-117
+Documentation:
+/**
+     * @return the higher end of the search interval.
+     */
+Method code:
+115 |     public double getMax() {
+116 |         return searchMax;
+117 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math.exception.util.ExceptionContext.getMessage()
+Source: src/main/java/org/apache/commons/math/exception/util/ExceptionContext.java
+Original range: 127-129
+Documentation:
+/**
+     * Gets the default message.
+     *
+     * @return the message.
+     */
+Method code:
+127 |     public String getMessage() {
+128 |         return getMessage(Locale.US);
+129 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.getRelativeAccuracy()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 133-135
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+133 |     public double getRelativeAccuracy() {
+134 |         return relativeAccuracy;
+135 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.computeObjectiveValue(double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 151-155
+Documentation:
+/**
+     * Compute the objective function value.
+     *
+     * @param point Point at which the objective function must be evaluated.
+     * @return the objective function value at specified point.
+     * @throws TooManyEvaluationsException if the maximal number of evaluations
+     * is exceeded.
+     */
+Method code:
+151 |     protected double computeObjectiveValue(double point)
+152 |         throws TooManyEvaluationsException {
+153 |         incrementEvaluationCount();
+154 |         return function.value(point);
+155 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math.util.Incrementor.anonymous_L62.trigger(int)
+Source: src/main/java/org/apache/commons/math/util/Incrementor.java
+Original range: 64-66
+Documentation:
+/** {@inheritDoc} */
+Method code:
+64 |                  public void trigger(int max) {
+65 |                      throw new MaxCountExceededException(max);
+66 |                  }
+
+===== M0035 =====
+Signature: org.apache.commons.math.exception.util.ExceptionContext.addMessage(Localizable,Object...)
+Source: src/main/java/org/apache/commons/math/exception/util/ExceptionContext.java
+Original range: 85-89
+Documentation:
+/**
+     * Adds a message.
+     *
+     * @param pattern Message pattern.
+     * @param arguments Values for replacing the placeholders in the message
+     * pattern.
+     */
+Method code:
+85 |     public void addMessage(Localizable pattern,
+86 |                            Object ... arguments) {
+87 |         msgPatterns.add(pattern);
+88 |         msgArguments.add(ArgUtils.flatten(arguments));
+89 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.incrementEvaluationCount()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 292-298
+Documentation:
+/**
+     * Increment the evaluation count by one.
+     * Method {@link #computeObjectiveValue(double)} calls this method internally.
+     * It is provided for subclasses that do not exclusively use
+     * {@code computeObjectiveValue} to solve the function.
+     * See e.g. {@link AbstractDifferentiableUnivariateRealSolver}.
+     */
+Method code:
+292 |     protected void incrementEvaluationCount() {
+293 |         try {
+294 |             evaluations.incrementCount();
+295 |         } catch (MaxCountExceededException e) {
+296 |             throw new TooManyEvaluationsException(e.getMax());
+297 |         }
+298 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math.util.Incrementor.resetCount()
+Source: src/main/java/org/apache/commons/math/util/Incrementor.java
+Original range: 158-160
+Documentation:
+/**
+     * Resets the counter to 0.
+     */
+Method code:
+158 |     public void resetCount() {
+159 |         count = 0;
+160 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math.exception.MathIllegalStateException.getMessage()
+Source: src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java
+Original range: 78-81
+Documentation:
+/** {@inheritDoc} */
+Method code:
+78 |     @Override
+79 |     public String getMessage() {
+80 |         return context.getMessage();
+81 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math.util.MathUtils.checkNotNull(Object)
+Source: src/main/java/org/apache/commons/math/util/MathUtils.java
+Original range: 255-260
+Documentation:
+/**
+     * Checks that an object is not null.
+     *
+     * @param o Object to be checked.
+     * @throws NullArgumentException if {@code o} is {@code null}.
+     */
+Method code:
+255 |     public static void checkNotNull(Object o)
+256 |         throws NullArgumentException {
+257 |         if (o == null) {
+258 |             throw new NullArgumentException();
+259 |         }
+260 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math.exception.util.ArgUtils.flatten(Object[])
+Source: src/main/java/org/apache/commons/math/exception/util/ArgUtils.java
+Original range: 41-55
+Documentation:
+/**
+     * Transform a multidimensional array into a one-dimensional list.
+     *
+     * @param array Array (possibly multidimensional).
+     * @return a list of all the {@code Object} instances contained in
+     * {@code array}.
+     */
+Method code:
+41 |     public static Object[] flatten(Object[] array) {
+42 |         final List<Object> list = new ArrayList<Object>();
+43 |         if (array != null) {
+44 |             for (Object o : array) {
+45 |                 if (o instanceof Object[]) {
+46 |                     for (Object oR : flatten((Object[]) o)) {
+47 |                         list.add(oR);
+48 |                     }
+49 |                 } else {
+50 |                     list.add(o);
+51 |                 }
+52 |             }
+53 |         }
+54 |         return list.toArray();
+55 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.getFunctionValueAccuracy()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 139-141
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+139 |     public double getFunctionValueAccuracy() {
+140 |         return functionValueAccuracy;
+141 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.math.analysis.solvers.BaseAbstractUnivariateRealSolver.getMin()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BaseAbstractUnivariateRealSolver.java
+Original range: 109-111
+Documentation:
+/**
+     * @return the lower end of the search interval.
+     */
+Method code:
+109 |     public double getMin() {
+110 |         return searchMin;
+111 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.math.util.Incrementor.Incrementor(int)
+Source: src/main/java/org/apache/commons/math/util/Incrementor.java
+Original range: 60-68
+Documentation:
+/**
+     * Defines a maximal count.
+     *
+     * @param max Maximal count.
+     */
+Method code:
+60 |     public Incrementor(int max) {
+61 |         this(max,
+62 |              new MaxCountExceededCallback() {
+63 |                  /** {@inheritDoc} */
+64 |                  public void trigger(int max) {
+65 |                      throw new MaxCountExceededException(max);
+66 |                  }
+67 |              });
+68 |     }
+
+===== M0044 =====
+Signature: org.apache.commons.math.exception.util.ExceptionContext.ExceptionContext(Throwable)
+Source: src/main/java/org/apache/commons/math/exception/util/ExceptionContext.java
+Original range: 64-69
+Documentation:
+/** Simple constructor.
+     * @param throwable the exception this context refers too
+     */
+Method code:
+64 |     public ExceptionContext(final Throwable throwable) {
+65 |         this.throwable = throwable;
+66 |         msgPatterns    = new ArrayList<Localizable>();
+67 |         msgArguments   = new ArrayList<Object[]>();
+68 |         context        = new HashMap<String, Object>();
+69 |     }
+
+===== M0045 =====
+Signature: org.apache.commons.math.util.Incrementor.Incrementor()
+Source: src/main/java/org/apache/commons/math/util/Incrementor.java
+Original range: 51-53
+Documentation:
+/**
+     * Default constructor.
+     * For the new instance to be useful, the maximal count must be set
+     * by calling {@link #setMaximalCount(int) setMaximalCount}.
+     */
+Method code:
+51 |     public Incrementor() {
+52 |         this(0);
+53 |     }
+
+===== M0046 =====
+Signature: org.apache.commons.math.exception.MathIllegalStateException.MathIllegalStateException()
+Source: src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java
+Original range: 68-70
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+68 |     public MathIllegalStateException() {
+69 |         this(LocalizedFormats.ILLEGAL_STATE);
+70 |     }
+
+===== M0047 =====
+Signature: org.apache.commons.math.util.FastMath.max(double,double)
+Source: src/main/java/org/apache/commons/math/util/FastMath.java
+Original range: 3537-3555
+Documentation:
+/** Compute the maximum of two values
+     * @param a first value
+     * @param b second value
+     * @return b if a is lesser or equal to b, a otherwise
+     */
+Method code:
+3537 |     public static double max(final double a, final double b) {
+3538 |         if (a > b) {
+3539 |             return a;
+3540 |         }
+3541 |         if (a < b) {
+3542 |             return b;
+3543 |         }
+3544 |         /* if either arg is NaN, return NaN */
+3545 |         if (a != b) {
+3546 |             return Double.NaN;
+3547 |         }
+3548 |         /* min(+0.0,-0.0) == -0.0 */
+3549 |         /* 0x8000000000000000L == Double.doubleToRawLongBits(-0.0d) */
+3550 |         long bits = Double.doubleToRawLongBits(a);
+3551 |         if (bits == 0x8000000000000000L) {
+3552 |             return b;
+3553 |         }
+3554 |         return a;
+3555 |     }
+
+===== M0048 =====
+Signature: org.apache.commons.math.util.Incrementor.Incrementor(int,MaxCountExceededCallback)
+Source: src/main/java/org/apache/commons/math/util/Incrementor.java
+Original range: 77-81
+Documentation:
+/**
+     * Defines a maximal count and a callback method to be triggered at
+     * counter exhaustion.
+     *
+     * @param max Maximal count.
+     * @param cb Function to be called when the maximal count has been reached.
+     */
+Method code:
+77 |     public Incrementor(int max,
+78 |                        MaxCountExceededCallback cb) {
+79 |         maximalCount = max;
+80 |         maxCountCallback = cb;
+81 |     }
+
+===== M0049 =====
+Signature: org.apache.commons.math.exception.util.LocalizedFormats.getLocalizedString(Locale)
+Source: src/main/java/org/apache/commons/math/exception/util/LocalizedFormats.java
+Original range: 371-388
+Documentation:
+/** {@inheritDoc} */
+Method code:
+371 |     public String getLocalizedString(final Locale locale) {
+372 |         try {
+373 |             ResourceBundle bundle =
+374 |                     ResourceBundle.getBundle("META-INF/localization/LocalizedFormats", locale);
+375 |             if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {
+376 |                 // the value of the resource is the translated format
+377 |                 return bundle.getString(toString());
+378 |             }
+379 | 
+380 |         } catch (MissingResourceException mre) {
+381 |             // do nothing here
+382 |         }
+383 | 
+384 |         // either the locale is not supported or the resource is unknown
+385 |         // don't translate and fall back to using the source format
+386 |         return sourceFormat;
+387 | 
+388 |     }
+

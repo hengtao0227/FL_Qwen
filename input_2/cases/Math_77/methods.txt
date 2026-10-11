@@ -1,0 +1,642 @@
+===== M0001 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.OpenIntToDoubleHashMap(int,double)
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 126-134
+Documentation:
+/**
+     * Build an empty map with specified size.
+     * @param expectedSize expected number of elements in the map
+     * @param missingEntries value to return when a missing entry is fetched
+     */
+Method code:
+126 |     public OpenIntToDoubleHashMap(final int expectedSize,
+127 |                                   final double missingEntries) {
+128 |         final int capacity = computeCapacity(expectedSize);
+129 |         keys   = new int[capacity];
+130 |         values = new double[capacity];
+131 |         states = new byte[capacity];
+132 |         this.missingEntries = missingEntries;
+133 |         mask   = capacity - 1;
+134 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.linear.OpenMapRealVector.OpenMapSparseIterator.OpenMapSparseIterator()
+Source: src/main/java/org/apache/commons/math/linear/OpenMapRealVector.java
+Original range: 863-866
+Documentation:
+/** Simple constructor. */
+Method code:
+863 |         protected OpenMapSparseIterator() {
+864 |             iter = entries.iterator();
+865 |             current = new OpenMapEntry(iter);
+866 |         }
+
+===== M0003 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.put(int,double)
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 416-437
+Documentation:
+/**
+     * Put a value associated with a key in the map.
+     * @param key key to which value is associated
+     * @param value value to put in the map
+     * @return previous value associated with the key
+     */
+Method code:
+416 |     public double put(final int key, final double value) {
+417 |         int index = findInsertionIndex(key);
+418 |         double previous = missingEntries;
+419 |         boolean newMapping = true;
+420 |         if (index < 0) {
+421 |             index = changeIndexSign(index);
+422 |             previous = values[index];
+423 |             newMapping = false;
+424 |         }
+425 |         keys[index]   = key;
+426 |         states[index] = FULL;
+427 |         values[index] = value;
+428 |         if (newMapping) {
+429 |             ++size;
+430 |             if (shouldGrowTable()) {
+431 |                 growTable();
+432 |             }
+433 |             ++count;
+434 |         }
+435 |         return previous;
+436 | 
+437 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.linear.ArrayRealVector.ArrayRealVector(double[])
+Source: src/main/java/org/apache/commons/math/linear/ArrayRealVector.java
+Original range: 82-84
+Documentation:
+/**
+     * Construct a vector from an array, copying the input array.
+     * @param d array of doubles.
+     */
+Method code:
+82 |     public ArrayRealVector(double[] d) {
+83 |         data = d.clone();
+84 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.hashOf(int)
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 484-487
+Documentation:
+/**
+     * Compute the hash value of a key
+     * @param key key to hash
+     * @return hash value of the key
+     */
+Method code:
+484 |     private static int hashOf(final int key) {
+485 |         final int h = key ^ ((key >>> 20) ^ (key >>> 12));
+486 |         return h ^ (h >>> 7) ^ (h >>> 4);
+487 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.linear.OpenMapRealVector.OpenMapEntry.getValue()
+Source: src/main/java/org/apache/commons/math/linear/OpenMapRealVector.java
+Original range: 830-833
+Documentation:
+/** {@inheritDoc} */
+Method code:
+830 |         @Override
+831 |         public double getValue() {
+832 |             return iter.value();
+833 |         }
+
+===== M0007 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.computeCapacity(int)
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 159-169
+Documentation:
+/**
+     * Compute the capacity needed for a given size.
+     * @param expectedSize expected size of the map
+     * @return capacity to use for the specified size
+     */
+Method code:
+159 |     private static int computeCapacity(final int expectedSize) {
+160 |         if (expectedSize == 0) {
+161 |             return 1;
+162 |         }
+163 |         final int capacity   = (int) Math.ceil(expectedSize / LOAD_FACTOR);
+164 |         final int powerOfTwo = Integer.highestOneBit(capacity);
+165 |         if (powerOfTwo == capacity) {
+166 |             return capacity;
+167 |         }
+168 |         return nextPowerOfTwo(capacity);
+169 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.linear.RealVectorFormat.RealVectorFormat(String,String,String,NumberFormat)
+Source: src/main/java/org/apache/commons/math/linear/RealVectorFormat.java
+Original range: 116-125
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix, separator and format
+     * for components.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param separator separator to use instead of the default "; "
+     * @param format the custom format for components.
+     */
+Method code:
+116 |     public RealVectorFormat(final String prefix, final String suffix,
+117 |                             final String separator, final NumberFormat format) {
+118 |         this.prefix      = prefix;
+119 |         this.suffix      = suffix;
+120 |         this.separator   = separator;
+121 |         trimmedPrefix    = prefix.trim();
+122 |         trimmedSuffix    = suffix.trim();
+123 |         trimmedSeparator = separator.trim();
+124 |         this.format      = format;
+125 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.Iterator.Iterator()
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 505-518
+Documentation:
+/**
+         * Simple constructor.
+         */
+Method code:
+505 |         private Iterator() {
+506 | 
+507 |             // preserve the modification count of the map to detect concurrent modifications later
+508 |             referenceCount = count;
+509 | 
+510 |             // initialize current index
+511 |             next = -1;
+512 |             try {
+513 |                 advance();
+514 |             } catch (NoSuchElementException nsee) {
+515 |                 // ignored
+516 |             }
+517 | 
+518 |         }
+
+===== M0010 =====
+Signature: org.apache.commons.math.linear.AbstractRealVector.getNorm()
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealVector.java
+Original range: 209-218
+Documentation:
+/** {@inheritDoc} */
+Method code:
+209 |     public double getNorm() {
+210 |         double sum = 0;
+211 |         Iterator<Entry> it = sparseIterator();
+212 |         Entry e;
+213 |         while (it.hasNext() && (e = it.next()) != null) {
+214 |             final double value = e.getValue();
+215 |             sum += value * value;
+216 |         }
+217 |         return Math.sqrt(sum);
+218 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.linear.OpenMapRealVector.OpenMapSparseIterator.next()
+Source: src/main/java/org/apache/commons/math/linear/OpenMapRealVector.java
+Original range: 874-877
+Documentation:
+/** {@inheritDoc} */
+Method code:
+874 |         public Entry next() {
+875 |             iter.advance();
+876 |             return current;
+877 |         }
+
+===== M0012 =====
+Signature: org.apache.commons.math.linear.OpenMapRealVector.sparseIterator()
+Source: src/main/java/org/apache/commons/math/linear/OpenMapRealVector.java
+Original range: 808-810
+Documentation:
+/** {@inheritDoc} */
+Method code:
+808 |     public java.util.Iterator<Entry> sparseIterator() {
+809 |         return new OpenMapSparseIterator();
+810 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.findInsertionIndex(int[],byte[],int,int)
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 277-324
+Documentation:
+/**
+     * Find the index at which a key should be inserted
+     * @param keys keys table
+     * @param states states table
+     * @param key key to lookup
+     * @param mask bit mask for hash values
+     * @return index at which key should be inserted
+     */
+Method code:
+277 |     private static int findInsertionIndex(final int[] keys, final byte[] states,
+278 |                                           final int key, final int mask) {
+279 |         final int hash = hashOf(key);
+280 |         int index = hash & mask;
+281 |         if (states[index] == FREE) {
+282 |             return index;
+283 |         } else if (states[index] == FULL && keys[index] == key) {
+284 |             return changeIndexSign(index);
+285 |         }
+286 | 
+287 |         int perturb = perturb(hash);
+288 |         int j = index;
+289 |         if (states[index] == FULL) {
+290 |             while (true) {
+291 |                 j = probe(perturb, j);
+292 |                 index = j & mask;
+293 |                 perturb >>= PERTURB_SHIFT;
+294 | 
+295 |                 if (states[index] != FULL || keys[index] == key) {
+296 |                     break;
+297 |                 }
+298 |             }
+299 |         }
+300 | 
+301 |         if (states[index] == FREE) {
+302 |             return index;
+303 |         } else if (states[index] == FULL) {
+304 |             // due to the loop exit condition,
+305 |             // if (states[index] == FULL) then keys[index] == key
+306 |             return changeIndexSign(index);
+307 |         }
+308 | 
+309 |         final int firstRemoved = index;
+310 |         while (true) {
+311 |             j = probe(perturb, j);
+312 |             index = j & mask;
+313 | 
+314 |             if (states[index] == FREE) {
+315 |                 return firstRemoved;
+316 |             } else if (states[index] == FULL && keys[index] == key) {
+317 |                 return changeIndexSign(index);
+318 |             }
+319 | 
+320 |             perturb >>= PERTURB_SHIFT;
+321 | 
+322 |         }
+323 | 
+324 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.OpenIntToDoubleHashMap(double)
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 109-111
+Documentation:
+/**
+     * Build an empty map with default size
+     * @param missingEntries value to return when a missing entry is fetched
+     */
+Method code:
+109 |     public OpenIntToDoubleHashMap(final double missingEntries) {
+110 |         this(DEFAULT_EXPECTED_SIZE, missingEntries);
+111 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.Iterator.hasNext()
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 524-526
+Documentation:
+/**
+         * Check if there is a next element in the map.
+         * @return true if there is a next element
+         */
+Method code:
+524 |         public boolean hasNext() {
+525 |             return next >= 0;
+526 |         }
+
+===== M0016 =====
+Signature: org.apache.commons.math.linear.ArrayRealVector.getL1Norm()
+Source: src/main/java/org/apache/commons/math/linear/ArrayRealVector.java
+Original range: 707-714
+Documentation:
+/** {@inheritDoc} */
+Method code:
+707 |     @Override
+708 |     public double getL1Norm() {
+709 |         double sum = 0;
+710 |         for (double a : data) {
+711 |             sum += Math.abs(a);
+712 |         }
+713 |         return sum;
+714 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math.linear.OpenMapRealVector.OpenMapRealVector(double[],double)
+Source: src/main/java/org/apache/commons/math/linear/OpenMapRealVector.java
+Original range: 126-136
+Documentation:
+/**
+     * Create from a double array, specifying zero tolerance.
+     * Only non-zero entries will be stored
+     * @param values The set of values to create from
+     * @param epsilon The tolerance for having a value considered zero
+     */
+Method code:
+126 |     public OpenMapRealVector(double[] values, double epsilon) {
+127 |         virtualSize = values.length;
+128 |         entries = new OpenIntToDoubleHashMap(0.0);
+129 |         this.epsilon = epsilon;
+130 |         for (int key = 0; key < values.length; key++) {
+131 |             double value = values[key];
+132 |             if (!isDefaultValue(value)) {
+133 |                 entries.put(key, value);
+134 |             }
+135 |         }
+136 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math.linear.OpenMapRealVector.isDefaultValue(double)
+Source: src/main/java/org/apache/commons/math/linear/OpenMapRealVector.java
+Original range: 204-206
+Documentation:
+/**
+     * Determine if this value is within epsilon of zero.
+     * @param value The value to test
+     * @return <code>true</code> if this value is within epsilon to zero, <code>false</code> otherwise
+     */
+Method code:
+204 |     protected boolean isDefaultValue(double value) {
+205 |         return Math.abs(value) < epsilon;
+206 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.Iterator.value()
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 552-562
+Documentation:
+/**
+         * Get the value of current entry.
+         * @return value of current entry
+         * @exception ConcurrentModificationException if the map is modified during iteration
+         * @exception NoSuchElementException if there is no element left in the map
+         */
+Method code:
+552 |         public double value()
+553 |             throws ConcurrentModificationException, NoSuchElementException {
+554 |             if (referenceCount != count) {
+555 |                 throw MathRuntimeException.createConcurrentModificationException(
+556 |                       CONCURRENT_MODIFICATION_MESSAGE);
+557 |             }
+558 |             if (current < 0) {
+559 |                 throw MathRuntimeException.createNoSuchElementException(EXHAUSTED_ITERATOR_MESSAGE);
+560 |             }
+561 |             return values[current];
+562 |         }
+
+===== M0020 =====
+Signature: org.apache.commons.math.linear.OpenMapRealVector.getLInfNorm()
+Source: src/main/java/org/apache/commons/math/linear/OpenMapRealVector.java
+Original range: 498-506
+Documentation:
+
+Method code:
+498 |     public double getLInfNorm() {
+499 |         double max = 0;
+500 |         Iterator iter = entries.iterator();
+501 |         while (iter.hasNext()) {
+502 |             iter.advance();
+503 |             max += iter.value();
+504 |         }
+505 |         return max;
+506 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.findInsertionIndex(int)
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 265-267
+Documentation:
+/**
+     * Find the index at which a key should be inserted
+     * @param key key to lookup
+     * @return index at which key should be inserted
+     */
+Method code:
+265 |     private int findInsertionIndex(final int key) {
+266 |         return findInsertionIndex(keys, states, key, mask);
+267 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.iterator()
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 247-249
+Documentation:
+/**
+     * Get an iterator over map elements.
+     * <p>The specialized iterators returned are fail-fast: they throw a
+     * <code>ConcurrentModificationException</code> when they detect the map
+     * has been modified during iteration.</p>
+     * @return iterator over the map elements
+     */
+Method code:
+247 |     public Iterator iterator() {
+248 |         return new Iterator();
+249 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math.linear.ArrayRealVector.getNorm()
+Source: src/main/java/org/apache/commons/math/linear/ArrayRealVector.java
+Original range: 697-704
+Documentation:
+/** {@inheritDoc} */
+Method code:
+697 |     @Override
+698 |     public double getNorm() {
+699 |         double sum = 0;
+700 |         for (double a : data) {
+701 |             sum += a * a;
+702 |         }
+703 |         return Math.sqrt(sum);
+704 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math.linear.RealVectorFormat.RealVectorFormat(NumberFormat)
+Source: src/main/java/org/apache/commons/math/linear/RealVectorFormat.java
+Original range: 93-95
+Documentation:
+/**
+     * Create an instance with a custom number format for components.
+     * @param format the custom format for components.
+     */
+Method code:
+93 |     public RealVectorFormat(final NumberFormat format) {
+94 |         this(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_SEPARATOR, format);
+95 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math.linear.ArrayRealVector.getLInfNorm()
+Source: src/main/java/org/apache/commons/math/linear/ArrayRealVector.java
+Original range: 717-724
+Documentation:
+/** {@inheritDoc} */
+Method code:
+717 |     @Override
+718 |     public double getLInfNorm() {
+719 |         double max = 0;
+720 |         for (double a : data) {
+721 |             max += Math.max(max, Math.abs(a));
+722 |         }
+723 |         return max;
+724 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math.linear.OpenMapRealVector.OpenMapSparseIterator.hasNext()
+Source: src/main/java/org/apache/commons/math/linear/OpenMapRealVector.java
+Original range: 869-871
+Documentation:
+/** {@inheritDoc} */
+Method code:
+869 |         public boolean hasNext() {
+870 |             return iter.hasNext();
+871 |         }
+
+===== M0027 =====
+Signature: org.apache.commons.math.linear.RealVectorFormat.getInstance()
+Source: src/main/java/org/apache/commons/math/linear/RealVectorFormat.java
+Original range: 172-174
+Documentation:
+/**
+     * Returns the default real vector format for the current locale.
+     * @return the default real vector format.
+     */
+Method code:
+172 |     public static RealVectorFormat getInstance() {
+173 |         return getInstance(Locale.getDefault());
+174 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math.linear.AbstractRealVector.getL1Norm()
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealVector.java
+Original range: 221-229
+Documentation:
+/** {@inheritDoc} */
+Method code:
+221 |     public double getL1Norm() {
+222 |         double norm = 0;
+223 |         Iterator<Entry> it = sparseIterator();
+224 |         Entry e;
+225 |         while (it.hasNext() && (e = it.next()) != null) {
+226 |             norm += Math.abs(e.getValue());
+227 |         }
+228 |         return norm;
+229 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.shouldGrowTable()
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 475-477
+Documentation:
+/**
+     * Check if tables should grow due to increased size.
+     * @return true if  tables should grow
+     */
+Method code:
+475 |     private boolean shouldGrowTable() {
+476 |         return size > (mask + 1) * LOAD_FACTOR;
+477 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math.util.CompositeFormat.getDefaultNumberFormat(Locale)
+Source: src/main/java/org/apache/commons/math/util/CompositeFormat.java
+Original range: 52-56
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance(java.util.Locale)} with the only
+     * customizing that the maximum number of fraction digits is set to 2.
+     * @param locale the specific locale used by the format.
+     * @return the default number format specific to the given locale.
+     */
+Method code:
+52 |     protected static NumberFormat getDefaultNumberFormat(final Locale locale) {
+53 |         final NumberFormat nf = NumberFormat.getInstance(locale);
+54 |         nf.setMaximumFractionDigits(2);
+55 |         return nf;
+56 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math.linear.RealVectorFormat.getInstance(Locale)
+Source: src/main/java/org/apache/commons/math/linear/RealVectorFormat.java
+Original range: 181-183
+Documentation:
+/**
+     * Returns the default real vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the real vector format specific to the given locale.
+     */
+Method code:
+181 |     public static RealVectorFormat getInstance(final Locale locale) {
+182 |         return new RealVectorFormat(getDefaultNumberFormat(locale));
+183 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.Iterator.advance()
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 569-592
+Documentation:
+/**
+         * Advance iterator one step further.
+         * @exception ConcurrentModificationException if the map is modified during iteration
+         * @exception NoSuchElementException if there is no element left in the map
+         */
+Method code:
+569 |         public void advance()
+570 |             throws ConcurrentModificationException, NoSuchElementException {
+571 | 
+572 |             if (referenceCount != count) {
+573 |                 throw MathRuntimeException.createConcurrentModificationException(
+574 |                       CONCURRENT_MODIFICATION_MESSAGE);
+575 |             }
+576 | 
+577 |             // advance on step
+578 |             current = next;
+579 | 
+580 |             // prepare next step
+581 |             try {
+582 |                 while (states[++next] != FULL) {
+583 |                     // nothing to do
+584 |                 }
+585 |             } catch (ArrayIndexOutOfBoundsException e) {
+586 |                 next = -2;
+587 |                 if (current < 0) {
+588 |                     throw MathRuntimeException.createNoSuchElementException(EXHAUSTED_ITERATOR_MESSAGE);
+589 |                 }
+590 |             }
+591 | 
+592 |         }
+
+===== M0033 =====
+Signature: org.apache.commons.math.linear.OpenMapRealVector.OpenMapEntry.OpenMapEntry(Iterator)
+Source: src/main/java/org/apache/commons/math/linear/OpenMapRealVector.java
+Original range: 825-827
+Documentation:
+/** Build an entry from an iterator point to an element.
+         * @param iter iterator pointing to the entry
+         */
+Method code:
+825 |         protected OpenMapEntry(Iterator iter) {
+826 |             this.iter = iter;
+827 |         }
+
+===== M0034 =====
+Signature: org.apache.commons.math.linear.OpenMapRealVector.OpenMapRealVector(double[])
+Source: src/main/java/org/apache/commons/math/linear/OpenMapRealVector.java
+Original range: 116-118
+Documentation:
+/**
+     * Create from a double array.
+     * Only non-zero entries will be stored
+     * @param values The set of values to create from
+     */
+Method code:
+116 |     public OpenMapRealVector(double[] values) {
+117 |         this(values, DEFAULT_ZERO_TOLERANCE);
+118 |     }
+

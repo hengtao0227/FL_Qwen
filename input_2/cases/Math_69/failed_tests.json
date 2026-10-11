@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math.stat.correlation.PearsonsCorrelationTest.testPValueNearZero()",
+    "resolved_signature": "org.apache.commons.math.stat.correlation.PearsonsCorrelationTest.testPValueNearZero()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math/stat/correlation/PearsonsCorrelationTest.java",
+    "begin_line": 167,
+    "end_line": 182,
+    "comment": "/**\r\n     * Test p-value near 0. JIRA: MATH-371\r\n     */",
+    "snippet": "    public void testPValueNearZero() throws Exception {\n        /*\n         * Create a dataset that has r -> 1, p -> 0 as dimension increases.\n         * Prior to the fix for MATH-371, p vanished for dimension >= 14.\n         * Post fix, p-values diminish smoothly, vanishing at dimension = 127.\n         * Tested value is ~1E-303.\n         */\n        int dimension = 120; \n        double[][] data = new double[dimension][2];\n        for (int i = 0; i < dimension; i++) {\n            data[i][0] = i;\n            data[i][1] = i + 1/((double)i + 1);\n        }\n        PearsonsCorrelation corrInstance = new PearsonsCorrelation(data);\n        assertTrue(corrInstance.getCorrelationPValues().getEntry(0, 1) > 0);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math.stat.correlation.SpearmansRankCorrelationTest.testPValueNearZero()",
+    "resolved_signature": "org.apache.commons.math.stat.correlation.PearsonsCorrelationTest.testPValueNearZero()",
+    "resolution": "inherited",
+    "src_path": "src/test/java/org/apache/commons/math/stat/correlation/PearsonsCorrelationTest.java",
+    "begin_line": 167,
+    "end_line": 182,
+    "comment": "/**\r\n     * Test p-value near 0. JIRA: MATH-371\r\n     */",
+    "snippet": "    public void testPValueNearZero() throws Exception {\n        /*\n         * Create a dataset that has r -> 1, p -> 0 as dimension increases.\n         * Prior to the fix for MATH-371, p vanished for dimension >= 14.\n         * Post fix, p-values diminish smoothly, vanishing at dimension = 127.\n         * Tested value is ~1E-303.\n         */\n        int dimension = 120; \n        double[][] data = new double[dimension][2];\n        for (int i = 0; i < dimension; i++) {\n            data[i][0] = i;\n            data[i][1] = i + 1/((double)i + 1);\n        }\n        PearsonsCorrelation corrInstance = new PearsonsCorrelation(data);\n        assertTrue(corrInstance.getCorrelationPValues().getEntry(0, 1) > 0);\n    }"
+  }
+]

@@ -1,0 +1,2107 @@
+===== M0001 =====
+Signature: org.jfree.chart.title.LegendTitle.LegendTitle(LegendItemSource,Arrangement,Arrangement)
+Source: source/org/jfree/chart/title/LegendTitle.java
+Original range: 174-188
+Documentation:
+/**
+     * Creates a new legend title with the specified arrangement.
+     * 
+     * @param source  the source.
+     * @param hLayout  the horizontal item arrangement (<code>null</code> not
+     *                 permitted).
+     * @param vLayout  the vertical item arrangement (<code>null</code> not
+     *                 permitted).
+     */
+Method code:
+174 |     public LegendTitle(LegendItemSource source, 
+175 |                        Arrangement hLayout, Arrangement vLayout) {
+176 |         this.sources = new LegendItemSource[] {source};
+177 |         this.items = new BlockContainer(hLayout);
+178 |         this.hLayout = hLayout;
+179 |         this.vLayout = vLayout;
+180 |         this.backgroundPaint = null;  
+181 |         this.legendItemGraphicEdge = RectangleEdge.LEFT;
+182 |         this.legendItemGraphicAnchor = RectangleAnchor.CENTER;
+183 |         this.legendItemGraphicLocation = RectangleAnchor.CENTER;
+184 |         this.legendItemGraphicPadding = new RectangleInsets(2.0, 2.0, 2.0, 2.0);
+185 |         this.itemFont = DEFAULT_ITEM_FONT;
+186 |         this.itemPaint = DEFAULT_ITEM_PAINT;
+187 |         this.itemLabelPadding = new RectangleInsets(2.0, 2.0, 2.0, 2.0);
+188 |     }
+
+===== M0002 =====
+Signature: org.jfree.data.DefaultKeyedValues2D.DefaultKeyedValues2D()
+Source: source/org/jfree/data/DefaultKeyedValues2D.java
+Original range: 94-96
+Documentation:
+/**
+     * Creates a new instance (initially empty).
+     */
+Method code:
+94 |     public DefaultKeyedValues2D() {
+95 |         this(false);
+96 |     }
+
+===== M0003 =====
+Signature: org.jfree.chart.resources.JFreeChartResources.getContents()
+Source: source/org/jfree/chart/resources/JFreeChartResources.java
+Original range: 51-53
+Documentation:
+/**
+     * Returns the array of strings in the resource bundle.
+     *
+     * @return The resources.
+     */
+Method code:
+51 |     public Object[][] getContents() {
+52 |         return CONTENTS;
+53 |     }
+
+===== M0004 =====
+Signature: org.jfree.chart.plot.PiePlot.PiePlot(PieDataset)
+Source: source/org/jfree/chart/plot/PiePlot.java
+Original range: 503-553
+Documentation:
+/**
+     * Creates a plot that will draw a pie chart for the specified dataset.
+     *
+     * @param dataset  the dataset (<code>null</code> permitted).
+     */
+Method code:
+503 |     public PiePlot(PieDataset dataset) {
+504 |         super();
+505 |         this.dataset = dataset;
+506 |         if (dataset != null) {
+507 |             dataset.addChangeListener(this);
+508 |         }
+509 |         this.pieIndex = 0;
+510 |         
+511 |         this.interiorGap = DEFAULT_INTERIOR_GAP;
+512 |         this.circular = true;
+513 |         this.startAngle = DEFAULT_START_ANGLE;
+514 |         this.direction = Rotation.CLOCKWISE;
+515 |         this.minimumArcAngleToDraw = DEFAULT_MINIMUM_ARC_ANGLE_TO_DRAW;
+516 | 
+517 |         this.sectionPaintMap = new PaintMap();
+518 |         this.baseSectionPaint = Color.gray;
+519 | 
+520 |         this.sectionOutlinesVisible = true;
+521 |         this.sectionOutlinePaintMap = new PaintMap();
+522 |         this.baseSectionOutlinePaint = DEFAULT_OUTLINE_PAINT;
+523 | 
+524 |         this.sectionOutlineStrokeMap = new StrokeMap();
+525 |         this.baseSectionOutlineStroke = DEFAULT_OUTLINE_STROKE;
+526 |         
+527 |         this.explodePercentages = new TreeMap();
+528 | 
+529 |         this.labelGenerator = new StandardPieSectionLabelGenerator();
+530 |         this.labelFont = DEFAULT_LABEL_FONT;
+531 |         this.labelPaint = DEFAULT_LABEL_PAINT;
+532 |         this.labelBackgroundPaint = DEFAULT_LABEL_BACKGROUND_PAINT;
+533 |         this.labelOutlinePaint = DEFAULT_LABEL_OUTLINE_PAINT;
+534 |         this.labelOutlineStroke = DEFAULT_LABEL_OUTLINE_STROKE;
+535 |         this.labelShadowPaint = DEFAULT_LABEL_SHADOW_PAINT;
+536 |         this.labelLinksVisible = true;
+537 |         this.labelDistributor = new PieLabelDistributor(0);
+538 |         
+539 |         this.simpleLabels = false;
+540 |         this.simpleLabelOffset = new RectangleInsets(UnitType.RELATIVE, 0.18, 
+541 |                 0.18, 0.18, 0.18);
+542 |         this.labelPadding = new RectangleInsets(2, 2, 2, 2);
+543 |         
+544 |         this.toolTipGenerator = null;
+545 |         this.urlGenerator = null;
+546 |         this.legendLabelGenerator = new StandardPieSectionLabelGenerator();
+547 |         this.legendLabelToolTipGenerator = null;
+548 |         this.legendLabelURLGenerator = null;
+549 |         this.legendItemShape = Plot.DEFAULT_LEGEND_ITEM_CIRCLE;
+550 |         
+551 |         this.ignoreNullValues = false;
+552 |         this.ignoreZeroValues = false;
+553 |     }
+
+===== M0005 =====
+Signature: org.jfree.chart.block.BlockContainer.BlockContainer(Arrangement)
+Source: source/org/jfree/chart/block/BlockContainer.java
+Original range: 95-101
+Documentation:
+/**
+     * Creates a new instance with the specified arrangement.
+     * 
+     * @param arrangement  the arrangement manager (<code>null</code> not 
+     *                     permitted).
+     */
+Method code:
+95 |     public BlockContainer(Arrangement arrangement) {
+96 |         if (arrangement == null) {
+97 |             throw new IllegalArgumentException("Null 'arrangement' argument.");
+98 |         }
+99 |         this.arrangement = arrangement;
+100 |         this.blocks = new ArrayList();
+101 |     }    
+
+===== M0006 =====
+Signature: org.jfree.chart.util.RectangleAnchor.RectangleAnchor(String)
+Source: source/org/jfree/chart/util/RectangleAnchor.java
+Original range: 106-108
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+106 |     private RectangleAnchor(final String name) {
+107 |         this.name = name;
+108 |     }
+
+===== M0007 =====
+Signature: org.jfree.chart.block.AbstractBlock.setPadding(RectangleInsets)
+Source: source/org/jfree/chart/block/AbstractBlock.java
+Original range: 276-281
+Documentation:
+/**
+     * Sets the padding (use {@link RectangleInsets#ZERO_INSETS} for no 
+     * padding).
+     * 
+     * @param padding  the padding (<code>null</code> not permitted).
+     * 
+     * @see #getPadding()
+     */
+Method code:
+276 |     public void setPadding(RectangleInsets padding) {
+277 |         if (padding == null) {
+278 |             throw new IllegalArgumentException("Null 'padding' argument.");   
+279 |         }
+280 |         this.padding = padding;
+281 |     }
+
+===== M0008 =====
+Signature: org.jfree.chart.JFreeChart.fireChartChanged()
+Source: source/org/jfree/chart/JFreeChart.java
+Original range: 1485-1488
+Documentation:
+/**
+     * Sends a default {@link ChartChangeEvent} to all registered listeners.
+     * <P>
+     * This method is for convenience only.
+     */
+Method code:
+1485 |     public void fireChartChanged() {
+1486 |         ChartChangeEvent event = new ChartChangeEvent(this);
+1487 |         notifyListeners(event);
+1488 |     }
+
+===== M0009 =====
+Signature: org.jfree.chart.ui.ProjectInfo.setLogo(Image)
+Source: source/org/jfree/chart/ui/ProjectInfo.java
+Original range: 110-112
+Documentation:
+/**
+     * Sets the project logo.
+     *
+     * @param logo  the project logo.
+     */
+Method code:
+110 |     public void setLogo(final Image logo) {
+111 |         this.logo = logo;
+112 |     }
+
+===== M0010 =====
+Signature: org.jfree.chart.plot.MultiplePiePlot.getDataset()
+Source: source/org/jfree/chart/plot/MultiplePiePlot.java
+Original range: 165-167
+Documentation:
+/**
+     * Returns the dataset used by the plot.
+     *
+     * @return The dataset (possibly <code>null</code>).
+     */
+Method code:
+165 |     public CategoryDataset getDataset() {
+166 |         return this.dataset;
+167 |     }
+
+===== M0011 =====
+Signature: org.jfree.chart.JFreeChart.JFreeChart(String,Font,Plot,boolean)
+Source: source/org/jfree/chart/JFreeChart.java
+Original range: 363-417
+Documentation:
+/**
+     * Creates a new chart with the given title and plot.  The 
+     * <code>createLegend</code> argument specifies whether or not a legend
+     * should be added to the chart.  
+     * <br><br>
+     * Note that the  {@link ChartFactory} class contains a range 
+     * of static methods that will return ready-made charts, and often this
+     * is a more convenient way to create charts than using this constructor.
+     *
+     * @param title  the chart title (<code>null</code> permitted).
+     * @param titleFont  the font for displaying the chart title 
+     *                   (<code>null</code> permitted).
+     * @param plot  controller of the visual representation of the data 
+     *              (<code>null</code> not permitted).
+     * @param createLegend  a flag indicating whether or not a legend should   
+     *                      be created for the chart.
+     */
+Method code:
+363 |     public JFreeChart(String title, Font titleFont, Plot plot, 
+364 |                       boolean createLegend) {
+365 | 
+366 |         if (plot == null) {
+367 |             throw new NullPointerException("Null 'plot' argument.");
+368 |         }
+369 | 
+370 |         // create storage for listeners...
+371 |         this.progressListeners = new EventListenerList();
+372 |         this.changeListeners = new EventListenerList();
+373 |         this.notify = true;  // default is to notify listeners when the 
+374 |                              // chart changes
+375 | 
+376 |         this.renderingHints = new RenderingHints(
+377 |                 RenderingHints.KEY_ANTIALIASING, 
+378 |                 RenderingHints.VALUE_ANTIALIAS_ON);
+379 | 
+380 |         this.borderVisible = false;
+381 |         this.borderStroke = new BasicStroke(1.0f);
+382 |         this.borderPaint = Color.black;
+383 | 
+384 |         this.padding = RectangleInsets.ZERO_INSETS;
+385 |         
+386 |         this.plot = plot;
+387 |         plot.addChangeListener(this);
+388 | 
+389 |         this.subtitles = new ArrayList();
+390 | 
+391 |         // create a legend, if requested...
+392 |         if (createLegend) {
+393 |             LegendTitle legend = new LegendTitle(this.plot);
+394 |             legend.setMargin(new RectangleInsets(1.0, 1.0, 1.0, 1.0));
+395 |             legend.setFrame(new LineBorder());
+396 |             legend.setBackgroundPaint(Color.white);
+397 |             legend.setPosition(RectangleEdge.BOTTOM);
+398 |             this.subtitles.add(legend);
+399 |             legend.addChangeListener(this);
+400 |         }
+401 | 
+402 |         // add the chart title, if one has been specified...
+403 |         if (title != null) {
+404 |             if (titleFont == null) {
+405 |                 titleFont = DEFAULT_TITLE_FONT;
+406 |             }
+407 |             this.title = new TextTitle(title, titleFont);
+408 |             this.title.addChangeListener(this);
+409 |         }
+410 | 
+411 |         this.backgroundPaint = DEFAULT_BACKGROUND_PAINT;
+412 | 
+413 |         this.backgroundImage = DEFAULT_BACKGROUND_IMAGE;
+414 |         this.backgroundImageAlignment = DEFAULT_BACKGROUND_IMAGE_ALIGNMENT;
+415 |         this.backgroundImageAlpha = DEFAULT_BACKGROUND_IMAGE_ALPHA;
+416 | 
+417 |     }
+
+===== M0012 =====
+Signature: org.jfree.chart.PaintMap.PaintMap()
+Source: source/org/jfree/chart/PaintMap.java
+Original range: 77-79
+Documentation:
+/**
+     * Creates a new (empty) map.
+     */
+Method code:
+77 |     public PaintMap() {
+78 |         this.store = new HashMap();    
+79 |     }
+
+===== M0013 =====
+Signature: org.jfree.data.DefaultKeyedValues2D.DefaultKeyedValues2D(boolean)
+Source: source/org/jfree/data/DefaultKeyedValues2D.java
+Original range: 103-108
+Documentation:
+/**
+     * Creates a new instance (initially empty).
+     * 
+     * @param sortRowKeys  if the row keys should be sorted.
+     */
+Method code:
+103 |     public DefaultKeyedValues2D(boolean sortRowKeys) {
+104 |         this.rowKeys = new java.util.ArrayList();
+105 |         this.columnKeys = new java.util.ArrayList();
+106 |         this.rows = new java.util.ArrayList();
+107 |         this.sortRowKeys = sortRowKeys;
+108 |     }
+
+===== M0014 =====
+Signature: org.jfree.chart.util.RectangleInsets.RectangleInsets(double,double,double,double)
+Source: source/org/jfree/chart/util/RectangleInsets.java
+Original range: 100-103
+Documentation:
+/**
+     * Creates a new instance with the specified insets (as 'absolute' units).
+     * 
+     * @param top  the top insets.
+     * @param left  the left insets.
+     * @param bottom  the bottom insets.
+     * @param right  the right insets.
+     */
+Method code:
+100 |     public RectangleInsets(double top, double left, double bottom, 
+101 |             double right) {
+102 |         this(UnitType.ABSOLUTE, top, left, bottom, right);   
+103 |     }
+
+===== M0015 =====
+Signature: org.jfree.chart.labels.StandardPieSectionLabelGenerator.StandardPieSectionLabelGenerator(String,NumberFormat,NumberFormat)
+Source: source/org/jfree/chart/labels/StandardPieSectionLabelGenerator.java
+Original range: 139-143
+Documentation:
+/**
+     * Creates an item label generator using the specified number formatters.
+     *
+     * @param labelFormat  the label format string (<code>null</code> not 
+     *                     permitted).
+     * @param numberFormat  the format object for the values (<code>null</code>
+     *                      not permitted).
+     * @param percentFormat  the format object for the percentages 
+     *                       (<code>null</code> not permitted).
+     */
+Method code:
+139 |     public StandardPieSectionLabelGenerator(String labelFormat,
+140 |             NumberFormat numberFormat, NumberFormat percentFormat) {
+141 |         super(labelFormat, numberFormat, percentFormat);
+142 |         this.attributedLabels = new ObjectList();
+143 |     }
+
+===== M0016 =====
+Signature: org.jfree.chart.plot.DefaultDrawingSupplier.intArray(double,double,double,double)
+Source: source/org/jfree/chart/plot/DefaultDrawingSupplier.java
+Original range: 531-533
+Documentation:
+/**
+     * Helper method to avoid lots of explicit casts in getShape().  Returns
+     * an array containing the provided doubles cast to ints.
+     *
+     * @param a  x
+     * @param b  y
+     * @param c  z
+     * @param d  t
+     *
+     * @return int[4] with converted params.
+     */
+Method code:
+531 |     private static int[] intArray(double a, double b, double c, double d) {
+532 |         return new int[] {(int) a, (int) b, (int) c, (int) d};
+533 |     }
+
+===== M0017 =====
+Signature: org.jfree.chart.ui.Library.Library()
+Source: source/org/jfree/chart/ui/Library.java
+Original range: 82-84
+Documentation:
+/**
+     * Creates a new library reference.
+     */
+Method code:
+82 |     protected Library() {
+83 |         // nothing required
+84 |     }
+
+===== M0018 =====
+Signature: org.jfree.chart.ui.BasicProjectInfo.setVersion(String)
+Source: source/org/jfree/chart/ui/BasicProjectInfo.java
+Original range: 233-235
+Documentation:
+/**
+     * Sets the project version number.
+     * 
+     * @param version  the version number.
+     */
+Method code:
+233 |     public void setVersion(String version) {
+234 |         super.setVersion(version);
+235 |     }
+
+===== M0019 =====
+Signature: org.jfree.chart.block.BlockBorder.BlockBorder(RectangleInsets,Paint)
+Source: source/org/jfree/chart/block/BlockBorder.java
+Original range: 128-137
+Documentation:
+/**
+     * Creates a new border.
+     * 
+     * @param insets  the border insets (<code>null</code> not permitted).
+     * @param paint  the paint (<code>null</code> not permitted).
+     */
+Method code:
+128 |     public BlockBorder(RectangleInsets insets, Paint paint) {
+129 |         if (insets == null) {
+130 |             throw new IllegalArgumentException("Null 'insets' argument.");
+131 |         }
+132 |         if (paint == null) {
+133 |             throw new IllegalArgumentException("Null 'paint' argument.");   
+134 |         }
+135 |         this.insets = insets;
+136 |         this.paint = paint;
+137 |     }
+
+===== M0020 =====
+Signature: org.jfree.chart.title.TextTitle.TextTitle(String,Font)
+Source: source/org/jfree/chart/title/TextTitle.java
+Original range: 186-190
+Documentation:
+/**
+     * Creates a new title, using default attributes where necessary.
+     *
+     * @param text  the title text (<code>null</code> not permitted).
+     * @param font  the title font (<code>null</code> not permitted).
+     */
+Method code:
+186 |     public TextTitle(String text, Font font) {
+187 |         this(text, font, TextTitle.DEFAULT_TEXT_PAINT, Title.DEFAULT_POSITION,
+188 |                 Title.DEFAULT_HORIZONTAL_ALIGNMENT, 
+189 |                 Title.DEFAULT_VERTICAL_ALIGNMENT, Title.DEFAULT_PADDING);
+190 |     }
+
+===== M0021 =====
+Signature: org.jfree.chart.util.AbstractObjectList.AbstractObjectList(int)
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 85-87
+Documentation:
+/**
+     * Creates a new list.
+     *
+     * @param initialCapacity  the initial capacity.
+     */
+Method code:
+85 |     protected AbstractObjectList(int initialCapacity) {
+86 |         this (initialCapacity, initialCapacity);
+87 |     }
+
+===== M0022 =====
+Signature: org.jfree.chart.ui.BasicProjectInfo.setCopyright(String)
+Source: source/org/jfree/chart/ui/BasicProjectInfo.java
+Original range: 197-199
+Documentation:
+/**
+     * Sets the project copyright statement.
+     *
+     * @param copyright  the project copyright statement.
+     */
+Method code:
+197 |     public void setCopyright(String copyright) {
+198 |         this.copyright = copyright;
+199 |     }
+
+===== M0023 =====
+Signature: org.jfree.chart.JFreeChart.JFreeChart(Plot)
+Source: source/org/jfree/chart/JFreeChart.java
+Original range: 326-328
+Documentation:
+/**
+     * Creates a new chart based on the supplied plot.  The chart will have
+     * a legend added automatically, but no title (although you can easily add
+     * one later).  
+     * <br><br>
+     * Note that the  {@link ChartFactory} class contains a range 
+     * of static methods that will return ready-made charts, and often this
+     * is a more convenient way to create charts than using this constructor.
+     *
+     * @param plot  the plot (<code>null</code> not permitted).
+     */
+Method code:
+326 |     public JFreeChart(Plot plot) {
+327 |         this(null, null, plot, true);
+328 |     }
+
+===== M0024 =====
+Signature: org.jfree.data.general.DatasetGroup.DatasetGroup()
+Source: source/org/jfree/data/general/DatasetGroup.java
+Original range: 62-65
+Documentation:
+/**
+     * Constructs a new group.
+     */
+Method code:
+62 |     public DatasetGroup() {
+63 |         super();
+64 |         this.id = "NOID";
+65 |     }
+
+===== M0025 =====
+Signature: org.jfree.chart.StrokeMap.StrokeMap()
+Source: source/org/jfree/chart/StrokeMap.java
+Original range: 75-77
+Documentation:
+/**
+     * Creates a new (empty) map.
+     */
+Method code:
+75 |     public StrokeMap() {
+76 |         this.store = new TreeMap();    
+77 |     }
+
+===== M0026 =====
+Signature: org.jfree.chart.util.VerticalAlignment.VerticalAlignment(String)
+Source: source/org/jfree/chart/util/VerticalAlignment.java
+Original range: 76-78
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+76 |     private VerticalAlignment(String name) {
+77 |         this.name = name;
+78 |     }
+
+===== M0027 =====
+Signature: org.jfree.chart.JFreeChart.getLegend()
+Source: source/org/jfree/chart/JFreeChart.java
+Original range: 627-629
+Documentation:
+/**
+     * Returns the legend for the chart, if there is one.  Note that a chart
+     * can have more than one legend - this method returns the first.
+     * 
+     * @return The legend (possibly <code>null</code>).
+     * 
+     * @see #getLegend(int)
+     */
+Method code:
+627 |     public LegendTitle getLegend() {
+628 |         return getLegend(0);
+629 |     }
+
+===== M0028 =====
+Signature: org.jfree.chart.ui.BasicProjectInfo.BasicProjectInfo()
+Source: source/org/jfree/chart/ui/BasicProjectInfo.java
+Original range: 145-148
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+145 |     public BasicProjectInfo() {
+146 |         this.libraries = new ArrayList();
+147 |         this.optionalLibraries = new ArrayList();
+148 |     }
+
+===== M0029 =====
+Signature: org.jfree.data.general.AbstractDataset.hasListener(EventListener)
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 159-162
+Documentation:
+/**
+     * Returns <code>true</code> if the specified object is registered with
+     * the dataset as a listener.  Most applications won't need to call this 
+     * method, it exists mainly for use by unit testing code.
+     * 
+     * @param listener  the listener.
+     * 
+     * @return A boolean.
+     * 
+     * @see #addChangeListener(DatasetChangeListener)
+     * @see #removeChangeListener(DatasetChangeListener)
+     */
+Method code:
+159 |     public boolean hasListener(EventListener listener) {
+160 |         List list = Arrays.asList(this.listenerList.getListenerList());
+161 |         return list.contains(listener);
+162 |     }
+
+===== M0030 =====
+Signature: org.jfree.chart.plot.DefaultDrawingSupplier.DefaultDrawingSupplier()
+Source: source/org/jfree/chart/plot/DefaultDrawingSupplier.java
+Original range: 148-156
+Documentation:
+/**
+     * Creates a new supplier, with default sequences for fill paint, outline 
+     * paint, stroke and shapes.
+     */
+Method code:
+148 |     public DefaultDrawingSupplier() {
+149 | 
+150 |         this(DEFAULT_PAINT_SEQUENCE, DEFAULT_FILL_PAINT_SEQUENCE,
+151 |              DEFAULT_OUTLINE_PAINT_SEQUENCE,
+152 |              DEFAULT_STROKE_SEQUENCE,
+153 |              DEFAULT_OUTLINE_STROKE_SEQUENCE,
+154 |              DEFAULT_SHAPE_SEQUENCE);
+155 | 
+156 |     }
+
+===== M0031 =====
+Signature: org.jfree.chart.util.AbstractObjectList.AbstractObjectList(int,int)
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 95-98
+Documentation:
+/**
+     * Creates a new list.
+     * 
+     * @param initialCapacity  the initial capacity.
+     * @param increment  the increment.
+     */
+Method code:
+95 |     protected AbstractObjectList(int initialCapacity, int increment) {
+96 |         this.objects = new Object[initialCapacity];
+97 |         this.increment = increment;
+98 |     }
+
+===== M0032 =====
+Signature: org.jfree.chart.plot.DefaultDrawingSupplier.createStandardSeriesShapes()
+Source: source/org/jfree/chart/plot/DefaultDrawingSupplier.java
+Original range: 287-337
+Documentation:
+/**
+     * Creates an array of standard shapes to display for the items in series 
+     * on charts.
+     *
+     * @return The array of shapes.
+     */
+Method code:
+287 |     public static Shape[] createStandardSeriesShapes() {
+288 | 
+289 |         Shape[] result = new Shape[10];
+290 | 
+291 |         double size = 6.0;
+292 |         double delta = size / 2.0;
+293 |         int[] xpoints = null;
+294 |         int[] ypoints = null;
+295 | 
+296 |         // square
+297 |         result[0] = new Rectangle2D.Double(-delta, -delta, size, size);
+298 |         // circle
+299 |         result[1] = new Ellipse2D.Double(-delta, -delta, size, size);
+300 | 
+301 |         // up-pointing triangle
+302 |         xpoints = intArray(0.0, delta, -delta);
+303 |         ypoints = intArray(-delta, delta, delta);
+304 |         result[2] = new Polygon(xpoints, ypoints, 3);
+305 | 
+306 |         // diamond
+307 |         xpoints = intArray(0.0, delta, 0.0, -delta);
+308 |         ypoints = intArray(-delta, 0.0, delta, 0.0);
+309 |         result[3] = new Polygon(xpoints, ypoints, 4);
+310 | 
+311 |         // horizontal rectangle
+312 |         result[4] = new Rectangle2D.Double(-delta, -delta / 2, size, size / 2);
+313 | 
+314 |         // down-pointing triangle
+315 |         xpoints = intArray(-delta, +delta, 0.0);
+316 |         ypoints = intArray(-delta, -delta, delta);
+317 |         result[5] = new Polygon(xpoints, ypoints, 3);
+318 | 
+319 |         // horizontal ellipse
+320 |         result[6] = new Ellipse2D.Double(-delta, -delta / 2, size, size / 2);
+321 | 
+322 |         // right-pointing triangle
+323 |         xpoints = intArray(-delta, delta, -delta);
+324 |         ypoints = intArray(-delta, 0.0, delta);
+325 |         result[7] = new Polygon(xpoints, ypoints, 3);
+326 | 
+327 |         // vertical rectangle
+328 |         result[8] = new Rectangle2D.Double(-delta / 2, -delta, size / 2, size);
+329 | 
+330 |         // left-pointing triangle
+331 |         xpoints = intArray(-delta, delta, delta);
+332 |         ypoints = intArray(0.0, -delta, +delta);
+333 |         result[9] = new Polygon(xpoints, ypoints, 3);
+334 | 
+335 |         return result;
+336 | 
+337 |     }
+
+===== M0033 =====
+Signature: org.jfree.data.category.DefaultCategoryDataset.DefaultCategoryDataset()
+Source: source/org/jfree/data/category/DefaultCategoryDataset.java
+Original range: 73-75
+Documentation:
+/**
+     * Creates a new (empty) dataset.
+     */
+Method code:
+73 |     public DefaultCategoryDataset() {
+74 |         this.data = new DefaultKeyedValues2D();
+75 |     }
+
+===== M0034 =====
+Signature: org.jfree.chart.ui.BasicProjectInfo.setName(String)
+Source: source/org/jfree/chart/ui/BasicProjectInfo.java
+Original range: 224-226
+Documentation:
+/**
+     * Sets the project name.
+     * 
+     * @param name  the project name.
+     */
+Method code:
+224 |     public void setName(String name) {
+225 |         super.setName(name);
+226 |     }
+
+===== M0035 =====
+Signature: org.jfree.chart.JFreeChart.removeLegend()
+Source: source/org/jfree/chart/JFreeChart.java
+Original range: 663-665
+Documentation:
+/**
+     * Removes the first legend in the chart and sends a 
+     * {@link ChartChangeEvent} to all registered listeners.
+     * 
+     * @see #getLegend()
+     */
+Method code:
+663 |     public void removeLegend() {
+664 |         removeSubtitle(getLegend());
+665 |     }
+
+===== M0036 =====
+Signature: org.jfree.chart.title.Title.addChangeListener(TitleChangeListener)
+Source: source/org/jfree/chart/title/Title.java
+Original range: 336-338
+Documentation:
+/**
+     * Registers an object for notification of changes to the title.
+     *
+     * @param listener  the object that is being registered.
+     */
+Method code:
+336 |     public void addChangeListener(TitleChangeListener listener) {
+337 |         this.listenerList.add(TitleChangeListener.class, listener);
+338 |     }
+
+===== M0037 =====
+Signature: org.jfree.chart.title.LegendTitle.LegendTitle(LegendItemSource)
+Source: source/org/jfree/chart/title/LegendTitle.java
+Original range: 161-163
+Documentation:
+/**
+     * Constructs a new (empty) legend for the specified source.
+     * 
+     * @param source  the source.
+     */
+Method code:
+161 |     public LegendTitle(LegendItemSource source) {
+162 |         this(source, new FlowArrangement(), new ColumnArrangement());
+163 |     }
+
+===== M0038 =====
+Signature: org.jfree.chart.ui.ProjectInfo.setContributors(List)
+Source: source/org/jfree/chart/ui/ProjectInfo.java
+Original range: 146-148
+Documentation:
+/**
+     * Sets the list of contributors.
+     *
+     * @param contributors  the list of contributors.
+     */
+Method code:
+146 |     public void setContributors(final List contributors) {
+147 |         this.contributors = contributors;
+148 |     }
+
+===== M0039 =====
+Signature: org.jfree.chart.ui.ProjectInfo.ProjectInfo()
+Source: source/org/jfree/chart/ui/ProjectInfo.java
+Original range: 67-69
+Documentation:
+/**
+     * Constructs an empty project info object.
+     */
+Method code:
+67 |     public ProjectInfo() {
+68 |         // nothing required
+69 |     }
+
+===== M0040 =====
+Signature: org.jfree.chart.title.Title.setPosition(RectangleEdge)
+Source: source/org/jfree/chart/title/Title.java
+Original range: 215-223
+Documentation:
+/**
+     * Sets the position for the title and sends a {@link TitleChangeEvent} to 
+     * all registered listeners.
+     *
+     * @param position  the position (<code>null</code> not permitted).
+     */
+Method code:
+215 |     public void setPosition(RectangleEdge position) {
+216 |         if (position == null) {
+217 |             throw new IllegalArgumentException("Null 'position' argument.");
+218 |         }
+219 |         if (this.position != position) {
+220 |             this.position = position;
+221 |             notifyListeners(new TitleChangeEvent(this));
+222 |         }
+223 |     }
+
+===== M0041 =====
+Signature: org.jfree.chart.util.UnitType.UnitType(String)
+Source: source/org/jfree/chart/util/UnitType.java
+Original range: 69-71
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+69 |     private UnitType(String name) {
+70 |         this.name = name;
+71 |     }
+
+===== M0042 =====
+Signature: org.jfree.chart.plot.PieLabelDistributor.PieLabelDistributor(int)
+Source: source/org/jfree/chart/plot/PieLabelDistributor.java
+Original range: 62-64
+Documentation:
+/**
+     * Creates a new distributor.
+     * 
+     * @param labelCount  the number of labels (ignored).
+     */
+Method code:
+62 |     public PieLabelDistributor(int labelCount) {
+63 |         super();
+64 |     }
+
+===== M0043 =====
+Signature: org.jfree.chart.ui.Licences.getInstance()
+Source: source/org/jfree/chart/ui/Licences.java
+Original range: 798-803
+Documentation:
+/**
+     * Returns a reference to this class.
+     *
+     * @return the instance reference.
+     */
+Method code:
+798 |     public static Licences getInstance() {
+799 |         if (singleton == null) {
+800 |             singleton = new Licences();
+801 |         }
+802 |         return singleton;
+803 |     }
+
+===== M0044 =====
+Signature: org.jfree.chart.plot.MultiplePiePlot.MultiplePiePlot()
+Source: source/org/jfree/chart/plot/MultiplePiePlot.java
+Original range: 134-136
+Documentation:
+/**
+     * Creates a new plot with no data.
+     */
+Method code:
+134 |     public MultiplePiePlot() {
+135 |         this(null);
+136 |     }
+
+===== M0045 =====
+Signature: org.jfree.chart.plot.DefaultDrawingSupplier.intArray(double,double,double)
+Source: source/org/jfree/chart/plot/DefaultDrawingSupplier.java
+Original range: 516-518
+Documentation:
+/**
+     * Helper method to avoid lots of explicit casts in getShape().  Returns
+     * an array containing the provided doubles cast to ints.
+     *
+     * @param a  x
+     * @param b  y
+     * @param c  z
+     *
+     * @return int[3] with converted params.
+     */
+Method code:
+516 |     private static int[] intArray(double a, double b, double c) {
+517 |         return new int[] {(int) a, (int) b, (int) c};
+518 |     }
+
+===== M0046 =====
+Signature: org.jfree.chart.title.Title.Title()
+Source: source/org/jfree/chart/title/Title.java
+Original range: 130-134
+Documentation:
+/**
+     * Creates a new title, using default attributes where necessary.
+     */
+Method code:
+130 |     protected Title() {
+131 |         this(Title.DEFAULT_POSITION,
+132 |                 Title.DEFAULT_HORIZONTAL_ALIGNMENT,
+133 |                 Title.DEFAULT_VERTICAL_ALIGNMENT, Title.DEFAULT_PADDING);
+134 |     }
+
+===== M0047 =====
+Signature: org.jfree.chart.ui.Library.setInfo(String)
+Source: source/org/jfree/chart/ui/Library.java
+Original range: 127-129
+Documentation:
+/**
+     * Sets the project info.
+     * 
+     * @param info  the project info.
+     */
+Method code:
+127 |     protected void setInfo(String info) {
+128 |         this.info = info;
+129 |     }
+
+===== M0048 =====
+Signature: org.jfree.chart.block.AbstractBlock.AbstractBlock()
+Source: source/org/jfree/chart/block/AbstractBlock.java
+Original range: 109-117
+Documentation:
+/**
+     * Creates a new block.
+     */
+Method code:
+109 |     protected AbstractBlock() {
+110 |         this.id = null;
+111 |         this.width = 0.0;
+112 |         this.height = 0.0;
+113 |         this.bounds = new Rectangle2D.Float();
+114 |         this.margin = RectangleInsets.ZERO_INSETS;
+115 |         this.frame = BlockBorder.NONE; 
+116 |         this.padding = RectangleInsets.ZERO_INSETS;
+117 |     }
+
+===== M0049 =====
+Signature: org.jfree.chart.block.LineBorder.LineBorder(Paint,Stroke,RectangleInsets)
+Source: source/org/jfree/chart/block/LineBorder.java
+Original range: 93-106
+Documentation:
+/**
+     * Creates a new border with the specified color.
+     * 
+     * @param paint  the color (<code>null</code> not permitted).
+     * @param stroke  the border stroke (<code>null</code> not permitted).
+     * @param insets  the insets (<code>null</code> not permitted).
+     */
+Method code:
+93 |     public LineBorder(Paint paint, Stroke stroke, RectangleInsets insets) {
+94 |         if (paint == null) {
+95 |             throw new IllegalArgumentException("Null 'paint' argument.");
+96 |         }
+97 |         if (stroke == null) {
+98 |             throw new IllegalArgumentException("Null 'stroke' argument.");
+99 |         }
+100 |         if (insets == null) {
+101 |             throw new IllegalArgumentException("Null 'insets' argument.");
+102 |         }
+103 |         this.paint = paint;
+104 |         this.stroke = stroke;
+105 |         this.insets = insets;
+106 |     }  
+
+===== M0050 =====
+Signature: org.jfree.chart.util.ObjectList.ObjectList()
+Source: source/org/jfree/chart/util/ObjectList.java
+Original range: 58-59
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+58 |     public ObjectList() {
+59 |     }
+
+===== M0051 =====
+Signature: org.jfree.chart.plot.Plot.Plot()
+Source: source/org/jfree/chart/plot/Plot.java
+Original range: 284-304
+Documentation:
+/**
+     * Creates a new plot.
+     */
+Method code:
+284 |     protected Plot() {
+285 | 
+286 |         this.parent = null;
+287 |         this.insets = DEFAULT_INSETS;
+288 |         this.backgroundPaint = DEFAULT_BACKGROUND_PAINT;
+289 |         this.backgroundAlpha = DEFAULT_BACKGROUND_ALPHA;
+290 |         this.backgroundImage = null;
+291 |         this.outlineVisible = true;
+292 |         this.outlineStroke = DEFAULT_OUTLINE_STROKE;
+293 |         this.outlinePaint = DEFAULT_OUTLINE_PAINT;
+294 |         this.foregroundAlpha = DEFAULT_FOREGROUND_ALPHA;
+295 | 
+296 |         this.noDataMessage = null;
+297 |         this.noDataMessageFont = new Font("SansSerif", Font.PLAIN, 12);
+298 |         this.noDataMessagePaint = Color.black;
+299 | 
+300 |         this.drawingSupplier = new DefaultDrawingSupplier();
+301 | 
+302 |         this.listenerList = new EventListenerList();
+303 | 
+304 |     }
+
+===== M0052 =====
+Signature: org.jfree.chart.plot.AbstractPieLabelDistributor.AbstractPieLabelDistributor()
+Source: source/org/jfree/chart/plot/AbstractPieLabelDistributor.java
+Original range: 60-62
+Documentation:
+/**
+     * Creates a new instance.
+     */
+Method code:
+60 |     public AbstractPieLabelDistributor() {
+61 |         this.labels = new java.util.ArrayList();
+62 |     }
+
+===== M0053 =====
+Signature: org.jfree.chart.block.FlowArrangement.FlowArrangement()
+Source: source/org/jfree/chart/block/FlowArrangement.java
+Original range: 79-81
+Documentation:
+/**
+     * Creates a new instance.
+     */
+Method code:
+79 |     public FlowArrangement() {   
+80 |         this(HorizontalAlignment.CENTER, VerticalAlignment.CENTER, 2.0, 2.0);
+81 |     }
+
+===== M0054 =====
+Signature: org.jfree.chart.event.ChartChangeEventType.ChartChangeEventType(String)
+Source: source/org/jfree/chart/event/ChartChangeEventType.java
+Original range: 74-76
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+74 |     private ChartChangeEventType(String name) {
+75 |         this.name = name;
+76 |     }
+
+===== M0055 =====
+Signature: org.jfree.chart.title.LegendTitle.equals(Object)
+Source: source/org/jfree/chart/title/LegendTitle.java
+Original range: 540-576
+Documentation:
+/**
+     * Tests this title for equality with an arbitrary object.
+     * 
+     * @param obj  the object (<code>null</code> permitted).
+     * 
+     * @return A boolean.
+     */
+Method code:
+540 |     public boolean equals(Object obj) {
+541 |         if (obj == this) {
+542 |             return true;   
+543 |         }
+544 |         if (!(obj instanceof LegendTitle)) {
+545 |             return false;   
+546 |         }
+547 |         if (!super.equals(obj)) {
+548 |             return false;   
+549 |         }
+550 |         LegendTitle that = (LegendTitle) obj;
+551 |         if (!PaintUtilities.equal(this.backgroundPaint, that.backgroundPaint)) {
+552 |             return false;   
+553 |         }
+554 |         if (this.legendItemGraphicEdge != that.legendItemGraphicEdge) {
+555 |             return false;   
+556 |         }
+557 |         if (this.legendItemGraphicAnchor != that.legendItemGraphicAnchor) {
+558 |             return false;   
+559 |         }
+560 |         if (this.legendItemGraphicLocation != that.legendItemGraphicLocation) {
+561 |             return false;   
+562 |         }
+563 |         if (!this.itemFont.equals(that.itemFont)) {
+564 |             return false;   
+565 |         }
+566 |         if (!this.itemPaint.equals(that.itemPaint)) {
+567 |             return false;   
+568 |         }
+569 |         if (!this.hLayout.equals(that.hLayout)) {
+570 |             return false;   
+571 |         }
+572 |         if (!this.vLayout.equals(that.vLayout)) {
+573 |             return false;   
+574 |         }
+575 |         return true;
+576 |     }
+
+===== M0056 =====
+Signature: org.jfree.chart.block.AbstractBlock.setMargin(RectangleInsets)
+Source: source/org/jfree/chart/block/AbstractBlock.java
+Original range: 208-213
+Documentation:
+/**
+     * Sets the margin (use {@link RectangleInsets#ZERO_INSETS} for no 
+     * padding).
+     * 
+     * @param margin  the margin (<code>null</code> not permitted).
+     * 
+     * @see #getMargin()
+     */
+Method code:
+208 |     public void setMargin(RectangleInsets margin) {
+209 |         if (margin == null) {
+210 |             throw new IllegalArgumentException("Null 'margin' argument.");   
+211 |         }
+212 |         this.margin = margin;
+213 |     }
+
+===== M0057 =====
+Signature: org.jfree.chart.util.RectangleInsets.RectangleInsets(UnitType,double,double,double,double)
+Source: source/org/jfree/chart/util/RectangleInsets.java
+Original range: 115-125
+Documentation:
+/**
+     * Creates a new instance.
+     * 
+     * @param unitType  absolute or relative units (<code>null</code> not 
+     *                  permitted).
+     * @param top  the top insets.
+     * @param left  the left insets.
+     * @param bottom  the bottom insets.
+     * @param right  the right insets.
+     */
+Method code:
+115 |     public RectangleInsets(UnitType unitType, double top, double left, 
+116 |                            double bottom, double right) {
+117 |         if (unitType == null) {
+118 |             throw new IllegalArgumentException("Null 'unitType' argument.");
+119 |         }
+120 |         this.unitType = unitType;
+121 |         this.top = top;
+122 |         this.bottom = bottom;
+123 |         this.left = left;
+124 |         this.right = right;
+125 |     }
+
+===== M0058 =====
+Signature: org.jfree.chart.plot.MultiplePiePlot.MultiplePiePlot(CategoryDataset)
+Source: source/org/jfree/chart/plot/MultiplePiePlot.java
+Original range: 143-158
+Documentation:
+/**
+     * Creates a new plot.
+     *
+     * @param dataset  the dataset (<code>null</code> permitted).
+     */
+Method code:
+143 |     public MultiplePiePlot(CategoryDataset dataset) {
+144 |         super();
+145 |         this.dataset = dataset;
+146 |         PiePlot piePlot = new PiePlot(null);
+147 |         this.pieChart = new JFreeChart(piePlot);
+148 |         this.pieChart.removeLegend();
+149 |         this.dataExtractOrder = TableOrder.BY_COLUMN;
+150 |         this.pieChart.setBackgroundPaint(null);
+151 |         TextTitle seriesTitle = new TextTitle("Series Title",
+152 |                 new Font("SansSerif", Font.BOLD, 12));
+153 |         seriesTitle.setPosition(RectangleEdge.BOTTOM);
+154 |         this.pieChart.setTitle(seriesTitle);
+155 |         this.aggregatedItemsKey = "Other";
+156 |         this.aggregatedItemsPaint = Color.lightGray;
+157 |         this.sectionPaints = new HashMap();
+158 |     }
+
+===== M0059 =====
+Signature: org.jfree.chart.JFreeChart.getLegend(int)
+Source: source/org/jfree/chart/JFreeChart.java
+Original range: 640-655
+Documentation:
+/**
+     * Returns the nth legend for a chart, or <code>null</code>.
+     * 
+     * @param index  the legend index (zero-based).
+     * 
+     * @return The legend (possibly <code>null</code>).
+     * 
+     * @see #addLegend(LegendTitle)
+     */
+Method code:
+640 |     public LegendTitle getLegend(int index) {
+641 |         int seen = 0;
+642 |         Iterator iterator = this.subtitles.iterator();
+643 |         while (iterator.hasNext()) {
+644 |             Title subtitle = (Title) iterator.next();
+645 |             if (subtitle instanceof LegendTitle) {
+646 |                 if (seen == index) {
+647 |                     return (LegendTitle) subtitle;
+648 |                 }
+649 |                 else {
+650 |                     seen++;   
+651 |                 }
+652 |             }
+653 |         }
+654 |         return null;        
+655 |     }
+
+===== M0060 =====
+Signature: org.jfree.chart.block.LineBorder.LineBorder()
+Source: source/org/jfree/chart/block/LineBorder.java
+Original range: 81-84
+Documentation:
+/**
+     * Creates a default border.
+     */
+Method code:
+81 |     public LineBorder() {
+82 |         this(Color.black, new BasicStroke(1.0f), new RectangleInsets(1.0, 1.0, 
+83 |                 1.0, 1.0));
+84 |     }
+
+===== M0061 =====
+Signature: org.jfree.chart.labels.StandardPieSectionLabelGenerator.StandardPieSectionLabelGenerator()
+Source: source/org/jfree/chart/labels/StandardPieSectionLabelGenerator.java
+Original range: 89-92
+Documentation:
+/**
+     * Creates a new section label generator using 
+     * {@link #DEFAULT_SECTION_LABEL_FORMAT} as the label format string, and 
+     * platform default number and percentage formatters.
+     */
+Method code:
+89 |     public StandardPieSectionLabelGenerator() {
+90 |         this(DEFAULT_SECTION_LABEL_FORMAT, NumberFormat.getNumberInstance(), 
+91 |                 NumberFormat.getPercentInstance());
+92 |     }
+
+===== M0062 =====
+Signature: org.jfree.data.general.AbstractDataset.AbstractDataset()
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 94-97
+Documentation:
+/**
+     * Constructs a dataset. By default, the dataset is assigned to its own 
+     * group.
+     */
+Method code:
+94 |     protected AbstractDataset() {
+95 |         this.group = new DatasetGroup();
+96 |         this.listenerList = new EventListenerList();
+97 |     }
+
+===== M0063 =====
+Signature: org.jfree.chart.ChartColor.createDefaultPaintArray()
+Source: source/org/jfree/chart/ChartColor.java
+Original range: 149-187
+Documentation:
+/**
+     * Convenience method to return an array of <code>Paint</code> objects that
+     * represent the pre-defined colors in the <code>Color<code> and 
+     * <code>ChartColor</code> objects.
+     *
+     * @return An array of objects with the <code>Paint</code> interface.
+     */
+Method code:
+149 |     public static Paint[] createDefaultPaintArray() {
+150 | 
+151 |         return new Paint[] {
+152 |             new Color(0xFF, 0x55, 0x55),
+153 |             new Color(0x55, 0x55, 0xFF),
+154 |             new Color(0x55, 0xFF, 0x55),
+155 |             new Color(0xFF, 0xFF, 0x55),
+156 |             new Color(0xFF, 0x55, 0xFF),
+157 |             new Color(0x55, 0xFF, 0xFF),
+158 |             Color.pink,
+159 |             Color.gray,
+160 |             ChartColor.DARK_RED,
+161 |             ChartColor.DARK_BLUE,
+162 |             ChartColor.DARK_GREEN,
+163 |             ChartColor.DARK_YELLOW,
+164 |             ChartColor.DARK_MAGENTA,
+165 |             ChartColor.DARK_CYAN,
+166 |             Color.darkGray,
+167 |             ChartColor.LIGHT_RED,
+168 |             ChartColor.LIGHT_BLUE,
+169 |             ChartColor.LIGHT_GREEN,
+170 |             ChartColor.LIGHT_YELLOW,
+171 |             ChartColor.LIGHT_MAGENTA,
+172 |             ChartColor.LIGHT_CYAN,
+173 |             Color.lightGray,
+174 |             ChartColor.VERY_DARK_RED,
+175 |             ChartColor.VERY_DARK_BLUE,
+176 |             ChartColor.VERY_DARK_GREEN,
+177 |             ChartColor.VERY_DARK_YELLOW,
+178 |             ChartColor.VERY_DARK_MAGENTA,
+179 |             ChartColor.VERY_DARK_CYAN,
+180 |             ChartColor.VERY_LIGHT_RED,
+181 |             ChartColor.VERY_LIGHT_BLUE,
+182 |             ChartColor.VERY_LIGHT_GREEN,
+183 |             ChartColor.VERY_LIGHT_YELLOW,
+184 |             ChartColor.VERY_LIGHT_MAGENTA,
+185 |             ChartColor.VERY_LIGHT_CYAN
+186 |         };
+187 |     }
+
+===== M0064 =====
+Signature: org.jfree.chart.title.TextTitle.TextTitle(String,Font,Paint,RectangleEdge,HorizontalAlignment,VerticalAlignment,RectangleInsets)
+Source: source/org/jfree/chart/title/TextTitle.java
+Original range: 205-234
+Documentation:
+/**
+     * Creates a new title.
+     *
+     * @param text  the text for the title (<code>null</code> not permitted).
+     * @param font  the title font (<code>null</code> not permitted).
+     * @param paint  the title paint (<code>null</code> not permitted).
+     * @param position  the title position (<code>null</code> not permitted).
+     * @param horizontalAlignment  the horizontal alignment (<code>null</code> 
+     *                             not permitted).
+     * @param verticalAlignment  the vertical alignment (<code>null</code> not 
+     *                           permitted).
+     * @param padding  the space to leave around the outside of the title.
+     */
+Method code:
+205 |     public TextTitle(String text, Font font, Paint paint, 
+206 |                      RectangleEdge position, 
+207 |                      HorizontalAlignment horizontalAlignment, 
+208 |                      VerticalAlignment verticalAlignment,
+209 |                      RectangleInsets padding) {
+210 | 
+211 |         super(position, horizontalAlignment, verticalAlignment, padding);
+212 |         
+213 |         if (text == null) {
+214 |             throw new NullPointerException("Null 'text' argument.");
+215 |         }
+216 |         if (font == null) {
+217 |             throw new NullPointerException("Null 'font' argument.");
+218 |         }
+219 |         if (paint == null) {
+220 |             throw new NullPointerException("Null 'paint' argument.");
+221 |         }
+222 |         this.text = text;
+223 |         this.font = font;
+224 |         this.paint = paint;
+225 |         // the textAlignment and the horizontalAlignment are separate things,
+226 |         // but it makes sense for the default textAlignment to match the
+227 |         // title's horizontal alignment...
+228 |         this.textAlignment = horizontalAlignment;
+229 |         this.backgroundPaint = null;
+230 |         this.content = null;
+231 |         this.toolTipText = null;
+232 |         this.urlText = null;
+233 |         
+234 |     }
+
+===== M0065 =====
+Signature: org.jfree.chart.ui.Contributor.Contributor(String,String)
+Source: source/org/jfree/chart/ui/Contributor.java
+Original range: 63-66
+Documentation:
+/**
+     * Creates a new contributor.
+     *
+     * @param name  the name.
+     * @param email  the e-mail address.
+     */
+Method code:
+63 |     public Contributor(String name, String email) {
+64 |         this.name = name;
+65 |         this.email = email;
+66 |     }
+
+===== M0066 =====
+Signature: org.jfree.chart.title.LegendTitle.setBackgroundPaint(Paint)
+Source: source/org/jfree/chart/title/LegendTitle.java
+Original range: 228-231
+Documentation:
+/**
+     * Sets the background paint for the legend and sends a 
+     * {@link TitleChangeEvent} to all registered listeners.
+     * 
+     * @param paint  the paint (<code>null</code> permitted).
+     */
+Method code:
+228 |     public void setBackgroundPaint(Paint paint) {
+229 |         this.backgroundPaint = paint;   
+230 |         notifyListeners(new TitleChangeEvent(this));
+231 |     }
+
+===== M0067 =====
+Signature: org.jfree.chart.JFreeChart.setBackgroundPaint(Paint)
+Source: source/org/jfree/chart/JFreeChart.java
+Original range: 957-972
+Documentation:
+/**
+     * Sets the paint used to fill the chart background and sends a 
+     * {@link ChartChangeEvent} to all registered listeners.
+     *
+     * @param paint  the paint (<code>null</code> permitted).
+     * 
+     * @see #getBackgroundPaint()
+     */
+Method code:
+957 |     public void setBackgroundPaint(Paint paint) {
+958 | 
+959 |         if (this.backgroundPaint != null) {
+960 |             if (!this.backgroundPaint.equals(paint)) {
+961 |                 this.backgroundPaint = paint;
+962 |                 fireChartChanged();
+963 |             }
+964 |         }
+965 |         else {
+966 |             if (paint != null) {
+967 |                 this.backgroundPaint = paint;
+968 |                 fireChartChanged();
+969 |             }
+970 |         }
+971 | 
+972 |     }
+
+===== M0068 =====
+Signature: org.jfree.chart.plot.Plot.addChangeListener(PlotChangeListener)
+Source: source/org/jfree/chart/plot/Plot.java
+Original range: 867-869
+Documentation:
+/**
+     * Registers an object for notification of changes to the plot.
+     *
+     * @param listener  the object to be registered.
+     * 
+     * @see #removeChangeListener(PlotChangeListener)
+     */
+Method code:
+867 |     public void addChangeListener(PlotChangeListener listener) {
+868 |         this.listenerList.add(PlotChangeListener.class, listener);
+869 |     }
+
+===== M0069 =====
+Signature: org.jfree.chart.util.AbstractObjectList.AbstractObjectList()
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 76-78
+Documentation:
+/**
+     * Creates a new list with the default initial capacity.
+     */
+Method code:
+76 |     protected AbstractObjectList() {
+77 |         this(DEFAULT_INITIAL_CAPACITY);
+78 |     }
+
+===== M0070 =====
+Signature: org.jfree.chart.block.AbstractBlock.setFrame(BlockFrame)
+Source: source/org/jfree/chart/block/AbstractBlock.java
+Original range: 250-255
+Documentation:
+/**
+     * Sets the frame (or border).
+     * 
+     * @param frame  the frame (<code>null</code> not permitted).
+     * 
+     * @since 1.0.5
+     * @see #getFrame()
+     */
+Method code:
+250 |     public void setFrame(BlockFrame frame) {
+251 |         if (frame == null) {
+252 |             throw new IllegalArgumentException("Null 'frame' argument.");   
+253 |         }
+254 |         this.frame = frame;
+255 |     }
+
+===== M0071 =====
+Signature: org.jfree.chart.ui.Library.setLicenceName(String)
+Source: source/org/jfree/chart/ui/Library.java
+Original range: 136-138
+Documentation:
+/**
+     * Sets the licence name.
+     * 
+     * @param licenceName  the licence name.
+     */
+Method code:
+136 |     protected void setLicenceName(String licenceName) {
+137 |         this.licenceName = licenceName;
+138 |     }
+
+===== M0072 =====
+Signature: org.jfree.chart.block.ColumnArrangement.ColumnArrangement()
+Source: source/org/jfree/chart/block/ColumnArrangement.java
+Original range: 78-79
+Documentation:
+/**
+     * Creates a new instance.
+     */
+Method code:
+78 |     public ColumnArrangement() {   
+79 |     }
+
+===== M0073 =====
+Signature: org.jfree.chart.ui.Licences.getLGPL()
+Source: source/org/jfree/chart/ui/Licences.java
+Original range: 821-823
+Documentation:
+/**
+     * Returns the LGPL text in a non static way to prevent the compiler
+     * to copy the contents of the field.
+     *
+     * @return the LGPL licence text.
+     */
+Method code:
+821 |     public String getLGPL() {
+822 |         return LGPL;
+823 |     }
+
+===== M0074 =====
+Signature: org.jfree.chart.JFreeChart.notifyListeners(ChartChangeEvent)
+Source: source/org/jfree/chart/JFreeChart.java
+Original range: 1496-1506
+Documentation:
+/**
+     * Sends a {@link ChartChangeEvent} to all registered listeners.
+     *
+     * @param event  information about the event that triggered the 
+     *               notification.
+     */
+Method code:
+1496 |     protected void notifyListeners(ChartChangeEvent event) {
+1497 |         if (this.notify) {
+1498 |             Object[] listeners = this.changeListeners.getListenerList();
+1499 |             for (int i = listeners.length - 2; i >= 0; i -= 2) {
+1500 |                 if (listeners[i] == ChartChangeListener.class) {
+1501 |                     ((ChartChangeListener) listeners[i + 1]).chartChanged(
+1502 |                             event);
+1503 |                 }
+1504 |             }
+1505 |         }
+1506 |     }
+
+===== M0075 =====
+Signature: org.jfree.chart.event.TitleChangeEvent.TitleChangeEvent(Title)
+Source: source/org/jfree/chart/event/TitleChangeEvent.java
+Original range: 63-66
+Documentation:
+/**
+     * Default constructor.
+     *
+     * @param title  the chart title that generated the event.
+     */
+Method code:
+63 |     public TitleChangeEvent(Title title) {
+64 |         super(title);
+65 |         this.title = title;
+66 |     }
+
+===== M0076 =====
+Signature: org.jfree.chart.ui.BasicProjectInfo.setLicenceName(String)
+Source: source/org/jfree/chart/ui/BasicProjectInfo.java
+Original range: 215-217
+Documentation:
+/**
+     * Sets the license name.
+     * 
+     * @param licence  the license name.
+     */
+Method code:
+215 |     public void setLicenceName(String licence) {
+216 |         super.setLicenceName(licence);
+217 |     }
+
+===== M0077 =====
+Signature: org.jfree.chart.JFreeChart.removeSubtitle(Title)
+Source: source/org/jfree/chart/JFreeChart.java
+Original range: 794-797
+Documentation:
+/**
+     * Removes the specified subtitle and sends a {@link ChartChangeEvent} to
+     * all registered listeners.
+     * 
+     * @param title  the title.
+     * 
+     * @see #addSubtitle(Title)
+     */
+Method code:
+794 |     public void removeSubtitle(Title title) {
+795 |         this.subtitles.remove(title);
+796 |         fireChartChanged();
+797 |     }
+
+===== M0078 =====
+Signature: org.jfree.chart.util.HorizontalAlignment.HorizontalAlignment(String)
+Source: source/org/jfree/chart/util/HorizontalAlignment.java
+Original range: 76-78
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+76 |     private HorizontalAlignment(String name) {
+77 |         this.name = name;
+78 |     }
+
+===== M0079 =====
+Signature: org.jfree.chart.util.TableOrder.TableOrder(String)
+Source: source/org/jfree/chart/util/TableOrder.java
+Original range: 69-71
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+69 |     private TableOrder(String name) {
+70 |         this.name = name;
+71 |     }
+
+===== M0080 =====
+Signature: org.jfree.chart.ui.ProjectInfo.setLicenceText(String)
+Source: source/org/jfree/chart/ui/ProjectInfo.java
+Original range: 128-130
+Documentation:
+/**
+     * Sets the project licence text.
+     *
+     * @param licenceText  the licence text.
+     */
+Method code:
+128 |     public void setLicenceText(final String licenceText) {
+129 |         this.licenceText = licenceText;
+130 |     }
+
+===== M0081 =====
+Signature: org.jfree.chart.event.ChartChangeEvent.ChartChangeEvent(Object,JFreeChart,ChartChangeEventType)
+Source: source/org/jfree/chart/event/ChartChangeEvent.java
+Original range: 91-96
+Documentation:
+/**
+     * Creates a new chart change event.
+     *
+     * @param source  the source of the event (could be the chart, a title, an
+                      axis etc.)
+     * @param chart  the chart that generated the event.
+     * @param type  the type of event.
+     */
+Method code:
+91 |     public ChartChangeEvent(Object source, JFreeChart chart, 
+92 |                             ChartChangeEventType type) {
+93 |         super(source);
+94 |         this.chart = chart;
+95 |         this.type = type;
+96 |     }
+
+===== M0082 =====
+Signature: org.jfree.chart.event.ChartChangeEvent.ChartChangeEvent(Object)
+Source: source/org/jfree/chart/event/ChartChangeEvent.java
+Original range: 68-70
+Documentation:
+/**
+     * Creates a new chart change event.
+     *
+     * @param source  the source of the event (could be the chart, a title, 
+     *                an axis etc.)
+     */
+Method code:
+68 |     public ChartChangeEvent(Object source) {
+69 |         this(source, null, ChartChangeEventType.GENERAL);
+70 |     }
+
+===== M0083 =====
+Signature: org.jfree.chart.labels.AbstractPieItemLabelGenerator.AbstractPieItemLabelGenerator(String,NumberFormat,NumberFormat)
+Source: source/org/jfree/chart/labels/AbstractPieItemLabelGenerator.java
+Original range: 80-99
+Documentation:
+/**
+     * Creates an item label generator using the specified number formatters.
+     *
+     * @param labelFormat  the label format string (<code>null</code> not
+     *                     permitted).
+     * @param numberFormat  the format object for the values (<code>null</code>
+     *                      not permitted).
+     * @param percentFormat  the format object for the percentages
+     *                       (<code>null</code> not permitted).
+     */
+Method code:
+80 |     protected AbstractPieItemLabelGenerator(String labelFormat,
+81 |                                             NumberFormat numberFormat, 
+82 |                                             NumberFormat percentFormat) {
+83 | 
+84 |         if (labelFormat == null) {
+85 |             throw new IllegalArgumentException("Null 'labelFormat' argument.");
+86 |         }
+87 |         if (numberFormat == null) {
+88 |             throw new IllegalArgumentException("Null 'numberFormat' argument.");
+89 |         }
+90 |         if (percentFormat == null) {
+91 |             throw new IllegalArgumentException(
+92 |                 "Null 'percentFormat' argument."
+93 |             );   
+94 |         }
+95 |         this.labelFormat = labelFormat;
+96 |         this.numberFormat = numberFormat;
+97 |         this.percentFormat = percentFormat;
+98 | 
+99 |     }
+
+===== M0084 =====
+Signature: org.jfree.chart.util.RectangleEdge.RectangleEdge(String)
+Source: source/org/jfree/chart/util/RectangleEdge.java
+Original range: 80-82
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+80 |     private RectangleEdge(String name) {
+81 |         this.name = name;
+82 |     }
+
+===== M0085 =====
+Signature: org.jfree.chart.block.FlowArrangement.FlowArrangement(HorizontalAlignment,VerticalAlignment,double,double)
+Source: source/org/jfree/chart/block/FlowArrangement.java
+Original range: 91-97
+Documentation:
+/**
+     * Creates a new instance.
+     * 
+     * @param hAlign  the horizontal alignment (currently ignored).
+     * @param vAlign  the vertical alignment (currently ignored).
+     * @param hGap  the horizontal gap.
+     * @param vGap  the vertical gap.
+     */
+Method code:
+91 |     public FlowArrangement(HorizontalAlignment hAlign, VerticalAlignment vAlign,
+92 |                            double hGap, double vGap) {   
+93 |         this.horizontalAlignment = hAlign;
+94 |         this.verticalAlignment = vAlign;
+95 |         this.horizontalGap = hGap;
+96 |         this.verticalGap = vGap;
+97 |     }
+
+===== M0086 =====
+Signature: org.jfree.chart.ui.Library.setName(String)
+Source: source/org/jfree/chart/ui/Library.java
+Original range: 145-147
+Documentation:
+/**
+     * Sets the project name.
+     * 
+     * @param name  the project name.
+     */
+Method code:
+145 |     protected void setName(String name) {
+146 |         this.name = name;
+147 |     }
+
+===== M0087 =====
+Signature: org.jfree.chart.plot.PieLabelLinkStyle.PieLabelLinkStyle(String)
+Source: source/org/jfree/chart/plot/PieLabelLinkStyle.java
+Original range: 74-76
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+74 |     private PieLabelLinkStyle(String name) {
+75 |         this.name = name;
+76 |     }
+
+===== M0088 =====
+Signature: org.jfree.chart.JFreeChart.setTitle(TextTitle)
+Source: source/org/jfree/chart/JFreeChart.java
+Original range: 570-579
+Documentation:
+/**
+     * Sets the main title for the chart and sends a {@link ChartChangeEvent} 
+     * to all registered listeners.  If you do not want a title for the 
+     * chart, set it to <code>null</code>.  If you want more than one title on
+     * a chart, use the {@link #addSubtitle(Title)} method.
+     *
+     * @param title  the title (<code>null</code> permitted).
+     * 
+     * @see #getTitle()
+     */
+Method code:
+570 |     public void setTitle(TextTitle title) {
+571 |         if (this.title != null) {
+572 |             this.title.removeChangeListener(this);
+573 |         }
+574 |         this.title = title;
+575 |         if (title != null) {
+576 |             title.addChangeListener(this);
+577 |         }
+578 |         fireChartChanged();
+579 |     }
+
+===== M0089 =====
+Signature: org.jfree.chart.ui.Library.setVersion(String)
+Source: source/org/jfree/chart/ui/Library.java
+Original range: 154-156
+Documentation:
+/**
+     * Sets the version identifier.
+     * 
+     * @param version  the version identifier.
+     */
+Method code:
+154 |     protected void setVersion(String version) {
+155 |         this.version = version;
+156 |     }
+
+===== M0090 =====
+Signature: org.jfree.chart.plot.DefaultDrawingSupplier.DefaultDrawingSupplier(Paint[],Paint[],Paint[],Stroke[],Stroke[],Shape[])
+Source: source/org/jfree/chart/plot/DefaultDrawingSupplier.java
+Original range: 194-205
+Documentation:
+/**
+     * Creates a new supplier.
+     *
+     * @param paintSequence  the paint sequence.
+     * @param fillPaintSequence  the fill paint sequence.
+     * @param outlinePaintSequence  the outline paint sequence.
+     * @param strokeSequence  the stroke sequence.
+     * @param outlineStrokeSequence  the outline stroke sequence.
+     * @param shapeSequence  the shape sequence.
+     * 
+     * @since 1.0.6
+     */
+Method code:
+194 |     public DefaultDrawingSupplier(Paint[] paintSequence, 
+195 |             Paint[] fillPaintSequence, Paint[] outlinePaintSequence,
+196 |             Stroke[] strokeSequence, Stroke[] outlineStrokeSequence,
+197 |             Shape[] shapeSequence) {
+198 | 
+199 |         this.paintSequence = paintSequence;
+200 |         this.fillPaintSequence = fillPaintSequence;
+201 |         this.outlinePaintSequence = outlinePaintSequence;
+202 |         this.strokeSequence = strokeSequence;
+203 |         this.outlineStrokeSequence = outlineStrokeSequence;
+204 |         this.shapeSequence = shapeSequence;
+205 |     }
+
+===== M0091 =====
+Signature: org.jfree.chart.util.Rotation.Rotation(String,double)
+Source: source/org/jfree/chart/util/Rotation.java
+Original range: 81-84
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     * @param factor  the rotation factor.
+     */
+Method code:
+81 |     private Rotation(final String name, final double factor) {
+82 |         this.name = name;
+83 |         this.factor = factor;
+84 |     }
+
+===== M0092 =====
+Signature: org.jfree.chart.JFreeChartInfo.JFreeChartInfo()
+Source: source/org/jfree/chart/JFreeChart.java
+Original range: 1733-1841
+Documentation:
+/** 
+     * Default constructor. 
+     */
+Method code:
+1733 |     public JFreeChartInfo() {
+1734 | 
+1735 |         // get a locale-specific resource bundle...
+1736 |         String baseResourceClass 
+1737 |                 = "org.jfree.chart.resources.JFreeChartResources";
+1738 |         ResourceBundle resources = ResourceBundle.getBundle(baseResourceClass);
+1739 | 
+1740 |         setName(resources.getString("project.name"));
+1741 |         setVersion(resources.getString("project.version"));
+1742 |         setInfo(resources.getString("project.info"));
+1743 |         setCopyright(resources.getString("project.copyright"));
+1744 |         setLogo(null);  // load only when required
+1745 |         setLicenceName("LGPL");
+1746 |         setLicenceText(Licences.getInstance().getLGPL());
+1747 | 
+1748 |         setContributors(Arrays.asList(
+1749 |             new Contributor[]{
+1750 |                 new Contributor("Eric Alexander", "-"),
+1751 |                 new Contributor("Richard Atkinson", 
+1752 |                         "richard_c_atkinson@ntlworld.com"),
+1753 |                 new Contributor("David Basten", "-"),
+1754 |                 new Contributor("David Berry", "-"),
+1755 |                 new Contributor("Chris Boek", "-"),
+1756 |                 new Contributor("Zoheb Borbora", "-"),
+1757 |                 new Contributor("Anthony Boulestreau", "-"),
+1758 |                 new Contributor("Jeremy Bowman", "-"),
+1759 |                 new Contributor("Nicolas Brodu", "-"),
+1760 |                 new Contributor("Jody Brownell", "-"),
+1761 |                 new Contributor("David Browning", "-"),
+1762 |                 new Contributor("Soren Caspersen", "-"),
+1763 |                 new Contributor("Chuanhao Chiu", "-"),
+1764 |                 new Contributor("Brian Cole", "-"),
+1765 |                 new Contributor("Pascal Collet", "-"),
+1766 |                 new Contributor("Martin Cordova", "-"),
+1767 |                 new Contributor("Paolo Cova", "-"),
+1768 |                 new Contributor("Mike Duffy", "-"),
+1769 |                 new Contributor("Don Elliott", "-"),
+1770 |                 new Contributor("David Forslund", "-"),
+1771 |                 new Contributor("Jonathan Gabbai", "-"),
+1772 |                 new Contributor("David Gilbert", 
+1773 |                         "david.gilbert@object-refinery.com"),
+1774 |                 new Contributor("Serge V. Grachov", "-"),
+1775 |                 new Contributor("Daniel Gredler", "-"),
+1776 |                 new Contributor("Hans-Jurgen Greiner", "-"),
+1777 |                 new Contributor("Joao Guilherme Del Valle", "-"),
+1778 |                 new Contributor("Aiman Han", "-"),
+1779 |                 new Contributor("Cameron Hayne", "-"),
+1780 |                 new Contributor("Jon Iles", "-"),
+1781 |                 new Contributor("Wolfgang Irler", "-"),
+1782 |                 new Contributor("Sergei Ivanov", "-"),
+1783 |                 new Contributor("Adriaan Joubert", "-"),
+1784 |                 new Contributor("Darren Jung", "-"),
+1785 |                 new Contributor("Xun Kang", "-"),
+1786 |                 new Contributor("Bill Kelemen", "-"),
+1787 |                 new Contributor("Norbert Kiesel", "-"),
+1788 |                 new Contributor("Gideon Krause", "-"),
+1789 |                 new Contributor("Pierre-Marie Le Biot", "-"),
+1790 |                 new Contributor("Arnaud Lelievre", "-"),
+1791 |                 new Contributor("Wolfgang Lenhard", "-"),
+1792 |                 new Contributor("David Li", "-"),
+1793 |                 new Contributor("Yan Liu", "-"),
+1794 |                 new Contributor("Tin Luu", "-"),
+1795 |                 new Contributor("Craig MacFarlane", "-"),
+1796 |                 new Contributor("Achilleus Mantzios", "-"),
+1797 |                 new Contributor("Thomas Meier", "-"),
+1798 |                 new Contributor("Jim Moore", "-"),
+1799 |                 new Contributor("Jonathan Nash", "-"),
+1800 |                 new Contributor("Barak Naveh", "-"),
+1801 |                 new Contributor("David M. O'Donnell", "-"),
+1802 |                 new Contributor("Krzysztof Paz", "-"),
+1803 |                 new Contributor("Tomer Peretz", "-"),
+1804 |                 new Contributor("Xavier Poinsard", "-"),
+1805 |                 new Contributor("Andrzej Porebski", "-"),
+1806 |                 new Contributor("Viktor Rajewski", "-"),
+1807 |                 new Contributor("Eduardo Ramalho", "-"),
+1808 |                 new Contributor("Michael Rauch", "-"),
+1809 |                 new Contributor("Cameron Riley", "-"),
+1810 |                 new Contributor("Klaus Rheinwald", "-"),
+1811 |                 new Contributor("Dan Rivett", "d.rivett@ukonline.co.uk"),
+1812 |                 new Contributor("Scott Sams", "-"),
+1813 |                 new Contributor("Michel Santos", "-"),
+1814 |                 new Contributor("Thierry Saura", "-"),
+1815 |                 new Contributor("Andreas Schneider", "-"),
+1816 |                 new Contributor("Jean-Luc SCHWAB", "-"),
+1817 |                 new Contributor("Bryan Scott", "-"),
+1818 |                 new Contributor("Tobias Selb", "-"),
+1819 |                 new Contributor("Mofeed Shahin", "-"),
+1820 |                 new Contributor("Pady Srinivasan", "-"),
+1821 |                 new Contributor("Greg Steckman", "-"),
+1822 |                 new Contributor("Roger Studner", "-"),
+1823 |                 new Contributor("Irv Thomae", "-"),
+1824 |                 new Contributor("Eric Thomas", "-"),
+1825 |                 new Contributor("Rich Unger", "-"),
+1826 |                 new Contributor("Daniel van Enckevort", "-"),
+1827 |                 new Contributor("Laurence Vanhelsuwe", "-"),
+1828 |                 new Contributor("Sylvain Vieujot", "-"),
+1829 |                 new Contributor("Jelai Wang", "-"),
+1830 |                 new Contributor("Mark Watson", "www.markwatson.com"),
+1831 |                 new Contributor("Alex Weber", "-"),
+1832 |                 new Contributor("Matthew Wright", "-"),
+1833 |                 new Contributor("Benoit Xhenseval", "-"),
+1834 |                 new Contributor("Christian W. Zuckschwerdt", 
+1835 |                         "Christian.Zuckschwerdt@Informatik.Uni-Oldenburg.de"),
+1836 |                 new Contributor("Hari", "-"),
+1837 |                 new Contributor("Sam (oldman)", "-"),
+1838 |             }
+1839 |         ));
+1840 | 
+1841 |     }
+
+===== M0093 =====
+Signature: org.jfree.chart.ui.BasicProjectInfo.setInfo(String)
+Source: source/org/jfree/chart/ui/BasicProjectInfo.java
+Original range: 206-208
+Documentation:
+/**
+     * Sets the project info string (for example, this could be the project URL).
+     * 
+     * @param info  the info string.
+     */
+Method code:
+206 |     public void setInfo(String info) {
+207 |         super.setInfo(info);
+208 |     }
+
+===== M0094 =====
+Signature: org.jfree.chart.title.Title.Title(RectangleEdge,HorizontalAlignment,VerticalAlignment,RectangleInsets)
+Source: source/org/jfree/chart/title/Title.java
+Original range: 169-198
+Documentation:
+/**
+     * Creates a new title.
+     *
+     * @param position  the position of the title (<code>null</code> not 
+     *                  permitted).
+     * @param horizontalAlignment  the horizontal alignment of the title (LEFT,
+     *                             CENTER or RIGHT, <code>null</code> not 
+     *                             permitted).
+     * @param verticalAlignment  the vertical alignment of the title (TOP, 
+     *                           MIDDLE or BOTTOM, <code>null</code> not 
+     *                           permitted).
+     * @param padding  the amount of space to leave around the outside of the 
+     *                 title (<code>null</code> not permitted).
+     */
+Method code:
+169 |     protected Title(RectangleEdge position,
+170 |                     HorizontalAlignment horizontalAlignment, 
+171 |                     VerticalAlignment verticalAlignment,
+172 |                     RectangleInsets padding) {
+173 | 
+174 |         // check arguments...
+175 |         if (position == null) {
+176 |             throw new IllegalArgumentException("Null 'position' argument.");
+177 |         }
+178 |         if (horizontalAlignment == null) {
+179 |             throw new IllegalArgumentException(
+180 |                     "Null 'horizontalAlignment' argument.");
+181 |         }
+182 | 
+183 |         if (verticalAlignment == null) {
+184 |             throw new IllegalArgumentException(
+185 |                     "Null 'verticalAlignment' argument.");
+186 |         }
+187 |         if (padding == null) {
+188 |             throw new IllegalArgumentException("Null 'spacer' argument.");
+189 |         }
+190 | 
+191 |         this.position = position;
+192 |         this.horizontalAlignment = horizontalAlignment;
+193 |         this.verticalAlignment = verticalAlignment;
+194 |         setPadding(padding);
+195 |         this.listenerList = new EventListenerList();
+196 |         this.notify = true;
+197 | 
+198 |     }
+
+===== M0095 =====
+Signature: org.jfree.chart.title.Title.notifyListeners(TitleChangeEvent)
+Source: source/org/jfree/chart/title/Title.java
+Original range: 356-366
+Documentation:
+/**
+     * Notifies all registered listeners that the chart title has changed in 
+     * some way.
+     *
+     * @param event  an object that contains information about the change to 
+     *               the title.
+     */
+Method code:
+356 |     protected void notifyListeners(TitleChangeEvent event) {
+357 |         if (this.notify) {
+358 |             Object[] listeners = this.listenerList.getListenerList();
+359 |             for (int i = listeners.length - 2; i >= 0; i -= 2) {
+360 |                 if (listeners[i] == TitleChangeListener.class) {
+361 |                     ((TitleChangeListener) listeners[i + 1]).titleChanged(
+362 |                             event);
+363 |                 }
+364 |             }
+365 |         }
+366 |     }
+

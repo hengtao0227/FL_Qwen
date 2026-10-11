@@ -1,0 +1,494 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.text.ExtendedMessageFormat.getFormat(String)
+Source: src/main/java/org/apache/commons/lang3/text/ExtendedMessageFormat.java
+Original range: 276-291
+Documentation:
+/**
+     * Get a custom format from a format description.
+     * 
+     * @param desc String
+     * @return Format
+     */
+Method code:
+276 |     private Format getFormat(String desc) {
+277 |         if (registry != null) {
+278 |             String name = desc;
+279 |             String args = null;
+280 |             int i = desc.indexOf(START_FMT);
+281 |             if (i > 0) {
+282 |                 name = desc.substring(0, i).trim();
+283 |                 args = desc.substring(i + 1).trim();
+284 |             }
+285 |             FormatFactory factory = registry.get(name);
+286 |             if (factory != null) {
+287 |                 return factory.getFormat(name, args, getLocale());
+288 |             }
+289 |         }
+290 |         return null;
+291 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.text.StrMatcher.splitMatcher()
+Source: src/main/java/org/apache/commons/lang3/text/StrMatcher.java
+Original range: 107-109
+Documentation:
+/**
+     * Matches the same characters as StringTokenizer,
+     * namely space, tab, newline and formfeed.
+     *
+     * @return the split matcher
+     */
+Method code:
+107 |     public static StrMatcher splitMatcher() {
+108 |         return SPLIT_MATCHER;
+109 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang3.text.ExtendedMessageFormat.parseFormatDescription(String,ParsePosition)
+Source: src/main/java/org/apache/commons/lang3/text/ExtendedMessageFormat.java
+Original range: 342-365
+Documentation:
+/**
+     * Parse the format component of a format element.
+     * 
+     * @param pattern string to parse
+     * @param pos current parse position
+     * @return Format description String
+     */
+Method code:
+342 |     private String parseFormatDescription(String pattern, ParsePosition pos) {
+343 |         int start = pos.getIndex();
+344 |         seekNonWs(pattern, pos);
+345 |         int text = pos.getIndex();
+346 |         int depth = 1;
+347 |         for (; pos.getIndex() < pattern.length(); next(pos)) {
+348 |             switch (pattern.charAt(pos.getIndex())) {
+349 |             case START_FE:
+350 |                 depth++;
+351 |                 break;
+352 |             case END_FE:
+353 |                 depth--;
+354 |                 if (depth == 0) {
+355 |                     return pattern.substring(text, pos.getIndex());
+356 |                 }
+357 |                 break;
+358 |             case QUOTE:
+359 |                 getQuotedString(pattern, pos, false);
+360 |                 break;
+361 |             }
+362 |         }
+363 |         throw new IllegalArgumentException(
+364 |                 "Unterminated format element at position " + start);
+365 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang3.text.ExtendedMessageFormat.applyPattern(String)
+Source: src/main/java/org/apache/commons/lang3/text/ExtendedMessageFormat.java
+Original range: 144-209
+Documentation:
+/**
+     * Apply the specified pattern.
+     * 
+     * @param pattern String
+     */
+Method code:
+144 |     @Override
+145 |     public final void applyPattern(String pattern) {
+146 |         if (registry == null) {
+147 |             super.applyPattern(pattern);
+148 |             toPattern = super.toPattern();
+149 |             return;
+150 |         }
+151 |         ArrayList<Format> foundFormats = new ArrayList<Format>();
+152 |         ArrayList<String> foundDescriptions = new ArrayList<String>();
+153 |         StringBuilder stripCustom = new StringBuilder(pattern.length());
+154 | 
+155 |         ParsePosition pos = new ParsePosition(0);
+156 |         char[] c = pattern.toCharArray();
+157 |         int fmtCount = 0;
+158 |         while (pos.getIndex() < pattern.length()) {
+159 |             switch (c[pos.getIndex()]) {
+160 |             case QUOTE:
+161 |                 appendQuotedString(pattern, pos, stripCustom, true);
+162 |                 break;
+163 |             case START_FE:
+164 |                 fmtCount++;
+165 |                 seekNonWs(pattern, pos);
+166 |                 int start = pos.getIndex();
+167 |                 int index = readArgumentIndex(pattern, next(pos));
+168 |                 stripCustom.append(START_FE).append(index);
+169 |                 seekNonWs(pattern, pos);
+170 |                 Format format = null;
+171 |                 String formatDescription = null;
+172 |                 if (c[pos.getIndex()] == START_FMT) {
+173 |                     formatDescription = parseFormatDescription(pattern,
+174 |                             next(pos));
+175 |                     format = getFormat(formatDescription);
+176 |                     if (format == null) {
+177 |                         stripCustom.append(START_FMT).append(formatDescription);
+178 |                     }
+179 |                 }
+180 |                 foundFormats.add(format);
+181 |                 foundDescriptions.add(format == null ? null : formatDescription);
+182 |                 Validate.isTrue(foundFormats.size() == fmtCount);
+183 |                 Validate.isTrue(foundDescriptions.size() == fmtCount);
+184 |                 if (c[pos.getIndex()] != END_FE) {
+185 |                     throw new IllegalArgumentException(
+186 |                             "Unreadable format element at position " + start);
+187 |                 }
+188 |                 //$FALL-THROUGH$
+189 |             default:
+190 |                 stripCustom.append(c[pos.getIndex()]);
+191 |                 next(pos);
+192 |             }
+193 |         }
+194 |         super.applyPattern(stripCustom.toString());
+195 |         toPattern = insertFormats(super.toPattern(), foundDescriptions);
+196 |         if (containsElements(foundFormats)) {
+197 |             Format[] origFormats = getFormats();
+198 |             // only loop over what we know we have, as MessageFormat on Java 1.3 
+199 |             // seems to provide an extra format element:
+200 |             int i = 0;
+201 |             for (Iterator<Format> it = foundFormats.iterator(); it.hasNext(); i++) {
+202 |                 Format f = it.next();
+203 |                 if (f != null) {
+204 |                     origFormats[i] = f;
+205 |                 }
+206 |             }
+207 |             super.setFormats(origFormats);
+208 |         }
+209 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang3.text.StrMatcher.CharMatcher.CharMatcher(char)
+Source: src/main/java/org/apache/commons/lang3/text/StrMatcher.java
+Original range: 317-320
+Documentation:
+/**
+         * Constructor that creates a matcher that matches a single character.
+         *
+         * @param ch  the character to match
+         */
+Method code:
+317 |         CharMatcher(char ch) {
+318 |             super();
+319 |             this.ch = ch;
+320 |         }
+
+===== M0006 =====
+Signature: org.apache.commons.lang3.text.ExtendedMessageFormat.seekNonWs(String,ParsePosition)
+Source: src/main/java/org/apache/commons/lang3/text/ExtendedMessageFormat.java
+Original range: 417-424
+Documentation:
+/**
+     * Consume whitespace from the current parse position.
+     * 
+     * @param pattern String to read
+     * @param pos current position
+     */
+Method code:
+417 |     private void seekNonWs(String pattern, ParsePosition pos) {
+418 |         int len = 0;
+419 |         char[] buffer = pattern.toCharArray();
+420 |         do {
+421 |             len = StrMatcher.splitMatcher().isMatch(buffer, pos.getIndex());
+422 |             pos.setIndex(pos.getIndex() + len);
+423 |         } while (len > 0 && pos.getIndex() < pattern.length());
+424 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.lang3.text.ExtendedMessageFormat.readArgumentIndex(String,ParsePosition)
+Source: src/main/java/org/apache/commons/lang3/text/ExtendedMessageFormat.java
+Original range: 300-333
+Documentation:
+/**
+     * Read the argument index from the current format element
+     * 
+     * @param pattern pattern to parse
+     * @param pos current parse position
+     * @return argument index
+     */
+Method code:
+300 |     private int readArgumentIndex(String pattern, ParsePosition pos) {
+301 |         int start = pos.getIndex();
+302 |         seekNonWs(pattern, pos);
+303 |         StringBuffer result = new StringBuffer();
+304 |         boolean error = false;
+305 |         for (; !error && pos.getIndex() < pattern.length(); next(pos)) {
+306 |             char c = pattern.charAt(pos.getIndex());
+307 |             if (Character.isWhitespace(c)) {
+308 |                 seekNonWs(pattern, pos);
+309 |                 c = pattern.charAt(pos.getIndex());
+310 |                 if (c != START_FMT && c != END_FE) {
+311 |                     error = true;
+312 |                     continue;
+313 |                 }
+314 |             }
+315 |             if ((c == START_FMT || c == END_FE) && result.length() > 0) {
+316 |                 try {
+317 |                     return Integer.parseInt(result.toString());
+318 |                 } catch (NumberFormatException e) {
+319 |                     // we've already ensured only digits, so unless something
+320 |                     // outlandishly large was specified we should be okay.
+321 |                 }
+322 |             }
+323 |             error = !Character.isDigit(c);
+324 |             result.append(c);
+325 |         }
+326 |         if (error) {
+327 |             throw new IllegalArgumentException(
+328 |                     "Invalid format argument index at position " + start + ": "
+329 |                             + pattern.substring(start, pos.getIndex()));
+330 |         }
+331 |         throw new IllegalArgumentException(
+332 |                 "Unterminated format element at position " + start);
+333 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.lang3.text.ExtendedMessageFormat.containsElements(Collection<?>)
+Source: src/main/java/org/apache/commons/lang3/text/ExtendedMessageFormat.java
+Original range: 494-504
+Documentation:
+/**
+     * Learn whether the specified Collection contains non-null elements.
+     * @param coll to check
+     * @return <code>true</code> if some Object was found, <code>false</code> otherwise.
+     */
+Method code:
+494 |     private boolean containsElements(Collection<?> coll) {
+495 |         if (coll == null || coll.size() == 0) {
+496 |             return false;
+497 |         }
+498 |         for (Iterator<?> iter = coll.iterator(); iter.hasNext();) {
+499 |             if (iter.next() != null) {
+500 |                 return true;
+501 |             }
+502 |         }
+503 |         return false;
+504 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.lang3.text.StrMatcher.NoMatcher.NoMatcher()
+Source: src/main/java/org/apache/commons/lang3/text/StrMatcher.java
+Original range: 388-390
+Documentation:
+/**
+         * Constructs a new instance of <code>NoMatcher</code>.
+         */
+Method code:
+388 |         NoMatcher() {
+389 |             super();
+390 |         }
+
+===== M0010 =====
+Signature: org.apache.commons.lang3.text.ExtendedMessageFormat.next(ParsePosition)
+Source: src/main/java/org/apache/commons/lang3/text/ExtendedMessageFormat.java
+Original range: 432-435
+Documentation:
+/**
+     * Convenience method to advance parse position by 1
+     * 
+     * @param pos ParsePosition
+     * @return <code>pos</code>
+     */
+Method code:
+432 |     private ParsePosition next(ParsePosition pos) {
+433 |         pos.setIndex(pos.getIndex() + 1);
+434 |         return pos;
+435 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.lang3.text.StrMatcher.isMatch(char[],int)
+Source: src/main/java/org/apache/commons/lang3/text/StrMatcher.java
+Original range: 266-268
+Documentation:
+/**
+     * Returns the number of matching characters, zero for no match.
+     * <p>
+     * This method is called to check for a match.
+     * The parameter <code>pos</code> represents the current position to be
+     * checked in the string <code>buffer</code> (a character array which must
+     * not be changed).
+     * The API guarantees that <code>pos</code> is a valid index for <code>buffer</code>.
+     * <p>
+     * The matching code may check one character or many.
+     * It may check characters preceeding <code>pos</code> as well as those after.
+     * <p>
+     * It must return zero for no match, or a positive number if a match was found.
+     * The number indicates the number of characters that matched.
+     *
+     * @param buffer  the text content to match against, do not change
+     * @param pos  the starting position for the match, valid for buffer
+     * @return the number of matching characters, zero for no match
+     * @since 2.4
+     */
+Method code:
+266 |     public int isMatch(char[] buffer, int pos) {
+267 |         return isMatch(buffer, pos, 0, buffer.length);
+268 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.lang3.text.StrMatcher.StrMatcher()
+Source: src/main/java/org/apache/commons/lang3/text/StrMatcher.java
+Original range: 215-217
+Documentation:
+/**
+     * Constructor.
+     */
+Method code:
+215 |     protected StrMatcher() {
+216 |         super();
+217 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.lang3.Validate.isTrue(boolean)
+Source: src/main/java/org/apache/commons/lang3/Validate.java
+Original range: 175-179
+Documentation:
+/**
+     * <p>Validate that the argument condition is <code>true</code>; otherwise 
+     * throwing an exception. This method is useful when validating according 
+     * to an arbitrary boolean expression, such as validating a 
+     * primitive number or using your own custom validation expression.</p>
+     *
+     * <pre>
+     * Validate.isTrue(i > 0);
+     * Validate.isTrue(myObject.isOk());</pre>
+     *
+     * <p>The message of the exception is &quot;The validated expression is 
+     * false&quot;.</p>
+     * 
+     * @param expression the boolean expression to check 
+     * @throws IllegalArgumentException if expression is <code>false</code>
+     * @see #isTrue(boolean, String, long)
+     * @see #isTrue(boolean, String, double)
+     * @see #isTrue(boolean, String, Object...)
+     */
+Method code:
+175 |     public static void isTrue(boolean expression) {
+176 |         if (expression == false) {
+177 |             throw new IllegalArgumentException(DEFAULT_IS_TRUE_EX_MESSAGE);
+178 |         }
+179 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.lang3.text.StrMatcher.TrimMatcher.TrimMatcher()
+Source: src/main/java/org/apache/commons/lang3/text/StrMatcher.java
+Original range: 416-418
+Documentation:
+/**
+         * Constructs a new instance of <code>TrimMatcher</code>.
+         */
+Method code:
+416 |         TrimMatcher() {
+417 |             super();
+418 |         }
+
+===== M0015 =====
+Signature: org.apache.commons.lang3.text.StrMatcher.CharSetMatcher.CharSetMatcher(char[])
+Source: src/main/java/org/apache/commons/lang3/text/StrMatcher.java
+Original range: 283-287
+Documentation:
+/**
+         * Constructor that creates a matcher from a character array.
+         *
+         * @param chars  the characters to match, must not be null
+         */
+Method code:
+283 |         CharSetMatcher(char chars[]) {
+284 |             super();
+285 |             this.chars = chars.clone();
+286 |             Arrays.sort(this.chars);
+287 |         }
+
+===== M0016 =====
+Signature: org.apache.commons.lang3.text.ExtendedMessageFormat.ExtendedMessageFormat(String,Locale,Map<String, ? extends FormatFactory>)
+Source: src/main/java/org/apache/commons/lang3/text/ExtendedMessageFormat.java
+Original range: 124-129
+Documentation:
+/**
+     * Create a new ExtendedMessageFormat.
+     * 
+     * @param pattern  the pattern to use, not null
+     * @param locale  the locale to use, not null
+     * @param registry  the registry of format factories, may be null
+     * @throws IllegalArgumentException in case of a bad pattern.
+     */
+Method code:
+124 |     public ExtendedMessageFormat(String pattern, Locale locale, Map<String, ? extends FormatFactory> registry) {
+125 |         super(DUMMY_PATTERN);
+126 |         setLocale(locale);
+127 |         this.registry = registry;
+128 |         applyPattern(pattern);
+129 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.lang3.text.ExtendedMessageFormat.insertFormats(String,ArrayList<String>)
+Source: src/main/java/org/apache/commons/lang3/text/ExtendedMessageFormat.java
+Original range: 374-409
+Documentation:
+/**
+     * Insert formats back into the pattern for toPattern() support.
+     *
+     * @param pattern source
+     * @param customPatterns The custom patterns to re-insert, if any
+     * @return full pattern
+     */
+Method code:
+374 |     private String insertFormats(String pattern, ArrayList<String> customPatterns) {
+375 |         if (!containsElements(customPatterns)) {
+376 |             return pattern;
+377 |         }
+378 |         StringBuilder sb = new StringBuilder(pattern.length() * 2);
+379 |         ParsePosition pos = new ParsePosition(0);
+380 |         int fe = -1;
+381 |         int depth = 0;
+382 |         while (pos.getIndex() < pattern.length()) {
+383 |             char c = pattern.charAt(pos.getIndex());
+384 |             switch (c) {
+385 |             case QUOTE:
+386 |                 appendQuotedString(pattern, pos, sb, false);
+387 |                 break;
+388 |             case START_FE:
+389 |                 depth++;
+390 |                 if (depth == 1) {
+391 |                     fe++;
+392 |                     sb.append(START_FE).append(
+393 |                             readArgumentIndex(pattern, next(pos)));
+394 |                     String customPattern = customPatterns.get(fe);
+395 |                     if (customPattern != null) {
+396 |                         sb.append(START_FMT).append(customPattern);
+397 |                     }
+398 |                 }
+399 |                 break;
+400 |             case END_FE:
+401 |                 depth--;
+402 |                 //$FALL-THROUGH$
+403 |             default:
+404 |                 sb.append(c);
+405 |                 next(pos);
+406 |             }
+407 |         }
+408 |         return sb.toString();
+409 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.lang3.text.StrMatcher.CharSetMatcher.isMatch(char[],int,int,int)
+Source: src/main/java/org/apache/commons/lang3/text/StrMatcher.java
+Original range: 298-301
+Documentation:
+/**
+         * Returns whether or not the given character matches.
+         *
+         * @param buffer  the text content to match against, do not change
+         * @param pos  the starting position for the match, valid for buffer
+         * @param bufferStart  the first active index in the buffer, valid for buffer
+         * @param bufferEnd  the end index of the active buffer, valid for buffer
+         * @return the number of matching characters, zero for no match
+         */
+Method code:
+298 |         @Override
+299 |         public int isMatch(char[] buffer, int pos, int bufferStart, int bufferEnd) {
+300 |             return Arrays.binarySearch(chars, buffer[pos]) >= 0 ? 1 : 0;
+301 |         }
+

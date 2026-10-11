@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math3.distribution.BinomialDistributionTest.testMath718()",
+    "resolved_signature": "org.apache.commons.math3.distribution.BinomialDistributionTest.testMath718()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/distribution/BinomialDistributionTest.java",
+    "begin_line": 132,
+    "end_line": 144,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMath718() {\n        // for large trials the evaluation of ContinuedFraction was inaccurate\n        // do a sweep over several large trials to test if the current implementation is\n        // numerically stable.\n\n        for (int trials = 500000; trials < 20000000; trials += 100000) {\n            BinomialDistribution dist = new BinomialDistribution(trials, 0.5);\n            int p = dist.inverseCumulativeProbability(0.5);\n            Assert.assertEquals(trials / 2, p);\n        }\n\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.distribution.FDistributionTest.testMath785()",
+    "resolved_signature": "org.apache.commons.math3.distribution.FDistributionTest.testMath785()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/distribution/FDistributionTest.java",
+    "begin_line": 146,
+    "end_line": 158,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMath785() {\n        // this test was failing due to inaccurate results from ContinuedFraction.\n\n        try {\n            double prob = 0.01;\n            FDistribution f = new FDistribution(200000, 200000);\n            double result = f.inverseCumulativeProbability(prob);\n            Assert.assertTrue(result < 1.0);\n        } catch (Exception e) {\n            Assert.fail(\"Failing to calculate inverse cumulative probability\");\n        }\n    }"
+  }
+]

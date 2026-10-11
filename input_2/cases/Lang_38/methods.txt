@@ -1,0 +1,682 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.TwoDigitNumberField.estimateLength()
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1339-1341
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1339 |         public int estimateLength() {
+1340 |             return 2;
+1341 |         }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.parseToken(String,int[])
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 707-757
+Documentation:
+/**
+     * <p>Performs the parsing of tokens.</p>
+     * 
+     * @param pattern  the pattern
+     * @param indexRef  index references
+     * @return parsed token
+     */
+Method code:
+707 |     protected String parseToken(String pattern, int[] indexRef) {
+708 |         StringBuilder buf = new StringBuilder();
+709 | 
+710 |         int i = indexRef[0];
+711 |         int length = pattern.length();
+712 | 
+713 |         char c = pattern.charAt(i);
+714 |         if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z') {
+715 |             // Scan a run of the same character, which indicates a time
+716 |             // pattern.
+717 |             buf.append(c);
+718 | 
+719 |             while (i + 1 < length) {
+720 |                 char peek = pattern.charAt(i + 1);
+721 |                 if (peek == c) {
+722 |                     buf.append(c);
+723 |                     i++;
+724 |                 } else {
+725 |                     break;
+726 |                 }
+727 |             }
+728 |         } else {
+729 |             // This will identify token as text.
+730 |             buf.append('\'');
+731 | 
+732 |             boolean inLiteral = false;
+733 | 
+734 |             for (; i < length; i++) {
+735 |                 c = pattern.charAt(i);
+736 | 
+737 |                 if (c == '\'') {
+738 |                     if (i + 1 < length && pattern.charAt(i + 1) == '\'') {
+739 |                         // '' is treated as escaped '
+740 |                         i++;
+741 |                         buf.append(c);
+742 |                     } else {
+743 |                         inLiteral = !inLiteral;
+744 |                     }
+745 |                 } else if (!inLiteral &&
+746 |                          (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z')) {
+747 |                     i--;
+748 |                     break;
+749 |                 } else {
+750 |                     buf.append(c);
+751 |                 }
+752 |             }
+753 |         }
+754 | 
+755 |         indexRef[0] = i;
+756 |         return buf.toString();
+757 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.CharacterLiteral.estimateLength()
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1090-1092
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1090 |         public int estimateLength() {
+1091 |             return 1;
+1092 |         }
+
+===== M0004 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.getInstance(String,TimeZone)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 181-183
+Documentation:
+/**
+     * <p>Gets a formatter instance using the specified pattern and
+     * time zone.</p>
+     * 
+     * @param pattern  {@link java.text.SimpleDateFormat} compatible
+     *  pattern
+     * @param timeZone  optional time zone, overrides time zone of
+     *  formatted date
+     * @return a pattern based date/time formatter
+     * @throws IllegalArgumentException if pattern is invalid
+     */
+Method code:
+181 |     public static FastDateFormat getInstance(String pattern, TimeZone timeZone) {
+182 |         return getInstance(pattern, timeZone, null);
+183 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.PaddedNumberField.appendTo(StringBuffer,Calendar)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1291-1293
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1291 |         public void appendTo(StringBuffer buffer, Calendar calendar) {
+1292 |             appendTo(buffer, calendar.get(mField));
+1293 |         }
+
+===== M0006 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.TwoDigitNumberField.appendTo(StringBuffer,Calendar)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1346-1348
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1346 |         public void appendTo(StringBuffer buffer, Calendar calendar) {
+1347 |             appendTo(buffer, calendar.get(mField));
+1348 |         }
+
+===== M0007 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.getInstance(String,TimeZone,Locale)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 212-221
+Documentation:
+/**
+     * <p>Gets a formatter instance using the specified pattern, time zone
+     * and locale.</p>
+     * 
+     * @param pattern  {@link java.text.SimpleDateFormat} compatible
+     *  pattern
+     * @param timeZone  optional time zone, overrides time zone of
+     *  formatted date
+     * @param locale  optional locale, overrides system locale
+     * @return a pattern based date/time formatter
+     * @throws IllegalArgumentException if pattern is invalid
+     *  or <code>null</code>
+     */
+Method code:
+212 |     public static synchronized FastDateFormat getInstance(String pattern, TimeZone timeZone, Locale locale) {
+213 |         FastDateFormat emptyFormat = new FastDateFormat(pattern, timeZone, locale);
+214 |         FastDateFormat format = cInstanceCache.get(emptyFormat);
+215 |         if (format == null) {
+216 |             format = emptyFormat;
+217 |             format.init();  // convert shell format into usable one
+218 |             cInstanceCache.put(format, format);  // this is OK!
+219 |         }
+220 |         return format;
+221 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.lang3.Validate.isTrue(boolean,String,long)
+Source: src/java/org/apache/commons/lang3/Validate.java
+Original range: 120-124
+Documentation:
+/**
+     * <p>Validate that the argument condition is <code>true</code>; otherwise 
+     * throwing an exception with the specified message. This method is useful when
+     * validating according to an arbitrary boolean expression, such as validating a 
+     * primitive number or using your own custom validation expression.</p>
+     *
+     * <pre>Validate.isTrue(i > 0.0, "The value must be greater than zero: %d", i);</pre>
+     *
+     * <p>For performance reasons, the long value is passed as a separate parameter and
+     * appended to the exception message only in the case of an error.</p>
+     * 
+     * @param expression the boolean expression to check 
+     * @param message the exception message if invalid
+     * @param value the value to append to the message when invalid
+     * @throws IllegalArgumentException if expression is <code>false</code>
+     * @see #isTrue(boolean)
+     * @see #isTrue(boolean, String, double)
+     * @see #isTrue(boolean, String, Object)
+     * @see #isTrue(boolean, String, Object...)
+     */
+Method code:
+120 |     public static void isTrue(boolean expression, String message, long value) {
+121 |         if (expression == false) {
+122 |             throw new IllegalArgumentException(String.format(message, Long.valueOf(value)));
+123 |         }
+124 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.applyRules(Calendar,StringBuffer)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 886-893
+Documentation:
+/**
+     * <p>Performs the formatting by applying the rules to the
+     * specified calendar.</p>
+     * 
+     * @param calendar  the calendar to format
+     * @param buf  the buffer to format into
+     * @return the specified string buffer
+     */
+Method code:
+886 |     protected StringBuffer applyRules(Calendar calendar, StringBuffer buf) {
+887 |         Rule[] rules = mRules;
+888 |         int len = mRules.length;
+889 |         for (int i = 0; i < len; i++) {
+890 |             rules[i].appendTo(buf, calendar);
+891 |         }
+892 |         return buf;
+893 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.PaddedNumberField.estimateLength()
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1284-1286
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1284 |         public int estimateLength() {
+1285 |             return 4;
+1286 |         }
+
+===== M0011 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.TwoDigitMonthField.TwoDigitMonthField()
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1408-1410
+Documentation:
+/**
+         * Constructs an instance of <code>TwoDigitMonthField</code>.
+         */
+Method code:
+1408 |         TwoDigitMonthField() {
+1409 |             super();
+1410 |         }
+
+===== M0012 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.TwoDigitMonthField.estimateLength()
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1415-1417
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1415 |         public int estimateLength() {
+1416 |             return 2;
+1417 |         }
+
+===== M0013 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.selectNumberRule(int,int)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 766-775
+Documentation:
+/**
+     * <p>Gets an appropriate rule for the padding required.</p>
+     * 
+     * @param field  the field to get a rule for
+     * @param padding  the padding required
+     * @return a new rule with the correct padding
+     */
+Method code:
+766 |     protected NumberRule selectNumberRule(int field, int padding) {
+767 |         switch (padding) {
+768 |         case 1:
+769 |             return new UnpaddedNumberField(field);
+770 |         case 2:
+771 |             return new TwoDigitNumberField(field);
+772 |         default:
+773 |             return new PaddedNumberField(field, padding);
+774 |         }
+775 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.CharacterLiteral.CharacterLiteral(char)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1083-1085
+Documentation:
+/**
+         * Constructs a new instance of <code>CharacterLiteral</code>
+         * to hold the specified value.
+         * 
+         * @param value the character literal
+         */
+Method code:
+1083 |         CharacterLiteral(char value) {
+1084 |             mValue = value;
+1085 |         }
+
+===== M0015 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.TwoDigitNumberField.TwoDigitNumberField(int)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1332-1334
+Documentation:
+/**
+         * Constructs an instance of <code>TwoDigitNumberField</code> with the specified field.
+         * 
+         * @param field the field
+         */
+Method code:
+1332 |         TwoDigitNumberField(int field) {
+1333 |             mField = field;
+1334 |         }
+
+===== M0016 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.FastDateFormat(String,TimeZone,Locale)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 534-552
+Documentation:
+/**
+     * <p>Constructs a new FastDateFormat.</p>
+     * 
+     * @param pattern  {@link java.text.SimpleDateFormat} compatible
+     *  pattern
+     * @param timeZone  time zone to use, <code>null</code> means use
+     *  default for <code>Date</code> and value within for
+     *  <code>Calendar</code>
+     * @param locale  locale, <code>null</code> means use system
+     *  default
+     * @throws IllegalArgumentException if pattern is invalid or
+     *  <code>null</code>
+     */
+Method code:
+534 |     protected FastDateFormat(String pattern, TimeZone timeZone, Locale locale) {
+535 |         super();
+536 |         if (pattern == null) {
+537 |             throw new IllegalArgumentException("The pattern must not be null");
+538 |         }
+539 |         mPattern = pattern;
+540 |         
+541 |         mTimeZoneForced = (timeZone != null);
+542 |         if (timeZone == null) {
+543 |             timeZone = TimeZone.getDefault();
+544 |         }
+545 |         mTimeZone = timeZone;
+546 |         
+547 |         mLocaleForced = (locale != null);
+548 |         if (locale == null) {
+549 |             locale = Locale.getDefault();
+550 |         }
+551 |         mLocale = locale;
+552 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.TwoDigitMonthField.appendTo(StringBuffer,Calendar)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1422-1424
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1422 |         public void appendTo(StringBuffer buffer, Calendar calendar) {
+1423 |             appendTo(buffer, calendar.get(Calendar.MONTH) + 1);
+1424 |         }
+
+===== M0018 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.TwoDigitMonthField.appendTo(StringBuffer,int)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1429-1432
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1429 |         public final void appendTo(StringBuffer buffer, int value) {
+1430 |             buffer.append((char)(value / 10 + '0'));
+1431 |             buffer.append((char)(value % 10 + '0'));
+1432 |         }
+
+===== M0019 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.format(Calendar)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 831-833
+Documentation:
+/**
+     * <p>Formats a <code>Calendar</code> object.</p>
+     * 
+     * @param calendar  the calendar to format
+     * @return the formatted string
+     */
+Method code:
+831 |     public String format(Calendar calendar) {
+832 |         return format(calendar, new StringBuffer(mMaxLengthEstimate)).toString();
+833 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.TwoDigitNumberField.appendTo(StringBuffer,int)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1353-1360
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1353 |         public final void appendTo(StringBuffer buffer, int value) {
+1354 |             if (value < 100) {
+1355 |                 buffer.append((char)(value / 10 + '0'));
+1356 |                 buffer.append((char)(value % 10 + '0'));
+1357 |             } else {
+1358 |                 buffer.append(Integer.toString(value));
+1359 |             }
+1360 |         }
+
+===== M0021 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.PaddedNumberField.appendTo(StringBuffer,int)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1298-1318
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1298 |         public final void appendTo(StringBuffer buffer, int value) {
+1299 |             if (value < 100) {
+1300 |                 for (int i = mSize; --i >= 2; ) {
+1301 |                     buffer.append('0');
+1302 |                 }
+1303 |                 buffer.append((char)(value / 10 + '0'));
+1304 |                 buffer.append((char)(value % 10 + '0'));
+1305 |             } else {
+1306 |                 int digits;
+1307 |                 if (value < 1000) {
+1308 |                     digits = 3;
+1309 |                 } else {
+1310 |                     Validate.isTrue(value > -1, "Negative values should not be possible", value);
+1311 |                     digits = Integer.toString(value).length();
+1312 |                 }
+1313 |                 for (int i = mSize; --i >= digits; ) {
+1314 |                     buffer.append('0');
+1315 |                 }
+1316 |                 buffer.append(Integer.toString(value));
+1317 |             }
+1318 |         }
+
+===== M0022 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.hashCode()
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1000-1009
+Documentation:
+/**
+     * <p>Returns a hashcode compatible with equals.</p>
+     * 
+     * @return a hashcode compatible with equals
+     */
+Method code:
+1000 |     @Override
+1001 |     public int hashCode() {
+1002 |         int total = 0;
+1003 |         total += mPattern.hashCode();
+1004 |         total += mTimeZone.hashCode();
+1005 |         total += (mTimeZoneForced ? 1 : 0);
+1006 |         total += mLocale.hashCode();
+1007 |         total += (mLocaleForced ? 1 : 0);
+1008 |         return total;
+1009 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.CharacterLiteral.appendTo(StringBuffer,Calendar)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1097-1099
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+1097 |         public void appendTo(StringBuffer buffer, Calendar calendar) {
+1098 |             buffer.append(mValue);
+1099 |         }
+
+===== M0024 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.format(Calendar,StringBuffer)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 870-876
+Documentation:
+/**
+     * <p>Formats a <code>Calendar</code> object into the
+     * supplied <code>StringBuffer</code>.</p>
+     * 
+     * @param calendar  the calendar to format
+     * @param buf  the buffer to format into
+     * @return the specified string buffer
+     */
+Method code:
+870 |     public StringBuffer format(Calendar calendar, StringBuffer buf) {
+871 |         if (mTimeZoneForced) {
+872 |             calendar = (Calendar) calendar.clone();
+873 |             calendar.setTimeZone(mTimeZone);
+874 |         }
+875 |         return applyRules(calendar, buf);
+876 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.init()
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 557-567
+Documentation:
+/**
+     * <p>Initializes the instance for first use.</p>
+     */
+Method code:
+557 |     protected void init() {
+558 |         List<Rule> rulesList = parsePattern();
+559 |         mRules = rulesList.toArray(new Rule[rulesList.size()]);
+560 | 
+561 |         int len = 0;
+562 |         for (int i=mRules.length; --i >= 0; ) {
+563 |             len += mRules[i].estimateLength();
+564 |         }
+565 | 
+566 |         mMaxLengthEstimate = len;
+567 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.parsePattern()
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 577-698
+Documentation:
+/**
+     * <p>Returns a list of Rules given a pattern.</p>
+     * 
+     * @return a <code>List</code> of Rule objects
+     * @throws IllegalArgumentException if pattern is invalid
+     */
+Method code:
+577 |     protected List<Rule> parsePattern() {
+578 |         DateFormatSymbols symbols = new DateFormatSymbols(mLocale);
+579 |         List<Rule> rules = new ArrayList<Rule>();
+580 | 
+581 |         String[] ERAs = symbols.getEras();
+582 |         String[] months = symbols.getMonths();
+583 |         String[] shortMonths = symbols.getShortMonths();
+584 |         String[] weekdays = symbols.getWeekdays();
+585 |         String[] shortWeekdays = symbols.getShortWeekdays();
+586 |         String[] AmPmStrings = symbols.getAmPmStrings();
+587 | 
+588 |         int length = mPattern.length();
+589 |         int[] indexRef = new int[1];
+590 | 
+591 |         for (int i = 0; i < length; i++) {
+592 |             indexRef[0] = i;
+593 |             String token = parseToken(mPattern, indexRef);
+594 |             i = indexRef[0];
+595 | 
+596 |             int tokenLen = token.length();
+597 |             if (tokenLen == 0) {
+598 |                 break;
+599 |             }
+600 | 
+601 |             Rule rule;
+602 |             char c = token.charAt(0);
+603 | 
+604 |             switch (c) {
+605 |             case 'G': // era designator (text)
+606 |                 rule = new TextField(Calendar.ERA, ERAs);
+607 |                 break;
+608 |             case 'y': // year (number)
+609 |                 if (tokenLen >= 4) {
+610 |                     rule = selectNumberRule(Calendar.YEAR, tokenLen);
+611 |                 } else {
+612 |                     rule = TwoDigitYearField.INSTANCE;
+613 |                 }
+614 |                 break;
+615 |             case 'M': // month in year (text and number)
+616 |                 if (tokenLen >= 4) {
+617 |                     rule = new TextField(Calendar.MONTH, months);
+618 |                 } else if (tokenLen == 3) {
+619 |                     rule = new TextField(Calendar.MONTH, shortMonths);
+620 |                 } else if (tokenLen == 2) {
+621 |                     rule = TwoDigitMonthField.INSTANCE;
+622 |                 } else {
+623 |                     rule = UnpaddedMonthField.INSTANCE;
+624 |                 }
+625 |                 break;
+626 |             case 'd': // day in month (number)
+627 |                 rule = selectNumberRule(Calendar.DAY_OF_MONTH, tokenLen);
+628 |                 break;
+629 |             case 'h': // hour in am/pm (number, 1..12)
+630 |                 rule = new TwelveHourField(selectNumberRule(Calendar.HOUR, tokenLen));
+631 |                 break;
+632 |             case 'H': // hour in day (number, 0..23)
+633 |                 rule = selectNumberRule(Calendar.HOUR_OF_DAY, tokenLen);
+634 |                 break;
+635 |             case 'm': // minute in hour (number)
+636 |                 rule = selectNumberRule(Calendar.MINUTE, tokenLen);
+637 |                 break;
+638 |             case 's': // second in minute (number)
+639 |                 rule = selectNumberRule(Calendar.SECOND, tokenLen);
+640 |                 break;
+641 |             case 'S': // millisecond (number)
+642 |                 rule = selectNumberRule(Calendar.MILLISECOND, tokenLen);
+643 |                 break;
+644 |             case 'E': // day in week (text)
+645 |                 rule = new TextField(Calendar.DAY_OF_WEEK, tokenLen < 4 ? shortWeekdays : weekdays);
+646 |                 break;
+647 |             case 'D': // day in year (number)
+648 |                 rule = selectNumberRule(Calendar.DAY_OF_YEAR, tokenLen);
+649 |                 break;
+650 |             case 'F': // day of week in month (number)
+651 |                 rule = selectNumberRule(Calendar.DAY_OF_WEEK_IN_MONTH, tokenLen);
+652 |                 break;
+653 |             case 'w': // week in year (number)
+654 |                 rule = selectNumberRule(Calendar.WEEK_OF_YEAR, tokenLen);
+655 |                 break;
+656 |             case 'W': // week in month (number)
+657 |                 rule = selectNumberRule(Calendar.WEEK_OF_MONTH, tokenLen);
+658 |                 break;
+659 |             case 'a': // am/pm marker (text)
+660 |                 rule = new TextField(Calendar.AM_PM, AmPmStrings);
+661 |                 break;
+662 |             case 'k': // hour in day (1..24)
+663 |                 rule = new TwentyFourHourField(selectNumberRule(Calendar.HOUR_OF_DAY, tokenLen));
+664 |                 break;
+665 |             case 'K': // hour in am/pm (0..11)
+666 |                 rule = selectNumberRule(Calendar.HOUR, tokenLen);
+667 |                 break;
+668 |             case 'z': // time zone (text)
+669 |                 if (tokenLen >= 4) {
+670 |                     rule = new TimeZoneNameRule(mTimeZone, mTimeZoneForced, mLocale, TimeZone.LONG);
+671 |                 } else {
+672 |                     rule = new TimeZoneNameRule(mTimeZone, mTimeZoneForced, mLocale, TimeZone.SHORT);
+673 |                 }
+674 |                 break;
+675 |             case 'Z': // time zone (value)
+676 |                 if (tokenLen == 1) {
+677 |                     rule = TimeZoneNumberRule.INSTANCE_NO_COLON;
+678 |                 } else {
+679 |                     rule = TimeZoneNumberRule.INSTANCE_COLON;
+680 |                 }
+681 |                 break;
+682 |             case '\'': // literal text
+683 |                 String sub = token.substring(1);
+684 |                 if (sub.length() == 1) {
+685 |                     rule = new CharacterLiteral(sub.charAt(0));
+686 |                 } else {
+687 |                     rule = new StringLiteral(sub);
+688 |                 }
+689 |                 break;
+690 |             default:
+691 |                 throw new IllegalArgumentException("Illegal pattern component: " + token);
+692 |             }
+693 | 
+694 |             rules.add(rule);
+695 |         }
+696 | 
+697 |         return rules;
+698 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.lang3.time.FastDateFormat.PaddedNumberField.PaddedNumberField(int,int)
+Source: src/java/org/apache/commons/lang3/time/FastDateFormat.java
+Original range: 1272-1279
+Documentation:
+/**
+         * Constructs an instance of <code>PaddedNumberField</code>.
+         * 
+         * @param field the field
+         * @param size size of the output field
+         */
+Method code:
+1272 |         PaddedNumberField(int field, int size) {
+1273 |             if (size < 3) {
+1274 |                 // Should use UnpaddedNumberField or TwoDigitNumberField.
+1275 |                 throw new IllegalArgumentException();
+1276 |             }
+1277 |             mField = field;
+1278 |             mSize = size;
+1279 |         }
+

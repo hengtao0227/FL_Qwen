@@ -1,0 +1,2118 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendFieldEnd(StringBuffer,String)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1532-1534
+Documentation:
+/**
+     * <p>Append to the <code>toString<code> the field end.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     */
+Method code:
+1532 |     protected void appendFieldEnd(StringBuffer buffer, String fieldName) {
+1533 |         appendFieldSeparator(buffer);
+1534 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.DefaultToStringStyle.DefaultToStringStyle()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 2124-2126
+Documentation:
+/**
+         * <p>Constructor.</p>
+         *
+         * <p>Use the static constant rather than instantiating.</p>
+         */
+Method code:
+2124 |         DefaultToStringStyle() {
+2125 |             super();
+2126 |         }
+
+===== M0003 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.setAppendStatics(boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 635-637
+Documentation:
+/**
+     * <p>
+     * Sets whether or not to append static fields.
+     * </p>
+     * 
+     * @param appendStatics
+     *            Whether or not to append static fields.
+     * @since 2.1
+     */
+Method code:
+635 |     public void setAppendStatics(boolean appendStatics) {
+636 |         this.appendStatics = appendStatics;
+637 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendInternal(StringBuffer,String,Object,boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 468-565
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> an <code>Object</code>,
+     * correctly interpreting its type.</p>
+     *
+     * <p>This method performs the main lookup by Class type to correctly
+     * route arrays, <code>Collections</code>, <code>Maps</code> and
+     * <code>Objects</code> to the appropriate method.</p>
+     *
+     * <p>Either detail or summary views can be specified.</p>
+     *
+     * <p>If a cycle is detected, an object will be appended with the
+     * <code>Object.toString()</code> format.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param value  the value to add to the <code>toString</code>,
+     *  not <code>null</code>
+     * @param detail  output detail or not
+     */
+Method code:
+468 |     protected void appendInternal(StringBuffer buffer, String fieldName, Object value, boolean detail) {
+469 |         if (isRegistered(value)
+470 |             && !(value instanceof Number || value instanceof Boolean || value instanceof Character)) {
+471 |            appendCyclicObject(buffer, fieldName, value);
+472 |            return;
+473 |         }
+474 | 
+475 |         register(value);
+476 | 
+477 |         try {
+478 |             if (value instanceof Collection<?>) {
+479 |                 if (detail) {
+480 |                     appendDetail(buffer, fieldName, (Collection<?>) value);
+481 |                 } else {
+482 |                     appendSummarySize(buffer, fieldName, ((Collection<?>) value).size());
+483 |                 }
+484 | 
+485 |             } else if (value instanceof Map<?, ?>) {
+486 |                 if (detail) {
+487 |                     appendDetail(buffer, fieldName, (Map<?, ?>) value);
+488 |                 } else {
+489 |                     appendSummarySize(buffer, fieldName, ((Map<?, ?>) value).size());
+490 |                 }
+491 | 
+492 |             } else if (value instanceof long[]) {
+493 |                 if (detail) {
+494 |                     appendDetail(buffer, fieldName, (long[]) value);
+495 |                 } else {
+496 |                     appendSummary(buffer, fieldName, (long[]) value);
+497 |                 }
+498 | 
+499 |             } else if (value instanceof int[]) {
+500 |                 if (detail) {
+501 |                     appendDetail(buffer, fieldName, (int[]) value);
+502 |                 } else {
+503 |                     appendSummary(buffer, fieldName, (int[]) value);
+504 |                 }
+505 | 
+506 |             } else if (value instanceof short[]) {
+507 |                 if (detail) {
+508 |                     appendDetail(buffer, fieldName, (short[]) value);
+509 |                 } else {
+510 |                     appendSummary(buffer, fieldName, (short[]) value);
+511 |                 }
+512 | 
+513 |             } else if (value instanceof byte[]) {
+514 |                 if (detail) {
+515 |                     appendDetail(buffer, fieldName, (byte[]) value);
+516 |                 } else {
+517 |                     appendSummary(buffer, fieldName, (byte[]) value);
+518 |                 }
+519 | 
+520 |             } else if (value instanceof char[]) {
+521 |                 if (detail) {
+522 |                     appendDetail(buffer, fieldName, (char[]) value);
+523 |                 } else {
+524 |                     appendSummary(buffer, fieldName, (char[]) value);
+525 |                 }
+526 | 
+527 |             } else if (value instanceof double[]) {
+528 |                 if (detail) {
+529 |                     appendDetail(buffer, fieldName, (double[]) value);
+530 |                 } else {
+531 |                     appendSummary(buffer, fieldName, (double[]) value);
+532 |                 }
+533 | 
+534 |             } else if (value instanceof float[]) {
+535 |                 if (detail) {
+536 |                     appendDetail(buffer, fieldName, (float[]) value);
+537 |                 } else {
+538 |                     appendSummary(buffer, fieldName, (float[]) value);
+539 |                 }
+540 | 
+541 |             } else if (value instanceof boolean[]) {
+542 |                 if (detail) {
+543 |                     appendDetail(buffer, fieldName, (boolean[]) value);
+544 |                 } else {
+545 |                     appendSummary(buffer, fieldName, (boolean[]) value);
+546 |                 }
+547 | 
+548 |             } else if (value.getClass().isArray()) {
+549 |                 if (detail) {
+550 |                     appendDetail(buffer, fieldName, (Object[]) value);
+551 |                 } else {
+552 |                     appendSummary(buffer, fieldName, (Object[]) value);
+553 |                 }
+554 | 
+555 |             } else {
+556 |                     if (detail) {
+557 |                         appendDetail(buffer, fieldName, value);
+558 |                     } else {
+559 |                         appendSummary(buffer, fieldName, value);
+560 |                     }
+561 |             }
+562 |         } finally {
+563 |             unregister(value);
+564 |         }
+565 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.isFullDetail(Boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1571-1576
+Documentation:
+/**
+     * <p>Is this field to be output in full detail.</p>
+     *
+     * <p>This method converts a detail request into a detail level.
+     * The calling code may request full detail (<code>true</code>),
+     * but a subclass might ignore that and always return
+     * <code>false</code>. The calling code may pass in
+     * <code>null</code> indicating that it doesn't care about
+     * the detail level. In this case the default detail level is
+     * used.</p>
+     *
+     * @param fullDetailRequest  the detail level requested
+     * @return whether full detail is to be shown
+     */
+Method code:
+1571 |     protected boolean isFullDetail(Boolean fullDetailRequest) {
+1572 |         if (fullDetailRequest == null) {
+1573 |             return defaultFullDetail;
+1574 |         }
+1575 |         return fullDetailRequest.booleanValue();
+1576 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,char)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 771-773
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> a <code>char</code>
+     * value.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param value  the value to add to the <code>toString</code>
+     */
+Method code:
+771 |     protected void appendDetail(StringBuffer buffer, String fieldName, char value) {
+772 |         buffer.append(value);
+773 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.register(Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 176-188
+Documentation:
+/**
+     * <p>
+     * Registers the given object. Used by the reflection methods to avoid
+     * infinite loops.
+     * </p>
+     *
+     * @param value
+     *                  The object to register.
+     */
+Method code:
+176 |     static void register(Object value) {
+177 |         if (value != null) {
+178 |             WeakHashMap<Object, Object> m;
+179 |             synchronized (ToStringStyle.class) {
+180 |                 m = REGISTRY.get();
+181 |                 if (m == null) {
+182 |                     m = new WeakHashMap<Object, Object>();
+183 |                     REGISTRY.set(m);
+184 |                 }
+185 |             }
+186 |             m.put(value, null);
+187 |         }
+188 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendNullText(StringBuffer,String)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1500-1502
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> an indicator for <code>null</code>.</p>
+     *
+     * <p>The default indicator is <code>'&lt;null&gt;'</code>.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     */
+Method code:
+1500 |     protected void appendNullText(StringBuffer buffer, String fieldName) {
+1501 |         buffer.append(nullText);
+1502 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.getUpToClass()
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 565-567
+Documentation:
+/**
+     * <p>
+     * Gets the last super class to stop appending fields for.
+     * </p>
+     * 
+     * @return The last super class to stop appending fields for.
+     */
+Method code:
+565 |     public Class<?> getUpToClass() {
+566 |         return this.upToClass;
+567 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.setContentStart(String)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1815-1820
+Documentation:
+/**
+     * <p>Sets the content start text.</p>
+     *
+     * <p><code>null</code> is accepted, but will be converted to
+     * an empty String.</p>
+     *
+     * @param contentStart  the new content start text
+     */
+Method code:
+1815 |     protected void setContentStart(String contentStart) {
+1816 |         if (contentStart == null) {
+1817 |             contentStart = "";
+1818 |         }
+1819 |         this.contentStart = contentStart;
+1820 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString(Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 154-156
+Documentation:
+/**
+     * <p>Uses <code>ReflectionToStringBuilder</code> to generate a
+     * <code>toString</code> for the specified object.</p>
+     * 
+     * @param object  the Object to be output
+     * @return the String result
+     * @see ReflectionToStringBuilder#toString(Object)
+     */
+Method code:
+154 |     public static String reflectionToString(Object object) {
+155 |         return ReflectionToStringBuilder.toString(object);
+156 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendClassName(StringBuffer,Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1449-1458
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the class name.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param object  the <code>Object</code> whose name to output
+     */
+Method code:
+1449 |     protected void appendClassName(StringBuffer buffer, Object object) {
+1450 |         if (useClassName && object != null) {
+1451 |             register(object);
+1452 |             if (useShortClassName) {
+1453 |                 buffer.append(getShortClassName(object.getClass()));
+1454 |             } else {
+1455 |                 buffer.append(object.getClass().getName());
+1456 |             }
+1457 |         }
+1458 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendCyclicObject(StringBuffer,String,Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 579-581
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> an <code>Object</code>
+     * value that has been detected to participate in a cycle. This
+     * implementation will print the standard string value of the value.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param value  the value to add to the <code>toString</code>,
+     *  not <code>null</code>
+     *
+     * @since 2.2
+     */
+Method code:
+579 |     protected void appendCyclicObject(StringBuffer buffer, String fieldName, Object value) {
+580 |        ObjectUtils.identityToString(buffer, value);
+581 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,byte[])
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1173-1182
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the detail of a
+     * <code>byte</code> array.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param array  the array to add to the <code>toString</code>,
+     *  not <code>null</code>
+     */
+Method code:
+1173 |     protected void appendDetail(StringBuffer buffer, String fieldName, byte[] array) {
+1174 |         buffer.append(arrayStart);
+1175 |         for (int i = 0; i < array.length; i++) {
+1176 |             if (i > 0) {
+1177 |                 buffer.append(arraySeparator);
+1178 |             }
+1179 |             appendDetail(buffer, fieldName, array[i]);
+1180 |         }
+1181 |         buffer.append(arrayEnd);
+1182 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.setFieldSeparator(String)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1893-1898
+Documentation:
+/**
+     * <p>Sets the field separator text.</p>
+     *
+     * <p><code>null</code> is accepted, but will be converted to
+     * an empty String.</p>
+     *
+     * @param fieldSeparator  the new field separator text
+     */
+Method code:
+1893 |     protected void setFieldSeparator(String fieldSeparator) {
+1894 |         if (fieldSeparator == null) {
+1895 |             fieldSeparator = "";
+1896 |         }
+1897 |         this.fieldSeparator = fieldSeparator;
+1898 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,Object[])
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 896-911
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the detail of an
+     * <code>Object</code> array.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param array  the array to add to the <code>toString</code>,
+     *  not <code>null</code>
+     */
+Method code:
+896 |     protected void appendDetail(StringBuffer buffer, String fieldName, Object[] array) {
+897 |         buffer.append(arrayStart);
+898 |         for (int i = 0; i < array.length; i++) {
+899 |             Object item = array[i];
+900 |             if (i > 0) {
+901 |                 buffer.append(arraySeparator);
+902 |             }
+903 |             if (item == null) {
+904 |                 appendNullText(buffer, fieldName);
+905 | 
+906 |             } else {
+907 |                 appendInternal(buffer, fieldName, item, arrayContentDetail);
+908 |             }
+909 |         }
+910 |         buffer.append(arrayEnd);
+911 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString(Object,ToStringStyle)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 167-169
+Documentation:
+/**
+     * <p>Uses <code>ReflectionToStringBuilder</code> to generate a
+     * <code>toString</code> for the specified object.</p>
+     * 
+     * @param object  the Object to be output
+     * @param style  the style of the <code>toString</code> to create, may be <code>null</code>
+     * @return the String result
+     * @see ReflectionToStringBuilder#toString(Object,ToStringStyle)
+     */
+Method code:
+167 |     public static String reflectionToString(Object object, ToStringStyle style) {
+168 |         return ReflectionToStringBuilder.toString(object, style);
+169 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString(T,ToStringStyle,boolean,Class<? super T>)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 197-203
+Documentation:
+/**
+     * <p>Uses <code>ReflectionToStringBuilder</code> to generate a
+     * <code>toString</code> for the specified object.</p>
+     * 
+     * @param object  the Object to be output
+     * @param style  the style of the <code>toString</code> to create, may be <code>null</code>
+     * @param outputTransients  whether to include transient fields
+     * @param reflectUpToClass  the superclass to reflect up to (inclusive), may be <code>null</code>
+     * @return the String result
+     * @see ReflectionToStringBuilder#toString(Object,ToStringStyle,boolean,boolean,Class)
+     * @since 2.0
+     */
+Method code:
+197 |     public static <T> String reflectionToString(
+198 |         T object,
+199 |         ToStringStyle style,
+200 |         boolean outputTransients,
+201 |         Class<? super T> reflectUpToClass) {
+202 |         return ReflectionToStringBuilder.toString(object, style, outputTransients, false, reflectUpToClass);
+203 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,long)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 659-661
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> a <code>long</code>
+     * value.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param value  the value to add to the <code>toString</code>
+     */
+Method code:
+659 |     protected void appendDetail(StringBuffer buffer, String fieldName, long value) {
+660 |         buffer.append(value);
+661 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.lang3.SystemUtils.getSystemProperty(String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1247-1258
+Documentation:
+/**
+     * <p>Gets a System property, defaulting to <code>null</code> if the property
+     * cannot be read.</p>
+     *
+     * <p>If a <code>SecurityException</code> is caught, the return
+     * value is <code>null</code> and a message is written to <code>System.err</code>.</p>
+     * 
+     * @param property the system property name
+     * @return the system property value or <code>null</code> if a security problem occurs
+     */
+Method code:
+1247 |     private static String getSystemProperty(String property) {
+1248 |         try {
+1249 |             return System.getProperty(property);
+1250 |         } catch (SecurityException ex) {
+1251 |             // we are not allowed to look at this property
+1252 |             System.err.println(
+1253 |                 "Caught a SecurityException reading the system property '" + property 
+1254 |                 + "'; the SystemUtils property value will default to null."
+1255 |             );
+1256 |             return null;
+1257 |         }
+1258 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,double)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 799-801
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> a <code>double</code>
+     * value.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param value  the value to add to the <code>toString</code>
+     */
+Method code:
+799 |     protected void appendDetail(StringBuffer buffer, String fieldName, double value) {
+800 |         buffer.append(value);
+801 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,float)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 827-829
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> a <code>float</code>
+     * value.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param value  the value to add to the <code>toString</code>
+     */
+Method code:
+827 |     protected void appendDetail(StringBuffer buffer, String fieldName, float value) {
+828 |         buffer.append(value);
+829 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.SimpleToStringStyle.SimpleToStringStyle()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 2223-2230
+Documentation:
+/**
+         * <p>Constructor.</p>
+         *
+         * <p>Use the static constant rather than instantiating.</p>
+         */
+Method code:
+2223 |         SimpleToStringStyle() {
+2224 |             super();
+2225 |             this.setUseClassName(false);
+2226 |             this.setUseIdentityHashCode(false);
+2227 |             this.setUseFieldNames(false);
+2228 |             this.setContentStart("");
+2229 |             this.setContentEnd("");
+2230 |         }
+
+===== M0024 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.setUseShortClassName(boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1632-1634
+Documentation:
+/**
+     * <p>Sets whether to output short or long class names.</p>
+     *
+     * @param useShortClassName  the new useShortClassName flag
+     * @since 2.0
+     */
+Method code:
+1632 |     protected void setUseShortClassName(boolean useShortClassName) {
+1633 |         this.useShortClassName = useShortClassName;
+1634 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.lang3.SystemUtils.getOSMatches(String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1215-1220
+Documentation:
+/**
+     * <p>Decides if the operating system matches.</p>
+     * 
+     * @param osNamePrefix  the prefix for the os name
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1215 |     private static boolean getOSMatches(String osNamePrefix) {
+1216 |         if (OS_NAME == null) {
+1217 |             return false;
+1218 |         }
+1219 |         return OS_NAME.startsWith(osNamePrefix);
+1220 |     }    
+
+===== M0026 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.getValue(Field)
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 585-587
+Documentation:
+/**
+     * <p>
+     * Calls <code>java.lang.reflect.Field.get(Object)</code>.
+     * </p>
+     * 
+     * @param field
+     *            The Field to query.
+     * @return The Object from the given Field.
+     * 
+     * @throws IllegalArgumentException
+     *             see {@link java.lang.reflect.Field#get(Object)}
+     * @throws IllegalAccessException
+     *             see {@link java.lang.reflect.Field#get(Object)}
+     * 
+     * @see java.lang.reflect.Field#get(Object)
+     */
+Method code:
+585 |     protected Object getValue(Field field) throws IllegalArgumentException, IllegalAccessException {
+586 |         return field.get(this.getObject());
+587 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.appendFieldsIn(Class<?>)
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 525-549
+Documentation:
+/**
+     * <p>
+     * Appends the fields and values defined by the given object of the given Class.
+     * </p>
+     * 
+     * <p>
+     * If a cycle is detected as an object is &quot;toString()'ed&quot;, such an object is rendered as if
+     * <code>Object.toString()</code> had been called and not implemented by the object.
+     * </p>
+     * 
+     * @param clazz
+     *            The class of object parameter
+     */
+Method code:
+525 |     protected void appendFieldsIn(Class<?> clazz) {
+526 |         if (clazz.isArray()) {
+527 |             this.reflectionAppendArray(this.getObject());
+528 |             return;
+529 |         }
+530 |         Field[] fields = clazz.getDeclaredFields();
+531 |         AccessibleObject.setAccessible(fields, true);
+532 |         for (Field field : fields) {
+533 |             String fieldName = field.getName();
+534 |             if (this.accept(field)) {
+535 |                 try {
+536 |                     // Warning: Field.get(Object) creates wrappers objects
+537 |                     // for primitive types.
+538 |                     Object fieldValue = this.getValue(field);
+539 |                     this.append(fieldName, fieldValue);
+540 |                 } catch (IllegalAccessException ex) {
+541 |                     //this can't happen. Would get a Security exception
+542 |                     // instead
+543 |                     //throw a runtime exception in case the impossible
+544 |                     // happens.
+545 |                     throw new InternalError("Unexpected IllegalAccessException: " + ex.getMessage());
+546 |                 }
+547 |             }
+548 |         }
+549 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.ToStringBuilder(Object,ToStringStyle,StringBuffer)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 254-266
+Documentation:
+/**
+     * <p>Constructs a builder for the specified object.</p>
+     *
+     * <p>If the style is <code>null</code>, the default style is used.</p>
+     *
+     * <p>If the buffer is <code>null</code>, a new one is created.</p>
+     * 
+     * @param object  the Object to build a <code>toString</code> for, not recommended to be null
+     * @param style  the style of the <code>toString</code> to create, null uses the default style
+     * @param buffer  the <code>StringBuffer</code> to populate, may be null
+     */
+Method code:
+254 |     public ToStringBuilder(Object object, ToStringStyle style, StringBuffer buffer) {
+255 |         if (style == null) {
+256 |             style = getDefaultStyle();
+257 |         }
+258 |         if (buffer == null) {
+259 |             buffer = new StringBuffer(512);
+260 |         }
+261 |         this.buffer = buffer;
+262 |         this.style = style;
+263 |         this.object = object;
+264 | 
+265 |         style.appendStart(buffer, object);
+266 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,short[])
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1112-1121
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the detail of a
+     * <code>short</code> array.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param array  the array to add to the <code>toString</code>,
+     *  not <code>null</code>
+     */
+Method code:
+1112 |     protected void appendDetail(StringBuffer buffer, String fieldName, short[] array) {
+1113 |         buffer.append(arrayStart);
+1114 |         for (int i = 0; i < array.length; i++) {
+1115 |             if (i > 0) {
+1116 |                 buffer.append(arraySeparator);
+1117 |             }
+1118 |             appendDetail(buffer, fieldName, array[i]);
+1119 |         }
+1120 |         buffer.append(arrayEnd);
+1121 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionTrimmed()
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1184-1194
+Documentation:
+/**
+     * Trims the text of the java version to start with numbers.
+     * 
+     * @return the trimmed java version
+     */
+Method code:
+1184 |     private static String getJavaVersionTrimmed() {
+1185 |         if (JAVA_VERSION != null) {
+1186 |             for (int i = 0; i < JAVA_VERSION.length(); i++) {
+1187 |                 char ch = JAVA_VERSION.charAt(i);
+1188 |                 if (ch >= '0' && ch <= '9') {
+1189 |                     return JAVA_VERSION.substring(i);
+1190 |                 }
+1191 |             }
+1192 |         }
+1193 |         return null;
+1194 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.NoFieldNameToStringStyle.NoFieldNameToStringStyle()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 2157-2160
+Documentation:
+/**
+         * <p>Constructor.</p>
+         *
+         * <p>Use the static constant rather than instantiating.</p>
+         */
+Method code:
+2157 |         NoFieldNameToStringStyle() {
+2158 |             super();
+2159 |             this.setUseFieldNames(false);
+2160 |         }
+
+===== M0032 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.getStringBuffer()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 1032-1034
+Documentation:
+/**
+     * <p>Gets the <code>StringBuffer</code> being populated.</p>
+     * 
+     * @return the <code>StringBuffer</code> being populated
+     */
+Method code:
+1032 |     public StringBuffer getStringBuffer() {
+1033 |         return buffer;
+1034 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendStart(StringBuffer,Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 374-383
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the start of data indicator.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param object  the <code>Object</code> to build a <code>toString</code> for
+     */
+Method code:
+374 |     public void appendStart(StringBuffer buffer, Object object) {
+375 |         if (object != null) {
+376 |             appendClassName(buffer, object);
+377 |             appendIdentityHashCode(buffer, object);
+378 |             appendContentStart(buffer);
+379 |             if (fieldSeparatorAtStart) {
+380 |                 appendFieldSeparator(buffer);
+381 |             }
+382 |         }
+383 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.append(Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 473-476
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> an <code>Object</code>
+     * value.</p>
+     *
+     * @param obj  the value to add to the <code>toString</code>
+     * @return this
+     */
+Method code:
+473 |     public ToStringBuilder append(Object obj) {
+474 |         style.append(buffer, null, obj, null);
+475 |         return this;
+476 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,byte)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 743-745
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> a <code>byte</code>
+     * value.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param value  the value to add to the <code>toString</code>
+     */
+Method code:
+743 |     protected void appendDetail(StringBuffer buffer, String fieldName, byte value) {
+744 |         buffer.append(value);
+745 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionMatches(String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1202-1207
+Documentation:
+/**
+     * <p>Decides if the java version matches.</p>
+     * 
+     * @param versionPrefix  the prefix for the java version
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1202 |     private static boolean getJavaVersionMatches(String versionPrefix) {
+1203 |         if (JAVA_VERSION_TRIMMED == null) {
+1204 |             return false;
+1205 |         }
+1206 |         return JAVA_VERSION_TRIMMED.startsWith(versionPrefix);
+1207 |     }    
+
+===== M0037 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendContentStart(StringBuffer)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1479-1481
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the content start.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     */
+Method code:
+1479 |     protected void appendContentStart(StringBuffer buffer) {
+1480 |         buffer.append(contentStart);
+1481 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.getStyle()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 1044-1046
+Documentation:
+/**
+     * <p>Gets the <code>ToStringStyle</code> being used.</p>
+     * 
+     * @return the <code>ToStringStyle</code> being used
+     * @since 2.0
+     */
+Method code:
+1044 |     public ToStringStyle getStyle() {
+1045 |         return style;
+1046 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendIdentityHashCode(StringBuffer,Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1466-1472
+Documentation:
+/**
+     * <p>Append the {@link System#identityHashCode(java.lang.Object)}.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param object  the <code>Object</code> whose id to output
+     */
+Method code:
+1466 |     protected void appendIdentityHashCode(StringBuffer buffer, Object object) {
+1467 |         if (this.isUseIdentityHashCode() && object!=null) {
+1468 |             register(object);
+1469 |             buffer.append('@');
+1470 |             buffer.append(Integer.toHexString(System.identityHashCode(object)));
+1471 |         }
+1472 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.getObject()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 1023-1025
+Documentation:
+/**
+     * <p>Returns the <code>Object</code> being output.</p>
+     * 
+     * @return The object being output.
+     * @since 2.0
+     */
+Method code:
+1023 |     public Object getObject() {
+1024 |         return object;
+1025 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendFieldStart(StringBuffer,String)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1519-1524
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the field start.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name
+     */
+Method code:
+1519 |     protected void appendFieldStart(StringBuffer buffer, String fieldName) {
+1520 |         if (useFieldNames && fieldName != null) {
+1521 |             buffer.append(fieldName);
+1522 |             buffer.append(fieldNameValueSeparator);
+1523 |         }
+1524 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.toString(Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 122-124
+Documentation:
+/**
+     * <p>
+     * Builds a <code>toString</code> value using the default <code>ToStringStyle</code> through reflection.
+     * </p>
+     * 
+     * <p>
+     * It uses <code>AccessibleObject.setAccessible</code> to gain access to private fields. This means that it will
+     * throw a security exception if run under a security manager, if the permissions are not set up correctly. It is
+     * also not as efficient as testing explicitly.
+     * </p>
+     * 
+     * <p>
+     * Transient members will be not be included, as they are likely derived. Static fields will not be included.
+     * Superclass fields will be appended.
+     * </p>
+     * 
+     * @param object
+     *            the Object to be output
+     * @return the String result
+     * @throws IllegalArgumentException
+     *             if the Object is <code>null</code>
+     */
+Method code:
+122 |     public static String toString(Object object) {
+123 |         return toString(object, null, false, false, null);
+124 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.append(StringBuffer,String,Object,Boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 436-447
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> an <code>Object</code>
+     * value, printing the full <code>toString</code> of the
+     * <code>Object</code> passed in.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name
+     * @param value  the value to add to the <code>toString</code>
+     * @param fullDetail  <code>true</code> for detail, <code>false</code>
+     *  for summary info, <code>null</code> for style decides
+     */
+Method code:
+436 |     public void append(StringBuffer buffer, String fieldName, Object value, Boolean fullDetail) {
+437 |         appendFieldStart(buffer, fieldName);
+438 | 
+439 |         if (value == null) {
+440 |             appendNullText(buffer, fieldName);
+441 | 
+442 |         } else {
+443 |             appendInternal(buffer, fieldName, value, isFullDetail(fullDetail));
+444 |         }
+445 | 
+446 |         appendFieldEnd(buffer, fieldName);
+447 |     }
+
+===== M0044 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.setUseClassName(boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1610-1612
+Documentation:
+/**
+     * <p>Sets whether to use the class name.</p>
+     *
+     * @param useClassName  the new useClassName flag
+     */
+Method code:
+1610 |     protected void setUseClassName(boolean useClassName) {
+1611 |         this.useClassName = useClassName;
+1612 |     }
+
+===== M0045 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.MultiLineToStringStyle.MultiLineToStringStyle()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 2259-2265
+Documentation:
+/**
+         * <p>Constructor.</p>
+         *
+         * <p>Use the static constant rather than instantiating.</p>
+         */
+Method code:
+2259 |         MultiLineToStringStyle() {
+2260 |             super();
+2261 |             this.setContentStart("[");
+2262 |             this.setFieldSeparator(SystemUtils.LINE_SEPARATOR + "  ");
+2263 |             this.setFieldSeparatorAtStart(true);
+2264 |             this.setContentEnd(SystemUtils.LINE_SEPARATOR + "]");
+2265 |         }
+
+===== M0046 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.setFieldSeparatorAtStart(boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1920-1922
+Documentation:
+/**
+     * <p>Sets whether the field separator should be added at the start
+     * of each buffer.</p>
+     *
+     * @param fieldSeparatorAtStart  the fieldSeparatorAtStart flag
+     * @since 2.0
+     */
+Method code:
+1920 |     protected void setFieldSeparatorAtStart(boolean fieldSeparatorAtStart) {
+1921 |         this.fieldSeparatorAtStart = fieldSeparatorAtStart;
+1922 |     }
+
+===== M0047 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,short)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 715-717
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> a <code>short</code>
+     * value.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param value  the value to add to the <code>toString</code>
+     */
+Method code:
+715 |     protected void appendDetail(StringBuffer buffer, String fieldName, short value) {
+716 |         buffer.append(value);
+717 |     }
+
+===== M0048 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.isUseIdentityHashCode()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1643-1645
+Documentation:
+/**
+     * <p>Gets whether to use the identity hash code.</p>
+     *
+     * @return the current useIdentityHashCode flag
+     */
+Method code:
+1643 |     protected boolean isUseIdentityHashCode() {
+1644 |         return useIdentityHashCode;
+1645 |     }
+
+===== M0049 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.accept(Field)
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 491-510
+Documentation:
+/**
+     * Returns whether or not to append the given <code>Field</code>.
+     * <ul>
+     * <li>Transient fields are appended only if {@link #isAppendTransients()} returns <code>true</code>.
+     * <li>Static fields are appended only if {@link #isAppendStatics()} returns <code>true</code>.
+     * <li>Inner class fields are not appened.</li>
+     * </ul>
+     * 
+     * @param field
+     *            The Field to test.
+     * @return Whether or not to append the given <code>Field</code>.
+     */
+Method code:
+491 |     protected boolean accept(Field field) {
+492 |         if (field.getName().indexOf(ClassUtils.INNER_CLASS_SEPARATOR_CHAR) != -1) {
+493 |             // Reject field from inner class.
+494 |             return false;
+495 |         }
+496 |         if (Modifier.isTransient(field.getModifiers()) && !this.isAppendTransients()) {
+497 |             // Reject transient fields.
+498 |             return false;
+499 |         }
+500 |         if (Modifier.isStatic(field.getModifiers()) && !this.isAppendStatics()) {
+501 |             // Reject static fields.
+502 |             return false;
+503 |         }
+504 |         if (this.excludeFieldNames != null
+505 |             && Arrays.binarySearch(this.excludeFieldNames, field.getName()) >= 0) {
+506 |             // Reject fields from the getExcludeFieldNames list.
+507 |             return false;
+508 |         }
+509 |         return true;
+510 |     }
+
+===== M0050 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.reflectionAppendArray(Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 621-624
+Documentation:
+/**
+     * <p>
+     * Append to the <code>toString</code> an <code>Object</code> array.
+     * </p>
+     * 
+     * @param array
+     *            the array to add to the <code>toString</code>
+     * @return this
+     */
+Method code:
+621 |     public ReflectionToStringBuilder reflectionAppendArray(Object array) {
+622 |         this.getStyle().reflectionAppendArrayDetail(this.getStringBuffer(), null, array);
+623 |         return this;
+624 |     }
+
+===== M0051 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.getRegistry()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 147-149
+Documentation:
+/**
+     * <p>
+     * Returns the registry of objects being traversed by the <code>reflectionToString</code>
+     * methods in the current thread.
+     * </p>
+     *
+     * @return Set the registry of objects being traversed
+     */
+Method code:
+147 |     static Map<Object, Object> getRegistry() {
+148 |         return REGISTRY.get() != null ? REGISTRY.get() : Collections.<Object, Object>emptyMap();
+149 |     }
+
+===== M0052 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionAsInt()
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1161-1177
+Documentation:
+/**
+     * <p>Gets the Java version number as an <code>int</code>.</p>
+     *
+     * <p>Example return values:</p>
+     * <ul>
+     *  <li><code>120</code> for JDK 1.2
+     *  <li><code>131</code> for JDK 1.3.1
+     * </ul>
+     * 
+     * <p>Patch releases are not reported.
+     * Zero is returned if {@link #JAVA_VERSION_TRIMMED} is <code>null</code>.</p>
+     * 
+     * @return the version, for example 131 for JDK 1.3.1
+     */
+Method code:
+1161 |     private static int getJavaVersionAsInt() {
+1162 |         if (JAVA_VERSION_TRIMMED == null) {
+1163 |             return 0;
+1164 |         }
+1165 |         String str = JAVA_VERSION_TRIMMED.substring(0, 1);
+1166 |         str = str + JAVA_VERSION_TRIMMED.substring(2, 3);
+1167 |         if (JAVA_VERSION_TRIMMED.length() >= 5) {
+1168 |             str = str + JAVA_VERSION_TRIMMED.substring(4, 5);
+1169 |         } else {
+1170 |             str = str + "0";
+1171 |         }
+1172 |         try {
+1173 |             return Integer.parseInt(str);
+1174 |         } catch (Exception ex) {
+1175 |             return 0;
+1176 |         }
+1177 |     }
+
+===== M0053 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.reflectionAppendArrayDetail(StringBuffer,String,Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 922-938
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the detail of an array type.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param array  the array to add to the <code>toString</code>,
+     *  not <code>null</code>
+     * @since 2.0
+     */
+Method code:
+922 |     protected void reflectionAppendArrayDetail(StringBuffer buffer, String fieldName, Object array) {
+923 |         buffer.append(arrayStart);
+924 |         int length = Array.getLength(array);
+925 |         for (int i = 0; i < length; i++) {
+926 |             Object item = Array.get(array, i);
+927 |             if (i > 0) {
+928 |                 buffer.append(arraySeparator);
+929 |             }
+930 |             if (item == null) {
+931 |                 appendNullText(buffer, fieldName);
+932 | 
+933 |             } else {
+934 |                 appendInternal(buffer, fieldName, item, arrayContentDetail);
+935 |             }
+936 |         }
+937 |         buffer.append(arrayEnd);
+938 |     }
+
+===== M0054 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.getDefaultStyle()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 119-121
+Documentation:
+/**
+     * <p>Gets the default <code>ToStringStyle</code> to use.</p>
+     * 
+     * <p>This method gets a singleton default value, typically for the whole JVM.
+     * Changing this default should generally only be done during application startup.
+     * It is recommended to pass a <code>ToStringStyle</code> to the constructor instead
+     * of using this global default.</p>
+     * 
+     * <p>This method can be used from multiple threads.
+     * Internally, a <code>volatile</code> variable is used to provide the guarantee
+     * that the latest value set using {@link #setDefaultStyle} is the value returned.
+     * It is strongly recommended that the default style is only changed during application startup.</p>
+     * 
+     * <p>One reason for changing the default could be to have a verbose style during
+     * development and a compact style in production.</p>
+     * 
+     * @return the default <code>ToStringStyle</code>, never null
+     */
+Method code:
+119 |     public static ToStringStyle getDefaultStyle() {
+120 |         return defaultStyle;
+121 |     }
+
+===== M0055 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,int[])
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1051-1060
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the detail of an
+     * <code>int</code> array.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param array  the array to add to the <code>toString</code>,
+     *  not <code>null</code>
+     */
+Method code:
+1051 |     protected void appendDetail(StringBuffer buffer, String fieldName, int[] array) {
+1052 |         buffer.append(arrayStart);
+1053 |         for (int i = 0; i < array.length; i++) {
+1054 |             if (i > 0) {
+1055 |                 buffer.append(arraySeparator);
+1056 |             }
+1057 |             appendDetail(buffer, fieldName, array[i]);
+1058 |         }
+1059 |         buffer.append(arrayEnd);
+1060 |     }
+
+===== M0056 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,int)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 687-689
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> an <code>int</code>
+     * value.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param value  the value to add to the <code>toString</code>
+     */
+Method code:
+687 |     protected void appendDetail(StringBuffer buffer, String fieldName, int value) {
+688 |         buffer.append(value);
+689 |     }
+
+===== M0057 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.ReflectionToStringBuilder(T,ToStringStyle,StringBuffer,Class<? super T>,boolean,boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 470-477
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param object
+     *            the Object to build a <code>toString</code> for
+     * @param style
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
+     * @param buffer
+     *            the <code>StringBuffer</code> to populate, may be <code>null</code>
+     * @param reflectUpToClass
+     *            the superclass to reflect up to (inclusive), may be <code>null</code>
+     * @param outputTransients
+     *            whether to include transient fields
+     * @param outputStatics
+     *            whether to include static fields
+     * @since 2.1
+     */
+Method code:
+470 |     public <T> ReflectionToStringBuilder(
+471 |             T object, ToStringStyle style, StringBuffer buffer,
+472 |             Class<? super T> reflectUpToClass, boolean outputTransients, boolean outputStatics) {
+473 |         super(object, style, buffer);
+474 |         this.setUpToClass(reflectUpToClass);
+475 |         this.setAppendTransients(outputTransients);
+476 |         this.setAppendStatics(outputStatics);
+477 |     }
+
+===== M0058 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionAsFloat()
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1132-1145
+Documentation:
+/**
+     * <p>Gets the Java version number as a <code>float</code>.</p>
+     *
+     * <p>Example return values:</p>
+     * <ul>
+     *  <li><code>1.2f</code> for JDK 1.2
+     *  <li><code>1.31f</code> for JDK 1.3.1
+     * </ul>
+     * 
+     * <p>Patch releases are not reported.
+     * Zero is returned if {@link #JAVA_VERSION_TRIMMED} is <code>null</code>.</p>
+     * 
+     * @return the version, for example 1.31f for JDK 1.3.1
+     */
+Method code:
+1132 |     private static float getJavaVersionAsFloat() {
+1133 |         if (JAVA_VERSION_TRIMMED == null) {
+1134 |             return 0f;
+1135 |         }
+1136 |         String str = JAVA_VERSION_TRIMMED.substring(0, 3);
+1137 |         if (JAVA_VERSION_TRIMMED.length() >= 5) {
+1138 |             str = str + JAVA_VERSION_TRIMMED.substring(4, 5);
+1139 |         }
+1140 |         try {
+1141 |             return Float.parseFloat(str);
+1142 |         } catch (Exception ex) {
+1143 |             return 0;
+1144 |         }
+1145 |     }
+
+===== M0059 =====
+Signature: org.apache.commons.lang3.ObjectUtils.identityToString(StringBuffer,Object)
+Source: src/main/java/org/apache/commons/lang3/ObjectUtils.java
+Original range: 214-221
+Documentation:
+/**
+     * <p>Appends the toString that would be produced by <code>Object</code>
+     * if a class did not override toString itself. <code>null</code>
+     * will throw a NullPointerException for either of the two parameters. </p>
+     *
+     * <pre>
+     * ObjectUtils.identityToString(buf, "")            = buf.append("java.lang.String@1e23"
+     * ObjectUtils.identityToString(buf, Boolean.TRUE)  = buf.append("java.lang.Boolean@7fa"
+     * ObjectUtils.identityToString(buf, Boolean.TRUE)  = buf.append("java.lang.Boolean@7fa")
+     * </pre>
+     *
+     * @param buffer  the buffer to append to
+     * @param object  the object to create a toString for
+     * @since 2.4
+     */
+Method code:
+214 |     public static void identityToString(StringBuffer buffer, Object object) {
+215 |         if (object == null) {
+216 |             throw new NullPointerException("Cannot get the toString of a null identity");
+217 |         }
+218 |         buffer.append(object.getClass().getName())
+219 |               .append('@')
+220 |               .append(Integer.toHexString(System.identityHashCode(object)));
+221 |     }
+
+===== M0060 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.unregister(Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 202-215
+Documentation:
+/**
+     * <p>
+     * Unregisters the given object.
+     * </p>
+     *
+     * <p>
+     * Used by the reflection methods to avoid infinite loops.
+     * </p>
+     *
+     * @param value
+     *                  The object to unregister.
+     */
+Method code:
+202 |     static void unregister(Object value) {
+203 |         if (value != null) {
+204 |             WeakHashMap<Object, Object> m;
+205 |             synchronized (ToStringStyle.class) {
+206 |                 m = REGISTRY.get();
+207 |                 if (m != null) {
+208 |                     m.remove(value);
+209 |                     if (m.isEmpty()) {
+210 |                         REGISTRY.remove();
+211 |                     }
+212 |                 }
+213 |             }
+214 |         }
+215 |     }
+
+===== M0061 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.toString(T,ToStringStyle,boolean,boolean,Class<? super T>)
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 287-292
+Documentation:
+/**
+     * <p>
+     * Builds a <code>toString</code> value through reflection.
+     * </p>
+     * 
+     * <p>
+     * It uses <code>AccessibleObject.setAccessible</code> to gain access to private fields. This means that it will
+     * throw a security exception if run under a security manager, if the permissions are not set up correctly. It is
+     * also not as efficient as testing explicitly.
+     * </p>
+     * 
+     * <p>
+     * If the <code>outputTransients</code> is <code>true</code>, transient fields will be output, otherwise they
+     * are ignored, as they are likely derived fields, and not part of the value of the Object.
+     * </p>
+     * 
+     * <p>
+     * If the <code>outputStatics</code> is <code>true</code>, static fields will be output, otherwise they are
+     * ignored.
+     * </p>
+     * 
+     * <p>
+     * Superclass fields will be appended up to and including the specified superclass. A null superclass is treated as
+     * <code>java.lang.Object</code>.
+     * </p>
+     * 
+     * <p>
+     * If the style is <code>null</code>, the default <code>ToStringStyle</code> is used.
+     * </p>
+     * 
+     * @param object
+     *            the Object to be output
+     * @param style
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
+     * @param outputTransients
+     *            whether to include transient fields
+     * @param outputStatics
+     *            whether to include static fields
+     * @param reflectUpToClass
+     *            the superclass to reflect up to (inclusive), may be <code>null</code>
+     * @return the String result
+     * @throws IllegalArgumentException
+     *             if the Object is <code>null</code>
+     * @since 2.1
+     */
+Method code:
+287 |     public static <T> String toString(
+288 |             T object, ToStringStyle style, boolean outputTransients,
+289 |             boolean outputStatics, Class<? super T> reflectUpToClass) {
+290 |         return new ReflectionToStringBuilder(object, style, null, reflectUpToClass, outputTransients, outputStatics)
+291 |                 .toString();
+292 |     }
+
+===== M0062 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 855-857
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> a <code>boolean</code>
+     * value.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param value  the value to add to the <code>toString</code>
+     */
+Method code:
+855 |     protected void appendDetail(StringBuffer buffer, String fieldName, boolean value) {
+856 |         buffer.append(value);
+857 |     }
+
+===== M0063 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendEnd(StringBuffer,Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 392-398
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the end of data indicator.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param object  the <code>Object</code> to build a
+     *  <code>toString</code> for.
+     */
+Method code:
+392 |     public void appendEnd(StringBuffer buffer, Object object) {
+393 |         if (this.fieldSeparatorAtEnd == false) {
+394 |             removeLastFieldSeparator(buffer);
+395 |         }
+396 |         appendContentEnd(buffer);
+397 |         unregister(object);
+398 |     }
+
+===== M0064 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.toString(Object,ToStringStyle)
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 154-156
+Documentation:
+/**
+     * <p>
+     * Builds a <code>toString</code> value through reflection.
+     * </p>
+     * 
+     * <p>
+     * It uses <code>AccessibleObject.setAccessible</code> to gain access to private fields. This means that it will
+     * throw a security exception if run under a security manager, if the permissions are not set up correctly. It is
+     * also not as efficient as testing explicitly.
+     * </p>
+     * 
+     * <p>
+     * Transient members will be not be included, as they are likely derived. Static fields will not be included.
+     * Superclass fields will be appended.
+     * </p>
+     * 
+     * <p>
+     * If the style is <code>null</code>, the default <code>ToStringStyle</code> is used.
+     * </p>
+     * 
+     * @param object
+     *            the Object to be output
+     * @param style
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
+     * @return the String result
+     * @throws IllegalArgumentException
+     *             if the Object or <code>ToStringStyle</code> is <code>null</code>
+     */
+Method code:
+154 |     public static String toString(Object object, ToStringStyle style) {
+155 |         return toString(object, style, false, false, null);
+156 |     }
+
+===== M0065 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendFieldSeparator(StringBuffer)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1509-1511
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the field separator.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     */
+Method code:
+1509 |     protected void appendFieldSeparator(StringBuffer buffer) {
+1510 |         buffer.append(fieldSeparator);
+1511 |     }
+
+===== M0066 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.setContentEnd(String)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1841-1846
+Documentation:
+/**
+     * <p>Sets the content end text.</p>
+     *
+     * <p><code>null</code> is accepted, but will be converted to
+     * an empty String.</p>
+     *
+     * @param contentEnd  the new content end text
+     */
+Method code:
+1841 |     protected void setContentEnd(String contentEnd) {
+1842 |         if (contentEnd == null) {
+1843 |             contentEnd = "";
+1844 |         }
+1845 |         this.contentEnd = contentEnd;
+1846 |     }
+
+===== M0067 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.ToStringBuilder(Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 227-229
+Documentation:
+/**
+     * <p>Constructs a builder for the specified object using the default output style.</p>
+     *
+     * <p>This default style is obtained from {@link #getDefaultStyle()}.</p>
+     * 
+     * @param object  the Object to build a <code>toString</code> for, not recommended to be null
+     */
+Method code:
+227 |     public ToStringBuilder(Object object) {
+228 |         this(object, null, null);
+229 |     }
+
+===== M0068 =====
+Signature: org.apache.commons.lang3.ObjectUtils.Null.Null()
+Source: src/main/java/org/apache/commons/lang3/ObjectUtils.java
+Original range: 340-342
+Documentation:
+/**
+         * Restricted constructor - singleton.
+         */
+Method code:
+340 |         Null() {
+341 |             super();
+342 |         }
+
+===== M0069 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,char[])
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1234-1243
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the detail of a
+     * <code>char</code> array.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param array  the array to add to the <code>toString</code>,
+     *  not <code>null</code>
+     */
+Method code:
+1234 |     protected void appendDetail(StringBuffer buffer, String fieldName, char[] array) {
+1235 |         buffer.append(arrayStart);
+1236 |         for (int i = 0; i < array.length; i++) {
+1237 |             if (i > 0) {
+1238 |                 buffer.append(arraySeparator);
+1239 |             }
+1240 |             appendDetail(buffer, fieldName, array[i]);
+1241 |         }
+1242 |         buffer.append(arrayEnd);
+1243 |     }
+
+===== M0070 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.toString()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 1058-1066
+Documentation:
+/**
+     * <p>Returns the built <code>toString</code>.</p>
+     * 
+     * <p>This method appends the end of data indicator, and can only be called once.
+     * Use {@link #getStringBuffer} to get the current string state.</p>
+     * 
+     * <p>If the object is <code>null</code>, return the style's <code>nullText</code></p>
+     * 
+     * @return the String <code>toString</code>
+     */
+Method code:
+1058 |     @Override
+1059 |     public String toString() {
+1060 |         if (this.getObject() == null) {
+1061 |             this.getStringBuffer().append(this.getStyle().getNullText());
+1062 |         } else {
+1063 |             style.appendEnd(this.getStringBuffer(), this.getObject());
+1064 |         }
+1065 |         return this.getStringBuffer().toString();
+1066 |     }
+
+===== M0071 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendContentEnd(StringBuffer)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1488-1490
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the content end.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     */
+Method code:
+1488 |     protected void appendContentEnd(StringBuffer buffer) {
+1489 |         buffer.append(contentEnd);
+1490 |     }
+
+===== M0072 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,double[])
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1295-1304
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the detail of a
+     * <code>double</code> array.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param array  the array to add to the <code>toString</code>,
+     *  not <code>null</code>
+     */
+Method code:
+1295 |     protected void appendDetail(StringBuffer buffer, String fieldName, double[] array) {
+1296 |         buffer.append(arrayStart);
+1297 |         for (int i = 0; i < array.length; i++) {
+1298 |             if (i > 0) {
+1299 |                 buffer.append(arraySeparator);
+1300 |             }
+1301 |             appendDetail(buffer, fieldName, array[i]);
+1302 |         }
+1303 |         buffer.append(arrayEnd);
+1304 |     }
+
+===== M0073 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,long[])
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 990-999
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the detail of a
+     * <code>long</code> array.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param array  the array to add to the <code>toString</code>,
+     *  not <code>null</code>
+     */
+Method code:
+990 |     protected void appendDetail(StringBuffer buffer, String fieldName, long[] array) {
+991 |         buffer.append(arrayStart);
+992 |         for (int i = 0; i < array.length; i++) {
+993 |             if (i > 0) {
+994 |                 buffer.append(arraySeparator);
+995 |             }
+996 |             appendDetail(buffer, fieldName, array[i]);
+997 |         }
+998 |         buffer.append(arrayEnd);
+999 |     }
+
+===== M0074 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.ToStringStyle()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 323-325
+Documentation:
+/**
+     * <p>Constructor.</p>
+     */
+Method code:
+323 |     protected ToStringStyle() {
+324 |         super();
+325 |     }
+
+===== M0075 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.isRegistered(Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 162-165
+Documentation:
+/**
+     * <p>
+     * Returns <code>true</code> if the registry contains the given object.
+     * Used by the reflection methods to avoid infinite loops.
+     * </p>
+     *
+     * @param value
+     *                  The object to lookup in the registry.
+     * @return boolean <code>true</code> if the registry contains the given
+     *             object.
+     */
+Method code:
+162 |     static boolean isRegistered(Object value) {
+163 |         Map<Object, Object> m = getRegistry();
+164 |         return m.containsKey(value);
+165 |     }
+
+===== M0076 =====
+Signature: org.apache.commons.lang3.SystemUtils.getOSMatches(String,String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1229-1234
+Documentation:
+/**
+     * <p>Decides if the operating system matches.</p>
+     * 
+     * @param osNamePrefix  the prefix for the os name
+     * @param osVersionPrefix  the prefix for the version
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1229 |     private static boolean getOSMatches(String osNamePrefix, String osVersionPrefix) {
+1230 |         if (OS_NAME == null || OS_VERSION == null) {
+1231 |             return false;
+1232 |         }
+1233 |         return OS_NAME.startsWith(osNamePrefix) && OS_VERSION.startsWith(osVersionPrefix);
+1234 |     }    
+
+===== M0077 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.ShortPrefixToStringStyle.ShortPrefixToStringStyle()
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 2191-2195
+Documentation:
+/**
+         * <p>Constructor.</p>
+         *
+         * <p>Use the static constant rather than instantiating.</p>
+         */
+Method code:
+2191 |         ShortPrefixToStringStyle() {
+2192 |             super();
+2193 |             this.setUseShortClassName(true);
+2194 |             this.setUseIdentityHashCode(false);
+2195 |         }
+
+===== M0078 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.setUpToClass(Class<?>)
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 676-684
+Documentation:
+/**
+     * <p>
+     * Sets the last super class to stop appending fields for.
+     * </p>
+     * 
+     * @param clazz
+     *            The last super class to stop appending fields for.
+     */
+Method code:
+676 |     public void setUpToClass(Class<?> clazz) {
+677 |         if (clazz != null) {
+678 |             Object object = getObject();
+679 |             if (object != null && clazz.isInstance(object) == false) {
+680 |                 throw new IllegalArgumentException("Specified class is not a superclass of the object");
+681 |             }
+682 |         }
+683 |         this.upToClass = clazz;
+684 |     }
+
+===== M0079 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.toString()
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 693-705
+Documentation:
+/**
+     * <p>
+     * Gets the String built by this builder.
+     * </p>
+     * 
+     * @return the built string
+     */
+Method code:
+693 |     @Override
+694 |     public String toString() {
+695 |         if (this.getObject() == null) {
+696 |             return this.getStyle().getNullText();
+697 |         }
+698 |         Class<?> clazz = this.getObject().getClass();
+699 |         this.appendFieldsIn(clazz);
+700 |         while (clazz.getSuperclass() != null && clazz != this.getUpToClass()) {
+701 |             clazz = clazz.getSuperclass();
+702 |             this.appendFieldsIn(clazz);
+703 |         }
+704 |         return super.toString();
+705 |     }
+
+===== M0080 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,float[])
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1356-1365
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the detail of a
+     * <code>float</code> array.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param array  the array to add to the <code>toString</code>,
+     *  not <code>null</code>
+     */
+Method code:
+1356 |     protected void appendDetail(StringBuffer buffer, String fieldName, float[] array) {
+1357 |         buffer.append(arrayStart);
+1358 |         for (int i = 0; i < array.length; i++) {
+1359 |             if (i > 0) {
+1360 |                 buffer.append(arraySeparator);
+1361 |             }
+1362 |             appendDetail(buffer, fieldName, array[i]);
+1363 |         }
+1364 |         buffer.append(arrayEnd);
+1365 |     }
+
+===== M0081 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.isAppendTransients()
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 608-610
+Documentation:
+/**
+     * <p>
+     * Gets whether or not to append transient fields.
+     * </p>
+     * 
+     * @return Whether or not to append transient fields.
+     */
+Method code:
+608 |     public boolean isAppendTransients() {
+609 |         return this.appendTransients;
+610 |     }
+
+===== M0082 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.removeLastFieldSeparator(StringBuffer)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 406-421
+Documentation:
+/**
+     * <p>Remove the last field separator from the buffer.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @since 2.0
+     */
+Method code:
+406 |     protected void removeLastFieldSeparator(StringBuffer buffer) {
+407 |         int len = buffer.length();
+408 |         int sepLen = fieldSeparator.length();
+409 |         if (len > 0 && sepLen > 0 && len >= sepLen) {
+410 |             boolean match = true;
+411 |             for (int i = 0; i < sepLen; i++) {
+412 |                 if (buffer.charAt(len - 1 - i) != fieldSeparator.charAt(sepLen - 1 - i)) {
+413 |                     match = false;
+414 |                     break;
+415 |                 }
+416 |             }
+417 |             if (match) {
+418 |                 buffer.setLength(len - sepLen);
+419 |             }
+420 |         }
+421 |     }
+
+===== M0083 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,boolean[])
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1417-1426
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> the detail of a
+     * <code>boolean</code> array.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param array  the array to add to the <code>toString</code>,
+     *  not <code>null</code>
+     */
+Method code:
+1417 |     protected void appendDetail(StringBuffer buffer, String fieldName, boolean[] array) {
+1418 |         buffer.append(arrayStart);
+1419 |         for (int i = 0; i < array.length; i++) {
+1420 |             if (i > 0) {
+1421 |                 buffer.append(arraySeparator);
+1422 |             }
+1423 |             appendDetail(buffer, fieldName, array[i]);
+1424 |         }
+1425 |         buffer.append(arrayEnd);
+1426 |     }
+
+===== M0084 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.setUseFieldNames(boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1672-1674
+Documentation:
+/**
+     * <p>Sets whether to use the field names passed in.</p>
+     *
+     * @param useFieldNames  the new useFieldNames flag
+     */
+Method code:
+1672 |     protected void setUseFieldNames(boolean useFieldNames) {
+1673 |         this.useFieldNames = useFieldNames;
+1674 |     }
+
+===== M0085 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.append(String,Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 849-852
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> an <code>Object</code>
+     * value.</p>
+     *
+     * @param fieldName  the field name
+     * @param obj  the value to add to the <code>toString</code>
+     * @return this
+     */
+Method code:
+849 |     public ToStringBuilder append(String fieldName, Object obj) {
+850 |         style.append(buffer, fieldName, obj, null);
+851 |         return this;
+852 |     }
+
+===== M0086 =====
+Signature: org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString(Object,ToStringStyle,boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringBuilder.java
+Original range: 181-183
+Documentation:
+/**
+     * <p>Uses <code>ReflectionToStringBuilder</code> to generate a
+     * <code>toString</code> for the specified object.</p>
+     * 
+     * @param object  the Object to be output
+     * @param style  the style of the <code>toString</code> to create, may be <code>null</code>
+     * @param outputTransients  whether to include transient fields
+     * @return the String result
+     * @see ReflectionToStringBuilder#toString(Object,ToStringStyle,boolean)
+     */
+Method code:
+181 |     public static String reflectionToString(Object object, ToStringStyle style, boolean outputTransients) {
+182 |         return ReflectionToStringBuilder.toString(object, style, outputTransients, false, null);
+183 |     }
+
+===== M0087 =====
+Signature: org.apache.commons.lang3.builder.ReflectionToStringBuilder.setAppendTransients(boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ReflectionToStringBuilder.java
+Original range: 647-649
+Documentation:
+/**
+     * <p>
+     * Sets whether or not to append transient fields.
+     * </p>
+     * 
+     * @param appendTransients
+     *            Whether or not to append transient fields.
+     */
+Method code:
+647 |     public void setAppendTransients(boolean appendTransients) {
+648 |         this.appendTransients = appendTransients;
+649 |     }
+
+===== M0088 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.setUseIdentityHashCode(boolean)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 1652-1654
+Documentation:
+/**
+     * <p>Sets whether to use the identity hash code.</p>
+     *
+     * @param useIdentityHashCode  the new useIdentityHashCode flag
+     */
+Method code:
+1652 |     protected void setUseIdentityHashCode(boolean useIdentityHashCode) {
+1653 |         this.useIdentityHashCode = useIdentityHashCode;
+1654 |     }
+
+===== M0089 =====
+Signature: org.apache.commons.lang3.builder.ToStringStyle.appendDetail(StringBuffer,String,Object)
+Source: src/main/java/org/apache/commons/lang3/builder/ToStringStyle.java
+Original range: 592-594
+Documentation:
+/**
+     * <p>Append to the <code>toString</code> an <code>Object</code>
+     * value, printing the full detail of the <code>Object</code>.</p>
+     *
+     * @param buffer  the <code>StringBuffer</code> to populate
+     * @param fieldName  the field name, typically not used as already appended
+     * @param value  the value to add to the <code>toString</code>,
+     *  not <code>null</code>
+     */
+Method code:
+592 |     protected void appendDetail(StringBuffer buffer, String fieldName, Object value) {
+593 |         buffer.append(value);
+594 |     }
+

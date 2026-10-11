@@ -1,0 +1,89 @@
+===== M0001 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.SimpleRegression()
+Source: src/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 88-90
+Documentation:
+/**
+     * Create an empty SimpleRegression instance
+     */
+Method code:
+88 |     public SimpleRegression() {
+89 |         super();
+90 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.getSumSquaredErrors()
+Source: src/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 263-265
+Documentation:
+/**
+     * Returns the <a href="http://www.xycoon.com/SumOfSquares.htm">
+     * sum of squared errors</a> (SSE) associated with the regression 
+     * model.
+     * <p>
+     * The sum is computed using the computational formula
+     * <p>
+     * <code>SSE = SYY - (SXY * SXY / SXX)</code>
+     * <p>
+     * where <code>SYY</code> is the sum of the squared deviations of the y
+     * values about their mean, <code>SXX</code> is similarly defined and
+     * <code>SXY</code> is the sum of the products of x and y mean deviations.
+     * <p>
+     * The sums are accumulated using the updating algorithm referenced in 
+     * {@link #addData}.  
+     * <p>
+     * The return value is constrained to be non-negative - i.e., if due to 
+     * rounding errors the computational formula returns a negative result, 
+     * 0 is returned.
+     * <p>
+     * <strong>Preconditions</strong>: <ul>
+     * <li>At least two observations (with at least two different x values)
+     * must have been added before invoking this method. If this method is 
+     * invoked before a model can be estimated, <code>Double,NaN</code> is
+     * returned.
+     * </li></ul>
+     *
+     * @return sum of squared errors associated with the regression model
+     */
+Method code:
+263 |     public double getSumSquaredErrors() {
+264 |         return sumYY - sumXY * sumXY / sumXX;
+265 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.addData(double,double)
+Source: src/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 105-121
+Documentation:
+/**
+     * Adds the observation (x,y) to the regression data set.
+     * <p>
+     * Uses updating formulas for means and sums of squares defined in 
+     * "Algorithms for Computing the Sample Variance: Analysis and
+     * Recommendations", Chan, T.F., Golub, G.H., and LeVeque, R.J. 
+     * 1983, American Statistician, vol. 37, pp. 242-247, referenced in
+     * Weisberg, S. "Applied Linear Regression". 2nd Ed. 1985
+     *
+     *
+     * @param x independent variable value
+     * @param y dependent variable value
+     */
+Method code:
+105 |     public void addData(double x, double y) {
+106 |         if (n == 0) {
+107 |             xbar = x;
+108 |             ybar = y;
+109 |         } else {
+110 |             double dx = x - xbar;
+111 |             double dy = y - ybar;
+112 |             sumXX += dx * dx * (double) n / (double) (n + 1.0);
+113 |             sumYY += dy * dy * (double) n / (double) (n + 1.0);
+114 |             sumXY += dx * dy * (double) n / (double) (n + 1.0);
+115 |             xbar += dx / (double) (n + 1.0);
+116 |             ybar += dy / (double) (n + 1.0);
+117 |         }
+118 |         sumX += x;
+119 |         sumY += y;
+120 |         n++;
+121 |     }
+

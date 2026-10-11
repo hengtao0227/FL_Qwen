@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math3.distribution.MultivariateNormalDistributionTest.testUnivariateDistribution()",
+    "resolved_signature": "org.apache.commons.math3.distribution.MultivariateNormalDistributionTest.testUnivariateDistribution()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/distribution/MultivariateNormalDistributionTest.java",
+    "begin_line": 138,
+    "end_line": 153,
+    "comment": "/**\r\n     * Test the accuracy of the distribution when calculating densities.\r\n     */",
+    "snippet": "    @Test\n    public void testUnivariateDistribution() {\n        final double[] mu = { -1.5 };\n        final double[][] sigma = { { 1 } };\n \n        final MultivariateNormalDistribution multi = new MultivariateNormalDistribution(mu, sigma);\n\n        final NormalDistribution uni = new NormalDistribution(mu[0], sigma[0][0]);\n        final Random rng = new Random();\n        final int numCases = 100;\n        final double tol = Math.ulp(1d);\n        for (int i = 0; i < numCases; i++) {\n            final double v = rng.nextDouble() * 10 - 5;\n            Assert.assertEquals(uni.density(v), multi.density(new double[] { v }), tol);\n        }\n    }"
+  }
+]

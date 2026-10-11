@@ -1,0 +1,76 @@
+===== M0001 =====
+Signature: org.apache.commons.lang.text.StrBuilder.ensureCapacity(int)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 227-234
+Documentation:
+/**
+     * Checks the capacity and ensures that it is at least the size specified.
+     *
+     * @param capacity  the capacity to ensure
+     * @return this, to enable chaining
+     */
+Method code:
+227 |     public StrBuilder ensureCapacity(int capacity) {
+228 |         if (capacity > buffer.length) {
+229 |             char[] old = buffer;
+230 |             buffer = new char[capacity];
+231 |             System.arraycopy(old, 0, buffer, 0, size);
+232 |         }
+233 |         return this;
+234 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang.text.StrBuilder.appendFixedWidthPadRight(Object,int,char)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 878-895
+Documentation:
+/**
+     * Appends an object to the builder padding on the right to a fixed length.
+     * The <code>toString</code> of the object is used.
+     * If the object is larger than the length, the right hand side is lost.
+     * If the object is null, null text value is used.
+     * 
+     * @param obj  the object to append, null uses null text
+     * @param width  the fixed field width, zero or negative has no effect
+     * @param padChar  the pad character to use
+     * @return this, to enable chaining
+     */
+Method code:
+878 |     public StrBuilder appendFixedWidthPadRight(Object obj, int width, char padChar) {
+879 |         if (width > 0) {
+880 |             ensureCapacity(size + width);
+881 |             String str = (obj == null ? getNullText() : obj.toString());
+882 |             int strLen = str.length();
+883 |             if (strLen >= width) {
+884 |                 str.getChars(0, strLen, buffer, size);
+885 |             } else {
+886 |                 int padLen = width - strLen;
+887 |                 str.getChars(0, strLen, buffer, size);
+888 |                 for (int i = 0; i < padLen; i++) {
+889 |                     buffer[size + strLen + i] = padChar;
+890 |                 }
+891 |             }
+892 |             size += width;
+893 |         }
+894 |         return this;
+895 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang.text.StrBuilder.StrBuilder(int)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 106-112
+Documentation:
+/**
+     * Constructor that creates an empty builder the specified initial capacity.
+     *
+     * @param initialCapacity  the initial capacity, zero or less will be converted to 32
+     */
+Method code:
+106 |     public StrBuilder(int initialCapacity) {
+107 |         super();
+108 |         if (initialCapacity <= 0) {
+109 |             initialCapacity = CAPACITY;
+110 |         }
+111 |         buffer = new char[initialCapacity];
+112 |     }
+

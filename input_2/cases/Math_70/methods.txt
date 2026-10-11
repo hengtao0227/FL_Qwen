@@ -1,0 +1,179 @@
+===== M0001 =====
+Signature: org.apache.commons.math.analysis.solvers.BisectionSolver.solve(UnivariateRealFunction,double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BisectionSolver.java
+Original range: 76-108
+Documentation:
+/** {@inheritDoc} */
+Method code:
+76 |     public double solve(final UnivariateRealFunction f, double min, double max)
+77 |         throws MaxIterationsExceededException, FunctionEvaluationException {
+78 | 
+79 |         clearResult();
+80 |         verifyInterval(min,max);
+81 |         double m;
+82 |         double fm;
+83 |         double fmin;
+84 | 
+85 |         int i = 0;
+86 |         while (i < maximalIterationCount) {
+87 |             m = UnivariateRealSolverUtils.midpoint(min, max);
+88 |            fmin = f.value(min);
+89 |            fm = f.value(m);
+90 | 
+91 |             if (fm * fmin > 0.0) {
+92 |                 // max and m bracket the root.
+93 |                 min = m;
+94 |             } else {
+95 |                 // min and m bracket the root.
+96 |                 max = m;
+97 |             }
+98 | 
+99 |             if (Math.abs(max - min) <= absoluteAccuracy) {
+100 |                 m = UnivariateRealSolverUtils.midpoint(min, max);
+101 |                 setResult(m, i);
+102 |                 return m;
+103 |             }
+104 |             ++i;
+105 |         }
+106 | 
+107 |         throw new MaxIterationsExceededException(maximalIterationCount);
+108 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverImpl.verifyInterval(double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverImpl.java
+Original range: 207-213
+Documentation:
+/**
+     * Verifies that the endpoints specify an interval,
+     * throws IllegalArgumentException if not
+     *
+     * @param lower  lower endpoint
+     * @param upper upper endpoint
+     * @throws IllegalArgumentException
+     */
+Method code:
+207 |     protected void verifyInterval(final double lower, final double upper) {
+208 |         if (lower >= upper) {
+209 |             throw MathRuntimeException.createIllegalArgumentException(
+210 |                     "endpoints do not specify an interval: [{0}, {1}]",
+211 |                     lower, upper);
+212 |         }
+213 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.ConvergingAlgorithmImpl.ConvergingAlgorithmImpl(int,double)
+Source: src/main/java/org/apache/commons/math/ConvergingAlgorithmImpl.java
+Original range: 60-69
+Documentation:
+/**
+     * Construct an algorithm with given iteration count and accuracy.
+     *
+     * @param defaultAbsoluteAccuracy maximum absolute error
+     * @param defaultMaximalIterationCount maximum number of iterations
+     * @throws IllegalArgumentException if f is null or the
+     * defaultAbsoluteAccuracy is not valid
+     */
+Method code:
+60 |     protected ConvergingAlgorithmImpl(final int defaultMaximalIterationCount,
+61 |                                       final double defaultAbsoluteAccuracy) {
+62 |         this.defaultAbsoluteAccuracy = defaultAbsoluteAccuracy;
+63 |         this.defaultRelativeAccuracy = 1.0e-14;
+64 |         this.absoluteAccuracy = defaultAbsoluteAccuracy;
+65 |         this.relativeAccuracy = defaultRelativeAccuracy;
+66 |         this.defaultMaximalIterationCount = defaultMaximalIterationCount;
+67 |         this.maximalIterationCount = defaultMaximalIterationCount;
+68 |         this.iterationCount = 0;
+69 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverImpl.clearResult()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverImpl.java
+Original range: 164-167
+Documentation:
+/**
+     * Convenience function for implementations.
+     */
+Method code:
+164 |     protected final void clearResult() {
+165 |         this.iterationCount = 0;
+166 |         this.resultComputed = false;
+167 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverUtils.midpoint(double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverUtils.java
+Original range: 222-224
+Documentation:
+/**
+     * Compute the midpoint of two values.
+     *
+     * @param a first value.
+     * @param b second value.
+     * @return the midpoint.
+     */
+Method code:
+222 |     public static double midpoint(double a, double b) {
+223 |         return (a + b) * .5;
+224 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.analysis.solvers.BisectionSolver.solve(double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BisectionSolver.java
+Original range: 63-67
+Documentation:
+/** {@inheritDoc} */
+Method code:
+63 |     @Deprecated
+64 |     public double solve(double min, double max)
+65 |         throws MaxIterationsExceededException, FunctionEvaluationException {
+66 |         return solve(f, min, max);
+67 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverImpl.UnivariateRealSolverImpl(int,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverImpl.java
+Original range: 91-96
+Documentation:
+/**
+     * Construct a solver with given iteration count and accuracy.
+     *
+     * @param defaultAbsoluteAccuracy maximum absolute error
+     * @param defaultMaximalIterationCount maximum number of iterations
+     * @throws IllegalArgumentException if f is null or the
+     * defaultAbsoluteAccuracy is not valid
+     */
+Method code:
+91 |     protected UnivariateRealSolverImpl(final int defaultMaximalIterationCount,
+92 |                                        final double defaultAbsoluteAccuracy) {
+93 |         super(defaultMaximalIterationCount, defaultAbsoluteAccuracy);
+94 |         this.defaultFunctionValueAccuracy = 1.0e-15;
+95 |         this.functionValueAccuracy = defaultFunctionValueAccuracy;
+96 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.analysis.solvers.BisectionSolver.solve(UnivariateRealFunction,double,double,double)
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BisectionSolver.java
+Original range: 70-73
+Documentation:
+/** {@inheritDoc} */
+Method code:
+70 |     public double solve(final UnivariateRealFunction f, double min, double max, double initial)
+71 |         throws MaxIterationsExceededException, FunctionEvaluationException {
+72 |         return solve(min, max);
+73 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.analysis.solvers.BisectionSolver.BisectionSolver()
+Source: src/main/java/org/apache/commons/math/analysis/solvers/BisectionSolver.java
+Original range: 51-53
+Documentation:
+/**
+     * Construct a solver.
+     *
+     */
+Method code:
+51 |     public BisectionSolver() {
+52 |         super(100, 1E-6);
+53 |     }
+

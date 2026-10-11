@@ -1,0 +1,170 @@
+===== M0001 =====
+Signature: com.google.javascript.jscomp.SourceFile.setCode(String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 147-149
+Documentation:
+
+Method code:
+147 |   private void setCode(String sourceCode) {
+148 |     code = sourceCode;
+149 |   }
+
+===== M0002 =====
+Signature: com.google.javascript.jscomp.SourceFile.Preloaded.Preloaded(String,String,String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 421-425
+Documentation:
+
+Method code:
+421 |     Preloaded(String fileName, String originalPath, String code) {
+422 |       super(fileName);
+423 |       super.setOriginalPath(originalPath);
+424 |       super.setCode(code);
+425 |     }
+
+===== M0003 =====
+Signature: com.google.javascript.jscomp.SourceFile.Builder.buildFromCode(String,String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 390-392
+Documentation:
+
+Method code:
+390 |     public SourceFile buildFromCode(String fileName, String code) {
+391 |       return new Preloaded(fileName, originalPath, code);
+392 |     }
+
+===== M0004 =====
+Signature: com.google.javascript.jscomp.ProcessCommonJSModules.guessCJSModuleName(String)
+Source: src/com/google/javascript/jscomp/ProcessCommonJSModules.java
+Original range: 71-73
+Documentation:
+
+Method code:
+71 |   String guessCJSModuleName(String filename) {
+72 |     return toModuleName(normalizeSourceName(filename));
+73 |   }
+
+===== M0005 =====
+Signature: com.google.javascript.jscomp.SourceFile.Builder.Builder()
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 368-368
+Documentation:
+
+Method code:
+368 |     public Builder() {}
+
+===== M0006 =====
+Signature: com.google.javascript.jscomp.ProcessCommonJSModules.toModuleName(String)
+Source: src/com/google/javascript/jscomp/ProcessCommonJSModules.java
+Original range: 88-93
+Documentation:
+/**
+   * Turns a filename into a JS identifier that is used for moduleNames in
+   * rewritten code. Removes leading ./, replaces / with $, removes trailing .js
+   * and replaces - with _. All moduleNames get a "module$" prefix.
+   */
+Method code:
+88 |   public static String toModuleName(String filename) {
+89 |     return MODULE_NAME_PREFIX +
+90 |         filename.replaceAll("^\\." + Pattern.quote(MODULE_SLASH), "")
+91 |             .replaceAll(Pattern.quote(MODULE_SLASH), MODULE_NAME_SEPARATOR)
+92 |             .replaceAll("\\.js$", "").replaceAll("-", "_");
+93 |   }
+
+===== M0007 =====
+Signature: com.google.javascript.jscomp.ProcessCommonJSModules.normalizeSourceName(String)
+Source: src/com/google/javascript/jscomp/ProcessCommonJSModules.java
+Original range: 116-125
+Documentation:
+
+Method code:
+116 |   private String normalizeSourceName(String filename) {
+117 |     // The DOS command shell will normalize "/" to "\", so we have to
+118 |     // wrestle it back.
+119 | 
+120 |     if (filename.indexOf(filenamePrefix) == 0) {
+121 |       filename = filename.substring(filenamePrefix.length());
+122 |     }
+123 | 
+124 |     return filename;
+125 |   }
+
+===== M0008 =====
+Signature: com.google.javascript.jscomp.SourceFile.fromCode(String,String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 322-324
+Documentation:
+
+Method code:
+322 |   public static SourceFile fromCode(String fileName, String code) {
+323 |     return builder().buildFromCode(fileName, code);
+324 |   }
+
+===== M0009 =====
+Signature: com.google.javascript.jscomp.ProcessCommonJSModules.ProcessCommonJSModules(AbstractCompiler,String,boolean)
+Source: src/com/google/javascript/jscomp/ProcessCommonJSModules.java
+Original range: 57-63
+Documentation:
+
+Method code:
+57 |   ProcessCommonJSModules(AbstractCompiler compiler, String filenamePrefix,
+58 |       boolean reportDependencies) {
+59 |     this.compiler = compiler;
+60 |     this.filenamePrefix = filenamePrefix.endsWith(MODULE_SLASH) ?
+61 |         filenamePrefix : filenamePrefix + MODULE_SLASH;
+62 |     this.reportDependencies = reportDependencies;
+63 |   }
+
+===== M0010 =====
+Signature: com.google.javascript.jscomp.SourceFile.builder()
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 354-356
+Documentation:
+/** Create a new builder for source files. */
+Method code:
+354 |   public static Builder builder() {
+355 |     return new Builder();
+356 |   }
+
+===== M0011 =====
+Signature: com.google.javascript.jscomp.ProcessCommonJSModules.ProcessCommonJSModules(AbstractCompiler,String)
+Source: src/com/google/javascript/jscomp/ProcessCommonJSModules.java
+Original range: 53-55
+Documentation:
+
+Method code:
+53 |   ProcessCommonJSModules(AbstractCompiler compiler, String filenamePrefix) {
+54 |     this(compiler, filenamePrefix, true);
+55 |   }
+
+===== M0012 =====
+Signature: com.google.javascript.jscomp.SourceFile.SourceFile(String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 81-86
+Documentation:
+/**
+   * Construct a new abstract source file.
+   *
+   * @param fileName The file name of the source file. It does not necessarily
+   *     need to correspond to a real path. But it should be unique. Will
+   *     appear in warning messages emitted by the compiler.
+   */
+Method code:
+81 |   public SourceFile(String fileName) {
+82 |     if (fileName == null || fileName.isEmpty()) {
+83 |       throw new IllegalArgumentException("a source must have a name");
+84 |     }
+85 |     this.fileName = fileName;
+86 |   }
+
+===== M0013 =====
+Signature: com.google.javascript.jscomp.SourceFile.setOriginalPath(String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 155-157
+Documentation:
+
+Method code:
+155 |   public void setOriginalPath(String originalPath) {
+156 |     this.originalPath = originalPath;
+157 |   }
+

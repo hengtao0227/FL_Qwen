@@ -1,0 +1,92 @@
+[
+  {
+    "requested_signature": "org.mockito.internal.invocation.InvocationMatcherTest.should_capture_varargs_as_vararg()",
+    "resolved_signature": "org.mockito.internal.invocation.InvocationMatcherTest.should_capture_varargs_as_vararg()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/internal/invocation/InvocationMatcherTest.java",
+    "begin_line": 142,
+    "end_line": 155,
+    "comment": "",
+    "snippet": "    @Test\n    public void should_capture_varargs_as_vararg() throws Exception {\n        //given\n        mock.mixedVarargs(1, \"a\", \"b\");\n        Invocation invocation = getLastInvocation();\n        CapturingMatcher m = new CapturingMatcher();\n        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals(1), new LocalizedMatcher(m)));\n\n        //when\n        invocationMatcher.captureArgumentsFrom(invocation);\n\n        //then\n        Assertions.assertThat(m.getAllValues()).containsExactly(\"a\", \"b\");\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.bugs.varargs.VarargsAndAnyObjectPicksUpExtraInvocationsTest.shouldVerifyCorrectlyNumberOfInvocationsWithVarargs()",
+    "resolved_signature": "org.mockitousage.bugs.varargs.VarargsAndAnyObjectPicksUpExtraInvocationsTest.shouldVerifyCorrectlyNumberOfInvocationsWithVarargs()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/bugs/varargs/VarargsAndAnyObjectPicksUpExtraInvocationsTest.java",
+    "begin_line": 43,
+    "end_line": 52,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldVerifyCorrectlyNumberOfInvocationsWithVarargs() {\n        //when\n        table.newRow(\"qux\", \"foo\", \"bar\", \"baz\");\n        table.newRow(\"abc\", \"def\");\n        \n        //then\n        verify(table).newRow(anyString(), eq(\"foo\"), anyString(), anyString());\n        verify(table).newRow(anyString(), anyString());\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.bugs.varargs.VarargsNotPlayingWithAnyObjectTest.shouldMatchAnyVararg()",
+    "resolved_signature": "org.mockitousage.bugs.varargs.VarargsNotPlayingWithAnyObjectTest.shouldMatchAnyVararg()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/bugs/varargs/VarargsNotPlayingWithAnyObjectTest.java",
+    "begin_line": 24,
+    "end_line": 35,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldMatchAnyVararg() {\n        mock.run(\"a\", \"b\");\n\n        verify(mock).run(anyString(), anyString());\n        verify(mock).run((String) anyObject(), (String) anyObject());\n\n        verify(mock).run((String[]) anyVararg());\n        \n        verify(mock, never()).run();\n        verify(mock, never()).run(anyString(), eq(\"f\"));\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.matchers.CapturingArgumentsTest.should_capture_all_vararg()",
+    "resolved_signature": "org.mockitousage.matchers.CapturingArgumentsTest.should_capture_all_vararg()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/matchers/CapturingArgumentsTest.java",
+    "begin_line": 266,
+    "end_line": 279,
+    "comment": "",
+    "snippet": "    @Test\n    public void should_capture_all_vararg() throws Exception {\n        // given\n        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);\n\n        // when\n        mock.mixedVarargs(42, \"a\", \"b\", \"c\");\n        mock.mixedVarargs(42, \"again ?!\");\n\n        // then\n        verify(mock, times(2)).mixedVarargs(any(), argumentCaptor.capture());\n\n        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly(\"a\", \"b\", \"c\", \"again ?!\");\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.matchers.CapturingArgumentsTest.captures_correctly_when_captor_used_multiple_times()",
+    "resolved_signature": "org.mockitousage.matchers.CapturingArgumentsTest.captures_correctly_when_captor_used_multiple_times()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/matchers/CapturingArgumentsTest.java",
+    "begin_line": 294,
+    "end_line": 306,
+    "comment": "",
+    "snippet": "    @Test\n    public void captures_correctly_when_captor_used_multiple_times() throws Exception {\n        // given\n        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);\n\n        // when\n        mock.mixedVarargs(42, \"a\", \"b\", \"c\");\n\n        // then\n        // this is only for backwards compatibility. It does not make sense in real to do so.\n        verify(mock).mixedVarargs(any(), argumentCaptor.capture(), argumentCaptor.capture(), argumentCaptor.capture());\n        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly(\"a\", \"b\", \"c\");\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.matchers.CapturingArgumentsTest.should_capture_vararg()",
+    "resolved_signature": "org.mockitousage.matchers.CapturingArgumentsTest.should_capture_vararg()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/matchers/CapturingArgumentsTest.java",
+    "begin_line": 253,
+    "end_line": 264,
+    "comment": "",
+    "snippet": "    @Test\n    public void should_capture_vararg() throws Exception {\n        // given\n        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);\n\n        // when\n        mock.mixedVarargs(42, \"a\", \"b\", \"c\");\n\n        // then\n        verify(mock).mixedVarargs(any(), argumentCaptor.capture());\n        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly(\"a\", \"b\", \"c\");\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.matchers.CapturingArgumentsTest.captures_correctly_when_captor_used_on_pure_vararg_method()",
+    "resolved_signature": "org.mockitousage.matchers.CapturingArgumentsTest.captures_correctly_when_captor_used_on_pure_vararg_method()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/matchers/CapturingArgumentsTest.java",
+    "begin_line": 308,
+    "end_line": 319,
+    "comment": "",
+    "snippet": "    @Test\n    public void captures_correctly_when_captor_used_on_pure_vararg_method() throws Exception {\n        // given\n        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);\n\n        // when\n        mock.varargs(42, \"capturedValue\");\n\n        // then\n        verify(mock).varargs(eq(42), argumentCaptor.capture());\n        Assertions.assertThat(argumentCaptor.getValue()).contains(\"capturedValue\");\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.matchers.CapturingArgumentsTest.should_capture_byte_vararg_by_creating_captor_with_primitive_wrapper()",
+    "resolved_signature": "org.mockitousage.matchers.CapturingArgumentsTest.should_capture_byte_vararg_by_creating_captor_with_primitive_wrapper()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/matchers/CapturingArgumentsTest.java",
+    "begin_line": 239,
+    "end_line": 251,
+    "comment": "",
+    "snippet": "    @Test\n    public void should_capture_byte_vararg_by_creating_captor_with_primitive_wrapper() throws Exception {\n        // given\n        ArgumentCaptor<Byte> argumentCaptor = ArgumentCaptor.forClass(Byte.class);\n\n        // when\n        mock.varargsbyte((byte) 1, (byte) 2);\n\n        // then\n        verify(mock).varargsbyte(argumentCaptor.capture());\n        assertEquals((byte) 2, (byte) argumentCaptor.getValue());\n        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1, (byte) 2);\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.matchers.CapturingArgumentsTest.should_capture_byte_vararg_by_creating_captor_with_primitive()",
+    "resolved_signature": "org.mockitousage.matchers.CapturingArgumentsTest.should_capture_byte_vararg_by_creating_captor_with_primitive()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/matchers/CapturingArgumentsTest.java",
+    "begin_line": 225,
+    "end_line": 237,
+    "comment": "",
+    "snippet": "    @Test\n    public void should_capture_byte_vararg_by_creating_captor_with_primitive() throws Exception {\n        // given\n        ArgumentCaptor<Byte> argumentCaptor = ArgumentCaptor.forClass(byte.class);\n\n        // when\n        mock.varargsbyte((byte) 1, (byte) 2);\n\n        // then\n        verify(mock).varargsbyte(argumentCaptor.capture());\n        assertEquals((byte) 2, (byte) argumentCaptor.getValue());\n        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1, (byte) 2);\n    }"
+  }
+]

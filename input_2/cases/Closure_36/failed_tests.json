@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.IntegrationTest.testSingletonGetter1()",
+    "resolved_signature": "com.google.javascript.jscomp.IntegrationTest.testSingletonGetter1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/IntegrationTest.java",
+    "begin_line": 1937,
+    "end_line": 1957,
+    "comment": "",
+    "snippet": "  public void testSingletonGetter1() {\n    CompilerOptions options = createCompilerOptions();\n    CompilationLevel.ADVANCED_OPTIMIZATIONS\n        .setOptionsForCompilationLevel(options);\n    options.setCodingConvention(new ClosureCodingConvention());\n    test(options,\n        \"/** @const */\\n\" +\n        \"var goog = goog || {};\\n\" +\n        \"goog.addSingletonGetter = function(ctor) {\\n\" +\n        \"  ctor.getInstance = function() {\\n\" +\n        \"    return ctor.instance_ || (ctor.instance_ = new ctor());\\n\" +\n        \"  };\\n\" +\n        \"};\" +\n        \"function Foo() {}\\n\" +\n        \"goog.addSingletonGetter(Foo);\" +\n        \"Foo.prototype.bar = 1;\" +\n        \"function Bar() {}\\n\" +\n        \"goog.addSingletonGetter(Bar);\" +\n        \"Bar.prototype.bar = 1;\",\n        \"\");\n  }"
+  }
+]

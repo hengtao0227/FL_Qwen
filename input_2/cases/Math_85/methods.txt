@@ -1,0 +1,789 @@
+===== M0001 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.getDomainLowerBound(double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 174-185
+Documentation:
+/**
+     * Access the domain value lower bound, based on <code>p</code>, used to
+     * bracket a CDF root.  This method is used by
+     * {@link #inverseCumulativeProbability(double)} to find critical values.
+     * 
+     * @param p the desired probability for the critical value
+     * @return domain value lower bound, i.e.
+     *         P(X &lt; <i>lower bound</i>) &lt; <code>p</code> 
+     */
+Method code:
+174 |     @Override
+175 |     protected double getDomainLowerBound(double p) {
+176 |         double ret;
+177 | 
+178 |         if (p < .5) {
+179 |             ret = -Double.MAX_VALUE;
+180 |         } else {
+181 |             ret = getMean();
+182 |         }
+183 |         
+184 |         return ret;
+185 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.ConvergenceException.ConvergenceException(String,Object...)
+Source: src/java/org/apache/commons/math/ConvergenceException.java
+Original range: 44-46
+Documentation:
+/**
+     * Constructs an exception with specified formatted detail message.
+     * Message formatting is delegated to {@link java.text.MessageFormat}.
+     * @param pattern format specifier
+     * @param arguments format arguments
+     * @since 1.2
+     */
+Method code:
+44 |     public ConvergenceException(String pattern, Object ... arguments) {
+45 |         super(pattern, arguments);
+46 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.special.Gamma.regularizedGammaP(double,double,double,int)
+Source: src/java/org/apache/commons/math/special/Gamma.java
+Original range: 151-188
+Documentation:
+/**
+     * Returns the regularized gamma function P(a, x).
+     * 
+     * The implementation of this method is based on:
+     * <ul>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/RegularizedGammaFunction.html">
+     * Regularized Gamma Function</a>, equation (1).</li>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/IncompleteGammaFunction.html">
+     * Incomplete Gamma Function</a>, equation (4).</li>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/ConfluentHypergeometricFunctionoftheFirstKind.html">
+     * Confluent Hypergeometric Function of the First Kind</a>, equation (1).
+     * </li>
+     * </ul>
+     * 
+     * @param a the a parameter.
+     * @param x the value.
+     * @param epsilon When the absolute value of the nth item in the
+     *                series is less than epsilon the approximation ceases
+     *                to calculate further elements in the series.
+     * @param maxIterations Maximum number of "iterations" to complete. 
+     * @return the regularized gamma function P(a, x)
+     * @throws MathException if the algorithm fails to converge.
+     */
+Method code:
+151 |     public static double regularizedGammaP(double a, 
+152 |                                            double x, 
+153 |                                            double epsilon, 
+154 |                                            int maxIterations) 
+155 |         throws MathException
+156 |     {
+157 |         double ret;
+158 | 
+159 |         if (Double.isNaN(a) || Double.isNaN(x) || (a <= 0.0) || (x < 0.0)) {
+160 |             ret = Double.NaN;
+161 |         } else if (x == 0.0) {
+162 |             ret = 0.0;
+163 |         } else if (a >= 1.0 && x > a) {
+164 |             // use regularizedGammaQ because it should converge faster in this
+165 |             // case.
+166 |             ret = 1.0 - regularizedGammaQ(a, x, epsilon, maxIterations);
+167 |         } else {
+168 |             // calculate series
+169 |             double n = 0.0; // current element index
+170 |             double an = 1.0 / a; // n-th element in the series
+171 |             double sum = an; // partial sum
+172 |             while (Math.abs(an) > epsilon && n < maxIterations) {
+173 |                 // compute next element in the series
+174 |                 n = n + 1.0;
+175 |                 an = an * (x / (a + n));
+176 | 
+177 |                 // update partial sum
+178 |                 sum = sum + an;
+179 |             }
+180 |             if (n >= maxIterations) {
+181 |                 throw new MaxIterationsExceededException(maxIterations);
+182 |             } else {
+183 |                 ret = Math.exp(-x + (a * Math.log(x)) - logGamma(a)) * sum;
+184 |             }
+185 |         }
+186 | 
+187 |         return ret;
+188 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.cumulativeProbability(double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 124-137
+Documentation:
+/**
+     * For this distribution, X, this method returns P(X &lt; <code>x</code>).
+     * @param x the value at which the CDF is evaluated.
+     * @return CDF evaluted at <code>x</code>. 
+     * @throws MathException if the algorithm fails to converge; unless
+     * x is more than 20 standard deviations from the mean, in which case the
+     * convergence exception is caught and 0 or 1 is returned.
+     */
+Method code:
+124 |     public double cumulativeProbability(double x) throws MathException {
+125 |         try {
+126 |             return 0.5 * (1.0 + Erf.erf((x - mean) /
+127 |                     (standardDeviation * Math.sqrt(2.0))));
+128 |         } catch (MaxIterationsExceededException ex) {
+129 |             if (x < (mean - 20 * standardDeviation)) { // JDK 1.5 blows at 38
+130 |                 return 0.0d;
+131 |             } else if (x > (mean + 20 * standardDeviation)) {
+132 |                 return 1.0d;
+133 |             } else {
+134 |                 throw ex;
+135 |             }
+136 |         }
+137 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.MaxIterationsExceededException.MaxIterationsExceededException(int)
+Source: src/java/org/apache/commons/math/MaxIterationsExceededException.java
+Original range: 42-45
+Documentation:
+/**
+     * Constructs an exception with specified formatted detail message.
+     * Message formatting is delegated to {@link java.text.MessageFormat}.
+     * @param maxIterations maximal number of iterations allowed
+     */
+Method code:
+42 |     public MaxIterationsExceededException(final int maxIterations) {
+43 |         super("Maximal number of iterations ({0}) exceeded", maxIterations);
+44 |         this.maxIterations = maxIterations;
+45 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.setStandardDeviation(double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 96-103
+Documentation:
+/**
+     * Modify the standard deviation.
+     * @param sd standard deviation for this distribution
+     * @throws IllegalArgumentException if <code>sd</code> is not positive.
+     */
+Method code:
+96 |     public void setStandardDeviation(double sd) {
+97 |         if (sd <= 0.0) {
+98 |             throw MathRuntimeException.createIllegalArgumentException(
+99 |                   "standard deviation must be positive ({0})",
+100 |                   sd);
+101 |         }       
+102 |         standardDeviation = sd;
+103 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.MathException.getMessage(Locale)
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 165-167
+Documentation:
+/** Gets the message in a specified locale.
+     *
+     * @param locale Locale in which the message should be translated
+     * 
+     * @return localized message
+     * @since 1.2
+     */
+Method code:
+165 |     public String getMessage(Locale locale) {
+166 |         return buildMessage(locale, pattern, arguments);
+167 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.special.Gamma.logGamma(double)
+Source: src/java/org/apache/commons/math/special/Gamma.java
+Original range: 88-108
+Documentation:
+/**
+     * Returns the natural logarithm of the gamma function &#915;(x).
+     *
+     * The implementation of this method is based on:
+     * <ul>
+     * <li><a href="http://mathworld.wolfram.com/GammaFunction.html">
+     * Gamma Function</a>, equation (28).</li>
+     * <li><a href="http://mathworld.wolfram.com/LanczosApproximation.html">
+     * Lanczos Approximation</a>, equations (1) through (5).</li>
+     * <li><a href="http://my.fit.edu/~gabdo/gamma.txt">Paul Godfrey, A note on
+     * the computation of the convergent Lanczos complex Gamma approximation
+     * </a></li>
+     * </ul>
+     * 
+     * @param x the value.
+     * @return log(&#915;(x))
+     */
+Method code:
+88 |     public static double logGamma(double x) {
+89 |         double ret;
+90 | 
+91 |         if (Double.isNaN(x) || (x <= 0.0)) {
+92 |             ret = Double.NaN;
+93 |         } else {
+94 |             double g = 607.0 / 128.0;
+95 |             
+96 |             double sum = 0.0;
+97 |             for (int i = lanczos.length - 1; i > 0; --i) {
+98 |                 sum = sum + (lanczos[i] / (x + i));
+99 |             }
+100 |             sum = sum + lanczos[0];
+101 | 
+102 |             double tmp = x + g + .5;
+103 |             ret = ((x + .5) * Math.log(tmp)) - tmp +
+104 |                 HALF_LOG_2_PI + Math.log(sum / x);
+105 |         }
+106 | 
+107 |         return ret;
+108 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.distribution.AbstractContinuousDistribution.inverseCumulativeProbability(double)
+Source: src/java/org/apache/commons/math/distribution/AbstractContinuousDistribution.java
+Original range: 60-111
+Documentation:
+/**
+     * For this distribution, X, this method returns the critical point x, such
+     * that P(X &lt; x) = <code>p</code>.
+     *
+     * @param p the desired probability
+     * @return x, such that P(X &lt; x) = <code>p</code>
+     * @throws MathException if the inverse cumulative probability can not be
+     *         computed due to convergence or other numerical errors.
+     * @throws IllegalArgumentException if <code>p</code> is not a valid
+     *         probability.
+     */
+Method code:
+60 |     public double inverseCumulativeProbability(final double p)
+61 |         throws MathException {
+62 |         if (p < 0.0 || p > 1.0) {
+63 |             throw MathRuntimeException.createIllegalArgumentException(
+64 |                   "{0} out of [{1}, {2}] range", p, 0.0, 1.0);
+65 |         }
+66 | 
+67 |         // by default, do simple root finding using bracketing and default solver.
+68 |         // subclasses can override if there is a better method.
+69 |         UnivariateRealFunction rootFindingFunction =
+70 |             new UnivariateRealFunction() {
+71 |             public double value(double x) throws FunctionEvaluationException {
+72 |                 try {
+73 |                     return cumulativeProbability(x) - p;
+74 |                 } catch (MathException ex) {
+75 |                     throw new FunctionEvaluationException(ex, x, ex.getPattern(), ex.getArguments());
+76 |                 }
+77 |             }
+78 |         };
+79 |               
+80 |         // Try to bracket root, test domain endoints if this fails     
+81 |         double lowerBound = getDomainLowerBound(p);
+82 |         double upperBound = getDomainUpperBound(p);
+83 |         double[] bracket = null;
+84 |         try {
+85 |             bracket = UnivariateRealSolverUtils.bracket(
+86 |                     rootFindingFunction, getInitialDomain(p),
+87 |                     lowerBound, upperBound);
+88 |         }  catch (ConvergenceException ex) {
+89 |             /* 
+90 |              * Check domain endpoints to see if one gives value that is within
+91 |              * the default solver's defaultAbsoluteAccuracy of 0 (will be the
+92 |              * case if density has bounded support and p is 0 or 1).
+93 |              * 
+94 |              * TODO: expose the default solver, defaultAbsoluteAccuracy as
+95 |              * a constant.
+96 |              */ 
+97 |             if (Math.abs(rootFindingFunction.value(lowerBound)) < 1E-6) {
+98 |                 return lowerBound;
+99 |             }
+100 |             if (Math.abs(rootFindingFunction.value(upperBound)) < 1E-6) {
+101 |                 return upperBound;
+102 |             }     
+103 |             // Failed bracket convergence was not because of corner solution
+104 |             throw new MathException(ex);
+105 |         }
+106 | 
+107 |         // find root
+108 |         double root = UnivariateRealSolverUtils.solve(rootFindingFunction,
+109 |                 bracket[0],bracket[1]);
+110 |         return root;
+111 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.MathException.buildMessage(Locale,String,Object...)
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 84-86
+Documentation:
+/**
+     * Builds a message string by from a pattern and its arguments.
+     * @param locale Locale in which the message should be translated
+     * @param pattern format specifier
+     * @param arguments format arguments
+     * @return a message string
+     */
+Method code:
+84 |     private static String buildMessage(Locale locale, String pattern, Object ... arguments) {
+85 |         return (pattern == null) ? "" : new MessageFormat(translate(pattern, locale), locale).format(arguments);        
+86 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.getDomainUpperBound(double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 196-207
+Documentation:
+/**
+     * Access the domain value upper bound, based on <code>p</code>, used to
+     * bracket a CDF root.  This method is used by
+     * {@link #inverseCumulativeProbability(double)} to find critical values.
+     * 
+     * @param p the desired probability for the critical value
+     * @return domain value upper bound, i.e.
+     *         P(X &lt; <i>upper bound</i>) &gt; <code>p</code> 
+     */
+Method code:
+196 |     @Override
+197 |     protected double getDomainUpperBound(double p) {
+198 |         double ret;
+199 | 
+200 |         if (p < .5) {
+201 |             ret = getMean();
+202 |         } else {
+203 |             ret = Double.MAX_VALUE;
+204 |         }
+205 |         
+206 |         return ret;
+207 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverUtils.bracket(UnivariateRealFunction,double,double,double,int)
+Source: src/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverUtils.java
+Original range: 165-208
+Documentation:
+/**
+     * This method attempts to find two values a and b satisfying <ul>
+     * <li> <code> lowerBound <= a < initial < b <= upperBound</code> </li>
+     * <li> <code> f(a) * f(b) <= 0 </code> </li>
+     * </ul>
+     * If f is continuous on <code>[a,b],</code> this means that <code>a</code>
+     * and <code>b</code> bracket a root of f.
+     * <p>
+     * The algorithm starts by setting 
+     * <code>a := initial -1; b := initial +1,</code> examines the value of the
+     * function at <code>a</code> and <code>b</code> and keeps moving
+     * the endpoints out by one unit each time through a loop that terminates 
+     * when one of the following happens: <ul>
+     * <li> <code> f(a) * f(b) <= 0 </code> --  success!</li>
+     * <li> <code> a = lower </code> and <code> b = upper</code> 
+     * -- ConvergenceException </li>
+     * <li> <code> maximumIterations</code> iterations elapse 
+     * -- ConvergenceException </li></ul></p>
+     * 
+     * @param function the function
+     * @param initial initial midpoint of interval being expanded to
+     * bracket a root
+     * @param lowerBound lower bound (a is never lower than this value)
+     * @param upperBound upper bound (b never is greater than this
+     * value)
+     * @param maximumIterations maximum number of iterations to perform
+     * @return a two element array holding {a, b}.
+     * @throws ConvergenceException if the algorithm fails to find a and b
+     * satisfying the desired conditions
+     * @throws FunctionEvaluationException if an error occurs evaluating the 
+     * function
+     * @throws IllegalArgumentException if function is null, maximumIterations
+     * is not positive, or initial is not between lowerBound and upperBound
+     */
+Method code:
+165 |     public static double[] bracket(UnivariateRealFunction function,
+166 |             double initial, double lowerBound, double upperBound, 
+167 |             int maximumIterations) throws ConvergenceException, 
+168 |             FunctionEvaluationException {
+169 |         
+170 |         if (function == null) {
+171 |             throw MathRuntimeException.createIllegalArgumentException("function is null");
+172 |         }
+173 |         if (maximumIterations <= 0)  {
+174 |             throw MathRuntimeException.createIllegalArgumentException(
+175 |                   "bad value for maximum iterations number: {0}", maximumIterations);
+176 |         }
+177 |         if (initial < lowerBound || initial > upperBound || lowerBound >= upperBound) {
+178 |             throw MathRuntimeException.createIllegalArgumentException(
+179 |                   "invalid bracketing parameters:  lower bound={0},  initial={1}, upper bound={2}",
+180 |                   lowerBound, initial, upperBound);
+181 |         }
+182 |         double a = initial;
+183 |         double b = initial;
+184 |         double fa;
+185 |         double fb;
+186 |         int numIterations = 0 ;
+187 |     
+188 |         do {
+189 |             a = Math.max(a - 1.0, lowerBound);
+190 |             b = Math.min(b + 1.0, upperBound);
+191 |             fa = function.value(a);
+192 |             
+193 |             fb = function.value(b);
+194 |             numIterations++ ;
+195 |         } while ((fa * fb > 0.0) && (numIterations < maximumIterations) && 
+196 |                 ((a > lowerBound) || (b < upperBound)));
+197 |    
+198 |         if (fa * fb >= 0.0 ) {
+199 |             throw new ConvergenceException(
+200 |                       "number of iterations={0}, maximum iterations={1}, " +
+201 |                       "initial={2}, lower bound={3}, upper bound={4}, final a value={5}, " +
+202 |                       "final b value={6}, f(a)={7}, f(b)={8}",
+203 |                       numIterations, maximumIterations, initial,
+204 |                       lowerBound, upperBound, a, b, fa, fb);
+205 |         }
+206 |         
+207 |         return new double[]{a, b};
+208 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.getInitialDomain(double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 217-230
+Documentation:
+/**
+     * Access the initial domain value, based on <code>p</code>, used to
+     * bracket a CDF root.  This method is used by
+     * {@link #inverseCumulativeProbability(double)} to find critical values.
+     * 
+     * @param p the desired probability for the critical value
+     * @return initial domain value
+     */
+Method code:
+217 |     @Override
+218 |     protected double getInitialDomain(double p) {
+219 |         double ret;
+220 | 
+221 |         if (p < .5) {
+222 |             ret = getMean() - getStandardDeviation();
+223 |         } else if (p > .5) {
+224 |             ret = getMean() + getStandardDeviation();
+225 |         } else {
+226 |             ret = getMean();
+227 |         }
+228 |         
+229 |         return ret;
+230 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.special.Erf.erf(double)
+Source: src/java/org/apache/commons/math/special/Erf.java
+Original range: 50-56
+Documentation:
+/**
+     * Returns the error function erf(x).
+     * 
+     * The implementation of this method is based on:
+     * <ul>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/Erf.html">
+     * Erf</a>, equation (3).</li>
+     * </ul>
+     * 
+     * @param x the value.
+     * @return the error function erf(x)
+     * @throws MathException if the algorithm fails to converge.
+     */
+Method code:
+50 |     public static double erf(double x) throws MathException {
+51 |         double ret = Gamma.regularizedGammaP(0.5, x * x, 1.0e-15, 10000);
+52 |         if (x < 0) {
+53 |             ret = -ret;
+54 |         }
+55 |         return ret;
+56 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.distribution.AbstractDistribution.AbstractDistribution()
+Source: src/java/org/apache/commons/math/distribution/AbstractDistribution.java
+Original range: 38-40
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+38 |     protected AbstractDistribution() {
+39 |         super();
+40 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math.MathException.printStackTrace(PrintStream)
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 188-196
+Documentation:
+/**
+     * Prints the stack trace of this exception to the specified stream.
+     *
+     * @param out  the <code>PrintStream</code> to use for output
+     */
+Method code:
+188 |     @Override
+189 |     public void printStackTrace(PrintStream out) {
+190 |         synchronized (out) {
+191 |             PrintWriter pw = new PrintWriter(out, false);
+192 |             printStackTrace(pw);
+193 |             // Flush the PrintWriter before it's GC'ed.
+194 |             pw.flush();
+195 |         }
+196 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.setMean(double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 79-81
+Documentation:
+/**
+     * Modify the mean.
+     * @param mean for this distribution
+     */
+Method code:
+79 |     public void setMean(double mean) {
+80 |         this.mean = mean;
+81 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.getStandardDeviation()
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 87-89
+Documentation:
+/**
+     * Access the standard deviation.
+     * @return standard deviation for this distribution
+     */
+Method code:
+87 |     public double getStandardDeviation() {
+88 |         return standardDeviation;
+89 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math.MathException.MathException(Throwable)
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 118-122
+Documentation:
+/**
+     * Constructs a new <code>MathException</code> with specified
+     * nested <code>Throwable</code> root cause.
+     *
+     * @param rootCause  the exception or error that caused this exception
+     *                   to be thrown.
+     */
+Method code:
+118 |     public MathException(Throwable rootCause) {
+119 |         super(rootCause);
+120 |         this.pattern   = getMessage();
+121 |         this.arguments = new Object[0];
+122 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.getMean()
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 71-73
+Documentation:
+/**
+     * Access the mean.
+     * @return mean for this distribution
+     */
+Method code:
+71 |     public double getMean() {
+72 |         return mean;
+73 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math.distribution.AbstractContinuousDistribution.AbstractContinuousDistribution()
+Source: src/java/org/apache/commons/math/distribution/AbstractContinuousDistribution.java
+Original range: 45-47
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+45 |     protected AbstractContinuousDistribution() {
+46 |         super();
+47 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.NormalDistributionImpl(double,double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 53-57
+Documentation:
+/**
+     * Create a normal distribution using the given mean and standard deviation.
+     * @param mean mean for this distribution
+     * @param sd standard deviation for this distribution
+     */
+Method code:
+53 |     public NormalDistributionImpl(double mean, double sd){
+54 |         super();
+55 |         setMean(mean);
+56 |         setStandardDeviation(sd);
+57 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math.MathException.getLocalizedMessage()
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 170-173
+Documentation:
+/** {@inheritDoc} */
+Method code:
+170 |     @Override
+171 |     public String getLocalizedMessage() {
+172 |         return getMessage(Locale.getDefault());
+173 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math.analysis.solvers.UnivariateRealSolverUtils.bracket(UnivariateRealFunction,double,double,double)
+Source: src/java/org/apache/commons/math/analysis/solvers/UnivariateRealSolverUtils.java
+Original range: 124-129
+Documentation:
+/**
+     * This method attempts to find two values a and b satisfying <ul>
+    * <li> <code> lowerBound <= a < initial < b <= upperBound</code> </li>
+     * <li> <code> f(a) * f(b) < 0 </code></li>
+     * </ul>
+     * If f is continuous on <code>[a,b],</code> this means that <code>a</code>
+     * and <code>b</code> bracket a root of f.
+     * <p>
+     * The algorithm starts by setting 
+     * <code>a := initial -1; b := initial +1,</code> examines the value of the
+     * function at <code>a</code> and <code>b</code> and keeps moving
+     * the endpoints out by one unit each time through a loop that terminates 
+     * when one of the following happens: <ul>
+     * <li> <code> f(a) * f(b) < 0 </code> --  success!</li>
+     * <li> <code> a = lower </code> and <code> b = upper</code> 
+     * -- ConvergenceException </li>
+     * <li> <code> Integer.MAX_VALUE</code> iterations elapse 
+     * -- ConvergenceException </li>
+     * </ul></p>
+     * <p>
+     * <strong>Note: </strong> this method can take 
+     * <code>Integer.MAX_VALUE</code> iterations to throw a 
+     * <code>ConvergenceException.</code>  Unless you are confident that there
+     * is a root between <code>lowerBound</code> and <code>upperBound</code>
+     * near <code>initial,</code> it is better to use 
+     * {@link #bracket(UnivariateRealFunction, double, double, double, int)}, 
+     * explicitly specifying the maximum number of iterations.</p>
+     *
+     * @param function the function
+     * @param initial initial midpoint of interval being expanded to
+     * bracket a root
+     * @param lowerBound lower bound (a is never lower than this value)
+     * @param upperBound upper bound (b never is greater than this
+     * value)
+     * @return a two element array holding {a, b}
+     * @throws ConvergenceException if a root can not be bracketted
+     * @throws FunctionEvaluationException if an error occurs evaluating the
+     * function
+     * @throws IllegalArgumentException if function is null, maximumIterations
+     * is not positive, or initial is not between lowerBound and upperBound
+     */
+Method code:
+124 |     public static double[] bracket(UnivariateRealFunction function, 
+125 |             double initial, double lowerBound, double upperBound) 
+126 |     throws ConvergenceException, FunctionEvaluationException {
+127 |         return bracket( function, initial, lowerBound, upperBound,
+128 |             Integer.MAX_VALUE ) ;
+129 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math.MathException.translate(String,Locale)
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 58-75
+Documentation:
+/**
+     * Translate a string to a given locale.
+     * @param s string to translate
+     * @param locale locale into which to translate the string
+     * @return translated string or original string
+     * for unsupported locales or unknown strings
+     */
+Method code:
+58 |     private static String translate(String s, Locale locale) {
+59 |         try {
+60 |             ResourceBundle bundle =
+61 |                     ResourceBundle.getBundle("org.apache.commons.math.MessagesResources", locale);
+62 |             if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {
+63 |                 // the value of the resource is the translated string
+64 |                 return bundle.getString(s);
+65 |             }
+66 |             
+67 |         } catch (MissingResourceException mre) {
+68 |             // do nothing here
+69 |         }
+70 | 
+71 |         // the locale is not supported or the resource is unknown
+72 |         // don't translate and fall back to using the string as is
+73 |         return s;
+74 | 
+75 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math.distribution.AbstractContinuousDistribution.anonymous_L70.value(double)
+Source: src/java/org/apache/commons/math/distribution/AbstractContinuousDistribution.java
+Original range: 71-77
+Documentation:
+
+Method code:
+71 |             public double value(double x) throws FunctionEvaluationException {
+72 |                 try {
+73 |                     return cumulativeProbability(x) - p;
+74 |                 } catch (MathException ex) {
+75 |                     throw new FunctionEvaluationException(ex, x, ex.getPattern(), ex.getArguments());
+76 |                 }
+77 |             }
+
+===== M0027 =====
+Signature: org.apache.commons.math.MathException.MathException(String,Object...)
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 105-109
+Documentation:
+/**
+     * Constructs a new <code>MathException</code> with specified
+     * formatted detail message.
+     * Message formatting is delegated to {@link java.text.MessageFormat}.
+     * @param pattern format specifier
+     * @param arguments format arguments
+     */
+Method code:
+105 |     public MathException(String pattern, Object ... arguments) {
+106 |       super(buildMessage(Locale.US, pattern, arguments));
+107 |       this.pattern   = pattern;
+108 |       this.arguments = (arguments == null) ? new Object[0] : arguments.clone();
+109 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.inverseCumulativeProbability(double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 153-163
+Documentation:
+/**
+     * For this distribution, X, this method returns the critical point x, such
+     * that P(X &lt; x) = <code>p</code>.
+     * <p>
+     * Returns <code>Double.NEGATIVE_INFINITY</code> for p=0 and 
+     * <code>Double.POSITIVE_INFINITY</code> for p=1.</p>
+     *
+     * @param p the desired probability
+     * @return x, such that P(X &lt; x) = <code>p</code>
+     * @throws MathException if the inverse cumulative probability can not be
+     *         computed due to convergence or other numerical errors.
+     * @throws IllegalArgumentException if <code>p</code> is not a valid
+     *         probability.
+     */
+Method code:
+153 |     @Override
+154 |     public double inverseCumulativeProbability(final double p) 
+155 |     throws MathException {
+156 |         if (p == 0) {
+157 |             return Double.NEGATIVE_INFINITY;
+158 |         }
+159 |         if (p == 1) {
+160 |             return Double.POSITIVE_INFINITY;
+161 |         }
+162 |         return super.inverseCumulativeProbability(p);
+163 |     }
+

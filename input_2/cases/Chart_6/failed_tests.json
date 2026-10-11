@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "org.jfree.chart.util.junit.ShapeListTests.testSerialization()",
+    "resolved_signature": "org.jfree.chart.util.junit.ShapeListTests.testSerialization()",
+    "resolution": "exact",
+    "src_path": "tests/org/jfree/chart/util/junit/ShapeListTests.java",
+    "begin_line": 128,
+    "end_line": 153,
+    "comment": "/**\r\n     * Serialize an instance, restore it, and check for equality.\r\n     */",
+    "snippet": "    public void testSerialization() {\n\n        ShapeList l1 = new ShapeList();\n        l1.setShape(0, new Rectangle(1, 2, 3, 4));\n        l1.setShape(1, new Line2D.Double(1.0, 2.0, 3.0, 4.0));\n        l1.setShape(2, null);\n\n        ShapeList l2 = null;\n\n        try {\n            ByteArrayOutputStream buffer = new ByteArrayOutputStream();\n            ObjectOutput out = new ObjectOutputStream(buffer);\n            out.writeObject(l1);\n            out.close();\n\n            ObjectInput in = new ObjectInputStream(new ByteArrayInputStream(\n            \t\tbuffer.toByteArray()));\n            l2 = (ShapeList) in.readObject();\n            in.close();\n        }\n        catch (Exception e) {\n            e.printStackTrace();\n        }\n        assertEquals(l1, l2);\n\n    }"
+  },
+  {
+    "requested_signature": "org.jfree.chart.util.junit.ShapeListTests.testEquals()",
+    "resolved_signature": "org.jfree.chart.util.junit.ShapeListTests.testEquals()",
+    "resolution": "exact",
+    "src_path": "tests/org/jfree/chart/util/junit/ShapeListTests.java",
+    "begin_line": 84,
+    "end_line": 97,
+    "comment": "/**\r\n     * Tests the equals() method.\r\n     */",
+    "snippet": "    public void testEquals() {\n        ShapeList l1 = new ShapeList();\n        l1.setShape(0, new Rectangle(1, 2, 3, 4));\n        l1.setShape(1, new Line2D.Double(1.0, 2.0, 3.0, 4.0));\n        l1.setShape(2, null);\n\n        ShapeList l2 = new ShapeList();\n        l2.setShape(0, new Rectangle(1, 2, 3, 4));\n        l2.setShape(1, new Line2D.Double(1.0, 2.0, 3.0, 4.0));\n        l2.setShape(2, null);\n\n        assertTrue(l1.equals(l2));\n        assertTrue(l2.equals(l2));\n    }"
+  }
+]

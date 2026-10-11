@@ -1,0 +1,42 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.IntegrationTest.testIssue701()",
+    "resolved_signature": "com.google.javascript.jscomp.IntegrationTest.testIssue701()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/IntegrationTest.java",
+    "begin_line": 1660,
+    "end_line": 1675,
+    "comment": "",
+    "snippet": "  public void testIssue701() {\n    // Check ASCII art in license comments.\n    String ascii = \"/**\\n\" +\n        \" * @preserve\\n\" +\n        \"   This\\n\" +\n        \"     is\\n\" +\n        \"       ASCII    ART\\n\" +\n        \"*/\";\n    String result = \"/*\\n\\n\" +\n        \"   This\\n\" +\n        \"     is\\n\" +\n        \"       ASCII    ART\\n\" +\n        \"*/\\n\";\n    testSame(createCompilerOptions(), ascii);\n    assertEquals(result, lastCompiler.toSource());\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.parsing.JsDocInfoParserTest.testParseLicense()",
+    "resolved_signature": "com.google.javascript.jscomp.parsing.JsDocInfoParserTest.testParseLicense()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/parsing/JsDocInfoParserTest.java",
+    "begin_line": 1281,
+    "end_line": 1287,
+    "comment": "",
+    "snippet": "  public void testParseLicense() throws Exception {\n    Node node = new Node(1);\n    this.fileLevelJsDocBuilder = node.getJsDocBuilderForNode();\n    String comment = \"@license Foo\\nBar\\n\\nBaz*/\";\n    parse(comment);\n    assertEquals(\" Foo\\nBar\\n\\nBaz\", node.getJSDocInfo().getLicense());\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.parsing.JsDocInfoParserTest.testParsePreserve()",
+    "resolved_signature": "com.google.javascript.jscomp.parsing.JsDocInfoParserTest.testParsePreserve()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/parsing/JsDocInfoParserTest.java",
+    "begin_line": 1273,
+    "end_line": 1279,
+    "comment": "",
+    "snippet": "  public void testParsePreserve() throws Exception {\n    Node node = new Node(1);\n    this.fileLevelJsDocBuilder = node.getJsDocBuilderForNode();\n    String comment = \"@preserve Foo\\nBar\\n\\nBaz*/\";\n    parse(comment);\n    assertEquals(\" Foo\\nBar\\n\\nBaz\", node.getJSDocInfo().getLicense());\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.parsing.JsDocInfoParserTest.testParseLicenseAscii()",
+    "resolved_signature": "com.google.javascript.jscomp.parsing.JsDocInfoParserTest.testParseLicenseAscii()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/parsing/JsDocInfoParserTest.java",
+    "begin_line": 1289,
+    "end_line": 1295,
+    "comment": "",
+    "snippet": "  public void testParseLicenseAscii() throws Exception {\n    Node node = new Node(1);\n    this.fileLevelJsDocBuilder = node.getJsDocBuilderForNode();\n    String comment = \"@license Foo\\n *   Bar\\n\\n  Baz*/\";\n    parse(comment);\n    assertEquals(\" Foo\\n   Bar\\n\\n  Baz\", node.getJSDocInfo().getLicense());\n  }"
+  }
+]

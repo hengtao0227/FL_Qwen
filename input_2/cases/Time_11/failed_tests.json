@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.joda.time.tz.TestCompiler.testDateTimeZoneBuilder()",
+    "resolved_signature": "org.joda.time.tz.TestCompiler.testDateTimeZoneBuilder()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/joda/time/tz/TestCompiler.java",
+    "begin_line": 88,
+    "end_line": 100,
+    "comment": "//-----------------------------------------------------------------------\r",
+    "snippet": "    public void testDateTimeZoneBuilder() throws Exception {\n        // test multithreading, issue #18\n        getTestDataTimeZoneBuilder().toDateTimeZone(\"TestDTZ1\", true);\n        final DateTimeZone[] zone = new DateTimeZone[1];\n        Thread t = new Thread(new Runnable() {\n            public void run() {\n                zone[0] = getTestDataTimeZoneBuilder().toDateTimeZone(\"TestDTZ2\", true);\n            }\n        });\n        t.start();\n        t.join();\n        assertNotNull(zone[0]);\n    }"
+  }
+]

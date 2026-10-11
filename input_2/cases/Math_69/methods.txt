@@ -1,0 +1,1275 @@
+===== M0001 =====
+Signature: org.apache.commons.math.special.Beta.regularizedBeta(double,double,double)
+Source: src/main/java/org/apache/commons/math/special/Beta.java
+Original range: 51-55
+Documentation:
+/**
+     * Returns the
+     * <a href="http://mathworld.wolfram.com/RegularizedBetaFunction.html">
+     * regularized beta function</a> I(x, a, b).
+     *
+     * @param x the value.
+     * @param a the a parameter.
+     * @param b the b parameter.
+     * @return the regularized beta function I(x, a, b)
+     * @throws MathException if the algorithm fails to converge.
+     */
+Method code:
+51 |     public static double regularizedBeta(double x, double a, double b)
+52 |         throws MathException
+53 |     {
+54 |         return regularizedBeta(x, a, b, DEFAULT_EPSILON, Integer.MAX_VALUE);
+55 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.SimpleRegression()
+Source: src/main/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 93-95
+Documentation:
+/**
+     * Create an empty SimpleRegression instance
+     */
+Method code:
+93 |     public SimpleRegression() {
+94 |         this(new TDistributionImpl(1.0));
+95 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.getRowDimension()
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 1343-1346
+Documentation:
+/** {@inheritDoc} */
+Method code:
+1343 |     @Override
+1344 |     public int getRowDimension() {
+1345 |         return rows;
+1346 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.special.Gamma.logGamma(double)
+Source: src/main/java/org/apache/commons/math/special/Gamma.java
+Original range: 94-114
+Documentation:
+/**
+     * Returns the natural logarithm of the gamma function &#915;(x).
+     *
+     * The implementation of this method is based on:
+     * <ul>
+     * <li><a href="http://mathworld.wolfram.com/GammaFunction.html">
+     * Gamma Function</a>, equation (28).</li>
+     * <li><a href="http://mathworld.wolfram.com/LanczosApproximation.html">
+     * Lanczos Approximation</a>, equations (1) through (5).</li>
+     * <li><a href="http://my.fit.edu/~gabdo/gamma.txt">Paul Godfrey, A note on
+     * the computation of the convergent Lanczos complex Gamma approximation
+     * </a></li>
+     * </ul>
+     *
+     * @param x the value.
+     * @return log(&#915;(x))
+     */
+Method code:
+94 |     public static double logGamma(double x) {
+95 |         double ret;
+96 | 
+97 |         if (Double.isNaN(x) || (x <= 0.0)) {
+98 |             ret = Double.NaN;
+99 |         } else {
+100 |             double g = 607.0 / 128.0;
+101 | 
+102 |             double sum = 0.0;
+103 |             for (int i = LANCZOS.length - 1; i > 0; --i) {
+104 |                 sum = sum + (LANCZOS[i] / (x + i));
+105 |             }
+106 |             sum = sum + LANCZOS[0];
+107 | 
+108 |             double tmp = x + g + .5;
+109 |             ret = ((x + .5) * Math.log(tmp)) - tmp +
+110 |                 HALF_LOG_2_PI + Math.log(sum / x);
+111 |         }
+112 | 
+113 |         return ret;
+114 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.util.ContinuedFraction.ContinuedFraction()
+Source: src/main/java/org/apache/commons/math/util/ContinuedFraction.java
+Original range: 45-47
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+45 |     protected ContinuedFraction() {
+46 |         super();
+47 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.SimpleRegression(TDistribution)
+Source: src/main/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 103-106
+Documentation:
+/**
+     * Create an empty SimpleRegression using the given distribution object to
+     * compute inference statistics.
+     * @param t the distribution used to compute inference statistics.
+     * @since 1.2
+     */
+Method code:
+103 |     public SimpleRegression(TDistribution t) {
+104 |         super();
+105 |         setDistribution(t);
+106 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.stat.correlation.PearsonsCorrelation.getCorrelationPValues()
+Source: src/main/java/org/apache/commons/math/stat/correlation/PearsonsCorrelation.java
+Original range: 160-176
+Documentation:
+/**
+     * Returns a matrix of p-values associated with the (two-sided) null
+     * hypothesis that the corresponding correlation coefficient is zero.
+     * <p><code>getCorrelationPValues().getEntry(i,j)</code> is the probability
+     * that a random variable distributed as <code>t<sub>n-2</sub></code> takes
+     * a value with absolute value greater than or equal to <br>
+     * <code>|r|((n - 2) / (1 - r<sup>2</sup>))<sup>1/2</sup></code></p>
+     * <p>The values in the matrix are sometimes referred to as the
+     * <i>significance</i> of the corresponding correlation coefficients.</p>
+     *
+     * @return matrix of p-values
+     * @throws MathException if an error occurs estimating probabilities
+     */
+Method code:
+160 |     public RealMatrix getCorrelationPValues() throws MathException {
+161 |         TDistribution tDistribution = new TDistributionImpl(nObs - 2);
+162 |         int nVars = correlationMatrix.getColumnDimension();
+163 |         double[][] out = new double[nVars][nVars];
+164 |         for (int i = 0; i < nVars; i++) {
+165 |             for (int j = 0; j < nVars; j++) {
+166 |                 if (i == j) {
+167 |                     out[i][j] = 0d;
+168 |                 } else {
+169 |                     double r = correlationMatrix.getEntry(i, j);
+170 |                     double t = Math.abs(r * Math.sqrt((nObs - 2)/(1 - r * r)));
+171 |                     out[i][j] = 2 * (1 - tDistribution.cumulativeProbability(t));
+172 |                 }
+173 |             }
+174 |         }
+175 |         return new BlockRealMatrix(out);
+176 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.util.ContinuedFraction.evaluate(double,double,int)
+Source: src/main/java/org/apache/commons/math/util/ContinuedFraction.java
+Original range: 125-206
+Documentation:
+/**
+     * <p>
+     * Evaluates the continued fraction at the value x.
+     * </p>
+     *
+     * <p>
+     * The implementation of this method is based on equations 14-17 of:
+     * <ul>
+     * <li>
+     *   Eric W. Weisstein. "Continued Fraction." From MathWorld--A Wolfram Web
+     *   Resource. <a target="_blank"
+     *   href="http://mathworld.wolfram.com/ContinuedFraction.html">
+     *   http://mathworld.wolfram.com/ContinuedFraction.html</a>
+     * </li>
+     * </ul>
+     * The recurrence relationship defined in those equations can result in
+     * very large intermediate results which can result in numerical overflow.
+     * As a means to combat these overflow conditions, the intermediate results
+     * are scaled whenever they threaten to become numerically unstable.</p>
+     *
+     * @param x the evaluation point.
+     * @param epsilon maximum error allowed.
+     * @param maxIterations maximum number of convergents
+     * @return the value of the continued fraction evaluated at x.
+     * @throws MathException if the algorithm fails to converge.
+     */
+Method code:
+125 |     public double evaluate(double x, double epsilon, int maxIterations)
+126 |         throws MathException
+127 |     {
+128 |         double p0 = 1.0;
+129 |         double p1 = getA(0, x);
+130 |         double q0 = 0.0;
+131 |         double q1 = 1.0;
+132 |         double c = p1 / q1;
+133 |         int n = 0;
+134 |         double relativeError = Double.MAX_VALUE;
+135 |         while (n < maxIterations && relativeError > epsilon) {
+136 |             ++n;
+137 |             double a = getA(n, x);
+138 |             double b = getB(n, x);
+139 |             double p2 = a * p1 + b * p0;
+140 |             double q2 = a * q1 + b * q0;
+141 |             boolean infinite = false;
+142 |             if (Double.isInfinite(p2) || Double.isInfinite(q2)) {
+143 |                 /*
+144 |                  * Need to scale. Try successive powers of the larger of a or b
+145 |                  * up to 5th power. Throw ConvergenceException if one or both
+146 |                  * of p2, q2 still overflow.
+147 |                  */
+148 |                 double scaleFactor = 1d;
+149 |                 double lastScaleFactor = 1d;
+150 |                 final int maxPower = 5;
+151 |                 final double scale = Math.max(a,b);
+152 |                 if (scale <= 0) {  // Can't scale
+153 |                     throw new ConvergenceException(
+154 |                             "Continued fraction convergents diverged to +/- infinity for value {0}",
+155 |                              x);
+156 |                 }
+157 |                 infinite = true;
+158 |                 for (int i = 0; i < maxPower; i++) {
+159 |                     lastScaleFactor = scaleFactor;
+160 |                     scaleFactor *= scale;
+161 |                     if (a != 0.0 && a > b) {
+162 |                         p2 = p1 / lastScaleFactor + (b / scaleFactor * p0);
+163 |                         q2 = q1 / lastScaleFactor + (b / scaleFactor * q0);
+164 |                     } else if (b != 0) {
+165 |                         p2 = (a / scaleFactor * p1) + p0 / lastScaleFactor;
+166 |                         q2 = (a / scaleFactor * q1) + q0 / lastScaleFactor;
+167 |                     }
+168 |                     infinite = Double.isInfinite(p2) || Double.isInfinite(q2);
+169 |                     if (!infinite) {
+170 |                         break;
+171 |                     }
+172 |                 }
+173 |             }
+174 | 
+175 |             if (infinite) {
+176 |                // Scaling failed
+177 |                throw new ConvergenceException(
+178 |                  "Continued fraction convergents diverged to +/- infinity for value {0}",
+179 |                   x);
+180 |             }
+181 | 
+182 |             double r = p2 / q2;
+183 | 
+184 |             if (Double.isNaN(r)) {
+185 |                 throw new ConvergenceException(
+186 |                   "Continued fraction diverged to NaN for value {0}",
+187 |                   x);
+188 |             }
+189 |             relativeError = Math.abs(r / c - 1.0);
+190 | 
+191 |             // prepare for next iteration
+192 |             c = p2 / q2;
+193 |             p0 = p1;
+194 |             p1 = p2;
+195 |             q0 = q1;
+196 |             q1 = q2;
+197 |         }
+198 | 
+199 |         if (n >= maxIterations) {
+200 |             throw new MaxIterationsExceededException(maxIterations,
+201 |                 "Continued fraction convergents failed to converge for value {0}",
+202 |                 x);
+203 |         }
+204 | 
+205 |         return c;
+206 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.stat.correlation.PearsonsCorrelation.PearsonsCorrelation(double[][])
+Source: src/main/java/org/apache/commons/math/stat/correlation/PearsonsCorrelation.java
+Original range: 67-69
+Documentation:
+/**
+     * Create a PearsonsCorrelation from a rectangular array
+     * whose columns represent values of variables to be correlated.
+     *
+     * @param data rectangular array with columns representing variables
+     * @throws IllegalArgumentException if the input data array is not
+     * rectangular with at least two rows and two columns.
+     */
+Method code:
+67 |     public PearsonsCorrelation(double[][] data) {
+68 |         this(new BlockRealMatrix(data));
+69 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.special.Beta.anonymous_L128.getB(int,double)
+Source: src/main/java/org/apache/commons/math/special/Beta.java
+Original range: 130-144
+Documentation:
+
+Method code:
+130 |                 @Override
+131 |                 protected double getB(int n, double x) {
+132 |                     double ret;
+133 |                     double m;
+134 |                     if (n % 2 == 0) { // even
+135 |                         m = n / 2.0;
+136 |                         ret = (m * (b - m) * x) /
+137 |                             ((a + (2 * m) - 1) * (a + (2 * m)));
+138 |                     } else {
+139 |                         m = (n - 1.0) / 2.0;
+140 |                         ret = -((a + m) * (a + b + m) * x) /
+141 |                                 ((a + (2 * m)) * (a + (2 * m) + 1.0));
+142 |                     }
+143 |                     return ret;
+144 |                 }
+
+===== M0011 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.getColumn(int)
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 1181-1203
+Documentation:
+/** {@inheritDoc} */
+Method code:
+1181 |     @Override
+1182 |     public double[] getColumn(final int column)
+1183 |         throws MatrixIndexException {
+1184 | 
+1185 |         MatrixUtils.checkColumnIndex(this, column);
+1186 |         final double[] out = new double[rows];
+1187 | 
+1188 |         // perform copy block-wise, to ensure good cache behavior
+1189 |         final int jBlock  = column / BLOCK_SIZE;
+1190 |         final int jColumn = column - jBlock * BLOCK_SIZE;
+1191 |         final int jWidth  = blockWidth(jBlock);
+1192 |         int outIndex      = 0;
+1193 |         for (int iBlock = 0; iBlock < blockRows; ++iBlock) {
+1194 |             final int iHeight = blockHeight(iBlock);
+1195 |             final double[] block = blocks[iBlock * blockColumns + jBlock];
+1196 |             for (int i = 0; i < iHeight; ++i) {
+1197 |                 out[outIndex++] = block[i * jWidth + jColumn];
+1198 |             }
+1199 |         }
+1200 | 
+1201 |         return out;
+1202 | 
+1203 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.getEntry(int,int)
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 1234-1248
+Documentation:
+/** {@inheritDoc} */
+Method code:
+1234 |     @Override
+1235 |     public double getEntry(final int row, final int column)
+1236 |         throws MatrixIndexException {
+1237 |         try {
+1238 |             final int iBlock = row    / BLOCK_SIZE;
+1239 |             final int jBlock = column / BLOCK_SIZE;
+1240 |             final int k      = (row    - iBlock * BLOCK_SIZE) * blockWidth(jBlock) +
+1241 |                                (column - jBlock * BLOCK_SIZE);
+1242 |             return blocks[iBlock * blockColumns + jBlock][k];
+1243 |         } catch (ArrayIndexOutOfBoundsException e) {
+1244 |             throw new MatrixIndexException(
+1245 |                     "no entry at indices ({0}, {1}) in a {2}x{3} matrix",
+1246 |                     row, column, getRowDimension(), getColumnDimension());
+1247 |         }
+1248 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.special.Beta.anonymous_L128.getA(int,double)
+Source: src/main/java/org/apache/commons/math/special/Beta.java
+Original range: 146-149
+Documentation:
+
+Method code:
+146 |                 @Override
+147 |                 protected double getA(int n, double x) {
+148 |                     return 1.0;
+149 |                 }
+
+===== M0014 =====
+Signature: org.apache.commons.math.distribution.TDistributionImpl.cumulativeProbability(double)
+Source: src/main/java/org/apache/commons/math/distribution/TDistributionImpl.java
+Original range: 126-144
+Documentation:
+/**
+     * For this distribution, X, this method returns P(X &lt; <code>x</code>).
+     * @param x the value at which the CDF is evaluated.
+     * @return CDF evaluated at <code>x</code>.
+     * @throws MathException if the cumulative probability can not be
+     *            computed due to convergence or other numerical errors.
+     */
+Method code:
+126 |     public double cumulativeProbability(double x) throws MathException{
+127 |         double ret;
+128 |         if (x == 0.0) {
+129 |             ret = 0.5;
+130 |         } else {
+131 |             double t =
+132 |                 Beta.regularizedBeta(
+133 |                     degreesOfFreedom / (degreesOfFreedom + (x * x)),
+134 |                     0.5 * degreesOfFreedom,
+135 |                     0.5);
+136 |             if (x < 0.0) {
+137 |                 ret = 0.5 * t;
+138 |             } else {
+139 |                 ret = 1.0 - 0.5 * t;
+140 |             }
+141 |         }
+142 | 
+143 |         return ret;
+144 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.BlockRealMatrix(double[][])
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 124-127
+Documentation:
+/**
+     * Create a new dense matrix copying entries from raw layout data.
+     * <p>The input array <em>must</em> already be in raw layout.</p>
+     * <p>Calling this constructor is equivalent to call:
+     * <pre>matrix = new BlockRealMatrix(rawData.length, rawData[0].length,
+     *                                   toBlocksLayout(rawData), false);</pre>
+     * </p>
+     * @param rawData data for new matrix, in raw layout
+     *
+     * @exception IllegalArgumentException if <code>blockData</code> shape is
+     * inconsistent with block layout
+     * @see #BlockRealMatrix(int, int, double[][], boolean)
+     */
+Method code:
+124 |     public BlockRealMatrix(final double[][] rawData)
+125 |         throws IllegalArgumentException {
+126 |         this(rawData.length, rawData[0].length, toBlocksLayout(rawData), false);
+127 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.createBlocksLayout(int,int)
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 265-287
+Documentation:
+/**
+     * Create a data array in blocks layout.
+     * <p>
+     * This method can be used to create the array argument of the {@link
+     * #BlockRealMatrix(int, int, double[][], boolean)} constructor.
+     * </p>
+     * @param rows  the number of rows in the new matrix
+     * @param columns  the number of columns in the new matrix
+     * @return a new data array in blocks layout
+     * @see #toBlocksLayout(double[][])
+     * @see #BlockRealMatrix(int, int, double[][], boolean)
+     */
+Method code:
+265 |     public static double[][] createBlocksLayout(final int rows, final int columns) {
+266 | 
+267 |         final int blockRows    = (rows    + BLOCK_SIZE - 1) / BLOCK_SIZE;
+268 |         final int blockColumns = (columns + BLOCK_SIZE - 1) / BLOCK_SIZE;
+269 | 
+270 |         final double[][] blocks = new double[blockRows * blockColumns][];
+271 |         int blockIndex = 0;
+272 |         for (int iBlock = 0; iBlock < blockRows; ++iBlock) {
+273 |             final int pStart  = iBlock * BLOCK_SIZE;
+274 |             final int pEnd    = Math.min(pStart + BLOCK_SIZE, rows);
+275 |             final int iHeight = pEnd - pStart;
+276 |             for (int jBlock = 0; jBlock < blockColumns; ++jBlock) {
+277 |                 final int qStart = jBlock * BLOCK_SIZE;
+278 |                 final int qEnd   = Math.min(qStart + BLOCK_SIZE, columns);
+279 |                 final int jWidth = qEnd - qStart;
+280 |                 blocks[blockIndex] = new double[iHeight * jWidth];
+281 |                 ++blockIndex;
+282 |             }
+283 |         }
+284 | 
+285 |         return blocks;
+286 | 
+287 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math.distribution.AbstractDistribution.AbstractDistribution()
+Source: src/main/java/org/apache/commons/math/distribution/AbstractDistribution.java
+Original range: 38-40
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+38 |     protected AbstractDistribution() {
+39 |         super();
+40 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math.linear.MatrixUtils.checkColumnIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math/linear/MatrixUtils.java
+Original range: 542-548
+Documentation:
+/**
+     * Check if a column index is valid.
+     * @param m matrix containing the submatrix
+     * @param column column index to check
+     * @exception MatrixIndexException if index is not valid
+     */
+Method code:
+542 |     public static void checkColumnIndex(final AnyMatrix m, final int column)
+543 |         throws MatrixIndexException {
+544 |         if (column < 0 || column >= m.getColumnDimension()) {
+545 |             throw new MatrixIndexException("column index {0} out of allowed range [{1}, {2}]",
+546 |                                            column, 0, m.getColumnDimension() - 1);
+547 |         }
+548 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.getR()
+Source: src/main/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 431-438
+Documentation:
+/**
+     * Returns <a href="http://mathworld.wolfram.com/CorrelationCoefficient.html">
+     * Pearson's product moment correlation coefficient</a>,
+     * usually denoted r.
+     * <p>
+     * <strong>Preconditions</strong>: <ul>
+     * <li>At least two observations (with at least two different x values)
+     * must have been added before invoking this method. If this method is
+     * invoked before a model can be estimated, <code>Double,NaN</code> is
+     * returned.
+     * </li></ul></p>
+     *
+     * @return Pearson's r
+     */
+Method code:
+431 |     public double getR() {
+432 |         double b1 = getSlope();
+433 |         double result = Math.sqrt(getRSquare());
+434 |         if (b1 < 0) {
+435 |             result = -result;
+436 |         }
+437 |         return result;
+438 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math.distribution.TDistributionImpl.setDegreesOfFreedomInternal(double)
+Source: src/main/java/org/apache/commons/math/distribution/TDistributionImpl.java
+Original range: 87-94
+Documentation:
+/**
+     * Modify the degrees of freedom.
+     * @param newDegreesOfFreedom the new degrees of freedom.
+     */
+Method code:
+87 |     private void setDegreesOfFreedomInternal(double newDegreesOfFreedom) {
+88 |         if (newDegreesOfFreedom <= 0.0) {
+89 |             throw MathRuntimeException.createIllegalArgumentException(
+90 |                   "degrees of freedom must be positive ({0})",
+91 |                   newDegreesOfFreedom);
+92 |         }
+93 |         this.degreesOfFreedom = newDegreesOfFreedom;
+94 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math.distribution.TDistributionImpl.TDistributionImpl(double,double)
+Source: src/main/java/org/apache/commons/math/distribution/TDistributionImpl.java
+Original range: 60-64
+Documentation:
+/**
+     * Create a t distribution using the given degrees of freedom and the
+     * specified inverse cumulative probability absolute accuracy.
+     *
+     * @param degreesOfFreedom the degrees of freedom.
+     * @param inverseCumAccuracy the maximum absolute error in inverse cumulative probability estimates
+     * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY})
+     * @since 2.1
+     */
+Method code:
+60 |     public TDistributionImpl(double degreesOfFreedom, double inverseCumAccuracy) {
+61 |         super();
+62 |         setDegreesOfFreedomInternal(degreesOfFreedom);
+63 |         solverAbsoluteAccuracy = inverseCumAccuracy;
+64 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math.stat.correlation.PearsonsCorrelation.checkSufficientData(RealMatrix)
+Source: src/main/java/org/apache/commons/math/stat/correlation/PearsonsCorrelation.java
+Original range: 272-280
+Documentation:
+/**
+     * Throws IllegalArgumentException of the matrix does not have at least
+     * two columns and two rows
+     *
+     * @param matrix matrix to check for sufficiency
+     */
+Method code:
+272 |     private void checkSufficientData(final RealMatrix matrix) {
+273 |         int nRows = matrix.getRowDimension();
+274 |         int nCols = matrix.getColumnDimension();
+275 |         if (nRows < 2 || nCols < 2) {
+276 |             throw MathRuntimeException.createIllegalArgumentException(
+277 |                     "insufficient data: only {0} rows and {1} columns.",
+278 |                     nRows, nCols);
+279 |         }
+280 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math.stat.correlation.PearsonsCorrelation.correlation(double[],double[])
+Source: src/main/java/org/apache/commons/math/stat/correlation/PearsonsCorrelation.java
+Original range: 224-237
+Documentation:
+/**
+     * Computes the Pearson's product-moment correlation coefficient between the two arrays.
+     *
+     * </p>Throws IllegalArgumentException if the arrays do not have the same length
+     * or their common length is less than 2</p>
+     *
+     * @param xArray first data array
+     * @param yArray second data array
+     * @return Returns Pearson's correlation coefficient for the two arrays
+     * @throws  IllegalArgumentException if the arrays lengths do not match or
+     * there is insufficient data
+     */
+Method code:
+224 |     public double correlation(final double[] xArray, final double[] yArray) throws IllegalArgumentException {
+225 |         SimpleRegression regression = new SimpleRegression();
+226 |         if(xArray.length == yArray.length && xArray.length > 1) {
+227 |             for(int i=0; i<xArray.length; i++) {
+228 |                 regression.addData(xArray[i], yArray[i]);
+229 |             }
+230 |             return regression.getR();
+231 |         }
+232 |         else {
+233 |             throw MathRuntimeException.createIllegalArgumentException(
+234 |                     "invalid array dimensions. xArray has size {0}; yArray has {1} elements",
+235 |                     xArray.length, yArray.length);
+236 |         }
+237 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.BlockRealMatrix(int,int,double[][],boolean)
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 144-179
+Documentation:
+/**
+     * Create a new dense matrix copying entries from block layout data.
+     * <p>The input array <em>must</em> already be in blocks layout.</p>
+     * @param rows  the number of rows in the new matrix
+     * @param columns  the number of columns in the new matrix
+     * @param blockData data for new matrix
+     * @param copyArray if true, the input array will be copied, otherwise
+     * it will be referenced
+     *
+     * @exception IllegalArgumentException if <code>blockData</code> shape is
+     * inconsistent with block layout
+     * @see #createBlocksLayout(int, int)
+     * @see #toBlocksLayout(double[][])
+     * @see #BlockRealMatrix(double[][])
+     */
+Method code:
+144 |     public BlockRealMatrix(final int rows, final int columns,
+145 |                            final double[][] blockData, final boolean copyArray)
+146 |         throws IllegalArgumentException {
+147 | 
+148 |         super(rows, columns);
+149 |         this.rows    = rows;
+150 |         this.columns = columns;
+151 | 
+152 |         // number of blocks
+153 |         blockRows    = (rows    + BLOCK_SIZE - 1) / BLOCK_SIZE;
+154 |         blockColumns = (columns + BLOCK_SIZE - 1) / BLOCK_SIZE;
+155 | 
+156 |         if (copyArray) {
+157 |             // allocate storage blocks, taking care of smaller ones at right and bottom
+158 |             blocks = new double[blockRows * blockColumns][];
+159 |         } else {
+160 |             // reference existing array
+161 |             blocks = blockData;
+162 |         }
+163 | 
+164 |         int index = 0;
+165 |         for (int iBlock = 0; iBlock < blockRows; ++iBlock) {
+166 |             final int iHeight = blockHeight(iBlock);
+167 |             for (int jBlock = 0; jBlock < blockColumns; ++jBlock, ++index) {
+168 |                 if (blockData[index].length != iHeight * blockWidth(jBlock)) {
+169 |                     throw MathRuntimeException.createIllegalArgumentException(
+170 |                             "wrong array shape (block length = {0}, expected {1})",
+171 |                             blockData[index].length, iHeight * blockWidth(jBlock));
+172 |                 }
+173 |                 if (copyArray) {
+174 |                     blocks[index] = blockData[index].clone();
+175 |                 }
+176 |             }
+177 |         }
+178 | 
+179 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.getColumnDimension()
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 1349-1352
+Documentation:
+/** {@inheritDoc} */
+Method code:
+1349 |     @Override
+1350 |     public int getColumnDimension() {
+1351 |         return columns;
+1352 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.toBlocksLayout(double[][])
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 203-251
+Documentation:
+/**
+     * Convert a data array from raw layout to blocks layout.
+     * <p>
+     * Raw layout is the straightforward layout where element at row i and
+     * column j is in array element <code>rawData[i][j]</code>. Blocks layout
+     * is the layout used in {@link BlockRealMatrix} instances, where the matrix
+     * is split in square blocks (except at right and bottom side where blocks may
+     * be rectangular to fit matrix size) and each block is stored in a flattened
+     * one-dimensional array.
+     * </p>
+     * <p>
+     * This method creates an array in blocks layout from an input array in raw layout.
+     * It can be used to provide the array argument of the {@link
+     * #BlockRealMatrix(int, int, double[][], boolean)} constructor.
+     * </p>
+     * @param rawData data array in raw layout
+     * @return a new data array containing the same entries but in blocks layout
+     * @exception IllegalArgumentException if <code>rawData</code> is not rectangular
+     *  (not all rows have the same length)
+     * @see #createBlocksLayout(int, int)
+     * @see #BlockRealMatrix(int, int, double[][], boolean)
+     */
+Method code:
+203 |     public static double[][] toBlocksLayout(final double[][] rawData)
+204 |         throws IllegalArgumentException {
+205 | 
+206 |         final int rows         = rawData.length;
+207 |         final int columns      = rawData[0].length;
+208 |         final int blockRows    = (rows    + BLOCK_SIZE - 1) / BLOCK_SIZE;
+209 |         final int blockColumns = (columns + BLOCK_SIZE - 1) / BLOCK_SIZE;
+210 | 
+211 |         // safety checks
+212 |         for (int i = 0; i < rawData.length; ++i) {
+213 |             final int length = rawData[i].length;
+214 |             if (length != columns) {
+215 |                 throw MathRuntimeException.createIllegalArgumentException(
+216 |                         "some rows have length {0} while others have length {1}",
+217 |                         columns, length);
+218 |             }
+219 |         }
+220 | 
+221 |         // convert array
+222 |         final double[][] blocks = new double[blockRows * blockColumns][];
+223 |         int blockIndex = 0;
+224 |         for (int iBlock = 0; iBlock < blockRows; ++iBlock) {
+225 |             final int pStart  = iBlock * BLOCK_SIZE;
+226 |             final int pEnd    = Math.min(pStart + BLOCK_SIZE, rows);
+227 |             final int iHeight = pEnd - pStart;
+228 |             for (int jBlock = 0; jBlock < blockColumns; ++jBlock) {
+229 |                 final int qStart = jBlock * BLOCK_SIZE;
+230 |                 final int qEnd   = Math.min(qStart + BLOCK_SIZE, columns);
+231 |                 final int jWidth = qEnd - qStart;
+232 | 
+233 |                 // allocate new block
+234 |                 final double[] block = new double[iHeight * jWidth];
+235 |                 blocks[blockIndex] = block;
+236 | 
+237 |                 // copy data
+238 |                 int index = 0;
+239 |                 for (int p = pStart; p < pEnd; ++p) {
+240 |                     System.arraycopy(rawData[p], qStart, block, index, jWidth);
+241 |                     index += jWidth;
+242 |                 }
+243 | 
+244 |                 ++blockIndex;
+245 | 
+246 |             }
+247 |         }
+248 | 
+249 |         return blocks;
+250 | 
+251 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math.distribution.AbstractContinuousDistribution.AbstractContinuousDistribution()
+Source: src/main/java/org/apache/commons/math/distribution/AbstractContinuousDistribution.java
+Original range: 52-54
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+52 |     protected AbstractContinuousDistribution() {
+53 |         super();
+54 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.BlockRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 95-109
+Documentation:
+/**
+     * Create a new matrix with the supplied row and column dimensions.
+     *
+     * @param rows  the number of rows in the new matrix
+     * @param columns  the number of columns in the new matrix
+     * @throws IllegalArgumentException if row or column dimension is not
+     *  positive
+     */
+Method code:
+95 |     public BlockRealMatrix(final int rows, final int columns)
+96 |         throws IllegalArgumentException {
+97 | 
+98 |         super(rows, columns);
+99 |         this.rows    = rows;
+100 |         this.columns = columns;
+101 | 
+102 |         // number of blocks
+103 |         blockRows    = (rows    + BLOCK_SIZE - 1) / BLOCK_SIZE;
+104 |         blockColumns = (columns + BLOCK_SIZE - 1) / BLOCK_SIZE;
+105 | 
+106 |         // allocate storage blocks, taking care of smaller ones at right and bottom
+107 |         blocks = createBlocksLayout(rows, columns);
+108 | 
+109 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.getSlope()
+Source: src/main/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 297-305
+Documentation:
+/**
+    * Returns the slope of the estimated regression line.
+    * <p>
+    * The least squares estimate of the slope is computed using the
+    * <a href="http://www.xycoon.com/estimation4.htm">normal equations</a>.
+    * The slope is sometimes denoted b1.</p>
+    * <p>
+    * <strong>Preconditions</strong>: <ul>
+    * <li>At least two observations (with at least two different x values)
+    * must have been added before invoking this method. If this method is
+    * invoked before a model can be estimated, <code>Double.NaN</code> is
+    * returned.
+    * </li></ul></p>
+    *
+    * @return the slope of the regression line
+    */
+Method code:
+297 |     public double getSlope() {
+298 |         if (n < 2) {
+299 |             return Double.NaN; //not enough data
+300 |         }
+301 |         if (Math.abs(sumXX) < 10 * Double.MIN_VALUE) {
+302 |             return Double.NaN; //not enough variation in x
+303 |         }
+304 |         return sumXY / sumXX;
+305 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math.special.Beta.regularizedBeta(double,double,double,double,int)
+Source: src/main/java/org/apache/commons/math/special/Beta.java
+Original range: 116-157
+Documentation:
+/**
+     * Returns the regularized beta function I(x, a, b).
+     *
+     * The implementation of this method is based on:
+     * <ul>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/RegularizedBetaFunction.html">
+     * Regularized Beta Function</a>.</li>
+     * <li>
+     * <a href="http://functions.wolfram.com/06.21.10.0001.01">
+     * Regularized Beta Function</a>.</li>
+     * </ul>
+     *
+     * @param x the value.
+     * @param a the a parameter.
+     * @param b the b parameter.
+     * @param epsilon When the absolute value of the nth item in the
+     *                series is less than epsilon the approximation ceases
+     *                to calculate further elements in the series.
+     * @param maxIterations Maximum number of "iterations" to complete.
+     * @return the regularized beta function I(x, a, b)
+     * @throws MathException if the algorithm fails to converge.
+     */
+Method code:
+116 |     public static double regularizedBeta(double x, final double a,
+117 |         final double b, double epsilon, int maxIterations) throws MathException
+118 |     {
+119 |         double ret;
+120 | 
+121 |         if (Double.isNaN(x) || Double.isNaN(a) || Double.isNaN(b) || (x < 0) ||
+122 |             (x > 1) || (a <= 0.0) || (b <= 0.0))
+123 |         {
+124 |             ret = Double.NaN;
+125 |         } else if (x > (a + 1.0) / (a + b + 2.0)) {
+126 |             ret = 1.0 - regularizedBeta(1.0 - x, b, a, epsilon, maxIterations);
+127 |         } else {
+128 |             ContinuedFraction fraction = new ContinuedFraction() {
+129 | 
+130 |                 @Override
+131 |                 protected double getB(int n, double x) {
+132 |                     double ret;
+133 |                     double m;
+134 |                     if (n % 2 == 0) { // even
+135 |                         m = n / 2.0;
+136 |                         ret = (m * (b - m) * x) /
+137 |                             ((a + (2 * m) - 1) * (a + (2 * m)));
+138 |                     } else {
+139 |                         m = (n - 1.0) / 2.0;
+140 |                         ret = -((a + m) * (a + b + m) * x) /
+141 |                                 ((a + (2 * m)) * (a + (2 * m) + 1.0));
+142 |                     }
+143 |                     return ret;
+144 |                 }
+145 | 
+146 |                 @Override
+147 |                 protected double getA(int n, double x) {
+148 |                     return 1.0;
+149 |                 }
+150 |             };
+151 |             ret = Math.exp((a * Math.log(x)) + (b * Math.log(1.0 - x)) -
+152 |                 Math.log(a) - logBeta(a, b, epsilon, maxIterations)) *
+153 |                 1.0 / fraction.evaluate(x, epsilon, maxIterations);
+154 |         }
+155 | 
+156 |         return ret;
+157 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.getRSquare()
+Source: src/main/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 454-457
+Documentation:
+/**
+     * Returns the <a href="http://www.xycoon.com/coefficient1.htm">
+     * coefficient of determination</a>,
+     * usually denoted r-square.
+     * <p>
+     * <strong>Preconditions</strong>: <ul>
+     * <li>At least two observations (with at least two different x values)
+     * must have been added before invoking this method. If this method is
+     * invoked before a model can be estimated, <code>Double,NaN</code> is
+     * returned.
+     * </li></ul></p>
+     *
+     * @return r-square
+     */
+Method code:
+454 |     public double getRSquare() {
+455 |         double ssto = getTotalSumSquares();
+456 |         return (ssto - getSumSquaredErrors()) / ssto;
+457 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math.distribution.TDistributionImpl.TDistributionImpl(double)
+Source: src/main/java/org/apache/commons/math/distribution/TDistributionImpl.java
+Original range: 70-72
+Documentation:
+/**
+     * Create a t distribution using the given degrees of freedom.
+     * @param degreesOfFreedom the degrees of freedom.
+     */
+Method code:
+70 |     public TDistributionImpl(double degreesOfFreedom) {
+71 |         this(degreesOfFreedom, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+72 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.setEntry(int,int,double)
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 1251-1265
+Documentation:
+/** {@inheritDoc} */
+Method code:
+1251 |     @Override
+1252 |     public void setEntry(final int row, final int column, final double value)
+1253 |         throws MatrixIndexException {
+1254 |         try {
+1255 |             final int iBlock = row    / BLOCK_SIZE;
+1256 |             final int jBlock = column / BLOCK_SIZE;
+1257 |             final int k      = (row    - iBlock * BLOCK_SIZE) * blockWidth(jBlock) +
+1258 |                                (column - jBlock * BLOCK_SIZE);
+1259 |             blocks[iBlock * blockColumns + jBlock][k] = value;
+1260 |         } catch (ArrayIndexOutOfBoundsException e) {
+1261 |             throw new MatrixIndexException(
+1262 |                     "no entry at indices ({0}, {1}) in a {2}x{3} matrix",
+1263 |                     row, column, getRowDimension(), getColumnDimension());
+1264 |         }
+1265 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.getSumSquaredErrors()
+Source: src/main/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 336-338
+Documentation:
+/**
+     * Returns the <a href="http://www.xycoon.com/SumOfSquares.htm">
+     * sum of squared errors</a> (SSE) associated with the regression
+     * model.
+     * <p>
+     * The sum is computed using the computational formula</p>
+     * <p>
+     * <code>SSE = SYY - (SXY * SXY / SXX)</code></p>
+     * <p>
+     * where <code>SYY</code> is the sum of the squared deviations of the y
+     * values about their mean, <code>SXX</code> is similarly defined and
+     * <code>SXY</code> is the sum of the products of x and y mean deviations.
+     * </p><p>
+     * The sums are accumulated using the updating algorithm referenced in
+     * {@link #addData}.</p>
+     * <p>
+     * The return value is constrained to be non-negative - i.e., if due to
+     * rounding errors the computational formula returns a negative result,
+     * 0 is returned.</p>
+     * <p>
+     * <strong>Preconditions</strong>: <ul>
+     * <li>At least two observations (with at least two different x values)
+     * must have been added before invoking this method. If this method is
+     * invoked before a model can be estimated, <code>Double,NaN</code> is
+     * returned.
+     * </li></ul></p>
+     *
+     * @return sum of squared errors associated with the regression model
+     */
+Method code:
+336 |     public double getSumSquaredErrors() {
+337 |         return Math.max(0d, sumYY - sumXY * sumXY / sumXX);
+338 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.AbstractRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 54-67
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension  the number of rows in the new matrix
+     * @param columnDimension  the number of columns in the new matrix
+     * @throws IllegalArgumentException if row or column dimension is not positive
+     */
+Method code:
+54 |     protected AbstractRealMatrix(final int rowDimension, final int columnDimension)
+55 |         throws IllegalArgumentException {
+56 |         if (rowDimension <= 0 ) {
+57 |             throw MathRuntimeException.createIllegalArgumentException(
+58 |                     "invalid row dimension {0} (must be positive)",
+59 |                     rowDimension);
+60 |         }
+61 |         if (columnDimension <= 0) {
+62 |             throw MathRuntimeException.createIllegalArgumentException(
+63 |                     "invalid column dimension {0} (must be positive)",
+64 |                     columnDimension);
+65 |         }
+66 |         lu = null;
+67 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.setDistribution(TDistribution)
+Source: src/main/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 613-620
+Documentation:
+/**
+     * Modify the distribution used to compute inference statistics.
+     * @param value the new distribution
+     * @since 1.2
+     */
+Method code:
+613 |     public void setDistribution(TDistribution value) {
+614 |         distribution = value;
+615 | 
+616 |         // modify degrees of freedom
+617 |         if (n > 2) {
+618 |             distribution.setDegreesOfFreedom(n - 2);
+619 |         }
+620 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math.distribution.TDistributionImpl.setDegreesOfFreedom(double)
+Source: src/main/java/org/apache/commons/math/distribution/TDistributionImpl.java
+Original range: 79-82
+Documentation:
+/**
+     * Modify the degrees of freedom.
+     * @param degreesOfFreedom the new degrees of freedom.
+     * @deprecated as of 2.1 (class will become immutable in 3.0)
+     */
+Method code:
+79 |     @Deprecated
+80 |     public void setDegreesOfFreedom(double degreesOfFreedom) {
+81 |         setDegreesOfFreedomInternal(degreesOfFreedom);
+82 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.addData(double,double)
+Source: src/main/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 121-141
+Documentation:
+/**
+     * Adds the observation (x,y) to the regression data set.
+     * <p>
+     * Uses updating formulas for means and sums of squares defined in
+     * "Algorithms for Computing the Sample Variance: Analysis and
+     * Recommendations", Chan, T.F., Golub, G.H., and LeVeque, R.J.
+     * 1983, American Statistician, vol. 37, pp. 242-247, referenced in
+     * Weisberg, S. "Applied Linear Regression". 2nd Ed. 1985.</p>
+     *
+     *
+     * @param x independent variable value
+     * @param y dependent variable value
+     */
+Method code:
+121 |     public void addData(double x, double y) {
+122 |         if (n == 0) {
+123 |             xbar = x;
+124 |             ybar = y;
+125 |         } else {
+126 |             double dx = x - xbar;
+127 |             double dy = y - ybar;
+128 |             sumXX += dx * dx * (double) n / (n + 1d);
+129 |             sumYY += dy * dy * (double) n / (n + 1d);
+130 |             sumXY += dx * dy * (double) n / (n + 1d);
+131 |             xbar += dx / (n + 1.0);
+132 |             ybar += dy / (n + 1.0);
+133 |         }
+134 |         sumX += x;
+135 |         sumY += y;
+136 |         n++;
+137 | 
+138 |         if (n > 2) {
+139 |             distribution.setDegreesOfFreedom(n - 2);
+140 |         }
+141 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math.stat.correlation.PearsonsCorrelation.computeCorrelationMatrix(RealMatrix)
+Source: src/main/java/org/apache/commons/math/stat/correlation/PearsonsCorrelation.java
+Original range: 186-198
+Documentation:
+/**
+     * Computes the correlation matrix for the columns of the
+     * input matrix.
+     *
+     * @param matrix matrix with columns representing variables to correlate
+     * @return correlation matrix
+     */
+Method code:
+186 |     public RealMatrix computeCorrelationMatrix(RealMatrix matrix) {
+187 |         int nVars = matrix.getColumnDimension();
+188 |         RealMatrix outMatrix = new BlockRealMatrix(nVars, nVars);
+189 |         for (int i = 0; i < nVars; i++) {
+190 |             for (int j = 0; j < i; j++) {
+191 |               double corr = correlation(matrix.getColumn(i), matrix.getColumn(j));
+192 |               outMatrix.setEntry(i, j, corr);
+193 |               outMatrix.setEntry(j, i, corr);
+194 |             }
+195 |             outMatrix.setEntry(i, i, 1d);
+196 |         }
+197 |         return outMatrix;
+198 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.blockHeight(int)
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 1674-1676
+Documentation:
+/**
+     * Get the height of a block.
+     * @param blockRow row index (in block sense) of the block
+     * @return height (number of rows) of the block
+     */
+Method code:
+1674 |     private int blockHeight(final int blockRow) {
+1675 |         return (blockRow == blockRows - 1) ? rows - blockRow * BLOCK_SIZE : BLOCK_SIZE;
+1676 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math.linear.BlockRealMatrix.blockWidth(int)
+Source: src/main/java/org/apache/commons/math/linear/BlockRealMatrix.java
+Original range: 1683-1685
+Documentation:
+/**
+     * Get the width of a block.
+     * @param blockColumn column index (in block sense) of the block
+     * @return width (number of columns) of the block
+     */
+Method code:
+1683 |     private int blockWidth(final int blockColumn) {
+1684 |         return (blockColumn == blockColumns - 1) ? columns - blockColumn * BLOCK_SIZE : BLOCK_SIZE;
+1685 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.math.stat.regression.SimpleRegression.getTotalSumSquares()
+Source: src/main/java/org/apache/commons/math/stat/regression/SimpleRegression.java
+Original range: 350-355
+Documentation:
+/**
+     * Returns the sum of squared deviations of the y values about their mean.
+     * <p>
+     * This is defined as SSTO
+     * <a href="http://www.xycoon.com/SumOfSquares.htm">here</a>.</p>
+     * <p>
+     * If <code>n < 2</code>, this returns <code>Double.NaN</code>.</p>
+     *
+     * @return sum of squared deviations of y values
+     */
+Method code:
+350 |     public double getTotalSumSquares() {
+351 |         if (n < 2) {
+352 |             return Double.NaN;
+353 |         }
+354 |         return sumYY;
+355 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.math.stat.correlation.PearsonsCorrelation.PearsonsCorrelation(RealMatrix)
+Source: src/main/java/org/apache/commons/math/stat/correlation/PearsonsCorrelation.java
+Original range: 77-81
+Documentation:
+/**
+     * Create a PearsonsCorrelation from a RealMatrix whose columns
+     * represent variables to be correlated.
+     *
+     * @param matrix matrix with columns representing variables to correlate
+     */
+Method code:
+77 |     public PearsonsCorrelation(RealMatrix matrix) {
+78 |         checkSufficientData(matrix);
+79 |         nObs = matrix.getRowDimension();
+80 |         correlationMatrix = computeCorrelationMatrix(matrix);
+81 |     }
+
+===== M0044 =====
+Signature: org.apache.commons.math.special.Beta.logBeta(double,double,double,int)
+Source: src/main/java/org/apache/commons/math/special/Beta.java
+Original range: 187-200
+Documentation:
+/**
+     * Returns the natural logarithm of the beta function B(a, b).
+     *
+     * The implementation of this method is based on:
+     * <ul>
+     * <li><a href="http://mathworld.wolfram.com/BetaFunction.html">
+     * Beta Function</a>, equation (1).</li>
+     * </ul>
+     *
+     * @param a the a parameter.
+     * @param b the b parameter.
+     * @param epsilon When the absolute value of the nth item in the
+     *                series is less than epsilon the approximation ceases
+     *                to calculate further elements in the series.
+     * @param maxIterations Maximum number of "iterations" to complete.
+     * @return log(B(a, b))
+     */
+Method code:
+187 |     public static double logBeta(double a, double b, double epsilon,
+188 |         int maxIterations) {
+189 | 
+190 |         double ret;
+191 | 
+192 |         if (Double.isNaN(a) || Double.isNaN(b) || (a <= 0.0) || (b <= 0.0)) {
+193 |             ret = Double.NaN;
+194 |         } else {
+195 |             ret = Gamma.logGamma(a) + Gamma.logGamma(b) -
+196 |                 Gamma.logGamma(a + b);
+197 |         }
+198 | 
+199 |         return ret;
+200 |     }
+

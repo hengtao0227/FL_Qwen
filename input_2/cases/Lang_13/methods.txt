@@ -1,0 +1,180 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.SerializationException.SerializationException(String,Throwable)
+Source: src/main/java/org/apache/commons/lang3/SerializationException.java
+Original range: 74-76
+Documentation:
+/**
+     * <p>Constructs a new {@code SerializationException} with specified
+     * detail message and nested {@code Throwable}.</p>
+     *
+     * @param msg    The error message.
+     * @param cause  The {@code Exception} or {@code Error}
+     *  that caused this exception to be thrown.
+     */
+Method code:
+74 |     public SerializationException(String msg, Throwable cause) {
+75 |         super(msg, cause);
+76 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.SerializationUtils.ClassLoaderAwareObjectInputStream.ClassLoaderAwareObjectInputStream(InputStream,ClassLoader)
+Source: src/main/java/org/apache/commons/lang3/SerializationUtils.java
+Original range: 248-252
+Documentation:
+/**
+         * Constructor.
+         * @param in The <code>InputStream</code>.
+         * @param classLoader classloader to use
+         * @throws IOException if an I/O error occurs while reading stream header.
+         * @see java.io.ObjectInputStream
+         */
+Method code:
+248 |         public ClassLoaderAwareObjectInputStream(InputStream in, ClassLoader classLoader) throws IOException {
+249 |             super(in);
+250 |             this.classLoader = classLoader;
+251 | 
+252 |         }
+
+===== M0003 =====
+Signature: org.apache.commons.lang3.SerializationUtils.ClassLoaderAwareObjectInputStream.resolveClass(ObjectStreamClass)
+Source: src/main/java/org/apache/commons/lang3/SerializationUtils.java
+Original range: 262-270
+Documentation:
+/**
+         * Overriden version that uses the parametrized <code>ClassLoader</code> or the <code>ClassLoader</code>
+         * of the current <code>Thread</code> to resolve the class.
+         * @param desc An instance of class <code>ObjectStreamClass</code>.
+         * @return A <code>Class</code> object corresponding to <code>desc</code>.
+         * @throws IOException Any of the usual Input/Output exceptions.
+         * @throws ClassNotFoundException If class of a serialized object cannot be found.
+         */
+Method code:
+262 |         @Override
+263 |         protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
+264 |             String name = desc.getName();
+265 |             try {
+266 |                 return Class.forName(name, false, classLoader);
+267 |             } catch (ClassNotFoundException ex) {
+268 |                     return Class.forName(name, false, Thread.currentThread().getContextClassLoader());
+269 |             }
+270 |         }
+
+===== M0004 =====
+Signature: org.apache.commons.lang3.SerializationUtils.serialize(Serializable)
+Source: src/main/java/org/apache/commons/lang3/SerializationUtils.java
+Original range: 161-165
+Documentation:
+/**
+     * <p>Serializes an {@code Object} to a byte array for
+     * storage/serialization.</p>
+     *
+     * @param obj  the object to serialize to bytes
+     * @return a byte[] with the converted Serializable
+     * @throws SerializationException (runtime) if the serialization fails
+     */
+Method code:
+161 |     public static byte[] serialize(Serializable obj) {
+162 |         ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+163 |         serialize(obj, baos);
+164 |         return baos.toByteArray();
+165 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang3.SerializationUtils.serialize(Serializable,OutputStream)
+Source: src/main/java/org/apache/commons/lang3/SerializationUtils.java
+Original range: 130-151
+Documentation:
+/**
+     * <p>Serializes an {@code Object} to the specified stream.</p>
+     *
+     * <p>The stream will be closed once the object is written.
+     * This avoids the need for a finally clause, and maybe also exception
+     * handling, in the application code.</p>
+     *
+     * <p>The stream passed in is not buffered internally within this method.
+     * This is the responsibility of your application if desired.</p>
+     *
+     * @param obj  the object to serialize to bytes, may be null
+     * @param outputStream  the stream to write to, must not be null
+     * @throws IllegalArgumentException if {@code outputStream} is {@code null}
+     * @throws SerializationException (runtime) if the serialization fails
+     */
+Method code:
+130 |     public static void serialize(Serializable obj, OutputStream outputStream) {
+131 |         if (outputStream == null) {
+132 |             throw new IllegalArgumentException("The OutputStream must not be null");
+133 |         }
+134 |         ObjectOutputStream out = null;
+135 |         try {
+136 |             // stream closed in the finally
+137 |             out = new ObjectOutputStream(outputStream);
+138 |             out.writeObject(obj);
+139 | 
+140 |         } catch (IOException ex) {
+141 |             throw new SerializationException(ex);
+142 |         } finally {
+143 |             try {
+144 |                 if (out != null) {
+145 |                     out.close();
+146 |                 }
+147 |             } catch (IOException ex) { // NOPMD
+148 |                 // ignore close exception
+149 |             }
+150 |         }
+151 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.lang3.SerializationUtils.clone(T)
+Source: src/main/java/org/apache/commons/lang3/SerializationUtils.java
+Original range: 78-111
+Documentation:
+/**
+     * <p>Deep clone an {@code Object} using serialization.</p>
+     *
+     * <p>This is many times slower than writing clone methods by hand
+     * on all objects in your object graph. However, for complex object
+     * graphs, or for those that don't support deep cloning this can
+     * be a simple alternative implementation. Of course all the objects
+     * must be {@code Serializable}.</p>
+     *
+     * @param <T> the type of the object involved
+     * @param object  the {@code Serializable} object to clone
+     * @return the cloned object
+     * @throws SerializationException (runtime) if the serialization fails
+     */
+Method code:
+78 |     public static <T extends Serializable> T clone(T object) {
+79 |         if (object == null) {
+80 |             return null;
+81 |         }
+82 |         byte[] objectData = serialize(object);
+83 |         ByteArrayInputStream bais = new ByteArrayInputStream(objectData);
+84 | 
+85 |         ClassLoaderAwareObjectInputStream in = null;
+86 |         try {
+87 |             // stream closed in the finally
+88 |             in = new ClassLoaderAwareObjectInputStream(bais, object.getClass().getClassLoader());
+89 |             /*
+90 |              * when we serialize and deserialize an object,
+91 |              * it is reasonable to assume the deserialized object
+92 |              * is of the same type as the original serialized object
+93 |              */
+94 |             @SuppressWarnings("unchecked") // see above
+95 |             T readObject = (T) in.readObject();
+96 |             return readObject;
+97 | 
+98 |         } catch (ClassNotFoundException ex) {
+99 |             throw new SerializationException("ClassNotFoundException while reading cloned object data", ex);
+100 |         } catch (IOException ex) {
+101 |             throw new SerializationException("IOException while reading cloned object data", ex);
+102 |         } finally {
+103 |             try {
+104 |                 if (in != null) {
+105 |                     in.close();
+106 |                 }
+107 |             } catch (IOException ex) {
+108 |                 throw new SerializationException("IOException on closing cloned object data InputStream.", ex);
+109 |             }
+110 |         }
+111 |     }
+

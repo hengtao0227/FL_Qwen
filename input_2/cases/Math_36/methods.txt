@@ -1,0 +1,168 @@
+===== M0001 =====
+Signature: org.apache.commons.math.exception.util.LocalizedFormats.LocalizedFormats(String)
+Source: src/main/java/org/apache/commons/math/exception/util/LocalizedFormats.java
+Original range: 370-372
+Documentation:
+/** Simple constructor.
+     * @param sourceFormat source English format to use when no
+     * localized version is available
+     */
+Method code:
+370 |     private LocalizedFormats(final String sourceFormat) {
+371 |         this.sourceFormat = sourceFormat;
+372 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.fraction.BigFraction.BigFraction(BigInteger,BigInteger)
+Source: src/main/java/org/apache/commons/math/fraction/BigFraction.java
+Original range: 119-148
+Documentation:
+/**
+     * Create a {@link BigFraction} given the numerator and denominator as
+     * {@code BigInteger}. The {@link BigFraction} is reduced to lowest terms.
+     *
+     * @param num the numerator, must not be {@code null}.
+     * @param den the denominator, must not be {@code null}.
+     * @throws ZeroException if the denominator is zero.
+     * @throws NullArgumentException if either of the arguments is null
+     */
+Method code:
+119 |     public BigFraction(BigInteger num, BigInteger den) {
+120 |         MathUtils.checkNotNull(num, LocalizedFormats.NUMERATOR);
+121 |         MathUtils.checkNotNull(den, LocalizedFormats.DENOMINATOR);
+122 |         if (BigInteger.ZERO.equals(den)) {
+123 |             throw new ZeroException(LocalizedFormats.ZERO_DENOMINATOR);
+124 |         }
+125 |         if (BigInteger.ZERO.equals(num)) {
+126 |             numerator   = BigInteger.ZERO;
+127 |             denominator = BigInteger.ONE;
+128 |         } else {
+129 | 
+130 |             // reduce numerator and denominator by greatest common denominator
+131 |             final BigInteger gcd = num.gcd(den);
+132 |             if (BigInteger.ONE.compareTo(gcd) < 0) {
+133 |                 num = num.divide(gcd);
+134 |                 den = den.divide(gcd);
+135 |             }
+136 | 
+137 |             // move sign to numerator
+138 |             if (BigInteger.ZERO.compareTo(den) > 0) {
+139 |                 num = num.negate();
+140 |                 den = den.negate();
+141 |             }
+142 | 
+143 |             // store the values in the final fields
+144 |             numerator   = num;
+145 |             denominator = den;
+146 | 
+147 |         }
+148 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.fraction.BigFraction.doubleValue()
+Source: src/main/java/org/apache/commons/math/fraction/BigFraction.java
+Original range: 683-689
+Documentation:
+/**
+     * <p>
+     * Gets the fraction as a <tt>double</tt>. This calculates the fraction as
+     * the numerator divided by denominator.
+     * </p>
+     *
+     * @return the fraction as a <tt>double</tt>
+     * @see java.lang.Number#doubleValue()
+     */
+Method code:
+683 |     @Override
+684 |     public double doubleValue() {
+685 |         double result = numerator.doubleValue() / denominator.doubleValue();
+686 |             // Numerator and/or denominator must be out of range:
+687 |             // Calculate how far to shift them to put them in range.
+688 |         return result;
+689 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.fraction.BigFraction.BigFraction(int,int)
+Source: src/main/java/org/apache/commons/math/fraction/BigFraction.java
+Original range: 380-382
+Documentation:
+/**
+     * <p>
+     * Create a {@link BigFraction} given the numerator and denominator as simple
+     * <tt>int</tt>. The {@link BigFraction} is reduced to lowest terms.
+     * </p>
+     *
+     * @param num
+     *            the numerator.
+     * @param den
+     *            the denominator.
+     */
+Method code:
+380 |     public BigFraction(final int num, final int den) {
+381 |         this(BigInteger.valueOf(num), BigInteger.valueOf(den));
+382 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.fraction.BigFraction.BigFraction(int)
+Source: src/main/java/org/apache/commons/math/fraction/BigFraction.java
+Original range: 365-367
+Documentation:
+/**
+     * <p>
+     * Create a {@link BigFraction} equivalent to the passed <tt>int</tt>, ie
+     * "num / 1".
+     * </p>
+     *
+     * @param num
+     *            the numerator.
+     */
+Method code:
+365 |     public BigFraction(final int num) {
+366 |         this(BigInteger.valueOf(num), BigInteger.ONE);
+367 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.fraction.BigFraction.floatValue()
+Source: src/main/java/org/apache/commons/math/fraction/BigFraction.java
+Original range: 730-736
+Documentation:
+/**
+     * <p>
+     * Gets the fraction as a <tt>float</tt>. This calculates the fraction as
+     * the numerator divided by denominator.
+     * </p>
+     *
+     * @return the fraction as a <tt>float</tt>.
+     * @see java.lang.Number#floatValue()
+     */
+Method code:
+730 |     @Override
+731 |     public float floatValue() {
+732 |         float result = numerator.floatValue() / denominator.floatValue();
+733 |             // Numerator and/or denominator must be out of range:
+734 |             // Calculate how far to shift them to put them in range.
+735 |         return result;
+736 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.util.MathUtils.checkNotNull(Object,Localizable,Object...)
+Source: src/main/java/org/apache/commons/math/util/MathUtils.java
+Original range: 241-247
+Documentation:
+/**
+     * Checks that an object is not null.
+     *
+     * @param o Object to be checked.
+     * @param pattern Message pattern.
+     * @param args Arguments to replace the placeholders in {@code pattern}.
+     * @throws NullArgumentException if {@code o} is {@code null}.
+     */
+Method code:
+241 |     public static void checkNotNull(Object o,
+242 |                                     Localizable pattern,
+243 |                                     Object ... args) {
+244 |         if (o == null) {
+245 |             throw new NullArgumentException(pattern, args);
+246 |         }
+247 |     }
+

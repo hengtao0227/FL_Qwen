@@ -1,0 +1,181 @@
+===== M0001 =====
+Signature: org.apache.commons.math.geometry.Vector3D.getY()
+Source: src/main/java/org/apache/commons/math/geometry/Vector3D.java
+Original range: 188-190
+Documentation:
+/** Get the ordinate of the vector.
+   * @return ordinate of the vector
+   * @see #Vector3D(double, double, double)
+   */
+Method code:
+188 |   public double getY() {
+189 |     return y;
+190 |   }
+
+===== M0002 =====
+Signature: org.apache.commons.math.geometry.Vector3DFormat.getInstance()
+Source: src/main/java/org/apache/commons/math/geometry/Vector3DFormat.java
+Original range: 158-160
+Documentation:
+/**
+     * Returns the default 3D vector format for the current locale.
+     * @return the default 3D vector format.
+     */
+Method code:
+158 |     public static Vector3DFormat getInstance() {
+159 |         return getInstance(Locale.getDefault());
+160 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.geometry.Vector3DFormat.getInstance(Locale)
+Source: src/main/java/org/apache/commons/math/geometry/Vector3DFormat.java
+Original range: 167-169
+Documentation:
+/**
+     * Returns the default 3D vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the 3D vector format specific to the given locale.
+     */
+Method code:
+167 |     public static Vector3DFormat getInstance(final Locale locale) {
+168 |         return new Vector3DFormat(CompositeFormat.getDefaultNumberFormat(locale));
+169 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.util.CompositeFormat.getDefaultNumberFormat(Locale)
+Source: src/main/java/org/apache/commons/math/util/CompositeFormat.java
+Original range: 55-59
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance(java.util.Locale)} with the only
+     * customizing that the maximum number of fraction digits is set to 2.
+     * @param locale the specific locale used by the format.
+     * @return the default number format specific to the given locale.
+     */
+Method code:
+55 |     public static NumberFormat getDefaultNumberFormat(final Locale locale) {
+56 |         final NumberFormat nf = NumberFormat.getInstance(locale);
+57 |         nf.setMaximumFractionDigits(2);
+58 |         return nf;
+59 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.geometry.Vector3D.Vector3D(double,double,double)
+Source: src/main/java/org/apache/commons/math/geometry/Vector3D.java
+Original range: 93-97
+Documentation:
+/** Simple constructor.
+   * Build a vector from its coordinates
+   * @param x abscissa
+   * @param y ordinate
+   * @param z height
+   * @see #getX()
+   * @see #getY()
+   * @see #getZ()
+   */
+Method code:
+93 |   public Vector3D(double x, double y, double z) {
+94 |     this.x = x;
+95 |     this.y = y;
+96 |     this.z = z;
+97 |   }
+
+===== M0006 =====
+Signature: org.apache.commons.math.geometry.Vector3DFormat.Vector3DFormat(String,String,String,NumberFormat)
+Source: src/main/java/org/apache/commons/math/geometry/Vector3DFormat.java
+Original range: 102-111
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix, separator and format
+     * for components.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param separator separator to use instead of the default "; "
+     * @param format the custom format for components.
+     */
+Method code:
+102 |     public Vector3DFormat(final String prefix, final String suffix,
+103 |                           final String separator, final NumberFormat format) {
+104 |         this.prefix      = prefix;
+105 |         this.suffix      = suffix;
+106 |         this.separator   = separator;
+107 |         trimmedPrefix    = prefix.trim();
+108 |         trimmedSuffix    = suffix.trim();
+109 |         trimmedSeparator = separator.trim();
+110 |         this.format      = format;
+111 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.geometry.Vector3D.getX()
+Source: src/main/java/org/apache/commons/math/geometry/Vector3D.java
+Original range: 180-182
+Documentation:
+/** Get the abscissa of the vector.
+   * @return abscissa of the vector
+   * @see #Vector3D(double, double, double)
+   */
+Method code:
+180 |   public double getX() {
+181 |     return x;
+182 |   }
+
+===== M0008 =====
+Signature: org.apache.commons.math.geometry.Vector3D.crossProduct(Vector3D,Vector3D)
+Source: src/main/java/org/apache/commons/math/geometry/Vector3D.java
+Original range: 457-475
+Documentation:
+/** Compute the cross-product of two vectors.
+   * @param v1 first vector
+   * @param v2 second vector
+   * @return the cross product v1 ^ v2 as a new Vector
+   */
+Method code:
+457 |   public static Vector3D crossProduct(final Vector3D v1, final Vector3D v2) {
+458 | 
+459 | 
+460 |       // rescale both vectors without losing precision,
+461 |       // to ensure their norm are the same order of magnitude
+462 | 
+463 |       // we reduce cancellation errors by preconditioning,
+464 |       // we replace v1 by v3 = v1 - rho v2 with rho chosen in order to compute
+465 |       // v3 without loss of precision. See Kahan lecture
+466 |       // "Computing Cross-Products and Rotations in 2- and 3-Dimensional Euclidean Spaces"
+467 |       // available at http://www.cs.berkeley.edu/~wkahan/MathH110/Cross.pdf
+468 | 
+469 |       // compute rho as an 8 bits approximation of v1.v2 / v2.v2
+470 | 
+471 | 
+472 |       // compute cross product from v3 and v2 instead of v1 and v2
+473 |       return new Vector3D(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
+474 | 
+475 |   }
+
+===== M0009 =====
+Signature: org.apache.commons.math.geometry.Vector3D.getZ()
+Source: src/main/java/org/apache/commons/math/geometry/Vector3D.java
+Original range: 196-198
+Documentation:
+/** Get the height of the vector.
+   * @return height of the vector
+   * @see #Vector3D(double, double, double)
+   */
+Method code:
+196 |   public double getZ() {
+197 |     return z;
+198 |   }
+
+===== M0010 =====
+Signature: org.apache.commons.math.geometry.Vector3DFormat.Vector3DFormat(NumberFormat)
+Source: src/main/java/org/apache/commons/math/geometry/Vector3DFormat.java
+Original range: 79-81
+Documentation:
+/**
+     * Create an instance with a custom number format for components.
+     * @param format the custom format for components.
+     */
+Method code:
+79 |     public Vector3DFormat(final NumberFormat format) {
+80 |         this(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_SEPARATOR, format);
+81 |     }
+

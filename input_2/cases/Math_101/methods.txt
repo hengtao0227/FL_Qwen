@@ -1,0 +1,377 @@
+===== M0001 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.ComplexFormat(NumberFormat)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 66-68
+Documentation:
+/**
+     * Create an instance with a custom number format for both real and
+     * imaginary parts.
+     * @param format the custom format for both real and imaginary parts.
+     */
+Method code:
+66 |     public ComplexFormat(NumberFormat format) {
+67 |         this(DEFAULT_IMAGINARY_CHARACTER, format);
+68 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.parse(String,ParsePosition)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 320-389
+Documentation:
+/**
+     * Parses a string to produce a {@link Complex} object.
+     *
+     * @param source the string to parse
+     * @param pos input/ouput parsing parameter.
+     * @return the parsed {@link Complex} object.
+     */
+Method code:
+320 |     public Complex parse(String source, ParsePosition pos) {
+321 |         int initialIndex = pos.getIndex();
+322 | 
+323 |         // parse whitespace
+324 |         parseAndIgnoreWhitespace(source, pos);
+325 | 
+326 |         // parse real
+327 |         Number re = parseNumber(source, getRealFormat(), pos);
+328 |         if (re == null) {
+329 |             // invalid real number
+330 |             // set index back to initial, error index should already be set
+331 |             // character examined.
+332 |             pos.setIndex(initialIndex);
+333 |             return null;
+334 |         }
+335 | 
+336 |         // parse sign
+337 |         int startIndex = pos.getIndex();
+338 |         char c = parseNextCharacter(source, pos);
+339 |         int sign = 0;
+340 |         switch (c) {
+341 |         case 0 :
+342 |             // no sign
+343 |             // return real only complex number
+344 |             return new Complex(re.doubleValue(), 0.0);
+345 |         case '-' :
+346 |             sign = -1;
+347 |             break;
+348 |         case '+' :
+349 |             sign = 1;
+350 |             break;
+351 |         default :
+352 |             // invalid sign
+353 |             // set index back to initial, error index should be the last
+354 |             // character examined.
+355 |             pos.setIndex(initialIndex);
+356 |             pos.setErrorIndex(startIndex);
+357 |             return null;
+358 |         }
+359 | 
+360 |         // parse whitespace
+361 |         parseAndIgnoreWhitespace(source, pos);
+362 | 
+363 |         // parse imaginary
+364 |         Number im = parseNumber(source, getRealFormat(), pos);
+365 |         if (im == null) {
+366 |             // invalid imaginary number
+367 |             // set index back to initial, error index should already be set
+368 |             // character examined.
+369 |             pos.setIndex(initialIndex);
+370 |             return null;
+371 |         }
+372 | 
+373 |         // parse imaginary character
+374 |         int n = getImaginaryCharacter().length();
+375 |         startIndex = pos.getIndex();
+376 |         int endIndex = startIndex + n;
+377 |         if (
+378 |             source.substring(startIndex, endIndex).compareTo(
+379 |             getImaginaryCharacter()) != 0) {
+380 |             // set index back to initial, error index should be the start index
+381 |             // character examined.
+382 |             pos.setIndex(initialIndex);
+383 |             pos.setErrorIndex(startIndex);
+384 |             return null;
+385 |         }
+386 |         pos.setIndex(endIndex);
+387 | 
+388 |         return new Complex(re.doubleValue(), im.doubleValue() * sign);
+389 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.setRealFormat(NumberFormat)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 535-541
+Documentation:
+/**
+     * Modify the realFormat.
+     * @param realFormat The new realFormat value.
+     * @throws IllegalArgumentException if <code>realFormat</code> is
+     *         <code>null</code>.
+     */
+Method code:
+535 |     public void setRealFormat(NumberFormat realFormat) {
+536 |         if (realFormat == null) {
+537 |             throw new IllegalArgumentException(
+538 |                 "realFormat can not be null.");
+539 |         }
+540 |         this.realFormat = realFormat;
+541 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.parseNextCharacter(String,ParsePosition)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 410-428
+Documentation:
+/**
+     * Parses <code>source</code> until a non-whitespace character is found.
+     *
+     * @param source the string to parse
+     * @param pos input/ouput parsing parameter.
+     * @return the first non-whitespace character.
+     */
+Method code:
+410 |     private char parseNextCharacter(String source, ParsePosition pos) {
+411 |          int index = pos.getIndex();
+412 |          int n = source.length();
+413 |          char ret = 0;
+414 | 
+415 |          if (index < n) {
+416 |              char c;
+417 |              do {
+418 |                  c = source.charAt(index++);
+419 |              } while (Character.isWhitespace(c) && index < n);
+420 |              pos.setIndex(index);
+421 |          
+422 |              if (index < n) {
+423 |                  ret = c;
+424 |              }
+425 |          }
+426 |          
+427 |          return ret;
+428 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.setImaginaryCharacter(String)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 507-513
+Documentation:
+/**
+     * Modify the imaginaryCharacter.
+     * @param imaginaryCharacter The new imaginaryCharacter value.
+     * @throws IllegalArgumentException if <code>imaginaryCharacter</code> is
+     *         <code>null</code> or an empty string.
+     */
+Method code:
+507 |     public void setImaginaryCharacter(String imaginaryCharacter) {
+508 |         if (imaginaryCharacter == null || imaginaryCharacter.length() == 0) {
+509 |             throw new IllegalArgumentException(
+510 |                 "imaginaryCharacter must be a non-empty string.");
+511 |         }
+512 |         this.imaginaryCharacter = imaginaryCharacter;
+513 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.parseNumber(String,NumberFormat,ParsePosition)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 470-488
+Documentation:
+/**
+     * Parses <code>source</code> for a number.  This method can parse normal,
+     * numeric values as well as special values.  These special values include
+     * Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY.
+     *
+     * @param source the string to parse
+     * @param format the number format used to parse normal, numeric values.
+     * @param pos input/ouput parsing parameter.
+     * @return the parsed number.
+     */
+Method code:
+470 |     private Number parseNumber(String source, NumberFormat format, ParsePosition pos) {
+471 |         int startIndex = pos.getIndex();
+472 |         Number number = format.parse(source, pos);
+473 |         int endIndex = pos.getIndex();
+474 |         
+475 |         // check for error parsing number
+476 |         if (startIndex == endIndex) {
+477 |             // try parsing special numbers
+478 |             double[] special = {Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
+479 |             for (int i = 0; i < special.length; ++i) {
+480 |                 number = parseNumber(source, special[i], pos);
+481 |                 if (number != null) {
+482 |                     break;
+483 |                 }
+484 |             }
+485 |         }
+486 |         
+487 |         return number;
+488 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.getInstance(Locale)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 282-285
+Documentation:
+/**
+     * Returns the default complex format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the complex format specific to the given locale.
+     */
+Method code:
+282 |     public static ComplexFormat getInstance(Locale locale) {
+283 |         NumberFormat f = getDefaultNumberFormat(locale);
+284 |         return new ComplexFormat(f);
+285 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.ComplexFormat(String,NumberFormat,NumberFormat)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 108-114
+Documentation:
+/**
+     * Create an instance with a custom imaginary character, a custom number
+     * format for the real part, and a custom number format for the imaginary
+     * part.
+     * @param imaginaryCharacter The custom imaginary character.
+     * @param realFormat the custom format for the real part.
+     * @param imaginaryFormat the custom format for the imaginary part.
+     */
+Method code:
+108 |     public ComplexFormat(String imaginaryCharacter, NumberFormat realFormat,
+109 |             NumberFormat imaginaryFormat) {
+110 |         super();
+111 |         setImaginaryCharacter(imaginaryCharacter);
+112 |         setImaginaryFormat(imaginaryFormat);
+113 |         setRealFormat(realFormat);
+114 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.getImaginaryCharacter()
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 257-259
+Documentation:
+/**
+     * Access the imaginaryCharacter.
+     * @return the imaginaryCharacter.
+     */
+Method code:
+257 |     public String getImaginaryCharacter() {
+258 |         return imaginaryCharacter;
+259 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.ComplexFormat()
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 57-59
+Documentation:
+/**
+     * Create an instance with the default imaginary character, 'i', and the
+     * default number format for both real and imaginary parts.
+     */
+Method code:
+57 |     public ComplexFormat() {
+58 |         this(DEFAULT_IMAGINARY_CHARACTER, getDefaultNumberFormat());
+59 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.parseAndIgnoreWhitespace(String,ParsePosition)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 398-401
+Documentation:
+/**
+     * Parses <code>source</code> until a non-whitespace character is found.
+     *
+     * @param source the string to parse
+     * @param pos input/ouput parsing parameter.  On output, <code>pos</code>
+     *        holds the index of the next non-whitespace character.
+     */
+Method code:
+398 |     private void parseAndIgnoreWhitespace(String source, ParsePosition pos) {
+399 |         parseNextCharacter(source, pos);
+400 |         pos.setIndex(pos.getIndex() - 1);
+401 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.setImaginaryFormat(NumberFormat)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 521-527
+Documentation:
+/**
+     * Modify the imaginaryFormat.
+     * @param imaginaryFormat The new imaginaryFormat value.
+     * @throws IllegalArgumentException if <code>imaginaryFormat</code> is
+     *         <code>null</code>.
+     */
+Method code:
+521 |     public void setImaginaryFormat(NumberFormat imaginaryFormat) {
+522 |         if (imaginaryFormat == null) {
+523 |             throw new IllegalArgumentException(
+524 |                 "imaginaryFormat can not be null.");
+525 |         }
+526 |         this.imaginaryFormat = imaginaryFormat;
+527 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.getDefaultNumberFormat(Locale)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 247-251
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance(java.util.Locale)} with the only
+     * customizing is the maximum number of fraction digits, which is set to 2.  
+     * @param locale the specific locale used by the format.
+     * @return the default number format specific to the given locale.
+     */
+Method code:
+247 |     private static NumberFormat getDefaultNumberFormat(Locale locale) {
+248 |         NumberFormat nf = NumberFormat.getInstance(locale);
+249 |         nf.setMaximumFractionDigits(2);
+250 |         return nf;
+251 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.getRealFormat()
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 291-293
+Documentation:
+/**
+     * Access the realFormat.
+     * @return the realFormat.
+     */
+Method code:
+291 |     public NumberFormat getRealFormat() {
+292 |         return realFormat;
+293 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.getDefaultNumberFormat()
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 236-238
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance()} with the only customizing is the
+     * maximum number of fraction digits, which is set to 2.  
+     * @return the default number format.
+     */
+Method code:
+236 |     private static NumberFormat getDefaultNumberFormat() {
+237 |         return getDefaultNumberFormat(Locale.getDefault());
+238 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math.complex.ComplexFormat.ComplexFormat(String,NumberFormat)
+Source: src/java/org/apache/commons/math/complex/ComplexFormat.java
+Original range: 96-98
+Documentation:
+/**
+     * Create an instance with a custom imaginary character, and a custom number
+     * format for both real and imaginary parts.
+     * @param imaginaryCharacter The custom imaginary character.
+     * @param format the custom format for both real and imaginary parts.
+     */
+Method code:
+96 |     public ComplexFormat(String imaginaryCharacter, NumberFormat format) {
+97 |         this(imaginaryCharacter, format, (NumberFormat)format.clone());
+98 |     }
+

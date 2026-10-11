@@ -1,0 +1,101 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.complex.Complex.Complex(double,double)
+Source: src/main/java/org/apache/commons/math3/complex/Complex.java
+Original range: 98-105
+Documentation:
+/**
+     * Create a complex number given the real and imaginary parts.
+     *
+     * @param real Real part.
+     * @param imaginary Imaginary part.
+     */
+Method code:
+98 |     public Complex(double real, double imaginary) {
+99 |         this.real = real;
+100 |         this.imaginary = imaginary;
+101 | 
+102 |         isNaN = Double.isNaN(real) || Double.isNaN(imaginary);
+103 |         isInfinite = !isNaN &&
+104 |             (Double.isInfinite(real) || Double.isInfinite(imaginary));
+105 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.complex.Complex.equals(Object)
+Source: src/main/java/org/apache/commons/math3/complex/Complex.java
+Original range: 338-352
+Documentation:
+/**
+     * Test for the equality of two Complex objects.
+     * If both the real and imaginary parts of two complex numbers
+     * are exactly the same, and neither is {@code Double.NaN}, the two
+     * Complex objects are considered to be equal.
+     * All {@code NaN} values are considered to be equal - i.e, if either
+     * (or both) real and imaginary parts of the complex number are equal
+     * to {@code Double.NaN}, the complex number is equal to
+     * {@code NaN}.
+     *
+     * @param other Object to test for equality to this
+     * @return true if two Complex objects are equal, false if object is
+     * {@code null}, not an instance of Complex, or not equal to this Complex
+     * instance.
+     */
+Method code:
+338 |     @Override
+339 |     public boolean equals(Object other) {
+340 |         if (this == other) {
+341 |             return true;
+342 |         }
+343 |         if (other instanceof Complex){
+344 |             Complex c = (Complex)other;
+345 |             if (c.isNaN) {
+346 |                 return isNaN;
+347 |             } else {
+348 |                 return (real == c.real) && (imaginary == c.imaginary);
+349 |             }
+350 |         }
+351 |         return false;
+352 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.complex.Complex.toString()
+Source: src/main/java/org/apache/commons/math3/complex/Complex.java
+Original range: 1226-1229
+Documentation:
+/** {@inheritDoc} */
+Method code:
+1226 |     @Override
+1227 |     public String toString() {
+1228 |         return "(" + real + ", " + imaginary + ")";
+1229 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.complex.Complex.reciprocal()
+Source: src/main/java/org/apache/commons/math3/complex/Complex.java
+Original range: 299-321
+Documentation:
+/** {@inheritDoc} */
+Method code:
+299 |     public Complex reciprocal() {
+300 |         if (isNaN) {
+301 |             return NaN;
+302 |         }
+303 | 
+304 |         if (real == 0.0 && imaginary == 0.0) {
+305 |             return NaN;
+306 |         }
+307 | 
+308 |         if (isInfinite) {
+309 |             return ZERO;
+310 |         }
+311 | 
+312 |         if (FastMath.abs(real) < FastMath.abs(imaginary)) {
+313 |             double q = real / imaginary;
+314 |             double scale = 1. / (real * q + imaginary);
+315 |             return createComplex(scale * q, -scale);
+316 |         } else {
+317 |             double q = imaginary / real;
+318 |             double scale = 1. / (imaginary * q + real);
+319 |             return createComplex(scale, -scale * q);
+320 |         }
+321 |     }
+

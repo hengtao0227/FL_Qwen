@@ -1,0 +1,272 @@
+[
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testObjectCycle()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testObjectCycle()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 827,
+    "end_line": 836,
+    "comment": "",
+    "snippet": "    public void testObjectCycle() {\n        ObjectCycle a = new ObjectCycle();\n        ObjectCycle b = new ObjectCycle();\n        a.obj = b;\n        b.obj = a;\n\n        String expected = toBaseString(a) + \"[\" + toBaseString(b) + \"[\" + toBaseString(a) + \"]]\";\n        assertEquals(expected, a.toString());\n        validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionHierarchy()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionHierarchy()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 311,
+    "end_line": 334,
+    "comment": "",
+    "snippet": "    public void testReflectionHierarchy() {\n        ReflectionTestFixtureA baseA = new ReflectionTestFixtureA();\n        String baseStr = this.toBaseString(baseA);\n        assertEquals(baseStr + \"[a=a]\", ToStringBuilder.reflectionToString(baseA));\n        assertEquals(baseStr + \"[a=a]\", ToStringBuilder.reflectionToString(baseA, null));\n        assertEquals(baseStr + \"[a=a]\", ToStringBuilder.reflectionToString(baseA, null, false));\n        assertEquals(baseStr + \"[a=a,transientA=t]\", ToStringBuilder.reflectionToString(baseA, null, true));\n        assertEquals(baseStr + \"[a=a]\", ToStringBuilder.reflectionToString(baseA, null, false, null));\n        assertEquals(baseStr + \"[a=a]\", ToStringBuilder.reflectionToString(baseA, null, false, Object.class));\n        assertEquals(baseStr + \"[a=a]\", ToStringBuilder.reflectionToString(baseA, null, false, ReflectionTestFixtureA.class));\n\n        ReflectionTestFixtureB baseB = new ReflectionTestFixtureB();\n        baseStr = this.toBaseString(baseB);\n        assertEquals(baseStr + \"[b=b,a=a]\", ToStringBuilder.reflectionToString(baseB));\n        assertEquals(baseStr + \"[b=b,a=a]\", ToStringBuilder.reflectionToString(baseB));\n        assertEquals(baseStr + \"[b=b,a=a]\", ToStringBuilder.reflectionToString(baseB, null));\n        assertEquals(baseStr + \"[b=b,a=a]\", ToStringBuilder.reflectionToString(baseB, null, false));\n        assertEquals(baseStr + \"[b=b,transientB=t,a=a,transientA=t]\", ToStringBuilder.reflectionToString(baseB, null, true));\n        assertEquals(baseStr + \"[b=b,a=a]\", ToStringBuilder.reflectionToString(baseB, null, false, null));\n        assertEquals(baseStr + \"[b=b,a=a]\", ToStringBuilder.reflectionToString(baseB, null, false, Object.class));\n        assertEquals(baseStr + \"[b=b,a=a]\", ToStringBuilder.reflectionToString(baseB, null, false, ReflectionTestFixtureA.class));\n        assertEquals(baseStr + \"[b=b]\", ToStringBuilder.reflectionToString(baseB, null, false, ReflectionTestFixtureB.class));\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testSelfInstanceTwoVarsReflectionObjectCycle()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testSelfInstanceTwoVarsReflectionObjectCycle()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 528,
+    "end_line": 532,
+    "comment": "/**\r\n     * Test a class that defines an ivar pointing to itself.  This test was\r\n     * created to show that handling cyclical object resulted in a missing endFieldSeparator call.\r\n     *\r\n     * @throws Exception\r\n     */",
+    "snippet": "    public void testSelfInstanceTwoVarsReflectionObjectCycle() throws Exception {\n        SelfInstanceTwoVarsReflectionTestFixture test = new SelfInstanceTwoVarsReflectionTestFixture();\n        assertEquals(this.toBaseString(test) + \"[typeIsSelf=\" + this.toBaseString(test) + \",otherType=\" + test.getOtherType().toString() + \"]\", test.toString());\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionArrayCycle()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionArrayCycle()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 374,
+    "end_line": 381,
+    "comment": "/**\r\n     * Test an array element pointing to its container.\r\n     */",
+    "snippet": "    public void testReflectionArrayCycle() throws Exception {\n        Object[] objects = new Object[1];\n        objects[0] = objects;\n        assertEquals(\n            this.toBaseString(objects) + \"[{\" + this.toBaseString(objects) + \"}]\",\n            ToStringBuilder.reflectionToString(objects));\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionLongArrayArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionLongArrayArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 237,
+    "end_line": 244,
+    "comment": "",
+    "snippet": "    public void testReflectionLongArrayArray() {\n        long[][] array = new long[][] { { 1, 2 }, null, { 5 } };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{{1,2},<null>,{5}}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionArrayArrayCycle()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionArrayArrayCycle()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 400,
+    "end_line": 420,
+    "comment": "",
+    "snippet": "    public void testReflectionArrayArrayCycle() throws Exception {\n        Object[][] objects = new Object[2][2];\n        objects[0][0] = objects;\n        objects[0][1] = objects;\n        objects[1][0] = objects;\n        objects[1][1] = objects;\n        String basicToString = this.toBaseString(objects);\n        assertEquals(\n            basicToString\n                + \"[{{\"\n                + basicToString\n                + \",\"\n                + basicToString\n                + \"},{\"\n                + basicToString\n                + \",\"\n                + basicToString\n                + \"}}]\",\n            ToStringBuilder.reflectionToString(objects));\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionFloatArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionFloatArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 207,
+    "end_line": 214,
+    "comment": "",
+    "snippet": "    public void testReflectionFloatArray() {\n        float[] array = new float[] { 1.0f, 2.9876f, -3.00001f, 4.3f };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{1.0,2.9876,-3.00001,4.3}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionDoubleArrayArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionDoubleArrayArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 282,
+    "end_line": 289,
+    "comment": "",
+    "snippet": "    public void testReflectionDoubleArrayArray() {\n        double[][] array = new double[][] { { 1.0, 2.29686 }, null, { Double.NaN } };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{{1.0,2.29686},<null>,{NaN}}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionBooleanArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionBooleanArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 216,
+    "end_line": 223,
+    "comment": "",
+    "snippet": "    public void testReflectionBooleanArray() {\n        boolean[] array = new boolean[] { true, false, false };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{true,false,false}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionyteArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionyteArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 180,
+    "end_line": 187,
+    "comment": "",
+    "snippet": "    public void testReflectionyteArray() {\n        byte[] array = new byte[] { 1, 2, -3, 4 };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{1,2,-3,4}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionDoubleArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionDoubleArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 198,
+    "end_line": 205,
+    "comment": "",
+    "snippet": "    public void testReflectionDoubleArray() {\n        double[] array = new double[] { 1.0, 2.9876, -3.00001, 4.3 };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{1.0,2.9876,-3.00001,4.3}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionIntArrayArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionIntArrayArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 246,
+    "end_line": 253,
+    "comment": "",
+    "snippet": "    public void testReflectionIntArrayArray() {\n        int[][] array = new int[][] { { 1, 2 }, null, { 5 } };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{{1,2},<null>,{5}}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionLongArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionLongArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 153,
+    "end_line": 160,
+    "comment": "",
+    "snippet": "    public void testReflectionLongArray() {\n        long[] array = new long[] { 1, 2, -3, 4 };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{1,2,-3,4}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionhortArrayArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionhortArrayArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 255,
+    "end_line": 262,
+    "comment": "",
+    "snippet": "    public void testReflectionhortArrayArray() {\n        short[][] array = new short[][] { { 1, 2 }, null, { 5 } };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{{1,2},<null>,{5}}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionObjectArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionObjectArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 144,
+    "end_line": 151,
+    "comment": "",
+    "snippet": "    public void testReflectionObjectArray() {\n        Object[] array = new Object[] { null, base, new int[] { 3, 6 } };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{<null>,5,{3,6}}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionObjectCycle()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionObjectCycle()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 540,
+    "end_line": 549,
+    "comment": "/**\r\n     * Test Objects pointing to each other.\r\n     *\r\n     * @throws Exception\r\n     */",
+    "snippet": "    public void testReflectionObjectCycle() throws Exception {\n        ReflectionTestCycleA a = new ReflectionTestCycleA();\n        ReflectionTestCycleB b = new ReflectionTestCycleB();\n        a.b = b;\n        b.a = a;\n        assertEquals(\n            this.toBaseString(a) + \"[b=\" + this.toBaseString(b) + \"[a=\" + this.toBaseString(a) + \"]]\",\n            a.toString());\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionBooleanArrayArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionBooleanArrayArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 291,
+    "end_line": 299,
+    "comment": "",
+    "snippet": "    public void testReflectionBooleanArrayArray() {\n        boolean[][] array = new boolean[][] { { true, false }, null, { false } };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{{true,false},<null>,{false}}]\", ToStringBuilder.reflectionToString(array));\n        assertEquals(baseStr + \"[{{true,false},<null>,{false}}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testSimpleReflectionObjectCycle()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testSimpleReflectionObjectCycle()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 504,
+    "end_line": 509,
+    "comment": "/**\r\n     * Test an Object pointing to itself, the simplest test.\r\n     *\r\n     * @throws Exception\r\n     */",
+    "snippet": "    public void testSimpleReflectionObjectCycle() throws Exception {\n        SimpleReflectionTestFixture simple = new SimpleReflectionTestFixture();\n        simple.o = simple;\n        assertEquals(this.toBaseString(simple) + \"[o=\" + this.toBaseString(simple) + \"]\", simple.toString());\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionByteArrayArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionByteArrayArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 264,
+    "end_line": 271,
+    "comment": "",
+    "snippet": "    public void testReflectionByteArrayArray() {\n        byte[][] array = new byte[][] { { 1, 2 }, null, { 5 } };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{{1,2},<null>,{5}}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionArrayCycleLevel2()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionArrayCycleLevel2()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 386,
+    "end_line": 398,
+    "comment": "/**\r\n     * Test an array element pointing to its container.\r\n     */",
+    "snippet": "    public void testReflectionArrayCycleLevel2() throws Exception {\n        Object[] objects = new Object[1];\n        Object[] objectsLevel2 = new Object[1];\n        objects[0] = objectsLevel2;\n        objectsLevel2[0] = objects;\n        assertEquals(\n            this.toBaseString(objects) + \"[{{\" + this.toBaseString(objects) + \"}}]\",\n            ToStringBuilder.reflectionToString(objects));\n        assertEquals(\n            this.toBaseString(objectsLevel2) + \"[{{\" + this.toBaseString(objectsLevel2) + \"}}]\",\n            ToStringBuilder.reflectionToString(objectsLevel2));\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionArrayAndObjectCycle()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionArrayAndObjectCycle()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 557,
+    "end_line": 577,
+    "comment": "/**\r\n     * Test a nasty combination of arrays and Objects pointing to each other.\r\n     * objects[0] -> SimpleReflectionTestFixture[ o -> objects ]\r\n     *\r\n     * @throws Exception\r\n     */",
+    "snippet": "    public void testReflectionArrayAndObjectCycle() throws Exception {\n        Object[] objects = new Object[1];\n        SimpleReflectionTestFixture simple = new SimpleReflectionTestFixture(objects);\n        objects[0] = simple;\n        assertEquals(\n            this.toBaseString(objects)\n                + \"[{\"\n                + this.toBaseString(simple)\n                + \"[o=\"\n                + this.toBaseString(objects)\n                + \"]\"\n                + \"}]\",\n            ToStringBuilder.reflectionToString(objects));\n        assertEquals(\n            this.toBaseString(simple)\n                + \"[o={\"\n                + this.toBaseString(simple)\n                + \"}]\",\n            ToStringBuilder.reflectionToString(simple));\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionCharArrayArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionCharArrayArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 273,
+    "end_line": 280,
+    "comment": "",
+    "snippet": "    public void testReflectionCharArrayArray() {\n        char[][] array = new char[][] { { 'A', 'B' }, null, { 'p' } };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{{A,B},<null>,{p}}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionShortArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionShortArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 171,
+    "end_line": 178,
+    "comment": "",
+    "snippet": "    public void testReflectionShortArray() {\n        short[] array = new short[] { 1, 2, -3, 4 };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{1,2,-3,4}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testSelfInstanceVarReflectionObjectCycle()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testSelfInstanceVarReflectionObjectCycle()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 516,
+    "end_line": 520,
+    "comment": "/**\r\n     * Test a class that defines an ivar pointing to itself.\r\n     *\r\n     * @throws Exception\r\n     */",
+    "snippet": "    public void testSelfInstanceVarReflectionObjectCycle() throws Exception {\n        SelfInstanceVarReflectionTestFixture test = new SelfInstanceVarReflectionTestFixture();\n        assertEquals(this.toBaseString(test) + \"[typeIsSelf=\" + this.toBaseString(test) + \"]\", test.toString());\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionIntArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionIntArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 162,
+    "end_line": 169,
+    "comment": "",
+    "snippet": "    public void testReflectionIntArray() {\n        int[] array = new int[] { 1, 2, -3, 4 };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{1,2,-3,4}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionCharArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionCharArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 189,
+    "end_line": 196,
+    "comment": "",
+    "snippet": "    public void testReflectionCharArray() {\n        char[] array = new char[] { 'A', '2', '_', 'D' };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{A,2,_,D}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionFloatArrayArray()",
+    "resolved_signature": "org.apache.commons.lang3.builder.ToStringBuilderTest.testReflectionFloatArrayArray()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/builder/ToStringBuilderTest.java",
+    "begin_line": 227,
+    "end_line": 234,
+    "comment": "// Reflection Array Array tests\r",
+    "snippet": "    public void testReflectionFloatArrayArray() {\n        float[][] array = new float[][] { { 1.0f, 2.29686f }, null, { Float.NaN } };\n        String baseStr = this.toBaseString(array);\n        assertEquals(baseStr + \"[{{1.0,2.29686},<null>,{NaN}}]\", ToStringBuilder.reflectionToString(array));\n        array = null;\n        assertReflectionArray(\"<null>\", array);\n        this.validateNullToStringStyleRegistry();\n    }"
+  }
+]

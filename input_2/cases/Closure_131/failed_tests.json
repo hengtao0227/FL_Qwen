@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.ConvertToDottedPropertiesTest.testQuotedProps()",
+    "resolved_signature": "com.google.javascript.jscomp.ConvertToDottedPropertiesTest.testQuotedProps()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/ConvertToDottedPropertiesTest.java",
+    "begin_line": 68,
+    "end_line": 73,
+    "comment": "",
+    "snippet": "  public void testQuotedProps() {\n    testSame(\"({'':0})\");\n    testSame(\"({'1.0':0})\");\n    testSame(\"({'\\u1d17A':0})\");\n    testSame(\"({'a\\u0004b':0})\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.ConvertToDottedPropertiesTest.testDoNotConvert()",
+    "resolved_signature": "com.google.javascript.jscomp.ConvertToDottedPropertiesTest.testDoNotConvert()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/ConvertToDottedPropertiesTest.java",
+    "begin_line": 41,
+    "end_line": 65,
+    "comment": "",
+    "snippet": "  public void testDoNotConvert() {\n    testSame(\"a[0]\");\n    testSame(\"a['']\");\n    testSame(\"a[' ']\");\n    testSame(\"a[',']\");\n    testSame(\"a[';']\");\n    testSame(\"a[':']\");\n    testSame(\"a['.']\");\n    testSame(\"a['0']\");\n    testSame(\"a['p ']\");\n    testSame(\"a['p' + '']\");\n    testSame(\"a[p]\");\n    testSame(\"a[P]\");\n    testSame(\"a[$]\");\n    testSame(\"a[p()]\");\n    testSame(\"a['default']\");\n    // Ignorable control characters are ok in Java identifiers, but not in JS.\n    testSame(\"a['A\\u0004']\");\n    // upper case lower half of o from phonetic extensions set.\n    // valid in Safari, not in Firefox, IE.\n    test(\"a['\\u1d17A']\", \"a['\\u1d17A']\");\n    // Latin capital N with tilde - nice if we handled it, but for now let's\n    // only allow simple Latin (aka ASCII) to be converted.\n    test(\"a['\\u00d1StuffAfter']\", \"a['\\u00d1StuffAfter']\");\n  }"
+  }
+]

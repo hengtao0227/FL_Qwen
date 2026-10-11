@@ -1,0 +1,42 @@
+[
+  {
+    "requested_signature": "org.jfree.data.category.junit.DefaultCategoryDatasetTests.testBug1835955()",
+    "resolved_signature": "org.jfree.data.category.junit.DefaultCategoryDatasetTests.testBug1835955()",
+    "resolution": "exact",
+    "src_path": "tests/org/jfree/data/category/junit/DefaultCategoryDatasetTests.java",
+    "begin_line": 345,
+    "end_line": 352,
+    "comment": "/**\n     * A test for bug 1835955.\n     */",
+    "snippet": "    public void testBug1835955() {\n    \tDefaultCategoryDataset d = new DefaultCategoryDataset();\n    \td.addValue(1.0, \"R1\", \"C1\");\n    \td.addValue(2.0, \"R2\", \"C2\");\n    \td.removeColumn(\"C2\");\n    \td.addValue(3.0, \"R2\", \"C2\");\n    \tassertEquals(3.0, d.getValue(\"R2\", \"C2\").doubleValue(), EPSILON);\n    }"
+  },
+  {
+    "requested_signature": "org.jfree.data.junit.DefaultKeyedValues2DTests.testRemoveColumnByKey()",
+    "resolved_signature": "org.jfree.data.junit.DefaultKeyedValues2DTests.testRemoveColumnByKey()",
+    "resolution": "exact",
+    "src_path": "tests/org/jfree/data/junit/DefaultKeyedValues2DTests.java",
+    "begin_line": 349,
+    "end_line": 366,
+    "comment": "/**\n     * Some basic checks for the removeColumn(Comparable) method.\n     */",
+    "snippet": "    public void testRemoveColumnByKey() {\n    \tDefaultKeyedValues2D d = new DefaultKeyedValues2D();\n    \td.addValue(new Double(1.0), \"R1\", \"C1\");\n    \td.addValue(new Double(2.0), \"R2\", \"C2\");\n    \td.removeColumn(\"C2\");\n    \td.addValue(new Double(3.0), \"R2\", \"C2\");\n    \tassertEquals(3.0, d.getValue(\"R2\", \"C2\").doubleValue(), EPSILON);\n    \t\n    \t// check for unknown column\n    \tboolean pass = false;\n    \ttry {\n    \t\td.removeColumn(\"XXX\");\n    \t}\n    \tcatch (UnknownKeyException e) {\n    \t\tpass = true;\n    \t}\n    \tassertTrue(pass);\n    }"
+  },
+  {
+    "requested_signature": "org.jfree.data.junit.DefaultKeyedValuesTests.testRemoveValue()",
+    "resolved_signature": "org.jfree.data.junit.DefaultKeyedValuesTests.testRemoveValue()",
+    "resolution": "exact",
+    "src_path": "tests/org/jfree/data/junit/DefaultKeyedValuesTests.java",
+    "begin_line": 355,
+    "end_line": 373,
+    "comment": "/**\n     * Some tests for the removeValue() method.\n     */",
+    "snippet": "    public void testRemoveValue() {\n        DefaultKeyedValues data = new DefaultKeyedValues();\n        data.addValue(\"A\", new Double(1.0));\n        data.addValue(\"B\", null);\n        data.addValue(\"C\", new Double(3.0));\n        data.addValue(\"D\", new Double(2.0));\n        assertEquals(1, data.getIndex(\"B\"));\n        data.removeValue(\"B\");\n        assertEquals(-1, data.getIndex(\"B\"));\n        \n        boolean pass = false;\n        try {\n            data.removeValue(\"XXX\");\n        }\n        catch (UnknownKeyException e) {\n            pass = true;   \n        }\n        assertTrue(pass);\n    }"
+  },
+  {
+    "requested_signature": "org.jfree.data.junit.DefaultKeyedValuesTests.testGetIndex2()",
+    "resolved_signature": "org.jfree.data.junit.DefaultKeyedValuesTests.testGetIndex2()",
+    "resolution": "exact",
+    "src_path": "tests/org/jfree/data/junit/DefaultKeyedValuesTests.java",
+    "begin_line": 238,
+    "end_line": 245,
+    "comment": "/**\n     * Another check for the getIndex(Comparable) method.\n     */",
+    "snippet": "    public void testGetIndex2() {\n    \tDefaultKeyedValues v = new DefaultKeyedValues();\n    \tassertEquals(-1, v.getIndex(\"K1\"));\n    \tv.addValue(\"K1\", 1.0);\n    \tassertEquals(0, v.getIndex(\"K1\"));\n    \tv.removeValue(\"K1\");\n    \tassertEquals(-1, v.getIndex(\"K1\"));\n    }"
+  }
+]

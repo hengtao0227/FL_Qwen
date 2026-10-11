@@ -1,0 +1,46 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.ClassUtils.addAbbreviation(String,String)
+Source: src/main/java/org/apache/commons/lang3/ClassUtils.java
+Original range: 115-118
+Documentation:
+/**
+     * Add primitive type abbreviation to maps of abbreviations.
+     *
+     * @param primitive Canonical name of primitive type
+     * @param abbreviation Corresponding abbreviation of primitive type
+     */
+Method code:
+115 |     private static void addAbbreviation(String primitive, String abbreviation) {
+116 |         abbreviationMap.put(primitive, abbreviation);
+117 |         reverseAbbreviationMap.put(abbreviation, primitive);
+118 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.ClassUtils.toClass(Object[])
+Source: src/main/java/org/apache/commons/lang3/ClassUtils.java
+Original range: 902-913
+Documentation:
+/**
+     * <p>Converts an array of <code>Object</code> in to an array of <code>Class</code> objects.
+     * If any of these objects is null, a null element will be inserted into the array.</p>
+     *
+     * <p>This method returns <code>null</code> for a <code>null</code> input array.</p>
+     *
+     * @param array an <code>Object</code> array
+     * @return a <code>Class</code> array, <code>null</code> if null array input
+     * @since 2.4
+     */
+Method code:
+902 |     public static Class<?>[] toClass(Object[] array) {
+903 |         if (array == null) {
+904 |             return null;
+905 |         } else if (array.length == 0) {
+906 |             return ArrayUtils.EMPTY_CLASS_ARRAY;
+907 |         }
+908 |         Class<?>[] classes = new Class[array.length];
+909 |         for (int i = 0; i < array.length; i++) {
+910 |             classes[i] = array[i].getClass();
+911 |         }
+912 |         return classes;
+913 |     }
+

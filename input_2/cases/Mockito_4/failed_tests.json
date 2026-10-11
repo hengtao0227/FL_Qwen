@@ -1,0 +1,42 @@
+[
+  {
+    "requested_signature": "org.mockito.exceptions.ReporterTest.can_use_print_mock_name_even_when_mock_bogus_default_answer_and_when_reporting_no_more_interaction_wanted_in_order()",
+    "resolved_signature": "org.mockito.exceptions.ReporterTest.can_use_print_mock_name_even_when_mock_bogus_default_answer_and_when_reporting_no_more_interaction_wanted_in_order()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/exceptions/ReporterTest.java",
+    "begin_line": 44,
+    "end_line": 48,
+    "comment": "",
+    "snippet": "    @Test(expected = VerificationInOrderFailure.class)\n    public void can_use_print_mock_name_even_when_mock_bogus_default_answer_and_when_reporting_no_more_interaction_wanted_in_order() throws Exception {\n        Invocation invocation_with_bogus_default_answer = new InvocationBuilder().mock(mock(IMethods.class, new Returns(false))).toInvocation();\n        new Reporter().noMoreInteractionsWantedInOrder(invocation_with_bogus_default_answer);\n    }"
+  },
+  {
+    "requested_signature": "org.mockito.exceptions.ReporterTest.can_use_print_mock_name_even_when_mock_bogus_default_answer_and_when_reporting_injection_failure()",
+    "resolved_signature": "org.mockito.exceptions.ReporterTest.can_use_print_mock_name_even_when_mock_bogus_default_answer_and_when_reporting_injection_failure()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/exceptions/ReporterTest.java",
+    "begin_line": 76,
+    "end_line": 80,
+    "comment": "",
+    "snippet": "    @Test(expected = MockitoException.class)\n    public void can_use_print_mock_name_even_when_mock_bogus_default_answer_and_when_reporting_injection_failure() throws Exception {\n        IMethods mock_with_bogus_default_answer = mock(IMethods.class, new Returns(false));\n        new Reporter().cannotInjectDependency(someField(), mock_with_bogus_default_answer, new Exception());\n    }"
+  },
+  {
+    "requested_signature": "org.mockito.exceptions.ReporterTest.can_use_mock_name_even_when_mock_bogus_default_answer_and_when_reporting_no_more_interaction_wanted()",
+    "resolved_signature": "org.mockito.exceptions.ReporterTest.can_use_mock_name_even_when_mock_bogus_default_answer_and_when_reporting_no_more_interaction_wanted()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/exceptions/ReporterTest.java",
+    "begin_line": 38,
+    "end_line": 42,
+    "comment": "",
+    "snippet": "    @Test(expected = NoInteractionsWanted.class)\n    public void can_use_mock_name_even_when_mock_bogus_default_answer_and_when_reporting_no_more_interaction_wanted() throws Exception {\n        Invocation invocation_with_bogus_default_answer = new InvocationBuilder().mock(mock(IMethods.class, new Returns(false))).toInvocation();\n        new Reporter().noMoreInteractionsWanted(invocation_with_bogus_default_answer, Collections.<VerificationAwareInvocation>emptyList());\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.bugs.ClassCastExOnVerifyZeroInteractionsTest.should_not_throw_a_ClassCastException()",
+    "resolved_signature": "org.mockitousage.bugs.ClassCastExOnVerifyZeroInteractionsTest.should_not_throw_a_ClassCastException()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/bugs/ClassCastExOnVerifyZeroInteractionsTest.java",
+    "begin_line": 16,
+    "end_line": 25,
+    "comment": "",
+    "snippet": "    @Test(expected = NoInteractionsWanted.class)\n    public void should_not_throw_a_ClassCastException() {\n        TestMock test = mock(TestMock.class, new Answer() {\n            public Object answer(InvocationOnMock invocation) throws Throwable {\n                return false;\n            }\n        });\n        test.m1();\n        verifyZeroInteractions(test);\n    }"
+  }
+]

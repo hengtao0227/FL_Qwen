@@ -1,0 +1,32 @@
+[
+  {
+    "requested_signature": "com.google.javascript.rhino.jstype.JSTypeTest.testRecordTypeLeastSuperType2()",
+    "resolved_signature": "com.google.javascript.rhino.jstype.JSTypeTest.testRecordTypeLeastSuperType2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/rhino/jstype/JSTypeTest.java",
+    "begin_line": 2714,
+    "end_line": 2724,
+    "comment": "",
+    "snippet": "  public void testRecordTypeLeastSuperType2() {\n    RecordTypeBuilder builder = new RecordTypeBuilder(registry);\n    builder.addProperty(\"e\", NUMBER_TYPE, null);\n    builder.addProperty(\"b\", STRING_TYPE, null);\n    builder.addProperty(\"c\", STRING_TYPE, null);\n    JSType otherRecordType = builder.build();\n\n    assertTypeEquals(\n        registry.createUnionType(recordType, otherRecordType),\n        recordType.getLeastSupertype(otherRecordType));\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.rhino.jstype.JSTypeTest.testRecordTypeLeastSuperType3()",
+    "resolved_signature": "com.google.javascript.rhino.jstype.JSTypeTest.testRecordTypeLeastSuperType3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/rhino/jstype/JSTypeTest.java",
+    "begin_line": 2726,
+    "end_line": 2736,
+    "comment": "",
+    "snippet": "  public void testRecordTypeLeastSuperType3() {\n    RecordTypeBuilder builder = new RecordTypeBuilder(registry);\n    builder.addProperty(\"d\", NUMBER_TYPE, null);\n    builder.addProperty(\"e\", STRING_TYPE, null);\n    builder.addProperty(\"f\", STRING_TYPE, null);\n    JSType otherRecordType = builder.build();\n\n    assertTypeEquals(\n        registry.createUnionType(recordType, otherRecordType),\n        recordType.getLeastSupertype(otherRecordType));\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.rhino.jstype.RecordTypeTest.testSupAndInf()",
+    "resolved_signature": "com.google.javascript.rhino.jstype.RecordTypeTest.testSupAndInf()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/rhino/jstype/RecordTypeTest.java",
+    "begin_line": 76,
+    "end_line": 105,
+    "comment": "",
+    "snippet": "  public void testSupAndInf() {\n    JSType recordA = new RecordTypeBuilder(registry)\n        .addProperty(\"a\", NUMBER_TYPE, null)\n        .addProperty(\"b\", NUMBER_TYPE, null)\n        .build();\n    JSType recordC = new RecordTypeBuilder(registry)\n        .addProperty(\"b\", NUMBER_TYPE, null)\n        .addProperty(\"c\", NUMBER_TYPE, null)\n        .build();\n    ProxyObjectType proxyRecordA = new ProxyObjectType(registry, recordA);\n    ProxyObjectType proxyRecordC = new ProxyObjectType(registry, recordC);\n\n    JSType aInfC = new RecordTypeBuilder(registry)\n        .addProperty(\"a\", NUMBER_TYPE, null)\n        .addProperty(\"b\", NUMBER_TYPE, null)\n        .addProperty(\"c\", NUMBER_TYPE, null)\n        .build();\n\n    JSType aSupC = registry.createUnionType(recordA, recordC);\n\n    Asserts.assertTypeEquals(\n        aInfC, recordA.getGreatestSubtype(recordC));\n    Asserts.assertTypeEquals(\n        aSupC, recordA.getLeastSupertype(recordC));\n\n    Asserts.assertTypeEquals(\n        aInfC, proxyRecordA.getGreatestSubtype(proxyRecordC));\n    Asserts.assertTypeEquals(\n        aSupC, proxyRecordA.getLeastSupertype(proxyRecordC));\n  }"
+  }
+]

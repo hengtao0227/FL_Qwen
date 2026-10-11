@@ -1,0 +1,62 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testIssue4177428_return()",
+    "resolved_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testIssue4177428_return()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/UnreachableCodeEliminationTest.java",
+    "begin_line": 361,
+    "end_line": 389,
+    "comment": "",
+    "snippet": "  public void testIssue4177428_return() {\n    test(\n        \"f = function() {\\n\" +\n        \"  var action;\\n\" +\n        \"  a: {\\n\" +\n        \"    var proto = null;\\n\" +\n        \"    try {\\n\" +\n        \"      proto = new Proto\\n\" +\n        \"    } finally {\\n\" +\n        \"      action = proto;\\n\" +\n        \"      return\\n\" +  // Keep this...\n        \"    }\\n\" +\n        \"  }\\n\" +\n        \"  alert(action)\\n\" + // and remove this.\n        \"};\",\n        \"f = function() {\\n\" +\n        \"  var action;\\n\" +\n        \"  a: {\\n\" +\n        \"    var proto = null;\\n\" +\n        \"    try {\\n\" +\n        \"      proto = new Proto\\n\" +\n        \"    } finally {\\n\" +\n        \"      action = proto;\\n\" +\n        \"      return\\n\" +\n        \"    }\\n\" +\n        \"  }\\n\" +\n        \"};\"\n        );\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testDontRemoveBreakInTryFinally()",
+    "resolved_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testDontRemoveBreakInTryFinally()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/UnreachableCodeEliminationTest.java",
+    "begin_line": 416,
+    "end_line": 418,
+    "comment": "",
+    "snippet": "  public void testDontRemoveBreakInTryFinally() throws Exception {\n    testSame(\"function f() {b:try{throw 9} finally {break b} return 1;}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testIssue4177428_continue()",
+    "resolved_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testIssue4177428_continue()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/UnreachableCodeEliminationTest.java",
+    "begin_line": 344,
+    "end_line": 359,
+    "comment": "",
+    "snippet": "  public void testIssue4177428_continue() {\n    testSame(\n        \"f = function() {\\n\" +\n        \"  var action;\\n\" +\n        \"  a: do {\\n\" +\n        \"    var proto = null;\\n\" +\n        \"    try {\\n\" +\n        \"      proto = new Proto\\n\" +\n        \"    } finally {\\n\" +\n        \"      action = proto;\\n\" +\n        \"      continue a\\n\" +  // Keep this...\n        \"    }\\n\" +\n        \"  } while(false)\\n\" +\n        \"  alert(action)\\n\" + // and this.\n        \"};\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testDontRemoveBreakInTryFinallySwitch()",
+    "resolved_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testDontRemoveBreakInTryFinallySwitch()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/UnreachableCodeEliminationTest.java",
+    "begin_line": 420,
+    "end_line": 422,
+    "comment": "",
+    "snippet": "  public void testDontRemoveBreakInTryFinallySwitch() throws Exception {\n    testSame(\"function f() {b:try{throw 9} finally {switch(x) {case 1: break b} } return 1;}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testIssue4177428a()",
+    "resolved_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testIssue4177428a()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/UnreachableCodeEliminationTest.java",
+    "begin_line": 287,
+    "end_line": 302,
+    "comment": "",
+    "snippet": "  public void testIssue4177428a() {\n    testSame(\n        \"f = function() {\\n\" +\n        \"  var action;\\n\" +\n        \"  a: {\\n\" +\n        \"    var proto = null;\\n\" +\n        \"    try {\\n\" +\n        \"      proto = new Proto\\n\" +\n        \"    } finally {\\n\" +\n        \"      action = proto;\\n\" +\n        \"      break a\\n\" +  // Keep this...\n        \"    }\\n\" +\n        \"  }\\n\" +\n        \"  alert(action)\\n\" + // and this.\n        \"};\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testIssue4177428c()",
+    "resolved_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testIssue4177428c()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/UnreachableCodeEliminationTest.java",
+    "begin_line": 324,
+    "end_line": 342,
+    "comment": "",
+    "snippet": "  public void testIssue4177428c() {\n    testSame(\n        \"f = function() {\\n\" +\n        \"  var action;\\n\" +\n        \"  a: {\\n\" +\n        \"    var proto = null;\\n\" +\n        \"    try {\\n\" +\n        \"    } finally {\\n\" +\n        \"    try {\\n\" +\n        \"      proto = new Proto\\n\" +\n        \"    } finally {\\n\" +\n        \"      action = proto;\\n\" +\n        \"      break a\\n\" +  // Keep this...\n        \"    }\\n\" +\n        \"    }\\n\" +\n        \"  }\\n\" +\n        \"  alert(action)\\n\" + // and this.\n        \"};\");\n  }"
+  }
+]

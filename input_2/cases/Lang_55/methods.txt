@@ -1,0 +1,108 @@
+===== M0001 =====
+Signature: org.apache.commons.lang.time.StopWatch.start()
+Source: src/java/org/apache/commons/lang/time/StopWatch.java
+Original range: 95-105
+Documentation:
+/**
+     * <p>Start the stopwatch.</p>
+     * 
+     * <p>This method starts a new timing session, clearing any previous values.</p>
+     *
+     * @throws IllegalStateException if the StopWatch is already running.
+     */
+Method code:
+95 |     public void start() {
+96 |         if(this.runningState == STATE_STOPPED) {
+97 |             throw new IllegalStateException("Stopwatch must be reset before being restarted. ");
+98 |         }
+99 |         if(this.runningState != STATE_UNSTARTED) {
+100 |             throw new IllegalStateException("Stopwatch already started. ");
+101 |         }
+102 |         stopTime = -1;
+103 |         startTime = System.currentTimeMillis();
+104 |         this.runningState = STATE_RUNNING;
+105 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang.time.StopWatch.StopWatch()
+Source: src/java/org/apache/commons/lang/time/StopWatch.java
+Original range: 84-86
+Documentation:
+/**
+     * <p>Constructor.</p>
+     */
+Method code:
+84 |     public StopWatch() {
+85 |         super();
+86 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang.time.StopWatch.suspend()
+Source: src/java/org/apache/commons/lang/time/StopWatch.java
+Original range: 175-181
+Documentation:
+/**
+     * <p>Suspend the stopwatch for later resumption.</p>
+     * 
+     * <p>This method suspends the watch until it is resumed. The watch will not include
+     * time between the suspend and resume calls in the total time.</p>
+     *
+     * @throws IllegalStateException if the StopWatch is not currently running.
+     */
+Method code:
+175 |     public void suspend() {
+176 |         if(this.runningState != STATE_RUNNING) {
+177 |             throw new IllegalStateException("Stopwatch must be running to suspend. ");
+178 |         }
+179 |         stopTime = System.currentTimeMillis();
+180 |         this.runningState = STATE_SUSPENDED;
+181 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang.time.StopWatch.stop()
+Source: src/java/org/apache/commons/lang/time/StopWatch.java
+Original range: 114-120
+Documentation:
+/**
+     * <p>Stop the stopwatch.</p>
+     * 
+     * <p>This method ends a new timing session, allowing the time to be retrieved.</p>
+     *
+     * @throws IllegalStateException if the StopWatch is not running.
+     */
+Method code:
+114 |     public void stop() {
+115 |         if(this.runningState != STATE_RUNNING && this.runningState != STATE_SUSPENDED) {
+116 |             throw new IllegalStateException("Stopwatch is not running. ");
+117 |         }
+118 |             stopTime = System.currentTimeMillis();
+119 |         this.runningState = STATE_STOPPED;
+120 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang.time.StopWatch.getTime()
+Source: src/java/org/apache/commons/lang/time/StopWatch.java
+Original range: 208-219
+Documentation:
+/**
+     * <p>Get the time on the stopwatch.</p>
+     * 
+     * <p>This is either the time between the start and the moment this method 
+     * is called, or the amount of time between start and stop.</p>
+     * 
+     * @return the time in milliseconds
+     */
+Method code:
+208 |     public long getTime() {
+209 |         if(this.runningState == STATE_STOPPED || this.runningState == STATE_SUSPENDED) {
+210 |             return this.stopTime - this.startTime;
+211 |         } else
+212 |         if(this.runningState == STATE_UNSTARTED) {
+213 |             return 0;
+214 |         } else
+215 |         if(this.runningState == STATE_RUNNING) {
+216 |             return System.currentTimeMillis() - this.startTime;
+217 |         }
+218 |         throw new RuntimeException("Illegal running state has occured. ");
+219 |     }
+

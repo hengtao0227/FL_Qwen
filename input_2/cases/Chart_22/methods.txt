@@ -1,0 +1,622 @@
+===== M0001 =====
+Signature: org.jfree.data.KeyedObjects.removeValue(Comparable)
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 264-272
+Documentation:
+/**
+     * Removes a value from the collection.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     * 
+     * @see #removeValue(int)
+     * 
+     * @throws UnknownKeyException if the key is not recognised.
+     */
+Method code:
+264 |     public void removeValue(Comparable key) {
+265 |         // defer argument checking 
+266 |         int index = getIndex(key);
+267 |         if (index < 0) {
+268 |             throw new UnknownKeyException("The key (" + key.toString() 
+269 |                     + ") is not recognised.");
+270 |         }
+271 |         removeValue(index);
+272 |     }
+
+===== M0002 =====
+Signature: org.jfree.data.KeyedObjects2D.addObject(Object,Comparable,Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 247-250
+Documentation:
+/**
+     * Adds an object to the table.  Performs the same function as setObject().
+     *
+     * @param object  the object.
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     */
+Method code:
+247 |     public void addObject(Object object, Comparable rowKey, 
+248 |             Comparable columnKey) {
+249 |         setObject(object, rowKey, columnKey);
+250 |     }
+
+===== M0003 =====
+Signature: org.jfree.data.KeyedObjects2D.getObject(Comparable,Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 214-238
+Documentation:
+/**
+     * Returns the object for the given row and column keys.
+     *
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     *
+     * @return The object (possibly <code>null</code>).
+     * 
+     * @throws IllegalArgumentException if <code>rowKey<code> or 
+     *         <code>columnKey</code> is <code>null</code>.
+     * @throws UnknownKeyException if <code>rowKey</code> or 
+     *         <code>columnKey</code> is not recognised.
+     */
+Method code:
+214 |     public Object getObject(Comparable rowKey, Comparable columnKey) {
+215 |         if (rowKey == null) {
+216 |             throw new IllegalArgumentException("Null 'rowKey' argument.");
+217 |         }
+218 |         if (columnKey == null) {
+219 |             throw new IllegalArgumentException("Null 'columnKey' argument.");
+220 |         }
+221 |         int row = this.rowKeys.indexOf(rowKey);
+222 |         if (row < 0) {
+223 |             throw new UnknownKeyException("Row key (" + rowKey 
+224 |                     + ") not recognised.");
+225 |         }
+226 |         int column = this.columnKeys.indexOf(columnKey);
+227 |         if (column < 0) {
+228 |             throw new UnknownKeyException("Column key (" + columnKey 
+229 |                     + ") not recognised.");
+230 |         }
+231 |         if (row >= 0) {
+232 |         KeyedObjects rowData = (KeyedObjects) this.rows.get(row);
+233 |             return rowData.getObject(columnKey);
+234 |         }
+235 |         else {
+236 |             return null;
+237 |         }
+238 |     }
+
+===== M0004 =====
+Signature: org.jfree.data.UnknownKeyException.UnknownKeyException(String)
+Source: source/org/jfree/data/UnknownKeyException.java
+Original range: 55-57
+Documentation:
+/**
+     * Creates a new exception.
+     *
+     * @param message  a message describing the exception.
+     */
+Method code:
+55 |     public UnknownKeyException(String message) {
+56 |         super(message);
+57 |     }
+
+===== M0005 =====
+Signature: org.jfree.data.KeyedObjects2D.getRowIndex(Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 149-151
+Documentation:
+/**
+     * Returns the row index for a given key.
+     *
+     * @param key  the key.
+     *
+     * @return The row index.
+     * 
+     * @see #getRowKey(int)
+     */
+Method code:
+149 |     public int getRowIndex(Comparable key) {
+150 |         return this.rowKeys.indexOf(key);
+151 |     }
+
+===== M0006 =====
+Signature: org.jfree.data.KeyedObjects.KeyedObjects()
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 67-69
+Documentation:
+/**
+     * Creates a new collection (initially empty).
+     */
+Method code:
+67 |     public KeyedObjects() {
+68 |         this.data = new java.util.ArrayList();
+69 |     }
+
+===== M0007 =====
+Signature: org.jfree.data.KeyedObjects.getObject(int)
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 89-96
+Documentation:
+/**
+     * Returns an object from the list.
+     *
+     * @param item  the item index (zero-based).
+     *
+     * @return The object (possibly <code>null</code>).
+     * 
+     * @throws IndexOutOfBoundsException if <code>item</code> is out of bounds.
+     */
+Method code:
+89 |     public Object getObject(int item) {
+90 |         Object result = null;
+91 |         KeyedObject kobj = (KeyedObject) this.data.get(item);
+92 |         if (kobj != null) {
+93 |             result = kobj.getObject();
+94 |         }
+95 |         return result;
+96 |     }
+
+===== M0008 =====
+Signature: org.jfree.data.KeyedObjects.setObject(Comparable,Object)
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 200-210
+Documentation:
+/**
+     * Replaces an existing object, or adds a new object to the collection.
+     * This is the same as the {@link #addObject(Comparable, Object)} 
+     * method.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     * @param object  the object.
+     * 
+     * @see #getObject(Comparable)
+     */
+Method code:
+200 |     public void setObject(Comparable key, Object object) {
+201 |         int keyIndex = getIndex(key);
+202 |         if (keyIndex >= 0) {
+203 |             KeyedObject ko = (KeyedObject) this.data.get(keyIndex);
+204 |             ko.setObject(object);
+205 |         }
+206 |         else {
+207 |             KeyedObject ko = new KeyedObject(key, object);
+208 |             this.data.add(ko);
+209 |         }
+210 |     }
+
+===== M0009 =====
+Signature: org.jfree.data.KeyedObjects2D.getColumnIndex(Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 186-188
+Documentation:
+/**
+     * Returns the column index for a given key.
+     *
+     * @param key  the key.
+     *
+     * @return The column index.
+     * 
+     * @see #getColumnKey(int)
+     */
+Method code:
+186 |     public int getColumnIndex(Comparable key) {
+187 |         return this.columnKeys.indexOf(key);
+188 |     }
+
+===== M0010 =====
+Signature: org.jfree.data.KeyedObjects.removeValue(int)
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 251-253
+Documentation:
+/**
+     * Removes a value from the collection.
+     *
+     * @param index  the index of the item to remove.
+     * 
+     * @see #removeValue(Comparable)
+     */
+Method code:
+251 |     public void removeValue(int index) {
+252 |         this.data.remove(index);
+253 |     }
+
+===== M0011 =====
+Signature: org.jfree.data.KeyedObject.getKey()
+Source: source/org/jfree/data/KeyedObject.java
+Original range: 84-86
+Documentation:
+/**
+     * Returns the key.
+     *
+     * @return The key.
+     */
+Method code:
+84 |     public Comparable getKey() {
+85 |         return this.key;
+86 |     }
+
+===== M0012 =====
+Signature: org.jfree.data.KeyedObjects2D.getObject(int,int)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 112-125
+Documentation:
+/**
+     * Returns the object for a given row and column.
+     *
+     * @param row  the row index (in the range 0 to getRowCount() - 1).
+     * @param column  the column index (in the range 0 to getColumnCount() - 1).
+     *
+     * @return The object (possibly <code>null</code>).
+     * 
+     * @see #getObject(Comparable, Comparable)
+     */
+Method code:
+112 |     public Object getObject(int row, int column) {
+113 |         Object result = null;
+114 |         KeyedObjects rowData = (KeyedObjects) this.rows.get(row);
+115 |         if (rowData != null) {
+116 |             Comparable columnKey = (Comparable) this.columnKeys.get(column);
+117 |             if (columnKey != null) {
+118 |                 int index = rowData.getIndex(columnKey);
+119 |                 if (index >= 0) {
+120 |                     result = rowData.getObject(columnKey);
+121 |                 }
+122 |             }
+123 |         }
+124 |         return result;
+125 |     }
+
+===== M0013 =====
+Signature: org.jfree.data.KeyedObjects2D.removeColumn(Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 369-381
+Documentation:
+/**
+     * Removes an entire column from the table.
+     *
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     * 
+     * @throws UnknownKeyException if <code>rowKey</code> is not recognised.
+     * 
+     * @see #removeRow(Comparable)
+     */
+Method code:
+369 |     public void removeColumn(Comparable columnKey) {
+370 |         int index = getColumnIndex(columnKey);
+371 |         if (index < 0) {
+372 |             throw new UnknownKeyException("Column key (" + columnKey 
+373 |                     + ") not recognised.");
+374 |         }
+375 |         Iterator iterator = this.rows.iterator();
+376 |         while (iterator.hasNext()) {
+377 |             KeyedObjects rowData = (KeyedObjects) iterator.next();
+378 |                 rowData.removeValue(columnKey);
+379 |         }
+380 |         this.columnKeys.remove(columnKey);
+381 |     }
+
+===== M0014 =====
+Signature: org.jfree.data.KeyedObjects2D.getRowCount()
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 87-89
+Documentation:
+/**
+     * Returns the row count.
+     *
+     * @return The row count.
+     * 
+     * @see #getColumnCount()
+     */
+Method code:
+87 |     public int getRowCount() {
+88 |         return this.rowKeys.size();
+89 |     }
+
+===== M0015 =====
+Signature: org.jfree.data.KeyedObjects.getIndex(Comparable)
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 127-141
+Documentation:
+/**
+     * Returns the index for a given key, or <code>-1</code>.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     *
+     * @return The index, or <code>-1</code> if the key is unrecognised.
+     * 
+     * @see #getKey(int)
+     */
+Method code:
+127 |     public int getIndex(Comparable key) {
+128 |         if (key == null) {
+129 |             throw new IllegalArgumentException("Null 'key' argument.");
+130 |         }
+131 |         int i = 0;
+132 |         Iterator iterator = this.data.iterator();
+133 |         while (iterator.hasNext()) {
+134 |             KeyedObject ko = (KeyedObject) iterator.next();
+135 |             if (ko.getKey().equals(key)) {
+136 |                 return i;
+137 |             }
+138 |             i++;
+139 |         }
+140 |         return -1;
+141 |     }
+
+===== M0016 =====
+Signature: org.jfree.data.KeyedObjects2D.removeRow(Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 343-346
+Documentation:
+/**
+     * Removes an entire row from the table.
+     *
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * 
+     * @throws UnknownKeyException if <code>rowKey</code> is not recognised.
+     * 
+     * @see #removeColumn(Comparable)
+     */
+Method code:
+343 |     public void removeRow(Comparable rowKey) {
+344 |         int index = getRowIndex(rowKey);
+345 |         removeRow(index);
+346 |     }
+
+===== M0017 =====
+Signature: org.jfree.data.KeyedObjects2D.removeObject(Comparable,Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 296-320
+Documentation:
+/**
+     * Removes an object from the table by setting it to <code>null</code>.  If
+     * all the objects in the specified row and/or column are now 
+     * <code>null</code>, the row and/or column is removed from the table.
+     *
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     * 
+     * @see #addObject(Object, Comparable, Comparable)
+     */
+Method code:
+296 |     public void removeObject(Comparable rowKey, Comparable columnKey) {
+297 |         setObject(null, rowKey, columnKey);
+298 |         
+299 |         // 1. check whether the row is now empty.
+300 |         boolean allNull = true;
+301 |         int rowIndex = getRowIndex(rowKey);
+302 |         KeyedObjects row = (KeyedObjects) this.rows.get(rowIndex);
+303 | 
+304 |         for (int item = 0, itemCount = row.getItemCount(); item < itemCount; 
+305 |              item++) {
+306 |             if (row.getObject(item) != null) {
+307 |                 allNull = false;
+308 |                 break;
+309 |             }
+310 |         }
+311 |         
+312 |         if (allNull) {
+313 |             this.rowKeys.remove(rowIndex);
+314 |             this.rows.remove(rowIndex);
+315 |         }
+316 |         
+317 |         // 2. check whether the column is now empty.
+318 |         
+319 |         
+320 |     }
+
+===== M0018 =====
+Signature: org.jfree.data.KeyedObjects.getObject(Comparable)
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 168-175
+Documentation:
+/**
+     * Returns the object for a given key. If the key is not recognised, the 
+     * method should return <code>null</code>.
+     *
+     * @param key  the key.
+     *
+     * @return The object (possibly <code>null</code>).
+     * 
+     * @see #addObject(Comparable, Object)
+     */
+Method code:
+168 |     public Object getObject(Comparable key) {
+169 |         int index = getIndex(key);
+170 |         if (index < 0) {
+171 |             throw new UnknownKeyException("The key (" + key 
+172 |                     + ") is not recognised.");
+173 |         }
+174 |         return getObject(index);
+175 |     }
+
+===== M0019 =====
+Signature: org.jfree.data.KeyedObject.getObject()
+Source: source/org/jfree/data/KeyedObject.java
+Original range: 93-95
+Documentation:
+/**
+     * Returns the object.
+     *
+     * @return The object (possibly <code>null</code>).
+     */
+Method code:
+93 |     public Object getObject() {
+94 |         return this.object;
+95 |     }
+
+===== M0020 =====
+Signature: org.jfree.data.KeyedObjects2D.setObject(Object,Comparable,Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 259-284
+Documentation:
+/**
+     * Adds or updates an object.
+     *
+     * @param object  the object.
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     */
+Method code:
+259 |     public void setObject(Object object, Comparable rowKey, 
+260 |             Comparable columnKey) {
+261 | 
+262 |         if (rowKey == null) {
+263 |             throw new IllegalArgumentException("Null 'rowKey' argument.");
+264 |         }
+265 |         if (columnKey == null) {
+266 |             throw new IllegalArgumentException("Null 'columnKey' argument.");
+267 |         }
+268 |         KeyedObjects row;
+269 |         int rowIndex = this.rowKeys.indexOf(rowKey);
+270 |         if (rowIndex >= 0) {
+271 |             row = (KeyedObjects) this.rows.get(rowIndex);
+272 |         }
+273 |         else {
+274 |             this.rowKeys.add(rowKey);
+275 |             row = new KeyedObjects();
+276 |             this.rows.add(row);
+277 |         }
+278 |         row.setObject(columnKey, object);
+279 |         int columnIndex = this.columnKeys.indexOf(columnKey);
+280 |         if (columnIndex < 0) {
+281 |             this.columnKeys.add(columnKey);
+282 |         }
+283 | 
+284 |     }
+
+===== M0021 =====
+Signature: org.jfree.data.KeyedObjects2D.getColumnCount()
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 98-100
+Documentation:
+/**
+     * Returns the column count.
+     *
+     * @return The column count.
+     * 
+     * @see #getRowCount()
+     */
+Method code:
+98 |     public int getColumnCount() {
+99 |         return this.columnKeys.size();
+100 |     }
+
+===== M0022 =====
+Signature: org.jfree.data.KeyedObjects.getItemCount()
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 76-78
+Documentation:
+/**
+     * Returns the number of items (values) in the collection.
+     *
+     * @return The item count.
+     */
+Method code:
+76 |     public int getItemCount() {
+77 |         return this.data.size();
+78 |     }
+
+===== M0023 =====
+Signature: org.jfree.data.KeyedObjects2D.KeyedObjects2D()
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 74-78
+Documentation:
+/**
+     * Creates a new instance (initially empty).
+     */
+Method code:
+74 |     public KeyedObjects2D() {
+75 |         this.rowKeys = new java.util.ArrayList();
+76 |         this.columnKeys = new java.util.ArrayList();
+77 |         this.rows = new java.util.ArrayList();
+78 |     }
+
+===== M0024 =====
+Signature: org.jfree.data.KeyedObjects2D.removeRow(int)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 329-332
+Documentation:
+/**
+     * Removes an entire row from the table.
+     *
+     * @param rowIndex  the row index.
+     * 
+     * @see #removeColumn(int)
+     */
+Method code:
+329 |     public void removeRow(int rowIndex) {
+330 |         this.rowKeys.remove(rowIndex);
+331 |         this.rows.remove(rowIndex);
+332 |     }
+
+===== M0025 =====
+Signature: org.jfree.data.KeyedObjects2D.removeColumn(int)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 355-358
+Documentation:
+/**
+     * Removes an entire column from the table.
+     *
+     * @param columnIndex  the column index.
+     * 
+     * @see #removeRow(int)
+     */
+Method code:
+355 |     public void removeColumn(int columnIndex) {
+356 |         Comparable columnKey = getColumnKey(columnIndex);
+357 |         removeColumn(columnKey);
+358 |     }
+
+===== M0026 =====
+Signature: org.jfree.data.KeyedObjects2D.getColumnKey(int)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 173-175
+Documentation:
+/**
+     * Returns the key for a given column.
+     *
+     * @param column  the column.
+     *
+     * @return The key.
+     * 
+     * @see #getColumnIndex(Comparable)
+     */
+Method code:
+173 |     public Comparable getColumnKey(int column) {
+174 |         return (Comparable) this.columnKeys.get(column);
+175 |     }
+
+===== M0027 =====
+Signature: org.jfree.data.KeyedObject.KeyedObject(Comparable,Object)
+Source: source/org/jfree/data/KeyedObject.java
+Original range: 74-77
+Documentation:
+/**
+     * Creates a new (key, object) pair.
+     *
+     * @param key  the key.
+     * @param object  the object (<code>null</code> permitted).
+     */
+Method code:
+74 |     public KeyedObject(Comparable key, Object object) {
+75 |         this.key = key;
+76 |         this.object = object;
+77 |     }
+
+===== M0028 =====
+Signature: org.jfree.data.KeyedObject.setObject(Object)
+Source: source/org/jfree/data/KeyedObject.java
+Original range: 102-104
+Documentation:
+/**
+     * Sets the object.
+     *
+     * @param object  the object (<code>null</code> permitted).
+     */
+Method code:
+102 |     public void setObject(Object object) {
+103 |         this.object = object;
+104 |     }
+

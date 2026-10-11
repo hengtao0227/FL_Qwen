@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.CheckSideEffectsTest.testUselessCode()",
+    "resolved_signature": "com.google.javascript.jscomp.CheckSideEffectsTest.testUselessCode()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CheckSideEffectsTest.java",
+    "begin_line": 49,
+    "end_line": 80,
+    "comment": "// no warning\r",
+    "snippet": "  public void testUselessCode() {\n    test(\"function f(x) { if(x) return; }\", ok);\n    test(\"function f(x) { if(x); }\", \"function f(x) { if(x); }\", e);\n\n    test(\"if(x) x = y;\", ok);\n    test(\"if(x) x == bar();\", \"if(x) JSCOMPILER_PRESERVE(x == bar());\", e);\n\n    test(\"x = 3;\", ok);\n    test(\"x == 3;\", \"JSCOMPILER_PRESERVE(x == 3);\", e);\n\n    test(\"var x = 'test'\", ok);\n    test(\"var x = 'test'\\n'str'\",\n         \"var x = 'test'\\nJSCOMPILER_PRESERVE('str')\", e);\n\n    test(\"\", ok);\n    test(\"foo();;;;bar();;;;\", ok);\n\n    test(\"var a, b; a = 5, b = 6\", ok);\n    test(\"var a, b; a = 5, b == 6\",\n         \"var a, b; a = 5, JSCOMPILER_PRESERVE(b == 6)\", e);\n    test(\"var a, b; a = (5, 6)\",\n         \"var a, b; a = (JSCOMPILER_PRESERVE(5), 6)\", e);\n    test(\"var a, b; a = (bar(), 6, 7)\",\n         \"var a, b; a = (bar(), JSCOMPILER_PRESERVE(6), 7)\", e);\n    test(\"var a, b; a = (bar(), bar(), 7, 8)\",\n         \"var a, b; a = (bar(), bar(), JSCOMPILER_PRESERVE(7), 8)\", e);\n    test(\"var a, b; a = (b = 7, 6)\", ok);\n    test(\"function x(){}\\nfunction f(a, b){}\\nf(1,(x(), 2));\", ok);\n    test(\"function x(){}\\nfunction f(a, b){}\\nf(1,(2, 3));\",\n         \"function x(){}\\nfunction f(a, b){}\\n\" +\n         \"f(1,(JSCOMPILER_PRESERVE(2), 3));\", e);\n  }"
+  }
+]

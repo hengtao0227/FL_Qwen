@@ -1,0 +1,629 @@
+===== M0001 =====
+Signature: org.apache.commons.math.stat.descriptive.AbstractUnivariateStatistic.test(double[],double[],int,int,boolean)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/AbstractUnivariateStatistic.java
+Original range: 256-287
+Documentation:
+/**
+     * This method is used by <code>evaluate(double[], double[], int, int)</code> methods
+     * to verify that the begin and length parameters designate a subarray of positive length
+     * and the weights are all non-negative, non-NaN, finite, and not all zero.
+     * <p>
+     * <ul>
+     * <li>returns <code>true</code> iff the parameters designate a subarray of
+     * non-negative length and the weights array contains legitimate values.</li>
+     * <li>throws <code>IllegalArgumentException</code> if any of the following are true:
+     * <ul><li>the values array is null</li>
+     *     <li>the weights array is null</li>
+     *     <li>the weights array does not have the same length as the values array</li>
+     *     <li>the weights array contains one or more infinite values</li>
+     *     <li>the weights array contains one or more NaN values</li>
+     *     <li>the weights array contains negative values</li>
+     *     <li>the start and length arguments do not determine a valid array</li></ul>
+     * </li>
+     * <li>returns <code>false</li> if the array is non-null, but
+     * <code>length</code> is 0 unless <code>allowEmpty</code> is <code>true</code>.
+     * </ul></p>
+     *
+     * @param values the input array.
+     * @param weights the weights array.
+     * @param begin index of the first array element to include.
+     * @param length the number of elements to include.
+     * @param allowEmpty if {@code true} than allow zero length arrays to pass.
+     * @return {@code true} if the parameters are valid.
+     * @throws IllegalArgumentException if the indices are invalid or the array
+     * is {@code null}.
+     * @since 3.0
+     */
+Method code:
+256 |     protected boolean test(final double[] values, final double[] weights, final int begin, final int length, final boolean allowEmpty){
+257 | 
+258 |         if (weights == null) {
+259 |             throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+260 |         }
+261 | 
+262 |         if (weights.length != values.length) {
+263 |             throw new DimensionMismatchException(weights.length, values.length);
+264 |         }
+265 | 
+266 |         boolean containsPositiveWeight = false;
+267 |         for (int i = begin; i < begin + length; i++) {
+268 |             if (Double.isNaN(weights[i])) {
+269 |                 throw new MathIllegalArgumentException(LocalizedFormats.NAN_ELEMENT_AT_INDEX, i);
+270 |             }
+271 |             if (Double.isInfinite(weights[i])) {
+272 |                 throw new MathIllegalArgumentException(LocalizedFormats.INFINITE_ARRAY_ELEMENT, weights[i], i);
+273 |             }
+274 |             if (weights[i] < 0) {
+275 |                 throw new MathIllegalArgumentException(LocalizedFormats.NEGATIVE_ELEMENT_AT_INDEX, i, weights[i]);
+276 |             }
+277 |             if (!containsPositiveWeight && weights[i] > 0.0) {
+278 |                 containsPositiveWeight = true;
+279 |             }
+280 |         }
+281 | 
+282 |         if (!containsPositiveWeight) {
+283 |             throw new MathIllegalArgumentException(LocalizedFormats.WEIGHT_AT_LEAST_ONE_NON_ZERO);
+284 |         }
+285 | 
+286 |         return test(values, begin, length, allowEmpty);
+287 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.Variance()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 97-99
+Documentation:
+/**
+     * Constructs a Variance with default (true) <code>isBiasCorrected</code>
+     * property.
+     */
+Method code:
+97 |     public Variance() {
+98 |         moment = new SecondMoment();
+99 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Mean.evaluate(double[],double[],int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Mean.java
+Original range: 203-220
+Documentation:
+/**
+     * Returns the weighted arithmetic mean of the entries in the specified portion of
+     * the input array, or <code>Double.NaN</code> if the designated subarray
+     * is empty.
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if either array is null.</p>
+     * <p>
+     * See {@link Mean} for details on the computing algorithm. The two-pass algorithm
+     * described above is used here, with weights applied in computing both the original
+     * estimate and the correction factor.</p>
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if any of the following are true:
+     * <ul><li>the values array is null</li>
+     *     <li>the weights array is null</li>
+     *     <li>the weights array does not have the same length as the values array</li>
+     *     <li>the weights array contains one or more infinite values</li>
+     *     <li>the weights array contains one or more NaN values</li>
+     *     <li>the weights array contains negative values</li>
+     *     <li>the start and length arguments do not determine a valid array</li>
+     * </ul></p>
+     *
+     * @param values the input array
+     * @param weights the weights array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return the mean of the values or Double.NaN if length = 0
+     * @throws IllegalArgumentException if the parameters are not valid
+     * @since 2.1
+     */
+Method code:
+203 |     public double evaluate(final double[] values, final double[] weights,
+204 |                            final int begin, final int length) {
+205 |         if (test(values, weights, begin, length)) {
+206 |             Sum sum = new Sum();
+207 | 
+208 |             // Compute initial estimate using definitional formula
+209 |             double sumw = sum.evaluate(weights,begin,length);
+210 |             double xbarw = sum.evaluate(values, weights, begin, length) / sumw;
+211 | 
+212 |             // Compute correction factor in second pass
+213 |             double correction = 0;
+214 |             for (int i = begin; i < begin + length; i++) {
+215 |                 correction += weights[i] * (values[i] - xbarw);
+216 |             }
+217 |             return xbarw + (correction/sumw);
+218 |         }
+219 |         return Double.NaN;
+220 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.SecondMoment.SecondMoment()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/SecondMoment.java
+Original range: 59-62
+Documentation:
+/**
+     * Create a SecondMoment instance
+     */
+Method code:
+59 |     public SecondMoment() {
+60 |         super();
+61 |         m2 = Double.NaN;
+62 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.Sum.evaluate(double[],double[],int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/Sum.java
+Original range: 157-167
+Documentation:
+/**
+     * The weighted sum of the entries in the specified portion of
+     * the input array, or 0 if the designated subarray
+     * is empty.
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if any of the following are true:
+     * <ul><li>the values array is null</li>
+     *     <li>the weights array is null</li>
+     *     <li>the weights array does not have the same length as the values array</li>
+     *     <li>the weights array contains one or more infinite values</li>
+     *     <li>the weights array contains one or more NaN values</li>
+     *     <li>the weights array contains negative values</li>
+     *     <li>the start and length arguments do not determine a valid array</li>
+     * </ul></p>
+     * <p>
+     * Uses the formula, <pre>
+     *    weighted sum = &Sigma;(values[i] * weights[i])
+     * </pre></p>
+     *
+     * @param values the input array
+     * @param weights the weights array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return the sum of the values or 0 if length = 0
+     * @throws IllegalArgumentException if the parameters are not valid
+     * @since 2.1
+     */
+Method code:
+157 |     public double evaluate(final double[] values, final double[] weights,
+158 |                            final int begin, final int length) {
+159 |         double sum = Double.NaN;
+160 |         if (test(values, weights, begin, length, true)) {
+161 |             sum = 0.0;
+162 |             for (int i = begin; i < begin + length; i++) {
+163 |                 sum += values[i] * weights[i];
+164 |             }
+165 |         }
+166 |         return sum;
+167 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.evaluate(double[],double[])
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 369-371
+Documentation:
+/**
+     * <p>
+     * Returns the weighted variance of the entries in the the input array.</p>
+     * <p>
+     * Uses the formula <pre>
+     *   &Sigma;(weights[i]*(values[i] - weightedMean)<sup>2</sup>)/(&Sigma;(weights[i]) - 1)
+     * </pre>
+     * where weightedMean is the weighted mean</p>
+     * <p>
+     * This formula will not return the same result as the unweighted variance when all
+     * weights are equal, unless all weights are equal to 1. The formula assumes that
+     * weights are to be treated as "expansion values," as will be the case if for example
+     * the weights represent frequency counts. To normalize weights so that the denominator
+     * in the variance computation equals the length of the input vector minus one, use <pre>
+     *   <code>evaluate(values, MathArrays.normalizeArray(weights, values.length)); </code>
+     * </pre>
+     * <p>
+     * Returns 0 for a single-value (i.e. length = 1) sample.</p>
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if any of the following are true:
+     * <ul><li>the values array is null</li>
+     *     <li>the weights array is null</li>
+     *     <li>the weights array does not have the same length as the values array</li>
+     *     <li>the weights array contains one or more infinite values</li>
+     *     <li>the weights array contains one or more NaN values</li>
+     *     <li>the weights array contains negative values</li>
+     * </ul></p>
+     * <p>
+     * Does not change the internal state of the statistic.</p>
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if either array is null.</p>
+     *
+     * @param values the input array
+     * @param weights the weights array
+     * @return the weighted variance of the values
+     * @throws IllegalArgumentException if the parameters are not valid
+     * @since 2.1
+     */
+Method code:
+369 |     public double evaluate(final double[] values, final double[] weights) {
+370 |         return evaluate(values, weights, 0, values.length);
+371 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.stat.descriptive.AbstractUnivariateStatistic.test(double[],int,int,boolean)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/AbstractUnivariateStatistic.java
+Original range: 161-186
+Documentation:
+/**
+     * This method is used by <code>evaluate(double[], int, int)</code> methods
+     * to verify that the input parameters designate a subarray of positive length.
+     * <p>
+     * <ul>
+     * <li>returns <code>true</code> iff the parameters designate a subarray of
+     * non-negative length</li>
+     * <li>throws <code>IllegalArgumentException</code> if the array is null or
+     * or the indices are invalid</li>
+     * <li>returns <code>false</li> if the array is non-null, but
+     * <code>length</code> is 0 unless <code>allowEmpty</code> is <code>true</code>
+     * </ul></p>
+     *
+     * @param values the input array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @param allowEmpty if <code>true</code> then zero length arrays are allowed
+     * @return true if the parameters are valid
+     * @throws IllegalArgumentException if the indices are invalid or the array is null
+     * @since 3.0
+     */
+Method code:
+161 |     protected boolean test(final double[] values, final int begin, final int length, final boolean allowEmpty){
+162 | 
+163 |         if (values == null) {
+164 |             throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+165 |         }
+166 | 
+167 |         if (begin < 0) {
+168 |             throw new NotPositiveException(LocalizedFormats.START_POSITION, begin);
+169 |         }
+170 | 
+171 |         if (length < 0) {
+172 |             throw new NotPositiveException(LocalizedFormats.LENGTH, length);
+173 |         }
+174 | 
+175 |         if (begin + length > values.length) {
+176 |             throw new NumberIsTooLargeException(LocalizedFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
+177 |                                                 begin + length, values.length, true);
+178 |         }
+179 | 
+180 |         if (length == 0 && !allowEmpty) {
+181 |             return false;
+182 |         }
+183 | 
+184 |         return true;
+185 | 
+186 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Mean.Mean()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Mean.java
+Original range: 79-82
+Documentation:
+/** Constructs a Mean. */
+Method code:
+79 |     public Mean() {
+80 |         incMoment = true;
+81 |         moment = new FirstMoment();
+82 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.FirstMoment.FirstMoment()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/FirstMoment.java
+Original range: 79-84
+Documentation:
+/**
+     * Create a FirstMoment instance
+     */
+Method code:
+79 |     public FirstMoment() {
+80 |         n = 0;
+81 |         m1 = Double.NaN;
+82 |         dev = Double.NaN;
+83 |         nDev = Double.NaN;
+84 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.FirstMoment.clear()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/FirstMoment.java
+Original range: 115-121
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+115 |     @Override
+116 |     public void clear() {
+117 |         m1 = Double.NaN;
+118 |         n = 0;
+119 |         dev = Double.NaN;
+120 |         nDev = Double.NaN;
+121 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.Sum.evaluate(double[],int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/Sum.java
+Original range: 118-128
+Documentation:
+/**
+     * The sum of the entries in the specified portion of
+     * the input array, or 0 if the designated subarray
+     * is empty.
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if the array is null.</p>
+     *
+     * @param values the input array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return the sum of the values or 0 if length = 0
+     * @throws IllegalArgumentException if the array is null or the array index
+     *  parameters are not valid
+     */
+Method code:
+118 |     @Override
+119 |     public double evaluate(final double[] values, final int begin, final int length) {
+120 |         double sum = Double.NaN;
+121 |         if (test(values, begin, length, true)) {
+122 |             sum = 0.0;
+123 |             for (int i = begin; i < begin + length; i++) {
+124 |                 sum += values[i];
+125 |             }
+126 |         }
+127 |         return sum;
+128 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.clear()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 202-207
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+202 |     @Override
+203 |     public void clear() {
+204 |         if (incMoment) {
+205 |             moment.clear();
+206 |         }
+207 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.Sum.Sum()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/Sum.java
+Original range: 56-59
+Documentation:
+/**
+     * Create a Sum instance
+     */
+Method code:
+56 |     public Sum() {
+57 |         n = 0;
+58 |         value = 0;
+59 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.SecondMoment.clear()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/SecondMoment.java
+Original range: 90-94
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+90 |     @Override
+91 |     public void clear() {
+92 |         super.clear();
+93 |         m2 = Double.NaN;
+94 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.stat.descriptive.AbstractUnivariateStatistic.test(double[],double[],int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/AbstractUnivariateStatistic.java
+Original range: 217-223
+Documentation:
+/**
+     * This method is used by <code>evaluate(double[], double[], int, int)</code> methods
+     * to verify that the begin and length parameters designate a subarray of positive length
+     * and the weights are all non-negative, non-NaN, finite, and not all zero.
+     * <p>
+     * <ul>
+     * <li>returns <code>true</code> iff the parameters designate a subarray of
+     * positive length and the weights array contains legitimate values.</li>
+     * <li>throws <code>IllegalArgumentException</code> if any of the following are true:
+     * <ul><li>the values array is null</li>
+     *     <li>the weights array is null</li>
+     *     <li>the weights array does not have the same length as the values array</li>
+     *     <li>the weights array contains one or more infinite values</li>
+     *     <li>the weights array contains one or more NaN values</li>
+     *     <li>the weights array contains negative values</li>
+     *     <li>the start and length arguments do not determine a valid array</li></ul>
+     * </li>
+     * <li>returns <code>false</li> if the array is non-null, but
+     * <code>length</code> is 0.
+     * </ul></p>
+     *
+     * @param values the input array
+     * @param weights the weights array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return true if the parameters are valid and designate a subarray of positive length
+     * @throws IllegalArgumentException if the indices are invalid or the array is null
+     * @since 2.1
+     */
+Method code:
+217 |     protected boolean test(
+218 |         final double[] values,
+219 |         final double[] weights,
+220 |         final int begin,
+221 |         final int length) {
+222 |         return test(values, weights, begin, length, false);
+223 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math.util.FastMath.sqrt(double)
+Source: src/main/java/org/apache/commons/math/util/FastMath.java
+Original range: 374-376
+Documentation:
+/** Compute the square root of a number.
+     * <p><b>Note:</b> this implementation currently delegates to {@link Math#sqrt}
+     * @param a number on which evaluation is done
+     * @return square root of a
+     */
+Method code:
+374 |     public static double sqrt(final double a) {
+375 |         return Math.sqrt(a);
+376 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.evaluate(double[],double[],double,int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 501-532
+Documentation:
+/**
+     * Returns the weighted variance of the entries in the specified portion of
+     * the input array, using the precomputed weighted mean value.  Returns
+     * <code>Double.NaN</code> if the designated subarray is empty.
+     * <p>
+     * Uses the formula <pre>
+     *   &Sigma;(weights[i]*(values[i] - mean)<sup>2</sup>)/(&Sigma;(weights[i]) - 1)
+     * </pre></p>
+     * <p>
+     * The formula used assumes that the supplied mean value is the weighted arithmetic
+     * mean of the sample data, not a known population parameter. This method
+     * is supplied only to save computation when the mean has already been
+     * computed.</p>
+     * <p>
+     * This formula will not return the same result as the unweighted variance when all
+     * weights are equal, unless all weights are equal to 1. The formula assumes that
+     * weights are to be treated as "expansion values," as will be the case if for example
+     * the weights represent frequency counts. To normalize weights so that the denominator
+     * in the variance computation equals the length of the input vector minus one, use <pre>
+     *   <code>evaluate(values, MathArrays.normalizeArray(weights, values.length), mean); </code>
+     * </pre>
+     * <p>
+     * Returns 0 for a single-value (i.e. length = 1) sample.</p>
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if any of the following are true:
+     * <ul><li>the values array is null</li>
+     *     <li>the weights array is null</li>
+     *     <li>the weights array does not have the same length as the values array</li>
+     *     <li>the weights array contains one or more infinite values</li>
+     *     <li>the weights array contains one or more NaN values</li>
+     *     <li>the weights array contains negative values</li>
+     *     <li>the start and length arguments do not determine a valid array</li>
+     * </ul></p>
+     * <p>
+     * Does not change the internal state of the statistic.</p>
+     *
+     * @param values the input array
+     * @param weights the weights array
+     * @param mean the precomputed weighted mean value
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return the variance of the values or Double.NaN if length = 0
+     * @throws IllegalArgumentException if the parameters are not valid
+     * @since 2.1
+     */
+Method code:
+501 |     public double evaluate(final double[] values, final double[] weights,
+502 |                            final double mean, final int begin, final int length) {
+503 | 
+504 |         double var = Double.NaN;
+505 | 
+506 |         if (test(values, weights, begin, length)) {
+507 |             if (length == 1) {
+508 |                 var = 0.0;
+509 |             } else if (length > 1) {
+510 |                 double accum = 0.0;
+511 |                 double dev = 0.0;
+512 |                 double accum2 = 0.0;
+513 |                 for (int i = begin; i < begin + length; i++) {
+514 |                     dev = values[i] - mean;
+515 |                     accum += weights[i] * (dev * dev);
+516 |                     accum2 += weights[i] * dev;
+517 |                 }
+518 | 
+519 |                 double sumWts = 0;
+520 |                 for (int i = 0; i < weights.length; i++) {
+521 |                     sumWts += weights[i];
+522 |                 }
+523 | 
+524 |                 if (isBiasCorrected) {
+525 |                     var = (accum - (accum2 * accum2 / sumWts)) / (sumWts - 1.0);
+526 |                 } else {
+527 |                     var = (accum - (accum2 * accum2 / sumWts)) / sumWts;
+528 |                 }
+529 |             }
+530 |         }
+531 |         return var;
+532 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.evaluate(double[],double[],int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 313-329
+Documentation:
+/**
+     * <p>Returns the weighted variance of the entries in the specified portion of
+     * the input array, or <code>Double.NaN</code> if the designated subarray
+     * is empty.</p>
+     * <p>
+     * Uses the formula <pre>
+     *   &Sigma;(weights[i]*(values[i] - weightedMean)<sup>2</sup>)/(&Sigma;(weights[i]) - 1)
+     * </pre>
+     * where weightedMean is the weighted mean</p>
+     * <p>
+     * This formula will not return the same result as the unweighted variance when all
+     * weights are equal, unless all weights are equal to 1. The formula assumes that
+     * weights are to be treated as "expansion values," as will be the case if for example
+     * the weights represent frequency counts. To normalize weights so that the denominator
+     * in the variance computation equals the length of the input vector minus one, use <pre>
+     *   <code>evaluate(values, MathArrays.normalizeArray(weights, values.length)); </code>
+     * </pre>
+     * <p>
+     * Returns 0 for a single-value (i.e. length = 1) sample.</p>
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if any of the following are true:
+     * <ul><li>the values array is null</li>
+     *     <li>the weights array is null</li>
+     *     <li>the weights array does not have the same length as the values array</li>
+     *     <li>the weights array contains one or more infinite values</li>
+     *     <li>the weights array contains one or more NaN values</li>
+     *     <li>the weights array contains negative values</li>
+     *     <li>the start and length arguments do not determine a valid array</li>
+     * </ul></p>
+     * <p>
+     * Does not change the internal state of the statistic.</p>
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if either array is null.</p>
+     *
+     * @param values the input array
+     * @param weights the weights array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return the weighted variance of the values or Double.NaN if length = 0
+     * @throws IllegalArgumentException if the parameters are not valid
+     * @since 2.1
+     */
+Method code:
+313 |     public double evaluate(final double[] values, final double[] weights,
+314 |                            final int begin, final int length) {
+315 | 
+316 |         double var = Double.NaN;
+317 | 
+318 |         if (test(values, weights,begin, length)) {
+319 |             clear();
+320 |             if (length == 1) {
+321 |                 var = 0.0;
+322 |             } else if (length > 1) {
+323 |                 Mean mean = new Mean();
+324 |                 double m = mean.evaluate(values, weights, begin, length);
+325 |                 var = evaluate(values, weights, m, begin, length);
+326 |             }
+327 |         }
+328 |         return var;
+329 |     }
+

@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.PeepholeFoldConstantsTest.testFoldGetElem()",
+    "resolved_signature": "com.google.javascript.jscomp.PeepholeFoldConstantsTest.testFoldGetElem()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+    "begin_line": 764,
+    "end_line": 778,
+    "comment": "",
+    "snippet": "  public void testFoldGetElem() {\n    fold(\"x = [,10][0]\", \"x = void 0\");\n    fold(\"x = [10, 20][0]\", \"x = 10\");\n    fold(\"x = [10, 20][1]\", \"x = 20\");\n    fold(\"x = [10, 20][0.5]\", \"\",\n        PeepholeFoldConstants.INVALID_GETELEM_INDEX_ERROR);\n    fold(\"x = [10, 20][-1]\",    \"\",\n        PeepholeFoldConstants.INDEX_OUT_OF_BOUNDS_ERROR);\n    fold(\"x = [10, 20][2]\",     \"\",\n        PeepholeFoldConstants.INDEX_OUT_OF_BOUNDS_ERROR);\n\n    foldSame(\"x = [foo(), 0][1]\");\n    fold(\"x = [0, foo()][1]\", \"x = foo()\");\n    foldSame(\"x = [0, foo()][0]\");\n  }"
+  }
+]

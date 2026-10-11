@@ -1,0 +1,2883 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.linear.RealVectorFormat.getInstance(Locale)
+Source: src/main/java/org/apache/commons/math3/linear/RealVectorFormat.java
+Original range: 170-172
+Documentation:
+/**
+     * Returns the default real vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the real vector format specific to the given locale.
+     */
+Method code:
+170 |     public static RealVectorFormat getInstance(final Locale locale) {
+171 |         return new RealVectorFormat(CompositeFormat.getDefaultNumberFormat(locale));
+172 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.random.RandomDataGenerator.RandomDataGenerator()
+Source: src/main/java/org/apache/commons/math3/random/RandomDataGenerator.java
+Original range: 131-132
+Documentation:
+/**
+     * Construct a RandomDataGenerator, using a default random generator as the source
+     * of randomness.
+     *
+     * <p>The default generator is a {@link Well19937c} seeded
+     * with {@code System.currentTimeMillis() + System.identityHashCode(this))}.
+     * The generator is initialized and seeded on first use.</p>
+     */
+Method code:
+131 |     public RandomDataGenerator() {
+132 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpIntA()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6141-6143
+Documentation:
+/**
+     * Load "EXP_INT_A".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6141 |     static double[] loadExpIntA() {
+6142 |         return EXP_INT_A.clone();
+6143 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.util.MathUtils.checkNotNull(Object)
+Source: src/main/java/org/apache/commons/math3/util/MathUtils.java
+Original range: 262-267
+Documentation:
+/**
+     * Checks that an object is not null.
+     *
+     * @param o Object to be checked.
+     * @throws NullArgumentException if {@code o} is {@code null}.
+     */
+Method code:
+262 |     public static void checkNotNull(Object o)
+263 |         throws NullArgumentException {
+264 |         if (o == null) {
+265 |             throw new NullArgumentException();
+266 |         }
+267 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadLnMant()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6173-6175
+Documentation:
+/**
+     * Load "LN_MANT".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6173 |     static double[][] loadLnMant() {
+6174 |         return LN_MANT.clone();
+6175 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.getDeterminant()
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 356-362
+Documentation:
+/**
+     * Computes the determinant of the matrix.
+     *
+     * @return the determinant of the matrix.
+     */
+Method code:
+356 |     public double getDeterminant() {
+357 |         double determinant = 1;
+358 |         for (double lambda : realEigenvalues) {
+359 |             determinant *= lambda;
+360 |         }
+361 |         return determinant;
+362 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math3.util.CompositeFormat.getDefaultNumberFormat()
+Source: src/main/java/org/apache/commons/math3/util/CompositeFormat.java
+Original range: 42-44
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance()} with the only customizing that the
+     * maximum number of fraction digits is set to 10.
+     * @return the default number format.
+     */
+Method code:
+42 |     public static NumberFormat getDefaultNumberFormat() {
+43 |         return getDefaultNumberFormat(Locale.getDefault());
+44 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math3.linear.TriDiagonalTransformer.TriDiagonalTransformer(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/TriDiagonalTransformer.java
+Original range: 62-78
+Documentation:
+/**
+     * Build the transformation to tridiagonal shape of a symmetrical matrix.
+     * <p>The specified matrix is assumed to be symmetrical without any check.
+     * Only the upper triangular part of the matrix is used.</p>
+     *
+     * @param matrix Symmetrical matrix to transform.
+     * @throws NonSquareMatrixException if the matrix is not square.
+     */
+Method code:
+62 |     public TriDiagonalTransformer(RealMatrix matrix) {
+63 |         if (!matrix.isSquare()) {
+64 |             throw new NonSquareMatrixException(matrix.getRowDimension(),
+65 |                                                matrix.getColumnDimension());
+66 |         }
+67 | 
+68 |         final int m = matrix.getRowDimension();
+69 |         householderVectors = matrix.getData();
+70 |         main      = new double[m];
+71 |         secondary = new double[m - 1];
+72 |         cachedQ   = null;
+73 |         cachedQt  = null;
+74 |         cachedT   = null;
+75 | 
+76 |         // transform matrix
+77 |         transform();
+78 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.copyIn(double[][])
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 545-548
+Documentation:
+/**
+     * Replace data with a fresh copy of the input array.
+     *
+     * @param in Data to copy.
+     * @throws NoDataException if the input array is empty.
+     * @throws DimensionMismatchException if the input array is not rectangular.
+     * @throws NullArgumentException if the input array is {@code null}.
+     */
+Method code:
+545 |     private void copyIn(final double[][] in)
+546 |         throws DimensionMismatchException, NoDataException, NullArgumentException {
+547 |         setSubMatrix(in, 0, 0);
+548 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.copyOut()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 527-535
+Documentation:
+/**
+     * Get a fresh copy of the underlying data array.
+     *
+     * @return a copy of the underlying data array.
+     */
+Method code:
+527 |     private double[][] copyOut() {
+528 |         final int nRows = this.getRowDimension();
+529 |         final double[][] out = new double[nRows][this.getColumnDimension()];
+530 |         // can't copy 2-d array in one shot, otherwise get row references
+531 |         for (int i = 0; i < nRows; i++) {
+532 |             System.arraycopy(data[i], 0, out[i], 0, data[i].length);
+533 |         }
+534 |         return out;
+535 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkRowIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 466-473
+Documentation:
+/**
+     * Check if a row index is valid.
+     *
+     * @param m Matrix.
+     * @param row Row index to check.
+     * @throws OutOfRangeException if {@code row} is not a valid index.
+     */
+Method code:
+466 |     public static void checkRowIndex(final AnyMatrix m, final int row)
+467 |         throws OutOfRangeException {
+468 |         if (row < 0 ||
+469 |             row >= m.getRowDimension()) {
+470 |             throw new OutOfRangeException(LocalizedFormats.ROW_INDEX,
+471 |                                           row, 0, m.getRowDimension() - 1);
+472 |         }
+473 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.setEntry(int,int,double)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 311-316
+Documentation:
+/** {@inheritDoc} */
+Method code:
+311 |     @Override
+312 |     public void setEntry(final int row, final int column, final double value)
+313 |         throws OutOfRangeException {
+314 |         MatrixUtils.checkMatrixIndex(this, row, column);
+315 |         data[row][column] = value;
+316 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getFormat()
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 206-208
+Documentation:
+/**
+     * Get the components format.
+     * @return components format.
+     */
+Method code:
+206 |     public NumberFormat getFormat() {
+207 |         return format;
+208 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.isSymmetricInternal(RealMatrix,double,boolean)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 388-414
+Documentation:
+/**
+     * Checks whether a matrix is symmetric, within a given relative tolerance.
+     *
+     * @param matrix Matrix to check.
+     * @param relativeTolerance Tolerance of the symmetry check.
+     * @param raiseException If {@code true}, an exception will be raised if
+     * the matrix is not symmetric.
+     * @return {@code true} if {@code matrix} is symmetric.
+     * @throws NonSquareMatrixException if the matrix is not square.
+     * @throws NonSymmetricMatrixException if the matrix is not symmetric.
+     */
+Method code:
+388 |     private static boolean isSymmetricInternal(RealMatrix matrix,
+389 |                                                double relativeTolerance,
+390 |                                                boolean raiseException) {
+391 |         final int rows = matrix.getRowDimension();
+392 |         if (rows != matrix.getColumnDimension()) {
+393 |             if (raiseException) {
+394 |                 throw new NonSquareMatrixException(rows, matrix.getColumnDimension());
+395 |             } else {
+396 |                 return false;
+397 |             }
+398 |         }
+399 |         for (int i = 0; i < rows; i++) {
+400 |             for (int j = i + 1; j < rows; j++) {
+401 |                 final double mij = matrix.getEntry(i, j);
+402 |                 final double mji = matrix.getEntry(j, i);
+403 |                 if (FastMath.abs(mij - mji) >
+404 |                     FastMath.max(FastMath.abs(mij), FastMath.abs(mji)) * relativeTolerance) {
+405 |                     if (raiseException) {
+406 |                         throw new NonSymmetricMatrixException(i, j, relativeTolerance);
+407 |                     } else {
+408 |                         return false;
+409 |                     }
+410 |                 }
+411 |             }
+412 |         }
+413 |         return true;
+414 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math3.util.FastMath.pow(double,double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1442-1600
+Documentation:
+/**
+     * Power function.  Compute x^y.
+     *
+     * @param x   a double
+     * @param y   a double
+     * @return double
+     */
+Method code:
+1442 |     public static double pow(double x, double y) {
+1443 |         final double lns[] = new double[2];
+1444 | 
+1445 |         if (y == 0.0) {
+1446 |             return 1.0;
+1447 |         }
+1448 | 
+1449 |         if (x != x) { // X is NaN
+1450 |             return x;
+1451 |         }
+1452 | 
+1453 | 
+1454 |         if (x == 0) {
+1455 |             long bits = Double.doubleToLongBits(x);
+1456 |             if ((bits & 0x8000000000000000L) != 0) {
+1457 |                 // -zero
+1458 |                 long yi = (long) y;
+1459 | 
+1460 |                 if (y < 0 && y == yi && (yi & 1) == 1) {
+1461 |                     return Double.NEGATIVE_INFINITY;
+1462 |                 }
+1463 | 
+1464 |                 if (y > 0 && y == yi && (yi & 1) == 1) {
+1465 |                     return -0.0;
+1466 |                 }
+1467 |             }
+1468 | 
+1469 |             if (y < 0) {
+1470 |                 return Double.POSITIVE_INFINITY;
+1471 |             }
+1472 |             if (y > 0) {
+1473 |                 return 0.0;
+1474 |             }
+1475 | 
+1476 |             return Double.NaN;
+1477 |         }
+1478 | 
+1479 |         if (x == Double.POSITIVE_INFINITY) {
+1480 |             if (y != y) { // y is NaN
+1481 |                 return y;
+1482 |             }
+1483 |             if (y < 0.0) {
+1484 |                 return 0.0;
+1485 |             } else {
+1486 |                 return Double.POSITIVE_INFINITY;
+1487 |             }
+1488 |         }
+1489 | 
+1490 |         if (y == Double.POSITIVE_INFINITY) {
+1491 |             if (x * x == 1.0) {
+1492 |                 return Double.NaN;
+1493 |             }
+1494 | 
+1495 |             if (x * x > 1.0) {
+1496 |                 return Double.POSITIVE_INFINITY;
+1497 |             } else {
+1498 |                 return 0.0;
+1499 |             }
+1500 |         }
+1501 | 
+1502 |         if (x == Double.NEGATIVE_INFINITY) {
+1503 |             if (y != y) { // y is NaN
+1504 |                 return y;
+1505 |             }
+1506 | 
+1507 |             if (y < 0) {
+1508 |                 long yi = (long) y;
+1509 |                 if (y == yi && (yi & 1) == 1) {
+1510 |                     return -0.0;
+1511 |                 }
+1512 | 
+1513 |                 return 0.0;
+1514 |             }
+1515 | 
+1516 |             if (y > 0)  {
+1517 |                 long yi = (long) y;
+1518 |                 if (y == yi && (yi & 1) == 1) {
+1519 |                     return Double.NEGATIVE_INFINITY;
+1520 |                 }
+1521 | 
+1522 |                 return Double.POSITIVE_INFINITY;
+1523 |             }
+1524 |         }
+1525 | 
+1526 |         if (y == Double.NEGATIVE_INFINITY) {
+1527 | 
+1528 |             if (x * x == 1.0) {
+1529 |                 return Double.NaN;
+1530 |             }
+1531 | 
+1532 |             if (x * x < 1.0) {
+1533 |                 return Double.POSITIVE_INFINITY;
+1534 |             } else {
+1535 |                 return 0.0;
+1536 |             }
+1537 |         }
+1538 | 
+1539 |         /* Handle special case x<0 */
+1540 |         if (x < 0) {
+1541 |             // y is an even integer in this case
+1542 |             if (y >= TWO_POWER_53 || y <= -TWO_POWER_53) {
+1543 |                 return pow(-x, y);
+1544 |             }
+1545 | 
+1546 |             if (y == (long) y) {
+1547 |                 // If y is an integer
+1548 |                 return ((long)y & 1) == 0 ? pow(-x, y) : -pow(-x, y);
+1549 |             } else {
+1550 |                 return Double.NaN;
+1551 |             }
+1552 |         }
+1553 | 
+1554 |         /* Split y into ya and yb such that y = ya+yb */
+1555 |         double ya;
+1556 |         double yb;
+1557 |         if (y < 8e298 && y > -8e298) {
+1558 |             double tmp1 = y * HEX_40000000;
+1559 |             ya = y + tmp1 - tmp1;
+1560 |             yb = y - ya;
+1561 |         } else {
+1562 |             double tmp1 = y * 9.31322574615478515625E-10;
+1563 |             double tmp2 = tmp1 * 9.31322574615478515625E-10;
+1564 |             ya = (tmp1 + tmp2 - tmp1) * HEX_40000000 * HEX_40000000;
+1565 |             yb = y - ya;
+1566 |         }
+1567 | 
+1568 |         /* Compute ln(x) */
+1569 |         final double lores = log(x, lns);
+1570 |         if (Double.isInfinite(lores)){ // don't allow this to be converted to NaN
+1571 |             return lores;
+1572 |         }
+1573 | 
+1574 |         double lna = lns[0];
+1575 |         double lnb = lns[1];
+1576 | 
+1577 |         /* resplit lns */
+1578 |         double tmp1 = lna * HEX_40000000;
+1579 |         double tmp2 = lna + tmp1 - tmp1;
+1580 |         lnb += lna - tmp2;
+1581 |         lna = tmp2;
+1582 | 
+1583 |         // y*ln(x) = (aa+ab)
+1584 |         final double aa = lna * ya;
+1585 |         final double ab = lna * yb + lnb * ya + lnb * yb;
+1586 | 
+1587 |         lna = aa+ab;
+1588 |         lnb = -(lna - aa - ab);
+1589 | 
+1590 |         double z = 1.0 / 120.0;
+1591 |         z = z * lnb + (1.0 / 24.0);
+1592 |         z = z * lnb + (1.0 / 6.0);
+1593 |         z = z * lnb + 0.5;
+1594 |         z = z * lnb + 1.0;
+1595 |         z = z * lnb;
+1596 | 
+1597 |         final double result = exp(lna, z, null);
+1598 |         //result = result + result * z;
+1599 |         return result;
+1600 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math3.util.FastMath.min(int,int)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3420-3422
+Documentation:
+/** Compute the minimum of two values
+     * @param a first value
+     * @param b second value
+     * @return a if a is lesser or equal to b, b otherwise
+     */
+Method code:
+3420 |     public static int min(final int a, final int b) {
+3421 |         return (a <= b) ? a : b;
+3422 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math3.random.AbstractWell.setSeed(int[])
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 152-170
+Documentation:
+/** Reinitialize the generator as if just built with the given int array seed.
+     * <p>The state of the generator is exactly the same as a new
+     * generator built with the same seed.</p>
+     * @param seed the initial seed (32 bits integers array). If null
+     * the seed of the generator will be the system time plus the system identity
+     * hash code of the instance.
+     */
+Method code:
+152 |     @Override
+153 |     public void setSeed(final int[] seed) {
+154 |         if (seed == null) {
+155 |             setSeed(System.currentTimeMillis() + System.identityHashCode(this));
+156 |             return;
+157 |         }
+158 | 
+159 |         System.arraycopy(seed, 0, v, 0, Math.min(seed.length, v.length));
+160 | 
+161 |         if (seed.length < v.length) {
+162 |             for (int i = seed.length; i < v.length; ++i) {
+163 |                 final long l = v[i - seed.length];
+164 |                 v[i] = (int) ((1812433253l * (l ^ (l >> 30)) + i) & 0xffffffffL);
+165 |             }
+166 |         }
+167 | 
+168 |         index = 0;
+169 |         clear();  // Clear normal deviate cache
+170 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkMatrixIndex(AnyMatrix,int,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 452-457
+Documentation:
+/**
+     * Check if matrix indices are valid.
+     *
+     * @param m Matrix.
+     * @param row Row index to check.
+     * @param column Column index to check.
+     * @throws OutOfRangeException if {@code row} or {@code column} is not
+     * a valid index.
+     */
+Method code:
+452 |     public static void checkMatrixIndex(final AnyMatrix m,
+453 |                                         final int row, final int column)
+454 |         throws OutOfRangeException {
+455 |         checkRowIndex(m, row);
+456 |         checkColumnIndex(m, column);
+457 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.transformToTridiagonal(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 559-564
+Documentation:
+/**
+     * Transforms the matrix to tridiagonal form.
+     *
+     * @param matrix Matrix to transform.
+     */
+Method code:
+559 |     private void transformToTridiagonal(final RealMatrix matrix) {
+560 |         // transform the matrix to tridiagonal
+561 |         transformer = new TriDiagonalTransformer(matrix);
+562 |         main = transformer.getMainDiagonalRef();
+563 |         secondary = transformer.getSecondaryDiagonalRef();
+564 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.getEigenvector(int)
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 347-349
+Documentation:
+/**
+     * Gets a copy of the i<sup>th</sup> eigenvector of the original matrix.
+     *
+     * @param i Index of the eigenvector (counting from 0).
+     * @return a copy of the i<sup>th</sup> eigenvector of the original matrix.
+     * @see #getD()
+     */
+Method code:
+347 |     public RealVector getEigenvector(final int i) {
+348 |         return eigenvectors[i].copy();
+349 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.isSymmetric(RealMatrix,double)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 438-441
+Documentation:
+/**
+     * Checks whether a matrix is symmetric.
+     *
+     * @param matrix Matrix to check.
+     * @param eps Relative tolerance.
+     * @return {@code true} if {@code matrix} is symmetric.
+     * @since 3.1
+     */
+Method code:
+438 |     public static boolean isSymmetric(RealMatrix matrix,
+439 |                                       double eps) {
+440 |         return isSymmetricInternal(matrix, eps, false);
+441 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.AbstractRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 65-74
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension  the number of rows in the new matrix
+     * @param columnDimension  the number of columns in the new matrix
+     * @throws NotStrictlyPositiveException if row or column dimension is not positive
+     */
+Method code:
+65 |     protected AbstractRealMatrix(final int rowDimension,
+66 |         final int columnDimension)
+67 |         throws NotStrictlyPositiveException {
+68 |         if (rowDimension < 1) {
+69 |             throw new NotStrictlyPositiveException(rowDimension);
+70 |         }
+71 |         if (columnDimension < 1) {
+72 |             throw new NotStrictlyPositiveException(columnDimension);
+73 |         }
+74 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math3.util.MathArrays.copyOf(double[],int)
+Source: src/main/java/org/apache/commons/math3/util/MathArrays.java
+Original range: 746-750
+Documentation:
+/**
+     * Creates a copy of the {@code source} array.
+     *
+     * @param source Array to be copied.
+     * @param len Number of entries to copy. If smaller then the source
+     * length, the copy will be truncated, if larger it will padded with
+     * zeroes.
+     * @return the copied array.
+     */
+Method code:
+746 |     public static double[] copyOf(double[] source, int len) {
+747 |          final double[] output = new double[len];
+748 |          System.arraycopy(source, 0, output, 0, FastMath.min(len, source.length));
+749 |          return output;
+750 |      }
+
+===== M0024 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(String,String,String,String,String,String)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 112-117
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix and separator.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param rowPrefix row prefix to use instead of the default "{"
+     * @param rowSuffix row suffix to use instead of the default "}"
+     * @param rowSeparator tow separator to use instead of the default ";"
+     * @param columnSeparator column separator to use instead of the default ", "
+     */
+Method code:
+112 |     public RealMatrixFormat(final String prefix, final String suffix,
+113 |                             final String rowPrefix, final String rowSuffix,
+114 |                             final String rowSeparator, final String columnSeparator) {
+115 |         this(prefix, suffix, rowPrefix, rowSuffix, rowSeparator, columnSeparator,
+116 |                 CompositeFormat.getDefaultNumberFormat());
+117 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.ArrayRealVector(ArrayRealVector,boolean)
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 202-204
+Documentation:
+/**
+     * Construct a vector from another vector.
+     *
+     * @param v Vector to copy.
+     * @param deep If {@code true} perform a deep copy, otherwise perform a
+     * shallow copy.
+     */
+Method code:
+202 |     public ArrayRealVector(ArrayRealVector v, boolean deep) {
+203 |         data = deep ? v.data.clone() : v.data;
+204 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math3.linear.TriDiagonalTransformer.getQ()
+Source: src/main/java/org/apache/commons/math3/linear/TriDiagonalTransformer.java
+Original range: 85-90
+Documentation:
+/**
+     * Returns the matrix Q of the transform.
+     * <p>Q is an orthogonal matrix, i.e. its transpose is also its inverse.</p>
+     * @return the Q matrix
+     */
+Method code:
+85 |     public RealMatrix getQ() {
+86 |         if (cachedQ == null) {
+87 |             cachedQ = getQT().transpose();
+88 |         }
+89 |         return cachedQ;
+90 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math3.random.AbstractWell.setSeed(long)
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 177-180
+Documentation:
+/** Reinitialize the generator as if just built with the given long seed.
+     * <p>The state of the generator is exactly the same as a new
+     * generator built with the same seed.</p>
+     * @param seed the initial seed (64 bits integer)
+     */
+Method code:
+177 |     @Override
+178 |     public void setSeed(final long seed) {
+179 |         setSeed(new int[] { (int) (seed >>> 32), (int) (seed & 0xffffffffl) });
+180 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.Array2DRowRealMatrix(double[][])
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 78-81
+Documentation:
+/**
+     * Create a new {@code RealMatrix} using the input array as the underlying
+     * data array.
+     * <p>The input array is copied, not referenced. This constructor has
+     * the same effect as calling {@link #Array2DRowRealMatrix(double[][], boolean)}
+     * with the second argument set to {@code true}.</p>
+     *
+     * @param d Data for the new matrix.
+     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws NoDataException if {@code d} row or colum dimension is zero.
+     * @throws NullArgumentException if {@code d} is {@code null}.
+     * @see #Array2DRowRealMatrix(double[][], boolean)
+     */
+Method code:
+78 |     public Array2DRowRealMatrix(final double[][] d)
+79 |         throws DimensionMismatchException, NoDataException, NullArgumentException {
+80 |         copyIn(d);
+81 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math3.distribution.NormalDistribution.NormalDistribution(RandomGenerator,double,double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/NormalDistribution.java
+Original range: 99-113
+Documentation:
+/**
+     * Creates a normal distribution.
+     *
+     * @param rng Random number generator.
+     * @param mean Mean for this distribution.
+     * @param sd Standard deviation for this distribution.
+     * @param inverseCumAccuracy Inverse cumulative probability accuracy.
+     * @throws NotStrictlyPositiveException if {@code sd <= 0}.
+     * @since 3.1
+     */
+Method code:
+99 |     public NormalDistribution(RandomGenerator rng,
+100 |                               double mean,
+101 |                               double sd,
+102 |                               double inverseCumAccuracy)
+103 |         throws NotStrictlyPositiveException {
+104 |         super(rng);
+105 | 
+106 |         if (sd <= 0) {
+107 |             throw new NotStrictlyPositiveException(LocalizedFormats.STANDARD_DEVIATION, sd);
+108 |         }
+109 | 
+110 |         this.mean = mean;
+111 |         standardDeviation = sd;
+112 |         solverAbsoluteAccuracy = inverseCumAccuracy;
+113 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math3.distribution.NormalDistribution.NormalDistribution(double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/NormalDistribution.java
+Original range: 69-72
+Documentation:
+/**
+     * Create a normal distribution using the given mean and standard deviation.
+     *
+     * @param mean Mean for this distribution.
+     * @param sd Standard deviation for this distribution.
+     * @throws NotStrictlyPositiveException if {@code sd <= 0}.
+     */
+Method code:
+69 |     public NormalDistribution(double mean, double sd)
+70 |         throws NotStrictlyPositiveException {
+71 |         this(mean, sd, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+72 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math3.distribution.MultivariateNormalDistribution.MultivariateNormalDistribution(RandomGenerator,double[],double[][])
+Source: src/main/java/org/apache/commons/math3/distribution/MultivariateNormalDistribution.java
+Original range: 97-156
+Documentation:
+/**
+     * Creates a multivariate normal distribution with the given mean vector and
+     * covariance matrix.
+     * <br/>
+     * The number of dimensions is equal to the length of the mean vector
+     * and to the number of rows and columns of the covariance matrix.
+     * It is frequently written as "p" in formulae.
+     *
+     * @param rng Random Number Generator.
+     * @param means Vector of means.
+     * @param covariances Covariance matrix.
+     * @throws DimensionMismatchException if the arrays length are
+     * inconsistent.
+     * @throws SingularMatrixException if the eigenvalue decomposition cannot
+     * be performed on the provided covariance matrix.
+     * @throws NonPositiveDefiniteMatrixException if any of the eigenvalues is
+     * negative.
+     */
+Method code:
+97 |     public MultivariateNormalDistribution(RandomGenerator rng,
+98 |                                           final double[] means,
+99 |                                           final double[][] covariances)
+100 |             throws SingularMatrixException,
+101 |                    DimensionMismatchException,
+102 |                    NonPositiveDefiniteMatrixException {
+103 |         super(rng, means.length);
+104 | 
+105 |         final int dim = means.length;
+106 | 
+107 |         if (covariances.length != dim) {
+108 |             throw new DimensionMismatchException(covariances.length, dim);
+109 |         }
+110 | 
+111 |         for (int i = 0; i < dim; i++) {
+112 |             if (dim != covariances[i].length) {
+113 |                 throw new DimensionMismatchException(covariances[i].length, dim);
+114 |             }
+115 |         }
+116 | 
+117 |         this.means = MathArrays.copyOf(means);
+118 | 
+119 |         covarianceMatrix = new Array2DRowRealMatrix(covariances);
+120 | 
+121 |         // Covariance matrix eigen decomposition.
+122 |         final EigenDecomposition covMatDec = new EigenDecomposition(covarianceMatrix);
+123 | 
+124 |         // Compute and store the inverse.
+125 |         covarianceMatrixInverse = covMatDec.getSolver().getInverse();
+126 |         // Compute and store the determinant.
+127 |         covarianceMatrixDeterminant = covMatDec.getDeterminant();
+128 | 
+129 |         // Eigenvalues of the covariance matrix.
+130 |         final double[] covMatEigenvalues = covMatDec.getRealEigenvalues();
+131 | 
+132 |         for (int i = 0; i < covMatEigenvalues.length; i++) {
+133 |             if (covMatEigenvalues[i] < 0) {
+134 |                 throw new NonPositiveDefiniteMatrixException(covMatEigenvalues[i], i, 0);
+135 |             }
+136 |         }
+137 | 
+138 |         // Matrix where each column is an eigenvector of the covariance matrix.
+139 |         final Array2DRowRealMatrix covMatEigenvectors = new Array2DRowRealMatrix(dim, dim);
+140 |         for (int v = 0; v < dim; v++) {
+141 |             final double[] evec = covMatDec.getEigenvector(v).toArray();
+142 |             covMatEigenvectors.setColumn(v, evec);
+143 |         }
+144 | 
+145 |         final RealMatrix tmpMatrix = covMatEigenvectors.transpose();
+146 | 
+147 |         // Scale each eigenvector by the square root of its eigenvalue.
+148 |         for (int row = 0; row < dim; row++) {
+149 |             final double factor = FastMath.sqrt(covMatEigenvalues[row]);
+150 |             for (int col = 0; col < dim; col++) {
+151 |                 tmpMatrix.multiplyEntry(row, col, factor);
+152 |             }
+153 |         }
+154 | 
+155 |         samplingMatrix = covMatEigenvectors.multiply(tmpMatrix);
+156 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math3.distribution.MultivariateNormalDistribution.density(double[])
+Source: src/main/java/org/apache/commons/math3/distribution/MultivariateNormalDistribution.java
+Original range: 177-186
+Documentation:
+/** {@inheritDoc} */
+Method code:
+177 |     public double density(final double[] vals) throws DimensionMismatchException {
+178 |         final int dim = getDimension();
+179 |         if (vals.length != dim) {
+180 |             throw new DimensionMismatchException(vals.length, dim);
+181 |         }
+182 | 
+183 |         return FastMath.pow(2 * FastMath.PI, -dim / 2) *
+184 |             FastMath.pow(covarianceMatrixDeterminant, -0.5) *
+185 |             getExponentTerm(vals);
+186 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math3.linear.DefaultRealMatrixPreservingVisitor.end()
+Source: src/main/java/org/apache/commons/math3/linear/DefaultRealMatrixPreservingVisitor.java
+Original range: 40-42
+Documentation:
+/** {@inheritDoc} */
+Method code:
+40 |     public double end() {
+41 |         return 0;
+42 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getInstance()
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 214-216
+Documentation:
+/**
+     * Returns the default real vector format for the current locale.
+     * @return the default real vector format.
+     */
+Method code:
+214 |     public static RealMatrixFormat getInstance() {
+215 |         return getInstance(Locale.getDefault());
+216 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.transpose()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 597-612
+Documentation:
+/** {@inheritDoc} */
+Method code:
+597 |     public RealMatrix transpose() {
+598 |         final int nRows = getRowDimension();
+599 |         final int nCols = getColumnDimension();
+600 |         final RealMatrix out = createMatrix(nCols, nRows);
+601 |         walkInOptimizedOrder(new DefaultRealMatrixPreservingVisitor() {
+602 | 
+603 |             /** {@inheritDoc} */
+604 |             @Override
+605 |             public void visit(final int row, final int column, final double value) {
+606 |                 out.setEntry(column, row, value);
+607 |             }
+608 | 
+609 |         });
+610 | 
+611 |         return out;
+612 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.ArrayRealVector(double[])
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 85-87
+Documentation:
+/**
+     * Construct a vector from an array, copying the input array.
+     *
+     * @param d Array.
+     */
+Method code:
+85 |     public ArrayRealVector(double[] d) {
+86 |         data = d.clone();
+87 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math3.util.FastMath.abs(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3016-3018
+Documentation:
+/**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x)
+     */
+Method code:
+3016 |     public static double abs(double x) {
+3017 |         return (x < 0.0) ? -x : (x == 0.0) ? 0.0 : x; // -0.0 => +0.0
+3018 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpFracB()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6165-6167
+Documentation:
+/**
+     * Load "EXP_FRAC_B".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6165 |     static double[] loadExpFracB() {
+6166 |         return EXP_FRAC_B.clone();
+6167 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.setColumn(int,double[])
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 570-580
+Documentation:
+/** {@inheritDoc} */
+Method code:
+570 |     public void setColumn(final int column, final double[] array)
+571 |         throws OutOfRangeException, MatrixDimensionMismatchException {
+572 |         MatrixUtils.checkColumnIndex(this, column);
+573 |         final int nRows = getRowDimension();
+574 |         if (array.length != nRows) {
+575 |             throw new MatrixDimensionMismatchException(array.length, 1, nRows, 1);
+576 |         }
+577 |         for (int i = 0; i < nRows; ++i) {
+578 |             setEntry(i, column, array[i]);
+579 |         }
+580 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math3.random.AbstractWell.AbstractWell(int,int,int,int,int[])
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 94-122
+Documentation:
+/** Creates a new random number generator using an int array seed.
+     * @param k number of bits in the pool (not necessarily a multiple of 32)
+     * @param m1 first parameter of the algorithm
+     * @param m2 second parameter of the algorithm
+     * @param m3 third parameter of the algorithm
+     * @param seed the initial seed (32 bits integers array), if null
+     * the seed of the generator will be related to the current time
+     */
+Method code:
+94 |     protected AbstractWell(final int k, final int m1, final int m2, final int m3, final int[] seed) {
+95 | 
+96 |         // the bits pool contains k bits, k = r w - p where r is the number
+97 |         // of w bits blocks, w is the block size (always 32 in the original paper)
+98 |         // and p is the number of unused bits in the last block
+99 |         final int w = 32;
+100 |         final int r = (k + w - 1) / w;
+101 |         this.v      = new int[r];
+102 |         this.index  = 0;
+103 | 
+104 |         // precompute indirection index tables. These tables are used for optimizing access
+105 |         // they allow saving computations like "(j + r - 2) % r" with costly modulo operations
+106 |         iRm1 = new int[r];
+107 |         iRm2 = new int[r];
+108 |         i1   = new int[r];
+109 |         i2   = new int[r];
+110 |         i3   = new int[r];
+111 |         for (int j = 0; j < r; ++j) {
+112 |             iRm1[j] = (j + r - 1) % r;
+113 |             iRm2[j] = (j + r - 2) % r;
+114 |             i1[j]   = (j + m1)    % r;
+115 |             i2[j]   = (j + m2)    % r;
+116 |             i3[j]   = (j + m3)    % r;
+117 |         }
+118 | 
+119 |         // initialize the pool content
+120 |         setSeed(seed);
+121 | 
+122 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.createRealMatrix(double[][])
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 127-136
+Documentation:
+/**
+     * Returns a {@link RealMatrix} whose entries are the the values in the
+     * the input array.
+     * <p>The type of matrix returned depends on the dimension. Below
+     * 2<sup>12</sup> elements (i.e. 4096 elements or 64&times;64 for a
+     * square matrix) which can be stored in a 32kB array, a {@link
+     * Array2DRowRealMatrix} instance is built. Above this threshold a {@link
+     * BlockRealMatrix} instance is built.</p>
+     * <p>The input array is copied, not referenced.</p>
+     *
+     * @param data input array
+     * @return  RealMatrix containing the values of the array
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException
+     * if {@code data} is not rectangular (not all rows have the same length).
+     * @throws NoDataException if a row or column is empty.
+     * @throws NullArgumentException if either {@code data} or {@code data[0]}
+     * is {@code null}.
+     * @throws DimensionMismatchException if {@code data} is not rectangular.
+     * @see #createRealMatrix(int, int)
+     */
+Method code:
+127 |     public static RealMatrix createRealMatrix(double[][] data)
+128 |         throws NullArgumentException, DimensionMismatchException,
+129 |         NoDataException {
+130 |         if (data == null ||
+131 |             data[0] == null) {
+132 |             throw new NullArgumentException();
+133 |         }
+134 |         return (data.length * data[0].length <= 4096) ?
+135 |                 new Array2DRowRealMatrix(data) : new BlockRealMatrix(data);
+136 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.math3.distribution.AbstractMultivariateRealDistribution.AbstractMultivariateRealDistribution(RandomGenerator,int)
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractMultivariateRealDistribution.java
+Original range: 40-44
+Documentation:
+/**
+     * @param rng Random number generator.
+     * @param n Number of dimensions.
+     */
+Method code:
+40 |     protected AbstractMultivariateRealDistribution(RandomGenerator rng,
+41 |                                                    int n) {
+42 |         random = rng;
+43 |         dimension = n;
+44 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.math3.util.MathArrays.copyOf(double[])
+Source: src/main/java/org/apache/commons/math3/util/MathArrays.java
+Original range: 718-720
+Documentation:
+/**
+     * Creates a copy of the {@code source} array.
+     *
+     * @param source Array to be copied.
+     * @return the copied array.
+     */
+Method code:
+718 |      public static double[] copyOf(double[] source) {
+719 |          return copyOf(source, source.length);
+720 |      }
+
+===== M0044 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.toArray()
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 724-727
+Documentation:
+/** {@inheritDoc} */
+Method code:
+724 |     @Override
+725 |     public double[] toArray(){
+726 |         return data.clone();
+727 |     }
+
+===== M0045 =====
+Signature: org.apache.commons.math3.linear.TriDiagonalTransformer.getMainDiagonalRef()
+Source: src/main/java/org/apache/commons/math3/linear/TriDiagonalTransformer.java
+Original range: 174-176
+Documentation:
+/**
+     * Get the main diagonal elements of the matrix T of the transform.
+     * <p>Note that since this class is only intended for internal use,
+     * it returns directly a reference to its internal arrays, not a copy.</p>
+     * @return the main diagonal elements of the T matrix
+     */
+Method code:
+174 |     double[] getMainDiagonalRef() {
+175 |         return main;
+176 |     }
+
+===== M0046 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.copy()
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 287-290
+Documentation:
+/** {@inheritDoc} */
+Method code:
+287 |     @Override
+288 |     public ArrayRealVector copy() {
+289 |         return new ArrayRealVector(this, true);
+290 |     }
+
+===== M0047 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.getRealEigenvalues()
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 289-291
+Documentation:
+/**
+     * Gets a copy of the real parts of the eigenvalues of the original matrix.
+     *
+     * @return a copy of the real parts of the eigenvalues of the original matrix.
+     *
+     * @see #getD()
+     * @see #getRealEigenvalue(int)
+     * @see #getImagEigenvalues()
+     */
+Method code:
+289 |     public double[] getRealEigenvalues() {
+290 |         return realEigenvalues.clone();
+291 |     }
+
+===== M0048 =====
+Signature: org.apache.commons.math3.linear.RealVectorFormat.RealVectorFormat(NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealVectorFormat.java
+Original range: 81-83
+Documentation:
+/**
+     * Create an instance with a custom number format for components.
+     * @param format the custom format for components.
+     */
+Method code:
+81 |     public RealVectorFormat(final NumberFormat format) {
+82 |         this(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_SEPARATOR, format);
+83 |     }
+
+===== M0049 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.Solver.isNonSingular()
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 515-523
+Documentation:
+/**
+         * Checks whether the decomposed matrix is non-singular.
+         *
+         * @return true if the decomposed matrix is non-singular.
+         */
+Method code:
+515 |         public boolean isNonSingular() {
+516 |             for (int i = 0; i < realEigenvalues.length; ++i) {
+517 |                 if (realEigenvalues[i] == 0 &&
+518 |                     imagEigenvalues[i] == 0) {
+519 |                     return false;
+520 |                 }
+521 |             }
+522 |             return true;
+523 |         }
+
+===== M0050 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpIntB()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6149-6151
+Documentation:
+/**
+     * Load "EXP_INT_B".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6149 |     static double[] loadExpIntB() {
+6150 |         return EXP_INT_B.clone();
+6151 |     }
+
+===== M0051 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.AbstractRealMatrix()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 56-56
+Documentation:
+/**
+     * Creates a matrix with no data
+     */
+Method code:
+56 |     protected AbstractRealMatrix() {}
+
+===== M0052 =====
+Signature: org.apache.commons.math3.distribution.MultivariateNormalDistribution.getExponentTerm(double[])
+Source: src/main/java/org/apache/commons/math3/distribution/MultivariateNormalDistribution.java
+Original range: 228-239
+Documentation:
+/**
+     * Computes the term used in the exponent (see definition of the distribution).
+     *
+     * @param values Values at which to compute density.
+     * @return the multiplication factor of density calculations.
+     */
+Method code:
+228 |     private double getExponentTerm(final double[] values) {
+229 |         final double[] centered = new double[values.length];
+230 |         for (int i = 0; i < centered.length; i++) {
+231 |             centered[i] = values[i] - getMeans()[i];
+232 |         }
+233 |         final double[] preMultiplied = covarianceMatrixInverse.preMultiply(centered);
+234 |         double sum = 0;
+235 |         for (int i = 0; i < preMultiplied.length; i++) {
+236 |             sum += preMultiplied[i] * centered[i];
+237 |         }
+238 |         return FastMath.exp(-0.5 * sum);
+239 |     }
+
+===== M0053 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.anonymous_L601.visit(int,int,double)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 604-607
+Documentation:
+/** {@inheritDoc} */
+Method code:
+604 |             @Override
+605 |             public void visit(final int row, final int column, final double value) {
+606 |                 out.setEntry(column, row, value);
+607 |             }
+
+===== M0054 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.multiply(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 139-158
+Documentation:
+/** {@inheritDoc} */
+Method code:
+139 |     public RealMatrix multiply(final RealMatrix m)
+140 |         throws DimensionMismatchException {
+141 |         MatrixUtils.checkMultiplicationCompatible(this, m);
+142 | 
+143 |         final int nRows = getRowDimension();
+144 |         final int nCols = m.getColumnDimension();
+145 |         final int nSum  = getColumnDimension();
+146 |         final RealMatrix out = createMatrix(nRows, nCols);
+147 |         for (int row = 0; row < nRows; ++row) {
+148 |             for (int col = 0; col < nCols; ++col) {
+149 |                 double sum = 0;
+150 |                 for (int i = 0; i < nSum; ++i) {
+151 |                     sum += getEntry(row, i) * m.getEntry(i, col);
+152 |                 }
+153 |                 out.setEntry(row, col, sum);
+154 |             }
+155 |         }
+156 | 
+157 |         return out;
+158 |     }
+
+===== M0055 =====
+Signature: org.apache.commons.math3.util.CompositeFormat.getDefaultNumberFormat(Locale)
+Source: src/main/java/org/apache/commons/math3/util/CompositeFormat.java
+Original range: 53-57
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance(java.util.Locale)} with the only
+     * customizing that the maximum number of fraction digits is set to 10.
+     * @param locale the specific locale used by the format.
+     * @return the default number format specific to the given locale.
+     */
+Method code:
+53 |     public static NumberFormat getDefaultNumberFormat(final Locale locale) {
+54 |         final NumberFormat nf = NumberFormat.getInstance(locale);
+55 |         nf.setMaximumFractionDigits(10);
+56 |         return nf;
+57 |     }
+
+===== M0056 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.multiplyEntry(int,int,double)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 328-334
+Documentation:
+/** {@inheritDoc} */
+Method code:
+328 |     @Override
+329 |     public void multiplyEntry(final int row, final int column,
+330 |                               final double factor)
+331 |         throws OutOfRangeException {
+332 |         MatrixUtils.checkMatrixIndex(this, row, column);
+333 |         data[row][column] *= factor;
+334 |     }
+
+===== M0057 =====
+Signature: org.apache.commons.math3.linear.TriDiagonalTransformer.getQT()
+Source: src/main/java/org/apache/commons/math3/linear/TriDiagonalTransformer.java
+Original range: 97-132
+Documentation:
+/**
+     * Returns the transpose of the matrix Q of the transform.
+     * <p>Q is an orthogonal matrix, i.e. its transpose is also its inverse.</p>
+     * @return the Q matrix
+     */
+Method code:
+97 |     public RealMatrix getQT() {
+98 |         if (cachedQt == null) {
+99 |             final int m = householderVectors.length;
+100 |             double[][] qta = new double[m][m];
+101 | 
+102 |             // build up first part of the matrix by applying Householder transforms
+103 |             for (int k = m - 1; k >= 1; --k) {
+104 |                 final double[] hK = householderVectors[k - 1];
+105 |                 qta[k][k] = 1;
+106 |                 if (hK[k] != 0.0) {
+107 |                     final double inv = 1.0 / (secondary[k - 1] * hK[k]);
+108 |                     double beta = 1.0 / secondary[k - 1];
+109 |                     qta[k][k] = 1 + beta * hK[k];
+110 |                     for (int i = k + 1; i < m; ++i) {
+111 |                         qta[k][i] = beta * hK[i];
+112 |                     }
+113 |                     for (int j = k + 1; j < m; ++j) {
+114 |                         beta = 0;
+115 |                         for (int i = k + 1; i < m; ++i) {
+116 |                             beta += qta[j][i] * hK[i];
+117 |                         }
+118 |                         beta *= inv;
+119 |                         qta[j][k] = beta * hK[k];
+120 |                         for (int i = k + 1; i < m; ++i) {
+121 |                             qta[j][i] += beta * hK[i];
+122 |                         }
+123 |                     }
+124 |                 }
+125 |             }
+126 |             qta[0][0] = 1;
+127 |             cachedQt = MatrixUtils.createRealMatrix(qta);
+128 |         }
+129 | 
+130 |         // return the cached matrix
+131 |         return cachedQt;
+132 |     }
+
+===== M0058 =====
+Signature: org.apache.commons.math3.util.FastMath.exp(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 830-832
+Documentation:
+/**
+     * Exponential function.
+     *
+     * Computes exp(x), function result is nearly rounded.   It will be correctly
+     * rounded to the theoretical value for 99.9% of input values, otherwise it will
+     * have a 1 UPL error.
+     *
+     * Method:
+     *    Lookup intVal = exp(int(x))
+     *    Lookup fracVal = exp(int(x-int(x) / 1024.0) * 1024.0 );
+     *    Compute z as the exponential of the remaining bits by a polynomial minus one
+     *    exp(x) = intVal * fracVal * (1 + z)
+     *
+     * Accuracy:
+     *    Calculation is done with 63 bits of precision, so result should be correctly
+     *    rounded for 99.9% of input values, with less than 1 ULP error otherwise.
+     *
+     * @param x   a double
+     * @return double e<sup>x</sup>
+     */
+Method code:
+830 |     public static double exp(double x) {
+831 |         return exp(x, 0.0, null);
+832 |     }
+
+===== M0059 =====
+Signature: org.apache.commons.math3.random.Well19937c.Well19937c()
+Source: src/main/java/org/apache/commons/math3/random/Well19937c.java
+Original range: 56-58
+Documentation:
+/** Creates a new random number generator.
+     * <p>The instance is initialized using the current time as the
+     * seed.</p>
+     */
+Method code:
+56 |     public Well19937c() {
+57 |         super(K, M1, M2, M3);
+58 |     }
+
+===== M0060 =====
+Signature: org.apache.commons.math3.distribution.NormalDistribution.NormalDistribution(double,double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/NormalDistribution.java
+Original range: 84-87
+Documentation:
+/**
+     * Create a normal distribution using the given mean, standard deviation and
+     * inverse cumulative distribution accuracy.
+     *
+     * @param mean Mean for this distribution.
+     * @param sd Standard deviation for this distribution.
+     * @param inverseCumAccuracy Inverse cumulative probability accuracy.
+     * @throws NotStrictlyPositiveException if {@code sd <= 0}.
+     * @since 2.1
+     */
+Method code:
+84 |     public NormalDistribution(double mean, double sd, double inverseCumAccuracy)
+85 |         throws NotStrictlyPositiveException {
+86 |         this(new Well19937c(), mean, sd, inverseCumAccuracy);
+87 |     }
+
+===== M0061 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkColumnIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 482-488
+Documentation:
+/**
+     * Check if a column index is valid.
+     *
+     * @param m Matrix.
+     * @param column Column index to check.
+     * @throws OutOfRangeException if {@code column} is not a valid index.
+     */
+Method code:
+482 |     public static void checkColumnIndex(final AnyMatrix m, final int column)
+483 |         throws OutOfRangeException {
+484 |         if (column < 0 || column >= m.getColumnDimension()) {
+485 |             throw new OutOfRangeException(LocalizedFormats.COLUMN_INDEX,
+486 |                                            column, 0, m.getColumnDimension() - 1);
+487 |         }
+488 |     }
+
+===== M0062 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.isSquare()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 615-617
+Documentation:
+/** {@inheritDoc} */
+Method code:
+615 |     public boolean isSquare() {
+616 |         return getColumnDimension() == getRowDimension();
+617 |     }
+
+===== M0063 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getRowDimension()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 337-340
+Documentation:
+/** {@inheritDoc} */
+Method code:
+337 |     @Override
+338 |     public int getRowDimension() {
+339 |         return (data == null) ? 0 : data.length;
+340 |     }
+
+===== M0064 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getData()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 252-255
+Documentation:
+/** {@inheritDoc} */
+Method code:
+252 |     @Override
+253 |     public double[][] getData() {
+254 |         return copyOut();
+255 |     }
+
+===== M0065 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.getSolver()
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 405-410
+Documentation:
+/**
+     * Gets a solver for finding the A &times; X = B solution in exact
+     * linear sense.
+     * <p>
+     * Since 3.1, eigen decomposition of a general matrix is supported,
+     * but the {@link DecompositionSolver} only supports real eigenvalues.
+     *
+     * @return a solver
+     * @throws MathUnsupportedOperationException if the decomposition resulted in
+     * complex eigenvalues
+     */
+Method code:
+405 |     public DecompositionSolver getSolver() {
+406 |         if (hasComplexEigenvalues()) {
+407 |             throw new MathUnsupportedOperationException();
+408 |         }
+409 |         return new Solver(realEigenvalues, imagEigenvalues, eigenvectors);
+410 |     }
+
+===== M0066 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.Solver.getInverse()
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 531-551
+Documentation:
+/**
+         * Get the inverse of the decomposed matrix.
+         *
+         * @return the inverse matrix.
+         * @throws SingularMatrixException if the decomposed matrix is singular.
+         */
+Method code:
+531 |         public RealMatrix getInverse() {
+532 |             if (!isNonSingular()) {
+533 |                 throw new SingularMatrixException();
+534 |             }
+535 | 
+536 |             final int m = realEigenvalues.length;
+537 |             final double[][] invData = new double[m][m];
+538 | 
+539 |             for (int i = 0; i < m; ++i) {
+540 |                 final double[] invI = invData[i];
+541 |                 for (int j = 0; j < m; ++j) {
+542 |                     double invIJ = 0;
+543 |                     for (int k = 0; k < m; ++k) {
+544 |                         final double[] vK = eigenvectors[k].getDataRef();
+545 |                         invIJ += vK[i] * vK[j] / realEigenvalues[k];
+546 |                     }
+547 |                     invI[j] = invIJ;
+548 |                 }
+549 |             }
+550 |             return MatrixUtils.createRealMatrix(invData);
+551 |         }
+
+===== M0067 =====
+Signature: org.apache.commons.math3.random.BitsStreamGenerator.clear()
+Source: src/main/java/org/apache/commons/math3/random/BitsStreamGenerator.java
+Original range: 169-171
+Documentation:
+/**
+     * Clears the cache used by the default implementation of
+     * {@link #nextGaussian}.
+     */
+Method code:
+169 |     public void clear() {
+170 |         nextGaussian = Double.NaN;
+171 |     }
+
+===== M0068 =====
+Signature: org.apache.commons.math3.distribution.MultivariateNormalDistribution.getMeans()
+Source: src/main/java/org/apache/commons/math3/distribution/MultivariateNormalDistribution.java
+Original range: 163-165
+Documentation:
+/**
+     * Gets the mean vector.
+     *
+     * @return the mean vector.
+     */
+Method code:
+163 |     public double[] getMeans() {
+164 |         return MathArrays.copyOf(means);
+165 |     }
+
+===== M0069 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 98-101
+Documentation:
+/**
+     * Create an instance with a custom number format for components.
+     * @param format the custom format for components.
+     */
+Method code:
+98 |     public RealMatrixFormat(final NumberFormat format) {
+99 |         this(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_ROW_PREFIX, DEFAULT_ROW_SUFFIX,
+100 |                 DEFAULT_ROW_SEPARATOR, DEFAULT_COLUMN_SEPARATOR, format);
+101 |     }
+
+===== M0070 =====
+Signature: org.apache.commons.math3.distribution.NormalDistribution.density(double)
+Source: src/main/java/org/apache/commons/math3/distribution/NormalDistribution.java
+Original range: 134-138
+Documentation:
+/** {@inheritDoc} */
+Method code:
+134 |     public double density(double x) {
+135 |         final double x0 = x - mean;
+136 |         final double x1 = x0 / standardDeviation;
+137 |         return FastMath.exp(-0.5 * x1 * x1) / (standardDeviation * SQRT2PI);
+138 |     }
+
+===== M0071 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.findEigenVectors(double[][])
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 572-721
+Documentation:
+/**
+     * Find eigenvalues and eigenvectors (Dubrulle et al., 1971)
+     *
+     * @param householderMatrix Householder matrix of the transformation
+     * to tridiagonal form.
+     */
+Method code:
+572 |     private void findEigenVectors(final double[][] householderMatrix) {
+573 |         final double[][]z = householderMatrix.clone();
+574 |         final int n = main.length;
+575 |         realEigenvalues = new double[n];
+576 |         imagEigenvalues = new double[n];
+577 |         final double[] e = new double[n];
+578 |         for (int i = 0; i < n - 1; i++) {
+579 |             realEigenvalues[i] = main[i];
+580 |             e[i] = secondary[i];
+581 |         }
+582 |         realEigenvalues[n - 1] = main[n - 1];
+583 |         e[n - 1] = 0;
+584 | 
+585 |         // Determine the largest main and secondary value in absolute term.
+586 |         double maxAbsoluteValue = 0;
+587 |         for (int i = 0; i < n; i++) {
+588 |             if (FastMath.abs(realEigenvalues[i]) > maxAbsoluteValue) {
+589 |                 maxAbsoluteValue = FastMath.abs(realEigenvalues[i]);
+590 |             }
+591 |             if (FastMath.abs(e[i]) > maxAbsoluteValue) {
+592 |                 maxAbsoluteValue = FastMath.abs(e[i]);
+593 |             }
+594 |         }
+595 |         // Make null any main and secondary value too small to be significant
+596 |         if (maxAbsoluteValue != 0) {
+597 |             for (int i=0; i < n; i++) {
+598 |                 if (FastMath.abs(realEigenvalues[i]) <= Precision.EPSILON * maxAbsoluteValue) {
+599 |                     realEigenvalues[i] = 0;
+600 |                 }
+601 |                 if (FastMath.abs(e[i]) <= Precision.EPSILON * maxAbsoluteValue) {
+602 |                     e[i]=0;
+603 |                 }
+604 |             }
+605 |         }
+606 | 
+607 |         for (int j = 0; j < n; j++) {
+608 |             int its = 0;
+609 |             int m;
+610 |             do {
+611 |                 for (m = j; m < n - 1; m++) {
+612 |                     double delta = FastMath.abs(realEigenvalues[m]) +
+613 |                         FastMath.abs(realEigenvalues[m + 1]);
+614 |                     if (FastMath.abs(e[m]) + delta == delta) {
+615 |                         break;
+616 |                     }
+617 |                 }
+618 |                 if (m != j) {
+619 |                     if (its == maxIter) {
+620 |                         throw new MaxCountExceededException(LocalizedFormats.CONVERGENCE_FAILED,
+621 |                                                             maxIter);
+622 |                     }
+623 |                     its++;
+624 |                     double q = (realEigenvalues[j + 1] - realEigenvalues[j]) / (2 * e[j]);
+625 |                     double t = FastMath.sqrt(1 + q * q);
+626 |                     if (q < 0.0) {
+627 |                         q = realEigenvalues[m] - realEigenvalues[j] + e[j] / (q - t);
+628 |                     } else {
+629 |                         q = realEigenvalues[m] - realEigenvalues[j] + e[j] / (q + t);
+630 |                     }
+631 |                     double u = 0.0;
+632 |                     double s = 1.0;
+633 |                     double c = 1.0;
+634 |                     int i;
+635 |                     for (i = m - 1; i >= j; i--) {
+636 |                         double p = s * e[i];
+637 |                         double h = c * e[i];
+638 |                         if (FastMath.abs(p) >= FastMath.abs(q)) {
+639 |                             c = q / p;
+640 |                             t = FastMath.sqrt(c * c + 1.0);
+641 |                             e[i + 1] = p * t;
+642 |                             s = 1.0 / t;
+643 |                             c = c * s;
+644 |                         } else {
+645 |                             s = p / q;
+646 |                             t = FastMath.sqrt(s * s + 1.0);
+647 |                             e[i + 1] = q * t;
+648 |                             c = 1.0 / t;
+649 |                             s = s * c;
+650 |                         }
+651 |                         if (e[i + 1] == 0.0) {
+652 |                             realEigenvalues[i + 1] -= u;
+653 |                             e[m] = 0.0;
+654 |                             break;
+655 |                         }
+656 |                         q = realEigenvalues[i + 1] - u;
+657 |                         t = (realEigenvalues[i] - q) * s + 2.0 * c * h;
+658 |                         u = s * t;
+659 |                         realEigenvalues[i + 1] = q + u;
+660 |                         q = c * t - h;
+661 |                         for (int ia = 0; ia < n; ia++) {
+662 |                             p = z[ia][i + 1];
+663 |                             z[ia][i + 1] = s * z[ia][i] + c * p;
+664 |                             z[ia][i] = c * z[ia][i] - s * p;
+665 |                         }
+666 |                     }
+667 |                     if (t == 0.0 && i >= j) {
+668 |                         continue;
+669 |                     }
+670 |                     realEigenvalues[j] -= u;
+671 |                     e[j] = q;
+672 |                     e[m] = 0.0;
+673 |                 }
+674 |             } while (m != j);
+675 |         }
+676 | 
+677 |         //Sort the eigen values (and vectors) in increase order
+678 |         for (int i = 0; i < n; i++) {
+679 |             int k = i;
+680 |             double p = realEigenvalues[i];
+681 |             for (int j = i + 1; j < n; j++) {
+682 |                 if (realEigenvalues[j] > p) {
+683 |                     k = j;
+684 |                     p = realEigenvalues[j];
+685 |                 }
+686 |             }
+687 |             if (k != i) {
+688 |                 realEigenvalues[k] = realEigenvalues[i];
+689 |                 realEigenvalues[i] = p;
+690 |                 for (int j = 0; j < n; j++) {
+691 |                     p = z[j][i];
+692 |                     z[j][i] = z[j][k];
+693 |                     z[j][k] = p;
+694 |                 }
+695 |             }
+696 |         }
+697 | 
+698 |         // Determine the largest eigen value in absolute term.
+699 |         maxAbsoluteValue = 0;
+700 |         for (int i = 0; i < n; i++) {
+701 |             if (FastMath.abs(realEigenvalues[i]) > maxAbsoluteValue) {
+702 |                 maxAbsoluteValue=FastMath.abs(realEigenvalues[i]);
+703 |             }
+704 |         }
+705 |         // Make null any eigen value too small to be significant
+706 |         if (maxAbsoluteValue != 0.0) {
+707 |             for (int i=0; i < n; i++) {
+708 |                 if (FastMath.abs(realEigenvalues[i]) < Precision.EPSILON * maxAbsoluteValue) {
+709 |                     realEigenvalues[i] = 0;
+710 |                 }
+711 |             }
+712 |         }
+713 |         eigenvectors = new ArrayRealVector[n];
+714 |         final double[] tmp = new double[n];
+715 |         for (int i = 0; i < n; i++) {
+716 |             for (int j = 0; j < n; j++) {
+717 |                 tmp[j] = z[j][i];
+718 |             }
+719 |             eigenvectors[i] = new ArrayRealVector(tmp);
+720 |         }
+721 |     }
+
+===== M0072 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkMultiplicationCompatible(AnyMatrix,AnyMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 604-611
+Documentation:
+/**
+     * Check if matrices are multiplication compatible
+     *
+     * @param left Left hand side matrix.
+     * @param right Right hand side matrix.
+     * @throws DimensionMismatchException if matrices are not multiplication
+     * compatible.
+     */
+Method code:
+604 |     public static void checkMultiplicationCompatible(final AnyMatrix left, final AnyMatrix right)
+605 |         throws DimensionMismatchException {
+606 | 
+607 |         if (left.getColumnDimension() != right.getRowDimension()) {
+608 |             throw new DimensionMismatchException(left.getColumnDimension(),
+609 |                                                  right.getRowDimension());
+610 |         }
+611 |     }
+
+===== M0073 =====
+Signature: org.apache.commons.math3.util.FastMath.abs(long)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 2998-3000
+Documentation:
+/**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x)
+     */
+Method code:
+2998 |     public static long abs(final long x) {
+2999 |         return (x < 0l) ? -x : x;
+3000 |     }
+
+===== M0074 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpFracA()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6157-6159
+Documentation:
+/**
+     * Load "EXP_FRAC_A".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6157 |     static double[] loadExpFracA() {
+6158 |         return EXP_FRAC_A.clone();
+6159 |     }
+
+===== M0075 =====
+Signature: org.apache.commons.math3.util.FastMath.sqrt(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 378-380
+Documentation:
+/** Compute the square root of a number.
+     * <p><b>Note:</b> this implementation currently delegates to {@link Math#sqrt}
+     * @param a number on which evaluation is done
+     * @return square root of a
+     */
+Method code:
+378 |     public static double sqrt(final double a) {
+379 |         return Math.sqrt(a);
+380 |     }
+
+===== M0076 =====
+Signature: org.apache.commons.math3.random.AbstractWell.AbstractWell(int,int,int,int)
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 71-73
+Documentation:
+/** Creates a new random number generator.
+     * <p>The instance is initialized using the current time plus the
+     * system identity hash code of this instance as the seed.</p>
+     * @param k number of bits in the pool (not necessarily a multiple of 32)
+     * @param m1 first parameter of the algorithm
+     * @param m2 second parameter of the algorithm
+     * @param m3 third parameter of the algorithm
+     */
+Method code:
+71 |     protected AbstractWell(final int k, final int m1, final int m2, final int m3) {
+72 |         this(k, m1, m2, m3, null);
+73 |     }
+
+===== M0077 =====
+Signature: org.apache.commons.math3.linear.RealVectorFormat.RealVectorFormat(String,String,String,NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealVectorFormat.java
+Original range: 105-114
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix, separator and format
+     * for components.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param separator separator to use instead of the default "; "
+     * @param format the custom format for components.
+     */
+Method code:
+105 |     public RealVectorFormat(final String prefix, final String suffix,
+106 |                             final String separator, final NumberFormat format) {
+107 |         this.prefix      = prefix;
+108 |         this.suffix      = suffix;
+109 |         this.separator   = separator;
+110 |         trimmedPrefix    = prefix.trim();
+111 |         trimmedSuffix    = suffix.trim();
+112 |         trimmedSeparator = separator.trim();
+113 |         this.format      = format;
+114 |     }
+
+===== M0078 =====
+Signature: org.apache.commons.math3.distribution.MultivariateNormalDistribution.MultivariateNormalDistribution(double[],double[][])
+Source: src/main/java/org/apache/commons/math3/distribution/MultivariateNormalDistribution.java
+Original range: 71-77
+Documentation:
+/**
+     * Creates a multivariate normal distribution with the given mean vector and
+     * covariance matrix.
+     * <br/>
+     * The number of dimensions is equal to the length of the mean vector
+     * and to the number of rows and columns of the covariance matrix.
+     * It is frequently written as "p" in formulae.
+     *
+     * @param means Vector of means.
+     * @param covariances Covariance matrix.
+     * @throws DimensionMismatchException if the arrays length are
+     * inconsistent.
+     * @throws SingularMatrixException if the eigenvalue decomposition cannot
+     * be performed on the provided covariance matrix.
+     * @throws NonPositiveDefiniteMatrixException if any of the eigenvalues is
+     * negative.
+     */
+Method code:
+71 |     public MultivariateNormalDistribution(final double[] means,
+72 |                                           final double[][] covariances)
+73 |         throws SingularMatrixException,
+74 |                DimensionMismatchException,
+75 |                NonPositiveDefiniteMatrixException {
+76 |         this(new Well19937c(), means, covariances);
+77 |     }
+
+===== M0079 =====
+Signature: org.apache.commons.math3.random.RandomDataImpl.RandomDataImpl()
+Source: src/main/java/org/apache/commons/math3/random/RandomDataImpl.java
+Original range: 114-116
+Documentation:
+/**
+     * Construct a RandomDataImpl, using a default random generator as the source
+     * of randomness.
+     *
+     * <p>The default generator is a {@link Well19937c} seeded
+     * with {@code System.currentTimeMillis() + System.identityHashCode(this))}.
+     * The generator is initialized and seeded on first use.</p>
+     */
+Method code:
+114 |     public RandomDataImpl() {
+115 |         delegate = new RandomDataGenerator();
+116 |     }
+
+===== M0080 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.Array2DRowRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 58-63
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension Number of rows in the new matrix.
+     * @param columnDimension Number of columns in the new matrix.
+     * @throws NotStrictlyPositiveException if the row or column dimension is
+     * not positive.
+     */
+Method code:
+58 |     public Array2DRowRealMatrix(final int rowDimension,
+59 |                                 final int columnDimension)
+60 |         throws NotStrictlyPositiveException {
+61 |         super(rowDimension, columnDimension);
+62 |         data = new double[rowDimension][columnDimension];
+63 |     }
+
+===== M0081 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.walkInOptimizedOrder(RealMatrixPreservingVisitor)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 872-874
+Documentation:
+/** {@inheritDoc} */
+Method code:
+872 |     public double walkInOptimizedOrder(final RealMatrixPreservingVisitor visitor) {
+873 |         return walkInRowOrder(visitor);
+874 |     }
+
+===== M0082 =====
+Signature: org.apache.commons.math3.util.FastMath.pow(double,int)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1611-1668
+Documentation:
+/**
+     * Raise a double to an int power.
+     *
+     * @param d Number to raise.
+     * @param e Exponent.
+     * @return d<sup>e</sup>
+     * @since 3.1
+     */
+Method code:
+1611 |     public static double pow(double d, int e) {
+1612 | 
+1613 |         if (e == 0) {
+1614 |             return 1.0;
+1615 |         } else if (e < 0) {
+1616 |             e = -e;
+1617 |             d = 1.0 / d;
+1618 |         }
+1619 | 
+1620 |         // split d as two 26 bits numbers
+1621 |         // beware the following expressions must NOT be simplified, they rely on floating point arithmetic properties
+1622 |         final int splitFactor = 0x8000001;
+1623 |         final double cd       = splitFactor * d;
+1624 |         final double d1High   = cd - (cd - d);
+1625 |         final double d1Low    = d - d1High;
+1626 | 
+1627 |         // prepare result
+1628 |         double resultHigh = 1;
+1629 |         double resultLow  = 0;
+1630 | 
+1631 |         // d^(2p)
+1632 |         double d2p     = d;
+1633 |         double d2pHigh = d1High;
+1634 |         double d2pLow  = d1Low;
+1635 | 
+1636 |         while (e != 0) {
+1637 | 
+1638 |             if ((e & 0x1) != 0) {
+1639 |                 // accurate multiplication result = result * d^(2p) using Veltkamp TwoProduct algorithm
+1640 |                 // beware the following expressions must NOT be simplified, they rely on floating point arithmetic properties
+1641 |                 final double tmpHigh = resultHigh * d2p;
+1642 |                 final double cRH     = splitFactor * resultHigh;
+1643 |                 final double rHH     = cRH - (cRH - resultHigh);
+1644 |                 final double rHL     = resultHigh - rHH;
+1645 |                 final double tmpLow  = rHL * d2pLow - (((tmpHigh - rHH * d2pHigh) - rHL * d2pHigh) - rHH * d2pLow);
+1646 |                 resultHigh = tmpHigh;
+1647 |                 resultLow  = resultLow * d2p + tmpLow;
+1648 |             }
+1649 | 
+1650 |             // accurate squaring d^(2(p+1)) = d^(2p) * d^(2p) using Veltkamp TwoProduct algorithm
+1651 |             // beware the following expressions must NOT be simplified, they rely on floating point arithmetic properties
+1652 |             final double tmpHigh = d2pHigh * d2p;
+1653 |             final double cD2pH   = splitFactor * d2pHigh;
+1654 |             final double d2pHH   = cD2pH - (cD2pH - d2pHigh);
+1655 |             final double d2pHL   = d2pHigh - d2pHH;
+1656 |             final double tmpLow  = d2pHL * d2pLow - (((tmpHigh - d2pHH * d2pHigh) - d2pHL * d2pHigh) - d2pHH * d2pLow);
+1657 |             final double cTmpH   = splitFactor * tmpHigh;
+1658 |             d2pHigh = cTmpH - (cTmpH - tmpHigh);
+1659 |             d2pLow  = d2pLow * d2p + tmpLow + (tmpHigh - d2pHigh);
+1660 |             d2p     = d2pHigh + d2pLow;
+1661 | 
+1662 |             e = e >> 1;
+1663 | 
+1664 |         }
+1665 | 
+1666 |         return resultHigh + resultLow;
+1667 | 
+1668 |     }
+
+===== M0083 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.preMultiply(double[])
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 370-390
+Documentation:
+/** {@inheritDoc} */
+Method code:
+370 |     @Override
+371 |     public double[] preMultiply(final double[] v)
+372 |         throws DimensionMismatchException {
+373 |         final int nRows = getRowDimension();
+374 |         final int nCols = getColumnDimension();
+375 |         if (v.length != nRows) {
+376 |             throw new DimensionMismatchException(v.length, nRows);
+377 |         }
+378 | 
+379 |         final double[] out = new double[nCols];
+380 |         for (int col = 0; col < nCols; ++col) {
+381 |             double sum = 0;
+382 |             for (int i = 0; i < nRows; ++i) {
+383 |                 sum += data[i][col] * v[i];
+384 |             }
+385 |             out[col] = sum;
+386 |         }
+387 | 
+388 |         return out;
+389 | 
+390 |     }
+
+===== M0084 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.getDataRef()
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 449-451
+Documentation:
+/**
+     * Get a reference to the underlying data array.
+     * This method does not make a fresh copy of the underlying data.
+     *
+     * @return the array of entries.
+     */
+Method code:
+449 |     public double[] getDataRef() {
+450 |         return data;
+451 |     }
+
+===== M0085 =====
+Signature: org.apache.commons.math3.random.BitsStreamGenerator.BitsStreamGenerator()
+Source: src/main/java/org/apache/commons/math3/random/BitsStreamGenerator.java
+Original range: 40-42
+Documentation:
+/**
+     * Creates a new random number generator.
+     */
+Method code:
+40 |     public BitsStreamGenerator() {
+41 |         nextGaussian = Double.NaN;
+42 |     }
+
+===== M0086 =====
+Signature: org.apache.commons.math3.util.FastMath.exp(double,double,double[])
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 841-956
+Documentation:
+/**
+     * Internal helper method for exponential function.
+     * @param x original argument of the exponential function
+     * @param extra extra bits of precision on input (To Be Confirmed)
+     * @param hiPrec extra bits of precision on output (To Be Confirmed)
+     * @return exp(x)
+     */
+Method code:
+841 |     private static double exp(double x, double extra, double[] hiPrec) {
+842 |         double intPartA;
+843 |         double intPartB;
+844 |         int intVal;
+845 | 
+846 |         /* Lookup exp(floor(x)).
+847 |          * intPartA will have the upper 22 bits, intPartB will have the lower
+848 |          * 52 bits.
+849 |          */
+850 |         if (x < 0.0) {
+851 |             intVal = (int) -x;
+852 | 
+853 |             if (intVal > 746) {
+854 |                 if (hiPrec != null) {
+855 |                     hiPrec[0] = 0.0;
+856 |                     hiPrec[1] = 0.0;
+857 |                 }
+858 |                 return 0.0;
+859 |             }
+860 | 
+861 |             if (intVal > 709) {
+862 |                 /* This will produce a subnormal output */
+863 |                 final double result = exp(x+40.19140625, extra, hiPrec) / 285040095144011776.0;
+864 |                 if (hiPrec != null) {
+865 |                     hiPrec[0] /= 285040095144011776.0;
+866 |                     hiPrec[1] /= 285040095144011776.0;
+867 |                 }
+868 |                 return result;
+869 |             }
+870 | 
+871 |             if (intVal == 709) {
+872 |                 /* exp(1.494140625) is nearly a machine number... */
+873 |                 final double result = exp(x+1.494140625, extra, hiPrec) / 4.455505956692756620;
+874 |                 if (hiPrec != null) {
+875 |                     hiPrec[0] /= 4.455505956692756620;
+876 |                     hiPrec[1] /= 4.455505956692756620;
+877 |                 }
+878 |                 return result;
+879 |             }
+880 | 
+881 |             intVal++;
+882 | 
+883 |             intPartA = ExpIntTable.EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX-intVal];
+884 |             intPartB = ExpIntTable.EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX-intVal];
+885 | 
+886 |             intVal = -intVal;
+887 |         } else {
+888 |             intVal = (int) x;
+889 | 
+890 |             if (intVal > 709) {
+891 |                 if (hiPrec != null) {
+892 |                     hiPrec[0] = Double.POSITIVE_INFINITY;
+893 |                     hiPrec[1] = 0.0;
+894 |                 }
+895 |                 return Double.POSITIVE_INFINITY;
+896 |             }
+897 | 
+898 |             intPartA = ExpIntTable.EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX+intVal];
+899 |             intPartB = ExpIntTable.EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX+intVal];
+900 |         }
+901 | 
+902 |         /* Get the fractional part of x, find the greatest multiple of 2^-10 less than
+903 |          * x and look up the exp function of it.
+904 |          * fracPartA will have the upper 22 bits, fracPartB the lower 52 bits.
+905 |          */
+906 |         final int intFrac = (int) ((x - intVal) * 1024.0);
+907 |         final double fracPartA = ExpFracTable.EXP_FRAC_TABLE_A[intFrac];
+908 |         final double fracPartB = ExpFracTable.EXP_FRAC_TABLE_B[intFrac];
+909 | 
+910 |         /* epsilon is the difference in x from the nearest multiple of 2^-10.  It
+911 |          * has a value in the range 0 <= epsilon < 2^-10.
+912 |          * Do the subtraction from x as the last step to avoid possible loss of percison.
+913 |          */
+914 |         final double epsilon = x - (intVal + intFrac / 1024.0);
+915 | 
+916 |         /* Compute z = exp(epsilon) - 1.0 via a minimax polynomial.  z has
+917 |        full double precision (52 bits).  Since z < 2^-10, we will have
+918 |        62 bits of precision when combined with the contant 1.  This will be
+919 |        used in the last addition below to get proper rounding. */
+920 | 
+921 |         /* Remez generated polynomial.  Converges on the interval [0, 2^-10], error
+922 |        is less than 0.5 ULP */
+923 |         double z = 0.04168701738764507;
+924 |         z = z * epsilon + 0.1666666505023083;
+925 |         z = z * epsilon + 0.5000000000042687;
+926 |         z = z * epsilon + 1.0;
+927 |         z = z * epsilon + -3.940510424527919E-20;
+928 | 
+929 |         /* Compute (intPartA+intPartB) * (fracPartA+fracPartB) by binomial
+930 |        expansion.
+931 |        tempA is exact since intPartA and intPartB only have 22 bits each.
+932 |        tempB will have 52 bits of precision.
+933 |          */
+934 |         double tempA = intPartA * fracPartA;
+935 |         double tempB = intPartA * fracPartB + intPartB * fracPartA + intPartB * fracPartB;
+936 | 
+937 |         /* Compute the result.  (1+z)(tempA+tempB).  Order of operations is
+938 |        important.  For accuracy add by increasing size.  tempA is exact and
+939 |        much larger than the others.  If there are extra bits specified from the
+940 |        pow() function, use them. */
+941 |         final double tempC = tempB + tempA;
+942 |         final double result;
+943 |         if (extra != 0.0) {
+944 |             result = tempC*extra*z + tempC*extra + tempC*z + tempB + tempA;
+945 |         } else {
+946 |             result = tempC*z + tempB + tempA;
+947 |         }
+948 | 
+949 |         if (hiPrec != null) {
+950 |             // If requesting high precision
+951 |             hiPrec[0] = tempA;
+952 |             hiPrec[1] = tempC*extra*z + tempC*extra + tempC*z + tempB;
+953 |         }
+954 | 
+955 |         return result;
+956 |     }
+
+===== M0087 =====
+Signature: org.apache.commons.math3.linear.DefaultRealMatrixPreservingVisitor.start(int,int,int,int,int,int)
+Source: src/main/java/org/apache/commons/math3/linear/DefaultRealMatrixPreservingVisitor.java
+Original range: 32-34
+Documentation:
+/** {@inheritDoc} */
+Method code:
+32 |     public void start(int rows, int columns,
+33 |                       int startRow, int endRow, int startColumn, int endColumn) {
+34 |     }
+
+===== M0088 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(String,String,String,String,String,String,NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 130-143
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix, separator and format
+     * for components.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param rowPrefix row prefix to use instead of the default "{"
+     * @param rowSuffix row suffix to use instead of the default "}"
+     * @param rowSeparator tow separator to use instead of the default ";"
+     * @param columnSeparator column separator to use instead of the default ", "
+     * @param format the custom format for components.
+     */
+Method code:
+130 |     public RealMatrixFormat(final String prefix, final String suffix,
+131 |                             final String rowPrefix, final String rowSuffix,
+132 |                             final String rowSeparator, final String columnSeparator,
+133 |                             final NumberFormat format) {
+134 |         this.prefix            = prefix;
+135 |         this.suffix            = suffix;
+136 |         this.rowPrefix         = rowPrefix;
+137 |         this.rowSuffix         = rowSuffix;
+138 |         this.rowSeparator      = rowSeparator;
+139 |         this.columnSeparator   = columnSeparator;
+140 |         this.format            = format;
+141 |         // disable grouping to prevent parsing problems
+142 |         this.format.setGroupingUsed(false);
+143 |     }
+
+===== M0089 =====
+Signature: org.apache.commons.math3.distribution.AbstractRealDistribution.AbstractRealDistribution(RandomGenerator)
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractRealDistribution.java
+Original range: 76-78
+Documentation:
+/**
+     * @param rng Random number generator.
+     * @since 3.1
+     */
+Method code:
+76 |     protected AbstractRealDistribution(RandomGenerator rng) {
+77 |         random = rng;
+78 |     }
+
+===== M0090 =====
+Signature: org.apache.commons.math3.linear.TriDiagonalTransformer.getSecondaryDiagonalRef()
+Source: src/main/java/org/apache/commons/math3/linear/TriDiagonalTransformer.java
+Original range: 184-186
+Documentation:
+/**
+     * Get the secondary diagonal elements of the matrix T of the transform.
+     * <p>Note that since this class is only intended for internal use,
+     * it returns directly a reference to its internal arrays, not a copy.</p>
+     * @return the secondary diagonal elements of the T matrix
+     */
+Method code:
+184 |     double[] getSecondaryDiagonalRef() {
+185 |         return secondary;
+186 |     }
+
+===== M0091 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.Solver.Solver(double[],double[],ArrayRealVector[])
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 428-434
+Documentation:
+/**
+         * Builds a solver from decomposed matrix.
+         *
+         * @param realEigenvalues Real parts of the eigenvalues.
+         * @param imagEigenvalues Imaginary parts of the eigenvalues.
+         * @param eigenvectors Eigenvectors.
+         */
+Method code:
+428 |         private Solver(final double[] realEigenvalues,
+429 |                 final double[] imagEigenvalues,
+430 |                 final ArrayRealVector[] eigenvectors) {
+431 |             this.realEigenvalues = realEigenvalues;
+432 |             this.imagEigenvalues = imagEigenvalues;
+433 |             this.eigenvectors = eigenvectors;
+434 |         }
+
+===== M0092 =====
+Signature: org.apache.commons.math3.util.Precision.equals(double,double,double)
+Source: src/main/java/org/apache/commons/math3/util/Precision.java
+Original range: 271-273
+Documentation:
+/**
+     * Returns {@code true} if there is no double value strictly between the
+     * arguments or the difference between them is within the range of allowed
+     * error (inclusive).
+     *
+     * @param x First value.
+     * @param y Second value.
+     * @param eps Amount of allowed absolute error.
+     * @return {@code true} if the values are two adjacent floating point
+     * numbers or they are within range of each other.
+     */
+Method code:
+271 |     public static boolean equals(double x, double y, double eps) {
+272 |         return equals(x, y, 1) || FastMath.abs(y - x) <= eps;
+273 |     }
+
+===== M0093 =====
+Signature: org.apache.commons.math3.util.Precision.equals(double,double,int)
+Source: src/main/java/org/apache/commons/math3/util/Precision.java
+Original range: 330-345
+Documentation:
+/**
+     * Returns true if both arguments are equal or within the range of allowed
+     * error (inclusive).
+     * Two float numbers are considered equal if there are {@code (maxUlps - 1)}
+     * (or fewer) floating point numbers between them, i.e. two adjacent floating
+     * point numbers are considered equal.
+     * Adapted from <a
+     * href="http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm">
+     * Bruce Dawson</a>
+     *
+     * @param x first value
+     * @param y second value
+     * @param maxUlps {@code (maxUlps - 1)} is the number of floating point
+     * values between {@code x} and {@code y}.
+     * @return {@code true} if there are fewer than {@code maxUlps} floating
+     * point values between {@code x} and {@code y}.
+     */
+Method code:
+330 |     public static boolean equals(double x, double y, int maxUlps) {
+331 |         long xInt = Double.doubleToLongBits(x);
+332 |         long yInt = Double.doubleToLongBits(y);
+333 | 
+334 |         // Make lexicographically ordered as a two's-complement integer.
+335 |         if (xInt < 0) {
+336 |             xInt = SGN_MASK - xInt;
+337 |         }
+338 |         if (yInt < 0) {
+339 |             yInt = SGN_MASK - yInt;
+340 |         }
+341 | 
+342 |         final boolean isEqual = FastMath.abs(xInt - yInt) <= maxUlps;
+343 | 
+344 |         return isEqual && !Double.isNaN(x) && !Double.isNaN(y);
+345 |     }
+
+===== M0094 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.setSubMatrix(double[][],int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 267-300
+Documentation:
+/** {@inheritDoc} */
+Method code:
+267 |     @Override
+268 |     public void setSubMatrix(final double[][] subMatrix, final int row,
+269 |                              final int column)
+270 |         throws NoDataException, OutOfRangeException,
+271 |         DimensionMismatchException, NullArgumentException {
+272 |         if (data == null) {
+273 |             if (row > 0) {
+274 |                 throw new MathIllegalStateException(LocalizedFormats.FIRST_ROWS_NOT_INITIALIZED_YET, row);
+275 |             }
+276 |             if (column > 0) {
+277 |                 throw new MathIllegalStateException(LocalizedFormats.FIRST_COLUMNS_NOT_INITIALIZED_YET, column);
+278 |             }
+279 |             MathUtils.checkNotNull(subMatrix);
+280 |             final int nRows = subMatrix.length;
+281 |             if (nRows == 0) {
+282 |                 throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+283 |             }
+284 | 
+285 |             final int nCols = subMatrix[0].length;
+286 |             if (nCols == 0) {
+287 |                 throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+288 |             }
+289 |             data = new double[subMatrix.length][nCols];
+290 |             for (int i = 0; i < data.length; ++i) {
+291 |                 if (subMatrix[i].length != nCols) {
+292 |                     throw new DimensionMismatchException(subMatrix[i].length, nCols);
+293 |                 }
+294 |                 System.arraycopy(subMatrix[i], 0, data[i + row], column, nCols);
+295 |             }
+296 |         } else {
+297 |             super.setSubMatrix(subMatrix, row, column);
+298 |         }
+299 | 
+300 |     }
+
+===== M0095 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.hasComplexEigenvalues()
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 271-278
+Documentation:
+/**
+     * Returns whether the calculated eigen values are complex or real.
+     * <p>The method performs a zero check for each element of the
+     * {@link #getImagEigenvalues()} array and returns {@code true} if any
+     * element is not equal to zero.
+     *
+     * @return {@code true} if the eigen values are complex, {@code false} otherwise
+     * @since 3.1
+     */
+Method code:
+271 |     public boolean hasComplexEigenvalues() {
+272 |         for (int i = 0; i < imagEigenvalues.length; i++) {
+273 |             if (!Precision.equals(imagEigenvalues[i], 0.0, EPSILON)) {
+274 |                 return true;
+275 |             }
+276 |         }
+277 |         return false;
+278 |     }
+
+===== M0096 =====
+Signature: org.apache.commons.math3.util.FastMath.log(double,double[])
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1129-1353
+Documentation:
+/**
+     * Internal helper method for natural logarithm function.
+     * @param x original argument of the natural logarithm function
+     * @param hiPrec extra bits of precision on output (To Be Confirmed)
+     * @return log(x)
+     */
+Method code:
+1129 |     private static double log(final double x, final double[] hiPrec) {
+1130 |         if (x==0) { // Handle special case of +0/-0
+1131 |             return Double.NEGATIVE_INFINITY;
+1132 |         }
+1133 |         long bits = Double.doubleToLongBits(x);
+1134 | 
+1135 |         /* Handle special cases of negative input, and NaN */
+1136 |         if ((bits & 0x8000000000000000L) != 0 || x != x) {
+1137 |             if (x != 0.0) {
+1138 |                 if (hiPrec != null) {
+1139 |                     hiPrec[0] = Double.NaN;
+1140 |                 }
+1141 | 
+1142 |                 return Double.NaN;
+1143 |             }
+1144 |         }
+1145 | 
+1146 |         /* Handle special cases of Positive infinity. */
+1147 |         if (x == Double.POSITIVE_INFINITY) {
+1148 |             if (hiPrec != null) {
+1149 |                 hiPrec[0] = Double.POSITIVE_INFINITY;
+1150 |             }
+1151 | 
+1152 |             return Double.POSITIVE_INFINITY;
+1153 |         }
+1154 | 
+1155 |         /* Extract the exponent */
+1156 |         int exp = (int)(bits >> 52)-1023;
+1157 | 
+1158 |         if ((bits & 0x7ff0000000000000L) == 0) {
+1159 |             // Subnormal!
+1160 |             if (x == 0) {
+1161 |                 // Zero
+1162 |                 if (hiPrec != null) {
+1163 |                     hiPrec[0] = Double.NEGATIVE_INFINITY;
+1164 |                 }
+1165 | 
+1166 |                 return Double.NEGATIVE_INFINITY;
+1167 |             }
+1168 | 
+1169 |             /* Normalize the subnormal number. */
+1170 |             bits <<= 1;
+1171 |             while ( (bits & 0x0010000000000000L) == 0) {
+1172 |                 --exp;
+1173 |                 bits <<= 1;
+1174 |             }
+1175 |         }
+1176 | 
+1177 | 
+1178 |         if (exp == -1 || exp == 0) {
+1179 |             if (x < 1.01 && x > 0.99 && hiPrec == null) {
+1180 |                 /* The normal method doesn't work well in the range [0.99, 1.01], so call do a straight
+1181 |            polynomial expansion in higer precision. */
+1182 | 
+1183 |                /* Compute x - 1.0 and split it */
+1184 |                 double xa = x - 1.0;
+1185 |                 double xb = xa - x + 1.0;
+1186 |                 double tmp = xa * HEX_40000000;
+1187 |                 double aa = xa + tmp - tmp;
+1188 |                 double ab = xa - aa;
+1189 |                 xa = aa;
+1190 |                 xb = ab;
+1191 | 
+1192 |                 final double[] lnCoef_last = LN_QUICK_COEF[LN_QUICK_COEF.length - 1];
+1193 |                 double ya = lnCoef_last[0];
+1194 |                 double yb = lnCoef_last[1];
+1195 | 
+1196 |                 for (int i = LN_QUICK_COEF.length - 2; i >= 0; i--) {
+1197 |                     /* Multiply a = y * x */
+1198 |                     aa = ya * xa;
+1199 |                     ab = ya * xb + yb * xa + yb * xb;
+1200 |                     /* split, so now y = a */
+1201 |                     tmp = aa * HEX_40000000;
+1202 |                     ya = aa + tmp - tmp;
+1203 |                     yb = aa - ya + ab;
+1204 | 
+1205 |                     /* Add  a = y + lnQuickCoef */
+1206 |                     final double[] lnCoef_i = LN_QUICK_COEF[i];
+1207 |                     aa = ya + lnCoef_i[0];
+1208 |                     ab = yb + lnCoef_i[1];
+1209 |                     /* Split y = a */
+1210 |                     tmp = aa * HEX_40000000;
+1211 |                     ya = aa + tmp - tmp;
+1212 |                     yb = aa - ya + ab;
+1213 |                 }
+1214 | 
+1215 |                 /* Multiply a = y * x */
+1216 |                 aa = ya * xa;
+1217 |                 ab = ya * xb + yb * xa + yb * xb;
+1218 |                 /* split, so now y = a */
+1219 |                 tmp = aa * HEX_40000000;
+1220 |                 ya = aa + tmp - tmp;
+1221 |                 yb = aa - ya + ab;
+1222 | 
+1223 |                 return ya + yb;
+1224 |             }
+1225 |         }
+1226 | 
+1227 |         // lnm is a log of a number in the range of 1.0 - 2.0, so 0 <= lnm < ln(2)
+1228 |         final double[] lnm = lnMant.LN_MANT[(int)((bits & 0x000ffc0000000000L) >> 42)];
+1229 | 
+1230 |         /*
+1231 |     double epsilon = x / Double.longBitsToDouble(bits & 0xfffffc0000000000L);
+1232 | 
+1233 |     epsilon -= 1.0;
+1234 |          */
+1235 | 
+1236 |         // y is the most significant 10 bits of the mantissa
+1237 |         //double y = Double.longBitsToDouble(bits & 0xfffffc0000000000L);
+1238 |         //double epsilon = (x - y) / y;
+1239 |         final double epsilon = (bits & 0x3ffffffffffL) / (TWO_POWER_52 + (bits & 0x000ffc0000000000L));
+1240 | 
+1241 |         double lnza = 0.0;
+1242 |         double lnzb = 0.0;
+1243 | 
+1244 |         if (hiPrec != null) {
+1245 |             /* split epsilon -> x */
+1246 |             double tmp = epsilon * HEX_40000000;
+1247 |             double aa = epsilon + tmp - tmp;
+1248 |             double ab = epsilon - aa;
+1249 |             double xa = aa;
+1250 |             double xb = ab;
+1251 | 
+1252 |             /* Need a more accurate epsilon, so adjust the division. */
+1253 |             final double numer = bits & 0x3ffffffffffL;
+1254 |             final double denom = TWO_POWER_52 + (bits & 0x000ffc0000000000L);
+1255 |             aa = numer - xa*denom - xb * denom;
+1256 |             xb += aa / denom;
+1257 | 
+1258 |             /* Remez polynomial evaluation */
+1259 |             final double[] lnCoef_last = LN_HI_PREC_COEF[LN_HI_PREC_COEF.length-1];
+1260 |             double ya = lnCoef_last[0];
+1261 |             double yb = lnCoef_last[1];
+1262 | 
+1263 |             for (int i = LN_HI_PREC_COEF.length - 2; i >= 0; i--) {
+1264 |                 /* Multiply a = y * x */
+1265 |                 aa = ya * xa;
+1266 |                 ab = ya * xb + yb * xa + yb * xb;
+1267 |                 /* split, so now y = a */
+1268 |                 tmp = aa * HEX_40000000;
+1269 |                 ya = aa + tmp - tmp;
+1270 |                 yb = aa - ya + ab;
+1271 | 
+1272 |                 /* Add  a = y + lnHiPrecCoef */
+1273 |                 final double[] lnCoef_i = LN_HI_PREC_COEF[i];
+1274 |                 aa = ya + lnCoef_i[0];
+1275 |                 ab = yb + lnCoef_i[1];
+1276 |                 /* Split y = a */
+1277 |                 tmp = aa * HEX_40000000;
+1278 |                 ya = aa + tmp - tmp;
+1279 |                 yb = aa - ya + ab;
+1280 |             }
+1281 | 
+1282 |             /* Multiply a = y * x */
+1283 |             aa = ya * xa;
+1284 |             ab = ya * xb + yb * xa + yb * xb;
+1285 | 
+1286 |             /* split, so now lnz = a */
+1287 |             /*
+1288 |       tmp = aa * 1073741824.0;
+1289 |       lnza = aa + tmp - tmp;
+1290 |       lnzb = aa - lnza + ab;
+1291 |              */
+1292 |             lnza = aa + ab;
+1293 |             lnzb = -(lnza - aa - ab);
+1294 |         } else {
+1295 |             /* High precision not required.  Eval Remez polynomial
+1296 |          using standard double precision */
+1297 |             lnza = -0.16624882440418567;
+1298 |             lnza = lnza * epsilon + 0.19999954120254515;
+1299 |             lnza = lnza * epsilon + -0.2499999997677497;
+1300 |             lnza = lnza * epsilon + 0.3333333333332802;
+1301 |             lnza = lnza * epsilon + -0.5;
+1302 |             lnza = lnza * epsilon + 1.0;
+1303 |             lnza = lnza * epsilon;
+1304 |         }
+1305 | 
+1306 |         /* Relative sizes:
+1307 |          * lnzb     [0, 2.33E-10]
+1308 |          * lnm[1]   [0, 1.17E-7]
+1309 |          * ln2B*exp [0, 1.12E-4]
+1310 |          * lnza      [0, 9.7E-4]
+1311 |          * lnm[0]   [0, 0.692]
+1312 |          * ln2A*exp [0, 709]
+1313 |          */
+1314 | 
+1315 |         /* Compute the following sum:
+1316 |          * lnzb + lnm[1] + ln2B*exp + lnza + lnm[0] + ln2A*exp;
+1317 |          */
+1318 | 
+1319 |         //return lnzb + lnm[1] + ln2B*exp + lnza + lnm[0] + ln2A*exp;
+1320 |         double a = LN_2_A*exp;
+1321 |         double b = 0.0;
+1322 |         double c = a+lnm[0];
+1323 |         double d = -(c-a-lnm[0]);
+1324 |         a = c;
+1325 |         b = b + d;
+1326 | 
+1327 |         c = a + lnza;
+1328 |         d = -(c - a - lnza);
+1329 |         a = c;
+1330 |         b = b + d;
+1331 | 
+1332 |         c = a + LN_2_B*exp;
+1333 |         d = -(c - a - LN_2_B*exp);
+1334 |         a = c;
+1335 |         b = b + d;
+1336 | 
+1337 |         c = a + lnm[1];
+1338 |         d = -(c - a - lnm[1]);
+1339 |         a = c;
+1340 |         b = b + d;
+1341 | 
+1342 |         c = a + lnzb;
+1343 |         d = -(c - a - lnzb);
+1344 |         a = c;
+1345 |         b = b + d;
+1346 | 
+1347 |         if (hiPrec != null) {
+1348 |             hiPrec[0] = a;
+1349 |             hiPrec[1] = b;
+1350 |         }
+1351 | 
+1352 |         return a + b;
+1353 |     }
+
+===== M0097 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getColumnDimension()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 343-346
+Documentation:
+/** {@inheritDoc} */
+Method code:
+343 |     @Override
+344 |     public int getColumnDimension() {
+345 |         return ((data == null) || (data[0] == null)) ? 0 : data[0].length;
+346 |     }
+
+===== M0098 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.createMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 141-146
+Documentation:
+/** {@inheritDoc} */
+Method code:
+141 |     @Override
+142 |     public RealMatrix createMatrix(final int rowDimension,
+143 |                                    final int columnDimension)
+144 |         throws NotStrictlyPositiveException {
+145 |         return new Array2DRowRealMatrix(rowDimension, columnDimension);
+146 |     }
+
+===== M0099 =====
+Signature: org.apache.commons.math3.linear.RealVectorFormat.getInstance()
+Source: src/main/java/org/apache/commons/math3/linear/RealVectorFormat.java
+Original range: 161-163
+Documentation:
+/**
+     * Returns the default real vector format for the current locale.
+     * @return the default real vector format.
+     */
+Method code:
+161 |     public static RealVectorFormat getInstance() {
+162 |         return getInstance(Locale.getDefault());
+163 |     }
+
+===== M0100 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getInstance(Locale)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 223-225
+Documentation:
+/**
+     * Returns the default real vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the real vector format specific to the given locale.
+     */
+Method code:
+223 |     public static RealMatrixFormat getInstance(final Locale locale) {
+224 |         return new RealMatrixFormat(CompositeFormat.getDefaultNumberFormat(locale));
+225 |     }
+
+===== M0101 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.walkInRowOrder(RealMatrixPreservingVisitor)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 408-420
+Documentation:
+/** {@inheritDoc} */
+Method code:
+408 |     @Override
+409 |     public double walkInRowOrder(final RealMatrixPreservingVisitor visitor) {
+410 |         final int rows    = getRowDimension();
+411 |         final int columns = getColumnDimension();
+412 |         visitor.start(rows, columns, 0, rows - 1, 0, columns - 1);
+413 |         for (int i = 0; i < rows; ++i) {
+414 |             final double[] rowI = data[i];
+415 |             for (int j = 0; j < columns; ++j) {
+416 |                 visitor.visit(i, j, rowI[j]);
+417 |             }
+418 |         }
+419 |         return visitor.end();
+420 |     }
+
+===== M0102 =====
+Signature: org.apache.commons.math3.linear.TriDiagonalTransformer.transform()
+Source: src/main/java/org/apache/commons/math3/linear/TriDiagonalTransformer.java
+Original range: 192-253
+Documentation:
+/**
+     * Transform original matrix to tridiagonal form.
+     * <p>Transformation is done using Householder transforms.</p>
+     */
+Method code:
+192 |     private void transform() {
+193 |         final int m = householderVectors.length;
+194 |         final double[] z = new double[m];
+195 |         for (int k = 0; k < m - 1; k++) {
+196 | 
+197 |             //zero-out a row and a column simultaneously
+198 |             final double[] hK = householderVectors[k];
+199 |             main[k] = hK[k];
+200 |             double xNormSqr = 0;
+201 |             for (int j = k + 1; j < m; ++j) {
+202 |                 final double c = hK[j];
+203 |                 xNormSqr += c * c;
+204 |             }
+205 |             final double a = (hK[k + 1] > 0) ? -FastMath.sqrt(xNormSqr) : FastMath.sqrt(xNormSqr);
+206 |             secondary[k] = a;
+207 |             if (a != 0.0) {
+208 |                 // apply Householder transform from left and right simultaneously
+209 | 
+210 |                 hK[k + 1] -= a;
+211 |                 final double beta = -1 / (a * hK[k + 1]);
+212 | 
+213 |                 // compute a = beta A v, where v is the Householder vector
+214 |                 // this loop is written in such a way
+215 |                 //   1) only the upper triangular part of the matrix is accessed
+216 |                 //   2) access is cache-friendly for a matrix stored in rows
+217 |                 Arrays.fill(z, k + 1, m, 0);
+218 |                 for (int i = k + 1; i < m; ++i) {
+219 |                     final double[] hI = householderVectors[i];
+220 |                     final double hKI = hK[i];
+221 |                     double zI = hI[i] * hKI;
+222 |                     for (int j = i + 1; j < m; ++j) {
+223 |                         final double hIJ = hI[j];
+224 |                         zI   += hIJ * hK[j];
+225 |                         z[j] += hIJ * hKI;
+226 |                     }
+227 |                     z[i] = beta * (z[i] + zI);
+228 |                 }
+229 | 
+230 |                 // compute gamma = beta vT z / 2
+231 |                 double gamma = 0;
+232 |                 for (int i = k + 1; i < m; ++i) {
+233 |                     gamma += z[i] * hK[i];
+234 |                 }
+235 |                 gamma *= beta / 2;
+236 | 
+237 |                 // compute z = z - gamma v
+238 |                 for (int i = k + 1; i < m; ++i) {
+239 |                     z[i] -= gamma * hK[i];
+240 |                 }
+241 | 
+242 |                 // update matrix: A = A - v zT - z vT
+243 |                 // only the upper triangular part of the matrix is updated
+244 |                 for (int i = k + 1; i < m; ++i) {
+245 |                     final double[] hI = householderVectors[i];
+246 |                     for (int j = i; j < m; ++j) {
+247 |                         hI[j] -= hK[i] * z[j] + z[i] * hK[j];
+248 |                     }
+249 |                 }
+250 |             }
+251 |         }
+252 |         main[m - 1] = householderVectors[m - 1][m - 1];
+253 |     }
+
+===== M0103 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getEntry(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 303-308
+Documentation:
+/** {@inheritDoc} */
+Method code:
+303 |     @Override
+304 |     public double getEntry(final int row, final int column)
+305 |         throws OutOfRangeException {
+306 |         MatrixUtils.checkMatrixIndex(this, row, column);
+307 |         return data[row][column];
+308 |     }
+
+===== M0104 =====
+Signature: org.apache.commons.math3.distribution.AbstractMultivariateRealDistribution.getDimension()
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractMultivariateRealDistribution.java
+Original range: 52-54
+Documentation:
+/** {@inheritDoc} */
+Method code:
+52 |     public int getDimension() {
+53 |         return dimension;
+54 |     }
+
+===== M0105 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.EigenDecomposition(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 117-128
+Documentation:
+/**
+     * Calculates the eigen decomposition of the given real matrix.
+     * <p>
+     * Supports decomposition of a general matrix since 3.1.
+     *
+     * @param matrix Matrix to decompose.
+     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathArithmeticException if the decomposition of a general matrix
+     * results in a matrix with zero norm
+     * @since 3.1
+     */
+Method code:
+117 |     public EigenDecomposition(final RealMatrix matrix)
+118 |         throws MathArithmeticException {
+119 |         final double symTol = 10 * matrix.getRowDimension() * matrix.getColumnDimension() * Precision.EPSILON;
+120 |         isSymmetric = MatrixUtils.isSymmetric(matrix, symTol);
+121 |         if (isSymmetric) {
+122 |             transformToTridiagonal(matrix);
+123 |             findEigenVectors(transformer.getQ().getData());
+124 |         } else {
+125 |             final SchurTransformer t = transformToSchur(matrix);
+126 |             findEigenVectorsFromSchur(t);
+127 |         }
+128 |     }
+

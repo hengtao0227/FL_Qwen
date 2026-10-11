@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "org.apache.commons.lang3.time.FastDateFormat_PrinterTest.testCalendarTimezoneRespected()",
+    "resolved_signature": "org.apache.commons.lang3.time.FastDatePrinterTest.testCalendarTimezoneRespected()",
+    "resolution": "inherited",
+    "src_path": "src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java",
+    "begin_line": 265,
+    "end_line": 287,
+    "comment": "",
+    "snippet": "    @Test\n    public void testCalendarTimezoneRespected() {\n        String[] availableZones = TimeZone.getAvailableIDs();\n        TimeZone currentZone = TimeZone.getDefault();\n        \n        TimeZone anotherZone = null;\n        for (String zone : availableZones) {\n            if (!zone.equals(currentZone.getID())) {\n                anotherZone = TimeZone.getTimeZone(zone);\n            }\n        }\n        \n        assertNotNull(\"Cannot find another timezone\", anotherZone);\n        \n        final String pattern = \"h:mma z\";\n        final Calendar cal = Calendar.getInstance(anotherZone);\n        \n        SimpleDateFormat sdf = new SimpleDateFormat(pattern);\n        sdf.setTimeZone(anotherZone);\n        String expectedValue = sdf.format(cal.getTime());\n        String actualValue = FastDateFormat.getInstance(pattern).format(cal);\n        assertEquals(expectedValue, actualValue);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.lang3.time.FastDatePrinterTest.testCalendarTimezoneRespected()",
+    "resolved_signature": "org.apache.commons.lang3.time.FastDatePrinterTest.testCalendarTimezoneRespected()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java",
+    "begin_line": 265,
+    "end_line": 287,
+    "comment": "",
+    "snippet": "    @Test\n    public void testCalendarTimezoneRespected() {\n        String[] availableZones = TimeZone.getAvailableIDs();\n        TimeZone currentZone = TimeZone.getDefault();\n        \n        TimeZone anotherZone = null;\n        for (String zone : availableZones) {\n            if (!zone.equals(currentZone.getID())) {\n                anotherZone = TimeZone.getTimeZone(zone);\n            }\n        }\n        \n        assertNotNull(\"Cannot find another timezone\", anotherZone);\n        \n        final String pattern = \"h:mma z\";\n        final Calendar cal = Calendar.getInstance(anotherZone);\n        \n        SimpleDateFormat sdf = new SimpleDateFormat(pattern);\n        sdf.setTimeZone(anotherZone);\n        String expectedValue = sdf.format(cal.getTime());\n        String actualValue = FastDateFormat.getInstance(pattern).format(cal);\n        assertEquals(expectedValue, actualValue);\n    }"
+  }
+]

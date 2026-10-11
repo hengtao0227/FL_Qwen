@@ -1,0 +1,136 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.StringUtils.isEmpty(CharSequence)
+Source: src/main/java/org/apache/commons/lang3/StringUtils.java
+Original range: 193-195
+Documentation:
+/**
+     * <p>Checks if a CharSequence is empty ("") or null.</p>
+     *
+     * <pre>
+     * StringUtils.isEmpty(null)      = true
+     * StringUtils.isEmpty("")        = true
+     * StringUtils.isEmpty(" ")       = false
+     * StringUtils.isEmpty("bob")     = false
+     * StringUtils.isEmpty("  bob  ") = false
+     * </pre>
+     *
+     * <p>NOTE: This method changed in Lang version 2.0.
+     * It no longer trims the CharSequence.
+     * That functionality is available in isBlank().</p>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return <code>true</code> if the CharSequence is empty or null
+     */
+Method code:
+193 |     public static boolean isEmpty(CharSequence cs) {
+194 |         return cs == null || cs.length() == 0;
+195 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.StringUtils.containsAny(CharSequence,String)
+Source: src/main/java/org/apache/commons/lang3/StringUtils.java
+Original range: 1486-1491
+Documentation:
+/**
+     * <p>
+     * Checks if the CharSequence contains any character in the given set of characters.
+     * </p>
+     * 
+     * <p>
+     * A <code>null</code> CharSequence will return <code>false</code>. A <code>null</code> search CharSequence will return
+     * <code>false</code>.
+     * </p>
+     * 
+     * <pre>
+     * StringUtils.containsAny(null, *)            = false
+     * StringUtils.containsAny("", *)              = false
+     * StringUtils.containsAny(*, null)            = false
+     * StringUtils.containsAny(*, "")              = false
+     * StringUtils.containsAny("zzabyycdxx", "za") = true
+     * StringUtils.containsAny("zzabyycdxx", "by") = true
+     * StringUtils.containsAny("aba","z")          = false
+     * </pre>
+     * 
+     * @param cs
+     *            the CharSequence to check, may be null
+     * @param searchChars
+     *            the chars to search for, may be null
+     * @return the <code>true</code> if any of the chars are found, <code>false</code> if no match or null input
+     * @since 2.4
+     */
+Method code:
+1486 |     public static boolean containsAny(CharSequence cs, String searchChars) {
+1487 |         if (searchChars == null) {
+1488 |             return false;
+1489 |         }
+1490 |         return containsAny(cs, searchChars.toCharArray());
+1491 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang3.StringUtils.containsAny(CharSequence,char[])
+Source: src/main/java/org/apache/commons/lang3/StringUtils.java
+Original range: 1440-1457
+Documentation:
+/**
+     * <p>Checks if the CharSequence contains any character in the given
+     * set of characters.</p>
+     *
+     * <p>A <code>null</code> CharSequence will return <code>false</code>.
+     * A <code>null</code> or zero length search array will return <code>false</code>.</p>
+     *
+     * <pre>
+     * StringUtils.containsAny(null, *)                = false
+     * StringUtils.containsAny("", *)                  = false
+     * StringUtils.containsAny(*, null)                = false
+     * StringUtils.containsAny(*, [])                  = false
+     * StringUtils.containsAny("zzabyycdxx",['z','a']) = true
+     * StringUtils.containsAny("zzabyycdxx",['b','y']) = true
+     * StringUtils.containsAny("aba", ['z'])           = false
+     * </pre>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @param searchChars  the chars to search for, may be null
+     * @return the <code>true</code> if any of the chars are found,
+     * <code>false</code> if no match or null input
+     * @since 2.4
+     */
+Method code:
+1440 | 	public static boolean containsAny(CharSequence cs, char[] searchChars) {
+1441 | 		if (isEmpty(cs) || ArrayUtils.isEmpty(searchChars)) {
+1442 | 			return false;
+1443 | 		}
+1444 | 		int csLength = cs.length();
+1445 | 		int searchLength = searchChars.length;
+1446 | 		for (int i = 0; i < csLength; i++) {
+1447 | 			char ch = cs.charAt(i);
+1448 | 			for (int j = 0; j < searchLength; j++) {
+1449 | 				if (searchChars[j] == ch) {
+1450 | 						// ch is a supplementary character
+1451 | 						// ch is in the Basic Multilingual Plane
+1452 | 						return true;
+1453 | 				}
+1454 | 			}
+1455 | 		}
+1456 | 		return false;
+1457 | 	}
+
+===== M0004 =====
+Signature: org.apache.commons.lang3.ArrayUtils.isEmpty(char[])
+Source: src/main/java/org/apache/commons/lang3/ArrayUtils.java
+Original range: 3278-3283
+Documentation:
+/**
+     * <p>Checks if an array of primitive chars is empty or <code>null</code>.</p>
+     *
+     * @param array  the array to test
+     * @return <code>true</code> if the array is empty or <code>null</code>
+     * @since 2.1
+     */
+Method code:
+3278 |     public static boolean isEmpty(char[] array) {
+3279 |         if (array == null || array.length == 0) {
+3280 |             return true;
+3281 |         }
+3282 |         return false;
+3283 |     }
+

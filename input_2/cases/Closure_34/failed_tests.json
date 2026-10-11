@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.CodePrinterTest.testManyAdds()",
+    "resolved_signature": "com.google.javascript.jscomp.CodePrinterTest.testManyAdds()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CodePrinterTest.java",
+    "begin_line": 1382,
+    "end_line": 1398,
+    "comment": "",
+    "snippet": "  public void testManyAdds() {\n    int numAdds = 10000;\n    List<String> numbers = Lists.newArrayList(\"0\", \"1\");\n    Node current = new Node(Token.ADD, Node.newNumber(0), Node.newNumber(1));\n    for (int i = 2; i < numAdds; i++) {\n      current = new Node(Token.ADD, current);\n\n      // 1000 is printed as 1E3, and screws up our test.\n      int num = i % 1000;\n      numbers.add(String.valueOf(num));\n      current.addChildToBack(Node.newNumber(num));\n    }\n\n    String expected = Joiner.on(\"+\").join(numbers);\n    String actual = printNode(current).replace(\"\\n\", \"\");\n    assertEquals(expected, actual);\n  }"
+  }
+]

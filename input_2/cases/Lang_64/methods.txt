@@ -1,0 +1,206 @@
+===== M0001 =====
+Signature: org.apache.commons.lang.enums.Enum.createEntry(Class)
+Source: src/java/org/apache/commons/lang/enums/Enum.java
+Original range: 483-496
+Documentation:
+/**
+     * <p>Creates an <code>Entry</code> for storing the Enums.</p>
+     *
+     * <p>This accounts for subclassed Enums.</p>
+     * 
+     * @param enumClass  the class of the <code>Enum</code> to get
+     * @return the enum entry
+     */
+Method code:
+483 |     private static Entry createEntry(Class enumClass) {
+484 |         Entry entry = new Entry();
+485 |         Class cls = enumClass.getSuperclass();
+486 |         while (cls != null && cls != Enum.class && cls != ValuedEnum.class) {
+487 |             Entry loopEntry = (Entry) cEnumClasses.get(cls);
+488 |             if (loopEntry != null) {
+489 |                 entry.list.addAll(loopEntry.list);
+490 |                 entry.map.putAll(loopEntry.map);
+491 |                 break;  // stop here, as this will already have had superclasses added
+492 |             }
+493 |             cls = cls.getSuperclass();
+494 |         }
+495 |         return entry;
+496 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang.enums.Enum.init(String)
+Source: src/java/org/apache/commons/lang/enums/Enum.java
+Original range: 326-359
+Documentation:
+/**
+     * Initializes the enumeration.
+     * 
+     * @param name  the enum name
+     * @throws IllegalArgumentException if the name is null or empty or duplicate
+     * @throws IllegalArgumentException if the enumClass is null or invalid
+     */
+Method code:
+326 |     private void init(String name) {
+327 |         if (StringUtils.isEmpty(name)) {
+328 |             throw new IllegalArgumentException("The Enum name must not be empty or null");
+329 |         }
+330 |         
+331 |         Class enumClass = getEnumClass();
+332 |         if (enumClass == null) {
+333 |             throw new IllegalArgumentException("getEnumClass() must not be null");
+334 |         }
+335 |         Class cls = getClass();
+336 |         boolean ok = false;
+337 |         while (cls != null && cls != Enum.class && cls != ValuedEnum.class) {
+338 |             if (cls == enumClass) {
+339 |                 ok = true;
+340 |                 break;
+341 |             }
+342 |             cls = cls.getSuperclass();
+343 |         }
+344 |         if (ok == false) {
+345 |             throw new IllegalArgumentException("getEnumClass() must return a superclass of this class");
+346 |         }
+347 |         
+348 |         // create entry
+349 |         Entry entry = (Entry) cEnumClasses.get(enumClass);
+350 |         if (entry == null) {
+351 |             entry = createEntry(enumClass);
+352 |             cEnumClasses.put(enumClass, entry);
+353 |         }
+354 |         if (entry.map.containsKey(name)) {
+355 |             throw new IllegalArgumentException("The Enum name must be unique, '" + name + "' has already been added");
+356 |         }
+357 |         entry.map.put(name, this);
+358 |         entry.list.add(this);
+359 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang.enums.Enum.Enum(String)
+Source: src/java/org/apache/commons/lang/enums/Enum.java
+Original range: 311-317
+Documentation:
+/**
+     * <p>Constructor to add a new named item to the enumeration.</p>
+     *
+     * @param name  the name of the enum object,
+     *  must not be empty or <code>null</code>
+     * @throws IllegalArgumentException if the name is <code>null</code>
+     *  or an empty string
+     * @throws IllegalArgumentException if the getEnumClass() method returns
+     *  a null or invalid Class
+     */
+Method code:
+311 |     protected Enum(String name) {
+312 |         super();
+313 |         init(name);
+314 |         iName = name;
+315 |         iHashCode = 7 + getEnumClass().hashCode() + 3 * name.hashCode();
+316 |         // cannot create toString here as subclasses may want to include other data
+317 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang.enums.ValuedEnum.compareTo(Object)
+Source: src/java/org/apache/commons/lang/enums/ValuedEnum.java
+Original range: 182-184
+Documentation:
+/**
+     * <p>Tests for order.</p>
+     *
+     * <p>The default ordering is numeric by value, but this
+     * can be overridden by subclasses.</p>
+     *
+     * <p>NOTE: From v2.2 the enums must be of the same type.
+     * If the parameter is in a different class loader than this instance,
+     * reflection is used to compare the values.</p>
+     *
+     * @see java.lang.Comparable#compareTo(Object)
+     * @param other  the other object to compare to
+     * @return -ve if this is less than the other object, +ve if greater than,
+     *  <code>0</code> of equal
+     * @throws ClassCastException if other is not an <code>Enum</code>
+     * @throws NullPointerException if other is <code>null</code>
+     */
+Method code:
+182 |     public int compareTo(Object other) {
+183 |         return iValue - ((ValuedEnum) other).iValue;
+184 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang.enums.ValuedEnum.ValuedEnum(String,int)
+Source: src/java/org/apache/commons/lang/enums/ValuedEnum.java
+Original range: 125-128
+Documentation:
+/**
+     * Constructor for enum item.
+     *
+     * @param name  the name of enum item
+     * @param value  the value of enum item
+     */
+Method code:
+125 |     protected ValuedEnum(String name, int value) {
+126 |         super(name);
+127 |         iValue = value;
+128 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.lang.enums.Enum.getEnumClass()
+Source: src/java/org/apache/commons/lang/enums/Enum.java
+Original range: 518-520
+Documentation:
+/**
+     * <p>Retrieves the Class of this Enum item, set in the constructor.</p>
+     * 
+     * <p>This is normally the same as <code>getClass()</code>, but for
+     * advanced Enums may be different. If overridden, it must return a
+     * constant value.</p>
+     * 
+     * @return the <code>Class</code> of the enum
+     * @since 2.0
+     */
+Method code:
+518 |     public Class getEnumClass() {
+519 |         return getClass();
+520 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.lang.StringUtils.isEmpty(String)
+Source: src/java/org/apache/commons/lang/StringUtils.java
+Original range: 184-186
+Documentation:
+/**
+     * <p>Checks if a String is empty ("") or null.</p>
+     *
+     * <pre>
+     * StringUtils.isEmpty(null)      = true
+     * StringUtils.isEmpty("")        = true
+     * StringUtils.isEmpty(" ")       = false
+     * StringUtils.isEmpty("bob")     = false
+     * StringUtils.isEmpty("  bob  ") = false
+     * </pre>
+     *
+     * <p>NOTE: This method changed in Lang version 2.0.
+     * It no longer trims the String.
+     * That functionality is available in isBlank().</p>
+     *
+     * @param str  the String to check, may be null
+     * @return <code>true</code> if the String is empty or null
+     */
+Method code:
+184 |     public static boolean isEmpty(String str) {
+185 |         return str == null || str.length() == 0;
+186 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.lang.enums.Enum.Entry.Entry()
+Source: src/java/org/apache/commons/lang/enums/Enum.java
+Original range: 296-298
+Documentation:
+/**
+         * <p>Restrictive constructor.</p>
+         */
+Method code:
+296 |         protected Entry() {
+297 |           super();
+298 |         }
+

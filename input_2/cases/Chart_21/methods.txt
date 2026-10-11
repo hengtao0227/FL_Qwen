@@ -1,0 +1,613 @@
+===== M0001 =====
+Signature: org.jfree.data.statistics.BoxAndWhiskerItem.BoxAndWhiskerItem(double,double,double,double,double,double,double,double,List)
+Source: source/org/jfree/data/statistics/BoxAndWhiskerItem.java
+Original range: 142-152
+Documentation:
+/**
+     * Creates a new box-and-whisker item.
+     * 
+     * @param mean  the mean.
+     * @param median  the median
+     * @param q1  the first quartile.
+     * @param q3  the third quartile.
+     * @param minRegularValue  the minimum regular value.
+     * @param maxRegularValue  the maximum regular value.
+     * @param minOutlier  the minimum outlier value.
+     * @param maxOutlier  the maximum outlier value.
+     * @param outliers  a list of the outliers.
+     * 
+     * @since 1.0.7
+     */
+Method code:
+142 |     public BoxAndWhiskerItem(double mean, double median, double q1, double q3,
+143 |             double minRegularValue, double maxRegularValue, double minOutlier,
+144 |             double maxOutlier, List outliers) {
+145 |         
+146 |         // pass values to other constructor
+147 |         this(new Double(mean), new Double(median), new Double(q1), 
+148 |                 new Double(q3), new Double(minRegularValue), 
+149 |                 new Double(maxRegularValue), new Double(minOutlier), 
+150 |                 new Double(maxOutlier), outliers);
+151 |         
+152 |     }
+
+===== M0002 =====
+Signature: org.jfree.data.general.AbstractDataset.notifyListeners(DatasetChangeEvent)
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 184-194
+Documentation:
+/**
+     * Notifies all registered listeners that the dataset has changed.
+     *
+     * @param event  contains information about the event that triggered the 
+     *               notification.
+     *               
+     * @see #addChangeListener(DatasetChangeListener)
+     * @see #removeChangeListener(DatasetChangeListener)
+     */
+Method code:
+184 |     protected void notifyListeners(DatasetChangeEvent event) {
+185 | 
+186 |         Object[] listeners = this.listenerList.getListenerList();
+187 |         for (int i = listeners.length - 2; i >= 0; i -= 2) {
+188 |             if (listeners[i] == DatasetChangeListener.class) {
+189 |                 ((DatasetChangeListener) listeners[i + 1]).datasetChanged(
+190 |                         event);
+191 |             }
+192 |         }
+193 | 
+194 |     }
+
+===== M0003 =====
+Signature: org.jfree.data.KeyedObject.setObject(Object)
+Source: source/org/jfree/data/KeyedObject.java
+Original range: 102-104
+Documentation:
+/**
+     * Sets the object.
+     *
+     * @param object  the object (<code>null</code> permitted).
+     */
+Method code:
+102 |     public void setObject(Object object) {
+103 |         this.object = object;
+104 |     }
+
+===== M0004 =====
+Signature: org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset.DefaultBoxAndWhiskerCategoryDataset()
+Source: source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java
+Original range: 106-115
+Documentation:
+/**
+     * Creates a new dataset.
+     */
+Method code:
+106 |     public DefaultBoxAndWhiskerCategoryDataset() {
+107 |         this.data = new KeyedObjects2D();
+108 |         this.minimumRangeValue = Double.NaN;
+109 |         this.minimumRangeValueRow = -1;
+110 |         this.minimumRangeValueColumn = -1;
+111 |         this.maximumRangeValue = Double.NaN;
+112 |         this.maximumRangeValueRow = -1;
+113 |         this.maximumRangeValueColumn = -1;
+114 |         this.rangeBounds = new Range(0.0, 0.0);
+115 |     }
+
+===== M0005 =====
+Signature: org.jfree.data.KeyedObjects.getIndex(Comparable)
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 127-141
+Documentation:
+/**
+     * Returns the index for a given key, or <code>-1</code>.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     *
+     * @return The index, or <code>-1</code> if the key is unrecognised.
+     * 
+     * @see #getKey(int)
+     */
+Method code:
+127 |     public int getIndex(Comparable key) {
+128 |         if (key == null) {
+129 |             throw new IllegalArgumentException("Null 'key' argument.");
+130 |         }
+131 |         int i = 0;
+132 |         Iterator iterator = this.data.iterator();
+133 |         while (iterator.hasNext()) {
+134 |             KeyedObject ko = (KeyedObject) iterator.next();
+135 |             if (ko.getKey().equals(key)) {
+136 |                 return i;
+137 |             }
+138 |             i++;
+139 |         }
+140 |         return -1;
+141 |     }
+
+===== M0006 =====
+Signature: org.jfree.data.KeyedObject.KeyedObject(Comparable,Object)
+Source: source/org/jfree/data/KeyedObject.java
+Original range: 74-77
+Documentation:
+/**
+     * Creates a new (key, object) pair.
+     *
+     * @param key  the key.
+     * @param object  the object (<code>null</code> permitted).
+     */
+Method code:
+74 |     public KeyedObject(Comparable key, Object object) {
+75 |         this.key = key;
+76 |         this.object = object;
+77 |     }
+
+===== M0007 =====
+Signature: org.jfree.data.general.DatasetGroup.DatasetGroup()
+Source: source/org/jfree/data/general/DatasetGroup.java
+Original range: 64-67
+Documentation:
+/**
+     * Constructs a new group.
+     */
+Method code:
+64 |     public DatasetGroup() {
+65 |         super();
+66 |         this.id = "NOID";
+67 |     }
+
+===== M0008 =====
+Signature: org.jfree.data.statistics.BoxAndWhiskerItem.getMaxOutlier()
+Source: source/org/jfree/data/statistics/BoxAndWhiskerItem.java
+Original range: 222-224
+Documentation:
+/**
+     * Returns the maximum outlier.
+     * 
+     * @return The maximum outlier (possibly <code>null</code>).
+     */
+Method code:
+222 |     public Number getMaxOutlier() {
+223 |         return this.maxOutlier;
+224 |     }
+
+===== M0009 =====
+Signature: org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset.getRangeBounds(boolean)
+Source: source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java
+Original range: 531-533
+Documentation:
+/**
+     * Returns the range of the values in this dataset's range.
+     *
+     * @param includeInterval  a flag that determines whether or not the
+     *                         y-interval is taken into account.
+     * 
+     * @return The range.
+     */
+Method code:
+531 |     public Range getRangeBounds(boolean includeInterval) {
+532 |         return this.rangeBounds;
+533 |     }
+
+===== M0010 =====
+Signature: org.jfree.data.Range.Range(double,double)
+Source: source/org/jfree/data/Range.java
+Original range: 85-93
+Documentation:
+/**
+     * Creates a new range.
+     *
+     * @param lower  the lower bound (must be <= upper bound).
+     * @param upper  the upper bound (must be >= lower bound).
+     */
+Method code:
+85 |     public Range(double lower, double upper) {
+86 |         if (lower > upper) {
+87 |             String msg = "Range(double, double): require lower (" + lower 
+88 |                 + ") <= upper (" + upper + ").";
+89 |             throw new IllegalArgumentException(msg);
+90 |         }
+91 |         this.lower = lower;
+92 |         this.upper = upper;
+93 |     }
+
+===== M0011 =====
+Signature: org.jfree.data.general.AbstractDataset.AbstractDataset()
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 96-99
+Documentation:
+/**
+     * Constructs a dataset. By default, the dataset is assigned to its own 
+     * group.
+     */
+Method code:
+96 |     protected AbstractDataset() {
+97 |         this.group = new DatasetGroup();
+98 |         this.listenerList = new EventListenerList();
+99 |     }
+
+===== M0012 =====
+Signature: org.jfree.data.KeyedObject.getKey()
+Source: source/org/jfree/data/KeyedObject.java
+Original range: 84-86
+Documentation:
+/**
+     * Returns the key.
+     *
+     * @return The key.
+     */
+Method code:
+84 |     public Comparable getKey() {
+85 |         return this.key;
+86 |     }
+
+===== M0013 =====
+Signature: org.jfree.data.KeyedObjects2D.setObject(Object,Comparable,Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 260-285
+Documentation:
+/**
+     * Adds or updates an object.
+     *
+     * @param object  the object.
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     */
+Method code:
+260 |     public void setObject(Object object, Comparable rowKey, 
+261 |             Comparable columnKey) {
+262 | 
+263 |         if (rowKey == null) {
+264 |             throw new IllegalArgumentException("Null 'rowKey' argument.");
+265 |         }
+266 |         if (columnKey == null) {
+267 |             throw new IllegalArgumentException("Null 'columnKey' argument.");
+268 |         }
+269 |         KeyedObjects row;
+270 |         int rowIndex = this.rowKeys.indexOf(rowKey);
+271 |         if (rowIndex >= 0) {
+272 |             row = (KeyedObjects) this.rows.get(rowIndex);
+273 |         }
+274 |         else {
+275 |             this.rowKeys.add(rowKey);
+276 |             row = new KeyedObjects();
+277 |             this.rows.add(row);
+278 |         }
+279 |         row.setObject(columnKey, object);
+280 |         int columnIndex = this.columnKeys.indexOf(columnKey);
+281 |         if (columnIndex < 0) {
+282 |             this.columnKeys.add(columnKey);
+283 |         }
+284 | 
+285 |     }
+
+===== M0014 =====
+Signature: org.jfree.data.KeyedObjects2D.getRowIndex(Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 149-151
+Documentation:
+/**
+     * Returns the row index for a given key.
+     *
+     * @param key  the key.
+     *
+     * @return The row index.
+     * 
+     * @see #getRowKey(int)
+     */
+Method code:
+149 |     public int getRowIndex(Comparable key) {
+150 |         return this.rowKeys.indexOf(key);
+151 |     }
+
+===== M0015 =====
+Signature: org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset.updateBounds()
+Source: source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java
+Original range: 739-742
+Documentation:
+/**
+     * Resets the cached bounds, by iterating over the entire dataset to find
+     * the current bounds.
+     */
+Method code:
+739 |     private void updateBounds() {
+740 |         this.minimumRangeValue = Double.NaN;
+741 |         this.maximumRangeValue = Double.NaN;
+742 |     }
+
+===== M0016 =====
+Signature: org.jfree.data.KeyedObjects2D.getColumnIndex(Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 186-188
+Documentation:
+/**
+     * Returns the column index for a given key.
+     *
+     * @param key  the key.
+     *
+     * @return The column index.
+     * 
+     * @see #getColumnKey(int)
+     */
+Method code:
+186 |     public int getColumnIndex(Comparable key) {
+187 |         return this.columnKeys.indexOf(key);
+188 |     }
+
+===== M0017 =====
+Signature: org.jfree.data.statistics.BoxAndWhiskerItem.BoxAndWhiskerItem(Number,Number,Number,Number,Number,Number,Number,Number,List)
+Source: source/org/jfree/data/statistics/BoxAndWhiskerItem.java
+Original range: 105-125
+Documentation:
+/**
+     * Creates a new box-and-whisker item.
+     * 
+     * @param mean  the mean (<code>null</code> permitted).
+     * @param median  the median (<code>null</code> permitted).
+     * @param q1  the first quartile (<code>null</code> permitted).
+     * @param q3  the third quartile (<code>null</code> permitted).
+     * @param minRegularValue  the minimum regular value (<code>null</code> 
+     *                         permitted).
+     * @param maxRegularValue  the maximum regular value (<code>null</code> 
+     *                         permitted).
+     * @param minOutlier  the minimum outlier (<code>null</code> permitted).
+     * @param maxOutlier  the maximum outlier (<code>null</code> permitted).
+     * @param outliers  the outliers (<code>null</code> permitted).
+     */
+Method code:
+105 |     public BoxAndWhiskerItem(Number mean,
+106 |                              Number median,
+107 |                              Number q1,
+108 |                              Number q3,
+109 |                              Number minRegularValue,
+110 |                              Number maxRegularValue,
+111 |                              Number minOutlier,
+112 |                              Number maxOutlier,
+113 |                              List outliers) {
+114 |                                  
+115 |         this.mean = mean;
+116 |         this.median = median;    
+117 |         this.q1 = q1;
+118 |         this.q3 = q3;
+119 |         this.minRegularValue = minRegularValue;
+120 |         this.maxRegularValue = maxRegularValue;
+121 |         this.minOutlier = minOutlier;
+122 |         this.maxOutlier = maxOutlier;
+123 |         this.outliers = outliers;
+124 |         
+125 |     }
+
+===== M0018 =====
+Signature: org.jfree.data.general.DatasetChangeEvent.DatasetChangeEvent(Object,Dataset)
+Source: source/org/jfree/data/general/DatasetChangeEvent.java
+Original range: 72-75
+Documentation:
+/**
+     * Constructs a new event.  The source is either the dataset or the 
+     * {@link org.jfree.chart.plot.Plot} class.  The dataset can be 
+     * <code>null</code> (in this case the source will be the 
+     * {@link org.jfree.chart.plot.Plot} class).
+     *
+     * @param source  the source of the event.
+     * @param dataset  the dataset that generated the event (<code>null</code>
+     *                 permitted).
+     */
+Method code:
+72 |     public DatasetChangeEvent(Object source, Dataset dataset) {
+73 |         super(source);
+74 |         this.dataset = dataset;
+75 |     }
+
+===== M0019 =====
+Signature: org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset.add(BoxAndWhiskerItem,Comparable,Comparable)
+Source: source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java
+Original range: 144-193
+Documentation:
+/**
+     * Adds a list of values relating to one Box and Whisker entity to the 
+     * table.  The various median values are calculated.
+     *
+     * @param item  a box and whisker item (<code>null</code> not permitted).
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     * 
+     * @see #add(List, Comparable, Comparable)
+     */
+Method code:
+144 |     public void add(BoxAndWhiskerItem item, Comparable rowKey, 
+145 |             Comparable columnKey) {
+146 | 
+147 |         this.data.addObject(item, rowKey, columnKey);
+148 |         
+149 |         // update cached min and max values
+150 |         int r = this.data.getRowIndex(rowKey);
+151 |         int c = this.data.getColumnIndex(columnKey);
+152 |         if ((this.maximumRangeValueRow == r && this.maximumRangeValueColumn 
+153 |                 == c) || (this.minimumRangeValueRow == r 
+154 |                 && this.minimumRangeValueColumn == c))  {
+155 |             updateBounds();
+156 |         }
+157 |         
+158 |             double minval = Double.NaN;
+159 |             if (item.getMinOutlier() != null) {
+160 |                 minval = item.getMinOutlier().doubleValue();
+161 |             }
+162 |             double maxval = Double.NaN;
+163 |             if (item.getMaxOutlier() != null) {
+164 |                 maxval = item.getMaxOutlier().doubleValue();
+165 |             }
+166 |         
+167 |             if (Double.isNaN(this.maximumRangeValue)) {
+168 |                 this.maximumRangeValue = maxval;
+169 |                 this.maximumRangeValueRow = r;
+170 |                 this.maximumRangeValueColumn = c;
+171 |             }
+172 |             else if (maxval > this.maximumRangeValue) {
+173 |                 this.maximumRangeValue = maxval;
+174 |                 this.maximumRangeValueRow = r;
+175 |                 this.maximumRangeValueColumn = c;
+176 |             }
+177 |         
+178 |             if (Double.isNaN(this.minimumRangeValue)) {
+179 |                 this.minimumRangeValue = minval;
+180 |                 this.minimumRangeValueRow = r;
+181 |                 this.minimumRangeValueColumn = c;
+182 |             }
+183 |             else if (minval < this.minimumRangeValue) {
+184 |                 this.minimumRangeValue = minval;
+185 |                 this.minimumRangeValueRow = r;
+186 |                 this.minimumRangeValueColumn = c;
+187 |             }
+188 |         
+189 |         this.rangeBounds = new Range(this.minimumRangeValue,
+190 |               this.maximumRangeValue);
+191 |         fireDatasetChanged();
+192 | 
+193 |     }
+
+===== M0020 =====
+Signature: org.jfree.data.statistics.BoxAndWhiskerItem.getMinOutlier()
+Source: source/org/jfree/data/statistics/BoxAndWhiskerItem.java
+Original range: 213-215
+Documentation:
+/**
+     * Returns the minimum outlier.
+     * 
+     * @return The minimum outlier (possibly <code>null</code>).
+     */
+Method code:
+213 |     public Number getMinOutlier() {
+214 |         return this.minOutlier;
+215 |     }
+
+===== M0021 =====
+Signature: org.jfree.data.Range.equals(Object)
+Source: source/org/jfree/data/Range.java
+Original range: 329-341
+Documentation:
+/**
+     * Tests this object for equality with an arbitrary object.
+     *
+     * @param obj  the object to test against (<code>null</code> permitted).
+     *
+     * @return A boolean.
+     */
+Method code:
+329 |     public boolean equals(Object obj) {
+330 |         if (!(obj instanceof Range)) {
+331 |             return false;
+332 |         }
+333 |         Range range = (Range) obj;
+334 |         if (!(this.lower == range.lower)) {
+335 |             return false;
+336 |         }
+337 |         if (!(this.upper == range.upper)) {
+338 |             return false;
+339 |         }
+340 |         return true;
+341 |     }
+
+===== M0022 =====
+Signature: org.jfree.data.KeyedObjects2D.KeyedObjects2D()
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 74-78
+Documentation:
+/**
+     * Creates a new instance (initially empty).
+     */
+Method code:
+74 |     public KeyedObjects2D() {
+75 |         this.rowKeys = new java.util.ArrayList();
+76 |         this.columnKeys = new java.util.ArrayList();
+77 |         this.rows = new java.util.ArrayList();
+78 |     }
+
+===== M0023 =====
+Signature: org.jfree.data.KeyedObjects2D.addObject(Object,Comparable,Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 248-251
+Documentation:
+/**
+     * Adds an object to the table.  Performs the same function as setObject().
+     *
+     * @param object  the object.
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     */
+Method code:
+248 |     public void addObject(Object object, Comparable rowKey, 
+249 |             Comparable columnKey) {
+250 |         setObject(object, rowKey, columnKey);
+251 |     }
+
+===== M0024 =====
+Signature: org.jfree.data.KeyedObjects.KeyedObjects()
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 67-69
+Documentation:
+/**
+     * Creates a new collection (initially empty).
+     */
+Method code:
+67 |     public KeyedObjects() {
+68 |         this.data = new java.util.ArrayList();
+69 |     }
+
+===== M0025 =====
+Signature: org.jfree.data.Range.toString()
+Source: source/org/jfree/data/Range.java
+Original range: 364-366
+Documentation:
+/**
+     * Returns a string representation of this Range.
+     *
+     * @return A String "Range[lower,upper]" where lower=lower range and 
+     *         upper=upper range.
+     */
+Method code:
+364 |     public String toString() {
+365 |         return ("Range[" + this.lower + "," + this.upper + "]");
+366 |     }
+
+===== M0026 =====
+Signature: org.jfree.data.general.AbstractDataset.fireDatasetChanged()
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 171-173
+Documentation:
+/**
+     * Notifies all registered listeners that the dataset has changed.
+     * 
+     * @see #addChangeListener(DatasetChangeListener)
+     */
+Method code:
+171 |     protected void fireDatasetChanged() {
+172 |         notifyListeners(new DatasetChangeEvent(this, this));
+173 |     }
+
+===== M0027 =====
+Signature: org.jfree.data.KeyedObjects.setObject(Comparable,Object)
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 200-210
+Documentation:
+/**
+     * Replaces an existing object, or adds a new object to the collection.
+     * This is the same as the {@link #addObject(Comparable, Object)} 
+     * method.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     * @param object  the object.
+     * 
+     * @see #getObject(Comparable)
+     */
+Method code:
+200 |     public void setObject(Comparable key, Object object) {
+201 |         int keyIndex = getIndex(key);
+202 |         if (keyIndex >= 0) {
+203 |             KeyedObject ko = (KeyedObject) this.data.get(keyIndex);
+204 |             ko.setObject(object);
+205 |         }
+206 |         else {
+207 |             KeyedObject ko = new KeyedObject(key, object);
+208 |             this.data.add(ko);
+209 |         }
+210 |     }
+

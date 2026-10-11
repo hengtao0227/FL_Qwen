@@ -1,0 +1,893 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.Iterator.key()
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 524-533
+Documentation:
+/**
+         * Get the key of current entry.
+         * @return key of current entry
+         * @exception ConcurrentModificationException if the map is modified during iteration
+         * @exception NoSuchElementException if there is no element left in the map
+         */
+Method code:
+524 |         public int key()
+525 |             throws ConcurrentModificationException, NoSuchElementException {
+526 |             if (referenceCount != count) {
+527 |                 throw new ConcurrentModificationException();
+528 |             }
+529 |             if (current < 0) {
+530 |                 throw new NoSuchElementException();
+531 |             }
+532 |             return keys[current];
+533 |         }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.doRemove(int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 390-398
+Documentation:
+/**
+     * Remove an element at specified index.
+     * @param index index of the element to remove
+     * @return removed value
+     */
+Method code:
+390 |     private double doRemove(int index) {
+391 |         keys[index]   = 0;
+392 |         states[index] = REMOVED;
+393 |         final double previous = values[index];
+394 |         values[index] = missingEntries;
+395 |         --size;
+396 |         ++count;
+397 |         return previous;
+398 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.OpenIntToDoubleHashMap(double)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 99-101
+Documentation:
+/**
+     * Build an empty map with default size
+     * @param missingEntries value to return when a missing entry is fetched
+     */
+Method code:
+99 |     public OpenIntToDoubleHashMap(final double missingEntries) {
+100 |         this(DEFAULT_EXPECTED_SIZE, missingEntries);
+101 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.probe(int,int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 322-324
+Documentation:
+/**
+     * Compute next probe for collision resolution
+     * @param perturb perturbed hash
+     * @param j previous probe
+     * @return next probe
+     */
+Method code:
+322 |     private static int probe(final int perturb, final int j) {
+323 |         return (j << 2) + j + perturb + 1;
+324 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.remove(int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 349-372
+Documentation:
+/**
+     * Remove the value associated with a key.
+     * @param key key to which the value is associated
+     * @return removed value
+     */
+Method code:
+349 |     public double remove(final int key) {
+350 | 
+351 |         final int hash  = hashOf(key);
+352 |         int index = hash & mask;
+353 |         if (containsKey(key, index)) {
+354 |             return doRemove(index);
+355 |         }
+356 | 
+357 |         if (states[index] == FREE) {
+358 |             return missingEntries;
+359 |         }
+360 | 
+361 |         int j = index;
+362 |         for (int perturb = perturb(hash); states[index] != FREE; perturb >>= PERTURB_SHIFT) {
+363 |             j = probe(perturb, j);
+364 |             index = j & mask;
+365 |             if (containsKey(key, index)) {
+366 |                 return doRemove(index);
+367 |             }
+368 |         }
+369 | 
+370 |         return missingEntries;
+371 | 
+372 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math3.linear.OpenMapRealVector.getDimension()
+Source: src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
+Original range: 399-402
+Documentation:
+/** {@inheritDoc} */
+Method code:
+399 |     @Override
+400 |     public int getDimension() {
+401 |         return virtualSize;
+402 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math3.util.FastMath.floor(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3331-3352
+Documentation:
+/** Get the largest whole number smaller than x.
+     * @param x number from which floor is requested
+     * @return a double number f such that f is an integer f <= x < f + 1.0
+     */
+Method code:
+3331 |     public static double floor(double x) {
+3332 |         long y;
+3333 | 
+3334 |         if (x != x) { // NaN
+3335 |             return x;
+3336 |         }
+3337 | 
+3338 |         if (x >= TWO_POWER_52 || x <= -TWO_POWER_52) {
+3339 |             return x;
+3340 |         }
+3341 | 
+3342 |         y = (long) x;
+3343 |         if (x < 0 && y != x) {
+3344 |             y--;
+3345 |         }
+3346 | 
+3347 |         if (y == 0) {
+3348 |             return x*y;
+3349 |         }
+3350 | 
+3351 |         return y;
+3352 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.Iterator.Iterator()
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 495-508
+Documentation:
+/**
+         * Simple constructor.
+         */
+Method code:
+495 |         private Iterator() {
+496 | 
+497 |             // preserve the modification count of the map to detect concurrent modifications later
+498 |             referenceCount = count;
+499 | 
+500 |             // initialize current index
+501 |             next = -1;
+502 |             try {
+503 |                 advance();
+504 |             } catch (NoSuchElementException nsee) {
+505 |                 // ignored
+506 |             }
+507 | 
+508 |         }
+
+===== M0009 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.Iterator.value()
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 541-550
+Documentation:
+/**
+         * Get the value of current entry.
+         * @return value of current entry
+         * @exception ConcurrentModificationException if the map is modified during iteration
+         * @exception NoSuchElementException if there is no element left in the map
+         */
+Method code:
+541 |         public double value()
+542 |             throws ConcurrentModificationException, NoSuchElementException {
+543 |             if (referenceCount != count) {
+544 |                 throw new ConcurrentModificationException();
+545 |             }
+546 |             if (current < 0) {
+547 |                 throw new NoSuchElementException();
+548 |             }
+549 |             return values[current];
+550 |         }
+
+===== M0010 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.findInsertionIndex(int[],byte[],int,int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 267-314
+Documentation:
+/**
+     * Find the index at which a key should be inserted
+     * @param keys keys table
+     * @param states states table
+     * @param key key to lookup
+     * @param mask bit mask for hash values
+     * @return index at which key should be inserted
+     */
+Method code:
+267 |     private static int findInsertionIndex(final int[] keys, final byte[] states,
+268 |                                           final int key, final int mask) {
+269 |         final int hash = hashOf(key);
+270 |         int index = hash & mask;
+271 |         if (states[index] == FREE) {
+272 |             return index;
+273 |         } else if (states[index] == FULL && keys[index] == key) {
+274 |             return changeIndexSign(index);
+275 |         }
+276 | 
+277 |         int perturb = perturb(hash);
+278 |         int j = index;
+279 |         if (states[index] == FULL) {
+280 |             while (true) {
+281 |                 j = probe(perturb, j);
+282 |                 index = j & mask;
+283 |                 perturb >>= PERTURB_SHIFT;
+284 | 
+285 |                 if (states[index] != FULL || keys[index] == key) {
+286 |                     break;
+287 |                 }
+288 |             }
+289 |         }
+290 | 
+291 |         if (states[index] == FREE) {
+292 |             return index;
+293 |         } else if (states[index] == FULL) {
+294 |             // due to the loop exit condition,
+295 |             // if (states[index] == FULL) then keys[index] == key
+296 |             return changeIndexSign(index);
+297 |         }
+298 | 
+299 |         final int firstRemoved = index;
+300 |         while (true) {
+301 |             j = probe(perturb, j);
+302 |             index = j & mask;
+303 | 
+304 |             if (states[index] == FREE) {
+305 |                 return firstRemoved;
+306 |             } else if (states[index] == FULL && keys[index] == key) {
+307 |                 return changeIndexSign(index);
+308 |             }
+309 | 
+310 |             perturb >>= PERTURB_SHIFT;
+311 | 
+312 |         }
+313 | 
+314 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math3.linear.OpenMapRealVector.OpenMapRealVector(OpenMapRealVector)
+Source: src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
+Original range: 179-183
+Documentation:
+/**
+     * Copy constructor.
+     *
+     * @param v Instance to copy from.
+     */
+Method code:
+179 |     public OpenMapRealVector(OpenMapRealVector v) {
+180 |         virtualSize = v.getDimension();
+181 |         entries = new OpenIntToDoubleHashMap(v.getEntries());
+182 |         epsilon = v.epsilon;
+183 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.findInsertionIndex(int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 255-257
+Documentation:
+/**
+     * Find the index at which a key should be inserted
+     * @param key key to lookup
+     * @return index at which key should be inserted
+     */
+Method code:
+255 |     private int findInsertionIndex(final int key) {
+256 |         return findInsertionIndex(keys, states, key, mask);
+257 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math3.util.FastMath.abs(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3019-3021
+Documentation:
+/**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x)
+     */
+Method code:
+3019 |     public static double abs(double x) {
+3020 |         return (x < 0.0) ? -x : (x == 0.0) ? 0.0 : x; // -0.0 => +0.0
+3021 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math3.util.FastMath.ceil(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3358-3377
+Documentation:
+/** Get the smallest whole number larger than x.
+     * @param x number from which ceil is requested
+     * @return a double number c such that c is an integer c - 1.0 < x <= c
+     */
+Method code:
+3358 |     public static double ceil(double x) {
+3359 |         double y;
+3360 | 
+3361 |         if (x != x) { // NaN
+3362 |             return x;
+3363 |         }
+3364 | 
+3365 |         y = floor(x);
+3366 |         if (y == x) {
+3367 |             return y;
+3368 |         }
+3369 | 
+3370 |         y += 1.0;
+3371 | 
+3372 |         if (y == 0) {
+3373 |             return x*y;
+3374 |         }
+3375 | 
+3376 |         return y;
+3377 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math3.linear.OpenMapRealVector.setEntry(int,double)
+Source: src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
+Original range: 586-594
+Documentation:
+/** {@inheritDoc} */
+Method code:
+586 |     @Override
+587 |     public void setEntry(int index, double value) {
+588 |         checkIndex(index);
+589 |         if (!isDefaultValue(value)) {
+590 |             entries.put(index, value);
+591 |         } else if (entries.containsKey(index)) {
+592 |             entries.remove(index);
+593 |         }
+594 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math3.linear.OpenMapRealVector.getEntries()
+Source: src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
+Original range: 207-209
+Documentation:
+/**
+     * Get the entries of this instance.
+     *
+     * @return the entries of this instance.
+     */
+Method code:
+207 |     private OpenIntToDoubleHashMap getEntries() {
+208 |         return entries;
+209 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.perturb(int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 246-248
+Documentation:
+/**
+     * Perturb the hash for starting probing.
+     * @param hash initial hash
+     * @return perturbed hash
+     */
+Method code:
+246 |     private static int perturb(final int hash) {
+247 |         return hash & 0x7fffffff;
+248 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math3.linear.OpenMapRealVector.OpenMapRealVector(double[],double)
+Source: src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
+Original range: 133-143
+Documentation:
+/**
+     * Create from an array, specifying zero tolerance.
+     * Only non-zero entries will be stored.
+     *
+     * @param values Set of values to create from.
+     * @param epsilon Tolerance below which a value is considered zero.
+     */
+Method code:
+133 |     public OpenMapRealVector(double[] values, double epsilon) {
+134 |         virtualSize = values.length;
+135 |         entries = new OpenIntToDoubleHashMap(0.0);
+136 |         this.epsilon = epsilon;
+137 |         for (int key = 0; key < values.length; key++) {
+138 |             double value = values[key];
+139 |             if (!isDefaultValue(value)) {
+140 |                 entries.put(key, value);
+141 |             }
+142 |         }
+143 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.containsKey(int,int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 381-383
+Documentation:
+/**
+     * Check if the tables contain an element associated with specified key
+     * at specified index.
+     * @param key key to check
+     * @param index index to check
+     * @return true if an element is associated with key at index
+     */
+Method code:
+381 |     private boolean containsKey(final int key, final int index) {
+382 |         return (key != 0 || states[index] == FULL) && keys[index] == key;
+383 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.OpenIntToDoubleHashMap(int,double)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 116-124
+Documentation:
+/**
+     * Build an empty map with specified size.
+     * @param expectedSize expected number of elements in the map
+     * @param missingEntries value to return when a missing entry is fetched
+     */
+Method code:
+116 |     public OpenIntToDoubleHashMap(final int expectedSize,
+117 |                                   final double missingEntries) {
+118 |         final int capacity = computeCapacity(expectedSize);
+119 |         keys   = new int[capacity];
+120 |         values = new double[capacity];
+121 |         states = new byte[capacity];
+122 |         this.missingEntries = missingEntries;
+123 |         mask   = capacity - 1;
+124 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.Iterator.hasNext()
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 514-516
+Documentation:
+/**
+         * Check if there is a next element in the map.
+         * @return true if there is a next element
+         */
+Method code:
+514 |         public boolean hasNext() {
+515 |             return next >= 0;
+516 |         }
+
+===== M0022 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.get(int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 175-198
+Documentation:
+/**
+     * Get the stored value associated with the given key
+     * @param key key associated with the data
+     * @return data associated with the key
+     */
+Method code:
+175 |     public double get(final int key) {
+176 | 
+177 |         final int hash  = hashOf(key);
+178 |         int index = hash & mask;
+179 |         if (containsKey(key, index)) {
+180 |             return values[index];
+181 |         }
+182 | 
+183 |         if (states[index] == FREE) {
+184 |             return missingEntries;
+185 |         }
+186 | 
+187 |         int j = index;
+188 |         for (int perturb = perturb(hash); states[index] != FREE; perturb >>= PERTURB_SHIFT) {
+189 |             j = probe(perturb, j);
+190 |             index = j & mask;
+191 |             if (containsKey(key, index)) {
+192 |                 return values[index];
+193 |             }
+194 |         }
+195 | 
+196 |         return missingEntries;
+197 | 
+198 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math3.linear.RealVector.checkIndex(int)
+Source: src/main/java/org/apache/commons/math3/linear/RealVector.java
+Original range: 188-194
+Documentation:
+/**
+     * Check if an index is valid.
+     *
+     * @param index Index to check.
+     * @exception OutOfRangeException if {@code index} is not valid.
+     */
+Method code:
+188 |     protected void checkIndex(final int index) {
+189 |         if (index < 0 ||
+190 |             index >= getDimension()) {
+191 |             throw new OutOfRangeException(LocalizedFormats.INDEX,
+192 |                                           index, 0, getDimension() - 1);
+193 |         }
+194 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.shouldGrowTable()
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 465-467
+Documentation:
+/**
+     * Check if tables should grow due to increased size.
+     * @return true if  tables should grow
+     */
+Method code:
+465 |     private boolean shouldGrowTable() {
+466 |         return size > (mask + 1) * LOAD_FACTOR;
+467 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math3.linear.OpenMapRealVector.ebeDivide(RealVector)
+Source: src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
+Original range: 340-355
+Documentation:
+/** {@inheritDoc} */
+Method code:
+340 |     @Override
+341 |     public OpenMapRealVector ebeDivide(RealVector v) {
+342 |         checkVectorDimensions(v.getDimension());
+343 |         OpenMapRealVector res = new OpenMapRealVector(this);
+344 |         /*
+345 |          * MATH-803: it is not sufficient to loop through non zero entries of
+346 |          * this only. Indeed, if this[i] = 0d and v[i] = 0d, then
+347 |          * this[i] / v[i] = NaN, and not 0d.
+348 |          */
+349 |         Iterator iter = entries.iterator();
+350 |         while (iter.hasNext()) {
+351 |             iter.advance();
+352 |             res.setEntry(iter.key(), iter.value() / v.getEntry(iter.key()));
+353 |         }
+354 |         return res;
+355 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math3.linear.OpenMapRealVector.isDefaultValue(double)
+Source: src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
+Original range: 219-221
+Documentation:
+/**
+     * Determine if this value is within epsilon of zero.
+     *
+     * @param value Value to test
+     * @return {@code true} if this value is within epsilon to zero,
+     * {@code false} otherwise.
+     * @since 2.1
+     */
+Method code:
+219 |     protected boolean isDefaultValue(double value) {
+220 |         return FastMath.abs(value) < epsilon;
+221 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.Iterator.advance()
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 557-579
+Documentation:
+/**
+         * Advance iterator one step further.
+         * @exception ConcurrentModificationException if the map is modified during iteration
+         * @exception NoSuchElementException if there is no element left in the map
+         */
+Method code:
+557 |         public void advance()
+558 |             throws ConcurrentModificationException, NoSuchElementException {
+559 | 
+560 |             if (referenceCount != count) {
+561 |                 throw new ConcurrentModificationException();
+562 |             }
+563 | 
+564 |             // advance on step
+565 |             current = next;
+566 | 
+567 |             // prepare next step
+568 |             try {
+569 |                 while (states[++next] != FULL) {
+570 |                     // nothing to do
+571 |                 }
+572 |             } catch (ArrayIndexOutOfBoundsException e) {
+573 |                 next = -2;
+574 |                 if (current < 0) {
+575 |                     throw new NoSuchElementException();
+576 |                 }
+577 |             }
+578 | 
+579 |         }
+
+===== M0028 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.computeCapacity(int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 149-159
+Documentation:
+/**
+     * Compute the capacity needed for a given size.
+     * @param expectedSize expected size of the map
+     * @return capacity to use for the specified size
+     */
+Method code:
+149 |     private static int computeCapacity(final int expectedSize) {
+150 |         if (expectedSize == 0) {
+151 |             return 1;
+152 |         }
+153 |         final int capacity   = (int) FastMath.ceil(expectedSize / LOAD_FACTOR);
+154 |         final int powerOfTwo = Integer.highestOneBit(capacity);
+155 |         if (powerOfTwo == capacity) {
+156 |             return capacity;
+157 |         }
+158 |         return nextPowerOfTwo(capacity);
+159 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.OpenIntToDoubleHashMap(OpenIntToDoubleHashMap)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 130-142
+Documentation:
+/**
+     * Copy constructor.
+     * @param source map to copy
+     */
+Method code:
+130 |     public OpenIntToDoubleHashMap(final OpenIntToDoubleHashMap source) {
+131 |         final int length = source.keys.length;
+132 |         keys = new int[length];
+133 |         System.arraycopy(source.keys, 0, keys, 0, length);
+134 |         values = new double[length];
+135 |         System.arraycopy(source.values, 0, values, 0, length);
+136 |         states = new byte[length];
+137 |         System.arraycopy(source.states, 0, states, 0, length);
+138 |         missingEntries = source.missingEntries;
+139 |         size  = source.size;
+140 |         mask  = source.mask;
+141 |         count = source.count;
+142 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.put(int,double)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 406-427
+Documentation:
+/**
+     * Put a value associated with a key in the map.
+     * @param key key to which value is associated
+     * @param value value to put in the map
+     * @return previous value associated with the key
+     */
+Method code:
+406 |     public double put(final int key, final double value) {
+407 |         int index = findInsertionIndex(key);
+408 |         double previous = missingEntries;
+409 |         boolean newMapping = true;
+410 |         if (index < 0) {
+411 |             index = changeIndexSign(index);
+412 |             previous = values[index];
+413 |             newMapping = false;
+414 |         }
+415 |         keys[index]   = key;
+416 |         states[index] = FULL;
+417 |         values[index] = value;
+418 |         if (newMapping) {
+419 |             ++size;
+420 |             if (shouldGrowTable()) {
+421 |                 growTable();
+422 |             }
+423 |             ++count;
+424 |         }
+425 |         return previous;
+426 | 
+427 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math3.linear.RealVector.checkVectorDimensions(int)
+Source: src/main/java/org/apache/commons/math3/linear/RealVector.java
+Original range: 175-180
+Documentation:
+/**
+     * Check if instance dimension is equal to some expected value.
+     *
+     * @param n Expected dimension.
+     * @throws DimensionMismatchException if the dimension is
+     * inconsistent with the vector size.
+     */
+Method code:
+175 |     protected void checkVectorDimensions(int n) {
+176 |         int d = getDimension();
+177 |         if (d != n) {
+178 |             throw new DimensionMismatchException(d, n);
+179 |         }
+180 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math3.linear.OpenMapRealVector.getEntry(int)
+Source: src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
+Original range: 446-450
+Documentation:
+/** {@inheritDoc} */
+Method code:
+446 |     @Override
+447 |     public double getEntry(int index) {
+448 |         checkIndex(index);
+449 |         return entries.get(index);
+450 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.growTable()
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 432-459
+Documentation:
+/**
+     * Grow the tables.
+     */
+Method code:
+432 |     private void growTable() {
+433 | 
+434 |         final int oldLength      = states.length;
+435 |         final int[] oldKeys      = keys;
+436 |         final double[] oldValues = values;
+437 |         final byte[] oldStates   = states;
+438 | 
+439 |         final int newLength = RESIZE_MULTIPLIER * oldLength;
+440 |         final int[] newKeys = new int[newLength];
+441 |         final double[] newValues = new double[newLength];
+442 |         final byte[] newStates = new byte[newLength];
+443 |         final int newMask = newLength - 1;
+444 |         for (int i = 0; i < oldLength; ++i) {
+445 |             if (oldStates[i] == FULL) {
+446 |                 final int key = oldKeys[i];
+447 |                 final int index = findInsertionIndex(newKeys, newStates, key, newMask);
+448 |                 newKeys[index]   = key;
+449 |                 newValues[index] = oldValues[i];
+450 |                 newStates[index] = FULL;
+451 |             }
+452 |         }
+453 | 
+454 |         mask   = newMask;
+455 |         keys   = newKeys;
+456 |         values = newValues;
+457 |         states = newStates;
+458 | 
+459 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.hashOf(int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 474-477
+Documentation:
+/**
+     * Compute the hash value of a key
+     * @param key key to hash
+     * @return hash value of the key
+     */
+Method code:
+474 |     private static int hashOf(final int key) {
+475 |         final int h = key ^ ((key >>> 20) ^ (key >>> 12));
+476 |         return h ^ (h >>> 7) ^ (h >>> 4);
+477 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math3.linear.OpenMapRealVector.ebeMultiply(RealVector)
+Source: src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
+Original range: 358-375
+Documentation:
+/** {@inheritDoc} */
+Method code:
+358 |     @Override
+359 |     public OpenMapRealVector ebeMultiply(RealVector v) {
+360 |         checkVectorDimensions(v.getDimension());
+361 |         OpenMapRealVector res = new OpenMapRealVector(this);
+362 |         Iterator iter = entries.iterator();
+363 |         while (iter.hasNext()) {
+364 |             iter.advance();
+365 |             res.setEntry(iter.key(), iter.value() * v.getEntry(iter.key()));
+366 |         }
+367 |         /*
+368 |          * MATH-803: the above loop assumes that 0d * x  = 0d for any double x,
+369 |          * which allows to consider only the non-zero entries of this. However,
+370 |          * this fails if this[i] == 0d and (v[i] = NaN or v[i] = Infinity).
+371 |          *
+372 |          * These special cases are handled below.
+373 |          */
+374 |         return res;
+375 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.iterator()
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 237-239
+Documentation:
+/**
+     * Get an iterator over map elements.
+     * <p>The specialized iterators returned are fail-fast: they throw a
+     * <code>ConcurrentModificationException</code> when they detect the map
+     * has been modified during iteration.</p>
+     * @return iterator over the map elements
+     */
+Method code:
+237 |     public Iterator iterator() {
+238 |         return new Iterator();
+239 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.changeIndexSign(int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 331-333
+Documentation:
+/**
+     * Change the index sign
+     * @param index initial index
+     * @return changed index
+     */
+Method code:
+331 |     private static int changeIndexSign(final int index) {
+332 |         return -index - 1;
+333 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math3.util.OpenIntToDoubleHashMap.containsKey(int)
+Source: src/main/java/org/apache/commons/math3/util/OpenIntToDoubleHashMap.java
+Original range: 205-228
+Documentation:
+/**
+     * Check if a value is associated with a key.
+     * @param key key to check
+     * @return true if a value is associated with key
+     */
+Method code:
+205 |     public boolean containsKey(final int key) {
+206 | 
+207 |         final int hash  = hashOf(key);
+208 |         int index = hash & mask;
+209 |         if (containsKey(key, index)) {
+210 |             return true;
+211 |         }
+212 | 
+213 |         if (states[index] == FREE) {
+214 |             return false;
+215 |         }
+216 | 
+217 |         int j = index;
+218 |         for (int perturb = perturb(hash); states[index] != FREE; perturb >>= PERTURB_SHIFT) {
+219 |             j = probe(perturb, j);
+220 |             index = j & mask;
+221 |             if (containsKey(key, index)) {
+222 |                 return true;
+223 |             }
+224 |         }
+225 | 
+226 |         return false;
+227 | 
+228 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math3.linear.OpenMapRealVector.OpenMapRealVector(double[])
+Source: src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
+Original range: 122-124
+Documentation:
+/**
+     * Create from an array.
+     * Only non-zero entries will be stored.
+     *
+     * @param values Set of values to create from.
+     */
+Method code:
+122 |     public OpenMapRealVector(double[] values) {
+123 |         this(values, DEFAULT_ZERO_TOLERANCE);
+124 |     }
+

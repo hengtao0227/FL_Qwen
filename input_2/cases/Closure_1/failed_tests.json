@@ -1,0 +1,82 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.CommandLineRunnerTest.testSimpleModeLeavesUnusedParams()",
+    "resolved_signature": "com.google.javascript.jscomp.CommandLineRunnerTest.testSimpleModeLeavesUnusedParams()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CommandLineRunnerTest.java",
+    "begin_line": 154,
+    "end_line": 157,
+    "comment": "",
+    "snippet": "  public void testSimpleModeLeavesUnusedParams() {\n    args.add(\"--compilation_level=SIMPLE_OPTIMIZATIONS\");\n    testSame(\"window.f = function(a) {};\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.CommandLineRunnerTest.testForwardDeclareDroppedTypes()",
+    "resolved_signature": "com.google.javascript.jscomp.CommandLineRunnerTest.testForwardDeclareDroppedTypes()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CommandLineRunnerTest.java",
+    "begin_line": 750,
+    "end_line": 773,
+    "comment": "",
+    "snippet": "  public void testForwardDeclareDroppedTypes() {\n    args.add(\"--manage_closure_dependencies=true\");\n\n    args.add(\"--warning_level=VERBOSE\");\n    test(new String[] {\n          \"goog.require('beer');\",\n          \"goog.provide('beer'); /** @param {Scotch} x */ function f(x) {}\",\n          \"goog.provide('Scotch'); var x = 3;\"\n         },\n         new String[] {\n           \"var beer = {}; function f(a) {}\",\n           \"\"\n         });\n\n    test(new String[] {\n          \"goog.require('beer');\",\n          \"goog.provide('beer'); /** @param {Scotch} x */ function f(x) {}\"\n         },\n         new String[] {\n           \"var beer = {}; function f(a) {}\",\n           \"\"\n         },\n         RhinoErrorReporter.TYPE_PARSE_ERROR);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.CommandLineRunnerTest.testDebugFlag1()",
+    "resolved_signature": "com.google.javascript.jscomp.CommandLineRunnerTest.testDebugFlag1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CommandLineRunnerTest.java",
+    "begin_line": 473,
+    "end_line": 478,
+    "comment": "",
+    "snippet": "  public void testDebugFlag1() {\n    args.add(\"--compilation_level=SIMPLE_OPTIMIZATIONS\");\n    args.add(\"--debug=false\");\n    test(\"function foo(a) {}\",\n         \"function foo(a) {}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.IntegrationTest.testIssue787()",
+    "resolved_signature": "com.google.javascript.jscomp.IntegrationTest.testIssue787()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/IntegrationTest.java",
+    "begin_line": 2326,
+    "end_line": 2372,
+    "comment": "",
+    "snippet": "  public void testIssue787() {\n    CompilerOptions options = createCompilerOptions();\n    CompilationLevel level = CompilationLevel.SIMPLE_OPTIMIZATIONS;\n    level.setOptionsForCompilationLevel(options);\n    WarningLevel warnings = WarningLevel.DEFAULT;\n    warnings.setOptionsForWarningLevel(options);\n\n    String code = \"\" +\n        \"function some_function() {\\n\" +\n        \"  var fn1;\\n\" +\n        \"  var fn2;\\n\" +\n        \"\\n\" +\n        \"  if (any_expression) {\\n\" +\n        \"    fn2 = external_ref;\\n\" +\n        \"    fn1 = function (content) {\\n\" +\n        \"      return fn2();\\n\" +\n        \"    }\\n\" +\n        \"  }\\n\" +\n        \"\\n\" +\n        \"  return {\\n\" +\n        \"    method1: function () {\\n\" +\n        \"      if (fn1) fn1();\\n\" +\n        \"      return true;\\n\" +\n        \"    },\\n\" +\n        \"    method2: function () {\\n\" +\n        \"      return false;\\n\" +\n        \"    }\\n\" +\n        \"  }\\n\" +\n        \"}\";\n\n    String result = \"\" +\n        \"function some_function() {\\n\" +\n        \"  var a, b;\\n\" +\n        \"  any_expression && (b = external_ref, a = function(a) {\\n\" +\n        \"    return b()\\n\" +\n        \"  });\\n\" +\n        \"  return{method1:function() {\\n\" +\n        \"    a && a();\\n\" +\n        \"    return !0\\n\" +\n        \"  }, method2:function() {\\n\" +\n        \"    return !1\\n\" +\n        \"  }}\\n\" +\n        \"}\\n\" +\n        \"\";\n\n    test(options, code, result);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.RemoveUnusedVarsTest.testRemoveGlobal1()",
+    "resolved_signature": "com.google.javascript.jscomp.RemoveUnusedVarsTest.testRemoveGlobal1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/RemoveUnusedVarsTest.java",
+    "begin_line": 244,
+    "end_line": 248,
+    "comment": "",
+    "snippet": "  public void testRemoveGlobal1() {\n    removeGlobal = false;\n    testSame(\"var x=1\");\n    test(\"var y=function(x){var z;}\", \"var y=function(x){}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.RemoveUnusedVarsTest.testRemoveGlobal2()",
+    "resolved_signature": "com.google.javascript.jscomp.RemoveUnusedVarsTest.testRemoveGlobal2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/RemoveUnusedVarsTest.java",
+    "begin_line": 250,
+    "end_line": 254,
+    "comment": "",
+    "snippet": "  public void testRemoveGlobal2() {\n    removeGlobal = false;\n    testSame(\"var x=1\");\n    test(\"function y(x){var z;}\", \"function y(x){}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.RemoveUnusedVarsTest.testRemoveGlobal3()",
+    "resolved_signature": "com.google.javascript.jscomp.RemoveUnusedVarsTest.testRemoveGlobal3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/RemoveUnusedVarsTest.java",
+    "begin_line": 256,
+    "end_line": 261,
+    "comment": "",
+    "snippet": "  public void testRemoveGlobal3() {\n    removeGlobal = false;\n    testSame(\"var x=1\");\n    test(\"function x(){function y(x){var z;}y()}\",\n         \"function x(){function y(x){}y()}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.RemoveUnusedVarsTest.testIssue168b()",
+    "resolved_signature": "com.google.javascript.jscomp.RemoveUnusedVarsTest.testIssue168b()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/RemoveUnusedVarsTest.java",
+    "begin_line": 281,
+    "end_line": 291,
+    "comment": "",
+    "snippet": "  public void testIssue168b() {\n    removeGlobal = false;\n    test(\"function a(){\" +\n         \"  (function(x){ b(); })(1);\" +\n         \"}\" +\n         \"function b(){\" +\n         \"  a();\" +\n         \"}\",\n         \"function a(){(function(x){b()})(1)}\" +\n         \"function b(){a()}\");\n  }"
+  }
+]

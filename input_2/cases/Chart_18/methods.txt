@@ -1,0 +1,491 @@
+===== M0001 =====
+Signature: org.jfree.data.category.DefaultCategoryDataset.DefaultCategoryDataset()
+Source: source/org/jfree/data/category/DefaultCategoryDataset.java
+Original range: 73-75
+Documentation:
+/**
+     * Creates a new (empty) dataset.
+     */
+Method code:
+73 |     public DefaultCategoryDataset() {
+74 |         this.data = new DefaultKeyedValues2D();
+75 |     }
+
+===== M0002 =====
+Signature: org.jfree.data.DefaultKeyedValues.addValue(Comparable,double)
+Source: source/org/jfree/data/DefaultKeyedValues.java
+Original range: 196-198
+Documentation:
+/**
+     * Updates an existing value, or adds a new value to the collection.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     * @param value  the value.
+     * 
+     * @see #addValue(Comparable, Number)
+     */
+Method code:
+196 |     public void addValue(Comparable key, double value) {
+197 |         addValue(key, new Double(value)); 
+198 |     }
+
+===== M0003 =====
+Signature: org.jfree.data.category.DefaultCategoryDataset.addValue(double,Comparable,Comparable)
+Source: source/org/jfree/data/category/DefaultCategoryDataset.java
+Original range: 231-234
+Documentation:
+/**
+     * Adds a value to the table.
+     *
+     * @param value  the value.
+     * @param rowKey  the row key.
+     * @param columnKey  the column key.
+     * 
+     * @see #getValue(Comparable, Comparable)
+     */
+Method code:
+231 |     public void addValue(double value, Comparable rowKey, 
+232 |                          Comparable columnKey) {
+233 |         addValue(new Double(value), rowKey, columnKey);
+234 |     }
+
+===== M0004 =====
+Signature: org.jfree.data.DefaultKeyedValues.getIndex(Comparable)
+Source: source/org/jfree/data/DefaultKeyedValues.java
+Original range: 149-158
+Documentation:
+/**
+     * Returns the index for a given key.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     *
+     * @return The index, or <code>-1</code> if the key is not recognised.
+     * 
+     * @throws IllegalArgumentException if <code>key</code> is 
+     *     <code>null</code>.
+     */
+Method code:
+149 |     public int getIndex(Comparable key) {
+150 |         if (key == null) {
+151 |             throw new IllegalArgumentException("Null 'key' argument.");
+152 |         }
+153 |         final Integer i = (Integer) this.indexMap.get(key);
+154 |         if (i == null) {
+155 |             return -1;  // key not found
+156 |         }
+157 |         return i.intValue();
+158 |     }
+
+===== M0005 =====
+Signature: org.jfree.data.DefaultKeyedValues.removeValue(Comparable)
+Source: source/org/jfree/data/DefaultKeyedValues.java
+Original range: 332-338
+Documentation:
+/**
+     * Removes a value from the collection.
+     *
+     * @param key  the item key (<code>null</code> not permitted).
+     * 
+     * @throws IllegalArgumentException if <code>key</code> is 
+     *     <code>null</code>.
+     * @throws UnknownKeyException if <code>key</code> is not recognised.
+     */
+Method code:
+332 |     public void removeValue(Comparable key) {
+333 |         int index = getIndex(key);
+334 |         if (index < 0) {
+335 | 			return;
+336 |         }
+337 |         removeValue(index);
+338 |     }
+
+===== M0006 =====
+Signature: org.jfree.data.DefaultKeyedValues2D.removeColumn(Comparable)
+Source: source/org/jfree/data/DefaultKeyedValues2D.java
+Original range: 454-461
+Documentation:
+/**
+     * Removes a column from the table.
+     *
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     * 
+     * @throws UnknownKeyException if the table does not contain a column with
+     *     the specified key.
+     * @throws IllegalArgumentException if <code>columnKey</code> is 
+     *     <code>null</code>.
+     * 
+     * @see #removeColumn(int)
+     * @see #removeRow(Comparable)
+     */
+Method code:
+454 |     public void removeColumn(Comparable columnKey) {
+455 |         Iterator iterator = this.rows.iterator();
+456 |         while (iterator.hasNext()) {
+457 |             DefaultKeyedValues rowData = (DefaultKeyedValues) iterator.next();
+458 |                 rowData.removeValue(columnKey);
+459 |         }
+460 |         this.columnKeys.remove(columnKey);
+461 |     }
+
+===== M0007 =====
+Signature: org.jfree.data.DefaultKeyedValues2D.DefaultKeyedValues2D(boolean)
+Source: source/org/jfree/data/DefaultKeyedValues2D.java
+Original range: 103-108
+Documentation:
+/**
+     * Creates a new instance (initially empty).
+     * 
+     * @param sortRowKeys  if the row keys should be sorted.
+     */
+Method code:
+103 |     public DefaultKeyedValues2D(boolean sortRowKeys) {
+104 |         this.rowKeys = new java.util.ArrayList();
+105 |         this.columnKeys = new java.util.ArrayList();
+106 |         this.rows = new java.util.ArrayList();
+107 |         this.sortRowKeys = sortRowKeys;
+108 |     }
+
+===== M0008 =====
+Signature: org.jfree.data.general.AbstractDataset.AbstractDataset()
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 94-97
+Documentation:
+/**
+     * Constructs a dataset. By default, the dataset is assigned to its own 
+     * group.
+     */
+Method code:
+94 |     protected AbstractDataset() {
+95 |         this.group = new DatasetGroup();
+96 |         this.listenerList = new EventListenerList();
+97 |     }
+
+===== M0009 =====
+Signature: org.jfree.data.DefaultKeyedValues.addValue(Comparable,Number)
+Source: source/org/jfree/data/DefaultKeyedValues.java
+Original range: 208-210
+Documentation:
+/**
+     * Adds a new value to the collection, or updates an existing value.
+     * This method passes control directly to the 
+     * {@link #setValue(Comparable, Number)} method.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     * @param value  the value (<code>null</code> permitted).
+     */
+Method code:
+208 |     public void addValue(Comparable key, Number value) {
+209 |         setValue(key, value);
+210 |     }
+
+===== M0010 =====
+Signature: org.jfree.data.general.AbstractDataset.fireDatasetChanged()
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 169-171
+Documentation:
+/**
+     * Notifies all registered listeners that the dataset has changed.
+     * 
+     * @see #addChangeListener(DatasetChangeListener)
+     */
+Method code:
+169 |     protected void fireDatasetChanged() {
+170 |         notifyListeners(new DatasetChangeEvent(this, this));
+171 |     }
+
+===== M0011 =====
+Signature: org.jfree.data.DefaultKeyedValues.DefaultKeyedValues()
+Source: source/org/jfree/data/DefaultKeyedValues.java
+Original range: 98-102
+Documentation:
+/**
+     * Creates a new collection (initially empty).
+     */
+Method code:
+98 |     public DefaultKeyedValues() {
+99 |         this.keys = new ArrayList();
+100 |         this.values = new ArrayList();
+101 |         this.indexMap = new HashMap();
+102 |     }
+
+===== M0012 =====
+Signature: org.jfree.data.category.DefaultCategoryDataset.addValue(Number,Comparable,Comparable)
+Source: source/org/jfree/data/category/DefaultCategoryDataset.java
+Original range: 216-220
+Documentation:
+/**
+     * Adds a value to the table.  Performs the same function as setValue().
+     *
+     * @param value  the value.
+     * @param rowKey  the row key.
+     * @param columnKey  the column key.
+     * 
+     * @see #getValue(Comparable, Comparable)
+     * @see #removeValue(Comparable, Comparable)
+     */
+Method code:
+216 |     public void addValue(Number value, Comparable rowKey, 
+217 |                          Comparable columnKey) {
+218 |         this.data.addValue(value, rowKey, columnKey);
+219 |         fireDatasetChanged();
+220 |     }
+
+===== M0013 =====
+Signature: org.jfree.data.general.DatasetChangeEvent.DatasetChangeEvent(Object,Dataset)
+Source: source/org/jfree/data/general/DatasetChangeEvent.java
+Original range: 70-73
+Documentation:
+/**
+     * Constructs a new event.  The source is either the dataset or the 
+     * {@link org.jfree.chart.plot.Plot} class.  The dataset can be 
+     * <code>null</code> (in this case the source will be the 
+     * {@link org.jfree.chart.plot.Plot} class).
+     *
+     * @param source  the source of the event.
+     * @param dataset  the dataset that generated the event (<code>null</code>
+     *                 permitted).
+     */
+Method code:
+70 |     public DatasetChangeEvent(Object source, Dataset dataset) {
+71 |         super(source);
+72 |         this.dataset = dataset;
+73 |     }
+
+===== M0014 =====
+Signature: org.jfree.data.DefaultKeyedValues2D.getRowIndex(Comparable)
+Source: source/org/jfree/data/DefaultKeyedValues2D.java
+Original range: 181-191
+Documentation:
+/**
+     * Returns the row index for a given key.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     *
+     * @return The row index.
+     * 
+     * @see #getRowKey(int)
+     * @see #getColumnIndex(Comparable)
+     */
+Method code:
+181 |     public int getRowIndex(Comparable key) {
+182 |         if (key == null) {
+183 |             throw new IllegalArgumentException("Null 'key' argument.");
+184 |         }
+185 |         if (this.sortRowKeys) {
+186 |             return Collections.binarySearch(this.rowKeys, key);
+187 |         }
+188 |         else {
+189 |             return this.rowKeys.indexOf(key);
+190 |         }
+191 |     }
+
+===== M0015 =====
+Signature: org.jfree.data.DefaultKeyedValues.removeValue(int)
+Source: source/org/jfree/data/DefaultKeyedValues.java
+Original range: 315-321
+Documentation:
+/**
+     * Removes a value from the collection.
+     *
+     * @param index  the index of the item to remove (in the range 
+     *     <code>0</code> to <code>getItemCount() - 1</code>).
+     *     
+     * @throws IndexOutOfBoundsException if <code>index</code> is not within
+     *     the specified range.
+     */
+Method code:
+315 |     public void removeValue(int index) {
+316 |         this.keys.remove(index);
+317 |         this.values.remove(index);
+318 |         if (index < this.keys.size()) {
+319 |         rebuildIndex();
+320 |         }
+321 |     }
+
+===== M0016 =====
+Signature: org.jfree.data.category.DefaultCategoryDataset.removeColumn(Comparable)
+Source: source/org/jfree/data/category/DefaultCategoryDataset.java
+Original range: 349-352
+Documentation:
+/**
+     * Removes a column from the dataset and sends a {@link DatasetChangeEvent}
+     * to all registered listeners.
+     *
+     * @param columnKey  the column key.
+     * 
+     * @see #removeRow(Comparable)
+     */
+Method code:
+349 |     public void removeColumn(Comparable columnKey) {
+350 |         this.data.removeColumn(columnKey);
+351 |         fireDatasetChanged();
+352 |     }
+
+===== M0017 =====
+Signature: org.jfree.data.DefaultKeyedValues2D.DefaultKeyedValues2D()
+Source: source/org/jfree/data/DefaultKeyedValues2D.java
+Original range: 94-96
+Documentation:
+/**
+     * Creates a new instance (initially empty).
+     */
+Method code:
+94 |     public DefaultKeyedValues2D() {
+95 |         this(false);
+96 |     }
+
+===== M0018 =====
+Signature: org.jfree.data.DefaultKeyedValues2D.setValue(Number,Comparable,Comparable)
+Source: source/org/jfree/data/DefaultKeyedValues2D.java
+Original range: 316-343
+Documentation:
+/**
+     * Adds or updates a value.
+     *
+     * @param value  the value (<code>null</code> permitted).
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     * 
+     * @see #addValue(Number, Comparable, Comparable)
+     * @see #removeValue(Comparable, Comparable)
+     */
+Method code:
+316 |     public void setValue(Number value, Comparable rowKey, 
+317 |                          Comparable columnKey) {
+318 | 
+319 |         DefaultKeyedValues row;
+320 |         int rowIndex = getRowIndex(rowKey);
+321 |         
+322 |         if (rowIndex >= 0) {
+323 |             row = (DefaultKeyedValues) this.rows.get(rowIndex);
+324 |         }
+325 |         else {
+326 |             row = new DefaultKeyedValues();
+327 |             if (this.sortRowKeys) {
+328 |                 rowIndex = -rowIndex - 1;
+329 |                 this.rowKeys.add(rowIndex, rowKey);
+330 |                 this.rows.add(rowIndex, row);
+331 |             }
+332 |             else {
+333 |                 this.rowKeys.add(rowKey);
+334 |                 this.rows.add(row);
+335 |             }
+336 |         }
+337 |         row.setValue(columnKey, value);
+338 |         
+339 |         int columnIndex = this.columnKeys.indexOf(columnKey);
+340 |         if (columnIndex < 0) {
+341 |             this.columnKeys.add(columnKey);
+342 |         }
+343 |     }
+
+===== M0019 =====
+Signature: org.jfree.data.general.AbstractDataset.notifyListeners(DatasetChangeEvent)
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 182-192
+Documentation:
+/**
+     * Notifies all registered listeners that the dataset has changed.
+     *
+     * @param event  contains information about the event that triggered the 
+     *               notification.
+     *               
+     * @see #addChangeListener(DatasetChangeListener)
+     * @see #removeChangeListener(DatasetChangeListener)
+     */
+Method code:
+182 |     protected void notifyListeners(DatasetChangeEvent event) {
+183 | 
+184 |         Object[] listeners = this.listenerList.getListenerList();
+185 |         for (int i = listeners.length - 2; i >= 0; i -= 2) {
+186 |             if (listeners[i] == DatasetChangeListener.class) {
+187 |                 ((DatasetChangeListener) listeners[i + 1]).datasetChanged(
+188 |                         event);
+189 |             }
+190 |         }
+191 | 
+192 |     }
+
+===== M0020 =====
+Signature: org.jfree.data.DefaultKeyedValues.rebuildIndex()
+Source: source/org/jfree/data/DefaultKeyedValues.java
+Original range: 298-304
+Documentation:
+/**
+     * Rebuilds the key to indexed-position mapping after an positioned insert
+     * or a remove operation.
+     */
+Method code:
+298 |     private void rebuildIndex () {
+299 |         this.indexMap.clear();
+300 |         for (int i = 0; i < this.keys.size(); i++) {
+301 |             final Object key = this.keys.get(i);
+302 |             this.indexMap.put(key, new Integer(i));
+303 |         }
+304 |     }
+
+===== M0021 =====
+Signature: org.jfree.data.DefaultKeyedValues2D.addValue(Number,Comparable,Comparable)
+Source: source/org/jfree/data/DefaultKeyedValues2D.java
+Original range: 300-304
+Documentation:
+/**
+     * Adds a value to the table.  Performs the same function as 
+     * #setValue(Number, Comparable, Comparable).
+     *
+     * @param value  the value (<code>null</code> permitted).
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     * 
+     * @see #setValue(Number, Comparable, Comparable)
+     * @see #removeValue(Comparable, Comparable)
+     */
+Method code:
+300 |     public void addValue(Number value, Comparable rowKey, 
+301 |                          Comparable columnKey) {
+302 |         // defer argument checking
+303 |         setValue(value, rowKey, columnKey);
+304 |     }
+
+===== M0022 =====
+Signature: org.jfree.data.DefaultKeyedValues.setValue(Comparable,Number)
+Source: source/org/jfree/data/DefaultKeyedValues.java
+Original range: 228-242
+Documentation:
+/**
+     * Updates an existing value, or adds a new value to the collection.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     * @param value  the value (<code>null</code> permitted).
+     */
+Method code:
+228 |     public void setValue(Comparable key, Number value) {
+229 |         if (key == null) {
+230 |             throw new IllegalArgumentException("Null 'key' argument.");
+231 |         }
+232 |         int keyIndex = getIndex(key);
+233 |         if (keyIndex >= 0) {
+234 |             this.keys.set(keyIndex, key);
+235 |             this.values.set(keyIndex, value);
+236 |         }
+237 |         else {
+238 |             this.keys.add(key);
+239 |             this.values.add(value);
+240 |             this.indexMap.put(key, new Integer(this.keys.size() - 1));
+241 |         }
+242 |     }
+
+===== M0023 =====
+Signature: org.jfree.data.general.DatasetGroup.DatasetGroup()
+Source: source/org/jfree/data/general/DatasetGroup.java
+Original range: 62-65
+Documentation:
+/**
+     * Constructs a new group.
+     */
+Method code:
+62 |     public DatasetGroup() {
+63 |         super();
+64 |         this.id = "NOID";
+65 |     }
+

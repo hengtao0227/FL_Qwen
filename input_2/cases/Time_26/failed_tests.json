@@ -1,0 +1,82 @@
+[
+  {
+    "requested_signature": "org.joda.time.TestDateTimeZoneCutover.testWithSecondOfMinuteInDstChange()",
+    "resolved_signature": "org.joda.time.TestDateTimeZoneCutover.testWithSecondOfMinuteInDstChange()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/joda/time/TestDateTimeZoneCutover.java",
+    "begin_line": 1097,
+    "end_line": 1102,
+    "comment": "",
+    "snippet": "    public void testWithSecondOfMinuteInDstChange() {\n        DateTime dateTime = new DateTime(\"2010-10-31T02:30:10.123+02:00\", ZONE_PARIS);\n        assertEquals(\"2010-10-31T02:30:10.123+02:00\", dateTime.toString());\n        DateTime test = dateTime.withSecondOfMinute(0);\n        assertEquals(\"2010-10-31T02:30:00.123+02:00\", test.toString());\n    }"
+  },
+  {
+    "requested_signature": "org.joda.time.TestDateTimeZoneCutover.testWithMinuteOfHourInDstChange()",
+    "resolved_signature": "org.joda.time.TestDateTimeZoneCutover.testWithMinuteOfHourInDstChange()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/joda/time/TestDateTimeZoneCutover.java",
+    "begin_line": 1090,
+    "end_line": 1095,
+    "comment": "",
+    "snippet": "    public void testWithMinuteOfHourInDstChange() {\n        DateTime dateTime = new DateTime(\"2010-10-31T02:30:10.123+02:00\", ZONE_PARIS);\n        assertEquals(\"2010-10-31T02:30:10.123+02:00\", dateTime.toString());\n        DateTime test = dateTime.withMinuteOfHour(0);\n        assertEquals(\"2010-10-31T02:00:10.123+02:00\", test.toString());\n    }"
+  },
+  {
+    "requested_signature": "org.joda.time.TestDateTimeZoneCutover.testWithMinuteOfHourInDstChange_mockZone()",
+    "resolved_signature": "org.joda.time.TestDateTimeZoneCutover.testWithMinuteOfHourInDstChange_mockZone()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/joda/time/TestDateTimeZoneCutover.java",
+    "begin_line": 1063,
+    "end_line": 1081,
+    "comment": "",
+    "snippet": "    public void testWithMinuteOfHourInDstChange_mockZone() {\n        DateTime cutover = new DateTime(2010, 10, 31, 1, 15, DateTimeZone.forOffsetHoursMinutes(0, 30));\n        assertEquals(\"2010-10-31T01:15:00.000+00:30\", cutover.toString());\n        DateTimeZone halfHourZone = new MockZone(cutover.getMillis(), 3600000, -1800);\n        DateTime pre = new DateTime(2010, 10, 31, 1, 0, halfHourZone);\n        assertEquals(\"2010-10-31T01:00:00.000+01:00\", pre.toString());\n        DateTime post = new DateTime(2010, 10, 31, 1, 59, halfHourZone);\n        assertEquals(\"2010-10-31T01:59:00.000+00:30\", post.toString());\n        \n        DateTime testPre1 = pre.withMinuteOfHour(30);\n        assertEquals(\"2010-10-31T01:30:00.000+01:00\", testPre1.toString());  // retain offset\n        DateTime testPre2 = pre.withMinuteOfHour(50);\n        assertEquals(\"2010-10-31T01:50:00.000+00:30\", testPre2.toString());\n        \n        DateTime testPost1 = post.withMinuteOfHour(30);\n        assertEquals(\"2010-10-31T01:30:00.000+00:30\", testPost1.toString());  // retain offset\n        DateTime testPost2 = post.withMinuteOfHour(10);\n        assertEquals(\"2010-10-31T01:10:00.000+01:00\", testPost2.toString());\n    }"
+  },
+  {
+    "requested_signature": "org.joda.time.TestDateTimeZoneCutover.testBug2182444_usCentral()",
+    "resolved_signature": "org.joda.time.TestDateTimeZoneCutover.testBug2182444_usCentral()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/joda/time/TestDateTimeZoneCutover.java",
+    "begin_line": 1153,
+    "end_line": 1170,
+    "comment": "",
+    "snippet": "    public void testBug2182444_usCentral() {\n        Chronology chronUSCentral = GregorianChronology.getInstance(DateTimeZone.forID(\"US/Central\"));\n        Chronology chronUTC = GregorianChronology.getInstance(DateTimeZone.UTC);\n        DateTime usCentralStandardInUTC = new DateTime(2008, 11, 2, 7, 0, 0, 0, chronUTC);\n        DateTime usCentralDaylightInUTC = new DateTime(2008, 11, 2, 6, 0, 0, 0, chronUTC);\n        assertTrue(\"Should be standard time\", chronUSCentral.getZone().isStandardOffset(usCentralStandardInUTC.getMillis()));\n        assertFalse(\"Should be daylight time\", chronUSCentral.getZone().isStandardOffset(usCentralDaylightInUTC.getMillis()));\n        \n        DateTime usCentralStandardInUSCentral = usCentralStandardInUTC.toDateTime(chronUSCentral);\n        DateTime usCentralDaylightInUSCentral = usCentralDaylightInUTC.toDateTime(chronUSCentral);\n        assertEquals(1, usCentralStandardInUSCentral.getHourOfDay());\n        assertEquals(usCentralStandardInUSCentral.getHourOfDay(), usCentralDaylightInUSCentral.getHourOfDay());\n        assertTrue(usCentralStandardInUSCentral.getMillis() != usCentralDaylightInUSCentral.getMillis());\n        assertEquals(usCentralStandardInUSCentral, usCentralStandardInUSCentral.withHourOfDay(1));\n        assertEquals(usCentralStandardInUSCentral.getMillis() + 3, usCentralStandardInUSCentral.withMillisOfSecond(3).getMillis());\n        assertEquals(usCentralDaylightInUSCentral, usCentralDaylightInUSCentral.withHourOfDay(1));\n        assertEquals(usCentralDaylightInUSCentral.getMillis() + 3, usCentralDaylightInUSCentral.withMillisOfSecond(3).getMillis());\n    }"
+  },
+  {
+    "requested_signature": "org.joda.time.TestDateTimeZoneCutover.testWithMillisOfSecondInDstChange_Paris_summer()",
+    "resolved_signature": "org.joda.time.TestDateTimeZoneCutover.testWithMillisOfSecondInDstChange_Paris_summer()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/joda/time/TestDateTimeZoneCutover.java",
+    "begin_line": 1104,
+    "end_line": 1109,
+    "comment": "",
+    "snippet": "    public void testWithMillisOfSecondInDstChange_Paris_summer() {\n        DateTime dateTime = new DateTime(\"2010-10-31T02:30:10.123+02:00\", ZONE_PARIS);\n        assertEquals(\"2010-10-31T02:30:10.123+02:00\", dateTime.toString());\n        DateTime test = dateTime.withMillisOfSecond(0);\n        assertEquals(\"2010-10-31T02:30:10.000+02:00\", test.toString());\n    }"
+  },
+  {
+    "requested_signature": "org.joda.time.TestDateTimeZoneCutover.testWithHourOfDayInDstChange()",
+    "resolved_signature": "org.joda.time.TestDateTimeZoneCutover.testWithHourOfDayInDstChange()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/joda/time/TestDateTimeZoneCutover.java",
+    "begin_line": 1083,
+    "end_line": 1088,
+    "comment": "",
+    "snippet": "    public void testWithHourOfDayInDstChange() {\n        DateTime dateTime = new DateTime(\"2010-10-31T02:30:10.123+02:00\", ZONE_PARIS);\n        assertEquals(\"2010-10-31T02:30:10.123+02:00\", dateTime.toString());\n        DateTime test = dateTime.withHourOfDay(2);\n        assertEquals(\"2010-10-31T02:30:10.123+02:00\", test.toString());\n    }"
+  },
+  {
+    "requested_signature": "org.joda.time.TestDateTimeZoneCutover.testWithMillisOfSecondInDstChange_NewYork_winter()",
+    "resolved_signature": "org.joda.time.TestDateTimeZoneCutover.testWithMillisOfSecondInDstChange_NewYork_winter()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/joda/time/TestDateTimeZoneCutover.java",
+    "begin_line": 1125,
+    "end_line": 1130,
+    "comment": "",
+    "snippet": "    public void testWithMillisOfSecondInDstChange_NewYork_winter() {\n        DateTime dateTime = new DateTime(\"2007-11-04T01:30:00.123-05:00\", ZONE_NEW_YORK);\n        assertEquals(\"2007-11-04T01:30:00.123-05:00\", dateTime.toString());\n        DateTime test = dateTime.withMillisOfSecond(0);\n        assertEquals(\"2007-11-04T01:30:00.000-05:00\", test.toString());\n    }"
+  },
+  {
+    "requested_signature": "org.joda.time.TestDateTimeZoneCutover.testBug2182444_ausNSW()",
+    "resolved_signature": "org.joda.time.TestDateTimeZoneCutover.testBug2182444_ausNSW()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/joda/time/TestDateTimeZoneCutover.java",
+    "begin_line": 1172,
+    "end_line": 1189,
+    "comment": "",
+    "snippet": "    public void testBug2182444_ausNSW() {\n        Chronology chronAusNSW = GregorianChronology.getInstance(DateTimeZone.forID(\"Australia/NSW\"));\n        Chronology chronUTC = GregorianChronology.getInstance(DateTimeZone.UTC);\n        DateTime australiaNSWStandardInUTC = new DateTime(2008, 4, 5, 16, 0, 0, 0, chronUTC);\n        DateTime australiaNSWDaylightInUTC = new DateTime(2008, 4, 5, 15, 0, 0, 0, chronUTC);\n        assertTrue(\"Should be standard time\", chronAusNSW.getZone().isStandardOffset(australiaNSWStandardInUTC.getMillis()));\n        assertFalse(\"Should be daylight time\", chronAusNSW.getZone().isStandardOffset(australiaNSWDaylightInUTC.getMillis()));\n        \n        DateTime australiaNSWStandardInAustraliaNSW = australiaNSWStandardInUTC.toDateTime(chronAusNSW);\n        DateTime australiaNSWDaylightInAusraliaNSW = australiaNSWDaylightInUTC.toDateTime(chronAusNSW);\n        assertEquals(2, australiaNSWStandardInAustraliaNSW.getHourOfDay());\n        assertEquals(australiaNSWStandardInAustraliaNSW.getHourOfDay(), australiaNSWDaylightInAusraliaNSW.getHourOfDay());\n        assertTrue(australiaNSWStandardInAustraliaNSW.getMillis() != australiaNSWDaylightInAusraliaNSW.getMillis());\n        assertEquals(australiaNSWStandardInAustraliaNSW, australiaNSWStandardInAustraliaNSW.withHourOfDay(2));\n        assertEquals(australiaNSWStandardInAustraliaNSW.getMillis() + 3, australiaNSWStandardInAustraliaNSW.withMillisOfSecond(3).getMillis());\n        assertEquals(australiaNSWDaylightInAusraliaNSW, australiaNSWDaylightInAusraliaNSW.withHourOfDay(2));\n        assertEquals(australiaNSWDaylightInAusraliaNSW.getMillis() + 3, australiaNSWDaylightInAusraliaNSW.withMillisOfSecond(3).getMillis());\n    }"
+  }
+]

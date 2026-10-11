@@ -1,0 +1,286 @@
+===== M0001 =====
+Signature: org.apache.commons.lang.text.StrBuilder.indexOf(String)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 1746-1748
+Documentation:
+/**
+     * Searches the string builder to find the first reference to the specified string.
+     * <p>
+     * Note that a null input string will return -1, whereas the JDK throws an exception.
+     * 
+     * @param str  the string to find, null returns -1
+     * @return the first index of the string, or -1 if not found
+     */
+Method code:
+1746 |     public int indexOf(String str) {
+1747 |         return indexOf(str, 0);
+1748 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang.text.StrMatcher.NoMatcher.NoMatcher()
+Source: src/java/org/apache/commons/lang/text/StrMatcher.java
+Original range: 361-363
+Documentation:
+/**
+         * Constructs a new instance of <code>NoMatcher</code>.
+         */
+Method code:
+361 |         NoMatcher() {
+362 |             super();
+363 |         }
+
+===== M0003 =====
+Signature: org.apache.commons.lang.text.StrMatcher.CharSetMatcher.CharSetMatcher(char[])
+Source: src/java/org/apache/commons/lang/text/StrMatcher.java
+Original range: 259-263
+Documentation:
+/**
+         * Constructor that creates a matcher from a character array.
+         *
+         * @param chars  the characters to match, must not be null
+         */
+Method code:
+259 |         CharSetMatcher(char chars[]) {
+260 |             super();
+261 |             this.chars = (char[]) chars.clone();
+262 |             Arrays.sort(this.chars);
+263 |         }
+
+===== M0004 =====
+Signature: org.apache.commons.lang.text.StrBuilder.append(String)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 468-480
+Documentation:
+/**
+     * Appends a string to this string builder.
+     * Appending null will call {@link #appendNull()}.
+     *
+     * @param str  the string to append
+     * @return this, to enable chaining
+     */
+Method code:
+468 |     public StrBuilder append(String str) {
+469 |         if (str == null) {
+470 |             return appendNull();
+471 |         }
+472 |         int strLen = str.length();
+473 |         if (strLen > 0) {
+474 |             int len = length();
+475 |             ensureCapacity(len + strLen);
+476 |             str.getChars(0, strLen, buffer, len);
+477 |             size += strLen;
+478 |         }
+479 |         return this;
+480 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang.text.StrBuilder.length()
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 181-183
+Documentation:
+/**
+     * Gets the length of the string builder.
+     *
+     * @return the length
+     */
+Method code:
+181 |     public int length() {
+182 |         return size;
+183 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.lang.text.StrMatcher.StrMatcher()
+Source: src/java/org/apache/commons/lang/text/StrMatcher.java
+Original range: 215-217
+Documentation:
+/**
+     * Constructor.
+     */
+Method code:
+215 |     protected StrMatcher() {
+216 |         super();
+217 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.lang.text.StrBuilder.StrBuilder(String)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 120-128
+Documentation:
+/**
+     * Constructor that creates a builder from the string, allocating
+     * 32 extra characters for growth.
+     *
+     * @param str  the string to copy, null treated as blank string
+     */
+Method code:
+120 |     public StrBuilder(String str) {
+121 |         super();
+122 |         if (str == null) {
+123 |             buffer = new char[CAPACITY];
+124 |         } else {
+125 |             buffer = new char[str.length() + CAPACITY];
+126 |             append(str);
+127 |         }
+128 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.lang.text.StrBuilder.indexOf(String,int)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 1760-1787
+Documentation:
+/**
+     * Searches the string builder to find the first reference to the specified
+     * string starting searching from the given index.
+     * <p>
+     * Note that a null input string will return -1, whereas the JDK throws an exception.
+     * 
+     * @param str  the string to find, null returns -1
+     * @param startIndex  the index to start at, invalid index rounded to edge
+     * @return the first index of the string, or -1 if not found
+     */
+Method code:
+1760 |     public int indexOf(String str, int startIndex) {
+1761 |         startIndex = (startIndex < 0 ? 0 : startIndex);
+1762 |         if (str == null || startIndex >= size) {
+1763 |             return -1;
+1764 |         }
+1765 |         int strLen = str.length();
+1766 |         if (strLen == 1) {
+1767 |             return indexOf(str.charAt(0), startIndex);
+1768 |         }
+1769 |         if (strLen == 0) {
+1770 |             return startIndex;
+1771 |         }
+1772 |         if (strLen > size) {
+1773 |             return -1;
+1774 |         }
+1775 |         char[] thisBuf = buffer;
+1776 |         int len = thisBuf.length - strLen;
+1777 |         outer:
+1778 |         for (int i = startIndex; i < len; i++) {
+1779 |             for (int j = 0; j < strLen; j++) {
+1780 |                 if (str.charAt(j) != thisBuf[i + j]) {
+1781 |                     continue outer;
+1782 |                 }
+1783 |             }
+1784 |             return i;
+1785 |         }
+1786 |         return -1;
+1787 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.lang.text.StrMatcher.CharMatcher.CharMatcher(char)
+Source: src/java/org/apache/commons/lang/text/StrMatcher.java
+Original range: 292-295
+Documentation:
+/**
+         * Constructor that creates a matcher that matches a single character.
+         *
+         * @param ch  the character to match
+         */
+Method code:
+292 |         CharMatcher(char ch) {
+293 |             super();
+294 |             this.ch = ch;
+295 |         }
+
+===== M0010 =====
+Signature: org.apache.commons.lang.text.StrBuilder.deleteAll(String)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 1183-1193
+Documentation:
+/**
+     * Deletes the string wherever it occurs in the builder.
+     *
+     * @param str  the string to delete, null causes no action
+     * @return this, to enable chaining
+     */
+Method code:
+1183 |     public StrBuilder deleteAll(String str) {
+1184 |         int len = (str == null ? 0 : str.length());
+1185 |         if (len > 0) {
+1186 |             int index = indexOf(str, 0);
+1187 |             while (index >= 0) {
+1188 |                 deleteImpl(index, index + len, len);
+1189 |                 index = indexOf(str, index);
+1190 |             }
+1191 |         }
+1192 |         return this;
+1193 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.lang.text.StrMatcher.TrimMatcher.TrimMatcher()
+Source: src/java/org/apache/commons/lang/text/StrMatcher.java
+Original range: 388-390
+Documentation:
+/**
+         * Constructs a new instance of <code>TrimMatcher</code>.
+         */
+Method code:
+388 |         TrimMatcher() {
+389 |             super();
+390 |         }
+
+===== M0012 =====
+Signature: org.apache.commons.lang.text.StrBuilder.ensureCapacity(int)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 227-234
+Documentation:
+/**
+     * Checks the capacity and ensures that it is at least the size specified.
+     *
+     * @param capacity  the capacity to ensure
+     * @return this, to enable chaining
+     */
+Method code:
+227 |     public StrBuilder ensureCapacity(int capacity) {
+228 |         if (capacity > buffer.length) {
+229 |             char[] old = buffer;
+230 |             buffer = new char[capacity];
+231 |             System.arraycopy(old, 0, buffer, 0, size);
+232 |         }
+233 |         return this;
+234 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.lang.text.StrBuilder.deleteFirst(String)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 1201-1210
+Documentation:
+/**
+     * Deletes the string wherever it occurs in the builder.
+     *
+     * @param str  the string to delete, null causes no action
+     * @return this, to enable chaining
+     */
+Method code:
+1201 |     public StrBuilder deleteFirst(String str) {
+1202 |         int len = (str == null ? 0 : str.length());
+1203 |         if (len > 0) {
+1204 |             int index = indexOf(str, 0);
+1205 |             if (index >= 0) {
+1206 |                 deleteImpl(index, index + len, len);
+1207 |             }
+1208 |         }
+1209 |         return this;
+1210 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.lang.text.StrBuilder.deleteImpl(int,int,int)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 1113-1116
+Documentation:
+/**
+     * Internal method to delete a range without validation.
+     *
+     * @param startIndex  the start index, must be valid
+     * @param endIndex  the end index (exclusive), must be valid
+     * @param len  the length, must be valid
+     * @throws IndexOutOfBoundsException if any index is invalid
+     */
+Method code:
+1113 |     private void deleteImpl(int startIndex, int endIndex, int len) {
+1114 |         System.arraycopy(buffer, endIndex, buffer, startIndex, size - endIndex);
+1115 |         size -= len;
+1116 |     }
+

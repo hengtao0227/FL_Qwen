@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.mockitointegration.NoJUnitDependenciesTest.pure_mockito_should_not_depend_JUnit()",
+    "resolved_signature": "org.mockitointegration.NoJUnitDependenciesTest.pure_mockito_should_not_depend_JUnit()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitointegration/NoJUnitDependenciesTest.java",
+    "begin_line": 13,
+    "end_line": 30,
+    "comment": "",
+    "snippet": "    @Test\n    public void pure_mockito_should_not_depend_JUnit() throws Exception {\n        ClassLoader classLoader_without_JUnit = ClassLoaders.excludingClassLoader()\n                .withCodeSourceUrlOf(\n                        Mockito.class,\n                        Matcher.class,\n                        Enhancer.class,\n                        Objenesis.class\n                )\n                .without(\"junit\", \"org.junit\")\n                .build();\n\n        Set<String> pureMockitoAPIClasses = ClassLoaders.in(classLoader_without_JUnit).omit(\"runners\", \"junit\", \"JUnit\").listOwnedClasses();\n\n        for (String pureMockitoAPIClass : pureMockitoAPIClasses) {\n            checkDependency(classLoader_without_JUnit, pureMockitoAPIClass);\n        }\n    }"
+  }
+]

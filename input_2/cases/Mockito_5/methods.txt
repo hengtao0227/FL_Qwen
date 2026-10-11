@@ -1,0 +1,214 @@
+===== M0001 =====
+Signature: org.mockito.internal.util.collections.Iterables.toIterable(Enumeration<T>)
+Source: src/org/mockito/internal/util/collections/Iterables.java
+Original range: 15-21
+Documentation:
+/**
+     * Converts enumeration into iterable
+     */
+Method code:
+15 |     public static <T> Iterable<T> toIterable(Enumeration<T> in) {
+16 |         List<T> out = new LinkedList<T>();
+17 |         while(in.hasMoreElements()) {
+18 |             out.add(in.nextElement());
+19 |         }
+20 |         return out;
+21 |     }
+
+===== M0002 =====
+Signature: org.mockito.internal.configuration.plugins.Plugins.getStackTraceCleanerProvider()
+Source: src/org/mockito/internal/configuration/plugins/Plugins.java
+Original range: 16-18
+Documentation:
+/**
+     * The implementation of the stack trace cleaner
+     */
+Method code:
+16 |     public static StackTraceCleanerProvider getStackTraceCleanerProvider() {
+17 |         return registry.getStackTraceCleanerProvider();
+18 |     }
+
+===== M0003 =====
+Signature: org.mockito.internal.stubbing.defaultanswers.Answers.Answers(Answer<Object>)
+Source: src/org/mockito/internal/stubbing/defaultanswers/Answers.java
+Original range: 32-34
+Documentation:
+
+Method code:
+32 |     private Answers(Answer<Object> implementation) {
+33 |         this.implementation = implementation;
+34 |     }
+
+===== M0004 =====
+Signature: org.mockito.internal.configuration.plugins.PluginRegistry.getMockMaker()
+Source: src/org/mockito/internal/configuration/plugins/PluginRegistry.java
+Original range: 32-34
+Documentation:
+/**
+     * Returns the implementation of the mock maker available for the current runtime.
+     *
+     * <p>Returns {@link org.mockito.internal.creation.cglib.CglibMockMaker} if no
+     * {@link org.mockito.plugins.MockMaker} extension exists or is visible in the current classpath.</p>
+     */
+Method code:
+32 |     MockMaker getMockMaker() {
+33 |         return mockMaker;
+34 |     }
+
+===== M0005 =====
+Signature: org.mockito.internal.configuration.plugins.PluginLoader.PluginLoader(PluginSwitch)
+Source: src/org/mockito/internal/configuration/plugins/PluginLoader.java
+Original range: 16-18
+Documentation:
+
+Method code:
+16 |     public PluginLoader(PluginSwitch pluginSwitch) {
+17 |         this.pluginSwitch = pluginSwitch;
+18 |     }
+
+===== M0006 =====
+Signature: org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider.getStackTraceCleaner(StackTraceCleaner)
+Source: src/org/mockito/internal/exceptions/stacktrace/DefaultStackTraceCleanerProvider.java
+Original range: 11-13
+Documentation:
+
+Method code:
+11 |     public StackTraceCleaner getStackTraceCleaner(StackTraceCleaner defaultCleaner) {
+12 |         return defaultCleaner;
+13 |     }
+
+===== M0007 =====
+Signature: org.mockito.internal.configuration.plugins.PluginFinder.PluginFinder(PluginSwitch)
+Source: src/org/mockito/internal/configuration/plugins/PluginFinder.java
+Original range: 14-16
+Documentation:
+
+Method code:
+14 |     public PluginFinder(PluginSwitch pluginSwitch) {
+15 |         this.pluginSwitch = pluginSwitch;
+16 |     }
+
+===== M0008 =====
+Signature: org.mockito.internal.configuration.plugins.PluginLoader.loadImpl(Class<T>)
+Source: src/org/mockito/internal/configuration/plugins/PluginLoader.java
+Original range: 45-69
+Documentation:
+/**
+     * Equivalent to {@link java.util.ServiceLoader#load} but without requiring
+     * Java 6 / Android 2.3 (Gingerbread).
+     */
+Method code:
+45 |     <T> T loadImpl(Class<T> service) {
+46 |         ClassLoader loader = Thread.currentThread().getContextClassLoader();
+47 |         if (loader == null) {
+48 |             loader = ClassLoader.getSystemClassLoader();
+49 |         }
+50 |         Enumeration<URL> resources;
+51 |         try {
+52 |             resources = loader.getResources("mockito-extensions/" + service.getName());
+53 |         } catch (IOException e) {
+54 |             throw new MockitoException("Failed to load " + service, e);
+55 |         }
+56 | 
+57 |         try {
+58 |             String foundPluginClass = new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
+59 |             if (foundPluginClass != null) {
+60 |                 Class<?> pluginClass = loader.loadClass(foundPluginClass);
+61 |                 Object plugin = pluginClass.newInstance();
+62 |                 return service.cast(plugin);
+63 |             }
+64 |             return null;
+65 |         } catch (Exception e) {
+66 |             throw new MockitoConfigurationException(
+67 |                     "Failed to load " + service + " implementation declared in " + resources, e);
+68 |         }
+69 |     }
+
+===== M0009 =====
+Signature: org.mockito.internal.configuration.plugins.PluginLoader.loadPlugin(Class<T>,String)
+Source: src/org/mockito/internal/configuration/plugins/PluginLoader.java
+Original range: 23-39
+Documentation:
+/**
+     * Scans the classpath for given pluginType. If not found, default class is used.
+     */
+Method code:
+23 |     <T> T loadPlugin(Class<T> pluginType, String defaultPluginClassName) {
+24 |         T plugin = loadImpl(pluginType);
+25 |         if (plugin != null) {
+26 |             return plugin;
+27 |         }
+28 | 
+29 |         try {
+30 |             // Default implementation. Use our own ClassLoader instead of the context
+31 |             // ClassLoader, as the default implementation is assumed to be part of
+32 |             // Mockito and may not be available via the context ClassLoader.
+33 |             return pluginType.cast(Class.forName(defaultPluginClassName).newInstance());
+34 |         } catch (Exception e) {
+35 |             throw new MockitoException("Internal problem occurred, please report it. " +
+36 |                     "Mockito is unable to load the default implementation of class that is a part of Mockito distribution. " +
+37 |                     "Failed to load " + pluginType, e);
+38 |         }
+39 |     }
+
+===== M0010 =====
+Signature: org.mockito.internal.configuration.plugins.PluginRegistry.getStackTraceCleanerProvider()
+Source: src/org/mockito/internal/configuration/plugins/PluginRegistry.java
+Original range: 21-24
+Documentation:
+/**
+     * The implementation of the stack trace cleaner
+     */
+Method code:
+21 |     StackTraceCleanerProvider getStackTraceCleanerProvider() {
+22 |         //TODO we should throw some sensible exception if this is null.
+23 |         return stackTraceCleanerProvider;
+24 |     }
+
+===== M0011 =====
+Signature: org.mockito.internal.configuration.plugins.PluginFinder.findPluginClass(Iterable<URL>)
+Source: src/org/mockito/internal/configuration/plugins/PluginFinder.java
+Original range: 18-40
+Documentation:
+
+Method code:
+18 |     String findPluginClass(Iterable<URL> resources) {
+19 |         for (URL resource : resources) {
+20 |             InputStream s = null;
+21 |             try {
+22 |                 s = resource.openStream();
+23 |                 String pluginClassName = new PluginFileReader().readPluginClass(s);
+24 |                 if (pluginClassName == null) {
+25 |                     //For backwards compatibility
+26 |                     //If the resource does not have plugin class name we're ignoring it
+27 |                     continue;
+28 |                 }
+29 |                 if (!pluginSwitch.isEnabled(pluginClassName)) {
+30 |                     continue;
+31 |                 }
+32 |                 return pluginClassName;
+33 |             } catch(Exception e) {
+34 |                 throw new MockitoException("Problems reading plugin implementation from: " + resource, e);
+35 |             } finally {
+36 |                 IOUtil.closeQuietly(s);
+37 |             }
+38 |         }
+39 |         return null;
+40 |     }
+
+===== M0012 =====
+Signature: org.mockito.internal.configuration.plugins.Plugins.getMockMaker()
+Source: src/org/mockito/internal/configuration/plugins/Plugins.java
+Original range: 26-28
+Documentation:
+/**
+     * Returns the implementation of the mock maker available for the current runtime.
+     *
+     * <p>Returns {@link org.mockito.internal.creation.cglib.CglibMockMaker} if no
+     * {@link org.mockito.plugins.MockMaker} extension exists or is visible in the current classpath.</p>
+     */
+Method code:
+26 |     public static MockMaker getMockMaker() {
+27 |         return registry.getMockMaker();
+28 |     }
+

@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.MinimizeExitPointsTest.testDontRemoveBreakInTryFinally()",
+    "resolved_signature": "com.google.javascript.jscomp.MinimizeExitPointsTest.testDontRemoveBreakInTryFinally()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/MinimizeExitPointsTest.java",
+    "begin_line": 275,
+    "end_line": 277,
+    "comment": "",
+    "snippet": "  public void testDontRemoveBreakInTryFinally() throws Exception {\n    foldSame(\"function f() {b:try{throw 9} finally {break b} return 1;}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.MinimizeExitPointsTest.testFunctionReturnOptimization()",
+    "resolved_signature": "com.google.javascript.jscomp.MinimizeExitPointsTest.testFunctionReturnOptimization()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/MinimizeExitPointsTest.java",
+    "begin_line": 91,
+    "end_line": 138,
+    "comment": "",
+    "snippet": "  public void testFunctionReturnOptimization() throws Exception {\n    fold(\"function f(){if(a()){b();if(c())return;}}\",\n         \"function f(){if(a()){b();if(c());}}\");\n    fold(\"function f(){if(x)return; x=3; return; }\",\n         \"function f(){if(x); else x=3}\");\n    fold(\"function f(){if(true){a();return;}else;b();}\",\n         \"function f(){if(true){a();}else{b();}}\");\n    fold(\"function f(){if(false){a();return;}else;b();return;}\",\n         \"function f(){if(false){a();}else{b();}}\");\n    fold(\"function f(){if(a()){b();return;}else;c();}\",\n         \"function f(){if(a()){b();}else{c();}}\");\n    fold(\"function f(){if(a()){b()}else{c();return;}}\",\n         \"function f(){if(a()){b()}else{c();}}\");\n    fold(\"function f(){if(a()){b();return;}else;}\",\n         \"function f(){if(a()){b();}else;}\");\n    fold(\"function f(){if(a()){return;}else{return;} return;}\",\n         \"function f(){if(a()){}else{}}\");\n    fold(\"function f(){if(a()){return;}else{return;} b();}\",\n         \"function f(){if(a()){}else{return;b()}}\");\n    fold(\"function f(){ if (x) return; if (y) return; if (z) return; w(); }\",\n        \" function f() {\" +\n        \"   if (x) {} else { if (y) {} else { if (z) {} else w(); }}\" +\n        \" }\");\n\n    fold(\"function f(){while(a())return;}\",\n         \"function f(){while(a())return}\");\n    foldSame(\"function f(){for(x in a())return}\");\n\n    fold(\"function f(){while(a())break;}\",\n         \"function f(){while(a())break}\");\n    foldSame(\"function f(){for(x in a())break}\");\n\n    fold(\"function f(){try{return;}catch(e){throw 9;}finally{return}}\",\n         \"function f(){try{}catch(e){throw 9;}finally{return}}\");\n    foldSame(\"function f(){try{throw 9;}finally{return;}}\");\n\n    fold(\"function f(){try{return;}catch(e){return;}}\",\n         \"function f(){try{}catch(e){}}\");\n    fold(\"function f(){try{if(a()){return;}else{return;} return;}catch(e){}}\",\n         \"function f(){try{if(a()){}else{}}catch(e){}}\");\n\n    fold(\"function f(){g:return}\",\n         \"function f(){}\");\n    fold(\"function f(){g:if(a()){return;}else{return;} return;}\",\n         \"function f(){g:if(a()){}else{}}\");\n    fold(\"function f(){try{g:if(a()){throw 9;} return;}finally{return}}\",\n         \"function f(){try{g:if(a()){throw 9;}}finally{return}}\");\n  }"
+  }
+]

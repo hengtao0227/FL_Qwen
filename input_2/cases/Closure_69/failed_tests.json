@@ -1,0 +1,32 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testThisTypeOfFunction2()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testThisTypeOfFunction2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 4552,
+    "end_line": 4558,
+    "comment": "",
+    "snippet": "  public void testThisTypeOfFunction2() throws Exception {\n    testTypes(\n        \"/** @constructor */ function F() {}\" +\n        \"/** @type {function(this:F)} */ function f() {}\" +\n        \"f();\",\n        \"\\\"function (this:F): ?\\\" must be called with a \\\"this\\\" type\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testThisTypeOfFunction3()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testThisTypeOfFunction3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 4560,
+    "end_line": 4566,
+    "comment": "",
+    "snippet": "  public void testThisTypeOfFunction3() throws Exception {\n    testTypes(\n        \"/** @constructor */ function F() {}\" +\n        \"F.prototype.bar = function() {};\" +\n        \"var f = (new F()).bar; f();\",\n        \"\\\"function (this:F): undefined\\\" must be called with a \\\"this\\\" type\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testThisTypeOfFunction4()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testThisTypeOfFunction4()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 4568,
+    "end_line": 4583,
+    "comment": "",
+    "snippet": "  public void testThisTypeOfFunction4() throws Exception {\n    testTypes(\n        \"/** @constructor */ function F() {}\" +\n        \"F.prototype.moveTo = function(x, y) {};\" +\n        \"F.prototype.lineTo = function(x, y) {};\" +\n        \"function demo() {\" +\n        \"  var path = new F();\" +\n        \"  var points = [[1,1], [2,2]];\" +\n        \"  for (var i = 0; i < points.length; i++) {\" +\n        \"    (i == 0 ? path.moveTo : path.lineTo)(\" +\n        \"       points[i][0], points[i][1]);\" +\n        \"  }\" +\n        \"}\",\n        \"\\\"function (this:F, ?, ?): undefined\\\" \" +\n        \"must be called with a \\\"this\\\" type\");\n  }"
+  }
+]

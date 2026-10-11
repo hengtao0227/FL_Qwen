@@ -1,0 +1,5240 @@
+===== M0001 =====
+Signature: org.joda.time.chrono.AssembledChronology.centuryOfEra()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 283-285
+Documentation:
+
+Method code:
+283 |     public final DateTimeField centuryOfEra() {
+284 |         return iCenturyOfEra;
+285 |     }
+
+===== M0002 =====
+Signature: org.joda.time.chrono.ISOChronology.assemble(Fields)
+Source: src/main/java/org/joda/time/chrono/ISOChronology.java
+Original range: 168-180
+Documentation:
+
+Method code:
+168 |     protected void assemble(Fields fields) {
+169 |         if (getBase().getZone() == DateTimeZone.UTC) {
+170 |             // Use zero based century and year of century.
+171 |             fields.centuryOfEra = new DividedDateTimeField(
+172 |                 ISOYearOfEraDateTimeField.INSTANCE, DateTimeFieldType.centuryOfEra(), 100);
+173 |             fields.yearOfCentury = new RemainderDateTimeField(
+174 |                 (DividedDateTimeField) fields.centuryOfEra, DateTimeFieldType.yearOfCentury());
+175 |             fields.weekyearOfCentury = new RemainderDateTimeField(
+176 |                 (DividedDateTimeField) fields.centuryOfEra, DateTimeFieldType.weekyearOfCentury());
+177 | 
+178 |             fields.centuries = fields.centuryOfEra.getDurationField();
+179 |         }
+180 |     }
+
+===== M0003 =====
+Signature: org.joda.time.DurationFieldType.StandardDurationFieldType.getField(Chronology)
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 263-295
+Documentation:
+
+Method code:
+263 |         public DurationField getField(Chronology chronology) {
+264 |             chronology = DateTimeUtils.getChronology(chronology);
+265 |             
+266 |             switch (iOrdinal) {
+267 |                 case ERAS:
+268 |                     return chronology.eras();
+269 |                 case CENTURIES:
+270 |                     return chronology.centuries();
+271 |                 case WEEKYEARS:
+272 |                     return chronology.weekyears();
+273 |                 case YEARS:
+274 |                     return chronology.years();
+275 |                 case MONTHS:
+276 |                     return chronology.months();
+277 |                 case WEEKS:
+278 |                     return chronology.weeks();
+279 |                 case DAYS:
+280 |                     return chronology.days();
+281 |                 case HALFDAYS:
+282 |                     return chronology.halfdays();
+283 |                 case HOURS:
+284 |                     return chronology.hours();
+285 |                 case MINUTES:
+286 |                     return chronology.minutes();
+287 |                 case SECONDS:
+288 |                     return chronology.seconds();
+289 |                 case MILLIS:
+290 |                     return chronology.millis();
+291 |                 default:
+292 |                     // Shouldn't happen.
+293 |                     throw new InternalError();
+294 |             }
+295 |         }
+
+===== M0004 =====
+Signature: org.joda.time.tz.FixedDateTimeZone.getOffsetFromLocal(long)
+Source: src/main/java/org/joda/time/tz/FixedDateTimeZone.java
+Original range: 56-58
+Documentation:
+
+Method code:
+56 |     public int getOffsetFromLocal(long instantLocal) {
+57 |         return iWallOffset;
+58 |     }
+
+===== M0005 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.Recurrence.Recurrence(OfYear,String,int)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 747-751
+Documentation:
+
+Method code:
+747 |         Recurrence(OfYear ofYear, String nameKey, int saveMillis) {
+748 |             iOfYear = ofYear;
+749 |             iNameKey = nameKey;
+750 |             iSaveMillis = saveMillis;
+751 |         }
+
+===== M0006 =====
+Signature: org.joda.time.chrono.ZonedChronology.ZonedDurationField.ZonedDurationField(DurationField,DateTimeZone)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 283-291
+Documentation:
+
+Method code:
+283 |         ZonedDurationField(DurationField field, DateTimeZone zone) {
+284 |             super(field.getType());
+285 |             if (!field.isSupported()) {
+286 |                 throw new IllegalArgumentException();
+287 |             }
+288 |             iField = field;
+289 |             iTimeField = useTimeArithmetic(field);
+290 |             iZone = zone;
+291 |         }
+
+===== M0007 =====
+Signature: org.joda.time.base.AbstractPeriod.AbstractPeriod()
+Source: src/main/java/org/joda/time/base/AbstractPeriod.java
+Original range: 44-46
+Documentation:
+/**
+     * Constructor.
+     */
+Method code:
+44 |     protected AbstractPeriod() {
+45 |         super();
+46 |     }
+
+===== M0008 =====
+Signature: org.joda.time.chrono.ZonedChronology.ZonedDateTimeField.ZonedDateTimeField(DateTimeField,DateTimeZone,DurationField,DurationField,DurationField)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 384-399
+Documentation:
+
+Method code:
+384 |         ZonedDateTimeField(DateTimeField field,
+385 |                            DateTimeZone zone,
+386 |                            DurationField durationField,
+387 |                            DurationField rangeDurationField,
+388 |                            DurationField leapDurationField) {
+389 |             super(field.getType());
+390 |             if (!field.isSupported()) {
+391 |                 throw new IllegalArgumentException();
+392 |             }
+393 |             iField = field;
+394 |             iZone = zone;
+395 |             iDurationField = durationField;
+396 |             iTimeField = useTimeArithmetic(durationField);
+397 |             iRangeDurationField = rangeDurationField;
+398 |             iLeapDurationField = leapDurationField;
+399 |         }
+
+===== M0009 =====
+Signature: org.joda.time.field.DividedDateTimeField.DividedDateTimeField(DateTimeField,DateTimeFieldType,int)
+Source: src/main/java/org/joda/time/field/DividedDateTimeField.java
+Original range: 54-80
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param field  the field to wrap, like "year()".
+     * @param type  the field type this field will actually use
+     * @param divisor  divisor, such as 100 years in a century
+     * @throws IllegalArgumentException if divisor is less than two
+     */
+Method code:
+54 |     public DividedDateTimeField(DateTimeField field,
+55 |                                 DateTimeFieldType type, int divisor) {
+56 |         super(field, type);
+57 |                 
+58 |         if (divisor < 2) {
+59 |             throw new IllegalArgumentException("The divisor must be at least 2");
+60 |         }
+61 | 
+62 |         DurationField unitField = field.getDurationField();
+63 |         if (unitField == null) {
+64 |             iDurationField = null;
+65 |         } else {
+66 |             iDurationField = new ScaledDurationField(
+67 |                 unitField, type.getDurationType(), divisor);
+68 |         }
+69 | 
+70 |         iDivisor = divisor;
+71 | 
+72 |         int i = field.getMinimumValue();
+73 |         int min = (i >= 0) ? i / divisor : ((i + 1) / divisor - 1);
+74 | 
+75 |         int j = field.getMaximumValue();
+76 |         int max = (j >= 0) ? j / divisor : ((j + 1) / divisor - 1);
+77 | 
+78 |         iMin = min;
+79 |         iMax = max;
+80 |     }
+
+===== M0010 =====
+Signature: org.joda.time.DurationFieldType.DurationFieldType(String)
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 93-96
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param name  the name to use, which by convention, are plural.
+     */
+Method code:
+93 |     protected DurationFieldType(String name) {
+94 |         super();
+95 |         iName = name;
+96 |     }
+
+===== M0011 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.loadZoneData(String)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 223-242
+Documentation:
+/**
+     * Loads the time zone data for one id.
+     * 
+     * @param id  the id to load
+     * @return the zone
+     */
+Method code:
+223 |     private DateTimeZone loadZoneData(String id) {
+224 |         InputStream in = null;
+225 |         try {
+226 |             in = openResource(id);
+227 |             DateTimeZone tz = DateTimeZoneBuilder.readFrom(in, id);
+228 |             iZoneInfoMap.put(id, new SoftReference<DateTimeZone>(tz));
+229 |             return tz;
+230 |         } catch (IOException e) {
+231 |             uncaughtException(e);
+232 |             iZoneInfoMap.remove(id);
+233 |             return null;
+234 |         } finally {
+235 |             try {
+236 |                 if (in != null) {
+237 |                     in.close();
+238 |                 }
+239 |             } catch (IOException e) {
+240 |             }
+241 |         }
+242 |     }
+
+===== M0012 =====
+Signature: org.joda.time.field.RemainderDateTimeField.getMaximumValue()
+Source: src/main/java/org/joda/time/field/RemainderDateTimeField.java
+Original range: 157-159
+Documentation:
+/**
+     * Get the maximum value for the field, which is always one less than the
+     * divisor.
+     * 
+     * @return the maximum value
+     */
+Method code:
+157 |     public int getMaximumValue() {
+158 |         return iDivisor - 1;
+159 |     }
+
+===== M0013 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.readFrom(DataInput,String)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 109-125
+Documentation:
+/**
+     * Decodes a built DateTimeZone from the given stream, as encoded by
+     * writeTo.
+     *
+     * @param in input stream to read encoded DateTimeZone from.
+     * @param id time zone id to assign
+     */
+Method code:
+109 |     public static DateTimeZone readFrom(DataInput in, String id) throws IOException {
+110 |         switch (in.readUnsignedByte()) {
+111 |         case 'F':
+112 |             DateTimeZone fixed = new FixedDateTimeZone
+113 |                 (id, in.readUTF(), (int)readMillis(in), (int)readMillis(in));
+114 |             if (fixed.equals(DateTimeZone.UTC)) {
+115 |                 fixed = DateTimeZone.UTC;
+116 |             }
+117 |             return fixed;
+118 |         case 'C':
+119 |             return CachedDateTimeZone.forZone(PrecalculatedZone.readFrom(in, id));
+120 |         case 'P':
+121 |             return PrecalculatedZone.readFrom(in, id);
+122 |         default:
+123 |             throw new IOException("Invalid encoding");
+124 |         }
+125 |     }
+
+===== M0014 =====
+Signature: org.joda.time.PeriodType.getFieldType(int)
+Source: src/main/java/org/joda/time/PeriodType.java
+Original range: 627-629
+Documentation:
+/**
+     * Gets the field type by index.
+     * 
+     * @param index  the index to retrieve
+     * @return the field type
+     * @throws IndexOutOfBoundsException if the index is invalid
+     */
+Method code:
+627 |     public DurationFieldType getFieldType(int index) {
+628 |         return iTypes[index];
+629 |     }
+
+===== M0015 =====
+Signature: org.joda.time.chrono.ZonedChronology.ZonedDurationField.isPrecise()
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 293-295
+Documentation:
+
+Method code:
+293 |         public boolean isPrecise() {
+294 |             return iTimeField ? iField.isPrecise() : iField.isPrecise() && this.iZone.isFixed();
+295 |         }
+
+===== M0016 =====
+Signature: org.joda.time.chrono.ZonedChronology.assemble(Fields)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 150-197
+Documentation:
+
+Method code:
+150 |     protected void assemble(Fields fields) {
+151 |         // Keep a local cache of converted fields so as not to create redundant
+152 |         // objects.
+153 |         HashMap<Object, Object> converted = new HashMap<Object, Object>();
+154 | 
+155 |         // Convert duration fields...
+156 | 
+157 |         fields.eras = convertField(fields.eras, converted);
+158 |         fields.centuries = convertField(fields.centuries, converted);
+159 |         fields.years = convertField(fields.years, converted);
+160 |         fields.months = convertField(fields.months, converted);
+161 |         fields.weekyears = convertField(fields.weekyears, converted);
+162 |         fields.weeks = convertField(fields.weeks, converted);
+163 |         fields.days = convertField(fields.days, converted);
+164 | 
+165 |         fields.halfdays = convertField(fields.halfdays, converted);
+166 |         fields.hours = convertField(fields.hours, converted);
+167 |         fields.minutes = convertField(fields.minutes, converted);
+168 |         fields.seconds = convertField(fields.seconds, converted);
+169 |         fields.millis = convertField(fields.millis, converted);
+170 | 
+171 |         // Convert datetime fields...
+172 | 
+173 |         fields.year = convertField(fields.year, converted);
+174 |         fields.yearOfEra = convertField(fields.yearOfEra, converted);
+175 |         fields.yearOfCentury = convertField(fields.yearOfCentury, converted);
+176 |         fields.centuryOfEra = convertField(fields.centuryOfEra, converted);
+177 |         fields.era = convertField(fields.era, converted);
+178 |         fields.dayOfWeek = convertField(fields.dayOfWeek, converted);
+179 |         fields.dayOfMonth = convertField(fields.dayOfMonth, converted);
+180 |         fields.dayOfYear = convertField(fields.dayOfYear, converted);
+181 |         fields.monthOfYear = convertField(fields.monthOfYear, converted);
+182 |         fields.weekOfWeekyear = convertField(fields.weekOfWeekyear, converted);
+183 |         fields.weekyear = convertField(fields.weekyear, converted);
+184 |         fields.weekyearOfCentury = convertField(fields.weekyearOfCentury, converted);
+185 | 
+186 |         fields.millisOfSecond = convertField(fields.millisOfSecond, converted);
+187 |         fields.millisOfDay = convertField(fields.millisOfDay, converted);
+188 |         fields.secondOfMinute = convertField(fields.secondOfMinute, converted);
+189 |         fields.secondOfDay = convertField(fields.secondOfDay, converted);
+190 |         fields.minuteOfHour = convertField(fields.minuteOfHour, converted);
+191 |         fields.minuteOfDay = convertField(fields.minuteOfDay, converted);
+192 |         fields.hourOfDay = convertField(fields.hourOfDay, converted);
+193 |         fields.hourOfHalfday = convertField(fields.hourOfHalfday, converted);
+194 |         fields.clockhourOfDay = convertField(fields.clockhourOfDay, converted);
+195 |         fields.clockhourOfHalfday = convertField(fields.clockhourOfHalfday, converted);
+196 |         fields.halfdayOfDay = convertField(fields.halfdayOfDay, converted);
+197 |     }
+
+===== M0017 =====
+Signature: org.joda.time.chrono.AssembledChronology.dayOfMonth()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 227-229
+Documentation:
+
+Method code:
+227 |     public final DateTimeField dayOfMonth() {
+228 |         return iDayOfMonth;
+229 |     }
+
+===== M0018 =====
+Signature: org.joda.time.DateTimeUtils.setCurrentMillisFixed(long)
+Source: src/main/java/org/joda/time/DateTimeUtils.java
+Original range: 81-84
+Documentation:
+/**
+     * Sets the current time to return a fixed millisecond time.
+     * <p>
+     * This method changes the behaviour of {@link #currentTimeMillis()}.
+     * Whenever the current time is queried, the same millisecond time will be returned.
+     * 
+     * @param fixedMillis  the fixed millisecond time to use
+     * @throws SecurityException if the application does not have sufficient security rights
+     */
+Method code:
+81 |     public static final void setCurrentMillisFixed(long fixedMillis) throws SecurityException {
+82 |         checkPermission();
+83 |         cMillisProvider = new FixedMillisProvider(fixedMillis);
+84 |     }
+
+===== M0019 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.OfYear.OfYear(char,int,int,int,boolean,int)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 499-515
+Documentation:
+
+Method code:
+499 |         OfYear(char mode,
+500 |                int monthOfYear,
+501 |                int dayOfMonth,
+502 |                int dayOfWeek, boolean advanceDayOfWeek,
+503 |                int millisOfDay)
+504 |         {
+505 |             if (mode != 'u' && mode != 'w' && mode != 's') {
+506 |                 throw new IllegalArgumentException("Unknown mode: " + mode);
+507 |             }
+508 | 
+509 |             iMode = mode;
+510 |             iMonthOfYear = monthOfYear;
+511 |             iDayOfMonth = dayOfMonth;
+512 |             iDayOfWeek = dayOfWeek;
+513 |             iAdvance = advanceDayOfWeek;
+514 |             iMillisOfDay = millisOfDay;
+515 |         }
+
+===== M0020 =====
+Signature: org.joda.time.chrono.BasicMonthOfYearDateTimeField.getLeapDurationField()
+Source: src/main/java/org/joda/time/chrono/BasicMonthOfYearDateTimeField.java
+Original range: 327-329
+Documentation:
+//-----------------------------------------------------------------------
+Method code:
+327 |     public DurationField getLeapDurationField() {
+328 |         return iChronology.days();
+329 |     }
+
+===== M0021 =====
+Signature: org.joda.time.DateTimeZone.setNameProvider0(NameProvider)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 513-518
+Documentation:
+/**
+     * Sets the name provider factory without performing the security check.
+     * 
+     * @param nameProvider  provider to use, or null for default
+     * @throws IllegalArgumentException if the provider is invalid
+     */
+Method code:
+513 |     private static void setNameProvider0(NameProvider nameProvider) {
+514 |         if (nameProvider == null) {
+515 |             nameProvider = getDefaultNameProvider();
+516 |         }
+517 |         cNameProvider = nameProvider;
+518 |     }
+
+===== M0022 =====
+Signature: org.joda.time.DateTimeFieldType.StandardDateTimeFieldType.getDurationType()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 451-453
+Documentation:
+/** @inheritdoc */
+Method code:
+451 |         public DurationFieldType getDurationType() {
+452 |             return iUnitType;
+453 |         }
+
+===== M0023 =====
+Signature: org.joda.time.tz.FixedDateTimeZone.getOffset(long)
+Source: src/main/java/org/joda/time/tz/FixedDateTimeZone.java
+Original range: 48-50
+Documentation:
+
+Method code:
+48 |     public int getOffset(long instant) {
+49 |         return iWallOffset;
+50 |     }
+
+===== M0024 =====
+Signature: org.joda.time.chrono.ZonedChronology.convertField(DateTimeField,HashMap<Object, Object>)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 211-225
+Documentation:
+
+Method code:
+211 |     private DateTimeField convertField(DateTimeField field, HashMap<Object, Object> converted) {
+212 |         if (field == null || !field.isSupported()) {
+213 |             return field;
+214 |         }
+215 |         if (converted.containsKey(field)) {
+216 |             return (DateTimeField)converted.get(field);
+217 |         }
+218 |         ZonedDateTimeField zonedField =
+219 |             new ZonedDateTimeField(field, getZone(),
+220 |                                    convertField(field.getDurationField(), converted),
+221 |                                    convertField(field.getRangeDurationField(), converted),
+222 |                                    convertField(field.getLeapDurationField(), converted));
+223 |         converted.put(field, zonedField);
+224 |         return zonedField;
+225 |     }
+
+===== M0025 =====
+Signature: org.joda.time.DateTimeFieldType.monthOfYear()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 317-319
+Documentation:
+/**
+     * Get the month of year field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+317 |     public static DateTimeFieldType monthOfYear() {
+318 |         return MONTH_OF_YEAR_TYPE;
+319 |     }
+
+===== M0026 =====
+Signature: org.joda.time.chrono.AssembledChronology.dayOfWeek()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 223-225
+Documentation:
+
+Method code:
+223 |     public final DateTimeField dayOfWeek() {
+224 |         return iDayOfWeek;
+225 |     }
+
+===== M0027 =====
+Signature: org.joda.time.DateTimeFieldType.dayOfYear()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 281-283
+Documentation:
+/**
+     * Get the day of year field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+281 |     public static DateTimeFieldType dayOfYear() {
+282 |         return DAY_OF_YEAR_TYPE;
+283 |     }
+
+===== M0028 =====
+Signature: org.joda.time.field.MillisDurationField.getDifference(long,long)
+Source: src/main/java/org/joda/time/field/MillisDurationField.java
+Original range: 124-126
+Documentation:
+
+Method code:
+124 |     public int getDifference(long minuendInstant, long subtrahendInstant) {
+125 |         return FieldUtils.safeToInt(FieldUtils.safeSubtract(minuendInstant, subtrahendInstant));
+126 |     }
+
+===== M0029 =====
+Signature: org.joda.time.chrono.AssembledChronology.weekyears()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 243-245
+Documentation:
+
+Method code:
+243 |     public final DurationField weekyears() {
+244 |         return iWeekyears;
+245 |     }
+
+===== M0030 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.OfYear.readFrom(DataInput)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 481-488
+Documentation:
+
+Method code:
+481 |         static OfYear readFrom(DataInput in) throws IOException {
+482 |             return new OfYear((char)in.readUnsignedByte(),
+483 |                               (int)in.readUnsignedByte(),
+484 |                               (int)in.readByte(),
+485 |                               (int)in.readUnsignedByte(),
+486 |                               in.readBoolean(),
+487 |                               (int)readMillis(in));
+488 |         }
+
+===== M0031 =====
+Signature: org.joda.time.DurationFieldType.hours()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 131-133
+Documentation:
+/**
+     * Get the hours field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+131 |     public static DurationFieldType hours() {
+132 |         return HOURS_TYPE;
+133 |     }
+
+===== M0032 =====
+Signature: org.joda.time.base.BasePeriod.getPeriodType()
+Source: src/main/java/org/joda/time/base/BasePeriod.java
+Original range: 302-304
+Documentation:
+/**
+     * Gets the period type.
+     *
+     * @return the period type
+     */
+Method code:
+302 |     public PeriodType getPeriodType() {
+303 |         return iType;
+304 |     }
+
+===== M0033 =====
+Signature: org.joda.time.field.UnsupportedDurationField.getUnitMillis()
+Source: src/main/java/org/joda/time/field/UnsupportedDurationField.java
+Original range: 217-219
+Documentation:
+/**
+     * Always returns zero.
+     *
+     * @return zero always
+     */
+Method code:
+217 |     public long getUnitMillis() {
+218 |         return 0;
+219 |     }
+
+===== M0034 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.DSTZone.readFrom(DataInput,String)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 1165-1168
+Documentation:
+
+Method code:
+1165 |         static DSTZone readFrom(DataInput in, String id) throws IOException {
+1166 |             return new DSTZone(id, (int)readMillis(in), 
+1167 |                                Recurrence.readFrom(in), Recurrence.readFrom(in));
+1168 |         }
+
+===== M0035 =====
+Signature: org.joda.time.chrono.AssembledChronology.clockhourOfDay()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 199-201
+Documentation:
+
+Method code:
+199 |     public final DateTimeField clockhourOfDay() {
+200 |         return iClockhourOfDay;
+201 |     }
+
+===== M0036 =====
+Signature: org.joda.time.tz.FixedDateTimeZone.FixedDateTimeZone(String,String,int,int)
+Source: src/main/java/org/joda/time/tz/FixedDateTimeZone.java
+Original range: 36-42
+Documentation:
+
+Method code:
+36 |     public FixedDateTimeZone(String id, String nameKey,
+37 |                              int wallOffset, int standardOffset) {
+38 |         super(id);
+39 |         iNameKey = nameKey;
+40 |         iWallOffset = wallOffset;
+41 |         iStandardOffset = standardOffset;
+42 |     }
+
+===== M0037 =====
+Signature: org.joda.time.field.PreciseDateTimeField.PreciseDateTimeField(DateTimeFieldType,DurationField,DurationField)
+Source: src/main/java/org/joda/time/field/PreciseDateTimeField.java
+Original range: 55-70
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param type  the field type this field uses
+     * @param unit  precise unit duration, like "seconds()".
+     * @param range precise range duration, preferably a multiple of the unit,
+     * like "minutes()".
+     * @throws IllegalArgumentException if either duration field is imprecise
+     * @throws IllegalArgumentException if unit milliseconds is less than one
+     * or effective value range is less than two.
+     */
+Method code:
+55 |     public PreciseDateTimeField(DateTimeFieldType type,
+56 |                                 DurationField unit, DurationField range) {
+57 |         super(type, unit);
+58 | 
+59 |         if (!range.isPrecise()) {
+60 |             throw new IllegalArgumentException("Range duration field must be precise");
+61 |         }
+62 | 
+63 |         long rangeMillis = range.getUnitMillis();
+64 |         iRange = (int)(rangeMillis / getUnitMillis());
+65 |         if (iRange < 2) {
+66 |             throw new IllegalArgumentException("The effective range must be at least 2");
+67 |         }
+68 | 
+69 |         iRangeField = range;
+70 |     }
+
+===== M0038 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.readZoneInfoMap(DataInputStream,Map<String, Object>)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 272-289
+Documentation:
+/**
+     * Reads the zone info map from file.
+     * 
+     * @param din  the input stream
+     * @param zimap  gets filled with string id to string id mappings
+     */
+Method code:
+272 |     private static void readZoneInfoMap(DataInputStream din, Map<String, Object> zimap) throws IOException {
+273 |         // Read the string pool.
+274 |         int size = din.readUnsignedShort();
+275 |         String[] pool = new String[size];
+276 |         for (int i=0; i<size; i++) {
+277 |             pool[i] = din.readUTF().intern();
+278 |         }
+279 | 
+280 |         // Read the mappings.
+281 |         size = din.readUnsignedShort();
+282 |         for (int i=0; i<size; i++) {
+283 |             try {
+284 |                 zimap.put(pool[din.readUnsignedShort()], pool[din.readUnsignedShort()]);
+285 |             } catch (ArrayIndexOutOfBoundsException e) {
+286 |                 throw new IOException("Corrupt zone info map");
+287 |             }
+288 |         }
+289 |     }
+
+===== M0039 =====
+Signature: org.joda.time.chrono.AssembledChronology.getBase()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 307-309
+Documentation:
+/**
+     * Returns the same base chronology as passed into the constructor.
+     */
+Method code:
+307 |     protected final Chronology getBase() {
+308 |         return iBase;
+309 |     }
+
+===== M0040 =====
+Signature: org.joda.time.field.UnsupportedDurationField.isSupported()
+Source: src/main/java/org/joda/time/field/UnsupportedDurationField.java
+Original range: 91-93
+Documentation:
+/**
+     * This field is not supported.
+     *
+     * @return false always
+     */
+Method code:
+91 |     public boolean isSupported() {
+92 |         return false;
+93 |     }
+
+===== M0041 =====
+Signature: org.joda.time.field.PreciseDurationField.PreciseDurationField(DurationFieldType,long)
+Source: src/main/java/org/joda/time/field/PreciseDurationField.java
+Original range: 42-45
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param type  the field type
+     * @param unitMillis  the unit milliseconds
+     */
+Method code:
+42 |     public PreciseDurationField(DurationFieldType type, long unitMillis) {
+43 |         super(type);
+44 |         iUnitMillis = unitMillis;
+45 |     }
+
+===== M0042 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.readFrom(InputStream,String)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 94-100
+Documentation:
+/**
+     * Decodes a built DateTimeZone from the given stream, as encoded by
+     * writeTo.
+     *
+     * @param in input stream to read encoded DateTimeZone from.
+     * @param id time zone id to assign
+     */
+Method code:
+94 |     public static DateTimeZone readFrom(InputStream in, String id) throws IOException {
+95 |         if (in instanceof DataInput) {
+96 |             return readFrom((DataInput)in, id);
+97 |         } else {
+98 |             return readFrom((DataInput)new DataInputStream(in), id);
+99 |         }
+100 |     }
+
+===== M0043 =====
+Signature: org.joda.time.field.ScaledDurationField.getUnitMillis()
+Source: src/main/java/org/joda/time/field/ScaledDurationField.java
+Original range: 108-110
+Documentation:
+
+Method code:
+108 |     public long getUnitMillis() {
+109 |         return getWrappedField().getUnitMillis() * iScalar;
+110 |     }
+
+===== M0044 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.ZoneInfoProvider(String,ClassLoader,boolean)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 103-124
+Documentation:
+/**
+     * @param favorSystemLoader when true, use the system class loader if
+     * loader null. When false, use the current class loader if loader is null.
+     */
+Method code:
+103 |     private ZoneInfoProvider(String resourcePath,
+104 |                              ClassLoader loader, boolean favorSystemLoader) 
+105 |         throws IOException
+106 |     {
+107 |         if (resourcePath == null) {
+108 |             throw new IllegalArgumentException("No resource path provided");
+109 |         }
+110 |         if (!resourcePath.endsWith("/")) {
+111 |             resourcePath += '/';
+112 |         }
+113 | 
+114 |         iFileDir = null;
+115 |         iResourcePath = resourcePath;
+116 | 
+117 |         if (loader == null && !favorSystemLoader) {
+118 |             loader = getClass().getClassLoader();
+119 |         }
+120 | 
+121 |         iLoader = loader;
+122 | 
+123 |         iZoneInfoMap = loadZoneInfoMap(openResource("ZoneInfoMap"));
+124 |     }
+
+===== M0045 =====
+Signature: org.joda.time.chrono.AssembledChronology.weeks()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 235-237
+Documentation:
+
+Method code:
+235 |     public final DurationField weeks() {
+236 |         return iWeeks;
+237 |     }
+
+===== M0046 =====
+Signature: org.joda.time.field.ZeroIsMaxDateTimeField.getLeapDurationField()
+Source: src/main/java/org/joda/time/field/ZeroIsMaxDateTimeField.java
+Original range: 100-102
+Documentation:
+
+Method code:
+100 |     public DurationField getLeapDurationField() {
+101 |         return getWrappedField().getLeapDurationField();
+102 |     }
+
+===== M0047 =====
+Signature: org.joda.time.chrono.ISOChronology.getInstance()
+Source: src/main/java/org/joda/time/chrono/ISOChronology.java
+Original range: 85-87
+Documentation:
+/**
+     * Gets an instance of the ISOChronology in the default time zone.
+     * 
+     * @return a chronology in the default time zone
+     */
+Method code:
+85 |     public static ISOChronology getInstance() {
+86 |         return getInstance(DateTimeZone.getDefault());
+87 |     }
+
+===== M0048 =====
+Signature: org.joda.time.DateTimeFieldType.minuteOfHour()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 199-201
+Documentation:
+/**
+     * Get the minute of hour field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+199 |     public static DateTimeFieldType minuteOfHour() {
+200 |         return MINUTE_OF_HOUR_TYPE;
+201 |     }
+
+===== M0049 =====
+Signature: org.joda.time.base.BaseDuration.getMillis()
+Source: src/main/java/org/joda/time/base/BaseDuration.java
+Original range: 114-116
+Documentation:
+/**
+     * Gets the length of this duration in milliseconds.
+     *
+     * @return the length of the duration in milliseconds.
+     */
+Method code:
+114 |     public long getMillis() {
+115 |         return iMillis;
+116 |     }
+
+===== M0050 =====
+Signature: org.joda.time.DurationFieldType.StandardDurationFieldType.StandardDurationFieldType(String,byte)
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 258-261
+Documentation:
+/**
+         * Constructor.
+         * 
+         * @param name  the name to use
+         */
+Method code:
+258 |         StandardDurationFieldType(String name, byte ordinal) {
+259 |             super(name);
+260 |             iOrdinal = ordinal;
+261 |         }
+
+===== M0051 =====
+Signature: org.joda.time.chrono.BasicWeekyearDateTimeField.getRangeDurationField()
+Source: src/main/java/org/joda/time/chrono/BasicWeekyearDateTimeField.java
+Original range: 207-209
+Documentation:
+
+Method code:
+207 |     public DurationField getRangeDurationField() {
+208 |         return null;
+209 |     }
+
+===== M0052 =====
+Signature: org.joda.time.DateTimeZone.printOffset(int)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 630-662
+Documentation:
+/**
+     * Formats a timezone offset string.
+     * <p>
+     * This method is kept separate from the formatting classes to speed and
+     * simplify startup and classloading.
+     * 
+     * @param offset  the offset in milliseconds
+     * @return the time zone string
+     */
+Method code:
+630 |     private static String printOffset(int offset) {
+631 |         StringBuffer buf = new StringBuffer();
+632 |         if (offset >= 0) {
+633 |             buf.append('+');
+634 |         } else {
+635 |             buf.append('-');
+636 |             offset = -offset;
+637 |         }
+638 | 
+639 |         int hours = offset / DateTimeConstants.MILLIS_PER_HOUR;
+640 |         FormatUtils.appendPaddedInteger(buf, hours, 2);
+641 |         offset -= hours * (int) DateTimeConstants.MILLIS_PER_HOUR;
+642 | 
+643 |         int minutes = offset / DateTimeConstants.MILLIS_PER_MINUTE;
+644 |         buf.append(':');
+645 |         FormatUtils.appendPaddedInteger(buf, minutes, 2);
+646 |         offset -= minutes * DateTimeConstants.MILLIS_PER_MINUTE;
+647 |         if (offset == 0) {
+648 |             return buf.toString();
+649 |         }
+650 | 
+651 |         int seconds = offset / DateTimeConstants.MILLIS_PER_SECOND;
+652 |         buf.append(':');
+653 |         FormatUtils.appendPaddedInteger(buf, seconds, 2);
+654 |         offset -= seconds * DateTimeConstants.MILLIS_PER_SECOND;
+655 |         if (offset == 0) {
+656 |             return buf.toString();
+657 |         }
+658 | 
+659 |         buf.append('.');
+660 |         FormatUtils.appendPaddedInteger(buf, offset, 3);
+661 |         return buf.toString();
+662 |     }
+
+===== M0053 =====
+Signature: org.joda.time.field.UnsupportedDurationField.UnsupportedDurationField(DurationFieldType)
+Source: src/main/java/org/joda/time/field/UnsupportedDurationField.java
+Original range: 70-72
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param type  the type to use
+     */
+Method code:
+70 |     private UnsupportedDurationField(DurationFieldType type) {
+71 |         iType = type;
+72 |     }
+
+===== M0054 =====
+Signature: org.joda.time.field.DecoratedDateTimeField.DecoratedDateTimeField(DateTimeField,DateTimeFieldType)
+Source: src/main/java/org/joda/time/field/DecoratedDateTimeField.java
+Original range: 53-62
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param field  the field being decorated
+     * @param type  allow type to be overridden
+     */
+Method code:
+53 |     protected DecoratedDateTimeField(DateTimeField field, DateTimeFieldType type) {
+54 |         super(type);
+55 |         if (field == null) {
+56 |             throw new IllegalArgumentException("The field must not be null");
+57 |         }
+58 |         if (!field.isSupported()) {
+59 |             throw new IllegalArgumentException("The field must be supported");
+60 |         }
+61 |         iField = field;
+62 |     }
+
+===== M0055 =====
+Signature: org.joda.time.Period.Period(long)
+Source: src/main/java/org/joda/time/Period.java
+Original range: 381-383
+Documentation:
+/**
+     * Creates a period from the given millisecond duration using the standard
+     * set of fields.
+     * <p>
+     * Only precise fields in the period type will be used.
+     * For the standard period type this is the time fields only.
+     * Thus the year, month, week and day fields will not be populated.
+     * <p>
+     * If the duration is small, less than one day, then this method will perform
+     * as you might expect and split the fields evenly.
+     * <p>
+     * If the duration is larger than one day then all the remaining duration will
+     * be stored in the largest available precise field, hours in this case.
+     * <p>
+     * For example, a duration equal to (365 + 60 + 5) days will be converted to
+     * ((365 + 60 + 5) * 24) hours by this constructor.
+     * <p>
+     * For more control over the conversion process, you have two options:
+     * <ul>
+     * <li>convert the duration to an {@link Interval}, and from there obtain the period
+     * <li>specify a period type that contains precise definitions of the day and larger
+     * fields, such as UTC
+     * </ul>
+     *
+     * @param duration  the duration, in milliseconds
+     */
+Method code:
+381 |     public Period(long duration) {
+382 |         super(duration);
+383 |     }
+
+===== M0056 =====
+Signature: org.joda.time.DateTimeFieldType.dayOfWeek()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 263-265
+Documentation:
+/**
+     * Get the day of week field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+263 |     public static DateTimeFieldType dayOfWeek() {
+264 |         return DAY_OF_WEEK_TYPE;
+265 |     }
+
+===== M0057 =====
+Signature: org.joda.time.chrono.BasicChronology.getMaxMonth()
+Source: src/main/java/org/joda/time/chrono/BasicChronology.java
+Original range: 690-692
+Documentation:
+/**
+     * Gets the maximum number of months.
+     * 
+     * @return 12
+     */
+Method code:
+690 |     int getMaxMonth() {
+691 |         return 12;
+692 |     }
+
+===== M0058 =====
+Signature: org.joda.time.DateTimeZone.getID()
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 704-707
+Documentation:
+/**
+     * Gets the ID of this datetime zone.
+     * 
+     * @return the ID of this datetime zone
+     */
+Method code:
+704 |     @ToString
+705 |     public final String getID() {
+706 |         return iID;
+707 |     }
+
+===== M0059 =====
+Signature: org.joda.time.field.ImpreciseDateTimeField.ImpreciseDateTimeField(DateTimeFieldType,long)
+Source: src/main/java/org/joda/time/field/ImpreciseDateTimeField.java
+Original range: 54-58
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param type  the field type
+     * @param unitMillis  the average duration unit milliseconds
+     */
+Method code:
+54 |     public ImpreciseDateTimeField(DateTimeFieldType type, long unitMillis) {
+55 |         super(type);
+56 |         iUnitMillis = unitMillis;
+57 |         iDurationField = new LinkedDurationField(type.getDurationType());
+58 |     }
+
+===== M0060 =====
+Signature: org.joda.time.DurationFieldType.months()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 177-179
+Documentation:
+/**
+     * Get the months field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+177 |     public static DurationFieldType months() {
+178 |         return MONTHS_TYPE;
+179 |     }
+
+===== M0061 =====
+Signature: org.joda.time.field.MillisDurationField.getUnitMillis()
+Source: src/main/java/org/joda/time/field/MillisDurationField.java
+Original range: 79-81
+Documentation:
+/**
+     * Returns the amount of milliseconds per unit value of this field.
+     *
+     * @return one always
+     */
+Method code:
+79 |     public final long getUnitMillis() {
+80 |         return 1;
+81 |     }
+
+===== M0062 =====
+Signature: org.joda.time.chrono.GregorianChronology.assemble(Fields)
+Source: src/main/java/org/joda/time/chrono/GregorianChronology.java
+Original range: 190-194
+Documentation:
+
+Method code:
+190 |     protected void assemble(Fields fields) {
+191 |         if (getBase() == null) {
+192 |             super.assemble(fields);
+193 |         }
+194 |     }
+
+===== M0063 =====
+Signature: org.joda.time.Period.Period()
+Source: src/main/java/org/joda/time/Period.java
+Original range: 297-299
+Documentation:
+/**
+     * Creates a new empty period with the standard set of fields.
+     * <p>
+     * One way to initialise a period is as follows:
+     * <pre>
+     * Period = new Period().withYears(6).withMonths(3).withSeconds(23);
+     * </pre>
+     * Bear in mind that this creates four period instances in total, three of
+     * which are immediately discarded.
+     * The alterative is more efficient, but less readable:
+     * <pre>
+     * Period = new Period(6, 3, 0, 0, 0, 0, 23, 0);
+     * </pre>
+     * The following is also slightly less wasteful:
+     * <pre>
+     * Period = Period.years(6).withMonths(3).withSeconds(23);
+     * </pre>
+     */
+Method code:
+297 |     public Period() {
+298 |         super(0L, null, null);
+299 |     }
+
+===== M0064 =====
+Signature: org.joda.time.field.MillisDurationField.add(long,int)
+Source: src/main/java/org/joda/time/field/MillisDurationField.java
+Original range: 116-118
+Documentation:
+
+Method code:
+116 |     public long add(long instant, int value) {
+117 |         return FieldUtils.safeAdd(instant, value);
+118 |     }
+
+===== M0065 =====
+Signature: org.joda.time.chrono.BasicWeekyearDateTimeField.BasicWeekyearDateTimeField(BasicChronology)
+Source: src/main/java/org/joda/time/chrono/BasicWeekyearDateTimeField.java
+Original range: 43-46
+Documentation:
+/**
+     * Restricted constructor
+     */
+Method code:
+43 |     BasicWeekyearDateTimeField(BasicChronology chronology) {
+44 |         super(DateTimeFieldType.weekyear(), chronology.getAverageMillisPerYear());
+45 |         iChronology = chronology;
+46 |     }
+
+===== M0066 =====
+Signature: org.joda.time.chrono.BasicDayOfMonthDateTimeField.BasicDayOfMonthDateTimeField(BasicChronology,DurationField)
+Source: src/main/java/org/joda/time/chrono/BasicDayOfMonthDateTimeField.java
+Original range: 40-43
+Documentation:
+/**
+     * Restricted constructor.
+     */
+Method code:
+40 |     BasicDayOfMonthDateTimeField(BasicChronology chronology, DurationField days) {
+41 |         super(DateTimeFieldType.dayOfMonth(), days);
+42 |         iChronology = chronology;
+43 |     }
+
+===== M0067 =====
+Signature: org.joda.time.chrono.BasicMonthOfYearDateTimeField.getRangeDurationField()
+Source: src/main/java/org/joda/time/chrono/BasicMonthOfYearDateTimeField.java
+Original range: 308-310
+Documentation:
+//-----------------------------------------------------------------------
+Method code:
+308 |     public DurationField getRangeDurationField() {
+309 |         return iChronology.years();
+310 |     }
+
+===== M0068 =====
+Signature: org.joda.time.tz.FixedDateTimeZone.equals(Object)
+Source: src/main/java/org/joda/time/tz/FixedDateTimeZone.java
+Original range: 87-99
+Documentation:
+
+Method code:
+87 |     public boolean equals(Object obj) {
+88 |         if (this == obj) {
+89 |             return true;
+90 |         }
+91 |         if (obj instanceof FixedDateTimeZone) {
+92 |             FixedDateTimeZone other = (FixedDateTimeZone)obj;
+93 |             return
+94 |                 getID().equals(other.getID()) &&
+95 |                 iStandardOffset == other.iStandardOffset &&
+96 |                 iWallOffset == other.iWallOffset;
+97 |         }
+98 |         return false;
+99 |     }
+
+===== M0069 =====
+Signature: org.joda.time.DateTimeFieldType.weekOfWeekyear()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 290-292
+Documentation:
+/**
+     * Get the week of a week based year field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+290 |     public static DateTimeFieldType weekOfWeekyear() {
+291 |         return WEEK_OF_WEEKYEAR_TYPE;
+292 |     }
+
+===== M0070 =====
+Signature: org.joda.time.DateTimeFieldType.clockhourOfHalfday()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 244-246
+Documentation:
+/**
+     * Get the hour of am/pm (offset to 1-12) field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+244 |     public static DateTimeFieldType clockhourOfHalfday() {
+245 |         return CLOCKHOUR_OF_HALFDAY_TYPE;
+246 |     }
+
+===== M0071 =====
+Signature: org.joda.time.DateTimeFieldType.StandardDateTimeFieldType.StandardDateTimeFieldType(String,byte,DurationFieldType,DurationFieldType)
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 442-448
+Documentation:
+/**
+         * Constructor.
+         * 
+         * @param name  the name to use
+         * @param ordinal  the byte value for the oridinal index
+         * @param unitType  the unit duration type
+         * @param rangeType  the range duration type
+         */
+Method code:
+442 |         StandardDateTimeFieldType(String name, byte ordinal,
+443 |                                   DurationFieldType unitType, DurationFieldType rangeType) {
+444 |             super(name);
+445 |             iOrdinal = ordinal;
+446 |             iUnitType = unitType;
+447 |             iRangeType = rangeType;
+448 |         }
+
+===== M0072 =====
+Signature: org.joda.time.field.BaseDurationField.getType()
+Source: src/main/java/org/joda/time/field/BaseDurationField.java
+Original range: 54-56
+Documentation:
+
+Method code:
+54 |     public final DurationFieldType getType() {
+55 |         return iType;
+56 |     }
+
+===== M0073 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.openResource(String)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 194-215
+Documentation:
+/**
+     * Opens a resource from file or classpath.
+     * 
+     * @param name  the name to open
+     * @return the input stream
+     * @throws IOException if an error occurs
+     */
+Method code:
+194 |     private InputStream openResource(String name) throws IOException {
+195 |         InputStream in;
+196 |         if (iFileDir != null) {
+197 |             in = new FileInputStream(new File(iFileDir, name));
+198 |         } else {
+199 |             String path = iResourcePath.concat(name);
+200 |             if (iLoader != null) {
+201 |                 in = iLoader.getResourceAsStream(path);
+202 |             } else {
+203 |                 in = ClassLoader.getSystemResourceAsStream(path);
+204 |             }
+205 |             if (in == null) {
+206 |                 StringBuffer buf = new StringBuffer(40)
+207 |                     .append("Resource not found: \"")
+208 |                     .append(path)
+209 |                     .append("\" ClassLoader: ")
+210 |                     .append(iLoader != null ? iLoader.toString() : "system");
+211 |                 throw new IOException(buf.toString());
+212 |             }
+213 |         }
+214 |         return in;
+215 |     }
+
+===== M0074 =====
+Signature: org.joda.time.chrono.ISOChronology.withUTC()
+Source: src/main/java/org/joda/time/chrono/ISOChronology.java
+Original range: 132-134
+Documentation:
+/**
+     * Gets the Chronology in the UTC time zone.
+     * 
+     * @return the chronology in UTC
+     */
+Method code:
+132 |     public Chronology withUTC() {
+133 |         return INSTANCE_UTC;
+134 |     }
+
+===== M0075 =====
+Signature: org.joda.time.field.DecoratedDateTimeField.getWrappedField()
+Source: src/main/java/org/joda/time/field/DecoratedDateTimeField.java
+Original range: 69-71
+Documentation:
+/**
+     * Gets the wrapped date time field.
+     * 
+     * @return the wrapped DateTimeField
+     */
+Method code:
+69 |     public final DateTimeField getWrappedField() {
+70 |         return iField;
+71 |     }
+
+===== M0076 =====
+Signature: org.joda.time.DateTimeZone.getDefault()
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 132-162
+Documentation:
+/**
+     * Gets the default time zone.
+     * <p>
+     * The default time zone is derived from the system property {@code user.timezone}.
+     * If that is {@code null} or is not a valid identifier, then the value of the
+     * JDK {@code TimeZone} default is converted. If that fails, {@code UTC} is used.
+     * <p>
+     * NOTE: If the {@code java.util.TimeZone} default is updated <i>after</i> calling this
+     * method, then the change will not be picked up here.
+     * 
+     * @return the default datetime zone object
+     */
+Method code:
+132 |     public static DateTimeZone getDefault() {
+133 |         DateTimeZone zone = cDefault;
+134 |         if (zone == null) {
+135 |             synchronized(DateTimeZone.class) {
+136 |                 zone = cDefault;
+137 |                 if (zone == null) {
+138 |                     DateTimeZone temp = null;
+139 |                     try {
+140 |                         try {
+141 |                             String id = System.getProperty("user.timezone");
+142 |                             if (id != null) {  // null check avoids stack overflow
+143 |                                 temp = forID(id);
+144 |                             }
+145 |                         } catch (RuntimeException ex) {
+146 |                             // ignored
+147 |                         }
+148 |                         if (temp == null) {
+149 |                             temp = forTimeZone(TimeZone.getDefault());
+150 |                         }
+151 |                     } catch (IllegalArgumentException ex) {
+152 |                         // ignored
+153 |                     }
+154 |                     if (temp == null) {
+155 |                         temp = UTC;
+156 |                     }
+157 |                     cDefault = zone = temp;
+158 |                 }
+159 |             }
+160 |         }
+161 |         return zone;
+162 |     }
+
+===== M0077 =====
+Signature: org.joda.time.field.DecoratedDurationField.getWrappedField()
+Source: src/main/java/org/joda/time/field/DecoratedDurationField.java
+Original range: 68-70
+Documentation:
+/**
+     * Gets the wrapped duration field.
+     * 
+     * @return the wrapped DurationField
+     */
+Method code:
+68 |     public final DurationField getWrappedField() {
+69 |         return iField;
+70 |     }
+
+===== M0078 =====
+Signature: org.joda.time.Duration.Duration(long)
+Source: src/main/java/org/joda/time/Duration.java
+Original range: 175-177
+Documentation:
+/**
+     * Creates a duration from the given millisecond duration.
+     *
+     * @param duration  the duration, in milliseconds
+     */
+Method code:
+175 |     public Duration(long duration) {
+176 |         super(duration);
+177 |     }
+
+===== M0079 =====
+Signature: org.joda.time.DurationFieldType.eras()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 204-206
+Documentation:
+/**
+     * Get the eras field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+204 |     public static DurationFieldType eras() {
+205 |         return ERAS_TYPE;
+206 |     }
+
+===== M0080 =====
+Signature: org.joda.time.chrono.AssembledChronology.secondOfMinute()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 171-173
+Documentation:
+
+Method code:
+171 |     public final DateTimeField secondOfMinute() {
+172 |         return iSecondOfMinute;
+173 |     }
+
+===== M0081 =====
+Signature: org.joda.time.field.RemainderDateTimeField.RemainderDateTimeField(DividedDateTimeField,DateTimeFieldType)
+Source: src/main/java/org/joda/time/field/RemainderDateTimeField.java
+Original range: 86-90
+Documentation:
+/**
+     * Construct a RemainderDateTimeField that compliments the given
+     * DividedDateTimeField.
+     *
+     * @param dividedField  complimentary divided field, like "century()".
+     * @param type  the field type this field actually uses
+     */
+Method code:
+86 |     public RemainderDateTimeField(DividedDateTimeField dividedField, DateTimeFieldType type) {
+87 |         super(dividedField.getWrappedField(), type);
+88 |         iDivisor = dividedField.iDivisor;
+89 |         iRangeField = dividedField.iDurationField;
+90 |     }
+
+===== M0082 =====
+Signature: org.joda.time.PeriodType.equals(Object)
+Source: src/main/java/org/joda/time/PeriodType.java
+Original range: 834-843
+Documentation:
+/**
+     * Compares this type to another object.
+     * To be equal, the object must be a PeriodType with the same set of fields.
+     * 
+     * @param obj  the object to compare to
+     * @return true if equal
+     */
+Method code:
+834 |     public boolean equals(Object obj) {
+835 |         if (this == obj) {
+836 |             return true;
+837 |         }
+838 |         if (obj instanceof PeriodType == false) {
+839 |             return false;
+840 |         }
+841 |         PeriodType other = (PeriodType) obj;
+842 |         return (Arrays.equals(iTypes, other.iTypes));
+843 |     }
+
+===== M0083 =====
+Signature: org.joda.time.chrono.AssembledChronology.weekOfWeekyear()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 239-241
+Documentation:
+
+Method code:
+239 |     public final DateTimeField weekOfWeekyear() {
+240 |         return iWeekOfWeekyear;
+241 |     }
+
+===== M0084 =====
+Signature: org.joda.time.format.FormatUtils.appendPaddedInteger(StringBuffer,int,int)
+Source: src/main/java/org/joda/time/format/FormatUtils.java
+Original range: 49-92
+Documentation:
+/**
+     * Converts an integer to a string, prepended with a variable amount of '0'
+     * pad characters, and appends it to the given buffer.
+     *
+     * <p>This method is optimized for converting small values to strings.
+     *
+     * @param buf receives integer converted to a string
+     * @param value value to convert to a string
+     * @param size minumum amount of digits to append
+     */
+Method code:
+49 |     public static void appendPaddedInteger(StringBuffer buf, int value, int size) {
+50 |         if (value < 0) {
+51 |             buf.append('-');
+52 |             if (value != Integer.MIN_VALUE) {
+53 |                 value = -value;
+54 |             } else {
+55 |                 for (; size > 10; size--) {
+56 |                     buf.append('0');
+57 |                 }
+58 |                 buf.append("" + -(long)Integer.MIN_VALUE);
+59 |                 return;
+60 |             }
+61 |         }
+62 |         if (value < 10) {
+63 |             for (; size > 1; size--) {
+64 |                 buf.append('0');
+65 |             }
+66 |             buf.append((char)(value + '0'));
+67 |         } else if (value < 100) {
+68 |             for (; size > 2; size--) {
+69 |                 buf.append('0');
+70 |             }
+71 |             // Calculate value div/mod by 10 without using two expensive
+72 |             // division operations. (2 ^ 27) / 10 = 13421772. Add one to
+73 |             // value to correct rounding error.
+74 |             int d = ((value + 1) * 13421772) >> 27;
+75 |             buf.append((char) (d + '0'));
+76 |             // Append remainder by calculating (value - d * 10).
+77 |             buf.append((char) (value - (d << 3) - (d << 1) + '0'));
+78 |         } else {
+79 |             int digits;
+80 |             if (value < 1000) {
+81 |                 digits = 3;
+82 |             } else if (value < 10000) {
+83 |                 digits = 4;
+84 |             } else {
+85 |                 digits = (int)(Math.log(value) / LOG_10) + 1;
+86 |             }
+87 |             for (; size > digits; size--) {
+88 |                 buf.append('0');
+89 |             }
+90 |             buf.append(Integer.toString(value));
+91 |         }
+92 |     }
+
+===== M0085 =====
+Signature: org.joda.time.DateTimeFieldType.millisOfSecond()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 163-165
+Documentation:
+/**
+     * Get the millis of second field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+163 |     public static DateTimeFieldType millisOfSecond() {
+164 |         return MILLIS_OF_SECOND_TYPE;
+165 |     }
+
+===== M0086 =====
+Signature: org.joda.time.chrono.BaseChronology.get(ReadablePeriod,long)
+Source: src/main/java/org/joda/time/chrono/BaseChronology.java
+Original range: 275-290
+Documentation:
+/**
+     * Gets the values of a period from an interval.
+     *
+     * @param period  the period instant to use
+     * @param duration  the duration to query
+     * @return the values of the period extracted from the duration
+     */
+Method code:
+275 |     public int[] get(ReadablePeriod period, long duration) {
+276 |         int size = period.size();
+277 |         int[] values = new int[size];
+278 |         if (duration != 0) {
+279 |             long current = 0;
+280 |             for (int i = 0; i < size; i++) {
+281 |                 DurationField field = period.getFieldType(i).getField(this);
+282 |                 if (field.isPrecise()) {
+283 |                     int value = field.getDifference(duration, current);
+284 |                     current = field.add(current, value);
+285 |                     values[i] = value;
+286 |                 }
+287 |             }
+288 |         }
+289 |         return values;
+290 |     }
+
+===== M0087 =====
+Signature: org.joda.time.field.BaseDateTimeField.BaseDateTimeField(DateTimeFieldType)
+Source: src/main/java/org/joda/time/field/BaseDateTimeField.java
+Original range: 49-55
+Documentation:
+/**
+     * Constructor.
+     */
+Method code:
+49 |     protected BaseDateTimeField(DateTimeFieldType type) {
+50 |         super();
+51 |         if (type == null) {
+52 |             throw new IllegalArgumentException("The type must not be null");
+53 |         }
+54 |         iType = type;
+55 |     }
+
+===== M0088 =====
+Signature: org.joda.time.field.BaseDateTimeField.getType()
+Source: src/main/java/org/joda/time/field/BaseDateTimeField.java
+Original range: 57-59
+Documentation:
+
+Method code:
+57 |     public final DateTimeFieldType getType() {
+58 |         return iType;
+59 |     }
+
+===== M0089 =====
+Signature: org.joda.time.chrono.BasicMonthOfYearDateTimeField.BasicMonthOfYearDateTimeField(BasicChronology,int)
+Source: src/main/java/org/joda/time/chrono/BasicMonthOfYearDateTimeField.java
+Original range: 50-55
+Documentation:
+/**
+     * Restricted constructor.
+     * 
+     * @param leapMonth the month of year that leaps
+     */
+Method code:
+50 |     BasicMonthOfYearDateTimeField(BasicChronology chronology, int leapMonth) {
+51 |         super(DateTimeFieldType.monthOfYear(), chronology.getAverageMillisPerMonth());
+52 |         iChronology = chronology;
+53 |         iMax = iChronology.getMaxMonth();
+54 |         iLeapMonth = leapMonth;
+55 |     }
+
+===== M0090 =====
+Signature: org.joda.time.DateTimeZone.getDefaultProvider()
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 442-474
+Documentation:
+/**
+     * Gets the default zone provider.
+     * <p>
+     * Tries the system property <code>org.joda.time.DateTimeZone.Provider</code>.
+     * Then tries a <code>ZoneInfoProvider</code> using the data in <code>org/joda/time/tz/data</code>.
+     * Then uses <code>UTCProvider</code>.
+     * 
+     * @return the default name provider
+     */
+Method code:
+442 |     private static Provider getDefaultProvider() {
+443 |         Provider provider = null;
+444 | 
+445 |         try {
+446 |             String providerClass =
+447 |                 System.getProperty("org.joda.time.DateTimeZone.Provider");
+448 |             if (providerClass != null) {
+449 |                 try {
+450 |                     provider = (Provider) Class.forName(providerClass).newInstance();
+451 |                 } catch (Exception ex) {
+452 |                     Thread thread = Thread.currentThread();
+453 |                     thread.getThreadGroup().uncaughtException(thread, ex);
+454 |                 }
+455 |             }
+456 |         } catch (SecurityException ex) {
+457 |             // ignored
+458 |         }
+459 | 
+460 |         if (provider == null) {
+461 |             try {
+462 |                 provider = new ZoneInfoProvider("org/joda/time/tz/data");
+463 |             } catch (Exception ex) {
+464 |                 Thread thread = Thread.currentThread();
+465 |                 thread.getThreadGroup().uncaughtException(thread, ex);
+466 |             }
+467 |         }
+468 | 
+469 |         if (provider == null) {
+470 |             provider = new UTCProvider();
+471 |         }
+472 | 
+473 |         return provider;
+474 |     }
+
+===== M0091 =====
+Signature: org.joda.time.chrono.AssembledChronology.minutes()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 179-181
+Documentation:
+
+Method code:
+179 |     public final DurationField minutes() {
+180 |         return iMinutes;
+181 |     }
+
+===== M0092 =====
+Signature: org.joda.time.field.RemainderDateTimeField.RemainderDateTimeField(DividedDateTimeField)
+Source: src/main/java/org/joda/time/field/RemainderDateTimeField.java
+Original range: 75-77
+Documentation:
+/**
+     * Construct a RemainderDateTimeField that compliments the given
+     * DividedDateTimeField.
+     *
+     * @param dividedField  complimentary divided field, like "century()".
+     */
+Method code:
+75 |     public RemainderDateTimeField(DividedDateTimeField dividedField) {
+76 |         this(dividedField, dividedField.getType());
+77 |     }
+
+===== M0093 =====
+Signature: org.joda.time.tz.DefaultNameProvider.createCache()
+Source: src/main/java/org/joda/time/tz/DefaultNameProvider.java
+Original range: 86-88
+Documentation:
+
+Method code:
+86 |     private HashMap createCache() {
+87 |         return new HashMap(7);
+88 |     }
+
+===== M0094 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.DSTZone.DSTZone(String,int,Recurrence,Recurrence)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 1174-1180
+Documentation:
+
+Method code:
+1174 |         DSTZone(String id, int standardOffset,
+1175 |                 Recurrence startRecurrence, Recurrence endRecurrence) {
+1176 |             super(id);
+1177 |             iStandardOffset = standardOffset;
+1178 |             iStartRecurrence = startRecurrence;
+1179 |             iEndRecurrence = endRecurrence;
+1180 |         }
+
+===== M0095 =====
+Signature: org.joda.time.DateTimeFieldType.hourOfHalfday()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 235-237
+Documentation:
+/**
+     * Get the hour of am/pm (0-11) field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+235 |     public static DateTimeFieldType hourOfHalfday() {
+236 |         return HOUR_OF_HALFDAY_TYPE;
+237 |     }
+
+===== M0096 =====
+Signature: org.joda.time.field.ScaledDurationField.ScaledDurationField(DurationField,DurationFieldType,int)
+Source: src/main/java/org/joda/time/field/ScaledDurationField.java
+Original range: 46-52
+Documentation:
+/**
+     * Constructor
+     * 
+     * @param field  the field to wrap, like "year()".
+     * @param type  the type this field will actually use
+     * @param scalar  scalar, such as 100 years in a century
+     * @throws IllegalArgumentException if scalar is zero or one.
+     */
+Method code:
+46 |     public ScaledDurationField(DurationField field, DurationFieldType type, int scalar) {
+47 |         super(field, type);
+48 |         if (scalar == 0 || scalar == 1) {
+49 |             throw new IllegalArgumentException("The scalar must not be 0 or 1");
+50 |         }
+51 |         iScalar = scalar;
+52 |     }
+
+===== M0097 =====
+Signature: org.joda.time.base.AbstractDuration.AbstractDuration()
+Source: src/main/java/org/joda/time/base/AbstractDuration.java
+Original range: 43-45
+Documentation:
+/**
+     * Constructor.
+     */
+Method code:
+43 |     protected AbstractDuration() {
+44 |         super();
+45 |     }
+
+===== M0098 =====
+Signature: org.joda.time.chrono.BaseChronology.eras()
+Source: src/main/java/org/joda/time/chrono/BaseChronology.java
+Original range: 659-661
+Documentation:
+/**
+     * Get the eras duration field for this chronology.
+     * 
+     * @return DurationField or UnsupportedDurationField if unsupported
+     */
+Method code:
+659 |     public DurationField eras() {
+660 |         return UnsupportedDurationField.getInstance(DurationFieldType.eras());
+661 |     }
+
+===== M0099 =====
+Signature: org.joda.time.field.BaseDateTimeField.getLeapDurationField()
+Source: src/main/java/org/joda/time/field/BaseDateTimeField.java
+Original range: 725-727
+Documentation:
+/**
+     * If this field were to leap, then it would be in units described by the
+     * returned duration. If this field doesn't ever leap, null is returned.
+     * <p>
+     * This implementation returns null.
+     */
+Method code:
+725 |     public DurationField getLeapDurationField() {
+726 |         return null;
+727 |     }
+
+===== M0100 =====
+Signature: org.joda.time.chrono.ZonedChronology.ZonedDurationField.getOffsetToAdd(long)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 343-351
+Documentation:
+
+Method code:
+343 |         private int getOffsetToAdd(long instant) {
+344 |             int offset = this.iZone.getOffset(instant);
+345 |             long sum = instant + offset;
+346 |             // If there is a sign change, but the two values have the same sign...
+347 |             if ((instant ^ sum) < 0 && (instant ^ offset) >= 0) {
+348 |                 throw new ArithmeticException("Adding time zone offset caused overflow");
+349 |             }
+350 |             return offset;
+351 |         }
+
+===== M0101 =====
+Signature: org.joda.time.DurationFieldType.years()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 186-188
+Documentation:
+/**
+     * Get the years field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+186 |     public static DurationFieldType years() {
+187 |         return YEARS_TYPE;
+188 |     }
+
+===== M0102 =====
+Signature: org.joda.time.field.OffsetDateTimeField.getMinimumValue()
+Source: src/main/java/org/joda/time/field/OffsetDateTimeField.java
+Original range: 173-175
+Documentation:
+/**
+     * Get the minimum value for the field.
+     * 
+     * @return the minimum value
+     */
+Method code:
+173 |     public int getMinimumValue() {
+174 |         return iMin;
+175 |     }
+
+===== M0103 =====
+Signature: org.joda.time.base.BaseDuration.BaseDuration(long)
+Source: src/main/java/org/joda/time/base/BaseDuration.java
+Original range: 60-63
+Documentation:
+/**
+     * Creates a duration from the given millisecond duration.
+     *
+     * @param duration  the duration, in milliseconds
+     */
+Method code:
+60 |     protected BaseDuration(long duration) {
+61 |         super();
+62 |         iMillis = duration;
+63 |     }
+
+===== M0104 =====
+Signature: org.joda.time.PeriodType.PeriodType(String,DurationFieldType[],int[])
+Source: src/main/java/org/joda/time/PeriodType.java
+Original range: 594-599
+Documentation:
+/**
+     * Constructor.
+     *
+     * @param name  the name
+     * @param types  the types
+     * @param indices  the indices
+     */
+Method code:
+594 |     protected PeriodType(String name, DurationFieldType[] types, int[] indices) {
+595 |         super();
+596 |         iName = name;
+597 |         iTypes = types;
+598 |         iIndices = indices;
+599 |     }
+
+===== M0105 =====
+Signature: org.joda.time.field.OffsetDateTimeField.getMaximumValue()
+Source: src/main/java/org/joda/time/field/OffsetDateTimeField.java
+Original range: 182-184
+Documentation:
+/**
+     * Get the maximum value for the field.
+     * 
+     * @return the maximum value
+     */
+Method code:
+182 |     public int getMaximumValue() {
+183 |         return iMax;
+184 |     }
+
+===== M0106 =====
+Signature: org.joda.time.field.UnsupportedDurationField.getInstance(DurationFieldType)
+Source: src/main/java/org/joda/time/field/UnsupportedDurationField.java
+Original range: 47-60
+Documentation:
+/**
+     * Gets an instance of UnsupportedDurationField for a specific named field.
+     * The returned instance is cached.
+     * 
+     * @param type  the type to obtain
+     * @return the instance
+     */
+Method code:
+47 |     public static synchronized UnsupportedDurationField getInstance(DurationFieldType type) {
+48 |         UnsupportedDurationField field;
+49 |         if (cCache == null) {
+50 |             cCache = new HashMap<DurationFieldType, UnsupportedDurationField>(7);
+51 |             field = null;
+52 |         } else {
+53 |             field = cCache.get(type);
+54 |         }
+55 |         if (field == null) {
+56 |             field = new UnsupportedDurationField(type);
+57 |             cCache.put(type, field);
+58 |         }
+59 |         return field;
+60 |     }
+
+===== M0107 =====
+Signature: org.joda.time.chrono.BasicYearDateTimeField.getMaximumValue()
+Source: src/main/java/org/joda/time/chrono/BasicYearDateTimeField.java
+Original range: 118-120
+Documentation:
+
+Method code:
+118 |     public int getMaximumValue() {
+119 |         return iChronology.getMaxYear();
+120 |     }
+
+===== M0108 =====
+Signature: org.joda.time.DateTimeFieldType.year()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 326-328
+Documentation:
+/**
+     * Get the year field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+326 |     public static DateTimeFieldType year() {
+327 |         return YEAR_TYPE;
+328 |     }
+
+===== M0109 =====
+Signature: org.joda.time.base.BasePeriod.size()
+Source: src/main/java/org/joda/time/base/BasePeriod.java
+Original range: 312-314
+Documentation:
+/**
+     * Gets the number of fields that this period supports.
+     *
+     * @return the number of fields supported
+     */
+Method code:
+312 |     public int size() {
+313 |         return iType.size();
+314 |     }
+
+===== M0110 =====
+Signature: org.joda.time.field.FieldUtils.safeAdd(long,long)
+Source: src/main/java/org/joda/time/field/FieldUtils.java
+Original range: 81-89
+Documentation:
+/**
+     * Add two values throwing an exception if overflow occurs.
+     * 
+     * @param val1  the first value
+     * @param val2  the second value
+     * @return the new total
+     * @throws ArithmeticException if the value is too big or too small
+     */
+Method code:
+81 |     public static long safeAdd(long val1, long val2) {
+82 |         long sum = val1 + val2;
+83 |         // If there is a sign change, but the two values have the same sign...
+84 |         if ((val1 ^ sum) < 0 && (val1 ^ val2) >= 0) {
+85 |             throw new ArithmeticException
+86 |                 ("The calculation caused an overflow: " + val1 + " + " + val2);
+87 |         }
+88 |         return sum;
+89 |     }
+
+===== M0111 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.Recurrence.readFrom(DataInput)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 739-741
+Documentation:
+
+Method code:
+739 |         static Recurrence readFrom(DataInput in) throws IOException {
+740 |             return new Recurrence(OfYear.readFrom(in), in.readUTF(), (int)readMillis(in));
+741 |         }
+
+===== M0112 =====
+Signature: org.joda.time.tz.FixedDateTimeZone.isFixed()
+Source: src/main/java/org/joda/time/tz/FixedDateTimeZone.java
+Original range: 60-62
+Documentation:
+
+Method code:
+60 |     public boolean isFixed() {
+61 |         return true;
+62 |     }
+
+===== M0113 =====
+Signature: org.joda.time.chrono.AssembledChronology.days()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 219-221
+Documentation:
+
+Method code:
+219 |     public final DurationField days() {
+220 |         return iDays;
+221 |     }
+
+===== M0114 =====
+Signature: org.joda.time.field.PreciseDurationDateTimeField.getUnitMillis()
+Source: src/main/java/org/joda/time/field/PreciseDurationDateTimeField.java
+Original range: 153-155
+Documentation:
+
+Method code:
+153 |     public final long getUnitMillis() {
+154 |         return iUnitMillis;
+155 |     }
+
+===== M0115 =====
+Signature: org.joda.time.DateTimeUtils.FixedMillisProvider.FixedMillisProvider(long)
+Source: src/main/java/org/joda/time/DateTimeUtils.java
+Original range: 414-416
+Documentation:
+/**
+         * Constructor.
+         * @param offsetMillis  the millis offset
+         */
+Method code:
+414 |         FixedMillisProvider(long fixedMillis) {
+415 |             iMillis = fixedMillis;
+416 |         }
+
+===== M0116 =====
+Signature: org.joda.time.DateTimeFieldType.secondOfMinute()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 181-183
+Documentation:
+/**
+     * Get the second of minute field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+181 |     public static DateTimeFieldType secondOfMinute() {
+182 |         return SECOND_OF_MINUTE_TYPE;
+183 |     }
+
+===== M0117 =====
+Signature: org.joda.time.Period.getMonths()
+Source: src/main/java/org/joda/time/Period.java
+Original range: 712-714
+Documentation:
+/**
+     * Gets the months field part of the period.
+     * 
+     * @return the number of months in the period, zero if unsupported
+     */
+Method code:
+712 |     public int getMonths() {
+713 |         return getPeriodType().getIndexedField(this, PeriodType.MONTH_INDEX);
+714 |     }
+
+===== M0118 =====
+Signature: org.joda.time.chrono.GregorianChronology.getAverageMillisPerMonth()
+Source: src/main/java/org/joda/time/chrono/GregorianChronology.java
+Original range: 236-238
+Documentation:
+
+Method code:
+236 |     long getAverageMillisPerMonth() {
+237 |         return MILLIS_PER_MONTH;
+238 |     }
+
+===== M0119 =====
+Signature: org.joda.time.base.BasePeriod.BasePeriod(long)
+Source: src/main/java/org/joda/time/base/BasePeriod.java
+Original range: 221-224
+Documentation:
+/**
+     * Creates a period from the given millisecond duration with the standard period type
+     * and ISO rules, ensuring that the calculation is performed with the time-only period type.
+     * <p>
+     * The calculation uses the hour, minute, second and millisecond fields.
+     *
+     * @param duration  the duration, in milliseconds
+     */
+Method code:
+221 |     protected BasePeriod(long duration) {
+222 |         this(duration, null, null);
+223 |         // bug [3264409]
+224 |     }
+
+===== M0120 =====
+Signature: org.joda.time.chrono.GJMonthOfYearDateTimeField.GJMonthOfYearDateTimeField(BasicChronology)
+Source: src/main/java/org/joda/time/chrono/GJMonthOfYearDateTimeField.java
+Original range: 36-38
+Documentation:
+/**
+     * Restricted constructor
+     */
+Method code:
+36 |     GJMonthOfYearDateTimeField(BasicChronology chronology) {
+37 |         super(chronology, 2);
+38 |     }
+
+===== M0121 =====
+Signature: org.joda.time.chrono.BasicDayOfYearDateTimeField.BasicDayOfYearDateTimeField(BasicChronology,DurationField)
+Source: src/main/java/org/joda/time/chrono/BasicDayOfYearDateTimeField.java
+Original range: 40-43
+Documentation:
+/**
+     * Restricted constructor
+     */
+Method code:
+40 |     BasicDayOfYearDateTimeField(BasicChronology chronology, DurationField days) {
+41 |         super(DateTimeFieldType.dayOfYear(), days);
+42 |         iChronology = chronology;
+43 |     }
+
+===== M0122 =====
+Signature: org.joda.time.chrono.GregorianChronology.getInstance(DateTimeZone,int)
+Source: src/main/java/org/joda/time/chrono/GregorianChronology.java
+Original range: 110-139
+Documentation:
+/**
+     * Gets an instance of the GregorianChronology in the given time zone.
+     * 
+     * @param zone  the time zone to get the chronology in, null is default
+     * @param minDaysInFirstWeek  minimum number of days in first week of the year; default is 4
+     * @return a chronology in the specified time zone
+     */
+Method code:
+110 |     public static GregorianChronology getInstance(DateTimeZone zone, int minDaysInFirstWeek) {
+111 |         if (zone == null) {
+112 |             zone = DateTimeZone.getDefault();
+113 |         }
+114 |         GregorianChronology chrono;
+115 |         synchronized (cCache) {
+116 |             GregorianChronology[] chronos = cCache.get(zone);
+117 |             if (chronos == null) {
+118 |                 chronos = new GregorianChronology[7];
+119 |                 cCache.put(zone, chronos);
+120 |             }
+121 |             try {
+122 |                 chrono = chronos[minDaysInFirstWeek - 1];
+123 |             } catch (ArrayIndexOutOfBoundsException e) {
+124 |                 throw new IllegalArgumentException
+125 |                     ("Invalid min days in first week: " + minDaysInFirstWeek);
+126 |             }
+127 |             if (chrono == null) {
+128 |                 if (zone == DateTimeZone.UTC) {
+129 |                     chrono = new GregorianChronology(null, null, minDaysInFirstWeek);
+130 |                 } else {
+131 |                     chrono = getInstance(DateTimeZone.UTC, minDaysInFirstWeek);
+132 |                     chrono = new GregorianChronology
+133 |                         (ZonedChronology.getInstance(chrono, zone), null, minDaysInFirstWeek);
+134 |                 }
+135 |                 chronos[minDaysInFirstWeek - 1] = chrono;
+136 |             }
+137 |         }
+138 |         return chrono;
+139 |     }
+
+===== M0123 =====
+Signature: org.joda.time.chrono.BasicWeekyearDateTimeField.getLeapDurationField()
+Source: src/main/java/org/joda/time/chrono/BasicWeekyearDateTimeField.java
+Original range: 219-221
+Documentation:
+
+Method code:
+219 |     public DurationField getLeapDurationField() {
+220 |         return iChronology.weeks();
+221 |     }
+
+===== M0124 =====
+Signature: org.joda.time.field.FieldUtils.safeSubtract(long,long)
+Source: src/main/java/org/joda/time/field/FieldUtils.java
+Original range: 99-107
+Documentation:
+/**
+     * Subtracts two values throwing an exception if overflow occurs.
+     * 
+     * @param val1  the first value, to be taken away from
+     * @param val2  the second value, the amount to take away
+     * @return the new total
+     * @throws ArithmeticException if the value is too big or too small
+     */
+Method code:
+99 |     public static long safeSubtract(long val1, long val2) {
+100 |         long diff = val1 - val2;
+101 |         // If there is a sign change, but the two values have different signs...
+102 |         if ((val1 ^ diff) < 0 && (val1 ^ val2) < 0) {
+103 |             throw new ArithmeticException
+104 |                 ("The calculation caused an overflow: " + val1 + " - " + val2);
+105 |         }
+106 |         return diff;
+107 |     }
+
+===== M0125 =====
+Signature: org.joda.time.chrono.GJEraDateTimeField.getDurationField()
+Source: src/main/java/org/joda/time/chrono/GJEraDateTimeField.java
+Original range: 126-128
+Documentation:
+
+Method code:
+126 |     public DurationField getDurationField() {
+127 |         return UnsupportedDurationField.getInstance(DurationFieldType.eras());
+128 |     }
+
+===== M0126 =====
+Signature: org.joda.time.field.ImpreciseDateTimeField.LinkedDurationField.LinkedDurationField(DurationFieldType)
+Source: src/main/java/org/joda/time/field/ImpreciseDateTimeField.java
+Original range: 151-153
+Documentation:
+
+Method code:
+151 |         LinkedDurationField(DurationFieldType type) {
+152 |             super(type);
+153 |         }
+
+===== M0127 =====
+Signature: org.joda.time.chrono.AssembledChronology.year()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 267-269
+Documentation:
+
+Method code:
+267 |     public final DateTimeField year() {
+268 |         return iYear;
+269 |     }
+
+===== M0128 =====
+Signature: org.joda.time.chrono.AssembledChronology.millisOfDay()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 163-165
+Documentation:
+
+Method code:
+163 |     public final DateTimeField millisOfDay() {
+164 |         return iMillisOfDay;
+165 |     }
+
+===== M0129 =====
+Signature: org.joda.time.field.PreciseDurationField.getUnitMillis()
+Source: src/main/java/org/joda/time/field/PreciseDurationField.java
+Original range: 62-64
+Documentation:
+/**
+     * Returns the amount of milliseconds per unit value of this field.
+     *
+     * @return the unit size of this field, in milliseconds
+     */
+Method code:
+62 |     public final long getUnitMillis() {
+63 |         return iUnitMillis;
+64 |     }
+
+===== M0130 =====
+Signature: org.joda.time.DateTimeZone.forOffsetHours(int)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 236-238
+Documentation:
+/**
+     * Gets a time zone instance for the specified offset to UTC in hours.
+     * This method assumes standard length hours.
+     * <p>
+     * This factory is a convenient way of constructing zones with a fixed offset.
+     * 
+     * @param hoursOffset  the offset in hours from UTC
+     * @return the DateTimeZone object for the offset
+     * @throws IllegalArgumentException if the offset is too large or too small
+     */
+Method code:
+236 |     public static DateTimeZone forOffsetHours(int hoursOffset) throws IllegalArgumentException {
+237 |         return forOffsetHoursMinutes(hoursOffset, 0);
+238 |     }
+
+===== M0131 =====
+Signature: org.joda.time.chrono.ISOChronology.getInstance(DateTimeZone)
+Source: src/main/java/org/joda/time/chrono/ISOChronology.java
+Original range: 95-113
+Documentation:
+/**
+     * Gets an instance of the ISOChronology in the given time zone.
+     * 
+     * @param zone  the time zone to get the chronology in, null is default
+     * @return a chronology in the specified time zone
+     */
+Method code:
+95 |     public static ISOChronology getInstance(DateTimeZone zone) {
+96 |         if (zone == null) {
+97 |             zone = DateTimeZone.getDefault();
+98 |         }
+99 |         int index = System.identityHashCode(zone) & (FAST_CACHE_SIZE - 1);
+100 |         ISOChronology chrono = cFastCache[index];
+101 |         if (chrono != null && chrono.getZone() == zone) {
+102 |             return chrono;
+103 |         }
+104 |         synchronized (cCache) {
+105 |             chrono = cCache.get(zone);
+106 |             if (chrono == null) {
+107 |                 chrono = new ISOChronology(ZonedChronology.getInstance(INSTANCE_UTC, zone));
+108 |                 cCache.put(zone, chrono);
+109 |             }
+110 |         }
+111 |         cFastCache[index] = chrono;
+112 |         return chrono;
+113 |     }
+
+===== M0132 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.PrecalculatedZone.readFrom(DataInput,String)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 1339-1377
+Documentation:
+
+Method code:
+1339 |         static PrecalculatedZone readFrom(DataInput in, String id) throws IOException {
+1340 |             // Read string pool.
+1341 |             int poolSize = in.readUnsignedShort();
+1342 |             String[] pool = new String[poolSize];
+1343 |             for (int i=0; i<poolSize; i++) {
+1344 |                 pool[i] = in.readUTF();
+1345 |             }
+1346 | 
+1347 |             int size = in.readInt();
+1348 |             long[] transitions = new long[size];
+1349 |             int[] wallOffsets = new int[size];
+1350 |             int[] standardOffsets = new int[size];
+1351 |             String[] nameKeys = new String[size];
+1352 |             
+1353 |             for (int i=0; i<size; i++) {
+1354 |                 transitions[i] = readMillis(in);
+1355 |                 wallOffsets[i] = (int)readMillis(in);
+1356 |                 standardOffsets[i] = (int)readMillis(in);
+1357 |                 try {
+1358 |                     int index;
+1359 |                     if (poolSize < 256) {
+1360 |                         index = in.readUnsignedByte();
+1361 |                     } else {
+1362 |                         index = in.readUnsignedShort();
+1363 |                     }
+1364 |                     nameKeys[i] = pool[index];
+1365 |                 } catch (ArrayIndexOutOfBoundsException e) {
+1366 |                     throw new IOException("Invalid encoding");
+1367 |                 }
+1368 |             }
+1369 | 
+1370 |             DSTZone tailZone = null;
+1371 |             if (in.readBoolean()) {
+1372 |                 tailZone = DSTZone.readFrom(in, id);
+1373 |             }
+1374 | 
+1375 |             return new PrecalculatedZone
+1376 |                 (id, transitions, wallOffsets, standardOffsets, nameKeys, tailZone);
+1377 |         }
+
+===== M0133 =====
+Signature: org.joda.time.chrono.ZonedChronology.getInstance(Chronology,DateTimeZone)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 55-67
+Documentation:
+/**
+     * Create a ZonedChronology for any chronology, overriding any time zone it
+     * may already have.
+     *
+     * @param base base chronology to wrap
+     * @param zone the time zone
+     * @throws IllegalArgumentException if chronology or time zone is null
+     */
+Method code:
+55 |     public static ZonedChronology getInstance(Chronology base, DateTimeZone zone) {
+56 |         if (base == null) {
+57 |             throw new IllegalArgumentException("Must supply a chronology");
+58 |         }
+59 |         base = base.withUTC();
+60 |         if (base == null) {
+61 |             throw new IllegalArgumentException("UTC chronology must not be null");
+62 |         }
+63 |         if (zone == null) {
+64 |             throw new IllegalArgumentException("DateTimeZone must not be null");
+65 |         }
+66 |         return new ZonedChronology(base, zone);
+67 |     }
+
+===== M0134 =====
+Signature: org.joda.time.chrono.AssembledChronology.Fields.Fields()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 436-437
+Documentation:
+
+Method code:
+436 |         Fields() {
+437 |         }
+
+===== M0135 =====
+Signature: org.joda.time.DateTimeFieldType.millisOfDay()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 172-174
+Documentation:
+/**
+     * Get the millis of day field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+172 |     public static DateTimeFieldType millisOfDay() {
+173 |         return MILLIS_OF_DAY_TYPE;
+174 |     }
+
+===== M0136 =====
+Signature: org.joda.time.DateTimeZone.getDefaultNameProvider()
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 528-549
+Documentation:
+/**
+     * Gets the default name provider.
+     * <p>
+     * Tries the system property <code>org.joda.time.DateTimeZone.NameProvider</code>.
+     * Then uses <code>DefaultNameProvider</code>.
+     * 
+     * @return the default name provider
+     */
+Method code:
+528 |     private static NameProvider getDefaultNameProvider() {
+529 |         NameProvider nameProvider = null;
+530 |         try {
+531 |             String providerClass = System.getProperty("org.joda.time.DateTimeZone.NameProvider");
+532 |             if (providerClass != null) {
+533 |                 try {
+534 |                     nameProvider = (NameProvider) Class.forName(providerClass).newInstance();
+535 |                 } catch (Exception ex) {
+536 |                     Thread thread = Thread.currentThread();
+537 |                     thread.getThreadGroup().uncaughtException(thread, ex);
+538 |                 }
+539 |             }
+540 |         } catch (SecurityException ex) {
+541 |             // ignore
+542 |         }
+543 | 
+544 |         if (nameProvider == null) {
+545 |             nameProvider = new DefaultNameProvider();
+546 |         }
+547 | 
+548 |         return nameProvider;
+549 |     }
+
+===== M0137 =====
+Signature: org.joda.time.field.PreciseDurationDateTimeField.PreciseDurationDateTimeField(DateTimeFieldType,DurationField)
+Source: src/main/java/org/joda/time/field/PreciseDurationDateTimeField.java
+Original range: 47-60
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param type  the field type
+     * @param unit  precise unit duration, like "days()".
+     * @throws IllegalArgumentException if duration field is imprecise
+     * @throws IllegalArgumentException if unit milliseconds is less than one
+     */
+Method code:
+47 |     public PreciseDurationDateTimeField(DateTimeFieldType type, DurationField unit) {
+48 |         super(type);
+49 | 
+50 |         if (!unit.isPrecise()) {
+51 |             throw new IllegalArgumentException("Unit duration field must be precise");
+52 |         }
+53 | 
+54 |         iUnitMillis = unit.getUnitMillis();
+55 |         if (iUnitMillis < 1) {
+56 |             throw new IllegalArgumentException("The unit milliseconds must be at least 1");
+57 |         }
+58 | 
+59 |         iUnitField = unit;
+60 |     }
+
+===== M0138 =====
+Signature: org.joda.time.field.FieldUtils.safeMultiply(int,int)
+Source: src/main/java/org/joda/time/field/FieldUtils.java
+Original range: 118-125
+Documentation:
+/**
+     * Multiply two values throwing an exception if overflow occurs.
+     * 
+     * @param val1  the first value
+     * @param val2  the second value
+     * @return the new total
+     * @throws ArithmeticException if the value is too big or too small
+     * @since 1.2
+     */
+Method code:
+118 |     public static int safeMultiply(int val1, int val2) {
+119 |         long total = (long) val1 * (long) val2;
+120 |         if (total < Integer.MIN_VALUE || total > Integer.MAX_VALUE) {
+121 |             throw new ArithmeticException
+122 |                 ("The calculation caused an overflow: " + val1 + " * " + val2);
+123 |         }
+124 |         return (int) total;
+125 |     }
+
+===== M0139 =====
+Signature: org.joda.time.chrono.GregorianChronology.GregorianChronology(Chronology,Object,int)
+Source: src/main/java/org/joda/time/chrono/GregorianChronology.java
+Original range: 147-149
+Documentation:
+/**
+     * Restricted constructor
+     */
+Method code:
+147 |     private GregorianChronology(Chronology base, Object param, int minDaysInFirstWeek) {
+148 |         super(base, param, minDaysInFirstWeek);
+149 |     }
+
+===== M0140 =====
+Signature: org.joda.time.field.OffsetDateTimeField.OffsetDateTimeField(DateTimeField,int)
+Source: src/main/java/org/joda/time/field/OffsetDateTimeField.java
+Original range: 45-47
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param field  the field to wrap, like "year()".
+     * @param offset  offset to add to field values
+     * @throws IllegalArgumentException if offset is zero
+     */
+Method code:
+45 |     public OffsetDateTimeField(DateTimeField field, int offset) {
+46 |         this(field, (field == null ? null : field.getType()), offset, Integer.MIN_VALUE, Integer.MAX_VALUE);
+47 |     }
+
+===== M0141 =====
+Signature: org.joda.time.field.BaseDurationField.getDifference(long,long)
+Source: src/main/java/org/joda/time/field/BaseDurationField.java
+Original range: 140-142
+Documentation:
+//------------------------------------------------------------------------
+Method code:
+140 |     public int getDifference(long minuendInstant, long subtrahendInstant) {
+141 |         return FieldUtils.safeToInt(getDifferenceAsLong(minuendInstant, subtrahendInstant));
+142 |     }
+
+===== M0142 =====
+Signature: org.joda.time.chrono.BasicWeekOfWeekyearDateTimeField.BasicWeekOfWeekyearDateTimeField(BasicChronology,DurationField)
+Source: src/main/java/org/joda/time/chrono/BasicWeekOfWeekyearDateTimeField.java
+Original range: 41-44
+Documentation:
+/**
+     * Restricted constructor
+     */
+Method code:
+41 |     BasicWeekOfWeekyearDateTimeField(BasicChronology chronology, DurationField weeks) {
+42 |         super(DateTimeFieldType.weekOfWeekyear(), weeks);
+43 |         iChronology = chronology;
+44 |     }
+
+===== M0143 =====
+Signature: org.joda.time.Period.getYears()
+Source: src/main/java/org/joda/time/Period.java
+Original range: 703-705
+Documentation:
+/**
+     * Gets the years field part of the period.
+     * 
+     * @return the number of years in the period, zero if unsupported
+     */
+Method code:
+703 |     public int getYears() {
+704 |         return getPeriodType().getIndexedField(this, PeriodType.YEAR_INDEX);
+705 |     }
+
+===== M0144 =====
+Signature: org.joda.time.field.MillisDurationField.isPrecise()
+Source: src/main/java/org/joda/time/field/MillisDurationField.java
+Original range: 70-72
+Documentation:
+/**
+     * Returns true as this field is precise.
+     * 
+     * @return true always
+     */
+Method code:
+70 |     public final boolean isPrecise() {
+71 |         return true;
+72 |     }
+
+===== M0145 =====
+Signature: org.joda.time.chrono.AssembledChronology.getZone()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 105-111
+Documentation:
+
+Method code:
+105 |     public DateTimeZone getZone() {
+106 |         Chronology base;
+107 |         if ((base = iBase) != null) {
+108 |             return base.getZone();
+109 |         }
+110 |         return null;
+111 |     }
+
+===== M0146 =====
+Signature: org.joda.time.tz.CachedDateTimeZone.CachedDateTimeZone(DateTimeZone)
+Source: src/main/java/org/joda/time/tz/CachedDateTimeZone.java
+Original range: 86-90
+Documentation:
+
+Method code:
+86 |     private CachedDateTimeZone(DateTimeZone zone) {
+87 |         super(zone.getID());
+88 |         iZone = zone;
+89 |         iInfoCache = new Info[cInfoCacheMask + 1];
+90 |     }
+
+===== M0147 =====
+Signature: org.joda.time.chrono.ISOChronology.ISOChronology(Chronology)
+Source: src/main/java/org/joda/time/chrono/ISOChronology.java
+Original range: 121-123
+Documentation:
+/**
+     * Restricted constructor
+     */
+Method code:
+121 |     private ISOChronology(Chronology base) {
+122 |         super(base, null);
+123 |     }
+
+===== M0148 =====
+Signature: org.joda.time.DateTimeFieldType.halfdayOfDay()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 253-255
+Documentation:
+/**
+     * Get the AM(0) PM(1) field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+253 |     public static DateTimeFieldType halfdayOfDay() {
+254 |         return HALFDAY_OF_DAY_TYPE;
+255 |     }
+
+===== M0149 =====
+Signature: org.joda.time.field.RemainderDateTimeField.getRangeDurationField()
+Source: src/main/java/org/joda/time/field/RemainderDateTimeField.java
+Original range: 138-140
+Documentation:
+/**
+     * Returns a scaled version of the wrapped field's unit duration field.
+     */
+Method code:
+138 |     public DurationField getRangeDurationField() {
+139 |         return iRangeField;
+140 |     }
+
+===== M0150 =====
+Signature: org.joda.time.PeriodType.size()
+Source: src/main/java/org/joda/time/PeriodType.java
+Original range: 616-618
+Documentation:
+/**
+     * Gets the number of fields in the period type.
+     * 
+     * @return the number of fields
+     */
+Method code:
+616 |     public int size() {
+617 |         return iTypes.length;
+618 |     }
+
+===== M0151 =====
+Signature: org.joda.time.DateTimeFieldType.minuteOfDay()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 208-210
+Documentation:
+/**
+     * Get the minute of day field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+208 |     public static DateTimeFieldType minuteOfDay() {
+209 |         return MINUTE_OF_DAY_TYPE;
+210 |     }
+
+===== M0152 =====
+Signature: org.joda.time.field.ImpreciseDateTimeField.getDurationField()
+Source: src/main/java/org/joda/time/field/ImpreciseDateTimeField.java
+Original range: 136-138
+Documentation:
+
+Method code:
+136 |     public final DurationField getDurationField() {
+137 |         return iDurationField;
+138 |     }
+
+===== M0153 =====
+Signature: org.joda.time.DateTimeZone.forOffsetMillis(int)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 281-284
+Documentation:
+/**
+     * Gets a time zone instance for the specified offset to UTC in milliseconds.
+     *
+     * @param millisOffset  the offset in millis from UTC
+     * @return the DateTimeZone object for the offset
+     */
+Method code:
+281 |     public static DateTimeZone forOffsetMillis(int millisOffset) {
+282 |         String id = printOffset(millisOffset);
+283 |         return fixedOffsetZone(id, millisOffset);
+284 |     }
+
+===== M0154 =====
+Signature: org.joda.time.chrono.ZonedChronology.ZonedChronology(Chronology,DateTimeZone)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 81-83
+Documentation:
+/**
+     * Restricted constructor
+     *
+     * @param base base chronology to wrap
+     * @param zone the time zone
+     */
+Method code:
+81 |     private ZonedChronology(Chronology base, DateTimeZone zone) {
+82 |         super(base, zone);
+83 |     }
+
+===== M0155 =====
+Signature: org.joda.time.chrono.GJYearOfEraDateTimeField.getMaximumValue()
+Source: src/main/java/org/joda/time/chrono/GJYearOfEraDateTimeField.java
+Original range: 96-98
+Documentation:
+
+Method code:
+96 |     public int getMaximumValue() {
+97 |         return getWrappedField().getMaximumValue();
+98 |     }
+
+===== M0156 =====
+Signature: org.joda.time.DateTimeUtils.setCurrentMillisSystem()
+Source: src/main/java/org/joda/time/DateTimeUtils.java
+Original range: 67-70
+Documentation:
+/**
+     * Resets the current time to return the system time.
+     * <p>
+     * This method changes the behaviour of {@link #currentTimeMillis()}.
+     * Whenever the current time is queried, {@link System#currentTimeMillis()} is used.
+     * 
+     * @throws SecurityException if the application does not have sufficient security rights
+     */
+Method code:
+67 |     public static final void setCurrentMillisSystem() throws SecurityException {
+68 |         checkPermission();
+69 |         cMillisProvider = SYSTEM_MILLIS_PROVIDER;
+70 |     }
+
+===== M0157 =====
+Signature: org.joda.time.field.ImpreciseDateTimeField.LinkedDurationField.isPrecise()
+Source: src/main/java/org/joda/time/field/ImpreciseDateTimeField.java
+Original range: 155-157
+Documentation:
+
+Method code:
+155 |         public boolean isPrecise() {
+156 |             return false;
+157 |         }
+
+===== M0158 =====
+Signature: org.joda.time.DateTimeFieldType.secondOfDay()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 190-192
+Documentation:
+/**
+     * Get the second of day field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+190 |     public static DateTimeFieldType secondOfDay() {
+191 |         return SECOND_OF_DAY_TYPE;
+192 |     }
+
+===== M0159 =====
+Signature: org.joda.time.chrono.AssembledChronology.era()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 291-293
+Documentation:
+
+Method code:
+291 |     public final DateTimeField era() {
+292 |         return iEra;
+293 |     }
+
+===== M0160 =====
+Signature: org.joda.time.chrono.AssembledChronology.weekyear()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 247-249
+Documentation:
+
+Method code:
+247 |     public final DateTimeField weekyear() {
+248 |         return iWeekyear;
+249 |     }
+
+===== M0161 =====
+Signature: org.joda.time.chrono.ZonedChronology.ZonedDurationField.getUnitMillis()
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 297-299
+Documentation:
+
+Method code:
+297 |         public long getUnitMillis() {
+298 |             return iField.getUnitMillis();
+299 |         }
+
+===== M0162 =====
+Signature: org.joda.time.chrono.AssembledChronology.weekyearOfCentury()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 251-253
+Documentation:
+
+Method code:
+251 |     public final DateTimeField weekyearOfCentury() {
+252 |         return iWeekyearOfCentury;
+253 |     }
+
+===== M0163 =====
+Signature: org.joda.time.field.DividedDateTimeField.getDurationField()
+Source: src/main/java/org/joda/time/field/DividedDateTimeField.java
+Original range: 181-183
+Documentation:
+/**
+     * Returns a scaled version of the wrapped field's unit duration field.
+     */
+Method code:
+181 |     public DurationField getDurationField() {
+182 |         return iDurationField;
+183 |     }
+
+===== M0164 =====
+Signature: org.joda.time.chrono.AssembledChronology.monthOfYear()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 259-261
+Documentation:
+
+Method code:
+259 |     public final DateTimeField monthOfYear() {
+260 |         return iMonthOfYear;
+261 |     }
+
+===== M0165 =====
+Signature: org.joda.time.field.ZeroIsMaxDateTimeField.ZeroIsMaxDateTimeField(DateTimeField,DateTimeFieldType)
+Source: src/main/java/org/joda/time/field/ZeroIsMaxDateTimeField.java
+Original range: 44-49
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param field  the base field
+     * @param type  the field type this field will actually use
+     * @throws IllegalArgumentException if wrapped field's minimum value is not zero
+     */
+Method code:
+44 |     public ZeroIsMaxDateTimeField(DateTimeField field, DateTimeFieldType type) {
+45 |         super(field, type);
+46 |         if (field.getMinimumValue() != 0) {
+47 |             throw new IllegalArgumentException("Wrapped field's minumum value must be zero");
+48 |         }
+49 |     }
+
+===== M0166 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.ZoneInfoProvider(String)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 81-83
+Documentation:
+/**
+     * ZoneInfoProvider searches the given ClassLoader resource path for
+     * compiled data files. Resources are loaded from the ClassLoader that
+     * loaded this class.
+     *
+     * @throws IOException if directory or map file cannot be read
+     */
+Method code:
+81 |     public ZoneInfoProvider(String resourcePath) throws IOException {
+82 |         this(resourcePath, null, false);
+83 |     }
+
+===== M0167 =====
+Signature: org.joda.time.chrono.BasicWeekOfWeekyearDateTimeField.getRangeDurationField()
+Source: src/main/java/org/joda/time/chrono/BasicWeekOfWeekyearDateTimeField.java
+Original range: 57-59
+Documentation:
+
+Method code:
+57 |     public DurationField getRangeDurationField() {
+58 |         return iChronology.weekyears();
+59 |     }
+
+===== M0168 =====
+Signature: org.joda.time.DateTimeFieldType.hourOfDay()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 217-219
+Documentation:
+/**
+     * Get the hour of day (0-23) field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+217 |     public static DateTimeFieldType hourOfDay() {
+218 |         return HOUR_OF_DAY_TYPE;
+219 |     }
+
+===== M0169 =====
+Signature: org.joda.time.chrono.AssembledChronology.millis()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 155-157
+Documentation:
+
+Method code:
+155 |     public final DurationField millis() {
+156 |         return iMillis;
+157 |     }
+
+===== M0170 =====
+Signature: org.joda.time.chrono.BasicYearDateTimeField.BasicYearDateTimeField(BasicChronology)
+Source: src/main/java/org/joda/time/chrono/BasicYearDateTimeField.java
+Original range: 44-47
+Documentation:
+/**
+     * Restricted constructor.
+     * 
+     * @param chronology  the chronology this field belogs to
+     */
+Method code:
+44 |     BasicYearDateTimeField(BasicChronology chronology) {
+45 |         super(DateTimeFieldType.year(), chronology.getAverageMillisPerYear());
+46 |         iChronology = chronology;
+47 |     }
+
+===== M0171 =====
+Signature: org.joda.time.chrono.GJDayOfWeekDateTimeField.GJDayOfWeekDateTimeField(BasicChronology,DurationField)
+Source: src/main/java/org/joda/time/chrono/GJDayOfWeekDateTimeField.java
+Original range: 44-47
+Documentation:
+/**
+     * Restricted constructor.
+     */
+Method code:
+44 |     GJDayOfWeekDateTimeField(BasicChronology chronology, DurationField days) {
+45 |         super(DateTimeFieldType.dayOfWeek(), days);
+46 |         iChronology = chronology;
+47 |     }
+
+===== M0172 =====
+Signature: org.joda.time.field.PreciseDateTimeField.getRangeDurationField()
+Source: src/main/java/org/joda/time/field/PreciseDateTimeField.java
+Original range: 121-123
+Documentation:
+/**
+     * Returns the range duration of this field. For example, if this field
+     * represents "minute of hour", then the range duration field is an hours.
+     *
+     * @return the range duration of this field, or null if field has no range
+     */
+Method code:
+121 |     public DurationField getRangeDurationField() {
+122 |         return iRangeField;
+123 |     }
+
+===== M0173 =====
+Signature: org.joda.time.field.BaseDateTimeField.isSupported()
+Source: src/main/java/org/joda/time/field/BaseDateTimeField.java
+Original range: 68-70
+Documentation:
+/**
+     * @return true always
+     */
+Method code:
+68 |     public final boolean isSupported() {
+69 |         return true;
+70 |     }
+
+===== M0174 =====
+Signature: org.joda.time.DateTimeZone.setDefault(DateTimeZone)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 173-184
+Documentation:
+/**
+     * Sets the default time zone.
+     * <p>
+     * NOTE: Calling this method does <i>not</i> set the {@code java.util.TimeZone} default.
+     * 
+     * @param zone  the default datetime zone object, must not be null
+     * @throws IllegalArgumentException if the zone is null
+     * @throws SecurityException if the application has insufficient security rights
+     */
+Method code:
+173 |     public static void setDefault(DateTimeZone zone) throws SecurityException {
+174 |         SecurityManager sm = System.getSecurityManager();
+175 |         if (sm != null) {
+176 |             sm.checkPermission(new JodaTimePermission("DateTimeZone.setDefault"));
+177 |         }
+178 |         if (zone == null) {
+179 |             throw new IllegalArgumentException("The datetime zone must not be null");
+180 |         }
+181 |         synchronized(DateTimeZone.class) {
+182 |             cDefault = zone;
+183 |         }
+184 |     }
+
+===== M0175 =====
+Signature: org.joda.time.field.PreciseDurationField.add(long,int)
+Source: src/main/java/org/joda/time/field/PreciseDurationField.java
+Original range: 103-106
+Documentation:
+
+Method code:
+103 |     public long add(long instant, int value) {
+104 |         long addition = value * iUnitMillis;  // safe
+105 |         return FieldUtils.safeAdd(instant, addition);
+106 |     }
+
+===== M0176 =====
+Signature: org.joda.time.DateTimeUtils.getPeriodType(PeriodType)
+Source: src/main/java/org/joda/time/DateTimeUtils.java
+Original range: 285-290
+Documentation:
+/**
+     * Gets the period type handling null.
+     * <p>
+     * If the zone is <code>null</code>, {@link PeriodType#standard()}
+     * will be returned. Otherwise, the type specified is returned.
+     * 
+     * @param type  the time zone to use, null means the standard type
+     * @return the type to use, never null
+     */
+Method code:
+285 |     public static final PeriodType getPeriodType(PeriodType type) {
+286 |         if (type == null) {
+287 |             return PeriodType.standard();
+288 |         }
+289 |         return type;
+290 |     }
+
+===== M0177 =====
+Signature: org.joda.time.chrono.AssembledChronology.centuries()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 279-281
+Documentation:
+
+Method code:
+279 |     public final DurationField centuries() {
+280 |         return iCenturies;
+281 |     }
+
+===== M0178 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.getAvailableIDs()
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 170-175
+Documentation:
+/**
+     * Gets a list of all the available zone ids.
+     * 
+     * @return the zone ids
+     */
+Method code:
+170 |     public Set<String> getAvailableIDs() {
+171 |         // Return a copy of the keys rather than an umodifiable collection.
+172 |         // This prevents ConcurrentModificationExceptions from being thrown by
+173 |         // some JVMs if zones are opened while this set is iterated over.
+174 |         return new TreeSet<String>(iZoneInfoMap.keySet());
+175 |     }
+
+===== M0179 =====
+Signature: org.joda.time.chrono.BasicChronology.assemble(Fields)
+Source: src/main/java/org/joda/time/chrono/BasicChronology.java
+Original range: 237-298
+Documentation:
+
+Method code:
+237 |     protected void assemble(Fields fields) {
+238 |         // First copy fields that are the same for all Gregorian and Julian
+239 |         // chronologies.
+240 | 
+241 |         fields.millis = cMillisField;
+242 |         fields.seconds = cSecondsField;
+243 |         fields.minutes = cMinutesField;
+244 |         fields.hours = cHoursField;
+245 |         fields.halfdays = cHalfdaysField;
+246 |         fields.days = cDaysField;
+247 |         fields.weeks = cWeeksField;
+248 | 
+249 |         fields.millisOfSecond = cMillisOfSecondField;
+250 |         fields.millisOfDay = cMillisOfDayField;
+251 |         fields.secondOfMinute = cSecondOfMinuteField;
+252 |         fields.secondOfDay = cSecondOfDayField;
+253 |         fields.minuteOfHour = cMinuteOfHourField;
+254 |         fields.minuteOfDay = cMinuteOfDayField;
+255 |         fields.hourOfDay = cHourOfDayField;
+256 |         fields.hourOfHalfday = cHourOfHalfdayField;
+257 |         fields.clockhourOfDay = cClockhourOfDayField;
+258 |         fields.clockhourOfHalfday = cClockhourOfHalfdayField;
+259 |         fields.halfdayOfDay = cHalfdayOfDayField;
+260 | 
+261 |         // Now create fields that have unique behavior for Gregorian and Julian
+262 |         // chronologies.
+263 | 
+264 |         fields.year = new BasicYearDateTimeField(this);
+265 |         fields.yearOfEra = new GJYearOfEraDateTimeField(fields.year, this);
+266 | 
+267 |         // Define one-based centuryOfEra and yearOfCentury.
+268 |         DateTimeField field = new OffsetDateTimeField(
+269 |             fields.yearOfEra, 99);
+270 |         fields.centuryOfEra = new DividedDateTimeField(
+271 |             field, DateTimeFieldType.centuryOfEra(), 100);
+272 |         
+273 |         field = new RemainderDateTimeField(
+274 |             (DividedDateTimeField) fields.centuryOfEra);
+275 |         fields.yearOfCentury = new OffsetDateTimeField(
+276 |             field, DateTimeFieldType.yearOfCentury(), 1);
+277 | 
+278 |         fields.era = new GJEraDateTimeField(this);
+279 |         fields.dayOfWeek = new GJDayOfWeekDateTimeField(this, fields.days);
+280 |         fields.dayOfMonth = new BasicDayOfMonthDateTimeField(this, fields.days);
+281 |         fields.dayOfYear = new BasicDayOfYearDateTimeField(this, fields.days);
+282 |         fields.monthOfYear = new GJMonthOfYearDateTimeField(this);
+283 |         fields.weekyear = new BasicWeekyearDateTimeField(this);
+284 |         fields.weekOfWeekyear = new BasicWeekOfWeekyearDateTimeField(this, fields.weeks);
+285 |         
+286 |         field = new RemainderDateTimeField(
+287 |             fields.weekyear, DateTimeFieldType.weekyearOfCentury(), 100);
+288 |         fields.weekyearOfCentury = new OffsetDateTimeField(
+289 |             field, DateTimeFieldType.weekyearOfCentury(), 1);
+290 |         
+291 |         // The remaining (imprecise) durations are available from the newly
+292 |         // created datetime fields.
+293 | 
+294 |         fields.years = fields.year.getDurationField();
+295 |         fields.centuries = fields.centuryOfEra.getDurationField();
+296 |         fields.months = fields.monthOfYear.getDurationField();
+297 |         fields.weekyears = fields.weekyear.getDurationField();
+298 |     }
+
+===== M0180 =====
+Signature: org.joda.time.DurationFieldType.minutes()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 122-124
+Documentation:
+/**
+     * Get the minutes field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+122 |     public static DurationFieldType minutes() {
+123 |         return MINUTES_TYPE;
+124 |     }
+
+===== M0181 =====
+Signature: org.joda.time.chrono.AssembledChronology.clockhourOfHalfday()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 211-213
+Documentation:
+
+Method code:
+211 |     public final DateTimeField clockhourOfHalfday() {
+212 |         return iClockhourOfHalfday;
+213 |     }
+
+===== M0182 =====
+Signature: org.joda.time.DateTimeFieldType.weekyearOfCentury()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 308-310
+Documentation:
+/**
+     * Get the year of a week based year within a century field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+308 |     public static DateTimeFieldType weekyearOfCentury() {
+309 |         return WEEKYEAR_OF_CENTURY_TYPE;
+310 |     }
+
+===== M0183 =====
+Signature: org.joda.time.chrono.ISOYearOfEraDateTimeField.ISOYearOfEraDateTimeField()
+Source: src/main/java/org/joda/time/chrono/ISOYearOfEraDateTimeField.java
+Original range: 45-47
+Documentation:
+/**
+     * Restricted constructor.
+     */
+Method code:
+45 |     private ISOYearOfEraDateTimeField() {
+46 |         super(GregorianChronology.getInstanceUTC().year(), DateTimeFieldType.yearOfEra());
+47 |     }
+
+===== M0184 =====
+Signature: org.joda.time.DurationFieldType.centuries()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 195-197
+Documentation:
+/**
+     * Get the centuries field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+195 |     public static DurationFieldType centuries() {
+196 |         return CENTURIES_TYPE;
+197 |     }
+
+===== M0185 =====
+Signature: org.joda.time.field.ImpreciseDateTimeField.LinkedDurationField.getUnitMillis()
+Source: src/main/java/org/joda/time/field/ImpreciseDateTimeField.java
+Original range: 159-161
+Documentation:
+
+Method code:
+159 |         public long getUnitMillis() {
+160 |             return iUnitMillis;
+161 |         }
+
+===== M0186 =====
+Signature: org.joda.time.chrono.ZonedChronology.ZonedDurationField.getOffsetFromLocalToSubtract(long)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 353-361
+Documentation:
+
+Method code:
+353 |         private int getOffsetFromLocalToSubtract(long instant) {
+354 |             int offset = this.iZone.getOffsetFromLocal(instant);
+355 |             long diff = instant - offset;
+356 |             // If there is a sign change, but the two values have different signs...
+357 |             if ((instant ^ diff) < 0 && (instant ^ offset) < 0) {
+358 |                 throw new ArithmeticException("Subtracting time zone offset caused overflow");
+359 |             }
+360 |             return offset;
+361 |         }
+
+===== M0187 =====
+Signature: org.joda.time.chrono.GJDayOfWeekDateTimeField.getRangeDurationField()
+Source: src/main/java/org/joda/time/chrono/GJDayOfWeekDateTimeField.java
+Original range: 93-95
+Documentation:
+
+Method code:
+93 |     public DurationField getRangeDurationField() {
+94 |         return iChronology.weeks();
+95 |     }
+
+===== M0188 =====
+Signature: org.joda.time.PeriodType.standard()
+Source: src/main/java/org/joda/time/PeriodType.java
+Original range: 101-117
+Documentation:
+/**
+     * Gets a type that defines all standard fields.
+     * <ul>
+     * <li>years
+     * <li>months
+     * <li>weeks
+     * <li>days
+     * <li>hours
+     * <li>minutes
+     * <li>seconds
+     * <li>milliseconds
+     * </ul>
+     *
+     * @return the period type
+     */
+Method code:
+101 |     public static PeriodType standard() {
+102 |         PeriodType type = cStandard;
+103 |         if (type == null) {
+104 |             type = new PeriodType(
+105 |                 "Standard",
+106 |                 new DurationFieldType[] {
+107 |                     DurationFieldType.years(), DurationFieldType.months(),
+108 |                     DurationFieldType.weeks(), DurationFieldType.days(),
+109 |                     DurationFieldType.hours(), DurationFieldType.minutes(),
+110 |                     DurationFieldType.seconds(), DurationFieldType.millis(),
+111 |                 },
+112 |                 new int[] { 0, 1, 2, 3, 4, 5, 6, 7, }
+113 |             );
+114 |             cStandard = type;
+115 |         }
+116 |         return type;
+117 |     }
+
+===== M0189 =====
+Signature: org.joda.time.chrono.BasicYearDateTimeField.getLeapDurationField()
+Source: src/main/java/org/joda/time/chrono/BasicYearDateTimeField.java
+Original range: 110-112
+Documentation:
+
+Method code:
+110 |     public DurationField getLeapDurationField() {
+111 |         return iChronology.days();
+112 |     }
+
+===== M0190 =====
+Signature: org.joda.time.chrono.BasicChronology.getZone()
+Source: src/main/java/org/joda/time/chrono/BasicChronology.java
+Original range: 141-147
+Documentation:
+
+Method code:
+141 |     public DateTimeZone getZone() {
+142 |         Chronology base;
+143 |         if ((base = getBase()) != null) {
+144 |             return base.getZone();
+145 |         }
+146 |         return DateTimeZone.UTC;
+147 |     }
+
+===== M0191 =====
+Signature: org.joda.time.field.FieldUtils.safeAdd(int,int)
+Source: src/main/java/org/joda/time/field/FieldUtils.java
+Original range: 63-71
+Documentation:
+/**
+     * Add two values throwing an exception if overflow occurs.
+     * 
+     * @param val1  the first value
+     * @param val2  the second value
+     * @return the new total
+     * @throws ArithmeticException if the value is too big or too small
+     */
+Method code:
+63 |     public static int safeAdd(int val1, int val2) {
+64 |         int sum = val1 + val2;
+65 |         // If there is a sign change, but the two values have the same sign...
+66 |         if ((val1 ^ sum) < 0 && (val1 ^ val2) >= 0) {
+67 |             throw new ArithmeticException
+68 |                 ("The calculation caused an overflow: " + val1 + " + " + val2);
+69 |         }
+70 |         return sum;
+71 |     }
+
+===== M0192 =====
+Signature: org.joda.time.chrono.GJEraDateTimeField.GJEraDateTimeField(BasicChronology)
+Source: src/main/java/org/joda/time/chrono/GJEraDateTimeField.java
+Original range: 45-48
+Documentation:
+/**
+     * Restricted constructor
+     */
+Method code:
+45 |     GJEraDateTimeField(BasicChronology chronology) {
+46 |         super(DateTimeFieldType.era());
+47 |         iChronology = chronology;
+48 |     }
+
+===== M0193 =====
+Signature: org.joda.time.chrono.AssembledChronology.eras()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 287-289
+Documentation:
+
+Method code:
+287 |     public final DurationField eras() {
+288 |         return iEras;
+289 |     }
+
+===== M0194 =====
+Signature: org.joda.time.chrono.AssembledChronology.hourOfDay()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 195-197
+Documentation:
+
+Method code:
+195 |     public final DateTimeField hourOfDay() {
+196 |         return iHourOfDay;
+197 |     }
+
+===== M0195 =====
+Signature: org.joda.time.DurationFieldType.halfdays()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 140-142
+Documentation:
+/**
+     * Get the halfdays field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+140 |     public static DurationFieldType halfdays() {
+141 |         return HALFDAYS_TYPE;
+142 |     }
+
+===== M0196 =====
+Signature: org.joda.time.chrono.AssembledChronology.halfdays()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 203-205
+Documentation:
+
+Method code:
+203 |     public final DurationField halfdays() {
+204 |         return iHalfdays;
+205 |     }
+
+===== M0197 =====
+Signature: org.joda.time.chrono.AssembledChronology.setFields()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 318-386
+Documentation:
+
+Method code:
+318 |     private void setFields() {
+319 |         Fields fields = new Fields();
+320 |         if (iBase != null) {
+321 |             fields.copyFieldsFrom(iBase);
+322 |         }
+323 |         assemble(fields);
+324 | 
+325 |         {
+326 |             DurationField f;
+327 |             iMillis    = (f = fields.millis)    != null ? f : super.millis();
+328 |             iSeconds   = (f = fields.seconds)   != null ? f : super.seconds();
+329 |             iMinutes   = (f = fields.minutes)   != null ? f : super.minutes();
+330 |             iHours     = (f = fields.hours)     != null ? f : super.hours();
+331 |             iHalfdays  = (f = fields.halfdays)  != null ? f : super.halfdays();
+332 |             iDays      = (f = fields.days)      != null ? f : super.days();
+333 |             iWeeks     = (f = fields.weeks)     != null ? f : super.weeks();
+334 |             iWeekyears = (f = fields.weekyears) != null ? f : super.weekyears();
+335 |             iMonths    = (f = fields.months)    != null ? f : super.months();
+336 |             iYears     = (f = fields.years)     != null ? f : super.years();
+337 |             iCenturies = (f = fields.centuries) != null ? f : super.centuries();
+338 |             iEras      = (f = fields.eras)      != null ? f : super.eras();
+339 |         }
+340 | 
+341 |         {
+342 |             DateTimeField f;
+343 |             iMillisOfSecond     = (f = fields.millisOfSecond)     != null ? f : super.millisOfSecond();
+344 |             iMillisOfDay        = (f = fields.millisOfDay)        != null ? f : super.millisOfDay();
+345 |             iSecondOfMinute     = (f = fields.secondOfMinute)     != null ? f : super.secondOfMinute();
+346 |             iSecondOfDay        = (f = fields.secondOfDay)        != null ? f : super.secondOfDay();
+347 |             iMinuteOfHour       = (f = fields.minuteOfHour)       != null ? f : super.minuteOfHour();
+348 |             iMinuteOfDay        = (f = fields.minuteOfDay)        != null ? f : super.minuteOfDay();
+349 |             iHourOfDay          = (f = fields.hourOfDay)          != null ? f : super.hourOfDay();
+350 |             iClockhourOfDay     = (f = fields.clockhourOfDay)     != null ? f : super.clockhourOfDay();
+351 |             iHourOfHalfday      = (f = fields.hourOfHalfday)      != null ? f : super.hourOfHalfday();
+352 |             iClockhourOfHalfday = (f = fields.clockhourOfHalfday) != null ? f : super.clockhourOfHalfday();
+353 |             iHalfdayOfDay       = (f = fields.halfdayOfDay)       != null ? f : super.halfdayOfDay();
+354 |             iDayOfWeek          = (f = fields.dayOfWeek)          != null ? f : super.dayOfWeek();
+355 |             iDayOfMonth         = (f = fields.dayOfMonth)         != null ? f : super.dayOfMonth();
+356 |             iDayOfYear          = (f = fields.dayOfYear)          != null ? f : super.dayOfYear();
+357 |             iWeekOfWeekyear     = (f = fields.weekOfWeekyear)     != null ? f : super.weekOfWeekyear();
+358 |             iWeekyear           = (f = fields.weekyear)           != null ? f : super.weekyear();
+359 |             iWeekyearOfCentury  = (f = fields.weekyearOfCentury)  != null ? f : super.weekyearOfCentury();
+360 |             iMonthOfYear        = (f = fields.monthOfYear)        != null ? f : super.monthOfYear();
+361 |             iYear               = (f = fields.year)               != null ? f : super.year();
+362 |             iYearOfEra          = (f = fields.yearOfEra)          != null ? f : super.yearOfEra();
+363 |             iYearOfCentury      = (f = fields.yearOfCentury)      != null ? f : super.yearOfCentury();
+364 |             iCenturyOfEra       = (f = fields.centuryOfEra)       != null ? f : super.centuryOfEra();
+365 |             iEra                = (f = fields.era)                != null ? f : super.era();
+366 |         }
+367 | 
+368 |         int flags;
+369 |         if (iBase == null) {
+370 |             flags = 0;
+371 |         } else {
+372 |             flags = 
+373 |                 ((iHourOfDay      == iBase.hourOfDay()      &&
+374 |                   iMinuteOfHour   == iBase.minuteOfHour()   &&
+375 |                   iSecondOfMinute == iBase.secondOfMinute() &&
+376 |                   iMillisOfSecond == iBase.millisOfSecond()   ) ? 1 : 0) |
+377 | 
+378 |                 ((iMillisOfDay == iBase.millisOfDay()) ? 2 : 0) |
+379 | 
+380 |                 ((iYear        == iBase.year()        &&
+381 |                   iMonthOfYear == iBase.monthOfYear() &&
+382 |                   iDayOfMonth  == iBase.dayOfMonth()    ) ? 4 : 0);
+383 |         }
+384 | 
+385 |         iBaseFlags = flags;
+386 |     }
+
+===== M0198 =====
+Signature: org.joda.time.chrono.AssembledChronology.AssembledChronology(Chronology,Object)
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 99-103
+Documentation:
+/**
+     * Constructor calls the assemble method, enabling subclasses to define its
+     * supported fields. If a base chronology is supplied, the field set
+     * initially contains references to each base chronology field.
+     * <p>
+     * Other methods in this class will delegate to the base chronology, if it
+     * can be determined that the base chronology will produce the same results
+     * as AbstractChronology.
+     *
+     * @param base optional base chronology to copy initial fields from
+     * @param param optional param object avalable for assemble method
+     */
+Method code:
+99 |     protected AssembledChronology(Chronology base, Object param) {
+100 |         iBase = base;
+101 |         iParam = param;
+102 |         setFields();
+103 |     }
+
+===== M0199 =====
+Signature: org.joda.time.DurationFieldType.millis()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 104-106
+Documentation:
+/**
+     * Get the millis field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+104 |     public static DurationFieldType millis() {
+105 |         return MILLIS_TYPE;
+106 |     }
+
+===== M0200 =====
+Signature: org.joda.time.chrono.GregorianChronology.getInstance(DateTimeZone)
+Source: src/main/java/org/joda/time/chrono/GregorianChronology.java
+Original range: 99-101
+Documentation:
+/**
+     * Gets an instance of the GregorianChronology in the given time zone.
+     * 
+     * @param zone  the time zone to get the chronology in, null is default
+     * @return a chronology in the specified time zone
+     */
+Method code:
+99 |     public static GregorianChronology getInstance(DateTimeZone zone) {
+100 |         return getInstance(zone, 4);
+101 |     }
+
+===== M0201 =====
+Signature: org.joda.time.DurationFieldType.days()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 150-152
+Documentation:
+/**
+     * Get the days field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+150 |     public static DurationFieldType days() {
+151 |         return DAYS_TYPE;
+152 |     }
+
+===== M0202 =====
+Signature: org.joda.time.chrono.AssembledChronology.Fields.isSupported(DurationField)
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 557-559
+Documentation:
+
+Method code:
+557 |         private static boolean isSupported(DurationField field) {
+558 |             return field == null ? false : field.isSupported();
+559 |         }
+
+===== M0203 =====
+Signature: org.joda.time.DateTimeZone.forID(String)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 202-224
+Documentation:
+/**
+     * Gets a time zone instance for the specified time zone id.
+     * <p>
+     * The time zone id may be one of those returned by getAvailableIDs.
+     * Short ids, as accepted by {@link java.util.TimeZone}, are not accepted.
+     * All IDs must be specified in the long format.
+     * The exception is UTC, which is an acceptable id.
+     * <p>
+     * Alternatively a locale independent, fixed offset, datetime zone can
+     * be specified. The form <code>[+-]hh:mm</code> can be used.
+     * 
+     * @param id  the ID of the datetime zone, null means default
+     * @return the DateTimeZone object for the ID
+     * @throws IllegalArgumentException if the ID is not recognised
+     */
+Method code:
+202 |     @FromString
+203 |     public static DateTimeZone forID(String id) {
+204 |         if (id == null) {
+205 |             return getDefault();
+206 |         }
+207 |         if (id.equals("UTC")) {
+208 |             return DateTimeZone.UTC;
+209 |         }
+210 |         DateTimeZone zone = cProvider.getZone(id);
+211 |         if (zone != null) {
+212 |             return zone;
+213 |         }
+214 |         if (id.startsWith("+") || id.startsWith("-")) {
+215 |             int offset = parseOffset(id);
+216 |             if (offset == 0L) {
+217 |                 return DateTimeZone.UTC;
+218 |             } else {
+219 |                 id = printOffset(offset);
+220 |                 return fixedOffsetZone(id, offset);
+221 |             }
+222 |         }
+223 |         throw new IllegalArgumentException("The datetime zone id '" + id + "' is not recognised");
+224 |     }
+
+===== M0204 =====
+Signature: org.joda.time.field.MillisDurationField.MillisDurationField()
+Source: src/main/java/org/joda/time/field/MillisDurationField.java
+Original range: 43-45
+Documentation:
+/**
+     * Restricted constructor.
+     */
+Method code:
+43 |     private MillisDurationField() {
+44 |         super();
+45 |     }
+
+===== M0205 =====
+Signature: org.joda.time.DateTimeZone.DateTimeZone(String)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 689-694
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param id  the id to use
+     * @throws IllegalArgumentException if the id is null
+     */
+Method code:
+689 |     protected DateTimeZone(String id) {
+690 |         if (id == null) {
+691 |             throw new IllegalArgumentException("Id must not be null");
+692 |         }
+693 |         iID = id;
+694 |     }
+
+===== M0206 =====
+Signature: org.joda.time.PeriodType.getIndexedField(ReadablePeriod,int)
+Source: src/main/java/org/joda/time/PeriodType.java
+Original range: 673-676
+Documentation:
+/**
+     * Gets the indexed field part of the period.
+     * 
+     * @param period  the period to query
+     * @param index  the index to use
+     * @return the value of the field, zero if unsupported
+     */
+Method code:
+673 |     int getIndexedField(ReadablePeriod period, int index) {
+674 |         int realIndex = iIndices[index];
+675 |         return (realIndex == -1 ? 0 : period.getValue(realIndex));
+676 |     }
+
+===== M0207 =====
+Signature: org.joda.time.chrono.GregorianChronology.getInstanceUTC()
+Source: src/main/java/org/joda/time/chrono/GregorianChronology.java
+Original range: 80-82
+Documentation:
+/**
+     * Gets an instance of the GregorianChronology.
+     * The time zone of the returned instance is UTC.
+     * 
+     * @return a singleton UTC instance of the chronology
+     */
+Method code:
+80 |     public static GregorianChronology getInstanceUTC() {
+81 |         return INSTANCE_UTC;
+82 |     }
+
+===== M0208 =====
+Signature: org.joda.time.chrono.AssembledChronology.years()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 263-265
+Documentation:
+
+Method code:
+263 |     public final DurationField years() {
+264 |         return iYears;
+265 |     }
+
+===== M0209 =====
+Signature: org.joda.time.DateTimeUtils.checkPermission()
+Source: src/main/java/org/joda/time/DateTimeUtils.java
+Original range: 128-133
+Documentation:
+/**
+     * Checks whether the provider may be changed using permission 'CurrentTime.setProvider'.
+     * 
+     * @throws SecurityException if the provider may not be changed
+     */
+Method code:
+128 |     private static void checkPermission() throws SecurityException {
+129 |         SecurityManager sm = System.getSecurityManager();
+130 |         if (sm != null) {
+131 |             sm.checkPermission(new JodaTimePermission("CurrentTime.setProvider"));
+132 |         }
+133 |     }
+
+===== M0210 =====
+Signature: org.joda.time.DurationFieldType.weekyears()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 168-170
+Documentation:
+/**
+     * Get the weekyears field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+168 |     public static DurationFieldType weekyears() {
+169 |         return WEEKYEARS_TYPE;
+170 |     }
+
+===== M0211 =====
+Signature: org.joda.time.DateTimeFieldType.clockhourOfDay()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 226-228
+Documentation:
+/**
+     * Get the hour of day (offset to 1-24) field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+226 |     public static DateTimeFieldType clockhourOfDay() {
+227 |         return CLOCKHOUR_OF_DAY_TYPE;
+228 |     }
+
+===== M0212 =====
+Signature: org.joda.time.chrono.AssembledChronology.seconds()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 167-169
+Documentation:
+
+Method code:
+167 |     public final DurationField seconds() {
+168 |         return iSeconds;
+169 |     }
+
+===== M0213 =====
+Signature: org.joda.time.field.FieldUtils.safeToInt(long)
+Source: src/main/java/org/joda/time/field/FieldUtils.java
+Original range: 183-188
+Documentation:
+/**
+     * Casts to an int throwing an exception if overflow occurs.
+     * 
+     * @param value  the value
+     * @return the value as an int
+     * @throws ArithmeticException if the value is too big or too small
+     */
+Method code:
+183 |     public static int safeToInt(long value) {
+184 |         if (Integer.MIN_VALUE <= value && value <= Integer.MAX_VALUE) {
+185 |             return (int) value;
+186 |         }
+187 |         throw new ArithmeticException("Value cannot fit in an int: " + value);
+188 |     }
+
+===== M0214 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.getZone(String)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 135-163
+Documentation:
+/**
+     * If an error is thrown while loading zone data, uncaughtException is
+     * called to log the error and null is returned for this and all future
+     * requests.
+     * 
+     * @param id  the id to load
+     * @return the loaded zone
+     */
+Method code:
+135 |     public DateTimeZone getZone(String id) {
+136 |         if (id == null) {
+137 |             return null;
+138 |         }
+139 | 
+140 |         Object obj = iZoneInfoMap.get(id);
+141 |         if (obj == null) {
+142 |             return null;
+143 |         }
+144 | 
+145 |         if (id.equals(obj)) {
+146 |             // Load zone data for the first time.
+147 |             return loadZoneData(id);
+148 |         }
+149 | 
+150 |         if (obj instanceof SoftReference<?>) {
+151 |             @SuppressWarnings("unchecked")
+152 |             SoftReference<DateTimeZone> ref = (SoftReference<DateTimeZone>) obj;
+153 |             DateTimeZone tz = ref.get();
+154 |             if (tz != null) {
+155 |                 return tz;
+156 |             }
+157 |             // Reference cleared; load data again.
+158 |             return loadZoneData(id);
+159 |         }
+160 | 
+161 |         // If this point is reached, mapping must link to another.
+162 |         return getZone((String)obj);
+163 |     }
+
+===== M0215 =====
+Signature: org.joda.time.chrono.GregorianChronology.getMaxYear()
+Source: src/main/java/org/joda/time/chrono/GregorianChronology.java
+Original range: 224-226
+Documentation:
+
+Method code:
+224 |     int getMaxYear() {
+225 |         return MAX_YEAR;
+226 |     }
+
+===== M0216 =====
+Signature: org.joda.time.DateTimeZone.forOffsetHoursMinutes(int,int)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 253-273
+Documentation:
+/**
+     * Gets a time zone instance for the specified offset to UTC in hours and minutes.
+     * This method assumes 60 minutes in an hour, and standard length minutes.
+     * <p>
+     * This factory is a convenient way of constructing zones with a fixed offset.
+     * The minutes value is always positive and in the range 0 to 59.
+     * If constructed with the values (-2, 30), the resulting zone is '-02:30'.
+     * 
+     * @param hoursOffset  the offset in hours from UTC
+     * @param minutesOffset  the offset in minutes from UTC, must be between 0 and 59 inclusive
+     * @return the DateTimeZone object for the offset
+     * @throws IllegalArgumentException if the offset or minute is too large or too small
+     */
+Method code:
+253 |     public static DateTimeZone forOffsetHoursMinutes(int hoursOffset, int minutesOffset) throws IllegalArgumentException {
+254 |         if (hoursOffset == 0 && minutesOffset == 0) {
+255 |             return DateTimeZone.UTC;
+256 |         }
+257 |         if (minutesOffset < 0 || minutesOffset > 59) {
+258 |             throw new IllegalArgumentException("Minutes out of range: " + minutesOffset);
+259 |         }
+260 |         int offset = 0;
+261 |         try {
+262 |             int hoursInMinutes = FieldUtils.safeMultiply(hoursOffset, 60);
+263 |             if (hoursInMinutes < 0) {
+264 |                 minutesOffset = FieldUtils.safeAdd(hoursInMinutes, -minutesOffset);
+265 |             } else {
+266 |                 minutesOffset = FieldUtils.safeAdd(hoursInMinutes, minutesOffset);
+267 |             }
+268 |             offset = FieldUtils.safeMultiply(minutesOffset, DateTimeConstants.MILLIS_PER_MINUTE);
+269 |         } catch (ArithmeticException ex) {
+270 |             throw new IllegalArgumentException("Offset is too large");
+271 |         }
+272 |         return forOffsetMillis(offset);
+273 |     }
+
+===== M0217 =====
+Signature: org.joda.time.field.BaseDurationField.BaseDurationField(DurationFieldType)
+Source: src/main/java/org/joda/time/field/BaseDurationField.java
+Original range: 46-52
+Documentation:
+
+Method code:
+46 |     protected BaseDurationField(DurationFieldType type) {
+47 |         super();
+48 |         if (type == null) {
+49 |             throw new IllegalArgumentException("The type must not be null");
+50 |         }
+51 |         iType = type;
+52 |     }
+
+===== M0218 =====
+Signature: org.joda.time.chrono.BasicChronology.HalfdayField.HalfdayField()
+Source: src/main/java/org/joda/time/chrono/BasicChronology.java
+Original range: 749-751
+Documentation:
+
+Method code:
+749 |         HalfdayField() {
+750 |             super(DateTimeFieldType.halfdayOfDay(), cHalfdaysField, cDaysField);
+751 |         }
+
+===== M0219 =====
+Signature: org.joda.time.field.ScaledDurationField.hashCode()
+Source: src/main/java/org/joda/time/field/ScaledDurationField.java
+Original range: 146-152
+Documentation:
+/**
+     * Gets a hash code for this instance.
+     * 
+     * @return a suitable hashcode
+     */
+Method code:
+146 |     public int hashCode() {
+147 |         long scalar = iScalar;
+148 |         int hash = (int) (scalar ^ (scalar >>> 32));
+149 |         hash += getType().hashCode();
+150 |         hash += getWrappedField().hashCode();
+151 |         return hash;
+152 |     }
+
+===== M0220 =====
+Signature: org.joda.time.chrono.AssembledChronology.yearOfEra()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 271-273
+Documentation:
+
+Method code:
+271 |     public final DateTimeField yearOfEra() {
+272 |         return iYearOfEra;
+273 |     }
+
+===== M0221 =====
+Signature: org.joda.time.base.BasePeriod.getValue(int)
+Source: src/main/java/org/joda/time/base/BasePeriod.java
+Original range: 334-336
+Documentation:
+/**
+     * Gets the value at the specified index.
+     *
+     * @param index  the index to retrieve
+     * @return the value of the field at the specified index
+     * @throws IndexOutOfBoundsException if the index is invalid
+     */
+Method code:
+334 |     public int getValue(int index) {
+335 |         return iValues[index];
+336 |     }
+
+===== M0222 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.readMillis(DataInput)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 182-211
+Documentation:
+/**
+     * Reads encoding generated by writeMillis.
+     */
+Method code:
+182 |     static long readMillis(DataInput in) throws IOException {
+183 |         int v = in.readUnsignedByte();
+184 |         switch (v >> 6) {
+185 |         case 0: default:
+186 |             // Form 00 (6 bits effective precision)
+187 |             v = (v << (32 - 6)) >> (32 - 6);
+188 |             return v * (30 * 60000L);
+189 | 
+190 |         case 1:
+191 |             // Form 01 (30 bits effective precision)
+192 |             v = (v << (32 - 6)) >> (32 - 30);
+193 |             v |= (in.readUnsignedByte()) << 16;
+194 |             v |= (in.readUnsignedByte()) << 8;
+195 |             v |= (in.readUnsignedByte());
+196 |             return v * 60000L;
+197 | 
+198 |         case 2:
+199 |             // Form 10 (38 bits effective precision)
+200 |             long w = (((long)v) << (64 - 6)) >> (64 - 38);
+201 |             w |= (in.readUnsignedByte()) << 24;
+202 |             w |= (in.readUnsignedByte()) << 16;
+203 |             w |= (in.readUnsignedByte()) << 8;
+204 |             w |= (in.readUnsignedByte());
+205 |             return w * 1000L;
+206 | 
+207 |         case 3:
+208 |             // Form 11 (64 bits effective precision)
+209 |             return in.readLong();
+210 |         }
+211 |     }
+
+===== M0223 =====
+Signature: org.joda.time.chrono.BasicYearDateTimeField.getRangeDurationField()
+Source: src/main/java/org/joda/time/chrono/BasicYearDateTimeField.java
+Original range: 94-96
+Documentation:
+
+Method code:
+94 |     public DurationField getRangeDurationField() {
+95 |         return null;
+96 |     }
+
+===== M0224 =====
+Signature: org.joda.time.DateTimeFieldType.era()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 362-364
+Documentation:
+/**
+     * Get the era field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+362 |     public static DateTimeFieldType era() {
+363 |         return ERA_TYPE;
+364 |     }
+
+===== M0225 =====
+Signature: org.joda.time.base.BasePeriod.BasePeriod(long,PeriodType,Chronology)
+Source: src/main/java/org/joda/time/base/BasePeriod.java
+Original range: 238-244
+Documentation:
+/**
+     * Creates a period from the given millisecond duration, which is only really
+     * suitable for durations less than one day.
+     * <p>
+     * Only fields that are precise will be used.
+     * Thus the largest precise field may have a large value.
+     *
+     * @param duration  the duration, in milliseconds
+     * @param type  which set of fields this period supports, null means standard
+     * @param chrono  the chronology to use, null means ISO default
+     * @throws IllegalArgumentException if period type is invalid
+     */
+Method code:
+238 |     protected BasePeriod(long duration, PeriodType type, Chronology chrono) {
+239 |         super();
+240 |         type = checkPeriodType(type);
+241 |         chrono = DateTimeUtils.getChronology(chrono);
+242 |         iType = type;
+243 |         iValues = chrono.get(this, duration);
+244 |     }
+
+===== M0226 =====
+Signature: org.joda.time.chrono.AssembledChronology.Fields.isSupported(DateTimeField)
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 561-563
+Documentation:
+
+Method code:
+561 |         private static boolean isSupported(DateTimeField field) {
+562 |             return field == null ? false : field.isSupported();
+563 |         }
+
+===== M0227 =====
+Signature: org.joda.time.field.OffsetDateTimeField.OffsetDateTimeField(DateTimeField,DateTimeFieldType,int,int,int)
+Source: src/main/java/org/joda/time/field/OffsetDateTimeField.java
+Original range: 71-91
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param field  the field to wrap, like "year()".
+     * @param type  the field type this field actually uses
+     * @param offset  offset to add to field values
+     * @param minValue  minimum allowed value
+     * @param maxValue  maximum allowed value
+     * @throws IllegalArgumentException if offset is zero
+     */
+Method code:
+71 |     public OffsetDateTimeField(DateTimeField field, DateTimeFieldType type, int offset,
+72 |                                int minValue, int maxValue) {
+73 |         super(field, type);
+74 |                 
+75 |         if (offset == 0) {
+76 |             throw new IllegalArgumentException("The offset cannot be zero");
+77 |         }
+78 | 
+79 |         iOffset = offset;
+80 | 
+81 |         if (minValue < (field.getMinimumValue() + offset)) {
+82 |             iMin = field.getMinimumValue() + offset;
+83 |         } else {
+84 |             iMin = minValue;
+85 |         }
+86 |         if (maxValue > (field.getMaximumValue() + offset)) {
+87 |             iMax = field.getMaximumValue() + offset;
+88 |         } else {
+89 |             iMax = maxValue;
+90 |         }
+91 |     }
+
+===== M0228 =====
+Signature: org.joda.time.chrono.AssembledChronology.hours()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 191-193
+Documentation:
+
+Method code:
+191 |     public final DurationField hours() {
+192 |         return iHours;
+193 |     }
+
+===== M0229 =====
+Signature: org.joda.time.DateTimeZone.fixedOffsetZone(String,int)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 348-366
+Documentation:
+/**
+     * Gets the zone using a fixed offset amount.
+     * 
+     * @param id  the zone id
+     * @param offset  the offset in millis
+     * @return the zone
+     */
+Method code:
+348 |     private static synchronized DateTimeZone fixedOffsetZone(String id, int offset) {
+349 |         if (offset == 0) {
+350 |             return DateTimeZone.UTC;
+351 |         }
+352 |         if (iFixedOffsetCache == null) {
+353 |             iFixedOffsetCache = new HashMap<String, SoftReference<DateTimeZone>>();
+354 |         }
+355 |         DateTimeZone zone;
+356 |         Reference<DateTimeZone> ref = iFixedOffsetCache.get(id);
+357 |         if (ref != null) {
+358 |             zone = ref.get();
+359 |             if (zone != null) {
+360 |                 return zone;
+361 |             }
+362 |         }
+363 |         zone = new FixedDateTimeZone(id, null, offset, offset);
+364 |         iFixedOffsetCache.put(id, new SoftReference<DateTimeZone>(zone));
+365 |         return zone;
+366 |     }
+
+===== M0230 =====
+Signature: org.joda.time.chrono.GJYearOfEraDateTimeField.GJYearOfEraDateTimeField(DateTimeField,BasicChronology)
+Source: src/main/java/org/joda/time/chrono/GJYearOfEraDateTimeField.java
+Original range: 39-42
+Documentation:
+/**
+     * Restricted constructor.
+     */
+Method code:
+39 |     GJYearOfEraDateTimeField(DateTimeField yearField, BasicChronology chronology) {
+40 |         super(yearField, DateTimeFieldType.yearOfEra());
+41 |         iChronology = chronology;
+42 |     }
+
+===== M0231 =====
+Signature: org.joda.time.Period.getWeeks()
+Source: src/main/java/org/joda/time/Period.java
+Original range: 721-723
+Documentation:
+/**
+     * Gets the weeks field part of the period.
+     * 
+     * @return the number of weeks in the period, zero if unsupported
+     */
+Method code:
+721 |     public int getWeeks() {
+722 |         return getPeriodType().getIndexedField(this, PeriodType.WEEK_INDEX);
+723 |     }
+
+===== M0232 =====
+Signature: org.joda.time.chrono.AssembledChronology.Fields.copyFieldsFrom(Chronology)
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 442-555
+Documentation:
+/**
+         * Copy the supported fields from a chronology into this container.
+         */
+Method code:
+442 |         public void copyFieldsFrom(Chronology chrono) {
+443 |             {
+444 |                 DurationField f;
+445 |                 if (isSupported(f = chrono.millis())) {
+446 |                     millis = f;
+447 |                 }
+448 |                 if (isSupported(f = chrono.seconds())) {
+449 |                     seconds = f;
+450 |                 }
+451 |                 if (isSupported(f = chrono.minutes())) {
+452 |                     minutes = f;
+453 |                 }
+454 |                 if (isSupported(f = chrono.hours())) {
+455 |                     hours = f;
+456 |                 }
+457 |                 if (isSupported(f = chrono.halfdays())) {
+458 |                     halfdays = f;
+459 |                 }
+460 |                 if (isSupported(f = chrono.days())) {
+461 |                     days = f;
+462 |                 }
+463 |                 if (isSupported(f = chrono.weeks())) {
+464 |                     weeks = f;
+465 |                 }
+466 |                 if (isSupported(f = chrono.weekyears())) {
+467 |                     weekyears = f;
+468 |                 }
+469 |                 if (isSupported(f = chrono.months())) {
+470 |                     months = f;
+471 |                 }
+472 |                 if (isSupported(f = chrono.years())) {
+473 |                     years = f;
+474 |                 }
+475 |                 if (isSupported(f = chrono.centuries())) {
+476 |                     centuries = f;
+477 |                 }
+478 |                 if (isSupported(f = chrono.eras())) {
+479 |                     eras = f;
+480 |                 }
+481 |             }
+482 | 
+483 |             {
+484 |                 DateTimeField f;
+485 |                 if (isSupported(f = chrono.millisOfSecond())) {
+486 |                     millisOfSecond = f;
+487 |                 }
+488 |                 if (isSupported(f = chrono.millisOfDay())) {
+489 |                     millisOfDay = f;
+490 |                 }
+491 |                 if (isSupported(f = chrono.secondOfMinute())) {
+492 |                     secondOfMinute = f;
+493 |                 }
+494 |                 if (isSupported(f = chrono.secondOfDay())) {
+495 |                     secondOfDay = f;
+496 |                 }
+497 |                 if (isSupported(f = chrono.minuteOfHour())) {
+498 |                     minuteOfHour = f;
+499 |                 }
+500 |                 if (isSupported(f = chrono.minuteOfDay())) {
+501 |                     minuteOfDay = f;
+502 |                 }
+503 |                 if (isSupported(f = chrono.hourOfDay())) {
+504 |                     hourOfDay = f;
+505 |                 }
+506 |                 if (isSupported(f = chrono.clockhourOfDay())) {
+507 |                     clockhourOfDay = f;
+508 |                 }
+509 |                 if (isSupported(f = chrono.hourOfHalfday())) {
+510 |                     hourOfHalfday = f;
+511 |                 }
+512 |                 if (isSupported(f = chrono.clockhourOfHalfday())) {
+513 |                     clockhourOfHalfday = f;
+514 |                 }
+515 |                 if (isSupported(f = chrono.halfdayOfDay())) {
+516 |                     halfdayOfDay = f;
+517 |                 }
+518 |                 if (isSupported(f = chrono.dayOfWeek())) {
+519 |                     dayOfWeek = f;
+520 |                 }
+521 |                 if (isSupported(f = chrono.dayOfMonth())) {
+522 |                     dayOfMonth = f;
+523 |                 }
+524 |                 if (isSupported(f = chrono.dayOfYear())) {
+525 |                     dayOfYear = f;
+526 |                 }
+527 |                 if (isSupported(f = chrono.weekOfWeekyear())) {
+528 |                     weekOfWeekyear = f;
+529 |                 }
+530 |                 if (isSupported(f = chrono.weekyear())) {
+531 |                     weekyear = f;
+532 |                 }
+533 |                 if (isSupported(f = chrono.weekyearOfCentury())) {
+534 |                     weekyearOfCentury = f;
+535 |                 }
+536 |                 if (isSupported(f = chrono.monthOfYear())) {
+537 |                     monthOfYear = f;
+538 |                 }
+539 |                 if (isSupported(f = chrono.year())) {
+540 |                     year = f;
+541 |                 }
+542 |                 if (isSupported(f = chrono.yearOfEra())) {
+543 |                     yearOfEra = f;
+544 |                 }
+545 |                 if (isSupported(f = chrono.yearOfCentury())) {
+546 |                     yearOfCentury = f;
+547 |                 }
+548 |                 if (isSupported(f = chrono.centuryOfEra())) {
+549 |                     centuryOfEra = f;
+550 |                 }
+551 |                 if (isSupported(f = chrono.era())) {
+552 |                     era = f;
+553 |                 }
+554 |             }
+555 |         }
+
+===== M0233 =====
+Signature: org.joda.time.DurationFieldType.weeks()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 159-161
+Documentation:
+/**
+     * Get the weeks field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+159 |     public static DurationFieldType weeks() {
+160 |         return WEEKS_TYPE;
+161 |     }
+
+===== M0234 =====
+Signature: org.joda.time.tz.CachedDateTimeZone.forZone(DateTimeZone)
+Source: src/main/java/org/joda/time/tz/CachedDateTimeZone.java
+Original range: 67-72
+Documentation:
+/**
+     * Returns a new CachedDateTimeZone unless given zone is already cached.
+     */
+Method code:
+67 |     public static CachedDateTimeZone forZone(DateTimeZone zone) {
+68 |         if (zone instanceof CachedDateTimeZone) {
+69 |             return (CachedDateTimeZone)zone;
+70 |         }
+71 |         return new CachedDateTimeZone(zone);
+72 |     }
+
+===== M0235 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.loadZoneInfoMap(InputStream)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 251-264
+Documentation:
+/**
+     * Loads the zone info map.
+     * 
+     * @param in  the input stream
+     * @return the map
+     */
+Method code:
+251 |     private static Map<String, Object> loadZoneInfoMap(InputStream in) throws IOException {
+252 |         Map<String, Object> map = new ConcurrentHashMap<String, Object>();
+253 |         DataInputStream din = new DataInputStream(in);
+254 |         try {
+255 |             readZoneInfoMap(din, map);
+256 |         } finally {
+257 |             try {
+258 |                 din.close();
+259 |             } catch (IOException e) {
+260 |             }
+261 |         }
+262 |         map.put("UTC", new SoftReference<DateTimeZone>(DateTimeZone.UTC));
+263 |         return map;
+264 |     }
+
+===== M0236 =====
+Signature: org.joda.time.field.DecoratedDurationField.DecoratedDurationField(DurationField,DurationFieldType)
+Source: src/main/java/org/joda/time/field/DecoratedDurationField.java
+Original range: 51-60
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param field  the base field
+     * @param type  the type to actually use
+     */
+Method code:
+51 |     public DecoratedDurationField(DurationField field, DurationFieldType type) {
+52 |         super(type);
+53 |         if (field == null) {
+54 |             throw new IllegalArgumentException("The field must not be null");
+55 |         }
+56 |         if (!field.isSupported()) {
+57 |             throw new IllegalArgumentException("The field must be supported");
+58 |         }
+59 |         iField = field;
+60 |     }
+
+===== M0237 =====
+Signature: org.joda.time.chrono.ISOYearOfEraDateTimeField.getMaximumValue()
+Source: src/main/java/org/joda/time/chrono/ISOYearOfEraDateTimeField.java
+Original range: 90-92
+Documentation:
+
+Method code:
+90 |     public int getMaximumValue() {
+91 |         return getWrappedField().getMaximumValue();
+92 |     }
+
+===== M0238 =====
+Signature: org.joda.time.DateTimeUtils.getChronology(Chronology)
+Source: src/main/java/org/joda/time/DateTimeUtils.java
+Original range: 251-256
+Documentation:
+/**
+     * Gets the chronology handling null.
+     * <p>
+     * If the chronology is <code>null</code>, {@link ISOChronology#getInstance()}
+     * will be returned. Otherwise, the chronology is returned.
+     * 
+     * @param chrono  the chronology to use, null means ISO in the default zone
+     * @return the chronology, never null
+     */
+Method code:
+251 |     public static final Chronology getChronology(Chronology chrono) {
+252 |         if (chrono == null) {
+253 |             return ISOChronology.getInstance();
+254 |         }
+255 |         return chrono;
+256 |     }
+
+===== M0239 =====
+Signature: org.joda.time.field.OffsetDateTimeField.OffsetDateTimeField(DateTimeField,DateTimeFieldType,int)
+Source: src/main/java/org/joda/time/field/OffsetDateTimeField.java
+Original range: 57-59
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param field  the field to wrap, like "year()".
+     * @param type  the field type this field actually uses
+     * @param offset  offset to add to field values
+     * @throws IllegalArgumentException if offset is zero
+     */
+Method code:
+57 |     public OffsetDateTimeField(DateTimeField field, DateTimeFieldType type, int offset) {
+58 |         this(field, type, offset, Integer.MIN_VALUE, Integer.MAX_VALUE);
+59 |     }
+
+===== M0240 =====
+Signature: org.joda.time.field.PreciseDurationDateTimeField.getDurationField()
+Source: src/main/java/org/joda/time/field/PreciseDurationDateTimeField.java
+Original range: 140-142
+Documentation:
+/**
+     * Returns the duration per unit value of this field. For example, if this
+     * field represents "minute of hour", then the duration field is minutes.
+     *
+     * @return the duration of this field, or UnsupportedDurationField if field
+     * has no duration
+     */
+Method code:
+140 |     public DurationField getDurationField() {
+141 |         return iUnitField;
+142 |     }
+
+===== M0241 =====
+Signature: org.joda.time.chrono.ZonedChronology.useTimeArithmetic(DurationField)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 69-73
+Documentation:
+
+Method code:
+69 |     static boolean useTimeArithmetic(DurationField field) {
+70 |         // Use time of day arithmetic rules for unit durations less than
+71 |         // typical time zone offsets.
+72 |         return field != null && field.getUnitMillis() < DateTimeConstants.MILLIS_PER_HOUR * 12;
+73 |     }
+
+===== M0242 =====
+Signature: org.joda.time.chrono.AssembledChronology.yearOfCentury()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 275-277
+Documentation:
+
+Method code:
+275 |     public final DateTimeField yearOfCentury() {
+276 |         return iYearOfCentury;
+277 |     }
+
+===== M0243 =====
+Signature: org.joda.time.chrono.AssembledChronology.getParam()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 314-316
+Documentation:
+/**
+     * Returns the same param object as passed into the constructor.
+     */
+Method code:
+314 |     protected final Object getParam() {
+315 |         return iParam;
+316 |     }
+
+===== M0244 =====
+Signature: org.joda.time.field.PreciseDurationField.getDifferenceAsLong(long,long)
+Source: src/main/java/org/joda/time/field/PreciseDurationField.java
+Original range: 113-116
+Documentation:
+
+Method code:
+113 |     public long getDifferenceAsLong(long minuendInstant, long subtrahendInstant) {
+114 |         long difference = FieldUtils.safeSubtract(minuendInstant, subtrahendInstant);
+115 |         return difference / iUnitMillis;
+116 |     }
+
+===== M0245 =====
+Signature: org.joda.time.field.PreciseDurationField.hashCode()
+Source: src/main/java/org/joda/time/field/PreciseDurationField.java
+Original range: 141-146
+Documentation:
+/**
+     * Gets a hash code for this instance.
+     * 
+     * @return a suitable hashcode
+     */
+Method code:
+141 |     public int hashCode() {
+142 |         long millis = iUnitMillis;
+143 |         int hash = (int) (millis ^ (millis >>> 32));
+144 |         hash += getType().hashCode();
+145 |         return hash;
+146 |     }
+
+===== M0246 =====
+Signature: org.joda.time.chrono.AssembledChronology.millisOfSecond()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 159-161
+Documentation:
+
+Method code:
+159 |     public final DateTimeField millisOfSecond() {
+160 |         return iMillisOfSecond;
+161 |     }
+
+===== M0247 =====
+Signature: org.joda.time.base.BasePeriod.getFieldType(int)
+Source: src/main/java/org/joda/time/base/BasePeriod.java
+Original range: 323-325
+Documentation:
+/**
+     * Gets the field type at the specified index.
+     *
+     * @param index  the index to retrieve
+     * @return the field at the specified index
+     * @throws IndexOutOfBoundsException if the index is invalid
+     */
+Method code:
+323 |     public DurationFieldType getFieldType(int index) {
+324 |         return iType.getFieldType(index);
+325 |     }
+
+===== M0248 =====
+Signature: org.joda.time.chrono.BasicGJChronology.BasicGJChronology(Chronology,Object,int)
+Source: src/main/java/org/joda/time/chrono/BasicGJChronology.java
+Original range: 74-76
+Documentation:
+/**
+     * Constructor.
+     */
+Method code:
+74 |     BasicGJChronology(Chronology base, Object param, int minDaysInFirstWeek) {
+75 |         super(base, param, minDaysInFirstWeek);
+76 |     }
+
+===== M0249 =====
+Signature: org.joda.time.chrono.AssembledChronology.halfdayOfDay()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 215-217
+Documentation:
+
+Method code:
+215 |     public final DateTimeField halfdayOfDay() {
+216 |         return iHalfdayOfDay;
+217 |     }
+
+===== M0250 =====
+Signature: org.joda.time.chrono.AssembledChronology.months()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 255-257
+Documentation:
+
+Method code:
+255 |     public final DurationField months() {
+256 |         return iMonths;
+257 |     }
+
+===== M0251 =====
+Signature: org.joda.time.chrono.AssembledChronology.secondOfDay()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 175-177
+Documentation:
+
+Method code:
+175 |     public final DateTimeField secondOfDay() {
+176 |         return iSecondOfDay;
+177 |     }
+
+===== M0252 =====
+Signature: org.joda.time.chrono.BasicChronology.BasicChronology(Chronology,Object,int)
+Source: src/main/java/org/joda/time/chrono/BasicChronology.java
+Original range: 130-139
+Documentation:
+
+Method code:
+130 |     BasicChronology(Chronology base, Object param, int minDaysInFirstWeek) {
+131 |         super(base, param);
+132 | 
+133 |         if (minDaysInFirstWeek < 1 || minDaysInFirstWeek > 7) {
+134 |             throw new IllegalArgumentException
+135 |                 ("Invalid min days in first week: " + minDaysInFirstWeek);
+136 |         }
+137 | 
+138 |         iMinDaysInFirstWeek = minDaysInFirstWeek;
+139 |     }
+
+===== M0253 =====
+Signature: org.joda.time.DateTimeFieldType.centuryOfEra()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 353-355
+Documentation:
+/**
+     * Get the century of era field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+353 |     public static DateTimeFieldType centuryOfEra() {
+354 |         return CENTURY_OF_ERA_TYPE;
+355 |     }
+
+===== M0254 =====
+Signature: org.joda.time.field.RemainderDateTimeField.RemainderDateTimeField(DateTimeField,DateTimeFieldType,int)
+Source: src/main/java/org/joda/time/field/RemainderDateTimeField.java
+Original range: 50-67
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param field  the field to wrap, like "year()".
+     * @param type  the field type this field actually uses
+     * @param divisor  divisor, such as 100 years in a century
+     * @throws IllegalArgumentException if divisor is less than two
+     */
+Method code:
+50 |     public RemainderDateTimeField(DateTimeField field,
+51 |                                   DateTimeFieldType type, int divisor) {
+52 |         super(field, type);
+53 | 
+54 |         if (divisor < 2) {
+55 |             throw new IllegalArgumentException("The divisor must be at least 2");
+56 |         }
+57 | 
+58 |         DurationField rangeField = field.getDurationField();
+59 |         if (rangeField == null) {
+60 |             iRangeField = null;
+61 |         } else {
+62 |             iRangeField = new ScaledDurationField(
+63 |                 rangeField, type.getRangeDurationType(), divisor);
+64 |         }
+65 | 
+66 |         iDivisor = divisor;
+67 |     }
+
+===== M0255 =====
+Signature: org.joda.time.tz.DefaultNameProvider.DefaultNameProvider()
+Source: src/main/java/org/joda/time/tz/DefaultNameProvider.java
+Original range: 39-40
+Documentation:
+
+Method code:
+39 |     public DefaultNameProvider() {
+40 |     }
+
+===== M0256 =====
+Signature: org.joda.time.chrono.ZonedChronology.ZonedDurationField.getDifference(long,long)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 329-334
+Documentation:
+
+Method code:
+329 |         public int getDifference(long minuendInstant, long subtrahendInstant) {
+330 |             int offset = getOffsetToAdd(subtrahendInstant);
+331 |             return iField.getDifference
+332 |                 (minuendInstant + (iTimeField ? offset : getOffsetToAdd(minuendInstant)),
+333 |                  subtrahendInstant + offset);
+334 |         }
+
+===== M0257 =====
+Signature: org.joda.time.chrono.GregorianChronology.getAverageMillisPerYear()
+Source: src/main/java/org/joda/time/chrono/GregorianChronology.java
+Original range: 228-230
+Documentation:
+
+Method code:
+228 |     long getAverageMillisPerYear() {
+229 |         return MILLIS_PER_YEAR;
+230 |     }
+
+===== M0258 =====
+Signature: org.joda.time.DurationFieldType.seconds()
+Source: src/main/java/org/joda/time/DurationFieldType.java
+Original range: 113-115
+Documentation:
+/**
+     * Get the seconds field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+113 |     public static DurationFieldType seconds() {
+114 |         return SECONDS_TYPE;
+115 |     }
+
+===== M0259 =====
+Signature: org.joda.time.tz.FixedDateTimeZone.hashCode()
+Source: src/main/java/org/joda/time/tz/FixedDateTimeZone.java
+Original range: 101-103
+Documentation:
+
+Method code:
+101 |     public int hashCode() {
+102 |         return getID().hashCode() + 37 * iStandardOffset + 31 * iWallOffset;
+103 |     }
+
+===== M0260 =====
+Signature: org.joda.time.field.RemainderDateTimeField.getMinimumValue()
+Source: src/main/java/org/joda/time/field/RemainderDateTimeField.java
+Original range: 147-149
+Documentation:
+/**
+     * Get the minimum value for the field, which is always zero.
+     * 
+     * @return the minimum value of zero.
+     */
+Method code:
+147 |     public int getMinimumValue() {
+148 |         return 0;
+149 |     }
+
+===== M0261 =====
+Signature: org.joda.time.field.DecoratedDateTimeField.getDurationField()
+Source: src/main/java/org/joda/time/field/DecoratedDateTimeField.java
+Original range: 85-87
+Documentation:
+
+Method code:
+85 |     public DurationField getDurationField() {
+86 |         return iField.getDurationField();
+87 |     }
+
+===== M0262 =====
+Signature: org.joda.time.chrono.AssembledChronology.hourOfHalfday()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 207-209
+Documentation:
+
+Method code:
+207 |     public final DateTimeField hourOfHalfday() {
+208 |         return iHourOfHalfday;
+209 |     }
+
+===== M0263 =====
+Signature: org.joda.time.DateTimeFieldType.yearOfCentury()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 344-346
+Documentation:
+/**
+     * Get the year of century field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+344 |     public static DateTimeFieldType yearOfCentury() {
+345 |         return YEAR_OF_CENTURY_TYPE;
+346 |     }
+
+===== M0264 =====
+Signature: org.joda.time.base.AbstractDuration.toPeriod()
+Source: src/main/java/org/joda/time/base/AbstractDuration.java
+Original range: 79-81
+Documentation:
+/**
+     * Converts this duration to a Period instance using the standard period type
+     * and the ISO chronology.
+     * <p>
+     * Only precise fields in the period type will be used. Thus, only the hour,
+     * minute, second and millisecond fields on the period will be used.
+     * The year, month, week and day fields will not be populated.
+     * <p>
+     * If the duration is small, less than one day, then this method will perform
+     * as you might expect and split the fields evenly.
+     * If the duration is larger than one day then all the remaining duration will
+     * be stored in the largest available field, hours in this case.
+     * <p>
+     * For example, a duration effectively equal to (365 + 60 + 5) days will be
+     * converted to ((365 + 60 + 5) * 24) hours by this constructor.
+     * <p>
+     * For more control over the conversion process, you must pair the duration with
+     * an instant, see {@link Period#Period(ReadableInstant,ReadableDuration)}.
+     * 
+     * @return a Period created using the millisecond duration from this instance
+     */
+Method code:
+79 |     public Period toPeriod() {
+80 |         return new Period(getMillis());
+81 |     }
+
+===== M0265 =====
+Signature: org.joda.time.DateTimeFieldType.StandardDateTimeFieldType.getRangeDurationType()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 456-458
+Documentation:
+/** @inheritdoc */
+Method code:
+456 |         public DurationFieldType getRangeDurationType() {
+457 |             return iRangeType;
+458 |         }
+
+===== M0266 =====
+Signature: org.joda.time.field.MillisDurationField.isSupported()
+Source: src/main/java/org/joda/time/field/MillisDurationField.java
+Original range: 61-63
+Documentation:
+/**
+     * Returns true as this field is supported.
+     * 
+     * @return true always
+     */
+Method code:
+61 |     public boolean isSupported() {
+62 |         return true;
+63 |     }
+
+===== M0267 =====
+Signature: org.joda.time.DateTimeFieldType.DateTimeFieldType(String)
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 152-155
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param name  the name to use
+     */
+Method code:
+152 |     protected DateTimeFieldType(String name) {
+153 |         super();
+154 |         iName = name;
+155 |     }
+
+===== M0268 =====
+Signature: org.joda.time.chrono.ZonedChronology.getZone()
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 85-87
+Documentation:
+
+Method code:
+85 |     public DateTimeZone getZone() {
+86 |         return (DateTimeZone)getParam();
+87 |     }
+
+===== M0269 =====
+Signature: org.joda.time.chrono.BasicDayOfMonthDateTimeField.getRangeDurationField()
+Source: src/main/java/org/joda/time/chrono/BasicDayOfMonthDateTimeField.java
+Original range: 50-52
+Documentation:
+
+Method code:
+50 |     public DurationField getRangeDurationField() {
+51 |         return iChronology.months();
+52 |     }
+
+===== M0270 =====
+Signature: org.joda.time.chrono.AssembledChronology.minuteOfHour()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 183-185
+Documentation:
+
+Method code:
+183 |     public final DateTimeField minuteOfHour() {
+184 |         return iMinuteOfHour;
+185 |     }
+
+===== M0271 =====
+Signature: org.joda.time.field.MillisDurationField.getType()
+Source: src/main/java/org/joda/time/field/MillisDurationField.java
+Original range: 48-50
+Documentation:
+//------------------------------------------------------------------------
+Method code:
+48 |     public DurationFieldType getType() {
+49 |         return DurationFieldType.millis();
+50 |     }
+
+===== M0272 =====
+Signature: org.joda.time.chrono.AssembledChronology.dayOfYear()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 231-233
+Documentation:
+
+Method code:
+231 |     public final DateTimeField dayOfYear() {
+232 |         return iDayOfYear;
+233 |     }
+
+===== M0273 =====
+Signature: org.joda.time.field.BaseDurationField.isSupported()
+Source: src/main/java/org/joda/time/field/BaseDurationField.java
+Original range: 65-67
+Documentation:
+/**
+     * @return true always
+     */
+Method code:
+65 |     public final boolean isSupported() {
+66 |         return true;
+67 |     }
+
+===== M0274 =====
+Signature: org.joda.time.DateTimeFieldType.weekyear()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 299-301
+Documentation:
+/**
+     * Get the year of a week based year field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+299 |     public static DateTimeFieldType weekyear() {
+300 |         return WEEKYEAR_TYPE;
+301 |     }
+
+===== M0275 =====
+Signature: org.joda.time.chrono.BaseChronology.BaseChronology()
+Source: src/main/java/org/joda/time/chrono/BaseChronology.java
+Original range: 53-55
+Documentation:
+/**
+     * Restricted constructor.
+     */
+Method code:
+53 |     protected BaseChronology() {
+54 |         super();
+55 |     }
+
+===== M0276 =====
+Signature: org.joda.time.chrono.ZonedChronology.ZonedDurationField.add(long,int)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 317-321
+Documentation:
+
+Method code:
+317 |         public long add(long instant, int value) {
+318 |             int offset = getOffsetToAdd(instant);
+319 |             instant = iField.add(instant + offset, value);
+320 |             return instant - (iTimeField ? offset : getOffsetFromLocalToSubtract(instant));
+321 |         }
+
+===== M0277 =====
+Signature: org.joda.time.chrono.ISOYearOfEraDateTimeField.getMinimumValue()
+Source: src/main/java/org/joda/time/chrono/ISOYearOfEraDateTimeField.java
+Original range: 86-88
+Documentation:
+
+Method code:
+86 |     public int getMinimumValue() {
+87 |         return 0;
+88 |     }
+
+===== M0278 =====
+Signature: org.joda.time.chrono.BasicDayOfYearDateTimeField.getRangeDurationField()
+Source: src/main/java/org/joda/time/chrono/BasicDayOfYearDateTimeField.java
+Original range: 55-57
+Documentation:
+
+Method code:
+55 |     public DurationField getRangeDurationField() {
+56 |         return iChronology.years();
+57 |     }
+
+===== M0279 =====
+Signature: org.joda.time.base.BasePeriod.checkPeriodType(PeriodType)
+Source: src/main/java/org/joda/time/base/BasePeriod.java
+Original range: 292-294
+Documentation:
+/**
+     * Validates a period type, converting nulls to a default value and
+     * checking the type is suitable for this instance.
+     * 
+     * @param type  the type to check, may be null
+     * @return the validated type to use, not null
+     * @throws IllegalArgumentException if the period type is invalid
+     */
+Method code:
+292 |     protected PeriodType checkPeriodType(PeriodType type) {
+293 |         return DateTimeUtils.getPeriodType(type);
+294 |     }
+
+===== M0280 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.PrecalculatedZone.PrecalculatedZone(String,long[],int[],int[],String[],DSTZone)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 1497-1506
+Documentation:
+/**
+         * Constructor used ONLY for valid input, loaded via static methods.
+         */
+Method code:
+1497 |         private PrecalculatedZone(String id, long[] transitions, int[] wallOffsets,
+1498 |                           int[] standardOffsets, String[] nameKeys, DSTZone tailZone)
+1499 |         {
+1500 |             super(id);
+1501 |             iTransitions = transitions;
+1502 |             iWallOffsets = wallOffsets;
+1503 |             iStandardOffsets = standardOffsets;
+1504 |             iNameKeys = nameKeys;
+1505 |             iTailZone = tailZone;
+1506 |         }
+
+===== M0281 =====
+Signature: org.joda.time.field.DecoratedDateTimeField.getRangeDurationField()
+Source: src/main/java/org/joda/time/field/DecoratedDateTimeField.java
+Original range: 89-91
+Documentation:
+
+Method code:
+89 |     public DurationField getRangeDurationField() {
+90 |         return iField.getRangeDurationField();
+91 |     }
+
+===== M0282 =====
+Signature: org.joda.time.chrono.GJYearOfEraDateTimeField.getMinimumValue()
+Source: src/main/java/org/joda/time/chrono/GJYearOfEraDateTimeField.java
+Original range: 92-94
+Documentation:
+
+Method code:
+92 |     public int getMinimumValue() {
+93 |         return 1;
+94 |     }
+
+===== M0283 =====
+Signature: org.joda.time.DateTimeFieldType.dayOfMonth()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 272-274
+Documentation:
+/**
+     * Get the day of month field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+272 |     public static DateTimeFieldType dayOfMonth() {
+273 |         return DAY_OF_MONTH_TYPE;
+274 |     }
+
+===== M0284 =====
+Signature: org.joda.time.field.PreciseDurationDateTimeField.getMinimumValue()
+Source: src/main/java/org/joda/time/field/PreciseDurationDateTimeField.java
+Original range: 149-151
+Documentation:
+/**
+     * Get the minimum value for the field.
+     * 
+     * @return the minimum value
+     */
+Method code:
+149 |     public int getMinimumValue() {
+150 |         return 0;
+151 |     }
+
+===== M0285 =====
+Signature: org.joda.time.DateTimeFieldType.yearOfEra()
+Source: src/main/java/org/joda/time/DateTimeFieldType.java
+Original range: 335-337
+Documentation:
+/**
+     * Get the year of era field type.
+     * 
+     * @return the DateTimeFieldType constant
+     */
+Method code:
+335 |     public static DateTimeFieldType yearOfEra() {
+336 |         return YEAR_OF_ERA_TYPE;
+337 |     }
+
+===== M0286 =====
+Signature: org.joda.time.field.PreciseDurationField.isPrecise()
+Source: src/main/java/org/joda/time/field/PreciseDurationField.java
+Original range: 53-55
+Documentation:
+/**
+     * This field is precise.
+     * 
+     * @return true always
+     */
+Method code:
+53 |     public final boolean isPrecise() {
+54 |         return true;
+55 |     }
+
+===== M0287 =====
+Signature: org.joda.time.chrono.ZonedChronology.convertField(DurationField,HashMap<Object, Object>)
+Source: src/main/java/org/joda/time/chrono/ZonedChronology.java
+Original range: 199-209
+Documentation:
+
+Method code:
+199 |     private DurationField convertField(DurationField field, HashMap<Object, Object> converted) {
+200 |         if (field == null || !field.isSupported()) {
+201 |             return field;
+202 |         }
+203 |         if (converted.containsKey(field)) {
+204 |             return (DurationField)converted.get(field);
+205 |         }
+206 |         ZonedDurationField zonedField = new ZonedDurationField(field, getZone());
+207 |         converted.put(field, zonedField);
+208 |         return zonedField;
+209 |     }
+
+===== M0288 =====
+Signature: org.joda.time.DateTimeZone.setProvider0(Provider)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 414-431
+Documentation:
+/**
+     * Sets the zone provider factory without performing the security check.
+     * 
+     * @param provider  provider to use, or null for default
+     * @throws IllegalArgumentException if the provider is invalid
+     */
+Method code:
+414 |     private static void setProvider0(Provider provider) {
+415 |         if (provider == null) {
+416 |             provider = getDefaultProvider();
+417 |         }
+418 |         Set<String> ids = provider.getAvailableIDs();
+419 |         if (ids == null || ids.size() == 0) {
+420 |             throw new IllegalArgumentException
+421 |                 ("The provider doesn't have any available ids");
+422 |         }
+423 |         if (!ids.contains("UTC")) {
+424 |             throw new IllegalArgumentException("The provider doesn't support UTC");
+425 |         }
+426 |         if (!UTC.equals(provider.getZone("UTC"))) {
+427 |             throw new IllegalArgumentException("Invalid UTC zone provided");
+428 |         }
+429 |         cProvider = provider;
+430 |         cAvailableIDs = ids;
+431 |     }
+
+===== M0289 =====
+Signature: org.joda.time.chrono.GJEraDateTimeField.getRangeDurationField()
+Source: src/main/java/org/joda/time/chrono/GJEraDateTimeField.java
+Original range: 130-132
+Documentation:
+
+Method code:
+130 |     public DurationField getRangeDurationField() {
+131 |         return null;
+132 |     }
+
+===== M0290 =====
+Signature: org.joda.time.chrono.AssembledChronology.minuteOfDay()
+Source: src/main/java/org/joda/time/chrono/AssembledChronology.java
+Original range: 187-189
+Documentation:
+
+Method code:
+187 |     public final DateTimeField minuteOfDay() {
+188 |         return iMinuteOfDay;
+189 |     }
+

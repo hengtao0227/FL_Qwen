@@ -1,0 +1,82 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testIssue1101a()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testIssue1101a()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 1346,
+    "end_line": 1350,
+    "comment": "",
+    "snippet": "  public void testIssue1101a() {\n    helperCanInlineReferenceToFunction(CanInlineResult.NO,\n        \"function foo(a){return modifiyX() + a;} foo(x);\", \"foo\",\n        INLINE_DIRECT);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testIssue1101b()",
+    "resolved_signature": "com.google.javascript.jscomp.FunctionInjectorTest.testIssue1101b()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/FunctionInjectorTest.java",
+    "begin_line": 1352,
+    "end_line": 1356,
+    "comment": "",
+    "snippet": "  public void testIssue1101b() {\n    helperCanInlineReferenceToFunction(CanInlineResult.NO,\n        \"function foo(a){return (x.prop = 2),a;} foo(x.prop);\", \"foo\",\n        INLINE_DIRECT);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testBug4944818()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testBug4944818()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 2062,
+    "end_line": 2098,
+    "comment": "",
+    "snippet": "  public void testBug4944818() {\n    test(\n        \"var getDomServices_ = function(self) {\\n\" +\n        \"  if (!self.domServices_) {\\n\" +\n        \"    self.domServices_ = goog$component$DomServices.get(\" +\n        \"        self.appContext_);\\n\" +\n        \"  }\\n\" +\n        \"\\n\" +\n        \"  return self.domServices_;\\n\" +\n        \"};\\n\" +\n        \"\\n\" +\n        \"var getOwnerWin_ = function(self) {\\n\" +\n        \"  return getDomServices_(self).getDomHelper().getWindow();\\n\" +\n        \"};\\n\" +\n        \"\\n\" +\n        \"HangoutStarter.prototype.launchHangout = function() {\\n\" +\n        \"  var self = a.b;\\n\" +\n        \"  var myUrl = new goog.Uri(getOwnerWin_(self).location.href);\\n\" +\n        \"};\",\n        \"HangoutStarter.prototype.launchHangout=function(){\" +\n        \"  var self$$2=a.b;\" +\n        \"  var JSCompiler_temp_const$$0=goog.Uri;\" +\n        \"  var JSCompiler_inline_result$$1;\" +\n        \"  {\" +\n        \"    var JSCompiler_inline_result$$0;\" +\n        \"    {\" +\n        \"      var self$$inline_1=self$$2;\" +\n        \"      if(!self$$inline_1.domServices_) {\" +\n        \"        self$$inline_1.domServices_=goog$component$DomServices.get(self$$inline_1.appContext_);\" +\n        \"      }\" +\n        \"      JSCompiler_inline_result$$0=self$$inline_1.domServices_;\" +\n        \"    }\" +\n        \"    JSCompiler_inline_result$$1=JSCompiler_inline_result$$0.getDomHelper().getWindow();\" +\n        \"  }\" +\n        \"  var myUrl=new JSCompiler_temp_const$$0(JSCompiler_inline_result$$1.location.href)\" +\n        \"}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testDoubleInlining2()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testDoubleInlining2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1108,
+    "end_line": 1113,
+    "comment": "",
+    "snippet": "  public void testDoubleInlining2() {\n    test(\"var foo = function(a) { return getWindow(a); };\" +\n         \"var bar = function(b) { return b; };\" +\n         \"foo(bar(x));\",\n         \"{getWindow(x)}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testIssue1101()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testIssue1101()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 2370,
+    "end_line": 2379,
+    "comment": "",
+    "snippet": "  public void testIssue1101() {\n    test(\n        \"var x = (function (saved) {\" +\n        \"    return foo(obj) + saved;\" +\n        \"  })(obj[\\\"prop\\\"]);\",\n        \"var x;\" +\n        \"{\" +\n        \"  var saved$$inline_0=obj[\\\"prop\\\"];x=foo(obj)+saved$$inline_0\" +\n        \"}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineIfParametersModified8()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineIfParametersModified8()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 599,
+    "end_line": 602,
+    "comment": "",
+    "snippet": "  public void testInlineIfParametersModified8() {\n    // OK, object parameter modified.\n    test(\"function f(a){return a.x=2}f(o)\", \"{o.x=2}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineIfParametersModified9()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineIfParametersModified9()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 604,
+    "end_line": 607,
+    "comment": "",
+    "snippet": "  public void testInlineIfParametersModified9() {\n    // OK, array parameter modified.\n    test(\"function f(a){return a[2]=2}f(o)\", \"{o[2]=2}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions6()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions6()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 155,
+    "end_line": 164,
+    "comment": "",
+    "snippet": "  public void testInlineFunctions6() {\n    // more complex inlines\n    test(\"function BAR_FN(x, y, z) { return z(nochg(x + y)) }\" +\n         \"alert(BAR_FN(1, 2, baz))\",\n\n         \"var JSCompiler_temp_const$$0=alert;\" +\n         \"var JSCompiler_inline_result$$1;\" +\n         \"{JSCompiler_inline_result$$1=baz(nochg(1+2));}\" +\n         \"JSCompiler_temp_const$$0(JSCompiler_inline_result$$1)\");\n  }"
+  }
+]

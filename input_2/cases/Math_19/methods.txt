@@ -1,0 +1,2251 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.repmat(RealMatrix,int,int)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 1227-1237
+Documentation:
+/**
+     * @param mat Input matrix.
+     * @param n Number of row replicates.
+     * @param m Number of column replicates.
+     * @return a matrix which replicates the input matrix in both directions.
+     */
+Method code:
+1227 |     private static RealMatrix repmat(final RealMatrix mat, int n, int m) {
+1228 |         int rd = mat.getRowDimension();
+1229 |         int cd = mat.getColumnDimension();
+1230 |         double[][] d = new double[n * rd][m * cd];
+1231 |         for (int r = 0; r < n * rd; r++) {
+1232 |             for (int c = 0; c < m * cd; c++) {
+1233 |                 d[r][c] = mat.getEntry(r % rd, c % cd);
+1234 |             }
+1235 |         }
+1236 |         return new Array2DRowRealMatrix(d, false);
+1237 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getRowDimension()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 333-336
+Documentation:
+/** {@inheritDoc} */
+Method code:
+333 |     @Override
+334 |     public int getRowDimension() {
+335 |         return (data == null) ? 0 : data.length;
+336 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.times(RealMatrix,RealMatrix)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 1078-1086
+Documentation:
+/**
+     * @param m Input matrix 1.
+     * @param n Input matrix 2.
+     * @return the matrix where the elements of m and n are element-wise multiplied.
+     */
+Method code:
+1078 |     private static RealMatrix times(final RealMatrix m, final RealMatrix n) {
+1079 |         double[][] d = new double[m.getRowDimension()][m.getColumnDimension()];
+1080 |         for (int r = 0; r < m.getRowDimension(); r++) {
+1081 |             for (int c = 0; c < m.getColumnDimension(); c++) {
+1082 |                 d[r][c] = m.getEntry(r, c) * n.getEntry(r, c);
+1083 |             }
+1084 |         }
+1085 |         return new Array2DRowRealMatrix(d, false);
+1086 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.FitnessFunction.FitnessFunction()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 903-906
+Documentation:
+/** Simple constructor.
+         */
+Method code:
+903 |         public FitnessFunction() {
+904 |             valueRange = 1.0;
+905 |             isRepairMode = true;
+906 |         }
+
+===== M0005 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.scalarAdd(double)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 111-122
+Documentation:
+/** {@inheritDoc} */
+Method code:
+111 |     public RealMatrix scalarAdd(final double d) {
+112 |         final int rowCount    = getRowDimension();
+113 |         final int columnCount = getColumnDimension();
+114 |         final RealMatrix out = createMatrix(rowCount, columnCount);
+115 |         for (int row = 0; row < rowCount; ++row) {
+116 |             for (int col = 0; col < columnCount; ++col) {
+117 |                 out.setEntry(row, col, getEntry(row, col) + d);
+118 |             }
+119 |         }
+120 | 
+121 |         return out;
+122 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.createColumnRealMatrix(double[])
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 337-348
+Documentation:
+/**
+     * Creates a column {@link RealMatrix} using the data from the input
+     * array.
+     *
+     * @param columnData  the input column data
+     * @return a columnData x 1 RealMatrix
+     * @throws NoDataException if {@code columnData} is empty.
+     * @throws NullArgumentException if {@code columnData} is {@code null}.
+     */
+Method code:
+337 |     public static RealMatrix createColumnRealMatrix(double[] columnData)
+338 |         throws NoDataException, NullArgumentException {
+339 |         if (columnData == null) {
+340 |             throw new NullArgumentException();
+341 |         }
+342 |         final int nRows = columnData.length;
+343 |         final RealMatrix m = createRealMatrix(nRows, 1);
+344 |         for (int i = 0; i < nRows; ++i) {
+345 |             m.setEntry(i, 0, columnData[i]);
+346 |         }
+347 |         return m;
+348 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.getLocalizedMessage()
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 136-138
+Documentation:
+/**
+     * Gets the message in the default locale.
+     *
+     * @return the localized message.
+     */
+Method code:
+136 |     public String getLocalizedMessage() {
+137 |         return getMessage(Locale.getDefault());
+138 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.AbstractRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 65-74
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension  the number of rows in the new matrix
+     * @param columnDimension  the number of columns in the new matrix
+     * @throws NotStrictlyPositiveException if row or column dimension is not positive
+     */
+Method code:
+65 |     protected AbstractRealMatrix(final int rowDimension,
+66 |         final int columnDimension)
+67 |         throws NotStrictlyPositiveException {
+68 |         if (rowDimension < 1) {
+69 |             throw new NotStrictlyPositiveException(rowDimension);
+70 |         }
+71 |         if (columnDimension < 1) {
+72 |             throw new NotStrictlyPositiveException(columnDimension);
+73 |         }
+74 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math3.random.BitsStreamGenerator.BitsStreamGenerator()
+Source: src/main/java/org/apache/commons/math3/random/BitsStreamGenerator.java
+Original range: 35-37
+Documentation:
+/** Creates a new random number generator.
+     */
+Method code:
+35 |     public BitsStreamGenerator() {
+36 |         nextGaussian = Double.NaN;
+37 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOptimizer.computeObjectiveValue(double[])
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateOptimizer.java
+Original range: 93-100
+Documentation:
+/**
+     * Compute the objective function value.
+     *
+     * @param point Point at which the objective function must be evaluated.
+     * @return the objective function value at the specified point.
+     * @throws TooManyEvaluationsException if the maximal number of
+     * evaluations is exceeded.
+     */
+Method code:
+93 |     protected double computeObjectiveValue(double[] point) {
+94 |         try {
+95 |             evaluations.incrementCount();
+96 |         } catch (MaxCountExceededException e) {
+97 |             throw new TooManyEvaluationsException(e.getMax());
+98 |         }
+99 |         return function.value(point);
+100 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOptimizer.getMaxEvaluations()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateOptimizer.java
+Original range: 71-73
+Documentation:
+/** {@inheritDoc} */
+Method code:
+71 |     public int getMaxEvaluations() {
+72 |         return evaluations.getMaximalCount();
+73 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateSimpleBoundsOptimizer.getLowerBound()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateSimpleBoundsOptimizer.java
+Original range: 72-74
+Documentation:
+/**
+     * @return the lower bounds.
+     */
+Method code:
+72 |     public double[] getLowerBound() {
+73 |         return lowerBound.clone();
+74 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.anonymous_L280.visit(int,int,double)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 293-295
+Documentation:
+/** {@inheritDoc} */
+Method code:
+293 |             public void visit(final int row, final int column, final double value) {
+294 |                 sum += value * value;
+295 |             }
+
+===== M0014 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.zeros(int,int)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 1217-1219
+Documentation:
+/**
+     * @param n Number of rows.
+     * @param m Number of columns.
+     * @return n-by-m matrix of 0.0-values.
+     */
+Method code:
+1217 |     private static RealMatrix zeros(int n, int m) {
+1218 |         return new Array2DRowRealMatrix(n, m);
+1219 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.square(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 1062-1071
+Documentation:
+/**
+     * @param m Input matrix
+     * @return Matrix representing the element-wise square (^2) of m.
+     */
+Method code:
+1062 |     private static RealMatrix square(final RealMatrix m) {
+1063 |         double[][] d = new double[m.getRowDimension()][m.getColumnDimension()];
+1064 |         for (int r = 0; r < m.getRowDimension(); r++) {
+1065 |             for (int c = 0; c < m.getColumnDimension(); c++) {
+1066 |                 double e = m.getEntry(r, c);
+1067 |                 d[r][c] = e * e;
+1068 |             }
+1069 |         }
+1070 |         return new Array2DRowRealMatrix(d, false);
+1071 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math3.optimization.SimpleValueChecker.SimpleValueChecker()
+Source: src/main/java/org/apache/commons/math3/optimization/SimpleValueChecker.java
+Original range: 40-41
+Documentation:
+/**
+     * Build an instance with default thresholds.
+     * @deprecated See {@link AbstractConvergenceChecker#AbstractConvergenceChecker()}
+     */
+Method code:
+40 |     @Deprecated
+41 |     public SimpleValueChecker() {}
+
+===== M0017 =====
+Signature: org.apache.commons.math3.linear.DefaultRealMatrixPreservingVisitor.end()
+Source: src/main/java/org/apache/commons/math3/linear/DefaultRealMatrixPreservingVisitor.java
+Original range: 40-42
+Documentation:
+/** {@inheritDoc} */
+Method code:
+40 |     public double end() {
+41 |         return 0;
+42 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math3.util.FastMath.sqrt(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 374-376
+Documentation:
+/** Compute the square root of a number.
+     * <p><b>Note:</b> this implementation currently delegates to {@link Math#sqrt}
+     * @param a number on which evaluation is done
+     * @return square root of a
+     */
+Method code:
+374 |     public static double sqrt(final double a) {
+375 |         return Math.sqrt(a);
+376 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.ones(int,int)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 1189-1195
+Documentation:
+/**
+     * @param n Number of rows.
+     * @param m Number of columns.
+     * @return n-by-m matrix filled with 1.
+     */
+Method code:
+1189 |     private static RealMatrix ones(int n, int m) {
+1190 |         double[][] d = new double[n][m];
+1191 |         for (int r = 0; r < n; r++) {
+1192 |             Arrays.fill(d[r], 1.0);
+1193 |         }
+1194 |         return new Array2DRowRealMatrix(d, false);
+1195 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math3.util.CompositeFormat.getDefaultNumberFormat()
+Source: src/main/java/org/apache/commons/math3/util/CompositeFormat.java
+Original range: 42-44
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance()} with the only customizing that the
+     * maximum number of fraction digits is set to 10.
+     * @return the default number format.
+     */
+Method code:
+42 |     public static NumberFormat getDefaultNumberFormat() {
+43 |         return getDefaultNumberFormat(Locale.getDefault());
+44 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.FitnessFunction.decode(double[])
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 938-948
+Documentation:
+/**
+         * @param x Normalized objective variables.
+         * @return the original objective variables.
+         */
+Method code:
+938 |         public double[] decode(final double[] x) {
+939 |             if (boundaries == null) {
+940 |                 return x;
+941 |             }
+942 |             double[] res = new double[x.length];
+943 |             for (int i = 0; i < x.length; i++) {
+944 |                 double diff = boundaries[1][i] - boundaries[0][i];
+945 |                 res[i] = diff * x[i] + boundaries[0][i];
+946 |             }
+947 |             return res;
+948 |         }
+
+===== M0022 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.AbstractRealMatrix()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 56-56
+Documentation:
+/**
+     * Creates a matrix with no data
+     */
+Method code:
+56 |     protected AbstractRealMatrix() {}
+
+===== M0023 =====
+Signature: org.apache.commons.math3.util.FastMath.max(int,int)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3463-3465
+Documentation:
+/** Compute the maximum of two values
+     * @param a first value
+     * @param b second value
+     * @return b if a is lesser or equal to b, a otherwise
+     */
+Method code:
+3463 |     public static int max(final int a, final int b) {
+3464 |         return (a <= b) ? b : a;
+3465 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.initializeCMA(double[])
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 568-635
+Documentation:
+/**
+     * Initialization of the dynamic search parameters
+     *
+     * @param guess Initial guess for the arguments of the fitness function.
+     */
+Method code:
+568 |     private void initializeCMA(double[] guess) {
+569 |         if (lambda <= 0) {
+570 |             lambda = 4 + (int) (3. * Math.log(dimension));
+571 |         }
+572 |         // initialize sigma
+573 |         double[][] sigmaArray = new double[guess.length][1];
+574 |         for (int i = 0; i < guess.length; i++) {
+575 |             final double range =  (boundaries == null) ? 1.0 : boundaries[1][i] - boundaries[0][i];
+576 |             sigmaArray[i][0]   = ((inputSigma == null) ? 0.3 : inputSigma[i]) / range;
+577 |         }
+578 |         RealMatrix insigma = new Array2DRowRealMatrix(sigmaArray, false);
+579 |         sigma = max(insigma); // overall standard deviation
+580 | 
+581 |         // initialize termination criteria
+582 |         stopTolUpX = 1e3 * max(insigma);
+583 |         stopTolX = 1e-11 * max(insigma);
+584 |         stopTolFun = 1e-12;
+585 |         stopTolHistFun = 1e-13;
+586 | 
+587 |         // initialize selection strategy parameters
+588 |         mu = lambda / 2; // number of parents/points for recombination
+589 |         logMu2 = Math.log(mu + 0.5);
+590 |         weights = log(sequence(1, mu, 1)).scalarMultiply(-1.).scalarAdd(logMu2);
+591 |         double sumw = 0;
+592 |         double sumwq = 0;
+593 |         for (int i = 0; i < mu; i++) {
+594 |             double w = weights.getEntry(i, 0);
+595 |             sumw += w;
+596 |             sumwq += w * w;
+597 |         }
+598 |         weights = weights.scalarMultiply(1. / sumw);
+599 |         mueff = sumw * sumw / sumwq; // variance-effectiveness of sum w_i x_i
+600 | 
+601 |         // initialize dynamic strategy parameters and constants
+602 |         cc = (4. + mueff / dimension) /
+603 |                 (dimension + 4. + 2. * mueff / dimension);
+604 |         cs = (mueff + 2.) / (dimension + mueff + 3.);
+605 |         damps = (1. + 2. * Math.max(0, Math.sqrt((mueff - 1.) /
+606 |                 (dimension + 1.)) - 1.)) *
+607 |                 Math.max(0.3, 1. - dimension /
+608 |                         (1e-6 + Math.min(maxIterations, getMaxEvaluations() /
+609 |                                 lambda))) + cs; // minor increment
+610 |         ccov1 = 2. / ((dimension + 1.3) * (dimension + 1.3) + mueff);
+611 |         ccovmu = Math.min(1 - ccov1, 2. * (mueff - 2. + 1. / mueff) /
+612 |                 ((dimension + 2.) * (dimension + 2.) + mueff));
+613 |         ccov1Sep = Math.min(1, ccov1 * (dimension + 1.5) / 3.);
+614 |         ccovmuSep = Math.min(1 - ccov1, ccovmu * (dimension + 1.5) / 3.);
+615 |         chiN = Math.sqrt(dimension) *
+616 |                 (1. - 1. / (4. * dimension) + 1 / (21. * dimension * dimension));
+617 |         // intialize CMA internal values - updated each generation
+618 |         xmean = MatrixUtils.createColumnRealMatrix(guess); // objective
+619 |                                                            // variables
+620 |         diagD = insigma.scalarMultiply(1. / sigma);
+621 |         diagC = square(diagD);
+622 |         pc = zeros(dimension, 1); // evolution paths for C and sigma
+623 |         ps = zeros(dimension, 1); // B defines the coordinate system
+624 |         normps = ps.getFrobeniusNorm();
+625 | 
+626 |         B = eye(dimension, dimension);
+627 |         D = ones(dimension, 1); // diagonal D defines the scaling
+628 |         BD = times(B, repmat(diagD.transpose(), dimension, 1));
+629 |         C = B.multiply(diag(square(D)).multiply(B.transpose())); // covariance
+630 |         historySize = 10 + (int) (3. * 10. * dimension / lambda);
+631 |         fitnessHistory = new double[historySize]; // history of fitness values
+632 |         for (int i = 0; i < historySize; i++) {
+633 |             fitnessHistory[i] = Double.MAX_VALUE;
+634 |         }
+635 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.FitnessFunction.value(double[])
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 954-966
+Documentation:
+/**
+         * @param point Normalized objective variables.
+         * @return the objective value + penalty for violated bounds.
+         */
+Method code:
+954 |         public double value(final double[] point) {
+955 |             double value;
+956 |             if (boundaries != null && isRepairMode) {
+957 |                 double[] repaired = repair(point);
+958 |                 value = CMAESOptimizer.this
+959 |                         .computeObjectiveValue(decode(repaired)) +
+960 |                         penalty(point, repaired);
+961 |             } else {
+962 |                 value = CMAESOptimizer.this
+963 |                         .computeObjectiveValue(decode(point));
+964 |             }
+965 |             return isMinimize ? value : -value;
+966 |         }
+
+===== M0026 =====
+Signature: org.apache.commons.math3.linear.DefaultRealMatrixPreservingVisitor.start(int,int,int,int,int,int)
+Source: src/main/java/org/apache/commons/math3/linear/DefaultRealMatrixPreservingVisitor.java
+Original range: 32-34
+Documentation:
+/** {@inheritDoc} */
+Method code:
+32 |     public void start(int rows, int columns,
+33 |                       int startRow, int endRow, int startColumn, int endColumn) {
+34 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.CMAESOptimizer()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 245-247
+Documentation:
+/**
+     * Default constructor, uses default parameters
+     */
+Method code:
+245 |     public CMAESOptimizer() {
+246 |         this(0);
+247 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(String,String,String,String,String,String)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 112-117
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix and separator.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param rowPrefix row prefix to use instead of the default "{"
+     * @param rowSuffix row suffix to use instead of the default "}"
+     * @param rowSeparator tow separator to use instead of the default ";"
+     * @param columnSeparator column separator to use instead of the default ", "
+     */
+Method code:
+112 |     public RealMatrixFormat(final String prefix, final String suffix,
+113 |                             final String rowPrefix, final String rowSuffix,
+114 |                             final String rowSeparator, final String columnSeparator) {
+115 |         this(prefix, suffix, rowPrefix, rowSuffix, rowSeparator, columnSeparator,
+116 |                 CompositeFormat.getDefaultNumberFormat());
+117 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.addMessage(Localizable,Object...)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 85-89
+Documentation:
+/**
+     * Adds a message.
+     *
+     * @param pattern Message pattern.
+     * @param arguments Values for replacing the placeholders in the message
+     * pattern.
+     */
+Method code:
+85 |     public void addMessage(Localizable pattern,
+86 |                            Object ... arguments) {
+87 |         msgPatterns.add(pattern);
+88 |         msgArguments.add(ArgUtils.flatten(arguments));
+89 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkColumnIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 416-422
+Documentation:
+/**
+     * Check if a column index is valid.
+     *
+     * @param m Matrix.
+     * @param column Column index to check.
+     * @throws OutOfRangeException if {@code column} is not a valid index.
+     */
+Method code:
+416 |     public static void checkColumnIndex(final AnyMatrix m, final int column)
+417 |         throws OutOfRangeException {
+418 |         if (column < 0 || column >= m.getColumnDimension()) {
+419 |             throw new OutOfRangeException(LocalizedFormats.COLUMN_INDEX,
+420 |                                            column, 0, m.getColumnDimension() - 1);
+421 |         }
+422 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math3.random.MersenneTwister.setSeed(int[])
+Source: src/main/java/org/apache/commons/math3/random/MersenneTwister.java
+Original range: 164-207
+Documentation:
+/** Reinitialize the generator as if just built with the given int array seed.
+     * <p>The state of the generator is exactly the same as a new
+     * generator built with the same seed.</p>
+     * @param seed the initial seed (32 bits integers array), if null
+     * the seed of the generator will be the current system time plus the
+     * system identity hash code of this instance
+     */
+Method code:
+164 |     @Override
+165 |     public void setSeed(int[] seed) {
+166 | 
+167 |         if (seed == null) {
+168 |             setSeed(System.currentTimeMillis() + System.identityHashCode(this));
+169 |             return;
+170 |         }
+171 | 
+172 |         setSeed(19650218);
+173 |         int i = 1;
+174 |         int j = 0;
+175 | 
+176 |         for (int k = FastMath.max(N, seed.length); k != 0; k--) {
+177 |             long l0 = (mt[i] & 0x7fffffffl)   | ((mt[i]   < 0) ? 0x80000000l : 0x0l);
+178 |             long l1 = (mt[i-1] & 0x7fffffffl) | ((mt[i-1] < 0) ? 0x80000000l : 0x0l);
+179 |             long l  = (l0 ^ ((l1 ^ (l1 >> 30)) * 1664525l)) + seed[j] + j; // non linear
+180 |             mt[i]   = (int) (l & 0xffffffffl);
+181 |             i++; j++;
+182 |             if (i >= N) {
+183 |                 mt[0] = mt[N - 1];
+184 |                 i = 1;
+185 |             }
+186 |             if (j >= seed.length) {
+187 |                 j = 0;
+188 |             }
+189 |         }
+190 | 
+191 |         for (int k = N - 1; k != 0; k--) {
+192 |             long l0 = (mt[i] & 0x7fffffffl)   | ((mt[i]   < 0) ? 0x80000000l : 0x0l);
+193 |             long l1 = (mt[i-1] & 0x7fffffffl) | ((mt[i-1] < 0) ? 0x80000000l : 0x0l);
+194 |             long l  = (l0 ^ ((l1 ^ (l1 >> 30)) * 1566083941l)) - i; // non linear
+195 |             mt[i]   = (int) (l & 0xffffffffL);
+196 |             i++;
+197 |             if (i >= N) {
+198 |                 mt[0] = mt[N - 1];
+199 |                 i = 1;
+200 |             }
+201 |         }
+202 | 
+203 |         mt[0] = 0x80000000; // MSB is 1; assuring non-zero initial array
+204 | 
+205 |         clear(); // Clear normal deviate cache
+206 | 
+207 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math3.random.MersenneTwister.setSeed(long)
+Source: src/main/java/org/apache/commons/math3/random/MersenneTwister.java
+Original range: 214-217
+Documentation:
+/** Reinitialize the generator as if just built with the given long seed.
+     * <p>The state of the generator is exactly the same as a new
+     * generator built with the same seed.</p>
+     * @param seed the initial seed (64 bits integer)
+     */
+Method code:
+214 |     @Override
+215 |     public void setSeed(long seed) {
+216 |         setSeed(new int[] { (int) (seed >>> 32), (int) (seed & 0xffffffffl) });
+217 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOptimizer.optimizeInternal(int,MultivariateFunction,GoalType,double[])
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateOptimizer.java
+Original range: 125-149
+Documentation:
+/**
+     * Optimize an objective function.
+     *
+     * @param f Objective function.
+     * @param goalType Type of optimization goal: either
+     * {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}.
+     * @param startPoint Start point for optimization.
+     * @param maxEval Maximum number of function evaluations.
+     * @return the point/value pair giving the optimal value for objective
+     * function.
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException
+     * if the start point dimension is wrong.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
+     * if the maximal number of evaluations is exceeded.
+     * @throws org.apache.commons.math3.exception.NullArgumentException if
+     * any argument is {@code null}.
+     */
+Method code:
+125 |     protected PointValuePair optimizeInternal(int maxEval, MultivariateFunction f, GoalType goalType,
+126 |                                               double[] startPoint) {
+127 |         // Checks.
+128 |         if (f == null) {
+129 |             throw new NullArgumentException();
+130 |         }
+131 |         if (goalType == null) {
+132 |             throw new NullArgumentException();
+133 |         }
+134 |         if (startPoint == null) {
+135 |             throw new NullArgumentException();
+136 |         }
+137 | 
+138 |         // Reset.
+139 |         evaluations.setMaximalCount(maxEval);
+140 |         evaluations.resetCount();
+141 | 
+142 |         // Store optimization problem characteristics.
+143 |         function = f;
+144 |         goal = goalType;
+145 |         start = startPoint.clone();
+146 | 
+147 |         // Perform computation.
+148 |         return doOptimize();
+149 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.getLocalizedMessage()
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 84-87
+Documentation:
+/** {@inheritDoc} */
+Method code:
+84 |     @Override
+85 |     public String getLocalizedMessage() {
+86 |         return context.getLocalizedMessage();
+87 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math3.util.Incrementor.Incrementor(int)
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 61-69
+Documentation:
+/**
+     * Defines a maximal count.
+     *
+     * @param max Maximal count.
+     */
+Method code:
+61 |     public Incrementor(int max) {
+62 |         this(max,
+63 |              new MaxCountExceededCallback() {
+64 |                  /** {@inheritDoc} */
+65 |                  public void trigger(int max) {
+66 |                      throw new MaxCountExceededException(max);
+67 |                  }
+68 |              });
+69 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getInstance(Locale)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 223-225
+Documentation:
+/**
+     * Returns the default real vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the real vector format specific to the given locale.
+     */
+Method code:
+223 |     public static RealMatrixFormat getInstance(final Locale locale) {
+224 |         return new RealMatrixFormat(CompositeFormat.getDefaultNumberFormat(locale));
+225 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.CMAESOptimizer(int,double[],int,double,boolean,int,int,RandomGenerator,boolean,ConvergenceChecker<PointValuePair>)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 308-323
+Documentation:
+/**
+     * @param lambda Population size.
+     * @param inputSigma Initial search volume; sigma of offspring objective variables.
+     * @param maxIterations Maximal number of iterations.
+     * @param stopFitness Whether to stop if objective function value is smaller than
+     * {@code stopFitness}.
+     * @param isActiveCMA Chooses the covariance matrix update method.
+     * @param diagonalOnly Number of initial iterations, where the covariance matrix
+     * remains diagonal.
+     * @param checkFeasableCount Determines how often new random objective variables are
+     * generated in case they are out of bounds.
+     * @param random Random generator.
+     * @param generateStatistics Whether statistic data is collected.
+     * @param checker Convergence checker.
+     */
+Method code:
+308 |     public CMAESOptimizer(int lambda, double[] inputSigma,
+309 |                           int maxIterations, double stopFitness,
+310 |                           boolean isActiveCMA, int diagonalOnly, int checkFeasableCount,
+311 |                           RandomGenerator random, boolean generateStatistics,
+312 |                           ConvergenceChecker<PointValuePair> checker) {
+313 |         super(checker);
+314 |         this.lambda = lambda;
+315 |         this.inputSigma = inputSigma == null ? null : (double[]) inputSigma.clone();
+316 |         this.maxIterations = maxIterations;
+317 |         this.stopFitness = stopFitness;
+318 |         this.isActiveCMA = isActiveCMA;
+319 |         this.diagonalOnly = diagonalOnly;
+320 |         this.checkFeasableCount = checkFeasableCount;
+321 |         this.random = random;
+322 |         this.generateStatistics = generateStatistics;
+323 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.createRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 80-83
+Documentation:
+/**
+     * Returns a {@link RealMatrix} with specified dimensions.
+     * <p>The type of matrix returned depends on the dimension. Below
+     * 2<sup>12</sup> elements (i.e. 4096 elements or 64&times;64 for a
+     * square matrix) which can be stored in a 32kB array, a {@link
+     * Array2DRowRealMatrix} instance is built. Above this threshold a {@link
+     * BlockRealMatrix} instance is built.</p>
+     * <p>The matrix elements are all set to 0.0.</p>
+     * @param rows number of rows of the matrix
+     * @param columns number of columns of the matrix
+     * @return  RealMatrix with specified dimensions
+     * @see #createRealMatrix(double[][])
+     */
+Method code:
+80 |     public static RealMatrix createRealMatrix(final int rows, final int columns) {
+81 |         return (rows * columns <= 4096) ?
+82 |                 new Array2DRowRealMatrix(rows, columns) : new BlockRealMatrix(rows, columns);
+83 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.CMAESOptimizer(int)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 252-256
+Documentation:
+/**
+     * @param lambda Population size.
+     */
+Method code:
+252 |     public CMAESOptimizer(int lambda) {
+253 |         this(lambda, null, DEFAULT_MAXITERATIONS, DEFAULT_STOPFITNESS,
+254 |              DEFAULT_ISACTIVECMA, DEFAULT_DIAGONALONLY,
+255 |              DEFAULT_CHECKFEASABLECOUNT, DEFAULT_RANDOMGENERATOR, false);
+256 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math3.util.CompositeFormat.getDefaultNumberFormat(Locale)
+Source: src/main/java/org/apache/commons/math3/util/CompositeFormat.java
+Original range: 53-57
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance(java.util.Locale)} with the only
+     * customizing that the maximum number of fraction digits is set to 10.
+     * @param locale the specific locale used by the format.
+     * @return the default number format specific to the given locale.
+     */
+Method code:
+53 |     public static NumberFormat getDefaultNumberFormat(final Locale locale) {
+54 |         final NumberFormat nf = NumberFormat.getInstance(locale);
+55 |         nf.setMaximumFractionDigits(10);
+56 |         return nf;
+57 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math3.util.Incrementor.incrementCount()
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 154-158
+Documentation:
+/**
+     * Adds one to the current iteration count.
+     * At counter exhaustion, this method will call the
+     * {@link MaxCountExceededCallback#trigger(int) trigger} method of the
+     * callback object passed to the
+     * {@link #Incrementor(int,MaxCountExceededCallback) constructor}.
+     * If not explictly set, a default callback is used that will throw
+     * a {@code MaxCountExceededException}.
+     *
+     * @throws MaxCountExceededException at counter exhaustion, unless a
+     * custom {@link MaxCountExceededCallback callback} has been set at
+     * construction.
+     */
+Method code:
+154 |     public void incrementCount() {
+155 |         if (++count > maximalCount) {
+156 |             maxCountCallback.trigger(maximalCount);
+157 |         }
+158 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.walkInRowOrder(RealMatrixPreservingVisitor)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 404-416
+Documentation:
+/** {@inheritDoc} */
+Method code:
+404 |     @Override
+405 |     public double walkInRowOrder(final RealMatrixPreservingVisitor visitor) {
+406 |         final int rows    = getRowDimension();
+407 |         final int columns = getColumnDimension();
+408 |         visitor.start(rows, columns, 0, rows - 1, 0, columns - 1);
+409 |         for (int i = 0; i < rows; ++i) {
+410 |             final double[] rowI = data[i];
+411 |             for (int j = 0; j < columns; ++j) {
+412 |                 visitor.visit(i, j, rowI[j]);
+413 |             }
+414 |         }
+415 |         return visitor.end();
+416 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.math3.exception.util.LocalizedFormats.getLocalizedString(Locale)
+Source: src/main/java/org/apache/commons/math3/exception/util/LocalizedFormats.java
+Original range: 378-396
+Documentation:
+/** {@inheritDoc} */
+Method code:
+378 |     public String getLocalizedString(final Locale locale) {
+379 |         try {
+380 |             final String path = LocalizedFormats.class.getName().replaceAll("\\.", "/");
+381 |             ResourceBundle bundle =
+382 |                     ResourceBundle.getBundle("assets/" + path, locale);
+383 |             if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {
+384 |                 // the value of the resource is the translated format
+385 |                 return bundle.getString(toString());
+386 |             }
+387 | 
+388 |         } catch (MissingResourceException mre) {
+389 |             // do nothing here
+390 |         }
+391 | 
+392 |         // either the locale is not supported or the resource is unknown
+393 |         // don't translate and fall back to using the source format
+394 |         return sourceFormat;
+395 | 
+396 |     }
+
+===== M0044 =====
+Signature: org.apache.commons.math3.exception.util.ArgUtils.flatten(Object[])
+Source: src/main/java/org/apache/commons/math3/exception/util/ArgUtils.java
+Original range: 41-55
+Documentation:
+/**
+     * Transform a multidimensional array into a one-dimensional list.
+     *
+     * @param array Array (possibly multidimensional).
+     * @return a list of all the {@code Object} instances contained in
+     * {@code array}.
+     */
+Method code:
+41 |     public static Object[] flatten(Object[] array) {
+42 |         final List<Object> list = new ArrayList<Object>();
+43 |         if (array != null) {
+44 |             for (Object o : array) {
+45 |                 if (o instanceof Object[]) {
+46 |                     for (Object oR : flatten((Object[]) o)) {
+47 |                         list.add(oR);
+48 |                     }
+49 |                 } else {
+50 |                     list.add(o);
+51 |                 }
+52 |             }
+53 |         }
+54 |         return list.toArray();
+55 |     }
+
+===== M0045 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.max(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 1260-1271
+Documentation:
+/**
+     * @param m Input matrix.
+     * @return the maximum of the matrix element values.
+     */
+Method code:
+1260 |     private static double max(final RealMatrix m) {
+1261 |         double max = -Double.MAX_VALUE;
+1262 |         for (int r = 0; r < m.getRowDimension(); r++) {
+1263 |             for (int c = 0; c < m.getColumnDimension(); c++) {
+1264 |                 double e = m.getEntry(r, c);
+1265 |                 if (max < e) {
+1266 |                     max = e;
+1267 |                 }
+1268 |             }
+1269 |         }
+1270 |         return max;
+1271 |     }
+
+===== M0046 =====
+Signature: org.apache.commons.math3.optimization.AbstractConvergenceChecker.AbstractConvergenceChecker()
+Source: src/main/java/org/apache/commons/math3/optimization/AbstractConvergenceChecker.java
+Original range: 63-67
+Documentation:
+/**
+     * Build an instance with default thresholds.
+     * @deprecated in 3.1 (to be removed in 4.0). Convergence thresholds are
+     * problem-dependent. As this class is intended for users who want to set
+     * their own convergence criterion instead of relying on an algorithm's
+     * default procedure, they should also set the thresholds appropriately
+     * (cf. MATH-798).
+     */
+Method code:
+63 |     @Deprecated
+64 |     public AbstractConvergenceChecker() {
+65 |         this.relativeThreshold = DEFAULT_RELATIVE_THRESHOLD;
+66 |         this.absoluteThreshold = DEFAULT_ABSOLUTE_THRESHOLD;
+67 |     }
+
+===== M0047 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.eye(int,int)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 1202-1210
+Documentation:
+/**
+     * @param n Number of rows.
+     * @param m Number of columns.
+     * @return n-by-m matrix of 0.0-values, diagonal has values 1.0.
+     */
+Method code:
+1202 |     private static RealMatrix eye(int n, int m) {
+1203 |         double[][] d = new double[n][m];
+1204 |         for (int r = 0; r < n; r++) {
+1205 |             if (r < m) {
+1206 |                 d[r][r] = 1;
+1207 |             }
+1208 |         }
+1209 |         return new Array2DRowRealMatrix(d, false);
+1210 |     }
+
+===== M0048 =====
+Signature: org.apache.commons.math3.util.Incrementor.getMaximalCount()
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 104-106
+Documentation:
+/**
+     * Gets the upper limit of the counter.
+     *
+     * @return the counter upper limit.
+     */
+Method code:
+104 |     public int getMaximalCount() {
+105 |         return maximalCount;
+106 |     }
+
+===== M0049 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOptimizer.BaseAbstractMultivariateOptimizer(ConvergenceChecker<PointValuePair>)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateOptimizer.java
+Original range: 66-68
+Documentation:
+/**
+     * @param checker Convergence checker.
+     */
+Method code:
+66 |     protected BaseAbstractMultivariateOptimizer(ConvergenceChecker<PointValuePair> checker) {
+67 |         this.checker = checker;
+68 |     }
+
+===== M0050 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getColumnDimension()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 339-342
+Documentation:
+/** {@inheritDoc} */
+Method code:
+339 |     @Override
+340 |     public int getColumnDimension() {
+341 |         return ((data == null) || (data[0] == null)) ? 0 : data[0].length;
+342 |     }
+
+===== M0051 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.MathIllegalStateException()
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 68-70
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+68 |     public MathIllegalStateException() {
+69 |         this(LocalizedFormats.ILLEGAL_STATE);
+70 |     }
+
+===== M0052 =====
+Signature: org.apache.commons.math3.util.FastMath.nextUp(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 766-768
+Documentation:
+/** Compute next number towards positive infinity.
+     * @param a number to which neighbor should be computed
+     * @return neighbor of a towards positive infinity
+     */
+Method code:
+766 |     public static double nextUp(final double a) {
+767 |         return nextAfter(a, Double.POSITIVE_INFINITY);
+768 |     }
+
+===== M0053 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.doOptimize()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 354-499
+Documentation:
+/** {@inheritDoc} */
+Method code:
+354 |     @Override
+355 |     protected PointValuePair doOptimize() {
+356 |         checkParameters();
+357 |          // -------------------- Initialization --------------------------------
+358 |         isMinimize = getGoalType().equals(GoalType.MINIMIZE);
+359 |         final FitnessFunction fitfun = new FitnessFunction();
+360 |         final double[] guess = fitfun.encode(getStartPoint());
+361 |         // number of objective variables/problem dimension
+362 |         dimension = guess.length;
+363 |         initializeCMA(guess);
+364 |         iterations = 0;
+365 |         double bestValue = fitfun.value(guess);
+366 |         push(fitnessHistory, bestValue);
+367 |         PointValuePair optimum = new PointValuePair(getStartPoint(),
+368 |                 isMinimize ? bestValue : -bestValue);
+369 |         PointValuePair lastResult = null;
+370 | 
+371 |         // -------------------- Generation Loop --------------------------------
+372 | 
+373 |         generationLoop:
+374 |             for (iterations = 1; iterations <= maxIterations; iterations++) {
+375 |                 // Generate and evaluate lambda offspring
+376 |                 RealMatrix arz = randn1(dimension, lambda);
+377 |                 RealMatrix arx = zeros(dimension, lambda);
+378 |                 double[] fitness = new double[lambda];
+379 |                 // generate random offspring
+380 |                 for (int k = 0; k < lambda; k++) {
+381 |                     RealMatrix arxk = null;
+382 |                     for (int i = 0; i < checkFeasableCount+1; i++) {
+383 |                         if (diagonalOnly <= 0) {
+384 |                             arxk = xmean.add(BD.multiply(arz.getColumnMatrix(k))
+385 |                                     .scalarMultiply(sigma)); // m + sig * Normal(0,C)
+386 |                         } else {
+387 |                             arxk = xmean.add(times(diagD,arz.getColumnMatrix(k))
+388 |                                     .scalarMultiply(sigma));
+389 |                         }
+390 |                         if (i >= checkFeasableCount || fitfun.isFeasible(arxk.getColumn(0))) {
+391 |                             break;
+392 |                         }
+393 |                         // regenerate random arguments for row
+394 |                         arz.setColumn(k, randn(dimension));
+395 |                     }
+396 |                     copyColumn(arxk, 0, arx, k);
+397 |                     try {
+398 |                         fitness[k] = fitfun.value(arx.getColumn(k)); // compute fitness
+399 |                     } catch (TooManyEvaluationsException e) {
+400 |                         break generationLoop;
+401 |                     }
+402 |                 }
+403 |                 // Sort by fitness and compute weighted mean into xmean
+404 |                 int[] arindex = sortedIndices(fitness);
+405 |                 // Calculate new xmean, this is selection and recombination
+406 |                 RealMatrix xold = xmean; // for speed up of Eq. (2) and (3)
+407 |                 RealMatrix bestArx = selectColumns(arx, MathArrays.copyOf(arindex, mu));
+408 |                 xmean = bestArx.multiply(weights);
+409 |                 RealMatrix bestArz = selectColumns(arz, MathArrays.copyOf(arindex, mu));
+410 |                 RealMatrix zmean = bestArz.multiply(weights);
+411 |                 boolean hsig = updateEvolutionPaths(zmean, xold);
+412 |                 if (diagonalOnly <= 0) {
+413 |                     updateCovariance(hsig, bestArx, arz, arindex, xold);
+414 |                 } else {
+415 |                     updateCovarianceDiagonalOnly(hsig, bestArz, xold);
+416 |                 }
+417 |                 // Adapt step size sigma - Eq. (5)
+418 |                 sigma *= Math.exp(Math.min(1.0,(normps/chiN - 1.)*cs/damps));
+419 |                 double bestFitness = fitness[arindex[0]];
+420 |                 double worstFitness = fitness[arindex[arindex.length-1]];
+421 |                 if (bestValue > bestFitness) {
+422 |                     bestValue = bestFitness;
+423 |                     lastResult = optimum;
+424 |                     optimum = new PointValuePair(
+425 |                             fitfun.repairAndDecode(bestArx.getColumn(0)),
+426 |                             isMinimize ? bestFitness : -bestFitness);
+427 |                     if (getConvergenceChecker() != null && lastResult != null) {
+428 |                         if (getConvergenceChecker().converged(iterations, optimum, lastResult)) {
+429 |                             break generationLoop;
+430 |                         }
+431 |                     }
+432 |                 }
+433 |                 // handle termination criteria
+434 |                 // Break, if fitness is good enough
+435 |                 if (stopFitness != 0) { // only if stopFitness is defined
+436 |                     if (bestFitness < (isMinimize ? stopFitness : -stopFitness)) {
+437 |                         break generationLoop;
+438 |                     }
+439 |                 }
+440 |                 double[] sqrtDiagC = sqrt(diagC).getColumn(0);
+441 |                 double[] pcCol = pc.getColumn(0);
+442 |                 for (int i = 0; i < dimension; i++) {
+443 |                     if (sigma*(Math.max(Math.abs(pcCol[i]), sqrtDiagC[i])) > stopTolX) {
+444 |                         break;
+445 |                     }
+446 |                     if (i >= dimension-1) {
+447 |                         break generationLoop;
+448 |                     }
+449 |                 }
+450 |                 for (int i = 0; i < dimension; i++) {
+451 |                     if (sigma*sqrtDiagC[i] > stopTolUpX) {
+452 |                         break generationLoop;
+453 |                     }
+454 |                 }
+455 |                 double historyBest = min(fitnessHistory);
+456 |                 double historyWorst = max(fitnessHistory);
+457 |                 if (iterations > 2 && Math.max(historyWorst, worstFitness) -
+458 |                         Math.min(historyBest, bestFitness) < stopTolFun) {
+459 |                     break generationLoop;
+460 |                 }
+461 |                 if (iterations > fitnessHistory.length &&
+462 |                         historyWorst-historyBest < stopTolHistFun) {
+463 |                     break generationLoop;
+464 |                 }
+465 |                 // condition number of the covariance matrix exceeds 1e14
+466 |                 if (max(diagD)/min(diagD) > 1e7) {
+467 |                     break generationLoop;
+468 |                 }
+469 |                 // user defined termination
+470 |                 if (getConvergenceChecker() != null) {
+471 |                     PointValuePair current =
+472 |                         new PointValuePair(bestArx.getColumn(0),
+473 |                                 isMinimize ? bestFitness : -bestFitness);
+474 |                     if (lastResult != null &&
+475 |                         getConvergenceChecker().converged(iterations, current, lastResult)) {
+476 |                         break generationLoop;
+477 |                     }
+478 |                     lastResult = current;
+479 |                 }
+480 |                 // Adjust step size in case of equal function values (flat fitness)
+481 |                 if (bestValue == fitness[arindex[(int)(0.1+lambda/4.)]]) {
+482 |                     sigma = sigma * Math.exp(0.2+cs/damps);
+483 |                 }
+484 |                 if (iterations > 2 && Math.max(historyWorst, bestFitness) -
+485 |                         Math.min(historyBest, bestFitness) == 0) {
+486 |                     sigma = sigma * Math.exp(0.2+cs/damps);
+487 |                 }
+488 |                 // store best in history
+489 |                 push(fitnessHistory,bestFitness);
+490 |                 fitfun.setValueRange(worstFitness-bestFitness);
+491 |                 if (generateStatistics) {
+492 |                     statisticsSigmaHistory.add(sigma);
+493 |                     statisticsFitnessHistory.add(bestFitness);
+494 |                     statisticsMeanHistory.add(xmean.transpose());
+495 |                     statisticsDHistory.add(diagD.transpose().scalarMultiply(1E5));
+496 |                 }
+497 |             }
+498 |         return optimum;
+499 |     }
+
+===== M0054 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.Array2DRowRealMatrix(double[][],boolean)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 99-123
+Documentation:
+/**
+     * Create a new RealMatrix using the input array as the underlying
+     * data array.
+     * If an array is built specially in order to be embedded in a
+     * RealMatrix and not used directly, the {@code copyArray} may be
+     * set to {@code false}. This will prevent the copying and improve
+     * performance as no new array will be built and no data will be copied.
+     *
+     * @param d Data for new matrix.
+     * @param copyArray if {@code true}, the input array will be copied,
+     * otherwise it will be referenced.
+     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws NoDataException if {@code d} row or colum dimension is zero.
+     * @throws NullArgumentException if {@code d} is {@code null}.
+     * @see #Array2DRowRealMatrix(double[][])
+     */
+Method code:
+99 |     public Array2DRowRealMatrix(final double[][] d, final boolean copyArray)
+100 |         throws DimensionMismatchException, NoDataException,
+101 |         NullArgumentException {
+102 |         if (copyArray) {
+103 |             copyIn(d);
+104 |         } else {
+105 |             if (d == null) {
+106 |                 throw new NullArgumentException();
+107 |             }
+108 |             final int nRows = d.length;
+109 |             if (nRows == 0) {
+110 |                 throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+111 |             }
+112 |             final int nCols = d[0].length;
+113 |             if (nCols == 0) {
+114 |                 throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+115 |             }
+116 |             for (int r = 1; r < nRows; r++) {
+117 |                 if (d[r].length != nCols) {
+118 |                     throw new DimensionMismatchException(d[r].length, nCols);
+119 |                 }
+120 |             }
+121 |             data = d;
+122 |         }
+123 |     }
+
+===== M0055 =====
+Signature: org.apache.commons.math3.random.MersenneTwister.MersenneTwister()
+Source: src/main/java/org/apache/commons/math3/random/MersenneTwister.java
+Original range: 106-109
+Documentation:
+/** Creates a new random number generator.
+     * <p>The instance is initialized using the current time plus the
+     * system identity hash code of this instance as the seed.</p>
+     */
+Method code:
+106 |     public MersenneTwister() {
+107 |         mt = new int[N];
+108 |         setSeed(System.currentTimeMillis() + System.identityHashCode(this));
+109 |     }
+
+===== M0056 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.CMAESOptimizer(int,double[],int,double,boolean,int,int,RandomGenerator,boolean)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 283-291
+Documentation:
+/**
+     * @param lambda Population size.
+     * @param inputSigma Initial search volume; sigma of offspring objective variables.
+     * @param maxIterations Maximal number of iterations.
+     * @param stopFitness Whether to stop if objective function value is smaller than
+     * {@code stopFitness}.
+     * @param isActiveCMA Chooses the covariance matrix update method.
+     * @param diagonalOnly Number of initial iterations, where the covariance matrix
+     * remains diagonal.
+     * @param checkFeasableCount Determines how often new random objective variables are
+     * generated in case they are out of bounds.
+     * @param random Random generator.
+     * @param generateStatistics Whether statistic data is collected.
+     * @deprecated See {@link SimpleValueChecker#SimpleValueChecker()}
+     */
+Method code:
+283 |     @Deprecated
+284 |     public CMAESOptimizer(int lambda, double[] inputSigma,
+285 |                           int maxIterations, double stopFitness,
+286 |                           boolean isActiveCMA, int diagonalOnly, int checkFeasableCount,
+287 |                           RandomGenerator random, boolean generateStatistics) {
+288 |         this(lambda, inputSigma, maxIterations, stopFitness, isActiveCMA,
+289 |              diagonalOnly, checkFeasableCount, random, generateStatistics,
+290 |              new SimpleValueChecker());
+291 |     }
+
+===== M0057 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.FitnessFunction.encode(double[])
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 912-922
+Documentation:
+/**
+         * @param x Original objective variables.
+         * @return the normalized objective variables.
+         */
+Method code:
+912 |         public double[] encode(final double[] x) {
+913 |             if (boundaries == null) {
+914 |                 return x;
+915 |             }
+916 |             double[] res = new double[x.length];
+917 |             for (int i = 0; i < x.length; i++) {
+918 |                 double diff = boundaries[1][i] - boundaries[0][i];
+919 |                 res[i] = (x[i] - boundaries[0][i]) / diff;
+920 |             }
+921 |             return res;
+922 |         }
+
+===== M0058 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOptimizer.optimize(int,FUNC,GoalType,double[])
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateOptimizer.java
+Original range: 103-106
+Documentation:
+/** {@inheritDoc} */
+Method code:
+103 |     public PointValuePair optimize(int maxEval, FUNC f, GoalType goalType,
+104 |                                        double[] startPoint) {
+105 |         return optimizeInternal(maxEval, f, goalType, startPoint);
+106 |     }
+
+===== M0059 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.anonymous_L280.end()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 298-300
+Documentation:
+/** {@inheritDoc} */
+Method code:
+298 |             public double end() {
+299 |                 return FastMath.sqrt(sum);
+300 |             }
+
+===== M0060 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.getMessage(Locale)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 146-148
+Documentation:
+/**
+     * Gets the message in a specified locale.
+     *
+     * @param locale Locale in which the message should be translated.
+     * @return the localized message.
+     */
+Method code:
+146 |     public String getMessage(final Locale locale) {
+147 |         return buildMessage(locale, ": ");
+148 |     }
+
+===== M0061 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(String,String,String,String,String,String,NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 130-143
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix, separator and format
+     * for components.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param rowPrefix row prefix to use instead of the default "{"
+     * @param rowSuffix row suffix to use instead of the default "}"
+     * @param rowSeparator tow separator to use instead of the default ";"
+     * @param columnSeparator column separator to use instead of the default ", "
+     * @param format the custom format for components.
+     */
+Method code:
+130 |     public RealMatrixFormat(final String prefix, final String suffix,
+131 |                             final String rowPrefix, final String rowSuffix,
+132 |                             final String rowSeparator, final String columnSeparator,
+133 |                             final NumberFormat format) {
+134 |         this.prefix            = prefix;
+135 |         this.suffix            = suffix;
+136 |         this.rowPrefix         = rowPrefix;
+137 |         this.rowSuffix         = rowSuffix;
+138 |         this.rowSeparator      = rowSeparator;
+139 |         this.columnSeparator   = columnSeparator;
+140 |         this.format            = format;
+141 |         // disable grouping to prevent parsing problems
+142 |         this.format.setGroupingUsed(false);
+143 |     }
+
+===== M0062 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.MathIllegalStateException(Localizable,Object...)
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 44-48
+Documentation:
+/**
+     * Simple constructor.
+     *
+     * @param pattern Message pattern explaining the cause of the error.
+     * @param args Arguments.
+     */
+Method code:
+44 |     public MathIllegalStateException(Localizable pattern,
+45 |                                      Object ... args) {
+46 |         context = new ExceptionContext(this);
+47 |         context.addMessage(pattern, args);
+48 |     }
+
+===== M0063 =====
+Signature: org.apache.commons.math3.util.Incrementor.setMaximalCount(int)
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 95-97
+Documentation:
+/**
+     * Sets the upper limit for the counter.
+     * This does not automatically reset the current count to zero (see
+     * {@link #resetCount()}).
+     *
+     * @param max Upper limit of the counter.
+     */
+Method code:
+95 |     public void setMaximalCount(int max) {
+96 |         maximalCount = max;
+97 |     }
+
+===== M0064 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.walkInOptimizedOrder(RealMatrixPreservingVisitor)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 872-874
+Documentation:
+/** {@inheritDoc} */
+Method code:
+872 |     public double walkInOptimizedOrder(final RealMatrixPreservingVisitor visitor) {
+873 |         return walkInRowOrder(visitor);
+874 |     }
+
+===== M0065 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getEntry(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 301-305
+Documentation:
+/** {@inheritDoc} */
+Method code:
+301 |     public double getEntry(final int row, final int column)
+302 |         throws OutOfRangeException {
+303 |         MatrixUtils.checkMatrixIndex(this, row, column);
+304 |         return data[row][column];
+305 |     }
+
+===== M0066 =====
+Signature: org.apache.commons.math3.util.Incrementor.resetCount()
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 163-165
+Documentation:
+/**
+     * Resets the counter to 0.
+     */
+Method code:
+163 |     public void resetCount() {
+164 |         count = 0;
+165 |     }
+
+===== M0067 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.diag(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 1154-1168
+Documentation:
+/**
+     * @param m Input matrix.
+     * @return the diagonal n-by-n matrix if m is a column matrix or the column
+     * matrix representing the diagonal if m is a n-by-n matrix.
+     */
+Method code:
+1154 |     private static RealMatrix diag(final RealMatrix m) {
+1155 |         if (m.getColumnDimension() == 1) {
+1156 |             double[][] d = new double[m.getRowDimension()][m.getRowDimension()];
+1157 |             for (int i = 0; i < m.getRowDimension(); i++) {
+1158 |                 d[i][i] = m.getEntry(i, 0);
+1159 |             }
+1160 |             return new Array2DRowRealMatrix(d, false);
+1161 |         } else {
+1162 |             double[][] d = new double[m.getRowDimension()][1];
+1163 |             for (int i = 0; i < m.getColumnDimension(); i++) {
+1164 |                 d[i][0] = m.getEntry(i, i);
+1165 |             }
+1166 |             return new Array2DRowRealMatrix(d, false);
+1167 |         }
+1168 |     }
+
+===== M0068 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.createMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 141-145
+Documentation:
+/** {@inheritDoc} */
+Method code:
+141 |     public RealMatrix createMatrix(final int rowDimension,
+142 |                                    final int columnDimension)
+143 |         throws NotStrictlyPositiveException {
+144 |         return new Array2DRowRealMatrix(rowDimension, columnDimension);
+145 |     }
+
+===== M0069 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.ExceptionContext(Throwable)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 64-69
+Documentation:
+/** Simple constructor.
+     * @param throwable the exception this context refers too
+     */
+Method code:
+64 |     public ExceptionContext(final Throwable throwable) {
+65 |         this.throwable = throwable;
+66 |         msgPatterns    = new ArrayList<Localizable>();
+67 |         msgArguments   = new ArrayList<Object[]>();
+68 |         context        = new HashMap<String, Object>();
+69 |     }
+
+===== M0070 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkMultiplicationCompatible(AnyMatrix,AnyMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 538-545
+Documentation:
+/**
+     * Check if matrices are multiplication compatible
+     *
+     * @param left Left hand side matrix.
+     * @param right Right hand side matrix.
+     * @throws DimensionMismatchException if matrices are not multiplication
+     * compatible.
+     */
+Method code:
+538 |     public static void checkMultiplicationCompatible(final AnyMatrix left, final AnyMatrix right)
+539 |         throws DimensionMismatchException {
+540 | 
+541 |         if (left.getColumnDimension() != right.getRowDimension()) {
+542 |             throw new DimensionMismatchException(left.getColumnDimension(),
+543 |                                                  right.getRowDimension());
+544 |         }
+545 |     }
+
+===== M0071 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.buildMessage(Locale,String)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 169-187
+Documentation:
+/**
+     * Builds a message string.
+     *
+     * @param locale Locale in which the message should be translated.
+     * @param separator Message separator.
+     * @return a localized message string.
+     */
+Method code:
+169 |     private String buildMessage(Locale locale,
+170 |                                 String separator) {
+171 |         final StringBuilder sb = new StringBuilder();
+172 |         int count = 0;
+173 |         final int len = msgPatterns.size();
+174 |         for (int i = 0; i < len; i++) {
+175 |             final Localizable pat = msgPatterns.get(i);
+176 |             final Object[] args = msgArguments.get(i);
+177 |             final MessageFormat fmt = new MessageFormat(pat.getLocalizedString(locale),
+178 |                                                         locale);
+179 |             sb.append(fmt.format(args));
+180 |             if (++count < len) {
+181 |                 // Add a separator if there are other messages.
+182 |                 sb.append(separator);
+183 |             }
+184 |         }
+185 | 
+186 |         return sb.toString();
+187 |     }
+
+===== M0072 =====
+Signature: org.apache.commons.math3.random.BitsStreamGenerator.clear()
+Source: src/main/java/org/apache/commons/math3/random/BitsStreamGenerator.java
+Original range: 164-166
+Documentation:
+/**
+     * Clears the cache used by the default implementation of
+     * {@link #nextGaussian}.
+     */
+Method code:
+164 |     public void clear() {
+165 |         nextGaussian = Double.NaN;
+166 |     }
+
+===== M0073 =====
+Signature: org.apache.commons.math3.util.Incrementor.Incrementor(int,MaxCountExceededCallback)
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 79-86
+Documentation:
+/**
+     * Defines a maximal count and a callback method to be triggered at
+     * counter exhaustion.
+     *
+     * @param max Maximal count.
+     * @param cb Function to be called when the maximal count has been reached.
+     * @throws NullArgumentException if {@code cb} is {@code null}
+     */
+Method code:
+79 |     public Incrementor(int max,
+80 |                        MaxCountExceededCallback cb) {
+81 |         if (cb == null){
+82 |             throw new NullArgumentException();
+83 |         }
+84 |         maximalCount = max;
+85 |         maxCountCallback = cb;
+86 |     }
+
+===== M0074 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getFormat()
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 206-208
+Documentation:
+/**
+     * Get the components format.
+     * @return components format.
+     */
+Method code:
+206 |     public NumberFormat getFormat() {
+207 |         return format;
+208 |     }
+
+===== M0075 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.log(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 1033-1041
+Documentation:
+/**
+     * @param m Input matrix
+     * @return Matrix representing the element-wise logarithm of m.
+     */
+Method code:
+1033 |     private static RealMatrix log(final RealMatrix m) {
+1034 |         double[][] d = new double[m.getRowDimension()][m.getColumnDimension()];
+1035 |         for (int r = 0; r < m.getRowDimension(); r++) {
+1036 |             for (int c = 0; c < m.getColumnDimension(); c++) {
+1037 |                 d[r][c] = Math.log(m.getEntry(r, c));
+1038 |             }
+1039 |         }
+1040 |         return new Array2DRowRealMatrix(d, false);
+1041 |     }
+
+===== M0076 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.scalarMultiply(double)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 125-136
+Documentation:
+/** {@inheritDoc} */
+Method code:
+125 |     public RealMatrix scalarMultiply(final double d) {
+126 |         final int rowCount    = getRowDimension();
+127 |         final int columnCount = getColumnDimension();
+128 |         final RealMatrix out = createMatrix(rowCount, columnCount);
+129 |         for (int row = 0; row < rowCount; ++row) {
+130 |             for (int col = 0; col < columnCount; ++col) {
+131 |                 out.setEntry(row, col, getEntry(row, col) * d);
+132 |             }
+133 |         }
+134 | 
+135 |         return out;
+136 |     }
+
+===== M0077 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkMatrixIndex(AnyMatrix,int,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 386-391
+Documentation:
+/**
+     * Check if matrix indices are valid.
+     *
+     * @param m Matrix.
+     * @param row Row index to check.
+     * @param column Column index to check.
+     * @throws OutOfRangeException if {@code row} or {@code column} is not
+     * a valid index.
+     */
+Method code:
+386 |     public static void checkMatrixIndex(final AnyMatrix m,
+387 |                                         final int row, final int column)
+388 |         throws OutOfRangeException {
+389 |         checkRowIndex(m, row);
+390 |         checkColumnIndex(m, column);
+391 |     }
+
+===== M0078 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.sequence(double,double,double)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 1245-1254
+Documentation:
+/**
+     * @param start Start value.
+     * @param end End value.
+     * @param step Step size.
+     * @return a sequence as column matrix.
+     */
+Method code:
+1245 |     private static RealMatrix sequence(double start, double end, double step) {
+1246 |         int size = (int) ((end - start) / step + 1);
+1247 |         double[][] d = new double[size][1];
+1248 |         double value = start;
+1249 |         for (int r = 0; r < size; r++) {
+1250 |             d[r][0] = value;
+1251 |             value += step;
+1252 |         }
+1253 |         return new Array2DRowRealMatrix(d, false);
+1254 |     }
+
+===== M0079 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkRowIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 400-407
+Documentation:
+/**
+     * Check if a row index is valid.
+     *
+     * @param m Matrix.
+     * @param row Row index to check.
+     * @throws OutOfRangeException if {@code row} is not a valid index.
+     */
+Method code:
+400 |     public static void checkRowIndex(final AnyMatrix m, final int row)
+401 |         throws OutOfRangeException {
+402 |         if (row < 0 ||
+403 |             row >= m.getRowDimension()) {
+404 |             throw new OutOfRangeException(LocalizedFormats.ROW_INDEX,
+405 |                                           row, 0, m.getRowDimension() - 1);
+406 |         }
+407 |     }
+
+===== M0080 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateSimpleBoundsOptimizer.getUpperBound()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateSimpleBoundsOptimizer.java
+Original range: 79-81
+Documentation:
+/**
+     * @return the upper bounds.
+     */
+Method code:
+79 |     public double[] getUpperBound() {
+80 |         return upperBound.clone();
+81 |     }
+
+===== M0081 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 98-101
+Documentation:
+/**
+     * Create an instance with a custom number format for components.
+     * @param format the custom format for components.
+     */
+Method code:
+98 |     public RealMatrixFormat(final NumberFormat format) {
+99 |         this(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_ROW_PREFIX, DEFAULT_ROW_SUFFIX,
+100 |                 DEFAULT_ROW_SEPARATOR, DEFAULT_COLUMN_SEPARATOR, format);
+101 |     }
+
+===== M0082 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOptimizer.getStartPoint()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateOptimizer.java
+Original range: 161-163
+Documentation:
+/**
+     * @return the initial guess.
+     */
+Method code:
+161 |     public double[] getStartPoint() {
+162 |         return start.clone();
+163 |     }
+
+===== M0083 =====
+Signature: org.apache.commons.math3.random.MersenneTwister.setSeed(int)
+Source: src/main/java/org/apache/commons/math3/random/MersenneTwister.java
+Original range: 141-155
+Documentation:
+/** Reinitialize the generator as if just built with the given int seed.
+     * <p>The state of the generator is exactly the same as a new
+     * generator built with the same seed.</p>
+     * @param seed the initial seed (32 bits integer)
+     */
+Method code:
+141 |     @Override
+142 |     public void setSeed(int seed) {
+143 |         // we use a long masked by 0xffffffffL as a poor man unsigned int
+144 |         long longMT = seed;
+145 |         // NB: unlike original C code, we are working with java longs, the cast below makes masking unnecessary
+146 |         mt[0]= (int) longMT;
+147 |         for (mti = 1; mti < N; ++mti) {
+148 |             // See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier.
+149 |             // initializer from the 2002-01-09 C version by Makoto Matsumoto
+150 |             longMT = (1812433253l * (longMT ^ (longMT >> 30)) + mti) & 0xffffffffL;
+151 |             mt[mti]= (int) longMT;
+152 |         }
+153 | 
+154 |         clear(); // Clear normal deviate cache
+155 |     }
+
+===== M0084 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.checkParameters()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 504-561
+Documentation:
+/**
+     * Checks dimensions and values of boundaries and inputSigma if defined.
+     */
+Method code:
+504 |     private void checkParameters() {
+505 |         final double[] init = getStartPoint();
+506 |         final double[] lB = getLowerBound();
+507 |         final double[] uB = getUpperBound();
+508 | 
+509 |         // Checks whether there is at least one finite bound value.
+510 |         boolean hasFiniteBounds = false;
+511 |         for (int i = 0; i < lB.length; i++) {
+512 |             if (!Double.isInfinite(lB[i]) ||
+513 |                 !Double.isInfinite(uB[i])) {
+514 |                 hasFiniteBounds = true;
+515 |                 break;
+516 |             }
+517 |         }
+518 |         // Checks whether there is at least one infinite bound value.
+519 |         boolean hasInfiniteBounds = false;
+520 |         if (hasFiniteBounds) {
+521 |             for (int i = 0; i < lB.length; i++) {
+522 |                 if (Double.isInfinite(lB[i]) ||
+523 |                     Double.isInfinite(uB[i])) {
+524 |                     hasInfiniteBounds = true;
+525 |                     break;
+526 |                 }
+527 |             }
+528 | 
+529 |             if (hasInfiniteBounds) {
+530 |                 // If there is at least one finite bound, none can be infinite,
+531 |                 // because mixed cases are not supported by the current code.
+532 |                 throw new MathUnsupportedOperationException();
+533 |             } else {
+534 |                 // Convert API to internal handling of boundaries.
+535 |                 boundaries = new double[2][];
+536 |                 boundaries[0] = lB;
+537 |                 boundaries[1] = uB;
+538 | 
+539 |                 // Abort early if the normalization will overflow (cf. "encode" method).
+540 |             }
+541 |         } else {
+542 |             // Convert API to internal handling of boundaries.
+543 |             boundaries = null;
+544 |         }
+545 | 
+546 |         if (inputSigma != null) {
+547 |             if (inputSigma.length != init.length) {
+548 |                 throw new DimensionMismatchException(inputSigma.length, init.length);
+549 |             }
+550 |             for (int i = 0; i < init.length; i++) {
+551 |                 if (inputSigma[i] < 0) {
+552 |                     throw new NotPositiveException(inputSigma[i]);
+553 |                 }
+554 |                 if (boundaries != null) {
+555 |                     if (inputSigma[i] > boundaries[1][i] - boundaries[0][i]) {
+556 |                         throw new OutOfRangeException(inputSigma[i], 0, boundaries[1][i] - boundaries[0][i]);
+557 |                     }
+558 |                 }
+559 |             }
+560 |         }
+561 |     }
+
+===== M0085 =====
+Signature: org.apache.commons.math3.util.Incrementor.Incrementor()
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 52-54
+Documentation:
+/**
+     * Default constructor.
+     * For the new instance to be useful, the maximal count must be set
+     * by calling {@link #setMaximalCount(int) setMaximalCount}.
+     */
+Method code:
+52 |     public Incrementor() {
+53 |         this(0);
+54 |     }
+
+===== M0086 =====
+Signature: org.apache.commons.math3.optimization.direct.CMAESOptimizer.FitnessFunction.repair(double[])
+Source: src/main/java/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java
+Original range: 998-1010
+Documentation:
+/**
+         * @param x Normalized objective variables.
+         * @return the repaired objective variables - all in bounds.
+         */
+Method code:
+998 |         private double[] repair(final double[] x) {
+999 |             double[] repaired = new double[x.length];
+1000 |             for (int i = 0; i < x.length; i++) {
+1001 |                 if (x[i] < 0) {
+1002 |                     repaired[i] = 0;
+1003 |                 } else if (x[i] > 1.0) {
+1004 |                     repaired[i] = 1.0;
+1005 |                 } else {
+1006 |                     repaired[i] = x[i];
+1007 |                 }
+1008 |             }
+1009 |             return repaired;
+1010 |         }
+
+===== M0087 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.getFrobeniusNorm()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 279-302
+Documentation:
+/** {@inheritDoc} */
+Method code:
+279 |     public double getFrobeniusNorm() {
+280 |         return walkInOptimizedOrder(new RealMatrixPreservingVisitor() {
+281 | 
+282 |             /** Sum of squared entries. */
+283 |             private double sum;
+284 | 
+285 |             /** {@inheritDoc} */
+286 |             public void start(final int rows, final int columns,
+287 |                               final int startRow, final int endRow,
+288 |                               final int startColumn, final int endColumn) {
+289 |                 sum = 0;
+290 |             }
+291 | 
+292 |             /** {@inheritDoc} */
+293 |             public void visit(final int row, final int column, final double value) {
+294 |                 sum += value * value;
+295 |             }
+296 | 
+297 |             /** {@inheritDoc} */
+298 |             public double end() {
+299 |                 return FastMath.sqrt(sum);
+300 |             }
+301 |         });
+302 |     }
+
+===== M0088 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.anonymous_L601.visit(int,int,double)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 604-607
+Documentation:
+/** {@inheritDoc} */
+Method code:
+604 |             @Override
+605 |             public void visit(final int row, final int column, final double value) {
+606 |                 out.setEntry(column, row, value);
+607 |             }
+
+===== M0089 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.Array2DRowRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 58-63
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension Number of rows in the new matrix.
+     * @param columnDimension Number of columns in the new matrix.
+     * @throws NotStrictlyPositiveException if the row or column dimension is
+     * not positive.
+     */
+Method code:
+58 |     public Array2DRowRealMatrix(final int rowDimension,
+59 |                                 final int columnDimension)
+60 |         throws NotStrictlyPositiveException {
+61 |         super(rowDimension, columnDimension);
+62 |         data = new double[rowDimension][columnDimension];
+63 |     }
+
+===== M0090 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getInstance()
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 214-216
+Documentation:
+/**
+     * Returns the default real vector format for the current locale.
+     * @return the default real vector format.
+     */
+Method code:
+214 |     public static RealMatrixFormat getInstance() {
+215 |         return getInstance(Locale.getDefault());
+216 |     }
+
+===== M0091 =====
+Signature: org.apache.commons.math3.util.FastMath.nextAfter(double,double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3218-3241
+Documentation:
+/**
+     * Get the next machine representable number after a number, moving
+     * in the direction of another number.
+     * <p>
+     * The ordering is as follows (increasing):
+     * <ul>
+     * <li>-INFINITY</li>
+     * <li>-MAX_VALUE</li>
+     * <li>-MIN_VALUE</li>
+     * <li>-0.0</li>
+     * <li>+0.0</li>
+     * <li>+MIN_VALUE</li>
+     * <li>+MAX_VALUE</li>
+     * <li>+INFINITY</li>
+     * <li></li>
+     * <p>
+     * If arguments compare equal, then the second argument is returned.
+     * <p>
+     * If {@code direction} is greater than {@code d},
+     * the smallest machine representable number strictly greater than
+     * {@code d} is returned; if less, then the largest representable number
+     * strictly less than {@code d} is returned.</p>
+     * <p>
+     * If {@code d} is infinite and direction does not
+     * bring it back to finite numbers, it is returned unchanged.</p>
+     *
+     * @param d base number
+     * @param direction (the only important thing is whether
+     * {@code direction} is greater or smaller than {@code d})
+     * @return the next machine representable number in the specified direction
+     */
+Method code:
+3218 |     public static double nextAfter(double d, double direction) {
+3219 | 
+3220 |         // handling of some important special cases
+3221 |         if (Double.isNaN(d) || Double.isNaN(direction)) {
+3222 |             return Double.NaN;
+3223 |         } else if (d == direction) {
+3224 |             return direction;
+3225 |         } else if (Double.isInfinite(d)) {
+3226 |             return (d < 0) ? -Double.MAX_VALUE : Double.MAX_VALUE;
+3227 |         } else if (d == 0) {
+3228 |             return (direction < 0) ? -Double.MIN_VALUE : Double.MIN_VALUE;
+3229 |         }
+3230 |         // special cases MAX_VALUE to infinity and  MIN_VALUE to 0
+3231 |         // are handled just as normal numbers
+3232 | 
+3233 |         final long bits = Double.doubleToLongBits(d);
+3234 |         final long sign = bits & 0x8000000000000000L;
+3235 |         if ((direction < d) ^ (sign == 0L)) {
+3236 |             return Double.longBitsToDouble(sign | ((bits & 0x7fffffffffffffffL) + 1));
+3237 |         } else {
+3238 |             return Double.longBitsToDouble(sign | ((bits & 0x7fffffffffffffffL) - 1));
+3239 |         }
+3240 | 
+3241 |     }
+
+===== M0092 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.multiply(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 139-158
+Documentation:
+/** {@inheritDoc} */
+Method code:
+139 |     public RealMatrix multiply(final RealMatrix m)
+140 |         throws DimensionMismatchException {
+141 |         MatrixUtils.checkMultiplicationCompatible(this, m);
+142 | 
+143 |         final int nRows = getRowDimension();
+144 |         final int nCols = m.getColumnDimension();
+145 |         final int nSum  = getColumnDimension();
+146 |         final RealMatrix out = createMatrix(nRows, nCols);
+147 |         for (int row = 0; row < nRows; ++row) {
+148 |             for (int col = 0; col < nCols; ++col) {
+149 |                 double sum = 0;
+150 |                 for (int i = 0; i < nSum; ++i) {
+151 |                     sum += getEntry(row, i) * m.getEntry(i, col);
+152 |                 }
+153 |                 out.setEntry(row, col, sum);
+154 |             }
+155 |         }
+156 | 
+157 |         return out;
+158 |     }
+
+===== M0093 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.setEntry(int,int,double)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 308-312
+Documentation:
+/** {@inheritDoc} */
+Method code:
+308 |     public void setEntry(final int row, final int column, final double value)
+309 |         throws OutOfRangeException {
+310 |         MatrixUtils.checkMatrixIndex(this, row, column);
+311 |         data[row][column] = value;
+312 |     }
+
+===== M0094 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOptimizer.getGoalType()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateOptimizer.java
+Original range: 154-156
+Documentation:
+/**
+     * @return the optimization type.
+     */
+Method code:
+154 |     public GoalType getGoalType() {
+155 |         return goal;
+156 |     }
+
+===== M0095 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.anonymous_L280.start(int,int,int,int,int,int)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 286-290
+Documentation:
+/** {@inheritDoc} */
+Method code:
+286 |             public void start(final int rows, final int columns,
+287 |                               final int startRow, final int endRow,
+288 |                               final int startColumn, final int endColumn) {
+289 |                 sum = 0;
+290 |             }
+
+===== M0096 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateSimpleBoundsOptimizer.optimize(int,FUNC,GoalType,double[],double[],double[])
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateSimpleBoundsOptimizer.java
+Original range: 91-141
+Documentation:
+/** {@inheritDoc} */
+Method code:
+91 |     public PointValuePair optimize(int maxEval, FUNC f, GoalType goalType,
+92 |                                        double[] startPoint,
+93 |                                        double[] lower, double[] upper) {
+94 |         // Checks.
+95 |         final int dim = startPoint.length;
+96 |         if (lower != null) {
+97 |             if (lower.length != dim) {
+98 |                 throw new DimensionMismatchException(lower.length, dim);
+99 |             }
+100 |             for (int i = 0; i < dim; i++) {
+101 |                 final double v = startPoint[i];
+102 |                 final double lo = lower[i];
+103 |                 if (v < lo) {
+104 |                     throw new NumberIsTooSmallException(v, lo, true);
+105 |                 }
+106 |             }
+107 |         }
+108 |         if (upper != null) {
+109 |             if (upper.length != dim) {
+110 |                 throw new DimensionMismatchException(upper.length, dim);
+111 |             }
+112 |             for (int i = 0; i < dim; i++) {
+113 |                 final double v = startPoint[i];
+114 |                 final double hi = upper[i];
+115 |                 if (v > hi) {
+116 |                     throw new NumberIsTooLargeException(v, hi, true);
+117 |                 }
+118 |             }
+119 |         }
+120 | 
+121 |         // Initialization.
+122 |         if (lower == null) {
+123 |             lowerBound = new double[dim];
+124 |             for (int i = 0; i < dim; i++) {
+125 |                 lowerBound[i] = Double.NEGATIVE_INFINITY;
+126 |             }
+127 |         } else {
+128 |             lowerBound = lower.clone();
+129 |         }
+130 |         if (upper == null) {
+131 |             upperBound = new double[dim];
+132 |             for (int i = 0; i < dim; i++) {
+133 |                 upperBound[i] = Double.POSITIVE_INFINITY;
+134 |             }
+135 |         } else {
+136 |             upperBound = upper.clone();
+137 |         }
+138 | 
+139 |         // Base class method performs the non bound-specific initializations.
+140 |         return super.optimize(maxEval, f, goalType, startPoint);
+141 |     }
+
+===== M0097 =====
+Signature: org.apache.commons.math3.exception.util.LocalizedFormats.LocalizedFormats(String)
+Source: src/main/java/org/apache/commons/math3/exception/util/LocalizedFormats.java
+Original range: 368-370
+Documentation:
+/** Simple constructor.
+     * @param sourceFormat source English format to use when no
+     * localized version is available
+     */
+Method code:
+368 |     private LocalizedFormats(final String sourceFormat) {
+369 |         this.sourceFormat = sourceFormat;
+370 |     }
+
+===== M0098 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateSimpleBoundsOptimizer.BaseAbstractMultivariateSimpleBoundsOptimizer(ConvergenceChecker<PointValuePair>)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateSimpleBoundsOptimizer.java
+Original range: 65-67
+Documentation:
+/**
+     * @param checker Convergence checker.
+     */
+Method code:
+65 |     protected BaseAbstractMultivariateSimpleBoundsOptimizer(ConvergenceChecker<PointValuePair> checker) {
+66 |         super(checker);
+67 |     }
+
+===== M0099 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.transpose()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 597-612
+Documentation:
+/** {@inheritDoc} */
+Method code:
+597 |     public RealMatrix transpose() {
+598 |         final int nRows = getRowDimension();
+599 |         final int nCols = getColumnDimension();
+600 |         final RealMatrix out = createMatrix(nCols, nRows);
+601 |         walkInOptimizedOrder(new DefaultRealMatrixPreservingVisitor() {
+602 | 
+603 |             /** {@inheritDoc} */
+604 |             @Override
+605 |             public void visit(final int row, final int column, final double value) {
+606 |                 out.setEntry(column, row, value);
+607 |             }
+608 | 
+609 |         });
+610 | 
+611 |         return out;
+612 |     }
+

@@ -1,0 +1,300 @@
+===== M0001 =====
+Signature: com.google.javascript.jscomp.CommandLineRunner.Flags.BooleanOptionHandler.BooleanOptionHandler(CmdLineParser,OptionDef,Setter<? super Boolean>)
+Source: src/com/google/javascript/jscomp/CommandLineRunner.java
+Original range: 326-330
+Documentation:
+
+Method code:
+326 |       public BooleanOptionHandler(
+327 |           CmdLineParser parser, OptionDef option,
+328 |           Setter<? super Boolean> setter) {
+329 |         super(parser, option, setter);
+330 |       }
+
+===== M0002 =====
+Signature: com.google.javascript.jscomp.JSSourceFile.fromCode(String,String)
+Source: src/com/google/javascript/jscomp/JSSourceFile.java
+Original range: 54-56
+Documentation:
+
+Method code:
+54 |   public static JSSourceFile fromCode(String fileName, String code) {
+55 |     return new JSSourceFile(SourceFile.fromCode(fileName, code));
+56 |   }
+
+===== M0003 =====
+Signature: com.google.javascript.jscomp.CommandLineRunner.Flags.BooleanOptionHandler.getDefaultMetaVariable()
+Source: src/com/google/javascript/jscomp/CommandLineRunner.java
+Original range: 353-356
+Documentation:
+
+Method code:
+353 |       @Override
+354 |       public String getDefaultMetaVariable() {
+355 |         return null;
+356 |       }
+
+===== M0004 =====
+Signature: com.google.javascript.jscomp.SourceFile.setOriginalPath(String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 117-119
+Documentation:
+
+Method code:
+117 |   public void setOriginalPath(String originalPath) {
+118 |     this.originalPath = originalPath;
+119 |   }
+
+===== M0005 =====
+Signature: com.google.javascript.jscomp.CommandLineRunner.CommandLineRunner(String[],PrintStream,PrintStream)
+Source: src/com/google/javascript/jscomp/CommandLineRunner.java
+Original range: 399-402
+Documentation:
+
+Method code:
+399 |   protected CommandLineRunner(String[] args, PrintStream out, PrintStream err) {
+400 |     super(out, err);
+401 |     initConfigFromFlags(args, err);
+402 |   }
+
+===== M0006 =====
+Signature: com.google.javascript.jscomp.SourceFile.getName()
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 135-137
+Documentation:
+/** Returns a unique name for the source file. */
+Method code:
+135 |   public String getName() {
+136 |     return fileName;
+137 |   }
+
+===== M0007 =====
+Signature: com.google.javascript.jscomp.CommandLineRunner.shouldRunCompiler()
+Source: src/com/google/javascript/jscomp/CommandLineRunner.java
+Original range: 609-611
+Documentation:
+/**
+   * @return Whether the configuration is valid.
+   */
+Method code:
+609 |   public boolean shouldRunCompiler() {
+610 |     return this.isConfigValid;
+611 |   }
+
+===== M0008 =====
+Signature: com.google.javascript.jscomp.SourceFile.Preloaded.Preloaded(String,String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 296-298
+Documentation:
+
+Method code:
+296 |     Preloaded(String fileName, String code) {
+297 |       this(fileName, fileName, code);
+298 |     }
+
+===== M0009 =====
+Signature: com.google.javascript.jscomp.SourceFile.fromCode(String,String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 256-258
+Documentation:
+
+Method code:
+256 |   public static SourceFile fromCode(String fileName, String code) {
+257 |     return new Preloaded(fileName, code);
+258 |   }
+
+===== M0010 =====
+Signature: com.google.javascript.jscomp.JSSourceFile.JSSourceFile(SourceFile)
+Source: src/com/google/javascript/jscomp/JSSourceFile.java
+Original range: 71-74
+Documentation:
+
+Method code:
+71 |   private JSSourceFile(SourceFile referenced) {
+72 |     super(referenced.getName());
+73 |     this.referenced = referenced;
+74 |   }
+
+===== M0011 =====
+Signature: com.google.javascript.jscomp.SourceFile.SourceFile(String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 79-84
+Documentation:
+/**
+   * Construct a new abstract source file.
+   *
+   * @param fileName The file name of the source file. It does not necessarily
+   *     need to correspond to a real path. But it should be unique. Will
+   *     appear in warning messages emitted by the compiler.
+   */
+Method code:
+79 |   SourceFile(String fileName) {
+80 |     this.fileName = fileName;
+81 |     // Starting point: offset 0 is at line 1.
+82 |     this.lastOffset = 0;
+83 |     this.lastLine = 1;
+84 |   }
+
+===== M0012 =====
+Signature: com.google.javascript.jscomp.CommandLineRunner.initConfigFromFlags(String[],PrintStream)
+Source: src/com/google/javascript/jscomp/CommandLineRunner.java
+Original range: 404-484
+Documentation:
+
+Method code:
+404 |   private void initConfigFromFlags(String[] args, PrintStream err) {
+405 |     // Args4j has a different format that the old command-line parser.
+406 |     // So we use some voodoo to get the args into the format that args4j
+407 |     // expects.
+408 |     Pattern argPattern = Pattern.compile("(--[a-zA-Z_]+)=(.*)");
+409 |     Pattern quotesPattern = Pattern.compile("^['\"](.*)['\"]$");
+410 |     List<String> processedArgs = Lists.newArrayList();
+411 |     for (String arg : args) {
+412 |       Matcher matcher = argPattern.matcher(arg);
+413 |       if (matcher.matches()) {
+414 |         processedArgs.add(matcher.group(1));
+415 | 
+416 |         String value = matcher.group(2);
+417 |         Matcher quotesMatcher = quotesPattern.matcher(value);
+418 |         if (quotesMatcher.matches()) {
+419 |           processedArgs.add(quotesMatcher.group(1));
+420 |         } else {
+421 |           processedArgs.add(value);
+422 |         }
+423 |       } else {
+424 |         processedArgs.add(arg);
+425 |       }
+426 |     }
+427 | 
+428 |     CmdLineParser parser = new CmdLineParser(flags);
+429 |     isConfigValid = true;
+430 |     try {
+431 |       parser.parseArgument(processedArgs.toArray(new String[] {}));
+432 |     } catch (CmdLineException e) {
+433 |       err.println(e.getMessage());
+434 |       isConfigValid = false;
+435 |     }
+436 | 
+437 |     if (flags.version) {
+438 |       ResourceBundle config = ResourceBundle.getBundle(configResource);
+439 |       err.println(
+440 |           "Closure Compiler (http://code.google.com/closure/compiler)\n" +
+441 |           "Version: " + config.getString("compiler.version") + "\n" +
+442 |           "Built on: " + config.getString("compiler.date"));
+443 |       err.flush();
+444 |     }
+445 | 
+446 |     if (!isConfigValid || flags.display_help) {
+447 |       isConfigValid = false;
+448 |       parser.printUsage(err);
+449 |     } else {
+450 |       getCommandLineConfig()
+451 |           .setPrintTree(flags.print_tree)
+452 |           .setComputePhaseOrdering(flags.compute_phase_ordering)
+453 |           .setPrintAst(flags.print_ast)
+454 |           .setPrintPassGraph(flags.print_pass_graph)
+455 |           .setJscompDevMode(flags.jscomp_dev_mode)
+456 |           .setLoggingLevel(flags.logging_level)
+457 |           .setExterns(flags.externs)
+458 |           .setJs(flags.js)
+459 |           .setJsOutputFile(flags.js_output_file)
+460 |           .setModule(flags.module)
+461 |           .setVariableMapInputFile(flags.variable_map_input_file)
+462 |           .setPropertyMapInputFile(flags.property_map_input_file)
+463 |           .setVariableMapOutputFile(flags.variable_map_output_file)
+464 |           .setCreateNameMapFiles(flags.create_name_map_files)
+465 |           .setPropertyMapOutputFile(flags.property_map_output_file)
+466 |           .setCodingConvention(flags.third_party ?
+467 |                new DefaultCodingConvention() :
+468 |                new ClosureCodingConvention())
+469 |           .setSummaryDetailLevel(flags.summary_detail_level)
+470 |           .setOutputWrapper(flags.output_wrapper)
+471 |           .setOutputWrapperMarker(flags.output_wrapper_marker)
+472 |           .setModuleWrapper(flags.module_wrapper)
+473 |           .setModuleOutputPathPrefix(flags.module_output_path_prefix)
+474 |           .setCreateSourceMap(flags.create_source_map)
+475 |           .setJscompError(flags.jscomp_error)
+476 |           .setJscompWarning(flags.jscomp_warning)
+477 |           .setJscompOff(flags.jscomp_off)
+478 |           .setDefine(flags.define)
+479 |           .setCharset(flags.charset)
+480 |           .setManageClosureDependencies(flags.manage_closure_dependencies)
+481 |           .setClosureEntryPoints(flags.closure_entry_point)
+482 |           .setOutputManifest(flags.output_manifest);
+483 |     }
+484 |   }
+
+===== M0013 =====
+Signature: com.google.javascript.jscomp.SourceFile.Preloaded.Preloaded(String,String,String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 300-304
+Documentation:
+
+Method code:
+300 |     Preloaded(String fileName, String originalPath, String code) {
+301 |       super(fileName);
+302 |       super.setOriginalPath(originalPath);
+303 |       super.setCode(code);
+304 |     }
+
+===== M0014 =====
+Signature: com.google.javascript.jscomp.CommandLineRunner.Flags.BooleanOptionHandler.parseArguments(Parameters)
+Source: src/com/google/javascript/jscomp/CommandLineRunner.java
+Original range: 332-351
+Documentation:
+
+Method code:
+332 |       @Override
+333 |       public int parseArguments(Parameters params) throws CmdLineException {
+334 |         String param = params.getParameter(0);
+335 | 
+336 |         if (param == null) {
+337 |           setter.addValue(true);
+338 |           return 0;
+339 |         } else {
+340 |           String lowerParam = param.toLowerCase();
+341 |           if (TRUES.contains(lowerParam)) {
+342 |             setter.addValue(true);
+343 |           } else if (FALSES.contains(lowerParam)) {
+344 |             setter.addValue(false);
+345 |           } else {
+346 |             setter.addValue(true);
+347 |             return 0;
+348 |           }
+349 |           return 1;
+350 |         }
+351 |       }
+
+===== M0015 =====
+Signature: com.google.javascript.jscomp.CompilationLevel.CompilationLevel()
+Source: src/com/google/javascript/jscomp/CompilationLevel.java
+Original range: 49-49
+Documentation:
+
+Method code:
+49 |   private CompilationLevel() {}
+
+===== M0016 =====
+Signature: com.google.javascript.jscomp.AbstractCommandLineRunner.AbstractCommandLineRunner(PrintStream,PrintStream)
+Source: src/com/google/javascript/jscomp/AbstractCommandLineRunner.java
+Original range: 113-117
+Documentation:
+
+Method code:
+113 |   AbstractCommandLineRunner(PrintStream out, PrintStream err) {
+114 |     this.config = new CommandLineConfig();
+115 |     this.out = out;
+116 |     this.err = err;
+117 |   }
+
+===== M0017 =====
+Signature: com.google.javascript.jscomp.SourceFile.setCode(String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 109-111
+Documentation:
+
+Method code:
+109 |   private void setCode(String sourceCode) {
+110 |     code = sourceCode;
+111 |   }
+

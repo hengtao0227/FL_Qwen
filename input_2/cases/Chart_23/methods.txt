@@ -1,0 +1,1094 @@
+===== M0001 =====
+Signature: org.jfree.chart.renderer.AbstractRenderer.equals(Object)
+Source: source/org/jfree/chart/renderer/AbstractRenderer.java
+Original range: 2354-2466
+Documentation:
+/**
+     * Tests this renderer for equality with another object.
+     *
+     * @param obj  the object (<code>null</code> permitted).
+     *
+     * @return <code>true</code> or <code>false</code>.
+     */
+Method code:
+2354 |     public boolean equals(Object obj) {
+2355 |         if (obj == this) {
+2356 |             return true;
+2357 |         }
+2358 |         if (!(obj instanceof AbstractRenderer)) {
+2359 |             return false;
+2360 |         }
+2361 |         AbstractRenderer that = (AbstractRenderer) obj;
+2362 |         if (!this.seriesVisibleList.equals(that.seriesVisibleList)) {
+2363 |             return false;   
+2364 |         }
+2365 |         if (this.baseSeriesVisible != that.baseSeriesVisible) {
+2366 |             return false;   
+2367 |         }
+2368 |         if (!this.seriesVisibleInLegendList.equals(
+2369 |                 that.seriesVisibleInLegendList)) {
+2370 |             return false;   
+2371 |         }
+2372 |         if (this.baseSeriesVisibleInLegend != that.baseSeriesVisibleInLegend) {
+2373 |             return false;   
+2374 |         }
+2375 |         if (!ObjectUtilities.equal(this.paintList, that.paintList)) {
+2376 |             return false;
+2377 |         }
+2378 |         if (!PaintUtilities.equal(this.basePaint, that.basePaint)) {
+2379 |             return false;
+2380 |         }
+2381 |         if (!ObjectUtilities.equal(this.fillPaintList, that.fillPaintList)) {
+2382 |             return false;
+2383 |         }
+2384 |         if (!PaintUtilities.equal(this.baseFillPaint, that.baseFillPaint)) {
+2385 |             return false;
+2386 |         }
+2387 |         if (!ObjectUtilities.equal(this.outlinePaintList,
+2388 |                 that.outlinePaintList)) {
+2389 |             return false;
+2390 |         }
+2391 |         if (!PaintUtilities.equal(this.baseOutlinePaint, 
+2392 |                 that.baseOutlinePaint)) {
+2393 |             return false;
+2394 |         }
+2395 |         if (!ObjectUtilities.equal(this.strokeList, that.strokeList)) {
+2396 |             return false;
+2397 |         }
+2398 |         if (!ObjectUtilities.equal(this.baseStroke, that.baseStroke)) {
+2399 |             return false;
+2400 |         }
+2401 |         if (!ObjectUtilities.equal(this.outlineStrokeList, 
+2402 |                 that.outlineStrokeList)) {
+2403 |             return false;
+2404 |         }
+2405 |         if (!ObjectUtilities.equal(
+2406 |             this.baseOutlineStroke, that.baseOutlineStroke)
+2407 |         ) {
+2408 |             return false;
+2409 |         }
+2410 |         if (!ObjectUtilities.equal(this.shapeList, that.shapeList)) {
+2411 |             return false;
+2412 |         }
+2413 |         if (!ObjectUtilities.equal(this.baseShape, that.baseShape)) {
+2414 |             return false;
+2415 |         }
+2416 |         if (!ObjectUtilities.equal(this.itemLabelsVisibleList, 
+2417 |                 that.itemLabelsVisibleList)) {
+2418 |             return false;
+2419 |         }
+2420 |         if (this.baseItemLabelsVisible != that.baseItemLabelsVisible) {
+2421 |             return false;
+2422 |         }
+2423 |         if (!ObjectUtilities.equal(this.itemLabelFontList, 
+2424 |                 that.itemLabelFontList)) {
+2425 |             return false;
+2426 |         }
+2427 |         if (!ObjectUtilities.equal(this.baseItemLabelFont, 
+2428 |                 that.baseItemLabelFont)) {
+2429 |             return false;
+2430 |         }
+2431 |         if (!ObjectUtilities.equal(this.itemLabelPaintList, 
+2432 |                 that.itemLabelPaintList)) {
+2433 |             return false;
+2434 |         }
+2435 |         if (!PaintUtilities.equal(this.baseItemLabelPaint, 
+2436 |                 that.baseItemLabelPaint)) {
+2437 |             return false;
+2438 |         }
+2439 |         if (!ObjectUtilities.equal(this.positiveItemLabelPositionList, 
+2440 |                 that.positiveItemLabelPositionList)) {
+2441 |             return false;
+2442 |         }
+2443 |         if (!ObjectUtilities.equal(this.basePositiveItemLabelPosition, 
+2444 |                 that.basePositiveItemLabelPosition)) {
+2445 |             return false;
+2446 |         }
+2447 |         if (!ObjectUtilities.equal(this.negativeItemLabelPositionList, 
+2448 |                 that.negativeItemLabelPositionList)) {
+2449 |             return false;
+2450 |         }
+2451 |         if (!ObjectUtilities.equal(this.baseNegativeItemLabelPosition, 
+2452 |                 that.baseNegativeItemLabelPosition)) {
+2453 |             return false;
+2454 |         }
+2455 |         if (this.itemLabelAnchorOffset != that.itemLabelAnchorOffset) {
+2456 |             return false;
+2457 |         }
+2458 |         if (!ObjectUtilities.equal(this.createEntitiesList, 
+2459 |                 that.createEntitiesList)) {
+2460 |             return false;   
+2461 |         }
+2462 |         if (this.baseCreateEntities != that.baseCreateEntities) {
+2463 |             return false;   
+2464 |         }
+2465 |         return true;
+2466 |     }
+
+===== M0002 =====
+Signature: org.jfree.chart.util.ShapeList.equals(Object)
+Source: source/org/jfree/chart/util/ShapeList.java
+Original range: 102-118
+Documentation:
+/**
+     * Tests the list for equality with another object (typically also a list).
+     *
+     * @param obj  the other object.
+     *
+     * @return A boolean.
+     */
+Method code:
+102 |     public boolean equals(Object obj) {
+103 | 
+104 |         if (obj == null) {
+105 |             return false;
+106 |         }
+107 |         
+108 |         if (obj == this) {
+109 |             return true;
+110 |         }
+111 |         
+112 |         if (obj instanceof ShapeList) {
+113 |             return super.equals(obj);
+114 |         }
+115 | 
+116 |         return false;
+117 | 
+118 |     }
+
+===== M0003 =====
+Signature: org.jfree.chart.labels.StandardCategorySeriesLabelGenerator.equals(Object)
+Source: source/org/jfree/chart/labels/StandardCategorySeriesLabelGenerator.java
+Original range: 140-153
+Documentation:
+/**
+     * Tests this object for equality with an arbitrary object.
+     *
+     * @param obj  the other object (<code>null</code> permitted).
+     *
+     * @return A boolean.
+     */
+Method code:
+140 |     public boolean equals(Object obj) {
+141 |         if (obj == this) {
+142 |             return true;
+143 |         }
+144 |         if (!(obj instanceof StandardCategorySeriesLabelGenerator)) {
+145 |             return false;
+146 |         }
+147 |         StandardCategorySeriesLabelGenerator that 
+148 |                 = (StandardCategorySeriesLabelGenerator) obj;
+149 |         if (!this.formatPattern.equals(that.formatPattern)) {
+150 |             return false;
+151 |         }
+152 |         return true;
+153 |     }
+
+===== M0004 =====
+Signature: org.jfree.chart.labels.ItemLabelPosition.ItemLabelPosition(ItemLabelAnchor,TextAnchor,TextAnchor,double)
+Source: source/org/jfree/chart/labels/ItemLabelPosition.java
+Original range: 108-130
+Documentation:
+/**
+     * Creates a new position record.  The item label anchor is a point 
+     * relative to the data item (dot, bar or other visual item) on a chart.  
+     * The item label is aligned by aligning the text anchor with the 
+     * item label anchor.
+     * 
+     * @param itemLabelAnchor  the item label anchor (<code>null</code> not 
+     *                         permitted).
+     * @param textAnchor  the text anchor (<code>null</code> not permitted).
+     * @param rotationAnchor  the rotation anchor (<code>null</code> not 
+     *                        permitted).
+     * @param angle  the rotation angle (in radians).
+     */
+Method code:
+108 |     public ItemLabelPosition(ItemLabelAnchor itemLabelAnchor, 
+109 |                              TextAnchor textAnchor,
+110 |                              TextAnchor rotationAnchor,
+111 |                              double angle) {
+112 |               
+113 |         if (itemLabelAnchor == null) {
+114 |             throw new IllegalArgumentException(
+115 |                     "Null 'itemLabelAnchor' argument.");
+116 |         }
+117 |         if (textAnchor == null) {
+118 |             throw new IllegalArgumentException("Null 'textAnchor' argument.");
+119 |         }
+120 |         if (rotationAnchor == null) {
+121 |             throw new IllegalArgumentException(
+122 |                     "Null 'rotationAnchor' argument.");
+123 |         }
+124 |         
+125 |         this.itemLabelAnchor = itemLabelAnchor;
+126 |         this.textAnchor = textAnchor;
+127 |         this.rotationAnchor = rotationAnchor;
+128 |         this.angle = angle;
+129 |     
+130 |     }
+
+===== M0005 =====
+Signature: org.jfree.chart.util.ObjectList.ObjectList()
+Source: source/org/jfree/chart/util/ObjectList.java
+Original range: 60-61
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+60 |     public ObjectList() {
+61 |     }
+
+===== M0006 =====
+Signature: org.jfree.chart.renderer.category.AbstractCategoryItemRenderer.AbstractCategoryItemRenderer()
+Source: source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
+Original range: 230-238
+Documentation:
+/**
+     * Creates a new renderer with no tool tip generator and no URL generator.
+     * The defaults (no tool tip or URL generators) have been chosen to
+     * minimise the processing required to generate a default chart.  If you
+     * require tool tips or URLs, then you can easily add the required
+     * generators.
+     */
+Method code:
+230 |     protected AbstractCategoryItemRenderer() {
+231 |         this.itemLabelGeneratorList = new ObjectList();
+232 |         this.toolTipGeneratorList = new ObjectList();
+233 |         this.urlGeneratorList = new ObjectList();
+234 |         this.legendItemLabelGenerator
+235 |                 = new StandardCategorySeriesLabelGenerator();
+236 |         this.backgroundAnnotations = new ArrayList();
+237 |         this.foregroundAnnotations = new ArrayList();
+238 |     }
+
+===== M0007 =====
+Signature: org.jfree.chart.labels.ItemLabelAnchor.ItemLabelAnchor(String)
+Source: source/org/jfree/chart/labels/ItemLabelAnchor.java
+Original range: 169-171
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+169 |     private ItemLabelAnchor(String name) {
+170 |         this.name = name;
+171 |     }
+
+===== M0008 =====
+Signature: org.jfree.chart.event.RendererChangeEvent.RendererChangeEvent(Object)
+Source: source/org/jfree/chart/event/RendererChangeEvent.java
+Original range: 62-65
+Documentation:
+/**
+     * Creates a new event.
+     *
+     * @param renderer  the renderer that generated the event.
+     */
+Method code:
+62 |     public RendererChangeEvent(Object renderer) {
+63 |         super(renderer);
+64 |         this.renderer = renderer;
+65 |     }
+
+===== M0009 =====
+Signature: org.jfree.chart.labels.ItemLabelPosition.equals(Object)
+Source: source/org/jfree/chart/labels/ItemLabelPosition.java
+Original range: 175-196
+Documentation:
+/**
+     * Tests this object for equality with an arbitrary object.
+     * 
+     * @param obj  the object (<code>null</code> permitted).
+     * 
+     * @return A boolean.
+     */
+Method code:
+175 |     public boolean equals(Object obj) {  
+176 |         if (obj == this) {
+177 |             return true;
+178 |         }    
+179 |         if (!(obj instanceof ItemLabelPosition)) {
+180 |             return false;
+181 |         }
+182 |         ItemLabelPosition that = (ItemLabelPosition) obj;
+183 |         if (!this.itemLabelAnchor.equals(that.itemLabelAnchor)) {
+184 |             return false;
+185 |         }
+186 |         if (!this.textAnchor.equals(that.textAnchor)) {
+187 |             return false;
+188 |         }
+189 |         if (!this.rotationAnchor.equals(that.rotationAnchor)) {
+190 |             return false;
+191 |         }
+192 |         if (this.angle != that.angle) {
+193 |             return false;
+194 |         }     
+195 |         return true;
+196 |     }
+
+===== M0010 =====
+Signature: org.jfree.chart.text.TextAnchor.TextAnchor(String)
+Source: source/org/jfree/chart/text/TextAnchor.java
+Original range: 126-128
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+126 |     private TextAnchor(String name) {
+127 |         this.name = name;
+128 |     }
+
+===== M0011 =====
+Signature: org.jfree.chart.renderer.AbstractRenderer.notifyListeners(RendererChangeEvent)
+Source: source/org/jfree/chart/renderer/AbstractRenderer.java
+Original range: 2338-2345
+Documentation:
+/**
+     * Notifies all registered listeners that the renderer has been modified.
+     *
+     * @param event  information about the change event.
+     */
+Method code:
+2338 |     public void notifyListeners(RendererChangeEvent event) {
+2339 |         Object[] ls = this.listenerList.getListenerList();
+2340 |         for (int i = ls.length - 2; i >= 0; i -= 2) {
+2341 |             if (ls[i] == RendererChangeListener.class) {
+2342 |                 ((RendererChangeListener) ls[i + 1]).rendererChanged(event);
+2343 |             }
+2344 |         }
+2345 |     }
+
+===== M0012 =====
+Signature: org.jfree.chart.util.AbstractObjectList.AbstractObjectList(int)
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 85-87
+Documentation:
+/**
+     * Creates a new list.
+     *
+     * @param initialCapacity  the initial capacity.
+     */
+Method code:
+85 |     protected AbstractObjectList(int initialCapacity) {
+86 |         this (initialCapacity, initialCapacity);
+87 |     }
+
+===== M0013 =====
+Signature: org.jfree.chart.util.PaintUtilities.equal(Paint,Paint)
+Source: source/org/jfree/chart/util/PaintUtilities.java
+Original range: 75-102
+Documentation:
+/**
+     * Returns <code>true</code> if the two <code>Paint</code> objects are equal 
+     * OR both <code>null</code>.  This method handles
+     * <code>GradientPaint</code> as a special case.
+     *
+     * @param p1  paint 1 (<code>null</code> permitted).
+     * @param p2  paint 2 (<code>null</code> permitted).
+     *
+     * @return A boolean.
+     */
+Method code:
+75 |     public static boolean equal(Paint p1, Paint p2) {
+76 | 
+77 |         // handle cases where either or both arguments are null
+78 |         if (p1 == null) {
+79 |             return (p2 == null);   
+80 |         }
+81 |         if (p2 == null) {
+82 |             return false;   
+83 |         }
+84 |         
+85 |         boolean result = false;
+86 |         // handle GradientPaint as a special case...
+87 |         if (p1 instanceof GradientPaint && p2 instanceof GradientPaint) {
+88 |             GradientPaint gp1 = (GradientPaint) p1;
+89 |             GradientPaint gp2 = (GradientPaint) p2;
+90 |             result = gp1.getColor1().equals(gp2.getColor1()) 
+91 |                 && gp1.getColor2().equals(gp2.getColor2())
+92 |                 && gp1.getPoint1().equals(gp2.getPoint1())    
+93 |                 && gp1.getPoint2().equals(gp2.getPoint2())
+94 |                 && gp1.isCyclic() == gp2.isCyclic()
+95 |                 && gp1.getTransparency() == gp1.getTransparency(); 
+96 |         }
+97 |         else {
+98 |             result = p1.equals(p2);
+99 |         }
+100 |         return result;
+101 | 
+102 |     }
+
+===== M0014 =====
+Signature: org.jfree.chart.util.PaintList.equals(Object)
+Source: source/org/jfree/chart/util/PaintList.java
+Original range: 93-110
+Documentation:
+/**
+     * Tests the list for equality with another object (typically also a list).
+     *
+     * @param obj  the other object (<code>null</code> permitted).
+     *
+     * @return A boolean.
+     */
+Method code:
+93 |     public boolean equals(Object obj) {
+94 |         if (obj == null) {
+95 |             return false;
+96 |         }
+97 |         if (obj == this) {
+98 |             return true;
+99 |         }
+100 |         if (obj instanceof PaintList) {
+101 |             PaintList that = (PaintList) obj;
+102 |             int listSize = size();
+103 |             for (int i = 0; i < listSize; i++) {
+104 |                if (!PaintUtilities.equal(getPaint(i), that.getPaint(i))) {
+105 |                    return false;
+106 |                }
+107 |             }
+108 |         }
+109 |         return true;
+110 |     }
+
+===== M0015 =====
+Signature: org.jfree.chart.util.StrokeList.equals(Object)
+Source: source/org/jfree/chart/util/StrokeList.java
+Original range: 103-119
+Documentation:
+/**
+     * Tests the list for equality with another object (typically also a list).
+     *
+     * @param obj  the other object.
+     *
+     * @return A boolean.
+     */
+Method code:
+103 |     public boolean equals(Object obj) {
+104 | 
+105 |         if (obj == null) {
+106 |             return false;
+107 |         }
+108 |         
+109 |         if (obj == this) {
+110 |             return true;
+111 |         }
+112 |         
+113 |         if (obj instanceof StrokeList) {
+114 |             return super.equals(obj);
+115 |         }
+116 | 
+117 |         return false;
+118 | 
+119 |     }
+
+===== M0016 =====
+Signature: org.jfree.chart.util.BooleanList.BooleanList()
+Source: source/org/jfree/chart/util/BooleanList.java
+Original range: 62-63
+Documentation:
+/**
+     * Creates a new list.
+     */
+Method code:
+62 |     public BooleanList() {
+63 |     }
+
+===== M0017 =====
+Signature: org.jfree.chart.labels.ItemLabelPosition.ItemLabelPosition(ItemLabelAnchor,TextAnchor)
+Source: source/org/jfree/chart/labels/ItemLabelPosition.java
+Original range: 90-93
+Documentation:
+/**
+     * Creates a new position record (with zero rotation).
+     * 
+     * @param itemLabelAnchor  the item label anchor (<code>null</code> not 
+     *                         permitted).
+     * @param textAnchor  the text anchor (<code>null</code> not permitted).
+     */
+Method code:
+90 |     public ItemLabelPosition(ItemLabelAnchor itemLabelAnchor, 
+91 |                              TextAnchor textAnchor) {
+92 |         this(itemLabelAnchor, textAnchor, TextAnchor.CENTER, 0.0);    
+93 |     }
+
+===== M0018 =====
+Signature: org.jfree.chart.util.PaintList.PaintList()
+Source: source/org/jfree/chart/util/PaintList.java
+Original range: 60-62
+Documentation:
+/**
+     * Creates a new list.
+     */
+Method code:
+60 |     public PaintList() {
+61 |         super();
+62 |     }
+
+===== M0019 =====
+Signature: org.jfree.chart.labels.StandardCategorySeriesLabelGenerator.StandardCategorySeriesLabelGenerator()
+Source: source/org/jfree/chart/labels/StandardCategorySeriesLabelGenerator.java
+Original range: 74-76
+Documentation:
+/**
+     * Creates a default series label generator (uses 
+     * {@link #DEFAULT_LABEL_FORMAT}).
+     */
+Method code:
+74 |     public StandardCategorySeriesLabelGenerator() {
+75 |         this(DEFAULT_LABEL_FORMAT);
+76 |     }
+
+===== M0020 =====
+Signature: org.jfree.chart.util.StrokeList.StrokeList()
+Source: source/org/jfree/chart/util/StrokeList.java
+Original range: 59-61
+Documentation:
+/**
+     * Creates a new list.
+     */
+Method code:
+59 |     public StrokeList() {
+60 |         super();
+61 |     }
+
+===== M0021 =====
+Signature: org.jfree.chart.renderer.category.AbstractCategoryItemRenderer.equals(Object)
+Source: source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
+Original range: 1289-1344
+Documentation:
+/**
+     * Tests this renderer for equality with another object.
+     *
+     * @param obj  the object.
+     *
+     * @return <code>true</code> or <code>false</code>.
+     */
+Method code:
+1289 |     public boolean equals(Object obj) {
+1290 | 
+1291 |         if (obj == this) {
+1292 |             return true;
+1293 |         }
+1294 |         if (!(obj instanceof AbstractCategoryItemRenderer)) {
+1295 |             return false;
+1296 |         }
+1297 |         AbstractCategoryItemRenderer that = (AbstractCategoryItemRenderer) obj;
+1298 | 
+1299 |         if (!ObjectUtilities.equal(this.itemLabelGeneratorList,
+1300 |                 that.itemLabelGeneratorList)) {
+1301 |             return false;
+1302 |         }
+1303 |         if (!ObjectUtilities.equal(this.baseItemLabelGenerator,
+1304 |                 that.baseItemLabelGenerator)) {
+1305 |             return false;
+1306 |         }
+1307 |         if (!ObjectUtilities.equal(this.toolTipGeneratorList,
+1308 |                 that.toolTipGeneratorList)) {
+1309 |             return false;
+1310 |         }
+1311 |         if (!ObjectUtilities.equal(this.baseToolTipGenerator,
+1312 |                 that.baseToolTipGenerator)) {
+1313 |             return false;
+1314 |         }
+1315 |         if (!ObjectUtilities.equal(this.urlGeneratorList, 
+1316 |                 that.urlGeneratorList)) {
+1317 |             return false;
+1318 |         }
+1319 |         if (!ObjectUtilities.equal(this.baseURLGenerator,
+1320 |                 that.baseURLGenerator)) {
+1321 |             return false;
+1322 |         }
+1323 |         if (!ObjectUtilities.equal(this.legendItemLabelGenerator,
+1324 |                 that.legendItemLabelGenerator)) {
+1325 |             return false;
+1326 |         }
+1327 |         if (!ObjectUtilities.equal(this.legendItemToolTipGenerator,
+1328 |                 that.legendItemToolTipGenerator)) {
+1329 |             return false;
+1330 |         }
+1331 |         if (!ObjectUtilities.equal(this.legendItemURLGenerator,
+1332 |                 that.legendItemURLGenerator)) {
+1333 |             return false;
+1334 |         }
+1335 |         if (!ObjectUtilities.equal(this.backgroundAnnotations,
+1336 |                 that.backgroundAnnotations)) {
+1337 |             return false;
+1338 |         }
+1339 |         if (!ObjectUtilities.equal(this.foregroundAnnotations,
+1340 |                 that.foregroundAnnotations)) {
+1341 |             return false;
+1342 |         }
+1343 |         return super.equals(obj);
+1344 |     }
+
+===== M0022 =====
+Signature: org.jfree.chart.event.ChartChangeEvent.ChartChangeEvent(Object)
+Source: source/org/jfree/chart/event/ChartChangeEvent.java
+Original range: 70-72
+Documentation:
+/**
+     * Creates a new chart change event.
+     *
+     * @param source  the source of the event (could be the chart, a title, 
+     *                an axis etc.)
+     */
+Method code:
+70 |     public ChartChangeEvent(Object source) {
+71 |         this(source, null, ChartChangeEventType.GENERAL);
+72 |     }
+
+===== M0023 =====
+Signature: org.jfree.chart.renderer.category.MinMaxCategoryRenderer.getIcon(Shape,boolean,boolean)
+Source: source/org/jfree/chart/renderer/category/MinMaxCategoryRenderer.java
+Original range: 486-512
+Documentation:
+/**
+     * Returns an icon from a shape.
+     *
+     * @param shape  the shape.
+     * @param fill  the fill flag.
+     * @param outline  the outline flag.
+     *
+     * @return The icon.
+     */
+Method code:
+486 |     private Icon getIcon(Shape shape, final boolean fill, 
+487 |             final boolean outline) {
+488 |         final int width = shape.getBounds().width;
+489 |         final int height = shape.getBounds().height;
+490 |         final GeneralPath path = new GeneralPath(shape);
+491 |         return new Icon() {
+492 |             public void paintIcon(Component c, Graphics g, int x, int y) {
+493 |                 Graphics2D g2 = (Graphics2D) g;
+494 |                 path.transform(AffineTransform.getTranslateInstance(x, y));
+495 |                 if (fill) {
+496 |                     g2.fill(path);
+497 |                 }
+498 |                 if (outline) {
+499 |                     g2.draw(path);
+500 |                 }
+501 |                 path.transform(AffineTransform.getTranslateInstance(-x, -y));
+502 |             }
+503 | 
+504 |             public int getIconWidth() {
+505 |                 return width;
+506 |             }
+507 | 
+508 |             public int getIconHeight() {
+509 |                 return height;
+510 |             }
+511 |         };
+512 |     }
+
+===== M0024 =====
+Signature: org.jfree.chart.renderer.category.MinMaxCategoryRenderer.MinMaxCategoryRenderer()
+Source: source/org/jfree/chart/renderer/category/MinMaxCategoryRenderer.java
+Original range: 143-145
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+143 |     public MinMaxCategoryRenderer() {
+144 |         super();
+145 |     }
+
+===== M0025 =====
+Signature: org.jfree.chart.event.ChartChangeEventType.ChartChangeEventType(String)
+Source: source/org/jfree/chart/event/ChartChangeEventType.java
+Original range: 76-78
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+76 |     private ChartChangeEventType(String name) {
+77 |         this.name = name;
+78 |     }
+
+===== M0026 =====
+Signature: org.jfree.chart.util.AbstractObjectList.size()
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 148-150
+Documentation:
+/**
+     * Returns the size of the list.
+     *
+     * @return The size of the list.
+     */
+Method code:
+148 |     public int size() {
+149 |         return this.size;
+150 |     }
+
+===== M0027 =====
+Signature: org.jfree.chart.util.AbstractObjectList.AbstractObjectList(int,int)
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 95-98
+Documentation:
+/**
+     * Creates a new list.
+     * 
+     * @param initialCapacity  the initial capacity.
+     * @param increment  the increment.
+     */
+Method code:
+95 |     protected AbstractObjectList(int initialCapacity, int increment) {
+96 |         this.objects = new Object[initialCapacity];
+97 |         this.increment = increment;
+98 |     }
+
+===== M0028 =====
+Signature: org.jfree.chart.util.AbstractObjectList.AbstractObjectList()
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 76-78
+Documentation:
+/**
+     * Creates a new list with the default initial capacity.
+     */
+Method code:
+76 |     protected AbstractObjectList() {
+77 |         this(DEFAULT_INITIAL_CAPACITY);
+78 |     }
+
+===== M0029 =====
+Signature: org.jfree.chart.renderer.AbstractRenderer.AbstractRenderer()
+Source: source/org/jfree/chart/renderer/AbstractRenderer.java
+Original range: 313-367
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+313 |     public AbstractRenderer() {
+314 | 
+315 |         this.seriesVisibleList = new BooleanList();
+316 |         this.baseSeriesVisible = true;
+317 | 
+318 |         this.seriesVisibleInLegendList = new BooleanList();
+319 |         this.baseSeriesVisibleInLegend = true;
+320 | 
+321 |         this.paintList = new PaintList();
+322 |         this.basePaint = DEFAULT_PAINT;
+323 |         this.autoPopulateSeriesPaint = true;
+324 | 
+325 |         this.fillPaintList = new PaintList();
+326 |         this.baseFillPaint = Color.white;
+327 |         this.autoPopulateSeriesFillPaint = false;
+328 | 
+329 |         this.outlinePaintList = new PaintList();
+330 |         this.baseOutlinePaint = DEFAULT_OUTLINE_PAINT;
+331 |         this.autoPopulateSeriesOutlinePaint = false;
+332 | 
+333 |         this.strokeList = new StrokeList();
+334 |         this.baseStroke = DEFAULT_STROKE;
+335 |         this.autoPopulateSeriesStroke = false;
+336 | 
+337 |         this.outlineStrokeList = new StrokeList();
+338 |         this.baseOutlineStroke = DEFAULT_OUTLINE_STROKE;
+339 |         this.autoPopulateSeriesOutlineStroke = false;
+340 | 
+341 |         this.shapeList = new ShapeList();
+342 |         this.baseShape = DEFAULT_SHAPE;
+343 |         this.autoPopulateSeriesShape = true;
+344 | 
+345 |         this.itemLabelsVisibleList = new BooleanList();
+346 |         this.baseItemLabelsVisible = false;
+347 | 
+348 |         this.itemLabelFontList = new ObjectList();
+349 |         this.baseItemLabelFont = new Font("SansSerif", Font.PLAIN, 10);
+350 | 
+351 |         this.itemLabelPaintList = new PaintList();
+352 |         this.baseItemLabelPaint = Color.black;
+353 | 
+354 |         this.positiveItemLabelPositionList = new ObjectList();
+355 |         this.basePositiveItemLabelPosition = new ItemLabelPosition(
+356 |                 ItemLabelAnchor.OUTSIDE12, TextAnchor.BOTTOM_CENTER);
+357 |         
+358 |         this.negativeItemLabelPositionList = new ObjectList();
+359 |         this.baseNegativeItemLabelPosition = new ItemLabelPosition(
+360 |                 ItemLabelAnchor.OUTSIDE6, TextAnchor.TOP_CENTER);
+361 | 
+362 |         this.createEntitiesList = new BooleanList();
+363 |         this.baseCreateEntities = true;
+364 |         
+365 |         this.listenerList = new EventListenerList();
+366 | 
+367 |     }
+
+===== M0030 =====
+Signature: org.jfree.chart.text.TextAnchor.equals(Object)
+Source: source/org/jfree/chart/text/TextAnchor.java
+Original range: 147-162
+Documentation:
+/**
+     * Returns <code>true</code> if this object is equal to the specified 
+     * object, and <code>false</code> otherwise.
+     *
+     * @param obj  the other object.
+     *
+     * @return A boolean.
+     */
+Method code:
+147 |     public boolean equals(Object obj) {
+148 | 
+149 |         if (this == obj) {
+150 |             return true;
+151 |         }
+152 |         if (!(obj instanceof TextAnchor)) {
+153 |             return false;
+154 |         }
+155 | 
+156 |         TextAnchor order = (TextAnchor) obj;
+157 |         if (!this.name.equals(order.name)) {
+158 |             return false;
+159 |         }
+160 | 
+161 |         return true;
+162 |     }
+
+===== M0031 =====
+Signature: org.jfree.chart.util.ShapeList.ShapeList()
+Source: source/org/jfree/chart/util/ShapeList.java
+Original range: 59-61
+Documentation:
+/**
+     * Creates a new list.
+     */
+Method code:
+59 |     public ShapeList() {
+60 |         super();
+61 |     }
+
+===== M0032 =====
+Signature: org.jfree.chart.renderer.category.MinMaxCategoryRenderer.getIcon(Shape,Paint,Paint)
+Source: source/org/jfree/chart/renderer/category/MinMaxCategoryRenderer.java
+Original range: 445-475
+Documentation:
+/**
+     * Returns an icon.
+     *
+     * @param shape  the shape.
+     * @param fillPaint  the fill paint.
+     * @param outlinePaint  the outline paint.
+     *
+     * @return The icon.
+     */
+Method code:
+445 |     private Icon getIcon(Shape shape, final Paint fillPaint, 
+446 |                         final Paint outlinePaint) {
+447 | 
+448 |       final int width = shape.getBounds().width;
+449 |       final int height = shape.getBounds().height;
+450 |       final GeneralPath path = new GeneralPath(shape);
+451 |       return new Icon() {
+452 |           public void paintIcon(Component c, Graphics g, int x, int y) {
+453 |               Graphics2D g2 = (Graphics2D) g;
+454 |               path.transform(AffineTransform.getTranslateInstance(x, y));
+455 |               if (fillPaint != null) {
+456 |                   g2.setPaint(fillPaint);
+457 |                   g2.fill(path);
+458 |               }
+459 |               if (outlinePaint != null) {
+460 |                   g2.setPaint(outlinePaint);
+461 |                   g2.draw(path);
+462 |               }
+463 |               path.transform(AffineTransform.getTranslateInstance(-x, -y));
+464 |         }
+465 | 
+466 |         public int getIconWidth() {
+467 |             return width;
+468 |         }
+469 | 
+470 |         public int getIconHeight() {
+471 |             return height;
+472 |         }
+473 | 
+474 |       };
+475 |     }
+
+===== M0033 =====
+Signature: org.jfree.chart.labels.ItemLabelAnchor.equals(Object)
+Source: source/org/jfree/chart/labels/ItemLabelAnchor.java
+Original range: 190-206
+Documentation:
+/**
+     * Returns <code>true</code> if this object is equal to the specified 
+     * object, and <code>false</code> otherwise.
+     *
+     * @param o  the other object.
+     *
+     * @return A boolean.
+     */
+Method code:
+190 |     public boolean equals(Object o) {
+191 | 
+192 |         if (this == o) {
+193 |             return true;
+194 |         }
+195 |         if (!(o instanceof ItemLabelAnchor)) {
+196 |             return false;
+197 |         }
+198 | 
+199 |         ItemLabelAnchor order = (ItemLabelAnchor) o;
+200 |         if (!this.name.equals(order.toString())) {
+201 |             return false;
+202 |         }
+203 | 
+204 |         return true;
+205 | 
+206 |     }
+
+===== M0034 =====
+Signature: org.jfree.chart.util.AbstractObjectList.equals(Object)
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 176-198
+Documentation:
+/**
+     * Tests this list for equality with another object.
+     *
+     * @param obj  the object to test.
+     * 
+     * @return A boolean.
+     */
+Method code:
+176 |     public boolean equals(Object obj) {
+177 | 
+178 |         if (obj == null) {
+179 |             return false;
+180 |         }
+181 | 
+182 |         if (obj == this) {
+183 |             return true;
+184 |         }
+185 | 
+186 |         if (!(obj instanceof AbstractObjectList)) {
+187 |             return false;
+188 |         }
+189 | 
+190 |         AbstractObjectList other = (AbstractObjectList) obj;
+191 |         int listSize = size();
+192 |         for (int i = 0; i < listSize; i++) {
+193 |            if (!ObjectUtilities.equal(get(i), other.get(i))) {
+194 |                return false;
+195 |            }
+196 |         }
+197 |         return true;
+198 |     }
+
+===== M0035 =====
+Signature: org.jfree.chart.labels.StandardCategorySeriesLabelGenerator.StandardCategorySeriesLabelGenerator(String)
+Source: source/org/jfree/chart/labels/StandardCategorySeriesLabelGenerator.java
+Original range: 83-88
+Documentation:
+/**
+     * Creates a new series label generator.
+     * 
+     * @param format  the format pattern (<code>null</code> not permitted).
+     */
+Method code:
+83 |     public StandardCategorySeriesLabelGenerator(String format) {
+84 |         if (format == null) {
+85 |             throw new IllegalArgumentException("Null 'format' argument.");
+86 |         }
+87 |         this.formatPattern = format;
+88 |     }
+
+===== M0036 =====
+Signature: org.jfree.chart.renderer.category.MinMaxCategoryRenderer.setDrawLines(boolean)
+Source: source/org/jfree/chart/renderer/category/MinMaxCategoryRenderer.java
+Original range: 168-174
+Documentation:
+/**
+     * Sets the flag that controls whether or not lines are drawn to connect
+     * the items within a series and sends a {@link RendererChangeEvent} to 
+     * all registered listeners.
+     *
+     * @param draw  the new value of the flag.
+     * 
+     * @see #isDrawLines()
+     */
+Method code:
+168 |     public void setDrawLines(boolean draw) {
+169 |         if (this.plotLines != draw) {
+170 |             this.plotLines = draw;
+171 |             this.notifyListeners(new RendererChangeEvent(this));
+172 |         }
+173 |         
+174 |     }
+
+===== M0037 =====
+Signature: org.jfree.chart.util.BooleanList.equals(Object)
+Source: source/org/jfree/chart/util/BooleanList.java
+Original range: 94-99
+Documentation:
+/**
+     * Tests the list for equality with another object (typically also a list).
+     *
+     * @param obj  the other object.
+     *
+     * @return A boolean.
+     */
+Method code:
+94 |     public boolean equals(Object obj) {
+95 |         if (obj instanceof BooleanList) {
+96 |             return super.equals(obj);
+97 |         }
+98 |         return false;
+99 |     }
+
+===== M0038 =====
+Signature: org.jfree.chart.event.ChartChangeEvent.ChartChangeEvent(Object,JFreeChart,ChartChangeEventType)
+Source: source/org/jfree/chart/event/ChartChangeEvent.java
+Original range: 93-98
+Documentation:
+/**
+     * Creates a new chart change event.
+     *
+     * @param source  the source of the event (could be the chart, a title, an
+                      axis etc.)
+     * @param chart  the chart that generated the event.
+     * @param type  the type of event.
+     */
+Method code:
+93 |     public ChartChangeEvent(Object source, JFreeChart chart, 
+94 |                             ChartChangeEventType type) {
+95 |         super(source);
+96 |         this.chart = chart;
+97 |         this.type = type;
+98 |     }
+
+===== M0039 =====
+Signature: org.jfree.chart.util.ObjectUtilities.equal(Object,Object)
+Source: source/org/jfree/chart/util/ObjectUtilities.java
+Original range: 126-136
+Documentation:
+/**
+     * Returns <code>true</code> if the two objects are equal OR both 
+     * <code>null</code>.
+     *
+     * @param o1 object 1 (<code>null</code> permitted).
+     * @param o2 object 2 (<code>null</code> permitted).
+     * @return <code>true</code> or <code>false</code>.
+     */
+Method code:
+126 |     public static boolean equal(final Object o1, final Object o2) {
+127 |         if (o1 == o2) {
+128 |             return true;
+129 |         }
+130 |         if (o1 != null) {
+131 |             return o1.equals(o2);
+132 |         }
+133 |         else {
+134 |             return false;
+135 |         }
+136 |     }
+

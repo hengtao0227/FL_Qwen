@@ -1,0 +1,89 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.genetics.ElitisticListPopulation.ElitisticListPopulation(int,double)
+Source: src/main/java/org/apache/commons/math3/genetics/ElitisticListPopulation.java
+Original range: 63-66
+Documentation:
+/**
+     * Creates a new ListPopulation instance and initializes its inner
+     * chromosome list.
+     *
+     * @param populationLimit maximal size of the population
+     * @param elitismRate how many best chromosomes will be directly transferred to the
+     *                    next generation [in %]
+     * @throws OutOfRangeException if the elitism rate is outside the [0, 1] range
+     */
+Method code:
+63 |     public ElitisticListPopulation(final int populationLimit, final double elitismRate) {
+64 |         super(populationLimit);
+65 |         this.elitismRate = elitismRate;
+66 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.genetics.ListPopulation.ListPopulation(int)
+Source: src/main/java/org/apache/commons/math3/genetics/ListPopulation.java
+Original range: 69-75
+Documentation:
+/**
+     * Creates a new ListPopulation instance and initializes its inner chromosome list.
+     *
+     * @param populationLimit maximal size of the population
+     * @throws NotPositiveException if the population limit is not a positive number (&lt; 1)
+     */
+Method code:
+69 |     public ListPopulation(final int populationLimit) {
+70 |         if (populationLimit <= 0) {
+71 |             throw new NotPositiveException(LocalizedFormats.POPULATION_LIMIT_NOT_POSITIVE, populationLimit);
+72 |         }
+73 |         this.populationLimit = populationLimit;
+74 |         this.chromosomes = new ArrayList<Chromosome>(populationLimit);
+75 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.genetics.ListPopulation.ListPopulation(List<Chromosome>,int)
+Source: src/main/java/org/apache/commons/math3/genetics/ListPopulation.java
+Original range: 50-61
+Documentation:
+/**
+     * Creates a new ListPopulation instance.
+     *
+     * @param chromosomes list of chromosomes in the population
+     * @param populationLimit maximal size of the population
+     * @throws NumberIsTooLargeException if the list of chromosomes exceeds the population limit
+     * @throws NotPositiveException if the population limit is not a positive number (&lt; 1)
+     */
+Method code:
+50 |     public ListPopulation(final List<Chromosome> chromosomes, final int populationLimit) {
+51 |         if (chromosomes.size() > populationLimit) {
+52 |             throw new NumberIsTooLargeException(LocalizedFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
+53 |                                                 chromosomes.size(), populationLimit, false);
+54 |         }
+55 |         if (populationLimit <= 0) {
+56 |             throw new NotPositiveException(LocalizedFormats.POPULATION_LIMIT_NOT_POSITIVE, populationLimit);
+57 |         }
+58 | 
+59 |         this.chromosomes = chromosomes;
+60 |         this.populationLimit = populationLimit;
+61 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.genetics.ElitisticListPopulation.ElitisticListPopulation(List<Chromosome>,int,double)
+Source: src/main/java/org/apache/commons/math3/genetics/ElitisticListPopulation.java
+Original range: 47-52
+Documentation:
+/**
+     * Creates a new ElitisticListPopulation instance.
+     *
+     * @param chromosomes list of chromosomes in the population
+     * @param populationLimit maximal size of the population
+     * @param elitismRate how many best chromosomes will be directly transferred to the
+     *                    next generation [in %]
+     * @throws OutOfRangeException if the elitism rate is outside the [0, 1] range
+     */
+Method code:
+47 |     public ElitisticListPopulation(final List<Chromosome> chromosomes,
+48 |                                    final int populationLimit,
+49 |                                    final double elitismRate) {
+50 |         super(chromosomes, populationLimit);
+51 |         this.elitismRate = elitismRate;
+52 |     }
+

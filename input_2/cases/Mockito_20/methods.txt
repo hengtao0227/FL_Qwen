@@ -1,0 +1,4251 @@
+===== M0001 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsSafeSet.iterator()
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsSafeSet.java
+Original range: 36-52
+Documentation:
+
+Method code:
+36 |     public Iterator<Object> iterator() {
+37 |         return new Iterator<Object>() {
+38 |             private final Iterator<HashCodeAndEqualsMockWrapper> iterator = backingHashSet.iterator();
+39 | 
+40 |             public boolean hasNext() {
+41 |                 return iterator.hasNext();
+42 |             }
+43 | 
+44 |             public Object next() {
+45 |                 return iterator.next().get();
+46 |             }
+47 | 
+48 |             public void remove() {
+49 |                 iterator.remove();
+50 |             }
+51 |         };
+52 |     }
+
+===== M0002 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.spiedInstance(Object)
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 75-78
+Documentation:
+
+Method code:
+75 |     public MockSettings spiedInstance(Object spiedInstance) {
+76 |         this.spiedInstance = spiedInstance;
+77 |         return this;
+78 |     }
+
+===== M0003 =====
+Signature: org.mockito.internal.handler.NullResultGuardian.NullResultGuardian(InternalMockHandler)
+Source: src/org/mockito/internal/handler/NullResultGuardian.java
+Original range: 24-26
+Documentation:
+
+Method code:
+24 |     public NullResultGuardian(InternalMockHandler delegate) {
+25 |         this.delegate = delegate;
+26 |     }
+
+===== M0004 =====
+Signature: org.mockito.Answers.Answers(Answer<Object>)
+Source: src/org/mockito/Answers.java
+Original range: 76-78
+Documentation:
+
+Method code:
+76 |     private Answers(Answer<Object> implementation) {
+77 |         this.implementation = implementation;
+78 |     }
+
+===== M0005 =====
+Signature: org.mockito.internal.configuration.plugins.PluginFinder.PluginFinder(PluginSwitch)
+Source: src/org/mockito/internal/configuration/plugins/PluginFinder.java
+Original range: 14-16
+Documentation:
+
+Method code:
+14 |     public PluginFinder(PluginSwitch pluginSwitch) {
+15 |         this.pluginSwitch = pluginSwitch;
+16 |     }
+
+===== M0006 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.setMockName(MockName)
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 88-91
+Documentation:
+
+Method code:
+88 |     public CreationSettings<T> setMockName(MockName mockName) {
+89 |         this.mockName = mockName;
+90 |         return this;
+91 |     }
+
+===== M0007 =====
+Signature: org.mockito.internal.stubbing.InvocationContainerImpl.createRegisteredInvocations(MockCreationSettings)
+Source: src/org/mockito/internal/stubbing/InvocationContainerImpl.java
+Original range: 136-140
+Documentation:
+
+Method code:
+136 |     private RegisteredInvocations createRegisteredInvocations(MockCreationSettings mockSettings) {
+137 |         return mockSettings.isStubOnly()
+138 |           ? new SingleRegisteredInvocation()
+139 |           : new DefaultRegisteredInvocations();
+140 |     }
+
+===== M0008 =====
+Signature: org.mockito.internal.stubbing.InvocationContainerImpl.hasAnswersForStubbing()
+Source: src/org/mockito/internal/stubbing/InvocationContainerImpl.java
+Original range: 98-100
+Documentation:
+
+Method code:
+98 |     public boolean hasAnswersForStubbing() {
+99 |         return !answersForStubbing.isEmpty();
+100 |     }
+
+===== M0009 =====
+Signature: org.mockito.internal.configuration.InjectingAnnotationEngine.processInjectMocks(Class<?>,Object)
+Source: src/org/mockito/internal/configuration/InjectingAnnotationEngine.java
+Original range: 59-65
+Documentation:
+
+Method code:
+59 |     private void processInjectMocks(final Class<?> clazz, final Object testInstance) {
+60 |         Class<?> classContext = clazz;
+61 |         while (classContext != Object.class) {
+62 |             injectMocks(testInstance);
+63 |             classContext = classContext.getSuperclass();
+64 |         }
+65 |     }
+
+===== M0010 =====
+Signature: org.mockito.internal.progress.ThreadSafeMockingProgress.stubbingCompleted(Invocation)
+Source: src/org/mockito/internal/progress/ThreadSafeMockingProgress.java
+Original range: 51-53
+Documentation:
+
+Method code:
+51 |     public void stubbingCompleted(Invocation invocation) {
+52 |         threadSafely().stubbingCompleted(invocation);
+53 |     }
+
+===== M0011 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.prepareExtraInterfaces(CreationSettings)
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 185-191
+Documentation:
+
+Method code:
+185 |     private static Set<Class> prepareExtraInterfaces(CreationSettings settings) {
+186 |         Set<Class> interfaces = new HashSet<Class>(settings.getExtraInterfaces());
+187 |         if(settings.isSerializable()) {
+188 |             interfaces.add(Serializable.class);
+189 |         }
+190 |         return interfaces;
+191 |     }
+
+===== M0012 =====
+Signature: org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.createMockitoMethod(Method)
+Source: src/org/mockito/internal/creation/bytebuddy/MockMethodInterceptor.java
+Original range: 92-98
+Documentation:
+
+Method code:
+92 |     private MockitoMethod createMockitoMethod(Method method) {
+93 |         if (mockCreationSettings.isSerializable()) {
+94 |             return new SerializableMethod(method);
+95 |         } else {
+96 |             return new DelegatingMethod(method);
+97 |         }
+98 |     }
+
+===== M0013 =====
+Signature: org.mockito.internal.configuration.injection.MockInjection.OngoingMockInjection.withMocks(Set<Object>)
+Source: src/org/mockito/internal/configuration/injection/MockInjection.java
+Original range: 70-73
+Documentation:
+
+Method code:
+70 |         public OngoingMockInjection withMocks(Set<Object> mocks) {
+71 |             this.mocks.addAll(checkNotNull(mocks, "mocks"));
+72 |             return this;
+73 |         }
+
+===== M0014 =====
+Signature: org.mockito.internal.progress.MockingProgressImpl.stubbingCompleted(Invocation)
+Source: src/org/mockito/internal/progress/MockingProgressImpl.java
+Original range: 92-94
+Documentation:
+
+Method code:
+92 |     public void stubbingCompleted(Invocation invocation) {
+93 |         stubbingInProgress = null;
+94 |     }
+
+===== M0015 =====
+Signature: org.mockito.internal.util.MockUtil.isSpy(Object)
+Source: src/org/mockito/internal/util/MockUtil.java
+Original range: 69-71
+Documentation:
+
+Method code:
+69 |     public boolean isSpy(Object mock) {
+70 |         return isMockitoMock(mock) && getMockSettings(mock).getDefaultAnswer() == Mockito.CALLS_REAL_METHODS;
+71 |     }
+
+===== M0016 =====
+Signature: org.mockito.internal.progress.MockingProgressImpl.stubbingStarted()
+Source: src/org/mockito/internal/progress/MockingProgressImpl.java
+Original range: 62-65
+Documentation:
+
+Method code:
+62 |     public void stubbingStarted() {
+63 |         validateState();
+64 |         stubbingInProgress = new LocationImpl();
+65 |     }
+
+===== M0017 =====
+Signature: org.mockito.internal.util.collections.Iterables.toIterable(Enumeration<T>)
+Source: src/org/mockito/internal/util/collections/Iterables.java
+Original range: 15-21
+Documentation:
+/**
+     * Converts enumeration into iterable
+     */
+Method code:
+15 |     public static <T> Iterable<T> toIterable(Enumeration<T> in) {
+16 |         List<T> out = new LinkedList<T>();
+17 |         while(in.hasMoreElements()) {
+18 |             out.add(in.nextElement());
+19 |         }
+20 |         return out;
+21 |     }
+
+===== M0018 =====
+Signature: org.mockito.internal.progress.ThreadSafeMockingProgress.validateState()
+Source: src/org/mockito/internal/progress/ThreadSafeMockingProgress.java
+Original range: 47-49
+Documentation:
+
+Method code:
+47 |     public void validateState() {
+48 |         threadSafely().validateState();
+49 |     }
+
+===== M0019 =====
+Signature: org.mockito.internal.configuration.injection.MockInjection.onFields(Set<Field>,Object)
+Source: src/org/mockito/internal/configuration/injection/MockInjection.java
+Original range: 47-49
+Documentation:
+/**
+     * Create a new configuration setup for fields
+     *
+     *
+     * @param fields Fields needing mock injection
+     * @param ofInstance Instance owning the <code>field</code>
+     * @return New configuration builder
+     */
+Method code:
+47 |     public static OngoingMockInjection onFields(Set<Field> fields, Object ofInstance) {
+48 |         return new OngoingMockInjection(fields, ofInstance);
+49 |     }
+
+===== M0020 =====
+Signature: org.mockito.internal.MockitoCore.stub()
+Source: src/org/mockito/internal/MockitoCore.java
+Original range: 64-71
+Documentation:
+
+Method code:
+64 |     public IOngoingStubbing stub() {
+65 |         IOngoingStubbing stubbing = mockingProgress.pullOngoingStubbing();
+66 |         if (stubbing == null) {
+67 |             mockingProgress.reset();
+68 |             reporter.missingMethodInvocation();
+69 |         }
+70 |         return stubbing;
+71 |     }
+
+===== M0021 =====
+Signature: org.mockito.internal.configuration.plugins.PluginFinder.findPluginClass(Iterable<URL>)
+Source: src/org/mockito/internal/configuration/plugins/PluginFinder.java
+Original range: 18-40
+Documentation:
+
+Method code:
+18 |     String findPluginClass(Iterable<URL> resources) {
+19 |         for (URL resource : resources) {
+20 |             InputStream s = null;
+21 |             try {
+22 |                 s = resource.openStream();
+23 |                 String pluginClassName = new PluginFileReader().readPluginClass(s);
+24 |                 if (pluginClassName == null) {
+25 |                     //For backwards compatibility
+26 |                     //If the resource does not have plugin class name we're ignoring it
+27 |                     continue;
+28 |                 }
+29 |                 if (!pluginSwitch.isEnabled(pluginClassName)) {
+30 |                     continue;
+31 |                 }
+32 |                 return pluginClassName;
+33 |             } catch(Exception e) {
+34 |                 throw new MockitoException("Problems reading plugin implementation from: " + resource, e);
+35 |             } finally {
+36 |                 IOUtil.closeQuietly(s);
+37 |             }
+38 |         }
+39 |         return null;
+40 |     }
+
+===== M0022 =====
+Signature: org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider.getStackTraceCleaner(StackTraceCleaner)
+Source: src/org/mockito/internal/exceptions/stacktrace/DefaultStackTraceCleanerProvider.java
+Original range: 11-13
+Documentation:
+
+Method code:
+11 |     public StackTraceCleaner getStackTraceCleaner(StackTraceCleaner defaultCleaner) {
+12 |         return defaultCleaner;
+13 |     }
+
+===== M0023 =====
+Signature: org.mockito.internal.configuration.SpyAnnotationEngine.assertNoIncompatibleAnnotations(Class,Field,Class...)
+Source: src/org/mockito/internal/configuration/SpyAnnotationEngine.java
+Original range: 122-128
+Documentation:
+//TODO duplicated elsewhere
+Method code:
+122 |     void assertNoIncompatibleAnnotations(Class annotation, Field field, Class... undesiredAnnotations) {
+123 |         for (Class u : undesiredAnnotations) {
+124 |             if (field.isAnnotationPresent(u)) {
+125 |                 new Reporter().unsupportedCombinationOfAnnotations(annotation.getSimpleName(), annotation.getClass().getSimpleName());
+126 |             }
+127 |         }
+128 |     }
+
+===== M0024 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.getSerializableMode()
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 97-99
+Documentation:
+
+Method code:
+97 |     public SerializableMode getSerializableMode() {
+98 |         return serializableMode;
+99 |     }
+
+===== M0025 =====
+Signature: org.mockito.internal.invocation.InvocationMatcher.captureArgumentsFrom(Invocation)
+Source: src/org/mockito/internal/invocation/InvocationMatcher.java
+Original range: 121-138
+Documentation:
+
+Method code:
+121 |     public void captureArgumentsFrom(Invocation invocation) {
+122 |         for (int position = 0; position < matchers.size(); position++) {
+123 |             Matcher m = matchers.get(position);
+124 |             if (m instanceof CapturesArguments && invocation.getRawArguments().length > position) {
+125 |                 //TODO SF - this whole lot can be moved captureFrom implementation
+126 |                 if(isVariableArgument(invocation, position) && isVarargMatcher(m)) {
+127 |                     Object array = invocation.getRawArguments()[position];
+128 |                     for (int i = 0; i < Array.getLength(array); i++) {
+129 |                         ((CapturesArguments) m).captureFrom(Array.get(array, i));
+130 |                     }
+131 |                     //since we've captured all varargs already, it does not make sense to process other matchers.
+132 |                     return;
+133 |                 } else {
+134 |                     ((CapturesArguments) m).captureFrom(invocation.getRawArguments()[position]);
+135 |                 }
+136 |             }
+137 |         }
+138 |     }
+
+===== M0026 =====
+Signature: org.mockito.Mockito.spy(Class<T>)
+Source: src/org/mockito/Mockito.java
+Original range: 1399-1404
+Documentation:
+/**
+     * Please refer to the documentation of {@link #spy(Object)}.
+     * Overusing spies hints at code design smells.
+     * <p>
+     * This method, in contrast to the original {@link #spy(Object)}, creates a spy based on class instead of an object.
+     * Sometimes it is more convenient to create spy based on the class and avoid providing an instance of a spied object.
+     * This is particularly useful for spying on abstract classes because they cannot be instantiated.
+     * See also {@link MockSettings#useConstructor()}.
+     * <p>
+     * Examples:
+     * <pre class="code"><code class="java">
+     *   SomeAbstract spy = spy(SomeAbstract.class);
+     *
+     *   //Robust API, via settings builder:
+     *   OtherAbstract spy = mock(OtherAbstract.class, withSettings()
+     *      .useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+     *
+     *   //Mocking a non-static inner abstract class:
+     *   InnerAbstract spy = mock(InnerAbstract.class, withSettings()
+     *      .useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
+     * </code></pre>
+     *
+     * @param classToSpy the class to spy
+     * @param <T> type of the spy
+     * @return a spy of the provided class
+     * @since 1.10.12
+     */
+Method code:
+1399 |     @Incubating
+1400 |     public static <T> T spy(Class<T> classToSpy) {
+1401 |         return MOCKITO_CORE.mock(classToSpy, withSettings()
+1402 |                 .useConstructor()
+1403 |                 .defaultAnswer(CALLS_REAL_METHODS));
+1404 |     }
+
+===== M0027 =====
+Signature: org.mockito.internal.stubbing.InvocationContainerImpl.resetInvocationForPotentialStubbing(InvocationMatcher)
+Source: src/org/mockito/internal/stubbing/InvocationContainerImpl.java
+Original range: 44-46
+Documentation:
+
+Method code:
+44 |     public void resetInvocationForPotentialStubbing(InvocationMatcher invocationMatcher) {
+45 |         this.invocationForStubbing = invocationMatcher;
+46 |     }
+
+===== M0028 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.getOuterClassInstance()
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 111-113
+Documentation:
+
+Method code:
+111 |     public Object getOuterClassInstance() {
+112 |         return outerClassInstance;
+113 |     }
+
+===== M0029 =====
+Signature: org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.interceptAbstract(Object,Method,Object[])
+Source: src/org/mockito/internal/creation/bytebuddy/MockMethodInterceptor.java
+Original range: 67-77
+Documentation:
+
+Method code:
+67 |     @RuntimeType
+68 |     public Object interceptAbstract(@This Object mock,
+69 |                                     @Origin(cacheMethod = true) Method invokedMethod,
+70 |                                     @AllArguments Object[] arguments) throws Throwable {
+71 |         return doIntercept(
+72 |                 mock,
+73 |                 invokedMethod,
+74 |                 arguments,
+75 |                 InterceptedInvocation.SuperMethod.IsIllegal.INSTANCE
+76 |         );
+77 |     }
+
+===== M0030 =====
+Signature: org.mockito.internal.debugging.LocationImpl.LocationImpl()
+Source: src/org/mockito/internal/debugging/LocationImpl.java
+Original range: 18-20
+Documentation:
+
+Method code:
+18 |     public LocationImpl() {
+19 |         this(new StackTraceFilter());
+20 |     }
+
+===== M0031 =====
+Signature: org.mockito.internal.configuration.ClassPathLoader.loadConfiguration()
+Source: src/org/mockito/internal/configuration/ClassPathLoader.java
+Original range: 63-81
+Documentation:
+/**
+     * @return configuration loaded from classpath or null
+     */
+Method code:
+63 |     @SuppressWarnings({"unchecked"})
+64 |     public IMockitoConfiguration loadConfiguration() {
+65 |         //Trying to get config from classpath
+66 |         Class configClass;
+67 |         try {
+68 |             configClass = (Class) Class.forName(MOCKITO_CONFIGURATION_CLASS_NAME);
+69 |         } catch (ClassNotFoundException e) {
+70 |             //that's ok, it means there is no global config, using default one.
+71 |             return null;
+72 |         }
+73 | 
+74 |         try {
+75 |             return (IMockitoConfiguration) configClass.newInstance();
+76 |         } catch (ClassCastException e) {
+77 |             throw new MockitoConfigurationException("MockitoConfiguration class must implement " + IMockitoConfiguration.class.getName() + " interface.", e);
+78 |         } catch (Exception e) {
+79 |             throw new MockitoConfigurationException("Unable to instantiate " + MOCKITO_CONFIGURATION_CLASS_NAME +" class. Does it have a safe, no-arg constructor?", e);
+80 |         }
+81 |     }
+
+===== M0032 =====
+Signature: org.mockito.internal.configuration.GlobalConfiguration.getAnnotationEngine()
+Source: src/org/mockito/internal/configuration/GlobalConfiguration.java
+Original range: 54-56
+Documentation:
+
+Method code:
+54 |     public AnnotationEngine getAnnotationEngine() {
+55 |         return GLOBAL_CONFIGURATION.get().getAnnotationEngine();
+56 |     }
+
+===== M0033 =====
+Signature: org.mockito.internal.util.Checks.checkNotNull(T,String)
+Source: src/org/mockito/internal/util/Checks.java
+Original range: 13-18
+Documentation:
+
+Method code:
+13 |     public static <T> T checkNotNull(T value, String checkedValue) {
+14 |         if(value == null) {
+15 |             throw new NullPointerException(checkedValue + " should not be null");
+16 |         }
+17 |         return value;
+18 |     }
+
+===== M0034 =====
+Signature: org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.interceptSuperCallable(Object,Method,Object[],Callable<?>)
+Source: src/org/mockito/internal/creation/bytebuddy/MockMethodInterceptor.java
+Original range: 39-51
+Documentation:
+
+Method code:
+39 |     @RuntimeType
+40 |     @BindingPriority(BindingPriority.DEFAULT * 3)
+41 |     public Object interceptSuperCallable(@This Object mock,
+42 |                                          @Origin(cacheMethod = true) Method invokedMethod,
+43 |                                          @AllArguments Object[] arguments,
+44 |                                          @SuperCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
+45 |         return doIntercept(
+46 |                 mock,
+47 |                 invokedMethod,
+48 |                 arguments,
+49 |                 new InterceptedInvocation.SuperMethod.FromCallable(superCall)
+50 |         );
+51 |     }
+
+===== M0035 =====
+Signature: org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues.answer(InvocationOnMock)
+Source: src/org/mockito/internal/stubbing/defaultanswers/ReturnsEmptyValues.java
+Original range: 63-81
+Documentation:
+/* (non-Javadoc)
+     * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
+     */
+Method code:
+63 |     public Object answer(InvocationOnMock invocation) {
+64 |         if (methodsGuru.isToString(invocation.getMethod())) {
+65 |             Object mock = invocation.getMock();
+66 |             MockName name = mockUtil.getMockName(mock);
+67 |             if (name.isDefault()) {
+68 |                 return "Mock for " + mockUtil.getMockSettings(mock).getTypeToMock().getSimpleName() + ", hashCode: " + mock.hashCode();
+69 |             } else {
+70 |                 return name.toString();
+71 |             }
+72 |         } else if (methodsGuru.isCompareToMethod(invocation.getMethod())) {
+73 |             //see issue 184.
+74 |             //mocks by default should return 0 if references are the same, otherwise some other value because they are not the same. Hence we return 1 (anything but 0 is good).
+75 |             //Only for compareTo() method by the Comparable interface
+76 |             return invocation.getMock() == invocation.getArguments()[0] ? 0 : 1;
+77 |         }
+78 |         
+79 |         Class<?> returnType = invocation.getMethod().getReturnType();
+80 |         return returnValueFor(returnType);
+81 |     }
+
+===== M0036 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.isStubOnly()
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 113-115
+Documentation:
+
+Method code:
+113 |     public boolean isStubOnly() {
+114 |         return stubOnly;
+115 |     }
+
+===== M0037 =====
+Signature: org.mockito.internal.util.MockUtil.createMock(MockCreationSettings<T>)
+Source: src/org/mockito/internal/util/MockUtil.java
+Original range: 30-41
+Documentation:
+
+Method code:
+30 |     public <T> T createMock(MockCreationSettings<T> settings) {
+31 |         MockHandler mockHandler = new MockHandlerFactory().create(settings);
+32 | 
+33 |         T mock = mockMaker.createMock(settings, mockHandler);
+34 | 
+35 |         Object spiedInstance = settings.getSpiedInstance();
+36 |         if (spiedInstance != null) {
+37 |             new LenientCopyTool().copyToMock(spiedInstance, mock);
+38 |         }
+39 | 
+40 |         return mock;
+41 |     }
+
+===== M0038 =====
+Signature: org.mockito.internal.util.MockCreationValidator.validateMockedType(Class,Object)
+Source: src/org/mockito/internal/util/MockCreationValidator.java
+Original range: 37-44
+Documentation:
+
+Method code:
+37 |     public void validateMockedType(Class classToMock, Object spiedInstance) {
+38 |         if (classToMock == null || spiedInstance == null) {
+39 |             return;
+40 |         }
+41 |         if (!classToMock.equals(spiedInstance.getClass())) {
+42 |             new Reporter().mockedTypeIsInconsistentWithSpiedInstanceType(classToMock, spiedInstance);
+43 |         }
+44 |     }
+
+===== M0039 =====
+Signature: org.mockito.MockitoAnnotations.initMocks(Object)
+Source: src/org/mockito/MockitoAnnotations.java
+Original range: 89-109
+Documentation:
+/**
+     * Initializes objects annotated with Mockito annotations for given testClass:
+     *  &#064;{@link org.mockito.Mock}, &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMocks} 
+     * <p>
+     * See examples in javadoc for {@link MockitoAnnotations} class.
+     */
+Method code:
+89 |     public static void initMocks(Object testClass) {
+90 |         if (testClass == null) {
+91 |             throw new MockitoException("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class");
+92 |         }
+93 | 
+94 |         AnnotationEngine annotationEngine = new GlobalConfiguration().getAnnotationEngine();
+95 |         Class<?> clazz = testClass.getClass();
+96 | 
+97 |         //below can be removed later, when we get read rid of deprecated stuff
+98 |         if (annotationEngine.getClass() != new DefaultMockitoConfiguration().getAnnotationEngine().getClass()) {
+99 |             //this means user has his own annotation engine and we have to respect that.
+100 |             //we will do annotation processing the old way so that we are backwards compatible
+101 |             while (clazz != Object.class) {
+102 |                 scanDeprecatedWay(annotationEngine, testClass, clazz);
+103 |                 clazz = clazz.getSuperclass();
+104 |             }
+105 |         }
+106 | 
+107 |         //anyway act 'the new' way
+108 |         annotationEngine.process(testClass.getClass(), testClass);
+109 |     }
+
+===== M0040 =====
+Signature: org.mockito.MockitoAnnotations.throwIfAlreadyAssigned(Field,boolean)
+Source: src/org/mockito/MockitoAnnotations.java
+Original range: 137-141
+Documentation:
+
+Method code:
+137 |     static void throwIfAlreadyAssigned(Field field, boolean alreadyAssigned) {
+138 |         if (alreadyAssigned) {
+139 |             new Reporter().moreThanOneAnnotationNotAllowed(field.getName());
+140 |         }
+141 |     }
+
+===== M0041 =====
+Signature: org.mockito.internal.progress.MockingProgressImpl.pullOngoingStubbing()
+Source: src/org/mockito/internal/progress/MockingProgressImpl.java
+Original range: 33-37
+Documentation:
+
+Method code:
+33 |     public IOngoingStubbing pullOngoingStubbing() {
+34 |         IOngoingStubbing temp = iOngoingStubbing;
+35 |         iOngoingStubbing = null;
+36 |         return temp;
+37 |     }
+
+===== M0042 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsMockWrapper.HashCodeAndEqualsMockWrapper(Object)
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsMockWrapper.java
+Original range: 31-33
+Documentation:
+
+Method code:
+31 |     public HashCodeAndEqualsMockWrapper(Object mockInstance) {
+32 |         this.mockInstance = mockInstance;
+33 |     }
+
+===== M0043 =====
+Signature: org.mockito.internal.util.reflection.LenientCopyTool.copyToMock(T,T)
+Source: src/org/mockito/internal/util/reflection/LenientCopyTool.java
+Original range: 15-17
+Documentation:
+
+Method code:
+15 |     public <T> void copyToMock(T from, T mock) {
+16 |         copy(from, mock, from.getClass(), mock.getClass().getSuperclass());
+17 |     }
+
+===== M0044 =====
+Signature: org.mockito.internal.stubbing.answers.MethodInfo.MethodInfo(Invocation)
+Source: src/org/mockito/internal/stubbing/answers/MethodInfo.java
+Original range: 21-23
+Documentation:
+
+Method code:
+21 |     public MethodInfo(Invocation theInvocation) {
+22 |         this.method = theInvocation.getMethod();
+23 |     }
+
+===== M0045 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.getExtraInterfaces()
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 62-64
+Documentation:
+
+Method code:
+62 |     public Set<Class> getExtraInterfaces() {
+63 |         return extraInterfaces;
+64 |     }
+
+===== M0046 =====
+Signature: org.mockito.internal.creation.DelegatingMethod.DelegatingMethod(Method)
+Source: src/org/mockito/internal/creation/DelegatingMethod.java
+Original range: 16-19
+Documentation:
+
+Method code:
+16 |     public DelegatingMethod(Method method) {
+17 |         assert method != null : "Method cannot be null";
+18 |         this.method = method;
+19 |     }
+
+===== M0047 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsSafeSet.anonymous_L37.next()
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsSafeSet.java
+Original range: 44-46
+Documentation:
+
+Method code:
+44 |             public Object next() {
+45 |                 return iterator.next().get();
+46 |             }
+
+===== M0048 =====
+Signature: org.mockito.internal.configuration.InjectingAnnotationEngine.processIndependentAnnotations(Class<?>,Object)
+Source: src/org/mockito/internal/configuration/InjectingAnnotationEngine.java
+Original range: 67-77
+Documentation:
+
+Method code:
+67 |     private void processIndependentAnnotations(final Class<?> clazz, final Object testInstance) {
+68 |         Class<?> classContext = clazz;
+69 |         while (classContext != Object.class) {
+70 |             //this will create @Mocks, @Captors, etc:
+71 |             delegate.process(classContext, testInstance);
+72 |             //this will create @Spies:
+73 |             spyAnnotationEngine.process(classContext, testInstance);
+74 | 
+75 |             classContext = classContext.getSuperclass();
+76 |         }
+77 |     }
+
+===== M0049 =====
+Signature: org.mockito.internal.configuration.injection.scanner.MockScanner.addPreparedMocks(Set<Object>)
+Source: src/org/mockito/internal/configuration/injection/scanner/MockScanner.java
+Original range: 46-48
+Documentation:
+/**
+     * Add the scanned and prepared mock instance to the given collection.
+     *
+     * <p>
+     * The preparation of mocks consists only in defining a MockName if not already set.
+     * </p>
+     *
+     * @param mocks Set of mocks
+     */
+Method code:
+46 |     public void addPreparedMocks(Set<Object> mocks) {
+47 |         mocks.addAll(scan());
+48 |     }
+
+===== M0050 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsSafeSet.anonymous_L37.hasNext()
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsSafeSet.java
+Original range: 40-42
+Documentation:
+
+Method code:
+40 |             public boolean hasNext() {
+41 |                 return iterator.hasNext();
+42 |             }
+
+===== M0051 =====
+Signature: org.mockito.internal.util.reflection.AccessibilityChanger.safelyDisableAccess(AccessibleObject)
+Source: src/org/mockito/internal/util/reflection/AccessibilityChanger.java
+Original range: 16-23
+Documentation:
+/**
+     * safely disables access
+     */
+Method code:
+16 |     public void safelyDisableAccess(AccessibleObject accessibleObject) {
+17 |         assert wasAccessible != null : "accessibility info shall not be null";
+18 |         try {
+19 |             accessibleObject.setAccessible(wasAccessible);
+20 |         } catch (Throwable t) {
+21 |             //ignore
+22 |         }
+23 |     }
+
+===== M0052 =====
+Signature: org.mockito.internal.configuration.InjectingAnnotationEngine.process(Class<?>,Object)
+Source: src/org/mockito/internal/configuration/InjectingAnnotationEngine.java
+Original range: 54-57
+Documentation:
+/**
+     * Process the fields of the test instance and create Mocks, Spies, Captors and inject them on fields
+     * annotated &#64;InjectMocks.
+     *
+     * <p>
+     * This code process the test class and the super classes.
+     * <ol>
+     * <li>First create Mocks, Spies, Captors.</li>
+     * <li>Then try to inject them.</li>
+     * </ol>
+     *
+     * @param clazz Not used
+     * @param testInstance The instance of the test, should not be null.
+     *
+     * @see org.mockito.configuration.AnnotationEngine#process(Class, Object)
+     */
+Method code:
+54 |     public void process(Class<?> clazz, Object testInstance) {
+55 |         processIndependentAnnotations(testInstance.getClass(), testInstance);
+56 |         processInjectMocks(testInstance.getClass(), testInstance);
+57 |     }
+
+===== M0053 =====
+Signature: org.mockito.internal.util.MockNameImpl.toInstanceName(Class<?>)
+Source: src/org/mockito/internal/util/MockNameImpl.java
+Original range: 31-39
+Documentation:
+
+Method code:
+31 |     private static String toInstanceName(Class<?> clazz) {
+32 |         String className = clazz.getSimpleName();
+33 |         if (className.length() == 0) {
+34 |             //it's an anonymous class, let's get name from the parent
+35 |             className = clazz.getSuperclass().getSimpleName();
+36 |         }
+37 |         //lower case first letter
+38 |         return className.substring(0, 1).toLowerCase() + className.substring(1);
+39 |     }
+
+===== M0054 =====
+Signature: org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker.getHandler(Object)
+Source: src/org/mockito/internal/creation/bytebuddy/ByteBuddyMockMaker.java
+Original range: 71-76
+Documentation:
+
+Method code:
+71 |     public MockHandler getHandler(Object mock) {
+72 |         if (!(mock instanceof MockMethodInterceptor.MockAccess)) {
+73 |             return null;
+74 |         }
+75 |         return ((MockMethodInterceptor.MockAccess) mock).getMockitoInterceptor().getMockHandler();
+76 |     }
+
+===== M0055 =====
+Signature: org.mockito.internal.stubbing.answers.AnswersValidator.validate(Answer<?>,Invocation)
+Source: src/org/mockito/internal/stubbing/answers/AnswersValidator.java
+Original range: 15-37
+Documentation:
+
+Method code:
+15 |     public void validate(Answer<?> answer, Invocation invocation) {
+16 |         MethodInfo methodInfo = new MethodInfo(invocation);
+17 |         if (answer instanceof ThrowsException) {
+18 |             validateException((ThrowsException) answer, methodInfo);
+19 |         }
+20 |         
+21 |         if (answer instanceof Returns) {
+22 |             validateReturnValue((Returns) answer, methodInfo);
+23 |         }
+24 |         
+25 |         if (answer instanceof DoesNothing) {
+26 |             validateDoNothing((DoesNothing) answer, methodInfo);
+27 |         }
+28 |         
+29 |         if (answer instanceof CallsRealMethods) {
+30 |             validateMockingConcreteClass((CallsRealMethods) answer, methodInfo);
+31 |         }
+32 | 
+33 |         if (answer instanceof ReturnsArgumentAt) {
+34 |             ReturnsArgumentAt returnsArgumentAt = (ReturnsArgumentAt) answer;
+35 |             validateReturnArgIdentity(returnsArgumentAt, invocation);
+36 |         }
+37 |     }
+
+===== M0056 =====
+Signature: org.mockito.internal.progress.ThreadSafeMockingProgress.reportOngoingStubbing(IOngoingStubbing)
+Source: src/org/mockito/internal/progress/ThreadSafeMockingProgress.java
+Original range: 27-29
+Documentation:
+
+Method code:
+27 |     public void reportOngoingStubbing(IOngoingStubbing iOngoingStubbing) {
+28 |         threadSafely().reportOngoingStubbing(iOngoingStubbing);
+29 |     }
+
+===== M0057 =====
+Signature: org.mockito.internal.configuration.DefaultAnnotationEngine.throwIfAlreadyAssigned(Field,boolean)
+Source: src/org/mockito/internal/configuration/DefaultAnnotationEngine.java
+Original range: 81-85
+Documentation:
+
+Method code:
+81 |     void throwIfAlreadyAssigned(Field field, boolean alreadyAssigned) {
+82 |         if (alreadyAssigned) {
+83 |             new Reporter().moreThanOneAnnotationNotAllowed(field.getName());
+84 |         }
+85 |     }
+
+===== M0058 =====
+Signature: org.mockito.internal.configuration.injection.scanner.MockScanner.isAnnotatedByMockOrSpy(Field)
+Source: src/org/mockito/internal/configuration/injection/scanner/MockScanner.java
+Original range: 79-83
+Documentation:
+
+Method code:
+79 |     private boolean isAnnotatedByMockOrSpy(Field field) {
+80 |         return null != field.getAnnotation(Spy.class)
+81 |                 || null != field.getAnnotation(Mock.class)
+82 |                 || null != field.getAnnotation(MockitoAnnotations.Mock.class);
+83 |     }
+
+===== M0059 =====
+Signature: org.mockito.internal.invocation.ArgumentsComparator.argumentsMatch(InvocationMatcher,Object[])
+Source: src/org/mockito/internal/invocation/ArgumentsComparator.java
+Original range: 21-31
+Documentation:
+
+Method code:
+21 |     public boolean argumentsMatch(InvocationMatcher invocationMatcher, Object[] actualArgs) {
+22 |         if (actualArgs.length != invocationMatcher.getMatchers().size()) {
+23 |             return false;
+24 |         }
+25 |         for (int i = 0; i < actualArgs.length; i++) {
+26 |             if (!invocationMatcher.getMatchers().get(i).matches(actualArgs[i])) {
+27 |                 return false;
+28 |             }
+29 |         }
+30 |         return true;
+31 |     }
+
+===== M0060 =====
+Signature: org.mockito.internal.creation.util.SearchingClassLoader.combineLoadersOf(Class<?>,Class<?>...)
+Source: src/org/mockito/internal/creation/util/SearchingClassLoader.java
+Original range: 27-50
+Documentation:
+
+Method code:
+27 |     private static ClassLoader combineLoadersOf(Class<?> first, Class<?>... others) {
+28 |         List<ClassLoader> loaders = new ArrayList<ClassLoader>();
+29 |         
+30 |         addIfNewElement(loaders, first.getClassLoader());
+31 |         for (Class<?> c : others) {
+32 |             addIfNewElement(loaders, c.getClassLoader());
+33 |         }
+34 |         
+35 |         // To support Eclipse Plug-in tests.
+36 |         // In an Eclipse plug-in, we will not be on the system class loader
+37 |         // but in the class loader of the plug-in.
+38 |         //
+39 |         // Note: I've been unable to reproduce the error in the test suite.
+40 |         addIfNewElement(loaders, SearchingClassLoader.class.getClassLoader());
+41 |         
+42 |         // To support the Maven Surefire plugin.
+43 |         // Note: I've been unable to reproduce the error in the test suite.
+44 |         addIfNewElement(loaders, currentThread().getContextClassLoader());
+45 | 
+46 |         //Had to comment that out because it didn't work with in-container Spring tests
+47 |         //addIfNewElement(loaders, ClassLoader.getSystemClassLoader());
+48 |         
+49 |         return combine(loaders);
+50 |     }
+
+===== M0061 =====
+Signature: org.mockito.internal.util.MockUtil.isMockitoMock(T)
+Source: src/org/mockito/internal/util/MockUtil.java
+Original range: 73-75
+Documentation:
+
+Method code:
+73 |     private <T> boolean isMockitoMock(T mock) {
+74 |         return mockMaker.getHandler(mock) != null;
+75 |     }
+
+===== M0062 =====
+Signature: org.mockito.internal.handler.InvocationNotifierHandler.notifyMethodCall(Invocation,Object)
+Source: src/org/mockito/internal/handler/InvocationNotifierHandler.java
+Original range: 48-56
+Documentation:
+
+Method code:
+48 | 	private void notifyMethodCall(Invocation invocation, Object returnValue) {
+49 | 		for (InvocationListener listener : invocationListeners) {
+50 |             try {
+51 |                 listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, returnValue));
+52 |             } catch(Throwable listenerThrowable) {
+53 |                 new Reporter().invocationListenerThrewException(listener, listenerThrowable);
+54 |             }
+55 |         }
+56 | 	}
+
+===== M0063 =====
+Signature: org.mockito.internal.debugging.LocationImpl.LocationImpl(StackTraceFilter)
+Source: src/org/mockito/internal/debugging/LocationImpl.java
+Original range: 22-25
+Documentation:
+
+Method code:
+22 |     public LocationImpl(StackTraceFilter stackTraceFilter) {
+23 |         this.stackTraceFilter = stackTraceFilter;
+24 |         stackTraceHolder = new Throwable();
+25 |     }
+
+===== M0064 =====
+Signature: org.mockito.internal.util.MockUtil.isMock(Object)
+Source: src/org/mockito/internal/util/MockUtil.java
+Original range: 64-67
+Documentation:
+
+Method code:
+64 |     public boolean isMock(Object mock) {
+65 |         // double check to avoid classes that have the same interfaces, could be great to have a custom mockito field in the proxy instead of relying on instance fields
+66 |         return isMockitoMock(mock);
+67 |     }
+
+===== M0065 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.validatedSettings(Class<T>,CreationSettings<T>)
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 164-183
+Documentation:
+
+Method code:
+164 |     private static <T> CreationSettings<T> validatedSettings(Class<T> typeToMock, CreationSettings<T> source) {
+165 |         MockCreationValidator validator = new MockCreationValidator();
+166 | 
+167 |         validator.validateType(typeToMock);
+168 |         validator.validateExtraInterfaces(typeToMock, source.getExtraInterfaces());
+169 |         validator.validateMockedType(typeToMock, source.getSpiedInstance());
+170 | 
+171 |         //TODO SF - add this validation and also add missing coverage
+172 | //        validator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance());
+173 | 
+174 |         validator.validateSerializable(typeToMock, source.isSerializable());
+175 |         validator.validateConstructorUse(source.isUsingConstructor(), source.getSerializableMode());
+176 | 
+177 |         //TODO SF - I don't think we really need CreationSettings type
+178 |         CreationSettings<T> settings = new CreationSettings<T>(source);
+179 |         settings.setMockName(new MockNameImpl(source.getName(), typeToMock));
+180 |         settings.setTypeToMock(typeToMock);
+181 |         settings.setExtraInterfaces(prepareExtraInterfaces(source));
+182 |         return settings;
+183 |     }
+
+===== M0066 =====
+Signature: org.mockito.internal.configuration.MockAnnotationProcessor.process(Mock,Field)
+Source: src/org/mockito/internal/configuration/MockAnnotationProcessor.java
+Original range: 17-34
+Documentation:
+
+Method code:
+17 |     public Object process(Mock annotation, Field field) {
+18 |         MockSettings mockSettings = Mockito.withSettings();
+19 |         if (annotation.extraInterfaces().length > 0) { // never null
+20 |             mockSettings.extraInterfaces(annotation.extraInterfaces());
+21 |         }
+22 |         if ("".equals(annotation.name())) {
+23 |             mockSettings.name(field.getName());
+24 |         } else {
+25 |             mockSettings.name(annotation.name());
+26 |         }
+27 |         if(annotation.serializable()){
+28 |         	mockSettings.serializable();
+29 |         }
+30 | 
+31 |         // see @Mock answer default value
+32 |         mockSettings.defaultAnswer(annotation.answer());
+33 |         return Mockito.mock(field.getType(), mockSettings);
+34 |     }
+
+===== M0067 =====
+Signature: org.mockito.internal.configuration.GlobalConfiguration.validate()
+Source: src/org/mockito/internal/configuration/GlobalConfiguration.java
+Original range: 46-48
+Documentation:
+
+Method code:
+46 |     public static void validate() {
+47 |         new GlobalConfiguration();
+48 |     }
+
+===== M0068 =====
+Signature: org.mockito.internal.util.reflection.AccessibilityChanger.enableAccess(AccessibleObject)
+Source: src/org/mockito/internal/util/reflection/AccessibilityChanger.java
+Original range: 28-31
+Documentation:
+/**
+     * changes the accessibleObject accessibility and returns true if accessibility was changed
+     */
+Method code:
+28 |     public void enableAccess(AccessibleObject accessibleObject) {
+29 |         wasAccessible = accessibleObject.isAccessible();
+30 |         accessibleObject.setAccessible(true);
+31 |     }
+
+===== M0069 =====
+Signature: org.mockito.internal.configuration.injection.MockInjection.OngoingMockInjection.tryPropertyOrFieldInjection()
+Source: src/org/mockito/internal/configuration/injection/MockInjection.java
+Original range: 80-83
+Documentation:
+
+Method code:
+80 |         public OngoingMockInjection tryPropertyOrFieldInjection() {
+81 |             injectionStrategies.thenTry(new PropertyAndSetterInjection());
+82 |             return this;
+83 |         }
+
+===== M0070 =====
+Signature: org.mockito.internal.util.MockCreationValidator.validateType(Class)
+Source: src/org/mockito/internal/util/MockCreationValidator.java
+Original range: 19-23
+Documentation:
+
+Method code:
+19 |     public void validateType(Class classToMock) {
+20 |         if (!mockUtil.isTypeMockable(classToMock)) {
+21 |             new Reporter().cannotMockFinalClass(classToMock);
+22 |         }
+23 |     }
+
+===== M0071 =====
+Signature: org.mockito.internal.creation.DelegatingMethod.getReturnType()
+Source: src/org/mockito/internal/creation/DelegatingMethod.java
+Original range: 37-39
+Documentation:
+
+Method code:
+37 |     public Class<?> getReturnType() {
+38 |         return method.getReturnType();
+39 |     }
+
+===== M0072 =====
+Signature: org.mockito.internal.creation.bytebuddy.CachingMockBytecodeGenerator.CachedBytecodeGenerator.CachedBytecodeGenerator(MockBytecodeGenerator)
+Source: src/org/mockito/internal/creation/bytebuddy/CachingMockBytecodeGenerator.java
+Original range: 54-56
+Documentation:
+
+Method code:
+54 |         private CachedBytecodeGenerator(MockBytecodeGenerator generator) {
+55 |             this.generator = generator;
+56 |         }
+
+===== M0073 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsSafeSet.add(Object)
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsSafeSet.java
+Original range: 66-68
+Documentation:
+
+Method code:
+66 |     public boolean add(Object mock) {
+67 |         return backingHashSet.add(HashCodeAndEqualsMockWrapper.of(mock));
+68 |     }
+
+===== M0074 =====
+Signature: org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues.returnValueFor(Class<?>)
+Source: src/org/mockito/internal/stubbing/defaultanswers/ReturnsEmptyValues.java
+Original range: 83-121
+Documentation:
+
+Method code:
+83 |     Object returnValueFor(Class<?> type) {
+84 |         if (Primitives.isPrimitiveOrWrapper(type)) {
+85 |             return Primitives.defaultValueForPrimitiveOrWrapper(type);
+86 |         //new instances are used instead of Collections.emptyList(), etc.
+87 |         //to avoid UnsupportedOperationException if code under test modifies returned collection
+88 |         } else if (type == Collection.class) {
+89 |             return new LinkedList<Object>();
+90 |         } else if (type == Set.class) {
+91 |             return new HashSet<Object>();
+92 |         } else if (type == HashSet.class) {
+93 |             return new HashSet<Object>();
+94 |         } else if (type == SortedSet.class) {
+95 |             return new TreeSet<Object>();
+96 |         } else if (type == TreeSet.class) {
+97 |             return new TreeSet<Object>();
+98 |         } else if (type == LinkedHashSet.class) {
+99 |             return new LinkedHashSet<Object>();
+100 |         } else if (type == List.class) {
+101 |             return new LinkedList<Object>();
+102 |         } else if (type == LinkedList.class) {
+103 |             return new LinkedList<Object>();
+104 |         } else if (type == ArrayList.class) {
+105 |             return new ArrayList<Object>();
+106 |         } else if (type == Map.class) {
+107 |             return new HashMap<Object, Object>();
+108 |         } else if (type == HashMap.class) {
+109 |             return new HashMap<Object, Object>();
+110 |         } else if (type == SortedMap.class) {
+111 |             return new TreeMap<Object, Object>();
+112 |         } else if (type == TreeMap.class) {
+113 |             return new TreeMap<Object, Object>();
+114 |         } else if (type == LinkedHashMap.class) {
+115 |             return new LinkedHashMap<Object, Object>();
+116 |         }
+117 |         // TODO return empty Iterable ; see issue 175
+118 | 
+119 |         //Let's not care about the rest of collections.
+120 |         return null;
+121 |     }
+
+===== M0075 =====
+Signature: org.mockito.internal.invocation.ArgumentsProcessor.argumentsToMatchers(Object[])
+Source: src/org/mockito/internal/invocation/ArgumentsProcessor.java
+Original range: 41-51
+Documentation:
+
+Method code:
+41 |     public static List<Matcher> argumentsToMatchers(Object[] arguments) {
+42 |         List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
+43 |         for (Object arg : arguments) {
+44 |             if (arg != null && arg.getClass().isArray()) {
+45 |                 matchers.add(new ArrayEquals(arg));
+46 |             } else {
+47 |                 matchers.add(new Equals(arg));
+48 |             }
+49 |         }
+50 |         return matchers;
+51 |     }
+
+===== M0076 =====
+Signature: org.mockito.internal.stubbing.answers.AnswersValidator.validateReturnValue(Returns,MethodInfo)
+Source: src/org/mockito/internal/stubbing/answers/AnswersValidator.java
+Original range: 63-75
+Documentation:
+
+Method code:
+63 |     private void validateReturnValue(Returns answer, MethodInfo methodInfo) {
+64 |         if (methodInfo.isVoid()) {
+65 |             reporter.cannotStubVoidMethodWithAReturnValue(methodInfo.getMethodName());
+66 |         }
+67 |         
+68 |         if (answer.returnsNull() && methodInfo.returnsPrimitive()) {
+69 |             reporter.wrongTypeOfReturnValue(methodInfo.printMethodReturnType(), "null", methodInfo.getMethodName());
+70 |         } 
+71 | 
+72 |         if (!answer.returnsNull() && !methodInfo.isValidReturnType(answer.getReturnType())) {
+73 |             reporter.wrongTypeOfReturnValue(methodInfo.printMethodReturnType(), answer.printReturnType(), methodInfo.getMethodName());
+74 |         }
+75 |     }
+
+===== M0077 =====
+Signature: org.mockito.MockitoAnnotations.scanDeprecatedWay(AnnotationEngine,Object,Class<?>)
+Source: src/org/mockito/MockitoAnnotations.java
+Original range: 111-117
+Documentation:
+
+Method code:
+111 |     static void scanDeprecatedWay(AnnotationEngine annotationEngine, Object testClass, Class<?> clazz) {
+112 |         Field[] fields = clazz.getDeclaredFields();
+113 | 
+114 |         for (Field field : fields) {
+115 |             processAnnotationDeprecatedWay(annotationEngine, testClass, field);
+116 |         }
+117 |     }
+
+===== M0078 =====
+Signature: org.mockito.internal.configuration.plugins.Plugins.getMockMaker()
+Source: src/org/mockito/internal/configuration/plugins/Plugins.java
+Original range: 26-28
+Documentation:
+/**
+     * Returns the implementation of the mock maker available for the current runtime.
+     *
+     * <p>Returns {@link org.mockito.internal.creation.cglib.CglibMockMaker} if no
+     * {@link org.mockito.plugins.MockMaker} extension exists or is visible in the current classpath.</p>
+     */
+Method code:
+26 |     public static MockMaker getMockMaker() {
+27 |         return registry.getMockMaker();
+28 |     }
+
+===== M0079 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.defaultAnswer(Answer)
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 80-86
+Documentation:
+
+Method code:
+80 |     public MockSettings defaultAnswer(Answer defaultAnswer) {
+81 |         this.defaultAnswer = defaultAnswer;
+82 |         if (defaultAnswer == null) {
+83 |             new Reporter().defaultAnswerDoesNotAcceptNullParameter();
+84 |         }
+85 |         return this;
+86 |     }
+
+===== M0080 =====
+Signature: org.mockito.internal.progress.MockingProgressImpl.mockingStarted(Object,Class)
+Source: src/org/mockito/internal/progress/MockingProgressImpl.java
+Original range: 112-117
+Documentation:
+
+Method code:
+112 |     public void mockingStarted(Object mock, Class classToMock) {
+113 |         if (listener instanceof MockingStartedListener) {
+114 |             ((MockingStartedListener) listener).mockingStarted(mock, classToMock);
+115 |         }
+116 |         validateMostStuff();
+117 |     }
+
+===== M0081 =====
+Signature: org.mockito.internal.util.Primitives.isPrimitiveOrWrapper(Class<?>)
+Source: src/org/mockito/internal/util/Primitives.java
+Original range: 41-43
+Documentation:
+/**
+     * Indicates if the given class is primitive type or a primitive wrapper.
+     *
+     * @param type The type to check
+     * @return <code>true</code> if primitive or wrapper, <code>false</code> otherwise.
+     */
+Method code:
+41 |     public static boolean isPrimitiveOrWrapper(Class<?> type) {
+42 |         return PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.containsKey(type);
+43 |     }
+
+===== M0082 =====
+Signature: org.mockito.internal.configuration.plugins.PluginRegistry.getMockMaker()
+Source: src/org/mockito/internal/configuration/plugins/PluginRegistry.java
+Original range: 32-34
+Documentation:
+/**
+     * Returns the implementation of the mock maker available for the current runtime.
+     *
+     * <p>Returns {@link org.mockito.internal.creation.cglib.CglibMockMaker} if no
+     * {@link org.mockito.plugins.MockMaker} extension exists or is visible in the current classpath.</p>
+     */
+Method code:
+32 |     MockMaker getMockMaker() {
+33 |         return mockMaker;
+34 |     }
+
+===== M0083 =====
+Signature: org.mockito.internal.progress.ThreadSafeMockingProgress.pullOngoingStubbing()
+Source: src/org/mockito/internal/progress/ThreadSafeMockingProgress.java
+Original range: 31-33
+Documentation:
+
+Method code:
+31 |     public IOngoingStubbing pullOngoingStubbing() {
+32 |         return threadSafely().pullOngoingStubbing();
+33 |     }
+
+===== M0084 =====
+Signature: org.mockito.internal.verification.DefaultRegisteredInvocations.removeLast()
+Source: src/org/mockito/internal/verification/DefaultRegisteredInvocations.java
+Original range: 29-36
+Documentation:
+
+Method code:
+29 |     public void removeLast() {
+30 |         //TODO: add specific test for synchronization of this block (it is tested by InvocationContainerImplTest at the moment)
+31 |         synchronized (invocations) {
+32 |             if (! invocations.isEmpty()) {
+33 |                 invocations.removeLast();
+34 |             }
+35 |         }
+36 |     }
+
+===== M0085 =====
+Signature: org.mockito.internal.progress.MockingProgressImpl.getArgumentMatcherStorage()
+Source: src/org/mockito/internal/progress/MockingProgressImpl.java
+Original range: 108-110
+Documentation:
+
+Method code:
+108 |     public ArgumentMatcherStorage getArgumentMatcherStorage() {
+109 |         return argumentMatcherStorage;
+110 |     }
+
+===== M0086 =====
+Signature: org.mockito.internal.invocation.ArgumentsProcessor.expandVarArgs(boolean,Object[])
+Source: src/org/mockito/internal/invocation/ArgumentsProcessor.java
+Original range: 21-39
+Documentation:
+// varArgs (1, a, b);
+Method code:
+21 |     public static Object[] expandVarArgs(final boolean isVarArgs, final Object[] args) {
+22 |         if (!isVarArgs || new ArrayUtils().isEmpty(args) || args[args.length - 1] != null && !args[args.length - 1].getClass().isArray()) {
+23 |             return args == null ? new Object[0] : args;
+24 |         }
+25 | 
+26 |         final int nonVarArgsCount = args.length - 1;
+27 |         Object[] varArgs;
+28 |         if (args[nonVarArgsCount] == null) {
+29 |             // in case someone deliberately passed null varArg array
+30 |             varArgs = new Object[] { null };
+31 |         } else {
+32 |             varArgs = ArrayEquals.createObjectArray(args[nonVarArgsCount]);
+33 |         }
+34 |         final int varArgsCount = varArgs.length;
+35 |         Object[] newArgs = new Object[nonVarArgsCount + varArgsCount];
+36 |         System.arraycopy(args, 0, newArgs, 0, nonVarArgsCount);
+37 |         System.arraycopy(varArgs, 0, newArgs, nonVarArgsCount, varArgsCount);
+38 |         return newArgs;
+39 |     }
+
+===== M0087 =====
+Signature: org.mockito.internal.configuration.InjectingAnnotationEngine.createMockFor(Annotation,Field)
+Source: src/org/mockito/internal/configuration/InjectingAnnotationEngine.java
+Original range: 33-36
+Documentation:
+/***
+     * Create a mock using {@link DefaultAnnotationEngine}
+     *
+     * @see org.mockito.internal.configuration.DefaultAnnotationEngine
+     * @see org.mockito.configuration.AnnotationEngine#createMockFor(java.lang.annotation.Annotation, java.lang.reflect.Field)
+     */
+Method code:
+33 |     @Deprecated
+34 |     public Object createMockFor(Annotation annotation, Field field) {
+35 |         return delegate.createMockFor(annotation, field);
+36 |     }
+
+===== M0088 =====
+Signature: org.mockito.internal.configuration.injection.scanner.MockScanner.MockScanner(Object,Class<?>)
+Source: src/org/mockito/internal/configuration/injection/scanner/MockScanner.java
+Original range: 32-35
+Documentation:
+/**
+     * Creates a MockScanner.
+     *
+     * @param instance The test instance
+     * @param clazz    The class in the type hierarchy of this instance.
+     */
+Method code:
+32 |     public MockScanner(Object instance, Class<?> clazz) {
+33 |         this.instance = instance;
+34 |         this.clazz = clazz;
+35 |     }
+
+===== M0089 =====
+Signature: org.mockito.internal.invocation.MatchersBinder.bindMatchers(ArgumentMatcherStorage,Invocation)
+Source: src/org/mockito/internal/invocation/MatchersBinder.java
+Original range: 22-28
+Documentation:
+
+Method code:
+22 |     public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
+23 |         List<LocalizedMatcher> lastMatchers = argumentMatcherStorage.pullLocalizedMatchers();
+24 |         validateMatchers(invocation, lastMatchers);
+25 | 
+26 |         InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, (List<Matcher>)(List) lastMatchers);
+27 |         return invocationWithMatchers;
+28 |     }
+
+===== M0090 =====
+Signature: org.mockito.internal.configuration.injection.scanner.InjectMocksScanner.addTo(Set<Field>)
+Source: src/org/mockito/internal/configuration/injection/scanner/InjectMocksScanner.java
+Original range: 39-41
+Documentation:
+/**
+     * Add the fields annotated by @{@link InjectMocks}
+     *
+     * @param mockDependentFields Set of fields annotated by  @{@link InjectMocks}
+     */
+Method code:
+39 |     public void addTo(Set<Field> mockDependentFields) {
+40 |         mockDependentFields.addAll(scan());
+41 |     }
+
+===== M0091 =====
+Signature: org.mockito.internal.invocation.ArgumentsComparator.argumentsMatch(InvocationMatcher,Invocation)
+Source: src/org/mockito/internal/invocation/ArgumentsComparator.java
+Original range: 16-19
+Documentation:
+
+Method code:
+16 |     public boolean argumentsMatch(InvocationMatcher invocationMatcher, Invocation actual) {
+17 |         Object[] actualArgs = actual.getArguments();
+18 |         return argumentsMatch(invocationMatcher, actualArgs) || varArgsMatch(invocationMatcher, actual);
+19 |     }
+
+===== M0092 =====
+Signature: org.mockito.internal.configuration.GlobalConfiguration.enableClassCache()
+Source: src/org/mockito/internal/configuration/GlobalConfiguration.java
+Original range: 62-64
+Documentation:
+
+Method code:
+62 |     public boolean enableClassCache() {
+63 |         return GLOBAL_CONFIGURATION.get().enableClassCache();
+64 |     }
+
+===== M0093 =====
+Signature: org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker.initializeClassInstantiator()
+Source: src/org/mockito/internal/creation/bytebuddy/ByteBuddyMockMaker.java
+Original range: 84-97
+Documentation:
+
+Method code:
+84 |     private static ClassInstantiator initializeClassInstantiator() {
+85 |         try {
+86 |             Class<?> objenesisClassLoader = Class.forName("org.mockito.internal.creation.bytebuddy.ClassInstantiator$UsingObjenesis");
+87 |             Constructor<?> usingClassCacheConstructor = objenesisClassLoader.getDeclaredConstructor(boolean.class);
+88 |             return ClassInstantiator.class.cast(usingClassCacheConstructor.newInstance(new GlobalConfiguration().enableClassCache()));
+89 |         } catch (Throwable throwable) {
+90 |             // MockitoException cannot be used at this point as we are early in the classloading chain and necessary dependencies may not yet be loadable by the classloader
+91 |             throw new IllegalStateException(join(
+92 |                     "Mockito could not create mock: Objenesis is missing on the classpath.",
+93 |                     "Please add Objenesis on the classpath.",
+94 |                     ""
+95 |             ), throwable);
+96 |         }
+97 |     }
+
+===== M0094 =====
+Signature: org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker.ByteBuddyMockMaker()
+Source: src/org/mockito/internal/creation/bytebuddy/ByteBuddyMockMaker.java
+Original range: 19-22
+Documentation:
+
+Method code:
+19 |     public ByteBuddyMockMaker() {
+20 |         classInstantiator = initializeClassInstantiator();
+21 |         cachingMockBytecodeGenerator = new CachingMockBytecodeGenerator();
+22 |     }
+
+===== M0095 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsSafeSet.addAll(Collection<?>)
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsSafeSet.java
+Original range: 123-125
+Documentation:
+
+Method code:
+123 |     public boolean addAll(Collection<?> mocks) {
+124 |         return backingHashSet.addAll(asWrappedMocks(mocks));
+125 |     }
+
+===== M0096 =====
+Signature: org.mockito.internal.configuration.GlobalConfiguration.createConfig()
+Source: src/org/mockito/internal/configuration/GlobalConfiguration.java
+Original range: 36-44
+Documentation:
+
+Method code:
+36 |     private IMockitoConfiguration createConfig() {
+37 |         IMockitoConfiguration defaultConfiguration = new DefaultMockitoConfiguration();
+38 |         IMockitoConfiguration config = new ClassPathLoader().loadConfiguration();
+39 |         if (config != null) {
+40 |             return config;
+41 |         } else {
+42 |             return defaultConfiguration;
+43 |         }
+44 |     }
+
+===== M0097 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.isSerializable()
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 93-95
+Documentation:
+
+Method code:
+93 |     public boolean isSerializable() {
+94 |         return serializableMode != SerializableMode.NONE;
+95 |     }
+
+===== M0098 =====
+Signature: org.mockito.internal.util.Checks.checkItemsNotNull(T,String)
+Source: src/org/mockito/internal/util/Checks.java
+Original range: 20-26
+Documentation:
+
+Method code:
+20 |     public static <T extends Iterable> T checkItemsNotNull(T iterable, String checkedIterable) {
+21 |         checkNotNull(iterable, checkedIterable);
+22 |         for (Object item : iterable) {
+23 |             checkNotNull(item, "item in " + checkedIterable);
+24 |         }
+25 |         return iterable;
+26 |     }
+
+===== M0099 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.confirm(Class<T>)
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 160-162
+Documentation:
+
+Method code:
+160 |     public MockCreationSettings<T> confirm(Class<T> typeToMock) {
+161 |         return validatedSettings(typeToMock, this);
+162 |     }
+
+===== M0100 =====
+Signature: org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker.ensureMockIsAssignableToMockedType(MockCreationSettings<T>,T)
+Source: src/org/mockito/internal/creation/bytebuddy/ByteBuddyMockMaker.java
+Original range: 55-61
+Documentation:
+
+Method code:
+55 |     private <T> T ensureMockIsAssignableToMockedType(MockCreationSettings<T> settings, T mock) {
+56 |         // Force explicit cast to mocked type here, instead of
+57 |         // relying on the JVM to implicitly cast on the client call site.
+58 |         // This allows us to catch the ClassCastException earlier
+59 |         Class<T> typeToMock = settings.getTypeToMock();
+60 |         return typeToMock.cast(mock);
+61 |     }
+
+===== M0101 =====
+Signature: org.mockito.internal.progress.MockingProgressImpl.resetOngoingStubbing()
+Source: src/org/mockito/internal/progress/MockingProgressImpl.java
+Original range: 48-50
+Documentation:
+/* (non-Javadoc)
+     * @see org.mockito.internal.progress.MockingProgress#resetOngoingStubbing()
+     */
+Method code:
+48 |     public void resetOngoingStubbing() {
+49 |         iOngoingStubbing = null;
+50 |     }
+
+===== M0102 =====
+Signature: org.mockito.internal.creation.bytebuddy.MockBytecodeGenerator.nameFor(Class<?>)
+Source: src/org/mockito/internal/creation/bytebuddy/MockBytecodeGenerator.java
+Original range: 65-71
+Documentation:
+// TODO inspect naming strategy (for OSGI, signed package, java.* (and bootstrap classes), etc...)
+Method code:
+65 |     private String nameFor(Class<?> type) {
+66 |         String typeName = type.getName();
+67 |         if (typeName.startsWith("java.") || (type.getPackage() != null && type.getPackage().isSealed())) {
+68 |             typeName = "codegen." + typeName;
+69 |         }
+70 |         return String.format("%s$%s$%d", typeName, "MockitoMock", Math.abs(random.nextInt()));
+71 |     }
+
+===== M0103 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.outerInstance(Object)
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 102-105
+Documentation:
+
+Method code:
+102 |     public MockSettings outerInstance(Object outerClassInstance) {
+103 |         this.outerClassInstance = outerClassInstance;
+104 |         return this;
+105 |     }
+
+===== M0104 =====
+Signature: org.mockito.internal.creation.bytebuddy.MockBytecodeGenerator.generateMockClass(Class<T>,Set<Class>)
+Source: src/org/mockito/internal/creation/bytebuddy/MockBytecodeGenerator.java
+Original range: 37-62
+Documentation:
+
+Method code:
+37 |     public <T> Class<? extends T> generateMockClass(Class<T> mockedType, Set<Class> interfaces) {
+38 |         DynamicType.Builder<T> builder = byteBuddy.subclass(mockedType, ConstructorStrategy.Default.IMITATE_SUPER_TYPE)
+39 |                 .name(nameFor(mockedType))
+40 |                 .implement(interfaces.toArray(new Class<?>[interfaces.size()]))
+41 |                 .method(any()).intercept(MethodDelegation
+42 |                         .toInstanceField(MockMethodInterceptor.class, "mockitoInterceptor")
+43 |                         .filter(isDeclaredBy(MockMethodInterceptor.class)))
+44 |                 .implement(MockMethodInterceptor.MockAccess.class).intercept(FieldAccessor.ofBeanProperty())
+45 |                 .method(isHashCode()).intercept(MethodDelegation.to(MockMethodInterceptor.ForHashCode.class))
+46 |                 .method(isEquals()).intercept(MethodDelegation.to(MockMethodInterceptor.ForEquals.class))
+47 |                 .defineField("serialVersionUID", long.class, Ownership.STATIC, Visibility.PRIVATE, FieldManifestation.FINAL).value(42L);
+48 | //            if (acrossClassLoaderSerialization) {
+49 | //                builder = builder.implement(AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable.class)
+50 | //                        .intercept(MethodDelegation.to(MethodInterceptor.ForWriteReplace.class));
+51 | //            }
+52 |         Class<?>[] allMockedTypes = new Class<?>[interfaces.size() + 1];
+53 |         allMockedTypes[0] = mockedType;
+54 | //            System.arraycopy(interfaces.toArray(), 0, allMockedTypes, 1, interfaces.size());
+55 |         int index = 1;
+56 |         for (Class<?> type : interfaces) {
+57 |             allMockedTypes[index++] = type;
+58 |         }
+59 |         return builder.make()
+60 |                 .load(SearchingClassLoader.combineLoadersOf(allMockedTypes), ClassLoadingStrategy.Default.INJECTION)
+61 |                 .getLoaded();
+62 |     }
+
+===== M0105 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsSafeSet.of(Object...)
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsSafeSet.java
+Original range: 145-147
+Documentation:
+
+Method code:
+145 |     public static HashCodeAndEqualsSafeSet of(Object... mocks) {
+146 |         return of(Arrays.asList(mocks));
+147 |     }
+
+===== M0106 =====
+Signature: org.mockito.internal.util.reflection.FieldCopier.copyValue(T,T,Field)
+Source: src/org/mockito/internal/util/reflection/FieldCopier.java
+Original range: 11-14
+Documentation:
+
+Method code:
+11 |     public <T> void copyValue(T from, T to, Field field) throws IllegalAccessException {
+12 |         Object value = field.get(from);
+13 |         field.set(to, value);
+14 |     }
+
+===== M0107 =====
+Signature: org.mockito.internal.util.ObjectMethodsGuru.isCompareToMethod(Method)
+Source: src/org/mockito/internal/util/ObjectMethodsGuru.java
+Original range: 38-43
+Documentation:
+
+Method code:
+38 |     public boolean isCompareToMethod(Method method) {
+39 |         return Comparable.class.isAssignableFrom(method.getDeclaringClass())
+40 |                 && method.getName().equals("compareTo")
+41 |                 && method.getParameterTypes().length == 1
+42 |                 && method.getParameterTypes()[0] == method.getDeclaringClass();
+43 |     }
+
+===== M0108 =====
+Signature: org.mockito.internal.progress.ArgumentMatcherStorageImpl.reset()
+Source: src/org/mockito/internal/progress/ArgumentMatcherStorageImpl.java
+Original range: 122-124
+Documentation:
+/* (non-Javadoc)
+     * @see org.mockito.internal.progress.ArgumentMatcherStorage#reset()
+     */
+Method code:
+122 |     public void reset() {
+123 |         matcherStack.clear();
+124 |     }
+
+===== M0109 =====
+Signature: org.mockito.internal.creation.util.SearchingClassLoader.combineLoadersOf(Class<?>...)
+Source: src/org/mockito/internal/creation/util/SearchingClassLoader.java
+Original range: 23-25
+Documentation:
+
+Method code:
+23 |     public static ClassLoader combineLoadersOf(Class<?>... classes) {
+24 |         return combineLoadersOf(classes[0], classes);
+25 |     }
+
+===== M0110 =====
+Signature: org.mockito.internal.configuration.injection.ConstructorInjection.ConstructorInjection()
+Source: src/org/mockito/internal/configuration/injection/ConstructorInjection.java
+Original range: 42-42
+Documentation:
+
+Method code:
+42 |     public ConstructorInjection() { }
+
+===== M0111 =====
+Signature: org.mockito.internal.stubbing.StubbedInvocationMatcher.answer(InvocationOnMock)
+Source: src/org/mockito/internal/stubbing/StubbedInvocationMatcher.java
+Original range: 28-35
+Documentation:
+
+Method code:
+28 |     public Object answer(InvocationOnMock invocation) throws Throwable {
+29 |         //see ThreadsShareGenerouslyStubbedMockTest
+30 |         Answer a;
+31 |         synchronized(answers) {
+32 |             a = answers.size() == 1 ? answers.peek() : answers.poll();
+33 |         }
+34 |         return a.answer(invocation);
+35 |     }
+
+===== M0112 =====
+Signature: org.mockito.internal.configuration.DefaultInjectionEngine.injectMocksOnFields(Set<Field>,Set<Object>,Object)
+Source: src/org/mockito/internal/configuration/DefaultInjectionEngine.java
+Original range: 19-26
+Documentation:
+
+Method code:
+19 |     public void injectMocksOnFields(Set<Field> needingInjection, Set<Object> mocks, Object testClassInstance) {
+20 |         MockInjection.onFields(needingInjection, testClassInstance)
+21 |                 .withMocks(mocks)
+22 |                 .tryConstructorInjection()
+23 |                 .tryPropertyOrFieldInjection()
+24 |                 .handleSpyAnnotation()
+25 |                 .apply();
+26 |     }
+
+===== M0113 =====
+Signature: org.mockito.internal.util.MockCreationValidator.validateSerializable(Class,boolean)
+Source: src/org/mockito/internal/util/MockCreationValidator.java
+Original range: 55-66
+Documentation:
+
+Method code:
+55 |     public void validateSerializable(Class classToMock, boolean serializable) {
+56 |         // We can't catch all the errors with this piece of code
+57 |         // Having a **superclass that do not implements Serializable** might fail as well when serialized
+58 |         // Though it might prevent issues when mockito is mocking a class without superclass.
+59 |         if(serializable
+60 |                 && !classToMock.isInterface()
+61 |                 && !(Serializable.class.isAssignableFrom(classToMock))
+62 |                 && Constructors.noArgConstructorOf(classToMock) == null
+63 |                 ) {
+64 |             new Reporter().serializableWontWorkForObjectsThatDontImplementSerializable(classToMock);
+65 |         }
+66 |     }
+
+===== M0114 =====
+Signature: org.mockito.internal.configuration.InjectingAnnotationEngine.injectMocks(Object)
+Source: src/org/mockito/internal/configuration/InjectingAnnotationEngine.java
+Original range: 89-101
+Documentation:
+/**
+     * Initializes mock/spies dependencies for objects annotated with
+     * &#064;InjectMocks for given testClassInstance.
+     * <p>
+     * See examples in javadoc for {@link MockitoAnnotations} class.
+     * 
+     * @param testClassInstance
+     *            Test class, usually <code>this</code>
+     */
+Method code:
+89 |     public void injectMocks(final Object testClassInstance) {
+90 |         Class<?> clazz = testClassInstance.getClass();
+91 |         Set<Field> mockDependentFields = new HashSet<Field>();
+92 |         Set<Object> mocks = newMockSafeHashSet();
+93 |         
+94 |         while (clazz != Object.class) {
+95 |             new InjectMocksScanner(clazz).addTo(mockDependentFields);
+96 |             new MockScanner(testClassInstance, clazz).addPreparedMocks(mocks);
+97 |             clazz = clazz.getSuperclass();
+98 |         }
+99 |         
+100 |         new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
+101 |     }
+
+===== M0115 =====
+Signature: org.mockito.internal.creation.bytebuddy.CachingMockBytecodeGenerator.get(Class<T>,Set<Class>)
+Source: src/org/mockito/internal/creation/bytebuddy/CachingMockBytecodeGenerator.java
+Original range: 24-37
+Documentation:
+
+Method code:
+24 |     public <T> Class<? extends T> get(final Class<T> mockedType, final Set<Class> interfaces) {
+25 |         avoidingClassLeakCacheLock.lock();
+26 |         try {
+27 | 
+28 |             Class generatedMockClass = mockCachePerClassLoaderOf(mockedType).getOrGenerateMockClass(
+29 |                     mockedType,
+30 |                     interfaces
+31 |             );
+32 | 
+33 |             return generatedMockClass;
+34 |         } finally {
+35 |           avoidingClassLeakCacheLock.unlock();
+36 |         }
+37 |     }
+
+===== M0116 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsSafeSet.of(Iterable<Object>)
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsSafeSet.java
+Original range: 149-157
+Documentation:
+
+Method code:
+149 |     public static HashCodeAndEqualsSafeSet of(Iterable<Object> objects) {
+150 |         HashCodeAndEqualsSafeSet hashCodeAndEqualsSafeSet = new HashCodeAndEqualsSafeSet();
+151 |         if (objects != null) {
+152 |             for (Object mock : objects) {
+153 |                 hashCodeAndEqualsSafeSet.add(mock);
+154 |             }
+155 |         }
+156 |         return hashCodeAndEqualsSafeSet;
+157 |     }
+
+===== M0117 =====
+Signature: org.mockito.internal.stubbing.StubbedInvocationMatcher.markStubUsed(DescribedInvocation)
+Source: src/org/mockito/internal/stubbing/StubbedInvocationMatcher.java
+Original range: 41-43
+Documentation:
+
+Method code:
+41 |     public void markStubUsed(DescribedInvocation usedAt) {
+42 |         this.usedAt = usedAt;
+43 |     }
+
+===== M0118 =====
+Signature: org.mockito.internal.stubbing.InvocationContainerImpl.findAnswerFor(Invocation)
+Source: src/org/mockito/internal/stubbing/InvocationContainerImpl.java
+Original range: 76-88
+Documentation:
+
+Method code:
+76 |     public StubbedInvocationMatcher findAnswerFor(Invocation invocation) {
+77 |         synchronized (stubbed) {
+78 |             for (StubbedInvocationMatcher s : stubbed) {
+79 |                 if (s.matches(invocation)) {
+80 |                     s.markStubUsed(invocation);
+81 |                     invocation.markStubbed(new StubInfoImpl(s));
+82 |                     return s;
+83 |                 }
+84 |             }
+85 |         }
+86 | 
+87 |         return null;
+88 |     }
+
+===== M0119 =====
+Signature: org.mockito.internal.configuration.DefaultAnnotationEngine.forAnnotation(A)
+Source: src/org/mockito/internal/configuration/DefaultAnnotationEngine.java
+Original range: 46-55
+Documentation:
+
+Method code:
+46 |     private <A extends Annotation> FieldAnnotationProcessor<A> forAnnotation(A annotation) {
+47 |         if (annotationProcessorMap.containsKey(annotation.annotationType())) {
+48 |             return (FieldAnnotationProcessor<A>) annotationProcessorMap.get(annotation.annotationType());
+49 |         }
+50 |         return new FieldAnnotationProcessor<A>() {
+51 |             public Object process(A annotation, Field field) {
+52 |                 return null;
+53 |             }
+54 |         };
+55 |     }
+
+===== M0120 =====
+Signature: org.mockito.internal.progress.MockingProgressImpl.reset()
+Source: src/org/mockito/internal/progress/MockingProgressImpl.java
+Original range: 102-106
+Documentation:
+
+Method code:
+102 |     public void reset() {
+103 |         stubbingInProgress = null;
+104 |         verificationMode = null;
+105 |         getArgumentMatcherStorage().reset();
+106 |     }
+
+===== M0121 =====
+Signature: org.mockito.internal.progress.ThreadSafeMockingProgress.threadSafely()
+Source: src/org/mockito/internal/progress/ThreadSafeMockingProgress.java
+Original range: 20-25
+Documentation:
+
+Method code:
+20 |     static MockingProgress threadSafely() {
+21 |         if (mockingProgress.get() == null) {
+22 |             mockingProgress.set(new MockingProgressImpl());
+23 |         }
+24 |         return mockingProgress.get();
+25 |     }
+
+===== M0122 =====
+Signature: org.mockito.internal.creation.bytebuddy.InterceptedInvocation.getArguments()
+Source: src/org/mockito/internal/creation/bytebuddy/InterceptedInvocation.java
+Original range: 105-108
+Documentation:
+
+Method code:
+105 |     @Override
+106 |     public Object[] getArguments() {
+107 |         return arguments;
+108 |     }
+
+===== M0123 =====
+Signature: org.mockito.internal.invocation.InvocationMatcher.matches(Invocation)
+Source: src/org/mockito/internal/invocation/InvocationMatcher.java
+Original range: 60-64
+Documentation:
+
+Method code:
+60 |     public boolean matches(Invocation actual) {
+61 |         return invocation.getMock().equals(actual.getMock())
+62 |                 && hasSameMethod(actual)
+63 |                 && new ArgumentsComparator().argumentsMatch(this, actual);
+64 |     }
+
+===== M0124 =====
+Signature: org.mockito.internal.stubbing.InvocationContainerImpl.addAnswer(Answer)
+Source: src/org/mockito/internal/stubbing/InvocationContainerImpl.java
+Original range: 48-51
+Documentation:
+
+Method code:
+48 |     public void addAnswer(Answer answer) {
+49 |         registeredInvocations.removeLast();
+50 |         addAnswer(answer, false);
+51 |     }
+
+===== M0125 =====
+Signature: org.mockito.internal.configuration.plugins.PluginRegistry.getStackTraceCleanerProvider()
+Source: src/org/mockito/internal/configuration/plugins/PluginRegistry.java
+Original range: 21-24
+Documentation:
+/**
+     * The implementation of the stack trace cleaner
+     */
+Method code:
+21 |     StackTraceCleanerProvider getStackTraceCleanerProvider() {
+22 |         //TODO we should throw some sensible exception if this is null.
+23 |         return stackTraceCleanerProvider;
+24 |     }
+
+===== M0126 =====
+Signature: org.mockito.internal.invocation.StubInfoImpl.StubInfoImpl(DescribedInvocation)
+Source: src/org/mockito/internal/invocation/StubInfoImpl.java
+Original range: 17-19
+Documentation:
+
+Method code:
+17 |     public StubInfoImpl(DescribedInvocation stubbedAt) {
+18 |         this.stubbedAt = stubbedAt;
+19 |     }
+
+===== M0127 =====
+Signature: org.mockito.internal.progress.ArgumentMatcherStorageImpl.pullLocalizedMatchers()
+Source: src/org/mockito/internal/progress/ArgumentMatcherStorageImpl.java
+Original range: 39-47
+Documentation:
+/* (non-Javadoc)
+     * @see org.mockito.internal.progress.ArgumentMatcherStorage#pullLocalizedMatchers()
+     */
+Method code:
+39 |     public List<LocalizedMatcher> pullLocalizedMatchers() {
+40 |         if (matcherStack.isEmpty()) {
+41 |             return Collections.emptyList();
+42 |         }
+43 |         
+44 |         List<LocalizedMatcher> matchers = new ArrayList<LocalizedMatcher>(matcherStack);
+45 |         matcherStack.clear();
+46 |         return (List) matchers;
+47 |     }
+
+===== M0128 =====
+Signature: org.mockito.internal.invocation.MatchersBinder.validateMatchers(Invocation,List<LocalizedMatcher>)
+Source: src/org/mockito/internal/invocation/MatchersBinder.java
+Original range: 30-38
+Documentation:
+
+Method code:
+30 |     private void validateMatchers(Invocation invocation, List<LocalizedMatcher> lastMatchers) {
+31 |         if (!lastMatchers.isEmpty()) {
+32 |             int recordedMatchersSize = lastMatchers.size();
+33 |             int expectedMatchersSize = invocation.getArguments().length;
+34 |             if (expectedMatchersSize != recordedMatchersSize) {
+35 |                 new Reporter().invalidUseOfMatchers(expectedMatchersSize, lastMatchers);
+36 |             }
+37 |         }
+38 |     }
+
+===== M0129 =====
+Signature: org.mockito.internal.configuration.DefaultAnnotationEngine.anonymous_L50.process(A,Field)
+Source: src/org/mockito/internal/configuration/DefaultAnnotationEngine.java
+Original range: 51-53
+Documentation:
+
+Method code:
+51 |             public Object process(A annotation, Field field) {
+52 |                 return null;
+53 |             }
+
+===== M0130 =====
+Signature: org.mockito.internal.verification.DefaultRegisteredInvocations.isEmpty()
+Source: src/org/mockito/internal/verification/DefaultRegisteredInvocations.java
+Original range: 47-51
+Documentation:
+
+Method code:
+47 |     public boolean isEmpty() {
+48 |         synchronized (invocations) {
+49 |             return invocations.isEmpty();
+50 |         }
+51 |     }
+
+===== M0131 =====
+Signature: org.mockito.internal.stubbing.answers.CallsRealMethods.answer(InvocationOnMock)
+Source: src/org/mockito/internal/stubbing/answers/CallsRealMethods.java
+Original range: 38-43
+Documentation:
+
+Method code:
+38 |     public Object answer(InvocationOnMock invocation) throws Throwable {
+39 |     	if (Modifier.isAbstract(invocation.getMethod().getModifiers())) {
+40 |     		return RETURNS_DEFAULTS.answer(invocation);
+41 |     	}
+42 |         return invocation.callRealMethod();
+43 |     }
+
+===== M0132 =====
+Signature: org.mockito.internal.configuration.DefaultAnnotationEngine.registerAnnotationProcessor(Class<A>,FieldAnnotationProcessor<A>)
+Source: src/org/mockito/internal/configuration/DefaultAnnotationEngine.java
+Original range: 57-59
+Documentation:
+
+Method code:
+57 |     private <A extends Annotation> void registerAnnotationProcessor(Class<A> annotationClass, FieldAnnotationProcessor<A> fieldAnnotationProcessor) {
+58 |         annotationProcessorMap.put(annotationClass, fieldAnnotationProcessor);
+59 |     }
+
+===== M0133 =====
+Signature: org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.doIntercept(Object,Method,Object[],InterceptedInvocation.SuperMethod)
+Source: src/org/mockito/internal/creation/bytebuddy/MockMethodInterceptor.java
+Original range: 79-90
+Documentation:
+
+Method code:
+79 |     private Object doIntercept(Object mock,
+80 |                                Method invokedMethod,
+81 |                                Object[] arguments,
+82 |                                InterceptedInvocation.SuperMethod superMethod) throws Throwable {
+83 |         return handler.handle(new InterceptedInvocation(
+84 |                 mock,
+85 |                 createMockitoMethod(invokedMethod),
+86 |                 arguments,
+87 |                 superMethod,
+88 |                 SequenceNumber.next()
+89 |         ));
+90 |     }
+
+===== M0134 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.getSpiedInstance()
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 66-68
+Documentation:
+
+Method code:
+66 |     public Object getSpiedInstance() {
+67 |         return spiedInstance;
+68 |     }
+
+===== M0135 =====
+Signature: org.mockito.internal.stubbing.InvocationContainerImpl.setInvocationForPotentialStubbing(InvocationMatcher)
+Source: src/org/mockito/internal/stubbing/InvocationContainerImpl.java
+Original range: 39-42
+Documentation:
+
+Method code:
+39 |     public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
+40 |         registeredInvocations.add(invocation.getInvocation());
+41 |         this.invocationForStubbing = invocation;
+42 |     }
+
+===== M0136 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.getName()
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 72-74
+Documentation:
+
+Method code:
+72 |     public String getName() {
+73 |         return name;
+74 |     }
+
+===== M0137 =====
+Signature: org.mockito.internal.stubbing.ConsecutiveStubbing.ConsecutiveStubbing(InvocationContainerImpl)
+Source: src/org/mockito/internal/stubbing/ConsecutiveStubbing.java
+Original range: 14-16
+Documentation:
+
+Method code:
+14 |     public ConsecutiveStubbing(InvocationContainerImpl invocationContainerImpl) {
+15 |         this.invocationContainerImpl = invocationContainerImpl;
+16 |     }
+
+===== M0138 =====
+Signature: org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.ForEquals.doIdentityEquals(Object,Object)
+Source: src/org/mockito/internal/creation/bytebuddy/MockMethodInterceptor.java
+Original range: 115-117
+Documentation:
+
+Method code:
+115 |         public static boolean doIdentityEquals(@This Object thiz, @Argument(0) Object other) {
+116 |             return thiz == other;
+117 |         }
+
+===== M0139 =====
+Signature: org.mockito.internal.configuration.injection.scanner.InjectMocksScanner.scan()
+Source: src/org/mockito/internal/configuration/injection/scanner/InjectMocksScanner.java
+Original range: 48-59
+Documentation:
+/**
+     * Scan fields annotated by &#064;InjectMocks
+     *
+     * @return Fields that depends on Mock
+     */
+Method code:
+48 |     private Set<Field> scan() {
+49 |         Set<Field> mockDependentFields = new HashSet<Field>();
+50 |         Field[] fields = clazz.getDeclaredFields();
+51 |         for (Field field : fields) {
+52 |             if (null != field.getAnnotation(InjectMocks.class)) {
+53 |                 assertNoAnnotations(field, Mock.class, MockitoAnnotations.Mock.class, Captor.class);
+54 |                 mockDependentFields.add(field);
+55 |             }
+56 |         }
+57 | 
+58 |         return mockDependentFields;
+59 |     }
+
+===== M0140 =====
+Signature: org.mockito.internal.creation.bytebuddy.InterceptedInvocation.InterceptedInvocation(Object,MockitoMethod,Object[],SuperMethod,int)
+Source: src/org/mockito/internal/creation/bytebuddy/InterceptedInvocation.java
+Original range: 36-48
+Documentation:
+
+Method code:
+36 |     public InterceptedInvocation(Object mock,
+37 |                                  MockitoMethod mockitoMethod,
+38 |                                  Object[] arguments,
+39 |                                  SuperMethod superMethod,
+40 |                                  int sequenceNumber) {
+41 |         this.mock = mock;
+42 |         this.mockitoMethod = mockitoMethod;
+43 |         this.arguments = ArgumentsProcessor.expandVarArgs(mockitoMethod.isVarArgs(), arguments);
+44 |         this.rawArguments = arguments;
+45 |         this.superMethod = superMethod;
+46 |         this.sequenceNumber = sequenceNumber;
+47 |         location = new LocationImpl();
+48 |     }
+
+===== M0141 =====
+Signature: org.mockito.internal.util.reflection.LenientCopyTool.copyValues(T,T,Class)
+Source: src/org/mockito/internal/util/reflection/LenientCopyTool.java
+Original range: 30-49
+Documentation:
+
+Method code:
+30 |     private <T> void copyValues(T from, T mock, Class classFrom) {
+31 |         Field[] fields = classFrom.getDeclaredFields();
+32 | 
+33 |         for (int i = 0; i < fields.length; i++) {
+34 |             // ignore static fields
+35 |             Field field = fields[i];
+36 |             if (Modifier.isStatic(field.getModifiers())) {
+37 |                 continue;
+38 |             }
+39 |             AccessibilityChanger accessibilityChanger = new AccessibilityChanger();
+40 |             try {
+41 |                 accessibilityChanger.enableAccess(field);
+42 |                 fieldCopier.copyValue(from, mock, field);
+43 |             } catch (Throwable t) {
+44 |                 //Ignore - be lenient - if some field cannot be copied then let's be it
+45 |             } finally {
+46 |                 accessibilityChanger.safelyDisableAccess(field);
+47 |             }
+48 |         }
+49 |     }
+
+===== M0142 =====
+Signature: org.mockito.internal.invocation.InvocationMatcher.getMatchers()
+Source: src/org/mockito/internal/invocation/InvocationMatcher.java
+Original range: 52-54
+Documentation:
+
+Method code:
+52 |     public List<Matcher> getMatchers() {
+53 |         return this.matchers;
+54 |     }
+
+===== M0143 =====
+Signature: org.mockito.internal.stubbing.InvocationContainerImpl.InvocationContainerImpl(MockingProgress,MockCreationSettings)
+Source: src/org/mockito/internal/stubbing/InvocationContainerImpl.java
+Original range: 34-37
+Documentation:
+
+Method code:
+34 |     public InvocationContainerImpl(MockingProgress mockingProgress, MockCreationSettings mockSettings) {
+35 |         this.mockingProgress = mockingProgress;
+36 |         this.registeredInvocations = createRegisteredInvocations(mockSettings);
+37 |     }
+
+===== M0144 =====
+Signature: org.mockito.internal.progress.SequenceNumber.next()
+Source: src/org/mockito/internal/progress/SequenceNumber.java
+Original range: 11-13
+Documentation:
+
+Method code:
+11 |     public static synchronized int next() {
+12 |         return sequenceNumber++;
+13 |     }
+
+===== M0145 =====
+Signature: org.mockito.internal.handler.InvocationNotifierHandler.InvocationNotifierHandler(InternalMockHandler<T>,MockCreationSettings)
+Source: src/org/mockito/internal/handler/InvocationNotifierHandler.java
+Original range: 31-34
+Documentation:
+
+Method code:
+31 |     public InvocationNotifierHandler(InternalMockHandler<T> mockHandler, MockCreationSettings settings) {
+32 |         this.mockHandler = mockHandler;
+33 |         this.invocationListeners = settings.getInvocationListeners();
+34 |     }
+
+===== M0146 =====
+Signature: org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.MockMethodInterceptor(InternalMockHandler,MockCreationSettings)
+Source: src/org/mockito/internal/creation/bytebuddy/MockMethodInterceptor.java
+Original range: 33-37
+Documentation:
+
+Method code:
+33 |     public MockMethodInterceptor(InternalMockHandler handler, MockCreationSettings mockCreationSettings) {
+34 |         this.handler = handler;
+35 |         this.mockCreationSettings = mockCreationSettings;
+36 |         acrossJVMSerializationFeature = new AcrossJVMSerializationFeature();
+37 |     }
+
+===== M0147 =====
+Signature: org.mockito.internal.creation.bytebuddy.InterceptedInvocation.getMock()
+Source: src/org/mockito/internal/creation/bytebuddy/InterceptedInvocation.java
+Original range: 95-98
+Documentation:
+
+Method code:
+95 |     @Override
+96 |     public Object getMock() {
+97 |         return mock;
+98 |     }
+
+===== M0148 =====
+Signature: org.mockito.internal.configuration.injection.scanner.MockScanner.isMockOrSpy(Object)
+Source: src/org/mockito/internal/configuration/injection/scanner/MockScanner.java
+Original range: 85-88
+Documentation:
+
+Method code:
+85 |     private boolean isMockOrSpy(Object instance) {
+86 |         return mockUtil.isMock(instance)
+87 |                 || mockUtil.isSpy(instance);
+88 |     }
+
+===== M0149 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.getInvocationListeners()
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 101-103
+Documentation:
+
+Method code:
+101 |     public List<InvocationListener> getInvocationListeners() {
+102 |         return invocationListeners;
+103 |     }
+
+===== M0150 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsMockWrapper.of(Object)
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsMockWrapper.java
+Original range: 54-56
+Documentation:
+
+Method code:
+54 |     public static HashCodeAndEqualsMockWrapper of(Object mock) {
+55 |         return new HashCodeAndEqualsMockWrapper(mock);
+56 |     }
+
+===== M0151 =====
+Signature: org.mockito.internal.creation.util.SearchingClassLoader.combine(List<ClassLoader>)
+Source: src/org/mockito/internal/creation/util/SearchingClassLoader.java
+Original range: 52-60
+Documentation:
+
+Method code:
+52 |     private static ClassLoader combine(List<ClassLoader> parentLoaders) {
+53 |         ClassLoader loader = parentLoaders.get(parentLoaders.size()-1);
+54 |         
+55 |         for (int i = parentLoaders.size()-2; i >= 0; i--) {
+56 |             loader = new SearchingClassLoader(parentLoaders.get(i), loader);
+57 |         }
+58 |         
+59 |         return loader;
+60 |     }
+
+===== M0152 =====
+Signature: org.mockito.internal.progress.ArgumentMatcherStorageImpl.validateState()
+Source: src/org/mockito/internal/progress/ArgumentMatcherStorageImpl.java
+Original range: 111-117
+Documentation:
+/* (non-Javadoc)
+     * @see org.mockito.internal.progress.ArgumentMatcherStorage#validateState()
+     */
+Method code:
+111 |     public void validateState() {
+112 |         if (!matcherStack.isEmpty()) {
+113 |             ArrayList lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
+114 |             matcherStack.clear();
+115 |             new Reporter().misplacedArgumentMatcher(lastMatchers);
+116 |         }
+117 |     }
+
+===== M0153 =====
+Signature: org.mockito.internal.MockitoCore.when(T)
+Source: src/org/mockito/internal/MockitoCore.java
+Original range: 78-81
+Documentation:
+
+Method code:
+78 |     public <T> OngoingStubbing<T> when(T methodCall) {
+79 |         mockingProgress.stubbingStarted();
+80 |         return (OngoingStubbing) stub();
+81 |     }
+
+===== M0154 =====
+Signature: org.mockito.internal.configuration.injection.MockInjectionStrategy.thenTry(MockInjectionStrategy)
+Source: src/org/mockito/internal/configuration/injection/MockInjectionStrategy.java
+Original range: 40-47
+Documentation:
+/**
+     * Enqueue next injection strategy.
+     *
+     * <p>
+     * The implementation should take care of the actual calling if required.
+     * </p>
+     *
+     * @param strategy Queued strategy.
+     * @return The passed strategy instance to allow chaining.
+     */
+Method code:
+40 |     public MockInjectionStrategy thenTry(MockInjectionStrategy strategy) {
+41 |         if(nextStrategy != null) {
+42 |             nextStrategy.thenTry(strategy);
+43 |         } else {
+44 |             nextStrategy = strategy;
+45 |         }
+46 |         return strategy;
+47 |     }
+
+===== M0155 =====
+Signature: org.mockito.internal.configuration.DefaultAnnotationEngine.DefaultAnnotationEngine()
+Source: src/org/mockito/internal/configuration/DefaultAnnotationEngine.java
+Original range: 32-36
+Documentation:
+
+Method code:
+32 |     public DefaultAnnotationEngine() {
+33 |         registerAnnotationProcessor(Mock.class, new MockAnnotationProcessor());
+34 |         registerAnnotationProcessor(MockitoAnnotations.Mock.class, new MockitoAnnotationsMockAnnotationProcessor());
+35 |         registerAnnotationProcessor(Captor.class, new CaptorAnnotationProcessor());
+36 |     }
+
+===== M0156 =====
+Signature: org.mockito.internal.util.MockNameImpl.MockNameImpl(String,Class)
+Source: src/org/mockito/internal/util/MockNameImpl.java
+Original range: 17-25
+Documentation:
+
+Method code:
+17 |     @SuppressWarnings("unchecked")
+18 |     public MockNameImpl(String mockName, Class classToMock) {
+19 |         if (mockName == null) {
+20 |             this.mockName = toInstanceName(classToMock);
+21 |             this.defaultName = true;
+22 |         } else {
+23 |             this.mockName = mockName;
+24 |         }
+25 |     }
+
+===== M0157 =====
+Signature: org.mockito.internal.configuration.plugins.PluginLoader.loadPlugin(Class<T>,String)
+Source: src/org/mockito/internal/configuration/plugins/PluginLoader.java
+Original range: 23-39
+Documentation:
+/**
+     * Scans the classpath for given pluginType. If not found, default class is used.
+     */
+Method code:
+23 |     <T> T loadPlugin(Class<T> pluginType, String defaultPluginClassName) {
+24 |         T plugin = loadImpl(pluginType);
+25 |         if (plugin != null) {
+26 |             return plugin;
+27 |         }
+28 | 
+29 |         try {
+30 |             // Default implementation. Use our own ClassLoader instead of the context
+31 |             // ClassLoader, as the default implementation is assumed to be part of
+32 |             // Mockito and may not be available via the context ClassLoader.
+33 |             return pluginType.cast(Class.forName(defaultPluginClassName).newInstance());
+34 |         } catch (Exception e) {
+35 |             throw new MockitoException("Internal problem occurred, please report it. " +
+36 |                     "Mockito is unable to load the default implementation of class that is a part of Mockito distribution. " +
+37 |                     "Failed to load " + pluginType, e);
+38 |         }
+39 |     }
+
+===== M0158 =====
+Signature: org.mockito.internal.util.reflection.LenientCopyTool.copy(T,T,Class,Class)
+Source: src/org/mockito/internal/util/reflection/LenientCopyTool.java
+Original range: 23-28
+Documentation:
+
+Method code:
+23 |     private <T> void copy(T from, T to, Class fromClazz, Class toClass) {
+24 |         while (fromClazz != Object.class) {
+25 |             copyValues(from, to, fromClazz);
+26 |             fromClazz = fromClazz.getSuperclass();
+27 |         }
+28 |     }
+
+===== M0159 =====
+Signature: org.mockito.internal.handler.MockHandlerFactory.create(MockCreationSettings)
+Source: src/org/mockito/internal/handler/MockHandlerFactory.java
+Original range: 15-21
+Documentation:
+
+Method code:
+15 |     public InternalMockHandler create(MockCreationSettings settings) {
+16 |         InternalMockHandler handler = new MockHandlerImpl(settings);
+17 |         InternalMockHandler nullResultGuardian = new NullResultGuardian(handler);
+18 |         InternalMockHandler notifier = new InvocationNotifierHandler(nullResultGuardian, settings);
+19 | 
+20 |         return notifier;
+21 |     }
+
+===== M0160 =====
+Signature: org.mockito.internal.configuration.injection.MockInjectionStrategy.nop()
+Source: src/org/mockito/internal/configuration/injection/MockInjectionStrategy.java
+Original range: 19-25
+Documentation:
+/**
+     * NOP Strategy that will always try the next strategy.
+     */
+Method code:
+19 |     public static final MockInjectionStrategy nop() {
+20 |         return new MockInjectionStrategy() {
+21 |             protected boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
+22 |                 return false;
+23 |             }
+24 |         };
+25 |     }
+
+===== M0161 =====
+Signature: org.mockito.internal.configuration.injection.MockInjection.OngoingMockInjection.OngoingMockInjection(Set<Field>,Object)
+Source: src/org/mockito/internal/configuration/injection/MockInjection.java
+Original range: 65-68
+Documentation:
+
+Method code:
+65 |         private OngoingMockInjection(Set<Field> fields, Object fieldOwner) {
+66 |             this.fieldOwner = checkNotNull(fieldOwner, "fieldOwner");
+67 |             this.fields.addAll(checkItemsNotNull(fields, "fields"));
+68 |         }
+
+===== M0162 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.getSpiedInstance()
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 76-78
+Documentation:
+
+Method code:
+76 |     public Object getSpiedInstance() {
+77 |         return spiedInstance;
+78 |     }
+
+===== M0163 =====
+Signature: org.mockito.internal.stubbing.StubbedInvocationMatcher.StubbedInvocationMatcher(InvocationMatcher,Answer)
+Source: src/org/mockito/internal/stubbing/StubbedInvocationMatcher.java
+Original range: 23-26
+Documentation:
+
+Method code:
+23 |     public StubbedInvocationMatcher(InvocationMatcher invocation, Answer answer) {
+24 |         super(invocation.getInvocation(), invocation.getMatchers());
+25 |         this.answers.add(answer);
+26 |     }
+
+===== M0164 =====
+Signature: org.mockito.internal.progress.ThreadSafeMockingProgress.reset()
+Source: src/org/mockito/internal/progress/ThreadSafeMockingProgress.java
+Original range: 59-61
+Documentation:
+
+Method code:
+59 |     public void reset() {
+60 |         threadSafely().reset();
+61 |     }
+
+===== M0165 =====
+Signature: org.mockito.internal.configuration.DefaultAnnotationEngine.createMockFor(Annotation,Field)
+Source: src/org/mockito/internal/configuration/DefaultAnnotationEngine.java
+Original range: 41-44
+Documentation:
+/* (non-Javadoc)
+    * @see org.mockito.AnnotationEngine#createMockFor(java.lang.annotation.Annotation, java.lang.reflect.Field)
+    */
+Method code:
+41 |     @SuppressWarnings("deprecation")
+42 |     public Object createMockFor(Annotation annotation, Field field) {
+43 |         return forAnnotation(annotation).process(annotation, field);
+44 |     }
+
+===== M0166 =====
+Signature: org.mockito.internal.util.collections.Sets.newMockSafeHashSet(Object...)
+Source: src/org/mockito/internal/util/collections/Sets.java
+Original range: 19-21
+Documentation:
+
+Method code:
+19 |     public static Set<Object> newMockSafeHashSet(Object... mocks) {
+20 |         return HashCodeAndEqualsSafeSet.of(mocks);
+21 |     }
+
+===== M0167 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.getTypeToMock()
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 54-56
+Documentation:
+
+Method code:
+54 |     public Class<T> getTypeToMock() {
+55 |         return typeToMock;
+56 |     }
+
+===== M0168 =====
+Signature: org.mockito.internal.util.MockUtil.isTypeMockable(Class<?>)
+Source: src/org/mockito/internal/util/MockUtil.java
+Original range: 26-28
+Documentation:
+
+Method code:
+26 |     public boolean isTypeMockable(Class<?> type) {
+27 |       return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers());
+28 |     }
+
+===== M0169 =====
+Signature: org.mockito.internal.configuration.plugins.PluginLoader.loadImpl(Class<T>)
+Source: src/org/mockito/internal/configuration/plugins/PluginLoader.java
+Original range: 45-69
+Documentation:
+/**
+     * Equivalent to {@link java.util.ServiceLoader#load} but without requiring
+     * Java 6 / Android 2.3 (Gingerbread).
+     */
+Method code:
+45 |     <T> T loadImpl(Class<T> service) {
+46 |         ClassLoader loader = Thread.currentThread().getContextClassLoader();
+47 |         if (loader == null) {
+48 |             loader = ClassLoader.getSystemClassLoader();
+49 |         }
+50 |         Enumeration<URL> resources;
+51 |         try {
+52 |             resources = loader.getResources("mockito-extensions/" + service.getName());
+53 |         } catch (IOException e) {
+54 |             throw new MockitoException("Failed to load " + service, e);
+55 |         }
+56 | 
+57 |         try {
+58 |             String foundPluginClass = new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
+59 |             if (foundPluginClass != null) {
+60 |                 Class<?> pluginClass = loader.loadClass(foundPluginClass);
+61 |                 Object plugin = pluginClass.newInstance();
+62 |                 return service.cast(plugin);
+63 |             }
+64 |             return null;
+65 |         } catch (Exception e) {
+66 |             throw new MockitoConfigurationException(
+67 |                     "Failed to load " + service + " implementation declared in " + resources, e);
+68 |         }
+69 |     }
+
+===== M0170 =====
+Signature: org.mockito.internal.configuration.SpyAnnotationEngine.process(Class<?>,Object)
+Source: src/org/mockito/internal/configuration/SpyAnnotationEngine.java
+Original range: 46-74
+Documentation:
+
+Method code:
+46 |     @SuppressWarnings("deprecation") // for MockitoAnnotations.Mock
+47 |     public void process(Class<?> context, Object testInstance) {
+48 |         Field[] fields = context.getDeclaredFields();
+49 |         for (Field field : fields) {
+50 |             if (field.isAnnotationPresent(Spy.class) && !field.isAnnotationPresent(InjectMocks.class)) {
+51 |                 assertNoIncompatibleAnnotations(Spy.class, field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
+52 |                 field.setAccessible(true);
+53 |                 Object instance;
+54 |                 try {
+55 |                     instance = field.get(testInstance);
+56 |                     assertNotInterface(instance, field.getType());
+57 |                     if (new MockUtil().isMock(instance)) {
+58 |                         // instance has been spied earlier
+59 |                         // for example happens when MockitoAnnotations.initMocks is called two times.
+60 |                         Mockito.reset(instance);
+61 |                     } else if (instance != null) {
+62 |                         field.set(testInstance, Mockito.mock(instance.getClass(), withSettings()
+63 |                                 .spiedInstance(instance)
+64 |                                 .defaultAnswer(Mockito.CALLS_REAL_METHODS)
+65 |                                 .name(field.getName())));
+66 |                     } else {
+67 |                         field.set(testInstance, newSpyInstance(testInstance, field));
+68 |                     }
+69 |                 } catch (Exception e) {
+70 |                     throw new MockitoException("Unable to initialize @Spy annotated field '" + field.getName() + "'.\n" + e.getMessage(), e);
+71 |                 }
+72 |             }
+73 |         }
+74 |     }
+
+===== M0171 =====
+Signature: org.mockito.internal.configuration.GlobalConfiguration.getIt()
+Source: src/org/mockito/internal/configuration/GlobalConfiguration.java
+Original range: 25-27
+Documentation:
+//back door for testing
+Method code:
+25 |     IMockitoConfiguration getIt() {
+26 |         return GLOBAL_CONFIGURATION.get();
+27 |     }
+
+===== M0172 =====
+Signature: org.mockito.internal.stubbing.OngoingStubbingImpl.OngoingStubbingImpl(InvocationContainerImpl)
+Source: src/org/mockito/internal/stubbing/OngoingStubbingImpl.java
+Original range: 19-21
+Documentation:
+
+Method code:
+19 |     public OngoingStubbingImpl(InvocationContainerImpl invocationContainerImpl) {
+20 |         this.invocationContainerImpl = invocationContainerImpl;
+21 |     }
+
+===== M0173 =====
+Signature: org.mockito.internal.creation.bytebuddy.CachingMockBytecodeGenerator.CachedBytecodeGenerator.MockKey.hashCode()
+Source: src/org/mockito/internal/creation/bytebuddy/CachingMockBytecodeGenerator.java
+Original range: 123-128
+Documentation:
+
+Method code:
+123 |             @Override
+124 |             public int hashCode() {
+125 |                 int result = mockedType.hashCode();
+126 |                 result = 31 * result + types.hashCode();
+127 |                 return result;
+128 |             }
+
+===== M0174 =====
+Signature: org.mockito.internal.creation.bytebuddy.InterceptedInvocation.SuperMethod.FromCallable.isInvokable()
+Source: src/org/mockito/internal/creation/bytebuddy/InterceptedInvocation.java
+Original range: 176-179
+Documentation:
+
+Method code:
+176 |             @Override
+177 |             public boolean isInvokable() {
+178 |                 return true;
+179 |             }
+
+===== M0175 =====
+Signature: org.mockito.internal.configuration.GlobalConfiguration.getDefaultAnswer()
+Source: src/org/mockito/internal/configuration/GlobalConfiguration.java
+Original range: 66-68
+Documentation:
+
+Method code:
+66 |     public Answer<Object> getDefaultAnswer() {
+67 |         return GLOBAL_CONFIGURATION.get().getDefaultAnswer();
+68 |     }
+
+===== M0176 =====
+Signature: org.mockito.internal.configuration.injection.MockInjection.OngoingMockInjection.handleSpyAnnotation()
+Source: src/org/mockito/internal/configuration/injection/MockInjection.java
+Original range: 85-88
+Documentation:
+
+Method code:
+85 |         public OngoingMockInjection handleSpyAnnotation() {
+86 |             postInjectionStrategies.thenTry(new SpyOnInjectedFieldsHandler());
+87 |             return this;
+88 |         }
+
+===== M0177 =====
+Signature: org.mockito.internal.creation.bytebuddy.InterceptedInvocation.callRealMethod()
+Source: src/org/mockito/internal/creation/bytebuddy/InterceptedInvocation.java
+Original range: 116-122
+Documentation:
+
+Method code:
+116 |     @Override
+117 |     public Object callRealMethod() throws Throwable {
+118 |         if (!superMethod.isInvokable()) {
+119 |             new Reporter().cannotCallAbstractRealMethod();
+120 |         }
+121 |         return superMethod.invoke();
+122 |     }
+
+===== M0178 =====
+Signature: org.mockito.internal.verification.DefaultRegisteredInvocations.add(Invocation)
+Source: src/org/mockito/internal/verification/DefaultRegisteredInvocations.java
+Original range: 23-27
+Documentation:
+
+Method code:
+23 |     public void add(Invocation invocation) {
+24 |         synchronized (invocations) {
+25 |             invocations.add(invocation);
+26 |         }
+27 |     }
+
+===== M0179 =====
+Signature: org.mockito.Mockito.withSettings()
+Source: src/org/mockito/Mockito.java
+Original range: 2285-2287
+Documentation:
+/**
+     * Allows mock creation with additional mock settings.
+     * <p>
+     * Don't use it too often.
+     * Consider writing simple tests that use simple mocks.
+     * Repeat after me: simple tests push simple, KISSy, readable & maintainable code.
+     * If you cannot write a test in a simple way - refactor the code under test.
+     * <p>
+     * Examples of mock settings:
+     * <pre class="code"><code class="java">
+     *   //Creates mock with different default answer & name
+     *   Foo mock = mock(Foo.class, withSettings()
+     *       .defaultAnswer(RETURNS_SMART_NULLS)
+     *       .name("cool mockie"));
+     *
+     *   //Creates mock with different default answer, descriptive name and extra interfaces
+     *   Foo mock = mock(Foo.class, withSettings()
+     *       .defaultAnswer(RETURNS_SMART_NULLS)
+     *       .name("cool mockie")
+     *       .extraInterfaces(Bar.class));
+     * </code></pre>
+     * {@link MockSettings} has been introduced for two reasons.
+     * Firstly, to make it easy to add another mock settings when the demand comes.
+     * Secondly, to enable combining different mock settings without introducing zillions of overloaded mock() methods.
+     * <p>
+     * See javadoc for {@link MockSettings} to learn about possible mock settings.
+     * <p>
+     *
+     * @return mock settings instance with defaults.
+     */
+Method code:
+2285 |     public static MockSettings withSettings() {
+2286 |         return new MockSettingsImpl().defaultAnswer(RETURNS_DEFAULTS);
+2287 |     }
+
+===== M0180 =====
+Signature: org.mockito.internal.stubbing.answers.Returns.Returns(Object)
+Source: src/org/mockito/internal/stubbing/answers/Returns.java
+Original range: 17-19
+Documentation:
+
+Method code:
+17 |     public Returns(Object value) {
+18 |         this.value = value;
+19 |     }
+
+===== M0181 =====
+Signature: org.mockito.internal.invocation.InvocationMatcher.InvocationMatcher(Invocation,List<Matcher>)
+Source: src/org/mockito/internal/invocation/InvocationMatcher.java
+Original range: 31-38
+Documentation:
+
+Method code:
+31 |     public InvocationMatcher(Invocation invocation, List<Matcher> matchers) {
+32 |         this.invocation = invocation;
+33 |         if (matchers.isEmpty()) {
+34 |             this.matchers = ArgumentsProcessor.argumentsToMatchers(invocation.getArguments());
+35 |         } else {
+36 |             this.matchers = matchers;
+37 |         }
+38 |     }
+
+===== M0182 =====
+Signature: org.mockito.Mockito.mock(Class<T>,MockSettings)
+Source: src/org/mockito/Mockito.java
+Original range: 1283-1285
+Documentation:
+/**
+     * Creates a mock with some non-standard settings.
+     * <p>
+     * The number of configuration points for a mock grows
+     * so we need a fluent way to introduce new configuration without adding more and more overloaded Mockito.mock() methods.
+     * Hence {@link MockSettings}.
+     * <pre class="code"><code class="java">
+     *   Listener mock = mock(Listener.class, withSettings()
+     *     .name("firstListner").defaultBehavior(RETURNS_SMART_NULLS));
+     *   );
+     * </code></pre>
+     * <b>Use it carefully and occasionally</b>. What might be reason your test needs non-standard mocks?
+     * Is the code under test so complicated that it requires non-standard mocks?
+     * Wouldn't you prefer to refactor the code under test so it is testable in a simple way?
+     * <p>
+     * See also {@link Mockito#withSettings()}
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param classToMock class or interface to mock
+     * @param mockSettings additional mock settings
+     * @return mock object
+     */
+Method code:
+1283 |     public static <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
+1284 |         return MOCKITO_CORE.mock(classToMock, mockSettings);
+1285 |     }
+
+===== M0183 =====
+Signature: org.mockito.internal.handler.NullResultGuardian.handle(Invocation)
+Source: src/org/mockito/internal/handler/NullResultGuardian.java
+Original range: 28-37
+Documentation:
+
+Method code:
+28 |     public Object handle(Invocation invocation) throws Throwable {
+29 |         Object result = delegate.handle(invocation);
+30 |         Class<?> returnType = invocation.getMethod().getReturnType();
+31 |         if(result == null && returnType.isPrimitive()) {
+32 |             //primitive values cannot be null
+33 |             return new HandyReturnValues().returnFor(returnType);
+34 |         } else {
+35 |             return result;
+36 |         }
+37 |     }
+
+===== M0184 =====
+Signature: org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFilter.TypeBasedCandidateFilter(MockCandidateFilter)
+Source: src/org/mockito/internal/configuration/injection/filter/TypeBasedCandidateFilter.java
+Original range: 16-18
+Documentation:
+
+Method code:
+16 |     public TypeBasedCandidateFilter(MockCandidateFilter next) {
+17 |         this.next = next;
+18 |     }
+
+===== M0185 =====
+Signature: org.mockito.internal.util.reflection.FieldSetter.set(Object)
+Source: src/org/mockito/internal/util/reflection/FieldSetter.java
+Original range: 19-31
+Documentation:
+
+Method code:
+19 |     public void set(Object value) {
+20 |         AccessibilityChanger changer = new AccessibilityChanger();
+21 |         changer.enableAccess(field);
+22 |         try {
+23 |             field.set(target, value);
+24 |         } catch (IllegalAccessException e) {
+25 |             throw new RuntimeException("Access not authorized on field '" + field + "' of object '" + target + "' with value: '" + value + "'", e);
+26 |         } catch (IllegalArgumentException e) {
+27 |             throw new RuntimeException("Wrong argument on field '" + field + "' of object '" + target + "' with value: '" + value + "', \n" +
+28 |                     "reason : " + e.getMessage(), e);
+29 |         }
+30 |         changer.safelyDisableAccess(field);
+31 |     }
+
+===== M0186 =====
+Signature: org.mockito.internal.creation.bytebuddy.ClassInstantiator.UsingObjenesis.UsingObjenesis(boolean)
+Source: src/org/mockito/internal/creation/bytebuddy/ClassInstantiator.java
+Original range: 17-19
+Documentation:
+
+Method code:
+17 |         public UsingObjenesis(boolean useClassCache) {
+18 |             this.objenesis = new ObjenesisStd(useClassCache);
+19 |         }
+
+===== M0187 =====
+Signature: org.mockito.internal.configuration.injection.MockInjection.OngoingMockInjection.apply()
+Source: src/org/mockito/internal/configuration/injection/MockInjection.java
+Original range: 90-95
+Documentation:
+
+Method code:
+90 |         public void apply() {
+91 |             for (Field field : fields) {
+92 |                 injectionStrategies.process(field, fieldOwner, mocks);
+93 |                 postInjectionStrategies.process(field, fieldOwner, mocks);
+94 |             }
+95 |         }
+
+===== M0188 =====
+Signature: org.mockito.internal.stubbing.answers.MethodInfo.isVoid()
+Source: src/org/mockito/internal/stubbing/answers/MethodInfo.java
+Original range: 45-47
+Documentation:
+
+Method code:
+45 |     public boolean isVoid() {
+46 |         return this.method.getReturnType() == Void.TYPE;
+47 |     }
+
+===== M0189 =====
+Signature: org.mockito.internal.progress.ThreadSafeMockingProgress.pullVerificationMode()
+Source: src/org/mockito/internal/progress/ThreadSafeMockingProgress.java
+Original range: 39-41
+Documentation:
+
+Method code:
+39 |     public VerificationMode pullVerificationMode() {
+40 |         return threadSafely().pullVerificationMode();
+41 |     }
+
+===== M0190 =====
+Signature: org.mockito.internal.stubbing.answers.Returns.getReturnType()
+Source: src/org/mockito/internal/stubbing/answers/Returns.java
+Original range: 29-31
+Documentation:
+
+Method code:
+29 |     public Class<?> getReturnType() {
+30 |         return value.getClass();
+31 |     }
+
+===== M0191 =====
+Signature: org.mockito.internal.creation.DelegatingMethod.getName()
+Source: src/org/mockito/internal/creation/DelegatingMethod.java
+Original range: 29-31
+Documentation:
+
+Method code:
+29 |     public String getName() {
+30 |         return method.getName();
+31 |     }
+
+===== M0192 =====
+Signature: org.mockito.internal.util.MockCreationValidator.validateExtraInterfaces(Class,Collection<Class>)
+Source: src/org/mockito/internal/util/MockCreationValidator.java
+Original range: 25-35
+Documentation:
+
+Method code:
+25 |     public void validateExtraInterfaces(Class classToMock, Collection<Class> extraInterfaces) {
+26 |         if (extraInterfaces == null) {
+27 |             return;
+28 |         }
+29 | 
+30 |         for (Class i : extraInterfaces) {
+31 |             if (classToMock == i) {
+32 |                 new Reporter().extraInterfacesCannotContainMockedType(classToMock);
+33 |             }
+34 |         }
+35 |     }
+
+===== M0193 =====
+Signature: org.mockito.internal.configuration.SpyAnnotationEngine.newSpyInstance(Object,Field)
+Source: src/org/mockito/internal/configuration/SpyAnnotationEngine.java
+Original range: 83-119
+Documentation:
+
+Method code:
+83 |     private static Object newSpyInstance(Object testInstance, Field field)
+84 |             throws InstantiationException, IllegalAccessException, InvocationTargetException {
+85 |         MockSettings settings = withSettings()
+86 |                 .defaultAnswer(Mockito.CALLS_REAL_METHODS)
+87 |                 .name(field.getName());
+88 |         Class<?> type = field.getType();
+89 |         if (type.isInterface()) {
+90 |             return Mockito.mock(type, settings.useConstructor());
+91 |         }
+92 |         if (!Modifier.isStatic(type.getModifiers())) {
+93 |             Class<?> enclosing = type.getEnclosingClass();
+94 |             if (enclosing != null) {
+95 |                 if (!enclosing.isInstance(testInstance)) {
+96 |                     throw new MockitoException("@Spy annotation can only initialize inner classes declared in the test. "
+97 |                             + "Inner class: '" + type.getSimpleName() + "', "
+98 |                             + "outer class: '" + enclosing.getSimpleName() + "'.");
+99 |                 }
+100 |                 return Mockito.mock(type, settings
+101 |                         .useConstructor()
+102 |                         .outerInstance(testInstance));
+103 |             }
+104 |         }
+105 |         Constructor<?> constructor;
+106 |         try {
+107 |             constructor = type.getDeclaredConstructor();
+108 |         } catch (NoSuchMethodException e) {
+109 |             throw new MockitoException("Please ensure that the type '" + type.getSimpleName() + "' has 0-arg constructor.");
+110 |         }
+111 | 
+112 |         if (Modifier.isPrivate(constructor.getModifiers())) {
+113 |             constructor.setAccessible(true);
+114 |             return Mockito.mock(type, settings
+115 |                     .spiedInstance(constructor.newInstance()));
+116 |         } else {
+117 |             return Mockito.mock(type, settings.useConstructor());
+118 |         }
+119 |     }
+
+===== M0194 =====
+Signature: org.mockito.internal.creation.bytebuddy.CachingMockBytecodeGenerator.CachedBytecodeGenerator.MockKey.MockKey(Class<T>,Set<Class>)
+Source: src/org/mockito/internal/creation/bytebuddy/CachingMockBytecodeGenerator.java
+Original range: 102-108
+Documentation:
+
+Method code:
+102 |             private MockKey(Class<T> mockedType, Set<Class> interfaces) {
+103 |                 this.mockedType = mockedType.getName();
+104 |                 for (Class anInterface : interfaces) {
+105 |                     types.add(anInterface.getName());
+106 |                 }
+107 |                 types.add(this.mockedType);
+108 |             }
+
+===== M0195 =====
+Signature: org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker.createMock(MockCreationSettings<T>,MockHandler)
+Source: src/org/mockito/internal/creation/bytebuddy/ByteBuddyMockMaker.java
+Original range: 24-53
+Documentation:
+
+Method code:
+24 |     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+25 |         if (settings.getSerializableMode() == SerializableMode.ACROSS_CLASSLOADERS) {
+26 |             throw new MockitoException("Serialization across classloaders not yet supported with ByteBuddyMockMaker");
+27 |         }
+28 |         Class<? extends T> mockedProxyType = cachingMockBytecodeGenerator.get(
+29 |                 settings.getTypeToMock(),
+30 |                 settings.getExtraInterfaces()
+31 |         );
+32 |         T mockInstance = null;
+33 |         try {
+34 |             mockInstance = classInstantiator.instantiate(mockedProxyType);
+35 |             MockMethodInterceptor.MockAccess mockAccess = (MockMethodInterceptor.MockAccess) mockInstance;
+36 |             mockAccess.setMockitoInterceptor(new MockMethodInterceptor(asInternalMockHandler(handler), settings));
+37 | 
+38 |             return ensureMockIsAssignableToMockedType(settings, mockInstance);
+39 |         } catch (ClassCastException cce) {
+40 |             throw new MockitoException(join(
+41 |                     "ClassCastException occurred while creating the mockito mock :",
+42 |                     "  class to mock : " + describeClass(mockedProxyType),
+43 |                     "  created class : " + describeClass(settings.getTypeToMock()),
+44 |                     "  proxy instance class : " + describeClass(mockInstance),
+45 |                     "  instance creation by : " + classInstantiator.getClass().getSimpleName(),
+46 |                     "",
+47 |                     "You might experience classloading issues, please ask the mockito mailing-list.",
+48 |                     ""
+49 |             ),cce);
+50 |         } catch (org.mockito.internal.creation.instance.InstantiationException e) {
+51 |             throw new MockitoException("Unable to create mock instance of type '" + mockedProxyType.getSuperclass().getSimpleName() + "'", e);
+52 |         }
+53 |     }
+
+===== M0196 =====
+Signature: org.mockito.internal.stubbing.defaultanswers.GloballyConfiguredAnswer.answer(InvocationOnMock)
+Source: src/org/mockito/internal/stubbing/defaultanswers/GloballyConfiguredAnswer.java
+Original range: 23-25
+Documentation:
+
+Method code:
+23 |     public Object answer(InvocationOnMock invocation) throws Throwable {
+24 |         return new GlobalConfiguration().getDefaultAnswer().answer(invocation);
+25 |     }
+
+===== M0197 =====
+Signature: org.mockito.internal.stubbing.InvocationContainerImpl.hasInvocationForPotentialStubbing()
+Source: src/org/mockito/internal/stubbing/InvocationContainerImpl.java
+Original range: 102-104
+Documentation:
+
+Method code:
+102 |     public boolean hasInvocationForPotentialStubbing() {
+103 |         return !registeredInvocations.isEmpty();
+104 |     }
+
+===== M0198 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.name(String)
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 70-73
+Documentation:
+
+Method code:
+70 |     public MockSettings name(String name) {
+71 |         this.name = name;
+72 |         return this;
+73 |     }
+
+===== M0199 =====
+Signature: org.mockito.internal.configuration.injection.scanner.MockScanner.preparedMock(Object,Field)
+Source: src/org/mockito/internal/configuration/injection/scanner/MockScanner.java
+Original range: 69-77
+Documentation:
+
+Method code:
+69 |     private Object preparedMock(Object instance, Field field) {
+70 |         if (isAnnotatedByMockOrSpy(field)) {
+71 |             return instance;
+72 |         } else if (isMockOrSpy(instance)) {
+73 |             mockUtil.maybeRedefineMockName(instance, field.getName());
+74 |             return instance;
+75 |         }
+76 |         return null;
+77 |     }
+
+===== M0200 =====
+Signature: org.mockito.internal.configuration.injection.scanner.MockScanner.scan()
+Source: src/org/mockito/internal/configuration/injection/scanner/MockScanner.java
+Original range: 55-67
+Documentation:
+/**
+     * Scan and prepare mocks for the given <code>testClassInstance</code> and <code>clazz</code> in the type hierarchy.
+     *
+     * @return A prepared set of mock
+     */
+Method code:
+55 |     private Set<Object> scan() {
+56 |         Set<Object> mocks = newMockSafeHashSet();
+57 |         for (Field field : clazz.getDeclaredFields()) {
+58 |             // mock or spies only
+59 |             FieldReader fieldReader = new FieldReader(instance, field);
+60 | 
+61 |             Object mockInstance = preparedMock(fieldReader.read(), field);
+62 |             if (mockInstance != null) {
+63 |                 mocks.add(mockInstance);
+64 |             }
+65 |         }
+66 |         return mocks;
+67 |     }
+
+===== M0201 =====
+Signature: org.mockito.internal.util.ObjectMethodsGuru.isToString(Method)
+Source: src/org/mockito/internal/util/ObjectMethodsGuru.java
+Original range: 17-19
+Documentation:
+
+Method code:
+17 |     public boolean isToString(Method method) {
+18 |         return isToString(new DelegatingMethod(method));
+19 |     }
+
+===== M0202 =====
+Signature: org.mockito.internal.progress.ThreadSafeMockingProgress.getArgumentMatcherStorage()
+Source: src/org/mockito/internal/progress/ThreadSafeMockingProgress.java
+Original range: 67-69
+Documentation:
+
+Method code:
+67 |     public ArgumentMatcherStorage getArgumentMatcherStorage() {
+68 |         return threadSafely().getArgumentMatcherStorage();
+69 |     }
+
+===== M0203 =====
+Signature: org.mockito.internal.progress.MockingProgressImpl.validateState()
+Source: src/org/mockito/internal/progress/MockingProgressImpl.java
+Original range: 67-76
+Documentation:
+
+Method code:
+67 |     public void validateState() {
+68 |         validateMostStuff();
+69 |         
+70 |         //validate stubbing:
+71 |         if (stubbingInProgress != null) {
+72 |             Location temp = stubbingInProgress;
+73 |             stubbingInProgress = null;
+74 |             reporter.unfinishedStubbing(temp);
+75 |         }
+76 |     }
+
+===== M0204 =====
+Signature: org.mockito.Mockito.when(T)
+Source: src/org/mockito/Mockito.java
+Original range: 1521-1523
+Documentation:
+/**
+     * Enables stubbing methods. Use it when you want the mock to return particular value when particular method is called.
+     * <p>
+     * Simply put: "<b>When</b> the x method is called <b>then</b> return y".
+     * <p>
+     * <b>when() is a successor of deprecated {@link Mockito#stub(Object)}</b>
+     * <p>
+     * Examples:
+     *
+     * <pre class="code"><code class="java">
+     * <b>when</b>(mock.someMethod()).<b>thenReturn</b>(10);
+     *
+     * //you can use flexible argument matchers, e.g:
+     * when(mock.someMethod(<b>anyString()</b>)).thenReturn(10);
+     *
+     * //setting exception to be thrown:
+     * when(mock.someMethod("some arg")).thenThrow(new RuntimeException());
+     *
+     * //you can set different behavior for consecutive method calls.
+     * //Last stubbing (e.g: thenReturn("foo")) determines the behavior of further consecutive calls.
+     * when(mock.someMethod("some arg"))
+     *  .thenThrow(new RuntimeException())
+     *  .thenReturn("foo");
+     *
+     * //Alternative, shorter version for consecutive stubbing:
+     * when(mock.someMethod("some arg"))
+     *  .thenReturn("one", "two");
+     * //is the same as:
+     * when(mock.someMethod("some arg"))
+     *  .thenReturn("one")
+     *  .thenReturn("two");
+     *
+     * //shorter version for consecutive method calls throwing exceptions:
+     * when(mock.someMethod("some arg"))
+     *  .thenThrow(new RuntimeException(), new NullPointerException();
+     *
+     * </code></pre>
+     *
+     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
+     * <p>
+     * Stubbing can be overridden: for example common stubbing can go to fixture
+     * setup but the test methods can override it.
+     * Please note that overridding stubbing is a potential code smell that points out too much stubbing.
+     * <p>
+     * Once stubbed, the method will always return stubbed value regardless
+     * of how many times it is called.
+     * <p>
+     * Last stubbing is more important - when you stubbed the same method with
+     * the same arguments many times.
+     * <p>
+     * Although it is possible to verify a stubbed invocation, usually <b>it's just redundant</b>.
+     * Let's say you've stubbed <code>foo.bar()</code>.
+     * If your code cares what <code>foo.bar()</code> returns then something else breaks(often before even <code>verify()</code> gets executed).
+     * If your code doesn't care what <code>get(0)</code> returns then it should not be stubbed.
+     * Not convinced? See <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>.
+     *
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     * @param methodCall method to be stubbed
+     * @return OngoingStubbing object used to stub fluently.
+     *         <strong>Do not</strong> create a reference to this returned object.
+     */
+Method code:
+1521 |     public static <T> OngoingStubbing<T> when(T methodCall) {
+1522 |         return MOCKITO_CORE.when(methodCall);
+1523 |     }
+
+===== M0205 =====
+Signature: org.mockito.internal.creation.DelegatingMethod.getParameterTypes()
+Source: src/org/mockito/internal/creation/DelegatingMethod.java
+Original range: 33-35
+Documentation:
+
+Method code:
+33 |     public Class<?>[] getParameterTypes() {
+34 |         return method.getParameterTypes();
+35 |     }
+
+===== M0206 =====
+Signature: org.mockito.MockitoAnnotations.processAnnotationDeprecatedWay(AnnotationEngine,Object,Field)
+Source: src/org/mockito/MockitoAnnotations.java
+Original range: 119-135
+Documentation:
+
+Method code:
+119 |     @SuppressWarnings("deprecation")
+120 |     static void processAnnotationDeprecatedWay(AnnotationEngine annotationEngine, Object testClass, Field field) {
+121 |         boolean alreadyAssigned = false;
+122 |         for(Annotation annotation : field.getAnnotations()) {
+123 |             Object mock = annotationEngine.createMockFor(annotation, field);
+124 |             if (mock != null) {
+125 |                 throwIfAlreadyAssigned(field, alreadyAssigned);
+126 |                 alreadyAssigned = true;                
+127 |                 try {
+128 |                     new FieldSetter(testClass, field).set(mock);
+129 |                 } catch (Exception e) {
+130 |                     throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
+131 |                             + annotation, e);
+132 |                 }
+133 |             }
+134 |         }
+135 |     }
+
+===== M0207 =====
+Signature: org.mockito.internal.util.reflection.FieldReader.FieldReader(Object,Field)
+Source: src/org/mockito/internal/util/reflection/FieldReader.java
+Original range: 17-21
+Documentation:
+
+Method code:
+17 |     public FieldReader(Object target, Field field) {
+18 |         this.target = target;
+19 |         this.field = field;
+20 |         changer.enableAccess(field);
+21 |     }
+
+===== M0208 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.CreationSettings()
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 37-37
+Documentation:
+
+Method code:
+37 |     public CreationSettings() {}
+
+===== M0209 =====
+Signature: org.mockito.internal.stubbing.OngoingStubbingImpl.thenAnswer(Answer<?>)
+Source: src/org/mockito/internal/stubbing/OngoingStubbingImpl.java
+Original range: 23-30
+Documentation:
+
+Method code:
+23 |     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
+24 |         if(!invocationContainerImpl.hasInvocationForPotentialStubbing()) {
+25 |             new Reporter().incorrectUseOfApi();
+26 |         }
+27 | 
+28 |         invocationContainerImpl.addAnswer(answer);
+29 |         return new ConsecutiveStubbing<T>(invocationContainerImpl);
+30 |     }
+
+===== M0210 =====
+Signature: org.mockito.internal.creation.DelegatingMethod.getJavaMethod()
+Source: src/org/mockito/internal/creation/DelegatingMethod.java
+Original range: 25-27
+Documentation:
+
+Method code:
+25 |     public Method getJavaMethod() {
+26 |         return method;
+27 |     }
+
+===== M0211 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.getDefaultAnswer()
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 80-82
+Documentation:
+
+Method code:
+80 |     public Answer<Object> getDefaultAnswer() {
+81 |         return defaultAnswer;
+82 |     }
+
+===== M0212 =====
+Signature: org.mockito.internal.creation.bytebuddy.ClassInstantiator.UsingObjenesis.instantiate(Class<T>)
+Source: src/org/mockito/internal/creation/bytebuddy/ClassInstantiator.java
+Original range: 21-23
+Documentation:
+
+Method code:
+21 |         public <T> T instantiate(Class<T> type) {
+22 |             return objenesis.newInstance(type);
+23 |         }
+
+===== M0213 =====
+Signature: org.mockito.internal.util.reflection.FieldSetter.FieldSetter(Object,Field)
+Source: src/org/mockito/internal/util/reflection/FieldSetter.java
+Original range: 14-17
+Documentation:
+
+Method code:
+14 |     public FieldSetter(Object target, Field field) {
+15 |         this.target = target;
+16 |         this.field = field;
+17 |     }
+
+===== M0214 =====
+Signature: org.mockito.internal.creation.bytebuddy.CachingMockBytecodeGenerator.CachedBytecodeGenerator.MockKey.equals(Object)
+Source: src/org/mockito/internal/creation/bytebuddy/CachingMockBytecodeGenerator.java
+Original range: 110-121
+Documentation:
+
+Method code:
+110 |             @Override
+111 |             public boolean equals(Object other) {
+112 |                 if (this == other) return true;
+113 |                 if (other == null || getClass() != other.getClass()) return false;
+114 | 
+115 |                 MockKey mockKey = (MockKey<?>) other;
+116 | 
+117 |                 if (!mockedType.equals(mockKey.mockedType)) return false;
+118 |                 if (!types.equals(mockKey.types)) return false;
+119 | 
+120 |                 return true;
+121 |             }
+
+===== M0215 =====
+Signature: org.mockito.internal.configuration.DefaultAnnotationEngine.process(Class<?>,Object)
+Source: src/org/mockito/internal/configuration/DefaultAnnotationEngine.java
+Original range: 61-79
+Documentation:
+
+Method code:
+61 |     public void process(Class<?> clazz, Object testInstance) {
+62 |         Field[] fields = clazz.getDeclaredFields();
+63 |         for (Field field : fields) {
+64 |             boolean alreadyAssigned = false;
+65 |             for(Annotation annotation : field.getAnnotations()) {           
+66 |                 Object mock = createMockFor(annotation, field);
+67 |                 if (mock != null) {
+68 |                     throwIfAlreadyAssigned(field, alreadyAssigned);                    
+69 |                     alreadyAssigned = true;                    
+70 |                     try {
+71 |                         new FieldSetter(testInstance, field).set(mock);
+72 |                     } catch (Exception e) {
+73 |                         throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
+74 |                                 + annotation, e);
+75 |                     }
+76 |                 }        
+77 |             }
+78 |         }
+79 |     }
+
+===== M0216 =====
+Signature: org.mockito.internal.util.reflection.FieldReader.read()
+Source: src/org/mockito/internal/util/reflection/FieldReader.java
+Original range: 27-33
+Documentation:
+
+Method code:
+27 |     public Object read() {
+28 |         try {
+29 |             return field.get(target);
+30 |         } catch (Exception e) {
+31 |             throw new MockitoException("Cannot read state from field: " + field + ", on instance: " + target);
+32 |         }
+33 |     }
+
+===== M0217 =====
+Signature: org.mockito.internal.progress.MockingProgressImpl.pullVerificationMode()
+Source: src/org/mockito/internal/progress/MockingProgressImpl.java
+Original range: 52-60
+Documentation:
+
+Method code:
+52 |     public VerificationMode pullVerificationMode() {
+53 |         if (verificationMode == null) {
+54 |             return null;
+55 |         }
+56 |         
+57 |         VerificationMode temp = verificationMode.getObject();
+58 |         verificationMode = null;
+59 |         return temp;
+60 |     }
+
+===== M0218 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.setExtraInterfaces(Set<Class>)
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 67-70
+Documentation:
+
+Method code:
+67 |     public CreationSettings<T> setExtraInterfaces(Set<Class> extraInterfaces) {
+68 |         this.extraInterfaces = extraInterfaces;
+69 |         return this;
+70 |     }
+
+===== M0219 =====
+Signature: org.mockito.internal.handler.MockHandlerImpl.MockHandlerImpl(MockCreationSettings)
+Source: src/org/mockito/internal/handler/MockHandlerImpl.java
+Original range: 40-45
+Documentation:
+
+Method code:
+40 |     public MockHandlerImpl(MockCreationSettings mockSettings) {
+41 |         this.mockSettings = mockSettings;
+42 |         this.mockingProgress = new ThreadSafeMockingProgress();
+43 |         this.matchersBinder = new MatchersBinder();
+44 |         this.invocationContainerImpl = new InvocationContainerImpl(mockingProgress, mockSettings);
+45 |     }
+
+===== M0220 =====
+Signature: org.mockito.internal.progress.ThreadSafeMockingProgress.stubbingStarted()
+Source: src/org/mockito/internal/progress/ThreadSafeMockingProgress.java
+Original range: 43-45
+Documentation:
+
+Method code:
+43 |     public void stubbingStarted() {
+44 |         threadSafely().stubbingStarted();
+45 |     }
+
+===== M0221 =====
+Signature: org.mockito.internal.creation.bytebuddy.CachingMockBytecodeGenerator.mockCachePerClassLoaderOf(Class<T>)
+Source: src/org/mockito/internal/creation/bytebuddy/CachingMockBytecodeGenerator.java
+Original range: 39-47
+Documentation:
+
+Method code:
+39 |     private <T> CachedBytecodeGenerator mockCachePerClassLoaderOf(Class<T> mockedType) {
+40 |         if (!avoidingClassLeakageCache.containsKey(mockedType.getClassLoader())) {
+41 |             avoidingClassLeakageCache.put(
+42 |                     mockedType.getClassLoader(),
+43 |                     new CachedBytecodeGenerator(mockBytecodeGenerator)
+44 |             );
+45 |         }
+46 |         return avoidingClassLeakageCache.get(mockedType.getClassLoader());
+47 |     }
+
+===== M0222 =====
+Signature: org.mockito.internal.stubbing.BaseStubbing.thenReturn(T)
+Source: src/org/mockito/internal/stubbing/BaseStubbing.java
+Original range: 17-19
+Documentation:
+//TODO why we need this method? The other thenReturn covers it.
+Method code:
+17 |     public OngoingStubbing<T> thenReturn(T value) {
+18 |         return thenAnswer(new Returns(value));
+19 |     }
+
+===== M0223 =====
+Signature: org.mockito.internal.creation.bytebuddy.CachingMockBytecodeGenerator.CachedBytecodeGenerator.MockKey.of(Class<T>,Set<Class>)
+Source: src/org/mockito/internal/creation/bytebuddy/CachingMockBytecodeGenerator.java
+Original range: 130-132
+Documentation:
+
+Method code:
+130 |             public static <T> MockKey of(Class<T> mockedType, Set<Class> interfaces) {
+131 |                 return new MockKey<T>(mockedType, interfaces);
+132 |             }
+
+===== M0224 =====
+Signature: org.mockito.internal.creation.DelegatingMethod.isVarArgs()
+Source: src/org/mockito/internal/creation/DelegatingMethod.java
+Original range: 41-43
+Documentation:
+
+Method code:
+41 |     public boolean isVarArgs() {
+42 |         return method.isVarArgs();
+43 |     }
+
+===== M0225 =====
+Signature: org.mockito.internal.creation.util.SearchingClassLoader.addIfNewElement(List<ClassLoader>,ClassLoader)
+Source: src/org/mockito/internal/creation/util/SearchingClassLoader.java
+Original range: 62-66
+Documentation:
+
+Method code:
+62 |     private static void addIfNewElement(List<ClassLoader> loaders, ClassLoader c) {
+63 |         if (c != null && !loaders.contains(c)) {
+64 |             loaders.add(c);
+65 |         }
+66 |     }
+
+===== M0226 =====
+Signature: org.mockito.internal.configuration.SpyAnnotationEngine.assertNotInterface(Object,Class<?>)
+Source: src/org/mockito/internal/configuration/SpyAnnotationEngine.java
+Original range: 76-81
+Documentation:
+
+Method code:
+76 |     private static void assertNotInterface(Object testInstance, Class<?> type) {
+77 |         type = testInstance != null? testInstance.getClass() : type;
+78 |         if (type.isInterface()) {
+79 |             throw new MockitoException("Type '" + type.getSimpleName() + "' is an interface and it cannot be spied on.");
+80 |         }
+81 |     }
+
+===== M0227 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.useConstructor()
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 97-100
+Documentation:
+
+Method code:
+97 |     public MockSettings useConstructor() {
+98 |         this.useConstructor = true;
+99 |         return this;
+100 |     }
+
+===== M0228 =====
+Signature: org.mockito.internal.util.MockCreationValidator.validateConstructorUse(boolean,SerializableMode)
+Source: src/org/mockito/internal/util/MockCreationValidator.java
+Original range: 68-72
+Documentation:
+
+Method code:
+68 |     public void validateConstructorUse(boolean usingConstructor, SerializableMode mode) {
+69 |         if (usingConstructor && mode == SerializableMode.ACROSS_CLASSLOADERS) {
+70 |             new Reporter().usingConstructorWithFancySerializable(mode);
+71 |         }
+72 |     }
+
+===== M0229 =====
+Signature: org.mockito.internal.creation.bytebuddy.InterceptedInvocation.getMethod()
+Source: src/org/mockito/internal/creation/bytebuddy/InterceptedInvocation.java
+Original range: 100-103
+Documentation:
+
+Method code:
+100 |     @Override
+101 |     public Method getMethod() {
+102 |         return mockitoMethod.getJavaMethod();
+103 |     }
+
+===== M0230 =====
+Signature: org.mockito.configuration.DefaultMockitoConfiguration.getDefaultAnswer()
+Source: src/org/mockito/configuration/DefaultMockitoConfiguration.java
+Original range: 31-33
+Documentation:
+
+Method code:
+31 |     public Answer<Object> getDefaultAnswer() {
+32 |         return new ReturnsEmptyValues();
+33 |     }
+
+===== M0231 =====
+Signature: org.mockito.internal.invocation.InvocationMatcher.getInvocation()
+Source: src/org/mockito/internal/invocation/InvocationMatcher.java
+Original range: 48-50
+Documentation:
+
+Method code:
+48 |     public Invocation getInvocation() {
+49 |         return this.invocation;
+50 |     }
+
+===== M0232 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.setTypeToMock(Class<T>)
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 58-61
+Documentation:
+
+Method code:
+58 |     public CreationSettings<T> setTypeToMock(Class<T> typeToMock) {
+59 |         this.typeToMock = typeToMock;
+60 |         return this;
+61 |     }
+
+===== M0233 =====
+Signature: org.mockito.internal.configuration.plugins.PluginLoader.PluginLoader(PluginSwitch)
+Source: src/org/mockito/internal/configuration/plugins/PluginLoader.java
+Original range: 16-18
+Documentation:
+
+Method code:
+16 |     public PluginLoader(PluginSwitch pluginSwitch) {
+17 |         this.pluginSwitch = pluginSwitch;
+18 |     }
+
+===== M0234 =====
+Signature: org.mockito.internal.configuration.injection.scanner.InjectMocksScanner.InjectMocksScanner(Class<?>)
+Source: src/org/mockito/internal/configuration/injection/scanner/InjectMocksScanner.java
+Original range: 29-31
+Documentation:
+/**
+     * Create a new InjectMocksScanner for the given clazz on the given instance
+     *
+     * @param clazz    Current class in the hierarchy of the test
+     */
+Method code:
+29 |     public InjectMocksScanner(Class<?> clazz) {
+30 |         this.clazz = clazz;
+31 |     }
+
+===== M0235 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsMockWrapper.hashCode()
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsMockWrapper.java
+Original range: 49-52
+Documentation:
+
+Method code:
+49 |     @Override
+50 |     public int hashCode() {
+51 |         return System.identityHashCode(mockInstance);
+52 |     }
+
+===== M0236 =====
+Signature: org.mockito.internal.progress.ThreadSafeMockingProgress.mockingStarted(Object,Class)
+Source: src/org/mockito/internal/progress/ThreadSafeMockingProgress.java
+Original range: 71-73
+Documentation:
+
+Method code:
+71 |     public void mockingStarted(Object mock, Class classToMock) {
+72 |         threadSafely().mockingStarted(mock, classToMock);
+73 |     }
+
+===== M0237 =====
+Signature: org.mockito.internal.progress.MockingProgressImpl.reportOngoingStubbing(IOngoingStubbing)
+Source: src/org/mockito/internal/progress/MockingProgressImpl.java
+Original range: 29-31
+Documentation:
+
+Method code:
+29 |     public void reportOngoingStubbing(IOngoingStubbing iOngoingStubbing) {
+30 |         this.iOngoingStubbing = iOngoingStubbing;
+31 |     }
+
+===== M0238 =====
+Signature: org.mockito.internal.progress.ThreadSafeMockingProgress.resetOngoingStubbing()
+Source: src/org/mockito/internal/progress/ThreadSafeMockingProgress.java
+Original range: 63-65
+Documentation:
+
+Method code:
+63 |     public void resetOngoingStubbing() {
+64 |         threadSafely().resetOngoingStubbing();
+65 |     }
+
+===== M0239 =====
+Signature: org.mockito.internal.handler.MockHandlerImpl.handle(Invocation)
+Source: src/org/mockito/internal/handler/MockHandlerImpl.java
+Original range: 47-103
+Documentation:
+
+Method code:
+47 |     public Object handle(Invocation invocation) throws Throwable {
+48 | 		if (invocationContainerImpl.hasAnswersForStubbing()) {
+49 |             // stubbing voids with stubVoid() or doAnswer() style
+50 |             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
+51 |                     mockingProgress.getArgumentMatcherStorage(),
+52 |                     invocation
+53 |             );
+54 |             invocationContainerImpl.setMethodForStubbing(invocationMatcher);
+55 |             return null;
+56 |         }
+57 |         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
+58 | 
+59 |         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
+60 |                 mockingProgress.getArgumentMatcherStorage(),
+61 |                 invocation
+62 |         );
+63 | 
+64 |         mockingProgress.validateState();
+65 | 
+66 |         // if verificationMode is not null then someone is doing verify()
+67 |         if (verificationMode != null) {
+68 |             // We need to check if verification was started on the correct mock
+69 |             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
+70 |             if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {
+71 |                 VerificationDataImpl data = createVerificationData(invocationContainerImpl, invocationMatcher);
+72 |                 verificationMode.verify(data);
+73 |                 return null;
+74 |             } else {
+75 |                 // this means there is an invocation on a different mock. Re-adding verification mode
+76 |                 // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
+77 |                 mockingProgress.verificationStarted(verificationMode);
+78 |             }
+79 |         }
+80 | 
+81 |         // prepare invocation for stubbing
+82 |         invocationContainerImpl.setInvocationForPotentialStubbing(invocationMatcher);
+83 |         OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(invocationContainerImpl);
+84 |         mockingProgress.reportOngoingStubbing(ongoingStubbing);
+85 | 
+86 |         // look for existing answer for this invocation
+87 |         StubbedInvocationMatcher stubbedInvocation = invocationContainerImpl.findAnswerFor(invocation);
+88 | 
+89 |         if (stubbedInvocation != null) {
+90 |             stubbedInvocation.captureArgumentsFrom(invocation);
+91 |             return stubbedInvocation.answer(invocation);
+92 |         } else {
+93 |              Object ret = mockSettings.getDefaultAnswer().answer(invocation);
+94 | 
+95 |             // redo setting invocation for potential stubbing in case of partial
+96 |             // mocks / spies.
+97 |             // Without it, the real method inside 'when' might have delegated
+98 |             // to other self method and overwrite the intended stubbed method
+99 |             // with a different one. The reset is required to avoid runtime exception that validates return type with stubbed method signature.
+100 |             invocationContainerImpl.resetInvocationForPotentialStubbing(invocationMatcher);
+101 |             return ret;
+102 |         }
+103 | 	}
+
+===== M0240 =====
+Signature: org.mockito.internal.progress.MockingProgressImpl.validateMostStuff()
+Source: src/org/mockito/internal/progress/MockingProgressImpl.java
+Original range: 78-90
+Documentation:
+
+Method code:
+78 |     private void validateMostStuff() {
+79 |         //State is cool when GlobalConfiguration is already loaded
+80 |         //this cannot really be tested functionally because I cannot dynamically mess up org.mockito.configuration.MockitoConfiguration class
+81 |         GlobalConfiguration.validate();
+82 | 
+83 |         if (verificationMode != null) {
+84 |             Location location = verificationMode.getLocation();
+85 |             verificationMode = null;
+86 |             reporter.unfinishedVerificationException(location);
+87 |         }
+88 | 
+89 |         getArgumentMatcherStorage().validateState();
+90 |     }
+
+===== M0241 =====
+Signature: org.mockito.internal.handler.InvocationNotifierHandler.handle(Invocation)
+Source: src/org/mockito/internal/handler/InvocationNotifierHandler.java
+Original range: 36-45
+Documentation:
+
+Method code:
+36 |     public Object handle(Invocation invocation) throws Throwable {
+37 |         try {
+38 |             Object returnedValue = mockHandler.handle(invocation);
+39 |             notifyMethodCall(invocation, returnedValue);
+40 |             return returnedValue;
+41 |         } catch (Throwable t){
+42 |             notifyMethodCallException(invocation, t);
+43 |             throw t;
+44 |         }
+45 |     }
+
+===== M0242 =====
+Signature: org.mockito.internal.creation.MockSettingsImpl.isUsingConstructor()
+Source: src/org/mockito/internal/creation/MockSettingsImpl.java
+Original range: 107-109
+Documentation:
+
+Method code:
+107 |     public boolean isUsingConstructor() {
+108 |         return useConstructor;
+109 |     }
+
+===== M0243 =====
+Signature: org.mockito.internal.creation.bytebuddy.MockBytecodeGenerator.MockBytecodeGenerator()
+Source: src/org/mockito/internal/creation/bytebuddy/MockBytecodeGenerator.java
+Original range: 28-35
+Documentation:
+
+Method code:
+28 |     public MockBytecodeGenerator() {
+29 |         byteBuddy = new ByteBuddy(ClassFileVersion.JAVA_V5)
+30 | //                .withIgnoredMethods(isBridge())
+31 |                 .withDefaultMethodAttributeAppender(MethodAttributeAppender.ForInstrumentedMethod.INSTANCE)
+32 |                 .withAttribute(TypeAttributeAppender.ForSuperType.INSTANCE);
+33 | 
+34 |         random = new Random();
+35 |     }
+
+===== M0244 =====
+Signature: org.mockito.internal.stubbing.answers.Returns.returnsNull()
+Source: src/org/mockito/internal/stubbing/answers/Returns.java
+Original range: 33-35
+Documentation:
+
+Method code:
+33 |     public boolean returnsNull() {
+34 |         return value == null;
+35 |     }
+
+===== M0245 =====
+Signature: org.mockito.internal.stubbing.InvocationContainerImpl.addAnswer(Answer,boolean)
+Source: src/org/mockito/internal/stubbing/InvocationContainerImpl.java
+Original range: 57-70
+Documentation:
+
+Method code:
+57 |     public void addAnswer(Answer answer, boolean isConsecutive) {
+58 |         Invocation invocation = invocationForStubbing.getInvocation();
+59 |         mockingProgress.stubbingCompleted(invocation);
+60 |         AnswersValidator answersValidator = new AnswersValidator();
+61 |         answersValidator.validate(answer, invocation);
+62 | 
+63 |         synchronized (stubbed) {
+64 |             if (isConsecutive) {
+65 |                 stubbed.getFirst().addAnswer(answer);
+66 |             } else {
+67 |                 stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
+68 |             }
+69 |         }
+70 |     }
+
+===== M0246 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsMockWrapper.get()
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsMockWrapper.java
+Original range: 35-37
+Documentation:
+
+Method code:
+35 |     public Object get() {
+36 |         return mockInstance;
+37 |     }
+
+===== M0247 =====
+Signature: org.mockito.internal.configuration.GlobalConfiguration.GlobalConfiguration()
+Source: src/org/mockito/internal/configuration/GlobalConfiguration.java
+Original range: 29-34
+Documentation:
+
+Method code:
+29 |     public GlobalConfiguration() {
+30 |         //Configuration should be loaded only once but I cannot really test it
+31 |         if (GLOBAL_CONFIGURATION.get() == null) {
+32 |             GLOBAL_CONFIGURATION.set(createConfig());
+33 |         }
+34 |     }
+
+===== M0248 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.getExtraInterfaces()
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 63-65
+Documentation:
+
+Method code:
+63 |     public Set<Class> getExtraInterfaces() {
+64 |         return extraInterfaces;
+65 |     }
+
+===== M0249 =====
+Signature: org.mockito.configuration.DefaultMockitoConfiguration.getAnnotationEngine()
+Source: src/org/mockito/configuration/DefaultMockitoConfiguration.java
+Original range: 38-40
+Documentation:
+/* (non-Javadoc)
+     * @see org.mockito.IMockitoConfiguration#getAnnotationEngine()
+     */
+Method code:
+38 |     public AnnotationEngine getAnnotationEngine() {
+39 |         return new InjectingAnnotationEngine();
+40 |     }
+
+===== M0250 =====
+Signature: org.mockito.internal.stubbing.answers.MethodInfo.isValidReturnType(Class)
+Source: src/org/mockito/internal/stubbing/answers/MethodInfo.java
+Original range: 37-43
+Documentation:
+
+Method code:
+37 |     public boolean isValidReturnType(Class clazz) {
+38 |         if (method.getReturnType().isPrimitive() || clazz.isPrimitive()) {
+39 |             return Primitives.primitiveTypeOf(clazz) == Primitives.primitiveTypeOf(method.getReturnType());
+40 |         } else {
+41 |             return method.getReturnType().isAssignableFrom(clazz);
+42 |         }
+43 |     }
+
+===== M0251 =====
+Signature: org.mockito.internal.creation.bytebuddy.InterceptedInvocation.SuperMethod.FromCallable.FromCallable(Callable<?>)
+Source: src/org/mockito/internal/creation/bytebuddy/InterceptedInvocation.java
+Original range: 172-174
+Documentation:
+
+Method code:
+172 |             public FromCallable(Callable<?> callable) {
+173 |                 this.callable = callable;
+174 |             }
+
+===== M0252 =====
+Signature: org.mockito.Answers.answer(InvocationOnMock)
+Source: src/org/mockito/Answers.java
+Original range: 89-91
+Documentation:
+
+Method code:
+89 | 	public Object answer(InvocationOnMock invocation) throws Throwable {
+90 | 		return implementation.answer(invocation);
+91 | 	}
+
+===== M0253 =====
+Signature: org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker.asInternalMockHandler(MockHandler)
+Source: src/org/mockito/internal/creation/bytebuddy/ByteBuddyMockMaker.java
+Original range: 99-108
+Documentation:
+
+Method code:
+99 |     private static InternalMockHandler asInternalMockHandler(MockHandler handler) {
+100 |         if (!(handler instanceof InternalMockHandler)) {
+101 |             throw new MockitoException(join(
+102 |                     "At the moment you cannot provide own implementations of MockHandler.",
+103 |                     "Please see the javadocs for the MockMaker interface.",
+104 |                     ""
+105 |             ));
+106 |         }
+107 |         return (InternalMockHandler) handler;
+108 |     }
+
+===== M0254 =====
+Signature: org.mockito.internal.configuration.plugins.Plugins.getStackTraceCleanerProvider()
+Source: src/org/mockito/internal/configuration/plugins/Plugins.java
+Original range: 16-18
+Documentation:
+/**
+     * The implementation of the stack trace cleaner
+     */
+Method code:
+16 |     public static StackTraceCleanerProvider getStackTraceCleanerProvider() {
+17 |         return registry.getStackTraceCleanerProvider();
+18 |     }
+
+===== M0255 =====
+Signature: org.mockito.internal.configuration.injection.filter.NameBasedCandidateFilter.NameBasedCandidateFilter(MockCandidateFilter)
+Source: src/org/mockito/internal/configuration/injection/filter/NameBasedCandidateFilter.java
+Original range: 18-20
+Documentation:
+
+Method code:
+18 |     public NameBasedCandidateFilter(MockCandidateFilter next) {
+19 |         this.next = next;
+20 |     }
+
+===== M0256 =====
+Signature: org.mockito.internal.invocation.InvocationMatcher.hasSameMethod(Invocation)
+Source: src/org/mockito/internal/invocation/InvocationMatcher.java
+Original range: 96-115
+Documentation:
+
+Method code:
+96 |     public boolean hasSameMethod(Invocation candidate) {
+97 |         //not using method.equals() for 1 good reason:
+98 |         //sometimes java generates forwarding methods when generics are in play see JavaGenericsForwardingMethodsTest
+99 |         Method m1 = invocation.getMethod();
+100 |         Method m2 = candidate.getMethod();
+101 |         
+102 |         if (m1.getName() != null && m1.getName().equals(m2.getName())) {
+103 |         	/* Avoid unnecessary cloning */
+104 |         	Class[] params1 = m1.getParameterTypes();
+105 |         	Class[] params2 = m2.getParameterTypes();
+106 |         	if (params1.length == params2.length) {
+107 |         	    for (int i = 0; i < params1.length; i++) {
+108 |         		if (params1[i] != params2[i])
+109 |         		    return false;
+110 |         	    }
+111 |         	    return true;
+112 |         	}
+113 |         }
+114 |         return false;
+115 |     }
+
+===== M0257 =====
+Signature: org.mockito.internal.configuration.injection.MockInjection.OngoingMockInjection.tryConstructorInjection()
+Source: src/org/mockito/internal/configuration/injection/MockInjection.java
+Original range: 75-78
+Documentation:
+
+Method code:
+75 |         public OngoingMockInjection tryConstructorInjection() {
+76 |             injectionStrategies.thenTry(new ConstructorInjection());
+77 |             return this;
+78 |         }
+
+===== M0258 =====
+Signature: org.mockito.internal.creation.bytebuddy.CachingMockBytecodeGenerator.CachedBytecodeGenerator.generate(Class<T>,Set<Class>)
+Source: src/org/mockito/internal/creation/bytebuddy/CachingMockBytecodeGenerator.java
+Original range: 72-78
+Documentation:
+
+Method code:
+72 |         private <T> Class<? extends T> generate(Class<T> mockedType, Set<Class> interfaces) {
+73 |             try {
+74 |                 return generator.generateMockClass(mockedType, interfaces);
+75 |             } catch (Exception bytecodeGenerationFailed) {
+76 |                 throw prettifyFailure(mockedType, bytecodeGenerationFailed);
+77 |             }
+78 |         }
+
+===== M0259 =====
+Signature: org.mockito.internal.creation.settings.CreationSettings.CreationSettings(CreationSettings)
+Source: src/org/mockito/internal/creation/settings/CreationSettings.java
+Original range: 39-52
+Documentation:
+
+Method code:
+39 |     @SuppressWarnings("unchecked")
+40 |     public CreationSettings(CreationSettings copy) {
+41 |         this.typeToMock = copy.typeToMock;
+42 |         this.extraInterfaces = copy.extraInterfaces;
+43 |         this.name = copy.name;
+44 |         this.spiedInstance = copy.spiedInstance;
+45 |         this.defaultAnswer = copy.defaultAnswer;
+46 |         this.mockName = copy.mockName;
+47 |         this.serializableMode = copy.serializableMode;
+48 |         this.invocationListeners = copy.invocationListeners;
+49 |         this.stubOnly = copy.stubOnly;
+50 |         this.useConstructor = copy.isUsingConstructor();
+51 |         this.outerClassInstance = copy.getOuterClassInstance();
+52 |     }
+
+===== M0260 =====
+Signature: org.mockito.internal.creation.bytebuddy.InterceptedInvocation.SuperMethod.FromCallable.invoke()
+Source: src/org/mockito/internal/creation/bytebuddy/InterceptedInvocation.java
+Original range: 181-189
+Documentation:
+
+Method code:
+181 |             @Override
+182 |             public Object invoke() throws Throwable {
+183 |                 try {
+184 |                     return callable.call();
+185 |                 } catch (Throwable t) {
+186 |                     new ConditionalStackTraceFilter().filter(t);
+187 |                     throw t;
+188 |                 }
+189 |             }
+
+===== M0261 =====
+Signature: org.mockito.internal.util.ObjectMethodsGuru.isToString(MockitoMethod)
+Source: src/org/mockito/internal/util/ObjectMethodsGuru.java
+Original range: 21-25
+Documentation:
+
+Method code:
+21 |     public boolean isToString(MockitoMethod method) {
+22 |         return method.getReturnType() == String.class
+23 |                 && method.getParameterTypes().length == 0
+24 |                 && method.getName().equals("toString");
+25 |     }
+
+===== M0262 =====
+Signature: org.mockito.internal.MockitoCore.mock(Class<T>,MockSettings)
+Source: src/org/mockito/internal/MockitoCore.java
+Original range: 51-62
+Documentation:
+
+Method code:
+51 |     public <T> T mock(Class<T> typeToMock, MockSettings settings) {
+52 |         if (!MockSettingsImpl.class.isInstance(settings)) {
+53 |             throw new IllegalArgumentException(
+54 |                     "Unexpected implementation of '" + settings.getClass().getCanonicalName() + "'\n"
+55 |                     + "At the moment, you cannot provide your own implementations that class.");
+56 |         }
+57 |         MockSettingsImpl impl = MockSettingsImpl.class.cast(settings);
+58 |         MockCreationSettings<T> creationSettings = impl.confirm(typeToMock);
+59 |         T mock = mockUtil.createMock(creationSettings);
+60 |         mockingProgress.mockingStarted(mock, typeToMock);
+61 |         return mock;
+62 |     }
+
+===== M0263 =====
+Signature: org.mockito.internal.util.collections.HashCodeAndEqualsSafeSet.asWrappedMocks(Collection<?>)
+Source: src/org/mockito/internal/util/collections/HashCodeAndEqualsSafeSet.java
+Original range: 131-139
+Documentation:
+
+Method code:
+131 |     private HashSet<HashCodeAndEqualsMockWrapper> asWrappedMocks(Collection<?> mocks) {
+132 |         Checks.checkNotNull(mocks, "Passed collection should notify() be null");
+133 |         HashSet<HashCodeAndEqualsMockWrapper> hashSet = new HashSet<HashCodeAndEqualsMockWrapper>();
+134 |         for (Object mock : mocks) {
+135 |             assert ! (mock instanceof HashCodeAndEqualsMockWrapper) : "WRONG";
+136 |             hashSet.add(HashCodeAndEqualsMockWrapper.of(mock));
+137 |         }
+138 |         return hashSet;
+139 |     }
+
+===== M0264 =====
+Signature: org.mockito.internal.creation.bytebuddy.InterceptedInvocation.markStubbed(StubInfo)
+Source: src/org/mockito/internal/creation/bytebuddy/InterceptedInvocation.java
+Original range: 80-83
+Documentation:
+
+Method code:
+80 |     @Override
+81 |     public void markStubbed(StubInfo stubInfo) {
+82 |         this.stubInfo = stubInfo;
+83 |     }
+
+===== M0265 =====
+Signature: org.mockito.internal.stubbing.answers.Returns.answer(InvocationOnMock)
+Source: src/org/mockito/internal/stubbing/answers/Returns.java
+Original range: 21-23
+Documentation:
+
+Method code:
+21 |     public Object answer(InvocationOnMock invocation) throws Throwable {
+22 |         return value;
+23 |     }
+
+===== M0266 =====
+Signature: org.mockito.internal.creation.bytebuddy.CachingMockBytecodeGenerator.CachedBytecodeGenerator.getOrGenerateMockClass(Class<T>,Set<Class>)
+Source: src/org/mockito/internal/creation/bytebuddy/CachingMockBytecodeGenerator.java
+Original range: 58-70
+Documentation:
+
+Method code:
+58 |         public <T> Class getOrGenerateMockClass(Class<T> mockedType, Set<Class> interfaces) {
+59 |             MockKey mockKey = MockKey.of(mockedType, interfaces);
+60 |             Class generatedMockClass = null;
+61 |             WeakReference<Class> classWeakReference = generatedClassCache.get(mockKey);
+62 |             if(classWeakReference != null) {
+63 |                 generatedMockClass = classWeakReference.get();
+64 |             }
+65 |             if(generatedMockClass == null) {
+66 |                 generatedMockClass = generate(mockedType, interfaces);
+67 |             }
+68 |             generatedClassCache.put(mockKey, new WeakReference<Class>(generatedMockClass));
+69 |             return generatedMockClass;
+70 |         }
+

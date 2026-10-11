@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.mockitousage.stubbing.DeepStubsSerializableTest.should_serialize_and_deserialize_mock_created_by_deep_stubs()",
+    "resolved_signature": "org.mockitousage.stubbing.DeepStubsSerializableTest.should_serialize_and_deserialize_mock_created_by_deep_stubs()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/stubbing/DeepStubsSerializableTest.java",
+    "begin_line": 17,
+    "end_line": 32,
+    "comment": "",
+    "snippet": "    @Test\n    public void should_serialize_and_deserialize_mock_created_by_deep_stubs() throws Exception {\n        // given\n        SampleClass sampleClass = mock(SampleClass.class, withSettings().defaultAnswer(Mockito.RETURNS_DEEP_STUBS).serializable());\n        when(sampleClass.getSample().isSth()).thenReturn(STUBBED_BOOLEAN_VALUE);\n        when(sampleClass.getSample().getNumber()).thenReturn(STUBBED_INTEGER_VALUE);\n\n        // when\n        Object o = SimpleSerializationUtil.serializeAndBack(sampleClass);\n\n        // then\n        assertThat(o).isInstanceOf(SampleClass.class);\n        SampleClass deserializedSample = (SampleClass) o;\n        assertThat(deserializedSample.getSample().isSth()).isEqualTo(STUBBED_BOOLEAN_VALUE);\n        assertThat(deserializedSample.getSample().getNumber()).isEqualTo(STUBBED_INTEGER_VALUE);\n    }"
+  }
+]

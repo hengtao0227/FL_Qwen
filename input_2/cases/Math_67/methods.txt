@@ -1,0 +1,712 @@
+===== M0001 =====
+Signature: org.apache.commons.math.optimization.MultiStartUnivariateRealOptimizer.getRelativeAccuracy()
+Source: src/main/java/org/apache/commons/math/optimization/MultiStartUnivariateRealOptimizer.java
+Original range: 126-128
+Documentation:
+/** {@inheritDoc} */
+Method code:
+126 |     public double getRelativeAccuracy() {
+127 |         return optimizer.getRelativeAccuracy();
+128 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.optimization.univariate.AbstractUnivariateRealOptimizer.clearResult()
+Source: src/main/java/org/apache/commons/math/optimization/univariate/AbstractUnivariateRealOptimizer.java
+Original range: 107-109
+Documentation:
+/**
+     * Convenience function for implementations.
+     */
+Method code:
+107 |     protected final void clearResult() {
+108 |         this.resultComputed = false;
+109 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.optimization.univariate.AbstractUnivariateRealOptimizer.getEvaluations()
+Source: src/main/java/org/apache/commons/math/optimization/univariate/AbstractUnivariateRealOptimizer.java
+Original range: 122-124
+Documentation:
+/** {@inheritDoc} */
+Method code:
+122 |     public int getEvaluations() {
+123 |         return evaluations;
+124 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.optimization.univariate.AbstractUnivariateRealOptimizer.checkResultComputed()
+Source: src/main/java/org/apache/commons/math/optimization/univariate/AbstractUnivariateRealOptimizer.java
+Original range: 71-75
+Documentation:
+/** Check if a result has been computed.
+     * @exception IllegalStateException if no result has been computed
+     */
+Method code:
+71 |     protected void checkResultComputed() throws IllegalStateException {
+72 |         if (!resultComputed) {
+73 |             throw MathRuntimeException.createIllegalStateException(LocalizedFormats.NO_RESULT_AVAILABLE);
+74 |         }
+75 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.ConvergingAlgorithmImpl.setRelativeAccuracy(double)
+Source: src/main/java/org/apache/commons/math/ConvergingAlgorithmImpl.java
+Original range: 107-109
+Documentation:
+/** {@inheritDoc} */
+Method code:
+107 |     public void setRelativeAccuracy(double accuracy) {
+108 |         relativeAccuracy = accuracy;
+109 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.optimization.univariate.AbstractUnivariateRealOptimizer.getFunctionValue()
+Source: src/main/java/org/apache/commons/math/optimization/univariate/AbstractUnivariateRealOptimizer.java
+Original range: 84-87
+Documentation:
+/** {@inheritDoc} */
+Method code:
+84 |     public double getFunctionValue() {
+85 |         checkResultComputed();
+86 |         return functionValue;
+87 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.optimization.MultiStartUnivariateRealOptimizer.setRelativeAccuracy(double)
+Source: src/main/java/org/apache/commons/math/optimization/MultiStartUnivariateRealOptimizer.java
+Original range: 161-163
+Documentation:
+/** {@inheritDoc} */
+Method code:
+161 |     public void setRelativeAccuracy(double accuracy) {
+162 |         optimizer.setRelativeAccuracy(accuracy);
+163 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.optimization.MultiStartUnivariateRealOptimizer.optimize(UnivariateRealFunction,GoalType,double,double)
+Source: src/main/java/org/apache/commons/math/optimization/MultiStartUnivariateRealOptimizer.java
+Original range: 226-310
+Documentation:
+/** {@inheritDoc} */
+Method code:
+226 |     public double optimize(final UnivariateRealFunction f, final GoalType goalType,
+227 |                            final double min, final double max)
+228 |         throws ConvergenceException,
+229 |             FunctionEvaluationException {
+230 | 
+231 |         optima           = new double[starts];
+232 |         optimaValues     = new double[starts];
+233 |         totalIterations  = 0;
+234 |         totalEvaluations = 0;
+235 | 
+236 |         // multi-start loop
+237 |         for (int i = 0; i < starts; ++i) {
+238 | 
+239 |             try {
+240 |                 optimizer.setMaximalIterationCount(maxIterations - totalIterations);
+241 |                 optimizer.setMaxEvaluations(maxEvaluations - totalEvaluations);
+242 |                 final double bound1 = (i == 0) ? min : min + generator.nextDouble() * (max - min);
+243 |                 final double bound2 = (i == 0) ? max : min + generator.nextDouble() * (max - min);
+244 |                 optima[i]       = optimizer.optimize(f, goalType,
+245 |                                                      Math.min(bound1, bound2),
+246 |                                                      Math.max(bound1, bound2));
+247 |                 optimaValues[i] = optimizer.getFunctionValue();
+248 |             } catch (FunctionEvaluationException fee) {
+249 |                 optima[i]       = Double.NaN;
+250 |                 optimaValues[i] = Double.NaN;
+251 |             } catch (ConvergenceException ce) {
+252 |                 optima[i]       = Double.NaN;
+253 |                 optimaValues[i] = Double.NaN;
+254 |             }
+255 | 
+256 |             totalIterations  += optimizer.getIterationCount();
+257 |             totalEvaluations += optimizer.getEvaluations();
+258 | 
+259 |         }
+260 | 
+261 |         // sort the optima from best to worst, followed by NaN elements
+262 |         int lastNaN = optima.length;
+263 |         for (int i = 0; i < lastNaN; ++i) {
+264 |             if (Double.isNaN(optima[i])) {
+265 |                 optima[i] = optima[--lastNaN];
+266 |                 optima[lastNaN + 1] = Double.NaN;
+267 |                 optimaValues[i] = optimaValues[--lastNaN];
+268 |                 optimaValues[lastNaN + 1] = Double.NaN;
+269 |             }
+270 |         }
+271 | 
+272 |         double currX = optima[0];
+273 |         double currY = optimaValues[0];
+274 |         for (int j = 1; j < lastNaN; ++j) {
+275 |             final double prevY = currY;
+276 |             currX = optima[j];
+277 |             currY = optimaValues[j];
+278 |             if ((goalType == GoalType.MAXIMIZE) ^ (currY < prevY)) {
+279 |                 // the current element should be inserted closer to the beginning
+280 |                 int i = j - 1;
+281 |                 double mIX = optima[i];
+282 |                 double mIY = optimaValues[i];
+283 |                 while ((i >= 0) && ((goalType == GoalType.MAXIMIZE) ^ (currY < mIY))) {
+284 |                     optima[i + 1]       = mIX;
+285 |                     optimaValues[i + 1] = mIY;
+286 |                     if (i-- != 0) {
+287 |                         mIX = optima[i];
+288 |                         mIY = optimaValues[i];
+289 |                     } else {
+290 |                         mIX = Double.NaN;
+291 |                         mIY = Double.NaN;
+292 |                     }
+293 |                 }
+294 |                 optima[i + 1]       = currX;
+295 |                 optimaValues[i + 1] = currY;
+296 |                 currX = optima[j];
+297 |                 currY = optimaValues[j];
+298 |             }
+299 |         }
+300 | 
+301 |         if (Double.isNaN(optima[0])) {
+302 |             throw new OptimizationException(
+303 |                     LocalizedFormats.NO_CONVERGENCE_WITH_ANY_START_POINT,
+304 |                     starts);
+305 |         }
+306 | 
+307 |         // return the found point given the best objective function value
+308 |         return optima[0];
+309 | 
+310 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.optimization.MultiStartUnivariateRealOptimizer.setMaxEvaluations(int)
+Source: src/main/java/org/apache/commons/math/optimization/MultiStartUnivariateRealOptimizer.java
+Original range: 156-158
+Documentation:
+/** {@inheritDoc} */
+Method code:
+156 |     public void setMaxEvaluations(int maxEvaluations) {
+157 |         this.maxEvaluations = maxEvaluations;
+158 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.ConvergingAlgorithmImpl.setMaximalIterationCount(int)
+Source: src/main/java/org/apache/commons/math/ConvergingAlgorithmImpl.java
+Original range: 92-94
+Documentation:
+/** {@inheritDoc} */
+Method code:
+92 |     public void setMaximalIterationCount(int count) {
+93 |         maximalIterationCount = count;
+94 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.optimization.univariate.BrentOptimizer.optimize(UnivariateRealFunction,GoalType,double,double)
+Source: src/main/java/org/apache/commons/math/optimization/univariate/BrentOptimizer.java
+Original range: 54-59
+Documentation:
+/** {@inheritDoc} */
+Method code:
+54 |     public double optimize(final UnivariateRealFunction f, final GoalType goalType,
+55 |                            final double min, final double max)
+56 |         throws MaxIterationsExceededException, FunctionEvaluationException {
+57 |         clearResult();
+58 |         return localMin(f, goalType, min, max, relativeAccuracy, absoluteAccuracy);
+59 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.optimization.univariate.BrentOptimizer.localMin(UnivariateRealFunction,GoalType,double,double,double,double)
+Source: src/main/java/org/apache/commons/math/optimization/univariate/BrentOptimizer.java
+Original range: 85-189
+Documentation:
+/**
+     * Find the minimum of the function {@code f} within the interval {@code (a, b)}.
+     *
+     * If the function {@code f} is defined on the interval {@code (a, b)}, then
+     * this method finds an approximation {@code x} to the point at which {@code f}
+     * attains its minimum.<br/>
+     * {@code t} and {@code eps} define a tolerance {@code tol = eps |x| + t} and
+     * {@code f} is never evaluated at two points closer together than {@code tol}.
+     * {@code eps} should be no smaller than <em>2 macheps</em> and preferable not
+     * much less than <em>sqrt(macheps)</em>, where <em>macheps</em> is the relative
+     * machine precision. {@code t} should be positive.
+     * @param f the function to solve
+     * @param goalType type of optimization goal: either {@link GoalType#MAXIMIZE}
+     * or {@link GoalType#MINIMIZE}
+     * @param a Lower bound of the interval
+     * @param b Higher bound of the interval
+     * @param eps Relative accuracy
+     * @param t Absolute accuracy
+     * @return the point at which the function is minimal.
+     * @throws MaxIterationsExceededException if the maximum iteration count
+     * is exceeded.
+     * @throws FunctionEvaluationException if an error occurs evaluating
+     * the function.
+     */
+Method code:
+85 |     private double localMin(final UnivariateRealFunction f, final GoalType goalType,
+86 |                             double a, double b, final double eps, final double t)
+87 |         throws MaxIterationsExceededException, FunctionEvaluationException {
+88 |         double x = a + GOLDEN_SECTION * (b - a);
+89 |         double v = x;
+90 |         double w = x;
+91 |         double e = 0;
+92 |         double fx = computeObjectiveValue(f, x);
+93 |         if (goalType == GoalType.MAXIMIZE) {
+94 |             fx = -fx;
+95 |         }
+96 |         double fv = fx;
+97 |         double fw = fx;
+98 | 
+99 |         int count = 0;
+100 |         while (count < maximalIterationCount) {
+101 |             double m = 0.5 * (a + b);
+102 |             double tol = eps * Math.abs(x) + t;
+103 |             double t2 = 2 * tol;
+104 | 
+105 |             // Check stopping criterion.
+106 |             if (Math.abs(x - m) > t2 - 0.5 * (b - a)) {
+107 |                 double p = 0;
+108 |                 double q = 0;
+109 |                 double r = 0;
+110 |                 double d = 0;
+111 |                 double u = 0;
+112 | 
+113 |                 if (Math.abs(e) > tol) { // Fit parabola.
+114 |                     r = (x - w) * (fx - fv);
+115 |                     q = (x - v) * (fx - fw);
+116 |                     p = (x - v) * q - (x - w) * r;
+117 |                     q = 2 * (q - r);
+118 | 
+119 |                     if (q > 0) {
+120 |                         p = -p;
+121 |                     } else {
+122 |                         q = -q;
+123 |                     }
+124 | 
+125 |                     r = e;
+126 |                     e = d;
+127 |                 }
+128 | 
+129 |                 if (Math.abs(p) < Math.abs(0.5 * q * r) &&
+130 |                     (p < q * (a - x)) && (p < q * (b - x))) { // Parabolic interpolation step.
+131 |                     d = p / q;
+132 |                     u = x + d;
+133 | 
+134 |                     // f must not be evaluated too close to a or b.
+135 |                     if (((u - a) < t2) || ((b - u) < t2)) {
+136 |                         d = (x < m) ? tol : -tol;
+137 |                     }
+138 |                 } else { // Golden section step.
+139 |                     e = ((x < m) ? b : a) - x;
+140 |                     d = GOLDEN_SECTION * e;
+141 |                 }
+142 | 
+143 |                 // f must not be evaluated too close to a or b.
+144 |                 u = x + ((Math.abs(d) > tol) ? d : ((d > 0) ? tol : -tol));
+145 |                 double fu = computeObjectiveValue(f, u);
+146 |                 if (goalType == GoalType.MAXIMIZE) {
+147 |                     fu = -fu;
+148 |                 }
+149 | 
+150 |                 // Update a, b, v, w and x.
+151 |                 if (fu <= fx) {
+152 |                     if (u < x) {
+153 |                         b = x;
+154 |                     } else {
+155 |                         a = x;
+156 |                     }
+157 |                     v = w;
+158 |                     fv = fw;
+159 |                     w = x;
+160 |                     fw = fx;
+161 |                     x = u;
+162 |                     fx = fu;
+163 |                 } else {
+164 |                     if (u < x) {
+165 |                         a = u;
+166 |                     } else {
+167 |                         b = u;
+168 |                     }
+169 |                     if ((fu <= fw) || (w == x)) {
+170 |                         v = w;
+171 |                         fv = fw;
+172 |                         w = u;
+173 |                         fw = fu;
+174 |                     } else if ((fu <= fv) || (v == x) || (v == w)) {
+175 |                         v = u;
+176 |                         fv = fu;
+177 |                     }
+178 |                 }
+179 |             } else { // termination
+180 |                 setResult(x, (goalType == GoalType.MAXIMIZE) ? -fx : fx, count);
+181 |                 return x;
+182 |             }
+183 | 
+184 |             ++count;
+185 |         }
+186 | 
+187 |         throw new MaxIterationsExceededException(maximalIterationCount);
+188 | 
+189 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.util.LocalizedFormats.LocalizedFormats(String)
+Source: src/main/java/org/apache/commons/math/util/LocalizedFormats.java
+Original range: 305-307
+Documentation:
+/** Simple constructor.
+     * @param sourceFormat source English format to use when no
+     * localized version is available
+     */
+Method code:
+305 |     private LocalizedFormats(final String sourceFormat) {
+306 |         this.sourceFormat = sourceFormat;
+307 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.optimization.univariate.AbstractUnivariateRealOptimizer.computeObjectiveValue(UnivariateRealFunction,double)
+Source: src/main/java/org/apache/commons/math/optimization/univariate/AbstractUnivariateRealOptimizer.java
+Original range: 134-142
+Documentation:
+/**
+     * Compute the objective function value.
+     * @param f objective function
+     * @param point point at which the objective function must be evaluated
+     * @return objective function value at specified point
+     * @exception FunctionEvaluationException if the function cannot be evaluated
+     * or the maximal number of iterations is exceeded
+     */
+Method code:
+134 |     protected double computeObjectiveValue(final UnivariateRealFunction f,
+135 |                                            final double point)
+136 |         throws FunctionEvaluationException {
+137 |         if (++evaluations > maxEvaluations) {
+138 |             throw new FunctionEvaluationException(new MaxEvaluationsExceededException(maxEvaluations),
+139 |                                                   point);
+140 |         }
+141 |         return f.value(point);
+142 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.ConvergingAlgorithmImpl.ConvergingAlgorithmImpl(int,double)
+Source: src/main/java/org/apache/commons/math/ConvergingAlgorithmImpl.java
+Original range: 60-69
+Documentation:
+/**
+     * Construct an algorithm with given iteration count and accuracy.
+     *
+     * @param defaultAbsoluteAccuracy maximum absolute error
+     * @param defaultMaximalIterationCount maximum number of iterations
+     * @throws IllegalArgumentException if f is null or the
+     * defaultAbsoluteAccuracy is not valid
+     */
+Method code:
+60 |     protected ConvergingAlgorithmImpl(final int defaultMaximalIterationCount,
+61 |                                       final double defaultAbsoluteAccuracy) {
+62 |         this.defaultAbsoluteAccuracy = defaultAbsoluteAccuracy;
+63 |         this.defaultRelativeAccuracy = 1.0e-14;
+64 |         this.absoluteAccuracy = defaultAbsoluteAccuracy;
+65 |         this.relativeAccuracy = defaultRelativeAccuracy;
+66 |         this.defaultMaximalIterationCount = defaultMaximalIterationCount;
+67 |         this.maximalIterationCount = defaultMaximalIterationCount;
+68 |         this.iterationCount = 0;
+69 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math.ConvergingAlgorithmImpl.setAbsoluteAccuracy(double)
+Source: src/main/java/org/apache/commons/math/ConvergingAlgorithmImpl.java
+Original range: 77-79
+Documentation:
+/** {@inheritDoc} */
+Method code:
+77 |     public void setAbsoluteAccuracy(double accuracy) {
+78 |         absoluteAccuracy = accuracy;
+79 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math.optimization.MultiStartUnivariateRealOptimizer.getResult()
+Source: src/main/java/org/apache/commons/math/optimization/MultiStartUnivariateRealOptimizer.java
+Original range: 96-98
+Documentation:
+/** {@inheritDoc} */
+Method code:
+96 |     public double getResult() {
+97 |         return optimizer.getResult();
+98 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math.ConvergingAlgorithmImpl.getAbsoluteAccuracy()
+Source: src/main/java/org/apache/commons/math/ConvergingAlgorithmImpl.java
+Original range: 82-84
+Documentation:
+/** {@inheritDoc} */
+Method code:
+82 |     public double getAbsoluteAccuracy() {
+83 |         return absoluteAccuracy;
+84 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math.optimization.univariate.BrentOptimizer.BrentOptimizer()
+Source: src/main/java/org/apache/commons/math/optimization/univariate/BrentOptimizer.java
+Original range: 42-44
+Documentation:
+/**
+     * Construct a solver.
+     */
+Method code:
+42 |     public BrentOptimizer() {
+43 |         super(100, 1E-10);
+44 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math.optimization.univariate.AbstractUnivariateRealOptimizer.setMaxEvaluations(int)
+Source: src/main/java/org/apache/commons/math/optimization/univariate/AbstractUnivariateRealOptimizer.java
+Original range: 112-114
+Documentation:
+/** {@inheritDoc} */
+Method code:
+112 |     public void setMaxEvaluations(int maxEvaluations) {
+113 |         this.maxEvaluations = maxEvaluations;
+114 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math.optimization.MultiStartUnivariateRealOptimizer.setMaximalIterationCount(int)
+Source: src/main/java/org/apache/commons/math/optimization/MultiStartUnivariateRealOptimizer.java
+Original range: 151-153
+Documentation:
+/** {@inheritDoc} */
+Method code:
+151 |     public void setMaximalIterationCount(int count) {
+152 |         this.maxIterations = count;
+153 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math.ConvergingAlgorithmImpl.getIterationCount()
+Source: src/main/java/org/apache/commons/math/ConvergingAlgorithmImpl.java
+Original range: 72-74
+Documentation:
+/** {@inheritDoc} */
+Method code:
+72 |     public int getIterationCount() {
+73 |         return iterationCount;
+74 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math.optimization.MultiStartUnivariateRealOptimizer.getOptima()
+Source: src/main/java/org/apache/commons/math/optimization/MultiStartUnivariateRealOptimizer.java
+Original range: 192-197
+Documentation:
+/** Get all the optima found during the last call to {@link
+     * #optimize(UnivariateRealFunction, GoalType, double, double) optimize}.
+     * <p>The optimizer stores all the optima found during a set of
+     * restarts. The {@link #optimize(UnivariateRealFunction, GoalType,
+     * double, double) optimize} method returns the best point only. This
+     * method returns all the points found at the end of each starts,
+     * including the best one already returned by the {@link
+     * #optimize(UnivariateRealFunction, GoalType, double, double) optimize}
+     * method.
+     * </p>
+     * <p>
+     * The returned array as one element for each start as specified
+     * in the constructor. It is ordered with the results from the
+     * runs that did converge first, sorted from best to worst
+     * objective value (i.e in ascending order if minimizing and in
+     * descending order if maximizing), followed by Double.NaN elements
+     * corresponding to the runs that did not converge. This means all
+     * elements will be NaN if the {@link #optimize(UnivariateRealFunction,
+     * GoalType, double, double) optimize} method did throw a {@link
+     * ConvergenceException ConvergenceException}). This also means that
+     * if the first element is not NaN, it is the best point found across
+     * all starts.</p>
+     * @return array containing the optima
+     * @exception IllegalStateException if {@link #optimize(UnivariateRealFunction,
+     * GoalType, double, double) optimize} has not been called
+     * @see #getOptimaValues()
+     */
+Method code:
+192 |     public double[] getOptima() throws IllegalStateException {
+193 |         if (optima == null) {
+194 |             throw MathRuntimeException.createIllegalStateException(LocalizedFormats.NO_OPTIMUM_COMPUTED_YET);
+195 |         }
+196 |         return optima.clone();
+197 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math.optimization.univariate.AbstractUnivariateRealOptimizer.AbstractUnivariateRealOptimizer(int,double)
+Source: src/main/java/org/apache/commons/math/optimization/univariate/AbstractUnivariateRealOptimizer.java
+Original range: 61-66
+Documentation:
+/**
+     * Construct a solver with given iteration count and accuracy.
+     * FunctionEvaluationExceptionFunctionEvaluationException
+     * @param defaultAbsoluteAccuracy maximum absolute error
+     * @param defaultMaximalIterationCount maximum number of iterations
+     * @throws IllegalArgumentException if f is null or the
+     * defaultAbsoluteAccuracy is not valid
+     */
+Method code:
+61 |     protected AbstractUnivariateRealOptimizer(final int defaultMaximalIterationCount,
+62 |                                               final double defaultAbsoluteAccuracy) {
+63 |         super(defaultMaximalIterationCount, defaultAbsoluteAccuracy);
+64 |         resultComputed = false;
+65 |         setMaxEvaluations(Integer.MAX_VALUE);
+66 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math.optimization.MultiStartUnivariateRealOptimizer.getOptimaValues()
+Source: src/main/java/org/apache/commons/math/optimization/MultiStartUnivariateRealOptimizer.java
+Original range: 218-223
+Documentation:
+/** Get all the function values at optima found during the last call to {@link
+     * #optimize(UnivariateRealFunction, GoalType, double, double) optimize}.
+     * <p>
+     * The returned array as one element for each start as specified
+     * in the constructor. It is ordered with the results from the
+     * runs that did converge first, sorted from best to worst
+     * objective value (i.e in ascending order if minimizing and in
+     * descending order if maximizing), followed by Double.NaN elements
+     * corresponding to the runs that did not converge. This means all
+     * elements will be NaN if the {@link #optimize(UnivariateRealFunction,
+     * GoalType, double, double) optimize} method did throw a {@link
+     * ConvergenceException ConvergenceException}). This also means that
+     * if the first element is not NaN, it is the best point found across
+     * all starts.</p>
+     * @return array containing the optima
+     * @exception IllegalStateException if {@link #optimize(UnivariateRealFunction,
+     * GoalType, double, double) optimize} has not been called
+     * @see #getOptima()
+     */
+Method code:
+218 |     public double[] getOptimaValues() throws IllegalStateException {
+219 |         if (optimaValues == null) {
+220 |             throw MathRuntimeException.createIllegalStateException(LocalizedFormats.NO_OPTIMUM_COMPUTED_YET);
+221 |         }
+222 |         return optimaValues.clone();
+223 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math.MathRuntimeException.createIllegalStateException(Localizable,Object...)
+Source: src/main/java/org/apache/commons/math/MathRuntimeException.java
+Original range: 442-462
+Documentation:
+/**
+     * Constructs a new <code>IllegalStateException</code> with specified formatted detail message.
+     * Message formatting is delegated to {@link java.text.MessageFormat}.
+     * @param pattern format specifier
+     * @param arguments format arguments
+     * @return built exception
+     * @since 2.2
+     */
+Method code:
+442 |     public static IllegalStateException createIllegalStateException(final Localizable pattern,
+443 |                                                                     final Object ... arguments) {
+444 |         return new IllegalStateException() {
+445 | 
+446 |             /** Serializable version identifier. */
+447 |             private static final long serialVersionUID = 6880901520234515725L;
+448 | 
+449 |             /** {@inheritDoc} */
+450 |             @Override
+451 |             public String getMessage() {
+452 |                 return buildMessage(Locale.US, pattern, arguments);
+453 |             }
+454 | 
+455 |             /** {@inheritDoc} */
+456 |             @Override
+457 |             public String getLocalizedMessage() {
+458 |                 return buildMessage(Locale.getDefault(), pattern, arguments);
+459 |             }
+460 | 
+461 |         };
+462 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math.optimization.MultiStartUnivariateRealOptimizer.MultiStartUnivariateRealOptimizer(UnivariateRealOptimizer,int,RandomGenerator)
+Source: src/main/java/org/apache/commons/math/optimization/MultiStartUnivariateRealOptimizer.java
+Original range: 78-88
+Documentation:
+/**
+     * Create a multi-start optimizer from a single-start optimizer
+     * @param optimizer single-start optimizer to wrap
+     * @param starts number of starts to perform (including the
+     * first one), multi-start is disabled if value is less than or
+     * equal to 1
+     * @param generator random generator to use for restarts
+     */
+Method code:
+78 |     public MultiStartUnivariateRealOptimizer(final UnivariateRealOptimizer optimizer,
+79 |                                              final int starts,
+80 |                                              final RandomGenerator generator) {
+81 |         this.optimizer        = optimizer;
+82 |         this.totalIterations  = 0;
+83 |         this.starts           = starts;
+84 |         this.generator        = generator;
+85 |         this.optima           = null;
+86 |         setMaximalIterationCount(Integer.MAX_VALUE);
+87 |         setMaxEvaluations(Integer.MAX_VALUE);
+88 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math.ConvergingAlgorithmImpl.getRelativeAccuracy()
+Source: src/main/java/org/apache/commons/math/ConvergingAlgorithmImpl.java
+Original range: 112-114
+Documentation:
+/** {@inheritDoc} */
+Method code:
+112 |     public double getRelativeAccuracy() {
+113 |         return relativeAccuracy;
+114 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math.optimization.MultiStartUnivariateRealOptimizer.setAbsoluteAccuracy(double)
+Source: src/main/java/org/apache/commons/math/optimization/MultiStartUnivariateRealOptimizer.java
+Original range: 146-148
+Documentation:
+/** {@inheritDoc} */
+Method code:
+146 |     public void setAbsoluteAccuracy(double accuracy) {
+147 |         optimizer.setAbsoluteAccuracy(accuracy);
+148 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math.optimization.univariate.AbstractUnivariateRealOptimizer.setResult(double,double,int)
+Source: src/main/java/org/apache/commons/math/optimization/univariate/AbstractUnivariateRealOptimizer.java
+Original range: 96-102
+Documentation:
+/**
+     * Convenience function for implementations.
+     *
+     * @param x the result to set
+     * @param fx the result to set
+     * @param iterationCount the iteration count to set
+     */
+Method code:
+96 |     protected final void setResult(final double x, final double fx,
+97 |                                    final int iterationCount) {
+98 |         this.result         = x;
+99 |         this.functionValue  = fx;
+100 |         this.iterationCount = iterationCount;
+101 |         this.resultComputed = true;
+102 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math.optimization.univariate.AbstractUnivariateRealOptimizer.getResult()
+Source: src/main/java/org/apache/commons/math/optimization/univariate/AbstractUnivariateRealOptimizer.java
+Original range: 78-81
+Documentation:
+/** {@inheritDoc} */
+Method code:
+78 |     public double getResult() {
+79 |         checkResultComputed();
+80 |         return result;
+81 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math.optimization.MultiStartUnivariateRealOptimizer.getAbsoluteAccuracy()
+Source: src/main/java/org/apache/commons/math/optimization/MultiStartUnivariateRealOptimizer.java
+Original range: 101-103
+Documentation:
+/** {@inheritDoc} */
+Method code:
+101 |     public double getAbsoluteAccuracy() {
+102 |         return optimizer.getAbsoluteAccuracy();
+103 |     }
+

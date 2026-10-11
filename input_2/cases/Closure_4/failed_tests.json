@@ -1,0 +1,32 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testImplementsExtendsLoop()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testImplementsExtendsLoop()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 9231,
+    "end_line": 9239,
+    "comment": "",
+    "snippet": "  public void testImplementsExtendsLoop() throws Exception {\n    testClosureTypesMultipleWarnings(\n        suppressMissingProperty(\"foo\") +\n            \"/** @constructor \\n * @implements {F} */var G = function() {};\" +\n            \"/** @constructor \\n * @extends {G} */var F = function() {};\" +\n        \"alert((new F).foo);\",\n        Lists.newArrayList(\n            \"Parse error. Cycle detected in inheritance chain of type F\"));\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testImplementsLoop()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testImplementsLoop()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 9222,
+    "end_line": 9229,
+    "comment": "",
+    "snippet": "  public void testImplementsLoop() throws Exception {\n    testClosureTypesMultipleWarnings(\n        suppressMissingProperty(\"foo\") +\n        \"/** @constructor \\n * @implements {T} */var T = function() {};\" +\n        \"alert((new T).foo);\",\n        Lists.newArrayList(\n            \"Parse error. Cycle detected in inheritance chain of type T\"));\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.TypeCheckTest.testConversionFromInterfaceToRecursiveConstructor()",
+    "resolved_signature": "com.google.javascript.jscomp.TypeCheckTest.testConversionFromInterfaceToRecursiveConstructor()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/TypeCheckTest.java",
+    "begin_line": 9252,
+    "end_line": 9266,
+    "comment": "",
+    "snippet": "  public void testConversionFromInterfaceToRecursiveConstructor()\n      throws Exception {\n    testClosureTypesMultipleWarnings(\n        suppressMissingProperty(\"foo\") +\n            \"/** @interface */ var OtherType = function() {}\\n\" +\n            \"/** @implements {MyType} \\n * @constructor */\\n\" +\n            \"var MyType = function() {}\\n\" +\n            \"/** @type {MyType} */\\n\" +\n            \"var x = /** @type {!OtherType} */ (new Object());\",\n        Lists.newArrayList(\n            \"Parse error. Cycle detected in inheritance chain of type MyType\",\n            \"initializing variable\\n\" +\n            \"found   : OtherType\\n\" +\n            \"required: (MyType|null)\"));\n  }"
+  }
+]

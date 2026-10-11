@@ -1,0 +1,591 @@
+===== M0001 =====
+Signature: org.jfree.data.time.TimePeriodValues.add(TimePeriod,double)
+Source: source/org/jfree/data/time/TimePeriodValues.java
+Original range: 362-365
+Documentation:
+/**
+     * Adds a new data item to the series and sends a {@link SeriesChangeEvent}
+     * to all registered listeners.
+     *
+     * @param period  the time period (<code>null</code> not permitted).
+     * @param value  the value.
+     * 
+     * @see #add(TimePeriod, Number)
+     */
+Method code:
+362 |     public void add(TimePeriod period, double value) {
+363 |         TimePeriodValue item = new TimePeriodValue(period, value);
+364 |         add(item);
+365 |     }
+
+===== M0002 =====
+Signature: org.jfree.data.general.Series.Series(Comparable,String)
+Source: source/org/jfree/data/general/Series.java
+Original range: 111-120
+Documentation:
+/**
+     * Creates a new series with the specified key and description.
+     *
+     * @param key  the series key (<code>null</code> NOT permitted).
+     * @param description  the series description (<code>null</code> permitted).
+     */
+Method code:
+111 |     protected Series(Comparable key, String description) {
+112 |         if (key == null) {
+113 |             throw new IllegalArgumentException("Null 'key' argument.");
+114 |         }
+115 |         this.key = key;
+116 |         this.description = description;
+117 |         this.listeners = new EventListenerList();
+118 |         this.propertyChangeSupport = new PropertyChangeSupport(this);
+119 |         this.notify = true;   
+120 |     }
+
+===== M0003 =====
+Signature: org.jfree.data.general.SeriesChangeEvent.SeriesChangeEvent(Object)
+Source: source/org/jfree/data/general/SeriesChangeEvent.java
+Original range: 60-62
+Documentation:
+/**
+     * Constructs a new event.
+     *
+     * @param source  the source of the change event.
+     */
+Method code:
+60 |     public SeriesChangeEvent(Object source) {
+61 |         super(source);
+62 |     }
+
+===== M0004 =====
+Signature: org.jfree.data.time.Year.getFirstMillisecond()
+Source: source/org/jfree/data/time/Year.java
+Original range: 149-151
+Documentation:
+/**
+     * Returns the first millisecond of the year.  This will be determined
+     * relative to the time zone specified in the constructor, or in the
+     * calendar instance passed in the most recent call to the
+     * {@link #peg(Calendar)} method.
+     *
+     * @return The first millisecond of the year.
+     *
+     * @see #getLastMillisecond()
+     */
+Method code:
+149 |     public long getFirstMillisecond() {
+150 |         return this.firstMillisecond;
+151 |     }
+
+===== M0005 =====
+Signature: org.jfree.data.time.TimePeriodValues.getDataItem(int)
+Source: source/org/jfree/data/time/TimePeriodValues.java
+Original range: 204-206
+Documentation:
+/**
+     * Returns one data item for the series.
+     *
+     * @param index  the item index (in the range <code>0</code> to 
+     *     <code>getItemCount() - 1</code>).
+     *
+     * @return One data item for the series.
+     */
+Method code:
+204 |     public TimePeriodValue getDataItem(int index) {
+205 |         return (TimePeriodValue) this.data.get(index);
+206 |     }
+
+===== M0006 =====
+Signature: org.jfree.data.general.Series.fireSeriesChanged()
+Source: source/org/jfree/data/general/Series.java
+Original range: 312-316
+Documentation:
+/**
+     * General method for signalling to registered listeners that the series
+     * has been changed.
+     */
+Method code:
+312 |     public void fireSeriesChanged() {
+313 |         if (this.notify) {
+314 |             notifyListeners(new SeriesChangeEvent(this));
+315 |         }
+316 |     }
+
+===== M0007 =====
+Signature: org.jfree.data.time.SimpleTimePeriod.getStart()
+Source: source/org/jfree/data/time/SimpleTimePeriod.java
+Original range: 99-101
+Documentation:
+/**
+     * Returns the start date/time.
+     *
+     * @return The start date/time (never <code>null</code>).
+     */
+Method code:
+99 |     public Date getStart() {
+100 |         return new Date(this.start);
+101 |     }
+
+===== M0008 =====
+Signature: org.jfree.data.time.TimePeriodValues.add(TimePeriodValue)
+Source: source/org/jfree/data/time/TimePeriodValues.java
+Original range: 242-249
+Documentation:
+/**
+     * Adds a data item to the series and sends a {@link SeriesChangeEvent} to
+     * all registered listeners.
+     *
+     * @param item  the item (<code>null</code> not permitted).
+     */
+Method code:
+242 |     public void add(TimePeriodValue item) {
+243 |         if (item == null) {
+244 |             throw new IllegalArgumentException("Null item not allowed.");
+245 |         }
+246 |         this.data.add(item);
+247 |         updateBounds(item.getPeriod(), this.data.size() - 1);
+248 |         fireSeriesChanged();
+249 |     }
+
+===== M0009 =====
+Signature: org.jfree.data.time.Year.getLastMillisecond(Calendar)
+Source: source/org/jfree/data/time/Year.java
+Original range: 251-257
+Documentation:
+/**
+     * Returns the last millisecond of the year, evaluated using the supplied
+     * calendar (which determines the time zone).
+     *
+     * @param calendar  the calendar (<code>null</code> not permitted).
+     *
+     * @return The last millisecond of the year.
+     *
+     * @throws NullPointerException if <code>calendar</code> is
+     *     <code>null</code>.
+     */
+Method code:
+251 |     public long getLastMillisecond(Calendar calendar) {
+252 |         calendar.set(this.year, Calendar.DECEMBER, 31, 23, 59, 59);
+253 |         calendar.set(Calendar.MILLISECOND, 999);
+254 |         // in the following line, we'd rather call calendar.getTimeInMillis()
+255 |         // to avoid object creation, but that isn't supported in Java 1.3.1
+256 |         return calendar.getTime().getTime();
+257 |     }
+
+===== M0010 =====
+Signature: org.jfree.data.time.TimePeriodValue.TimePeriodValue(TimePeriod,double)
+Source: source/org/jfree/data/time/TimePeriodValue.java
+Original range: 87-89
+Documentation:
+/**
+     * Constructs a new data item.
+     *
+     * @param period  the time period (<code>null</code> not permitted).
+     * @param value  the value associated with the time period.
+     *
+     * @throws IllegalArgumentException if <code>period</code> is
+     *     <code>null</code>.
+     */
+Method code:
+87 |     public TimePeriodValue(TimePeriod period, double value) {
+88 |         this(period, new Double(value));
+89 |     }
+
+===== M0011 =====
+Signature: org.jfree.data.time.TimePeriodValue.getPeriod()
+Source: source/org/jfree/data/time/TimePeriodValue.java
+Original range: 96-98
+Documentation:
+/**
+     * Returns the time period.
+     *
+     * @return The time period (never <code>null</code>).
+     */
+Method code:
+96 |     public TimePeriod getPeriod() {
+97 |         return this.period;
+98 |     }
+
+===== M0012 =====
+Signature: org.jfree.data.time.TimePeriodValues.getMaxMiddleIndex()
+Source: source/org/jfree/data/time/TimePeriodValues.java
+Original range: 551-553
+Documentation:
+/**
+     * Returns the index of the time period with the maximum middle 
+     * milliseconds.
+     * 
+     * @return The index.
+     */
+Method code:
+551 |     public int getMaxMiddleIndex() {
+552 |         return this.maxMiddleIndex;
+553 |     }
+
+===== M0013 =====
+Signature: org.jfree.data.general.Series.notifyListeners(SeriesChangeEvent)
+Source: source/org/jfree/data/general/Series.java
+Original range: 324-334
+Documentation:
+/**
+     * Sends a change event to all registered listeners.
+     *
+     * @param event  contains information about the event that triggered the 
+     *               notification.
+     */
+Method code:
+324 |     protected void notifyListeners(SeriesChangeEvent event) {
+325 | 
+326 |         Object[] listenerList = this.listeners.getListenerList();
+327 |         for (int i = listenerList.length - 2; i >= 0; i -= 2) {
+328 |             if (listenerList[i] == SeriesChangeListener.class) {
+329 |                 ((SeriesChangeListener) listenerList[i + 1]).seriesChanged(
+330 |                         event);
+331 |             }
+332 |         }
+333 | 
+334 |     }
+
+===== M0014 =====
+Signature: org.jfree.data.time.TimePeriodValues.TimePeriodValues(Comparable)
+Source: source/org/jfree/data/time/TimePeriodValues.java
+Original range: 113-115
+Documentation:
+/**
+     * Creates a new (empty) collection of time period values.
+     *
+     * @param name  the name of the series (<code>null</code> not permitted).
+     */
+Method code:
+113 |     public TimePeriodValues(Comparable name) {
+114 |         this(name, DEFAULT_DOMAIN_DESCRIPTION, DEFAULT_RANGE_DESCRIPTION);
+115 |     }
+
+===== M0015 =====
+Signature: org.jfree.data.time.TimePeriodValues.add(TimePeriod,Number)
+Source: source/org/jfree/data/time/TimePeriodValues.java
+Original range: 374-377
+Documentation:
+/**
+     * Adds a new data item to the series and sends a {@link SeriesChangeEvent}
+     * to all registered listeners.
+     *
+     * @param period  the time period (<code>null</code> not permitted).
+     * @param value  the value (<code>null</code> permitted).
+     */
+Method code:
+374 |     public void add(TimePeriod period, Number value) {
+375 |         TimePeriodValue item = new TimePeriodValue(period, value);
+376 |         add(item);
+377 |     }
+
+===== M0016 =====
+Signature: org.jfree.data.time.Year.Year(int)
+Source: source/org/jfree/data/time/Year.java
+Original range: 96-105
+Documentation:
+/**
+     * Creates a time period representing a single year.
+     *
+     * @param year  the year.
+     */
+Method code:
+96 |     public Year(int year) {
+97 |         if ((year < SerialDate.MINIMUM_YEAR_SUPPORTED)
+98 |             || (year > SerialDate.MAXIMUM_YEAR_SUPPORTED)) {
+99 | 
+100 |             throw new IllegalArgumentException(
+101 |                 "Year constructor: year (" + year + ") outside valid range.");
+102 |         }
+103 |         this.year = (short) year;
+104 |         peg(Calendar.getInstance());
+105 |     }
+
+===== M0017 =====
+Signature: org.jfree.data.time.TimePeriodValues.updateBounds(TimePeriod,int)
+Source: source/org/jfree/data/time/TimePeriodValues.java
+Original range: 257-335
+Documentation:
+/**
+     * Update the index values for the maximum and minimum bounds.
+     * 
+     * @param period  the time period.
+     * @param index  the index of the time period.
+     */
+Method code:
+257 |     private void updateBounds(TimePeriod period, int index) {
+258 |         
+259 |         long start = period.getStart().getTime();
+260 |         long end = period.getEnd().getTime();
+261 |         long middle = start + ((end - start) / 2);
+262 | 
+263 |         if (this.minStartIndex >= 0) {
+264 |             long minStart = getDataItem(this.minStartIndex).getPeriod()
+265 |                 .getStart().getTime();
+266 |             if (start < minStart) {
+267 |                 this.minStartIndex = index;           
+268 |             }
+269 |         }
+270 |         else {
+271 |             this.minStartIndex = index;
+272 |         }
+273 |         
+274 |         if (this.maxStartIndex >= 0) {
+275 |             long maxStart = getDataItem(this.maxStartIndex).getPeriod()
+276 |                 .getStart().getTime();
+277 |             if (start > maxStart) {
+278 |                 this.maxStartIndex = index;           
+279 |             }
+280 |         }
+281 |         else {
+282 |             this.maxStartIndex = index;
+283 |         }
+284 |         
+285 |         if (this.minMiddleIndex >= 0) {
+286 |             long s = getDataItem(this.minMiddleIndex).getPeriod().getStart()
+287 |                 .getTime();
+288 |             long e = getDataItem(this.minMiddleIndex).getPeriod().getEnd()
+289 |                 .getTime();
+290 |             long minMiddle = s + (e - s) / 2;
+291 |             if (middle < minMiddle) {
+292 |                 this.minMiddleIndex = index;           
+293 |             }
+294 |         }
+295 |         else {
+296 |             this.minMiddleIndex = index;
+297 |         }
+298 |         
+299 |         if (this.maxMiddleIndex >= 0) {
+300 |             long s = getDataItem(this.minMiddleIndex).getPeriod().getStart()
+301 |                 .getTime();
+302 |             long e = getDataItem(this.minMiddleIndex).getPeriod().getEnd()
+303 |                 .getTime();
+304 |             long maxMiddle = s + (e - s) / 2;
+305 |             if (middle > maxMiddle) {
+306 |                 this.maxMiddleIndex = index;           
+307 |             }
+308 |         }
+309 |         else {
+310 |             this.maxMiddleIndex = index;
+311 |         }
+312 |         
+313 |         if (this.minEndIndex >= 0) {
+314 |             long minEnd = getDataItem(this.minEndIndex).getPeriod().getEnd()
+315 |                 .getTime();
+316 |             if (end < minEnd) {
+317 |                 this.minEndIndex = index;           
+318 |             }
+319 |         }
+320 |         else {
+321 |             this.minEndIndex = index;
+322 |         }
+323 |        
+324 |         if (this.maxEndIndex >= 0) {
+325 |             long maxEnd = getDataItem(this.maxEndIndex).getPeriod().getEnd()
+326 |                 .getTime();
+327 |             if (end > maxEnd) {
+328 |                 this.maxEndIndex = index;           
+329 |             }
+330 |         }
+331 |         else {
+332 |             this.maxEndIndex = index;
+333 |         }
+334 |         
+335 |     }
+
+===== M0018 =====
+Signature: org.jfree.data.time.SimpleTimePeriod.SimpleTimePeriod(long,long)
+Source: source/org/jfree/data/time/SimpleTimePeriod.java
+Original range: 76-82
+Documentation:
+/**
+     * Creates a new time allocation.
+     *
+     * @param start  the start date/time in milliseconds.
+     * @param end  the end date/time in milliseconds.
+     */
+Method code:
+76 |     public SimpleTimePeriod(long start, long end) {
+77 |         if (start > end) {
+78 |             throw new IllegalArgumentException("Requires start <= end.");
+79 |         }
+80 |         this.start = start;
+81 |         this.end = end;
+82 |     }
+
+===== M0019 =====
+Signature: org.jfree.data.time.Year.getLastMillisecond()
+Source: source/org/jfree/data/time/Year.java
+Original range: 163-165
+Documentation:
+/**
+     * Returns the last millisecond of the year.  This will be
+     * determined relative to the time zone specified in the constructor, or
+     * in the calendar instance passed in the most recent call to the
+     * {@link #peg(Calendar)} method.
+     *
+     * @return The last millisecond of the year.
+     *
+     * @see #getFirstMillisecond()
+     */
+Method code:
+163 |     public long getLastMillisecond() {
+164 |         return this.lastMillisecond;
+165 |     }
+
+===== M0020 =====
+Signature: org.jfree.data.time.Year.getFirstMillisecond(Calendar)
+Source: source/org/jfree/data/time/Year.java
+Original range: 232-238
+Documentation:
+/**
+     * Returns the first millisecond of the year, evaluated using the supplied
+     * calendar (which determines the time zone).
+     *
+     * @param calendar  the calendar (<code>null</code> not permitted).
+     *
+     * @return The first millisecond of the year.
+     *
+     * @throws NullPointerException if <code>calendar</code> is
+     *     <code>null</code>.
+     */
+Method code:
+232 |     public long getFirstMillisecond(Calendar calendar) {
+233 |         calendar.set(this.year, Calendar.JANUARY, 1, 0, 0, 0);
+234 |         calendar.set(Calendar.MILLISECOND, 0);
+235 |         // in the following line, we'd rather call calendar.getTimeInMillis()
+236 |         // to avoid object creation, but that isn't supported in Java 1.3.1
+237 |         return calendar.getTime().getTime();
+238 |     }
+
+===== M0021 =====
+Signature: org.jfree.data.general.Series.Series(Comparable)
+Source: source/org/jfree/data/general/Series.java
+Original range: 101-103
+Documentation:
+/**
+     * Creates a new series with the specified key.  
+     *
+     * @param key  the series key (<code>null</code> not permitted).
+     */
+Method code:
+101 |     protected Series(Comparable key) {
+102 |         this(key, null);
+103 |     }
+
+===== M0022 =====
+Signature: org.jfree.data.time.RegularTimePeriod.getStart()
+Source: source/org/jfree/data/time/RegularTimePeriod.java
+Original range: 181-183
+Documentation:
+/**
+     * Returns the date/time that marks the start of the time period.  This
+     * method returns a new <code>Date</code> instance every time it is called.
+     *
+     * @return The start date/time.
+     *
+     * @see #getFirstMillisecond()
+     */
+Method code:
+181 |     public Date getStart() {
+182 |         return new Date(getFirstMillisecond());
+183 |     }
+
+===== M0023 =====
+Signature: org.jfree.data.time.RegularTimePeriod.getEnd()
+Source: source/org/jfree/data/time/RegularTimePeriod.java
+Original range: 193-195
+Documentation:
+/**
+     * Returns the date/time that marks the end of the time period.  This
+     * method returns a new <code>Date</code> instance every time it is called.
+     *
+     * @return The end date/time.
+     *
+     * @see #getLastMillisecond()
+     */
+Method code:
+193 |     public Date getEnd() {
+194 |         return new Date(getLastMillisecond());
+195 |     }
+
+===== M0024 =====
+Signature: org.jfree.data.time.TimePeriodValue.TimePeriodValue(TimePeriod,Number)
+Source: source/org/jfree/data/time/TimePeriodValue.java
+Original range: 70-76
+Documentation:
+/**
+     * Constructs a new data item.
+     *
+     * @param period  the time period (<code>null</code> not permitted).
+     * @param value  the value associated with the time period.
+     *
+     * @throws IllegalArgumentException if <code>period</code> is
+     *     <code>null</code>.
+     */
+Method code:
+70 |     public TimePeriodValue(TimePeriod period, Number value) {
+71 |         if (period == null) {
+72 |             throw new IllegalArgumentException("Null 'period' argument.");
+73 |         }
+74 |         this.period = period;
+75 |         this.value = value;
+76 |     }
+
+===== M0025 =====
+Signature: org.jfree.data.time.Year.peg(Calendar)
+Source: source/org/jfree/data/time/Year.java
+Original range: 175-178
+Documentation:
+/**
+     * Recalculates the start date/time and end date/time for this time period
+     * relative to the supplied calendar (which incorporates a time zone).
+     *
+     * @param calendar  the calendar (<code>null</code> not permitted).
+     *
+     * @since 1.0.3
+     */
+Method code:
+175 |     public void peg(Calendar calendar) {
+176 |         this.firstMillisecond = getFirstMillisecond(calendar);
+177 |         this.lastMillisecond = getLastMillisecond(calendar);
+178 |     }
+
+===== M0026 =====
+Signature: org.jfree.data.time.TimePeriodValues.TimePeriodValues(Comparable,String,String)
+Source: source/org/jfree/data/time/TimePeriodValues.java
+Original range: 128-133
+Documentation:
+/**
+     * Creates a new time series that contains no data.
+     * <P>
+     * Descriptions can be specified for the domain and range.  One situation
+     * where this is helpful is when generating a chart for the time series -
+     * axis labels can be taken from the domain and range description.
+     *
+     * @param name  the name of the series (<code>null</code> not permitted).
+     * @param domain  the domain description.
+     * @param range  the range description.
+     */
+Method code:
+128 |     public TimePeriodValues(Comparable name, String domain, String range) {
+129 |         super(name);
+130 |         this.domain = domain;
+131 |         this.range = range;
+132 |         this.data = new ArrayList();
+133 |     }
+
+===== M0027 =====
+Signature: org.jfree.data.time.SimpleTimePeriod.getEnd()
+Source: source/org/jfree/data/time/SimpleTimePeriod.java
+Original range: 119-121
+Documentation:
+/**
+     * Returns the end date/time.
+     *
+     * @return The end date/time (never <code>null</code>).
+     */
+Method code:
+119 |     public Date getEnd() {
+120 |         return new Date(this.end);
+121 |     }
+

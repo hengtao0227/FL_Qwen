@@ -1,0 +1,255 @@
+===== M0001 =====
+Signature: com.google.javascript.rhino.IR.block()
+Source: src/com/google/javascript/rhino/IR.java
+Original range: 91-94
+Documentation:
+
+Method code:
+91 |   public static Node block() {
+92 |     Node block = new Node(Token.BLOCK);
+93 |     return block;
+94 |   }
+
+===== M0002 =====
+Signature: com.google.javascript.rhino.IR.mayBeStatement(Node)
+Source: src/com/google/javascript/rhino/IR.java
+Original range: 473-503
+Documentation:
+/**
+   * It isn't possible to always determine if a detached node is a expression,
+   * so make a best guess.
+   */
+Method code:
+473 |   private static boolean mayBeStatement(Node n) {
+474 |     switch (n.getType()) {
+475 |       case Token.EMPTY:
+476 |       case Token.FUNCTION:
+477 |         // EMPTY and FUNCTION are used both in expression and statement
+478 |         // contexts
+479 |         return true;
+480 | 
+481 |       case Token.BLOCK:
+482 |       case Token.BREAK:
+483 |       case Token.CONST:
+484 |       case Token.CONTINUE:
+485 |       case Token.DEBUGGER:
+486 |       case Token.DO:
+487 |       case Token.EXPR_RESULT:
+488 |       case Token.FOR:
+489 |       case Token.IF:
+490 |       case Token.LABEL:
+491 |       case Token.RETURN:
+492 |       case Token.SWITCH:
+493 |       case Token.THROW:
+494 |       case Token.TRY:
+495 |       case Token.VAR:
+496 |       case Token.WHILE:
+497 |       case Token.WITH:
+498 |         return true;
+499 | 
+500 |       default:
+501 |         return false;
+502 |     }
+503 |   }
+
+===== M0003 =====
+Signature: com.google.javascript.rhino.Node.isCatch()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 2204-2206
+Documentation:
+
+Method code:
+2204 |   public boolean isCatch() {
+2205 |     return this.getType() == Token.CATCH;
+2206 |   }
+
+===== M0004 =====
+Signature: com.google.javascript.rhino.Node.Node(int,Node,Node)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 381-399
+Documentation:
+
+Method code:
+381 |   public Node(int nodeType, Node left, Node right) {
+382 |     Preconditions.checkArgument(left.parent == null,
+383 |         "first new child has existing parent");
+384 |     Preconditions.checkArgument(left.next == null,
+385 |         "first new child has existing sibling");
+386 |     Preconditions.checkArgument(right.parent == null,
+387 |         "second new child has existing parent");
+388 |     Preconditions.checkArgument(right.next == null,
+389 |         "second new child has existing sibling");
+390 |     type = nodeType;
+391 |     parent = null;
+392 |     first = left;
+393 |     last = right;
+394 |     left.next = right;
+395 |     left.parent = this;
+396 |     right.next = null;
+397 |     right.parent = this;
+398 |     sourcePosition = -1;
+399 |   }
+
+===== M0005 =====
+Signature: com.google.javascript.rhino.Node.newString(int,String)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 516-518
+Documentation:
+
+Method code:
+516 |   public static Node newString(int type, String str) {
+517 |     return new StringNode(type, str);
+518 |   }
+
+===== M0006 =====
+Signature: com.google.javascript.rhino.IR.block(Node)
+Source: src/com/google/javascript/rhino/IR.java
+Original range: 96-100
+Documentation:
+
+Method code:
+96 |   public static Node block(Node stmt) {
+97 |     Preconditions.checkState(mayBeStatement(stmt));
+98 |     Node block = new Node(Token.BLOCK, stmt);
+99 |     return block;
+100 |   }
+
+===== M0007 =====
+Signature: com.google.javascript.rhino.Node.Node(int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 361-365
+Documentation:
+
+Method code:
+361 |   public Node(int nodeType) {
+362 |     type = nodeType;
+363 |     parent = null;
+364 |     sourcePosition = -1;
+365 |   }
+
+===== M0008 =====
+Signature: com.google.javascript.rhino.IR.tryCatchFinally(Node,Node,Node)
+Source: src/com/google/javascript/rhino/IR.java
+Original range: 237-243
+Documentation:
+
+Method code:
+237 |   public static Node tryCatchFinally(
+238 |       Node tryBody, Node catchNode, Node finallyBody) {
+239 |     Preconditions.checkState(finallyBody.isBlock());
+240 |     Node tryNode = tryCatch(tryBody, catchNode);
+241 |     tryNode.addChildToBack(finallyBody);
+242 |     return tryNode;
+243 |   }
+
+===== M0009 =====
+Signature: com.google.javascript.rhino.Node.isName()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 2296-2298
+Documentation:
+
+Method code:
+2296 |   public boolean isName() {
+2297 |     return this.getType() == Token.NAME;
+2298 |   }
+
+===== M0010 =====
+Signature: com.google.javascript.rhino.Node.isBlock()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 2188-2190
+Documentation:
+
+Method code:
+2188 |   public boolean isBlock() {
+2189 |     return this.getType() == Token.BLOCK;
+2190 |   }
+
+===== M0011 =====
+Signature: com.google.javascript.rhino.Node.StringNode.StringNode(int,String)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 196-202
+Documentation:
+
+Method code:
+196 |     StringNode(int type, String str) {
+197 |       super(type);
+198 |       if (null == str) {
+199 |         throw new IllegalArgumentException("StringNode: str is null");
+200 |       }
+201 |       this.str = str;
+202 |     }
+
+===== M0012 =====
+Signature: com.google.javascript.rhino.Node.isLabelName()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 2292-2294
+Documentation:
+
+Method code:
+2292 |   public boolean isLabelName() {
+2293 |     return this.getType() == Token.LABEL_NAME;
+2294 |   }
+
+===== M0013 =====
+Signature: com.google.javascript.rhino.IR.tryFinally(Node,Node)
+Source: src/com/google/javascript/rhino/IR.java
+Original range: 223-228
+Documentation:
+
+Method code:
+223 |   public static Node tryFinally(Node tryBody, Node finallyBody) {
+224 |     Preconditions.checkState(tryBody.isLabelName());
+225 |     Preconditions.checkState(finallyBody.isLabelName());
+226 |     Node catchBody = block().copyInformationFrom(tryBody);
+227 |     return new Node(Token.TRY, tryBody, catchBody, finallyBody);
+228 |   }
+
+===== M0014 =====
+Signature: com.google.javascript.rhino.Node.getType()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 528-530
+Documentation:
+
+Method code:
+528 |   public int getType() {
+529 |     return type;
+530 |   }
+
+===== M0015 =====
+Signature: com.google.javascript.rhino.IR.tryCatch(Node,Node)
+Source: src/com/google/javascript/rhino/IR.java
+Original range: 230-235
+Documentation:
+
+Method code:
+230 |   public static Node tryCatch(Node tryBody, Node catchNode) {
+231 |     Preconditions.checkState(tryBody.isBlock());
+232 |     Preconditions.checkState(catchNode.isCatch());
+233 |     Node catchBody = block(catchNode).copyInformationFrom(catchNode);
+234 |     return new Node(Token.TRY, tryBody, catchBody);
+235 |   }
+
+===== M0016 =====
+Signature: com.google.javascript.rhino.IR.catchNode(Node,Node)
+Source: src/com/google/javascript/rhino/IR.java
+Original range: 245-249
+Documentation:
+
+Method code:
+245 |   public static Node catchNode(Node expr, Node body) {
+246 |     Preconditions.checkState(expr.isName());
+247 |     Preconditions.checkState(body.isBlock());
+248 |     return new Node(Token.CATCH, expr, body);
+249 |   }
+
+===== M0017 =====
+Signature: com.google.javascript.rhino.IR.name(String)
+Source: src/com/google/javascript/rhino/IR.java
+Original range: 292-294
+Documentation:
+
+Method code:
+292 |   public static Node name(String name) {
+293 |     return Node.newString(Token.NAME, name);
+294 |   }
+

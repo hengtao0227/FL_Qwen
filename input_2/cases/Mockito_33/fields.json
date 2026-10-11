@@ -1,0 +1,2783 @@
+[
+  {
+    "class_name": "org.mockito.AdditionalMatchers",
+    "src_path": "src/org/mockito/AdditionalMatchers.java",
+    "signature": "org.mockito.AdditionalMatchers.mockingProgress",
+    "snippet": "    private static MockingProgress mockingProgress = new ThreadSafeMockingProgress();",
+    "begin_line": 43,
+    "end_line": 43,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.Answers",
+    "src_path": "src/org/mockito/Answers.java",
+    "signature": "org.mockito.Answers.implementation",
+    "snippet": "    private Answer<Object> implementation;",
+    "begin_line": 34,
+    "end_line": 34,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.ArgumentCaptor",
+    "src_path": "src/org/mockito/ArgumentCaptor.java",
+    "signature": "org.mockito.ArgumentCaptor.handyReturnValues",
+    "snippet": "    HandyReturnValues handyReturnValues = new HandyReturnValues();",
+    "begin_line": 45,
+    "end_line": 45,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.ArgumentCaptor",
+    "src_path": "src/org/mockito/ArgumentCaptor.java",
+    "signature": "org.mockito.ArgumentCaptor.capturingMatcher",
+    "snippet": "    private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();",
+    "begin_line": 47,
+    "end_line": 47,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.ArgumentCaptor",
+    "src_path": "src/org/mockito/ArgumentCaptor.java",
+    "signature": "org.mockito.ArgumentCaptor.clazz",
+    "snippet": "    private final Class<T> clazz;",
+    "begin_line": 48,
+    "end_line": 48,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.ArgumentMatcher",
+    "src_path": "src/org/mockito/ArgumentMatcher.java",
+    "signature": "org.mockito.ArgumentMatcher.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -2145234737829370369L;",
+    "begin_line": 59,
+    "end_line": 59,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.BDDMockito.BDDOngoingStubbingImpl",
+    "src_path": "src/org/mockito/BDDMockito.java",
+    "signature": "org.mockito.BDDMockito.BDDOngoingStubbingImpl.mockitoOngoingStubbing",
+    "snippet": "        private final OngoingStubbing<T> mockitoOngoingStubbing;",
+    "begin_line": 91,
+    "end_line": 91,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.BDDMockito.BDDStubberImpl",
+    "src_path": "src/org/mockito/BDDMockito.java",
+    "signature": "org.mockito.BDDMockito.BDDStubberImpl.mockitoStubber",
+    "snippet": "        private final Stubber mockitoStubber;",
+    "begin_line": 169,
+    "end_line": 169,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.Matchers",
+    "src_path": "src/org/mockito/Matchers.java",
+    "signature": "org.mockito.Matchers.mockingProgress",
+    "snippet": "    private static MockingProgress mockingProgress = new ThreadSafeMockingProgress();",
+    "begin_line": 100,
+    "end_line": 100,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.Mockito",
+    "src_path": "src/org/mockito/Mockito.java",
+    "signature": "org.mockito.Mockito.MOCKITO_CORE",
+    "snippet": "    static final MockitoCore MOCKITO_CORE = new MockitoCore();",
+    "begin_line": 680,
+    "end_line": 680,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.Mockito",
+    "src_path": "src/org/mockito/Mockito.java",
+    "signature": "org.mockito.Mockito.RETURNS_DEFAULTS",
+    "snippet": "    public static final Answer<Object> RETURNS_DEFAULTS = Answers.RETURNS_DEFAULTS.get();",
+    "begin_line": 691,
+    "end_line": 691,
+    "comment": "/**\r\n     * The default Answer of every mock <b>if</b> the mock was not stubbed. \r\n     * Typically it just returns some empty value. \r\n     * <p>\r\n     * {@link Answer} can be used to define the return values of unstubbed invocations. \r\n     * <p>\r\n     * This implementation first tries the global configuration. \r\n     * If there is no global configuration then it uses {@link ReturnsEmptyValues} (returns zeros, empty collections, nulls, etc.)\r\n     */"
+  },
+  {
+    "class_name": "org.mockito.Mockito",
+    "src_path": "src/org/mockito/Mockito.java",
+    "signature": "org.mockito.Mockito.RETURNS_SMART_NULLS",
+    "snippet": "    public static final Answer<Object> RETURNS_SMART_NULLS = Answers.RETURNS_SMART_NULLS.get();",
+    "begin_line": 723,
+    "end_line": 723,
+    "comment": "/**\r\n     * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}\r\n     * <p>\r\n     * {@link Answer} can be used to define the return values of unstubbed invocations.\r\n     * <p>\r\n     * This implementation can be helpful when working with legacy code.\r\n     * Unstubbed methods often return null. If your code uses the object returned by an unstubbed call you get a NullPointerException.\r\n     * This implementation of Answer <b>returns SmartNull instead of null</b>.\r\n     * SmartNull gives nicer exception message than NPE because it points out the line where unstubbed method was called. You just click on the stack trace.\r\n     * <p>\r\n     * ReturnsSmartNulls first tries to return ordinary return values (see {@link ReturnsMoreEmptyValues})\r\n     * then it tries to return SmartNull. If the return type is final then plain null is returned.\r\n     * <p>\r\n     * ReturnsSmartNulls will be probably the default return values strategy in Mockito 2.0\r\n     * <p>\r\n     * Example:\r\n     * <pre>\r\n     *   Foo mock = (Foo.class, RETURNS_SMART_NULLS);\r\n     *   \r\n     *   //calling unstubbed method here:\r\n     *   Stuff stuff = mock.getStuff();\r\n     *   \r\n     *   //using object returned by unstubbed call:\r\n     *   stuff.doSomething();\r\n     *   \r\n     *   //Above doesn't yield NullPointerException this time!\r\n     *   //Instead, SmartNullPointerException is thrown. \r\n     *   //Exception's cause links to unstubbed <i>mock.getStuff()</i> - just click on the stack trace.  \r\n     * </pre>\r\n     */"
+  },
+  {
+    "class_name": "org.mockito.Mockito",
+    "src_path": "src/org/mockito/Mockito.java",
+    "signature": "org.mockito.Mockito.RETURNS_MOCKS",
+    "snippet": "    public static final Answer<Object> RETURNS_MOCKS = Answers.RETURNS_MOCKS.get();",
+    "begin_line": 736,
+    "end_line": 736,
+    "comment": "/**\r\n     * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}\r\n     * <p>\r\n     * {@link Answer} can be used to define the return values of unstubbed invocations.\r\n     * <p>\r\n     * This implementation can be helpful when working with legacy code. \r\n     * <p>\r\n     * ReturnsMocks first tries to return ordinary return values (see {@link ReturnsMoreEmptyValues})\r\n     * then it tries to return mocks. If the return type cannot be mocked (e.g. is final) then plain null is returned.\r\n     * <p>\r\n     */"
+  },
+  {
+    "class_name": "org.mockito.Mockito",
+    "src_path": "src/org/mockito/Mockito.java",
+    "signature": "org.mockito.Mockito.RETURNS_DEEP_STUBS",
+    "snippet": "    public static final Answer<Object> RETURNS_DEEP_STUBS = Answers.RETURNS_DEEP_STUBS.get();",
+    "begin_line": 777,
+    "end_line": 777,
+    "comment": "/**\r\n     * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}\r\n     * <p>\r\n     * Example that shows how deep stub works:\r\n     * <pre>\r\n     *   Foo mock = mock(Foo.class, RETURNS_DEEP_STUBS);\r\n     *\r\n     *   // note that we're stubbing a chain of methods here: getBar().getName()\r\n     *   when(mock.getBar().getName()).thenReturn(\"deep\");\r\n     *\r\n     *   // note that we're chaining method calls: getBar().getName()\r\n     *   assertEquals(\"deep\", mock.getBar().getName());\r\n     * </pre>\r\n     * \r\n     * <strong>Verification API does not support 'chaining'</strong> so deep stub doesn't change how you do verification.\r\n     * <p>\r\n     * <strong>WARNING: </strong>\r\n     * This feature should rarely be required for regular clean code! Leave it for legacy code.\r\n     * Mocking a mock to return a mock, to return a mock, (...), to return something meaningful\r\n     * hints at violation of Law of Demeter or mocking a value object (a well known anti-pattern).\r\n     * <p>\r\n     * Good quote I've seen one day on the web: <strong>every time a mock returns a mock a fairy dies</strong>. \r\n     * <p>\r\n     * How deep stub work internally?\r\n     * <pre>\r\n     *   //this:\r\n     *   Foo mock = mock(Foo.class, RETURNS_DEEP_STUBS);\r\n     *   when(mock.getBar().getName(), \"deep\");\r\n     *\r\n     *   //is equivalent of\r\n     *   Foo foo = mock(Foo.class);\r\n     *   Bar bar = mock(Bar.class);\r\n     *   when(foo.getBar()).thenReturn(bar);\r\n     *   when(bar.getName()).thenReturn(\"deep\");\r\n     * </pre>\r\n     * <p>\r\n     * This feature will not work when any return type of methods included in the chain cannot be mocked\r\n     * (for example: is a primitive or a final class). This is because of java type system.   \r\n     */"
+  },
+  {
+    "class_name": "org.mockito.Mockito",
+    "src_path": "src/org/mockito/Mockito.java",
+    "signature": "org.mockito.Mockito.CALLS_REAL_METHODS",
+    "snippet": "    public static final Answer<Object> CALLS_REAL_METHODS = Answers.CALLS_REAL_METHODS.get();",
+    "begin_line": 811,
+    "end_line": 811,
+    "comment": "/**\r\n     * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}\r\n     * <p>\r\n     * {@link Answer} can be used to define the return values of unstubbed invocations.\r\n     * <p>\r\n     * This implementation can be helpful when working with legacy code.\r\n     * When this implementation is used, unstubbed methods will delegate to the real implementation.\r\n     * This is a way to create a partial mock object that calls real methods by default.\r\n     * <p>\r\n     * As usual you are going to read <b>the partial mock warning</b>:\r\n     * Object oriented programming is more less tackling complexity by dividing the complexity into separate, specific, SRPy objects.\r\n     * How does partial mock fit into this paradigm? Well, it just doesn't... \r\n     * Partial mock usually means that the complexity has been moved to a different method on the same object.\r\n     * In most cases, this is not the way you want to design your application.\r\n     * <p>\r\n     * However, there are rare cases when partial mocks come handy: \r\n     * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)\r\n     * However, I wouldn't use partial mocks for new, test-driven & well-designed code.\r\n     * <p>\r\n     * Example:\r\n     * <pre>\r\n     * Foo mock = mock(Foo.class, CALLS_REAL_METHODS);\r\n     *\r\n     * // this calls the real implementation of Foo.getSomething()\r\n     * value = mock.getSomething();\r\n     *\r\n     * when(mock.getSomething()).thenReturn(fakeValue);\r\n     *\r\n     * // now fakeValue is returned\r\n     * value = mock.getSomething();\r\n     * </pre>\r\n     */"
+  },
+  {
+    "class_name": "org.mockito.exceptions.Discrepancy",
+    "src_path": "src/org/mockito/exceptions/Discrepancy.java",
+    "signature": "org.mockito.exceptions.Discrepancy.wantedCount",
+    "snippet": "    private final int wantedCount;",
+    "begin_line": 9,
+    "end_line": 9,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.Discrepancy",
+    "src_path": "src/org/mockito/exceptions/Discrepancy.java",
+    "signature": "org.mockito.exceptions.Discrepancy.actualCount",
+    "snippet": "    private final int actualCount;",
+    "begin_line": 10,
+    "end_line": 10,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.base.MockitoAssertionError",
+    "src_path": "src/org/mockito/exceptions/base/MockitoAssertionError.java",
+    "signature": "org.mockito.exceptions.base.MockitoAssertionError.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.base.MockitoAssertionError",
+    "src_path": "src/org/mockito/exceptions/base/MockitoAssertionError.java",
+    "signature": "org.mockito.exceptions.base.MockitoAssertionError.unfilteredStackTrace",
+    "snippet": "    private StackTraceElement[] unfilteredStackTrace;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.base.MockitoException",
+    "src_path": "src/org/mockito/exceptions/base/MockitoException.java",
+    "signature": "org.mockito.exceptions.base.MockitoException.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 12,
+    "end_line": 12,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.base.MockitoException",
+    "src_path": "src/org/mockito/exceptions/base/MockitoException.java",
+    "signature": "org.mockito.exceptions.base.MockitoException.unfilteredStackTrace",
+    "snippet": "    private StackTraceElement[] unfilteredStackTrace;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.misusing.InvalidUseOfMatchersException",
+    "src_path": "src/org/mockito/exceptions/misusing/InvalidUseOfMatchersException.java",
+    "signature": "org.mockito.exceptions.misusing.InvalidUseOfMatchersException.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.misusing.MissingMethodInvocationException",
+    "src_path": "src/org/mockito/exceptions/misusing/MissingMethodInvocationException.java",
+    "signature": "org.mockito.exceptions.misusing.MissingMethodInvocationException.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.misusing.MockitoConfigurationException",
+    "src_path": "src/org/mockito/exceptions/misusing/MockitoConfigurationException.java",
+    "signature": "org.mockito.exceptions.misusing.MockitoConfigurationException.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.misusing.NotAMockException",
+    "src_path": "src/org/mockito/exceptions/misusing/NotAMockException.java",
+    "signature": "org.mockito.exceptions.misusing.NotAMockException.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.misusing.NullInsteadOfMockException",
+    "src_path": "src/org/mockito/exceptions/misusing/NullInsteadOfMockException.java",
+    "signature": "org.mockito.exceptions.misusing.NullInsteadOfMockException.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.misusing.UnfinishedStubbingException",
+    "src_path": "src/org/mockito/exceptions/misusing/UnfinishedStubbingException.java",
+    "signature": "org.mockito.exceptions.misusing.UnfinishedStubbingException.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.misusing.UnfinishedVerificationException",
+    "src_path": "src/org/mockito/exceptions/misusing/UnfinishedVerificationException.java",
+    "signature": "org.mockito.exceptions.misusing.UnfinishedVerificationException.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.misusing.WrongTypeOfReturnValue",
+    "src_path": "src/org/mockito/exceptions/misusing/WrongTypeOfReturnValue.java",
+    "signature": "org.mockito.exceptions.misusing.WrongTypeOfReturnValue.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.ArgumentsAreDifferent",
+    "src_path": "src/org/mockito/exceptions/verification/ArgumentsAreDifferent.java",
+    "signature": "org.mockito.exceptions.verification.ArgumentsAreDifferent.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 12,
+    "end_line": 12,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.NeverWantedButInvoked",
+    "src_path": "src/org/mockito/exceptions/verification/NeverWantedButInvoked.java",
+    "signature": "org.mockito.exceptions.verification.NeverWantedButInvoked.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.NoInteractionsWanted",
+    "src_path": "src/org/mockito/exceptions/verification/NoInteractionsWanted.java",
+    "signature": "org.mockito.exceptions.verification.NoInteractionsWanted.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.SmartNullPointerException",
+    "src_path": "src/org/mockito/exceptions/verification/SmartNullPointerException.java",
+    "signature": "org.mockito.exceptions.verification.SmartNullPointerException.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.TooLittleActualInvocations",
+    "src_path": "src/org/mockito/exceptions/verification/TooLittleActualInvocations.java",
+    "signature": "org.mockito.exceptions.verification.TooLittleActualInvocations.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.TooManyActualInvocations",
+    "src_path": "src/org/mockito/exceptions/verification/TooManyActualInvocations.java",
+    "signature": "org.mockito.exceptions.verification.TooManyActualInvocations.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.VerificationInOrderFailure",
+    "src_path": "src/org/mockito/exceptions/verification/VerificationInOrderFailure.java",
+    "signature": "org.mockito.exceptions.verification.VerificationInOrderFailure.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.WantedButNotInvoked",
+    "src_path": "src/org/mockito/exceptions/verification/WantedButNotInvoked.java",
+    "signature": "org.mockito.exceptions.verification.WantedButNotInvoked.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 12,
+    "end_line": 12,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.junit.ArgumentsAreDifferent",
+    "src_path": "src/org/mockito/exceptions/verification/junit/ArgumentsAreDifferent.java",
+    "signature": "org.mockito.exceptions.verification.junit.ArgumentsAreDifferent.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.junit.ArgumentsAreDifferent",
+    "src_path": "src/org/mockito/exceptions/verification/junit/ArgumentsAreDifferent.java",
+    "signature": "org.mockito.exceptions.verification.junit.ArgumentsAreDifferent.message",
+    "snippet": "    private final String message;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.junit.ArgumentsAreDifferent",
+    "src_path": "src/org/mockito/exceptions/verification/junit/ArgumentsAreDifferent.java",
+    "signature": "org.mockito.exceptions.verification.junit.ArgumentsAreDifferent.unfilteredStackTrace",
+    "snippet": "    private StackTraceElement[] unfilteredStackTrace;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.exceptions.verification.junit.JUnitTool",
+    "src_path": "src/org/mockito/exceptions/verification/junit/JUnitTool.java",
+    "signature": "org.mockito.exceptions.verification.junit.JUnitTool.hasJUnit",
+    "snippet": "    private static boolean hasJUnit;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.InOrderImpl",
+    "src_path": "src/org/mockito/internal/InOrderImpl.java",
+    "signature": "org.mockito.internal.InOrderImpl.mockitoCore",
+    "snippet": "    private final MockitoCore mockitoCore = new MockitoCore();",
+    "begin_line": 26,
+    "end_line": 26,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.InOrderImpl",
+    "src_path": "src/org/mockito/internal/InOrderImpl.java",
+    "signature": "org.mockito.internal.InOrderImpl.reporter",
+    "snippet": "    private final Reporter reporter = new Reporter();",
+    "begin_line": 27,
+    "end_line": 27,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.InOrderImpl",
+    "src_path": "src/org/mockito/internal/InOrderImpl.java",
+    "signature": "org.mockito.internal.InOrderImpl.mocksToBeVerifiedInOrder",
+    "snippet": "    private final List<Object> mocksToBeVerifiedInOrder = new LinkedList<Object>();",
+    "begin_line": 28,
+    "end_line": 28,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.InOrderImpl",
+    "src_path": "src/org/mockito/internal/InOrderImpl.java",
+    "signature": "org.mockito.internal.InOrderImpl.inOrderContext",
+    "snippet": "    private final InOrderContext inOrderContext = new InOrderContextImpl();",
+    "begin_line": 29,
+    "end_line": 29,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.MockHandler",
+    "src_path": "src/org/mockito/internal/MockHandler.java",
+    "signature": "org.mockito.internal.MockHandler.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -2917871070982574165L;",
+    "begin_line": 34,
+    "end_line": 34,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.MockHandler",
+    "src_path": "src/org/mockito/internal/MockHandler.java",
+    "signature": "org.mockito.internal.MockHandler.invocationContainerImpl",
+    "snippet": "    InvocationContainerImpl invocationContainerImpl;",
+    "begin_line": 36,
+    "end_line": 36,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.MockHandler",
+    "src_path": "src/org/mockito/internal/MockHandler.java",
+    "signature": "org.mockito.internal.MockHandler.matchersBinder",
+    "snippet": "    MatchersBinder matchersBinder = new MatchersBinder();",
+    "begin_line": 37,
+    "end_line": 37,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.MockHandler",
+    "src_path": "src/org/mockito/internal/MockHandler.java",
+    "signature": "org.mockito.internal.MockHandler.mockingProgress",
+    "snippet": "    MockingProgress mockingProgress = new ThreadSafeMockingProgress();",
+    "begin_line": 38,
+    "end_line": 38,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.MockHandler",
+    "src_path": "src/org/mockito/internal/MockHandler.java",
+    "signature": "org.mockito.internal.MockHandler.mockSettings",
+    "snippet": "    private final MockSettingsImpl mockSettings;",
+    "begin_line": 40,
+    "end_line": 40,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.MockitoCore",
+    "src_path": "src/org/mockito/internal/MockitoCore.java",
+    "signature": "org.mockito.internal.MockitoCore.reporter",
+    "snippet": "    private final Reporter reporter = new Reporter();",
+    "begin_line": 40,
+    "end_line": 40,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.MockitoCore",
+    "src_path": "src/org/mockito/internal/MockitoCore.java",
+    "signature": "org.mockito.internal.MockitoCore.mockUtil",
+    "snippet": "    private final MockUtil mockUtil = new MockUtil();",
+    "begin_line": 41,
+    "end_line": 41,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.MockitoCore",
+    "src_path": "src/org/mockito/internal/MockitoCore.java",
+    "signature": "org.mockito.internal.MockitoCore.mockingProgress",
+    "snippet": "    private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();",
+    "begin_line": 42,
+    "end_line": 42,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.configuration.DefaultInjectionEngine",
+    "src_path": "src/org/mockito/internal/configuration/DefaultInjectionEngine.java",
+    "signature": "org.mockito.internal.configuration.DefaultInjectionEngine.mockUtil",
+    "snippet": "    private final MockUtil mockUtil = new MockUtil();",
+    "begin_line": 24,
+    "end_line": 24,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.configuration.GlobalConfiguration",
+    "src_path": "src/org/mockito/internal/configuration/GlobalConfiguration.java",
+    "signature": "org.mockito.internal.configuration.GlobalConfiguration.serialVersionUID",
+    "snippet": "    static final long serialVersionUID = -2860353062105505938L;",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.configuration.GlobalConfiguration",
+    "src_path": "src/org/mockito/internal/configuration/GlobalConfiguration.java",
+    "signature": "org.mockito.internal.configuration.GlobalConfiguration.globalConfiguration",
+    "snippet": "    private static ThreadLocal<IMockitoConfiguration> globalConfiguration = new ThreadLocal<IMockitoConfiguration>();",
+    "begin_line": 22,
+    "end_line": 22,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.configuration.InjectingAnnotationEngine",
+    "src_path": "src/org/mockito/internal/configuration/InjectingAnnotationEngine.java",
+    "signature": "org.mockito.internal.configuration.InjectingAnnotationEngine.delegate",
+    "snippet": "    AnnotationEngine delegate = new DefaultAnnotationEngine();",
+    "begin_line": 28,
+    "end_line": 28,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.configuration.InjectingAnnotationEngine",
+    "src_path": "src/org/mockito/internal/configuration/InjectingAnnotationEngine.java",
+    "signature": "org.mockito.internal.configuration.InjectingAnnotationEngine.spyAnnotationEngine",
+    "snippet": "    AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();",
+    "begin_line": 29,
+    "end_line": 29,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.DelegatingMethod",
+    "src_path": "src/org/mockito/internal/creation/DelegatingMethod.java",
+    "signature": "org.mockito.internal.creation.DelegatingMethod.method",
+    "snippet": "    private final Method method;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.DelegatingMockitoMethodProxy",
+    "src_path": "src/org/mockito/internal/creation/DelegatingMockitoMethodProxy.java",
+    "signature": "org.mockito.internal.creation.DelegatingMockitoMethodProxy.methodProxy",
+    "snippet": "    private final MethodProxy methodProxy;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MethodInterceptorFilter",
+    "src_path": "src/org/mockito/internal/creation/MethodInterceptorFilter.java",
+    "signature": "org.mockito.internal.creation.MethodInterceptorFilter.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 6182795666612683784L;",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MethodInterceptorFilter",
+    "src_path": "src/org/mockito/internal/creation/MethodInterceptorFilter.java",
+    "signature": "org.mockito.internal.creation.MethodInterceptorFilter.handler",
+    "snippet": "    private final MockitoInvocationHandler handler;",
+    "begin_line": 22,
+    "end_line": 22,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MethodInterceptorFilter",
+    "src_path": "src/org/mockito/internal/creation/MethodInterceptorFilter.java",
+    "signature": "org.mockito.internal.creation.MethodInterceptorFilter.cglibHacker",
+    "snippet": "    CGLIBHacker cglibHacker = new CGLIBHacker();",
+    "begin_line": 23,
+    "end_line": 23,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MethodInterceptorFilter",
+    "src_path": "src/org/mockito/internal/creation/MethodInterceptorFilter.java",
+    "signature": "org.mockito.internal.creation.MethodInterceptorFilter.objectMethodsGuru",
+    "snippet": "    ObjectMethodsGuru objectMethodsGuru = new ObjectMethodsGuru();",
+    "begin_line": 24,
+    "end_line": 24,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MethodInterceptorFilter",
+    "src_path": "src/org/mockito/internal/creation/MethodInterceptorFilter.java",
+    "signature": "org.mockito.internal.creation.MethodInterceptorFilter.mockSettings",
+    "snippet": "    private final MockSettingsImpl mockSettings;",
+    "begin_line": 25,
+    "end_line": 25,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MockSettingsImpl",
+    "src_path": "src/org/mockito/internal/creation/MockSettingsImpl.java",
+    "signature": "org.mockito.internal.creation.MockSettingsImpl.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 4475297236197939568L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MockSettingsImpl",
+    "src_path": "src/org/mockito/internal/creation/MockSettingsImpl.java",
+    "signature": "org.mockito.internal.creation.MockSettingsImpl.extraInterfaces",
+    "snippet": "    private Class<?>[] extraInterfaces;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MockSettingsImpl",
+    "src_path": "src/org/mockito/internal/creation/MockSettingsImpl.java",
+    "signature": "org.mockito.internal.creation.MockSettingsImpl.name",
+    "snippet": "    private String name;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MockSettingsImpl",
+    "src_path": "src/org/mockito/internal/creation/MockSettingsImpl.java",
+    "signature": "org.mockito.internal.creation.MockSettingsImpl.spiedInstance",
+    "snippet": "    private Object spiedInstance;",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MockSettingsImpl",
+    "src_path": "src/org/mockito/internal/creation/MockSettingsImpl.java",
+    "signature": "org.mockito.internal.creation.MockSettingsImpl.defaultAnswer",
+    "snippet": "    private Answer<Object> defaultAnswer;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MockSettingsImpl",
+    "src_path": "src/org/mockito/internal/creation/MockSettingsImpl.java",
+    "signature": "org.mockito.internal.creation.MockSettingsImpl.mockName",
+    "snippet": "    private MockName mockName;",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.MockSettingsImpl",
+    "src_path": "src/org/mockito/internal/creation/MockSettingsImpl.java",
+    "signature": "org.mockito.internal.creation.MockSettingsImpl.serializable",
+    "snippet": "    private boolean serializable;",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.SerializableMockitoMethodProxy",
+    "src_path": "src/org/mockito/internal/creation/SerializableMockitoMethodProxy.java",
+    "signature": "org.mockito.internal.creation.SerializableMockitoMethodProxy.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -5337859962876770632L;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.SerializableMockitoMethodProxy",
+    "src_path": "src/org/mockito/internal/creation/SerializableMockitoMethodProxy.java",
+    "signature": "org.mockito.internal.creation.SerializableMockitoMethodProxy.c1",
+    "snippet": "    private final Class<?> c1;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.SerializableMockitoMethodProxy",
+    "src_path": "src/org/mockito/internal/creation/SerializableMockitoMethodProxy.java",
+    "signature": "org.mockito.internal.creation.SerializableMockitoMethodProxy.c2",
+    "snippet": "    private final Class<?> c2;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.SerializableMockitoMethodProxy",
+    "src_path": "src/org/mockito/internal/creation/SerializableMockitoMethodProxy.java",
+    "signature": "org.mockito.internal.creation.SerializableMockitoMethodProxy.desc",
+    "snippet": "    private final String desc;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.SerializableMockitoMethodProxy",
+    "src_path": "src/org/mockito/internal/creation/SerializableMockitoMethodProxy.java",
+    "signature": "org.mockito.internal.creation.SerializableMockitoMethodProxy.name",
+    "snippet": "    private final String name;",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.SerializableMockitoMethodProxy",
+    "src_path": "src/org/mockito/internal/creation/SerializableMockitoMethodProxy.java",
+    "signature": "org.mockito.internal.creation.SerializableMockitoMethodProxy.superName",
+    "snippet": "    private final String superName;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.SerializableMockitoMethodProxy",
+    "src_path": "src/org/mockito/internal/creation/SerializableMockitoMethodProxy.java",
+    "signature": "org.mockito.internal.creation.SerializableMockitoMethodProxy.methodProxy",
+    "snippet": "    private transient MethodProxy methodProxy;",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.cglib.CGLIBHacker",
+    "src_path": "src/org/mockito/internal/creation/cglib/CGLIBHacker.java",
+    "signature": "org.mockito.internal.creation.cglib.CGLIBHacker.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -4389233991416356668L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.cglib.MockitoNamingPolicy",
+    "src_path": "src/org/mockito/internal/creation/cglib/MockitoNamingPolicy.java",
+    "signature": "org.mockito.internal.creation.cglib.MockitoNamingPolicy.INSTANCE",
+    "snippet": "    public static final MockitoNamingPolicy INSTANCE = new MockitoNamingPolicy(); ",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.jmock.ClassImposterizer",
+    "src_path": "src/org/mockito/internal/creation/jmock/ClassImposterizer.java",
+    "signature": "org.mockito.internal.creation.jmock.ClassImposterizer.INSTANCE",
+    "snippet": "    public static final ClassImposterizer INSTANCE = new ClassImposterizer();",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.jmock.ClassImposterizer",
+    "src_path": "src/org/mockito/internal/creation/jmock/ClassImposterizer.java",
+    "signature": "org.mockito.internal.creation.jmock.ClassImposterizer.objenesis",
+    "snippet": "    private ObjenesisStd objenesis = new ObjenesisStd();",
+    "begin_line": 28,
+    "end_line": 28,
+    "comment": "//TODO: after 1.8, for the same reason catch and give better feedback when hamcrest core is not found.\r"
+  },
+  {
+    "class_name": "org.mockito.internal.creation.jmock.ClassImposterizer",
+    "src_path": "src/org/mockito/internal/creation/jmock/ClassImposterizer.java",
+    "signature": "org.mockito.internal.creation.jmock.ClassImposterizer.NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES",
+    "snippet": "    private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new MockitoNamingPolicy() {\n        @Override\n        public String getClassName(String prefix, String source, Object key, Predicate names) {\n            return \"codegen.\" + super.getClassName(prefix, source, key, names);\n        }\n    };",
+    "begin_line": 30,
+    "end_line": 35,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.jmock.ClassImposterizer",
+    "src_path": "src/org/mockito/internal/creation/jmock/ClassImposterizer.java",
+    "signature": "org.mockito.internal.creation.jmock.ClassImposterizer.IGNORE_BRIDGE_METHODS",
+    "snippet": "    private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {\n        public int accept(Method method) {\n            return method.isBridge() ? 1 : 0;\n        }\n    };",
+    "begin_line": 37,
+    "end_line": 41,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.jmock.SearchingClassLoader",
+    "src_path": "src/org/mockito/internal/creation/jmock/SearchingClassLoader.java",
+    "signature": "org.mockito.internal.creation.jmock.SearchingClassLoader.nextToSearch",
+    "snippet": "    private final ClassLoader nextToSearch;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.jmock.SerializableNoOp",
+    "src_path": "src/org/mockito/internal/creation/jmock/SerializableNoOp.java",
+    "signature": "org.mockito.internal.creation.jmock.SerializableNoOp.serialVersionUID",
+    "snippet": "  private static final long serialVersionUID = 7434976328690189159L;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.creation.jmock.SerializableNoOp",
+    "src_path": "src/org/mockito/internal/creation/jmock/SerializableNoOp.java",
+    "signature": "org.mockito.internal.creation.jmock.SerializableNoOp.SERIALIZABLE_INSTANCE",
+    "snippet": "  public static final Callback SERIALIZABLE_INSTANCE = new SerializableNoOp();",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.Localized",
+    "src_path": "src/org/mockito/internal/debugging/Localized.java",
+    "signature": "org.mockito.internal.debugging.Localized.object",
+    "snippet": "    private final T object;",
+    "begin_line": 10,
+    "end_line": 10,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.Localized",
+    "src_path": "src/org/mockito/internal/debugging/Localized.java",
+    "signature": "org.mockito.internal.debugging.Localized.location",
+    "snippet": "    private final Location location;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.Location",
+    "src_path": "src/org/mockito/internal/debugging/Location.java",
+    "signature": "org.mockito.internal.debugging.Location.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -9054861157390980624L;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.Location",
+    "src_path": "src/org/mockito/internal/debugging/Location.java",
+    "signature": "org.mockito.internal.debugging.Location.where",
+    "snippet": "    private final String where;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.LoggingListener",
+    "src_path": "src/org/mockito/internal/debugging/LoggingListener.java",
+    "signature": "org.mockito.internal.debugging.LoggingListener.warnAboutUnstubbed",
+    "snippet": "    private boolean warnAboutUnstubbed;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.LoggingListener",
+    "src_path": "src/org/mockito/internal/debugging/LoggingListener.java",
+    "signature": "org.mockito.internal.debugging.LoggingListener.logger",
+    "snippet": "    private final MockitoLogger logger;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.MockitoDebuggerImpl",
+    "src_path": "src/org/mockito/internal/debugging/MockitoDebuggerImpl.java",
+    "signature": "org.mockito.internal.debugging.MockitoDebuggerImpl.allInvocationsFinder",
+    "snippet": "    private AllInvocationsFinder allInvocationsFinder = new AllInvocationsFinder();",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.MockitoDebuggerImpl",
+    "src_path": "src/org/mockito/internal/debugging/MockitoDebuggerImpl.java",
+    "signature": "org.mockito.internal.debugging.MockitoDebuggerImpl.unusedStubsFinder",
+    "snippet": "    private UnusedStubsFinder unusedStubsFinder = new UnusedStubsFinder();",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.WarningsCollector",
+    "src_path": "src/org/mockito/internal/debugging/WarningsCollector.java",
+    "signature": "org.mockito.internal.debugging.WarningsCollector.createdMocks",
+    "snippet": "    List createdMocks;",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.WarningsFinder",
+    "src_path": "src/org/mockito/internal/debugging/WarningsFinder.java",
+    "signature": "org.mockito.internal.debugging.WarningsFinder.baseUnusedStubs",
+    "snippet": "    private final List<Invocation> baseUnusedStubs;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.WarningsFinder",
+    "src_path": "src/org/mockito/internal/debugging/WarningsFinder.java",
+    "signature": "org.mockito.internal.debugging.WarningsFinder.baseAllInvocations",
+    "snippet": "    private final List<InvocationMatcher> baseAllInvocations;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.WarningsPrinterImpl",
+    "src_path": "src/org/mockito/internal/debugging/WarningsPrinterImpl.java",
+    "signature": "org.mockito.internal.debugging.WarningsPrinterImpl.warnAboutUnstubbed",
+    "snippet": "    private final boolean warnAboutUnstubbed;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.debugging.WarningsPrinterImpl",
+    "src_path": "src/org/mockito/internal/debugging/WarningsPrinterImpl.java",
+    "signature": "org.mockito.internal.debugging.WarningsPrinterImpl.finder",
+    "snippet": "    private WarningsFinder finder;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings",
+    "src_path": "src/org/mockito/internal/exceptions/ExceptionIncludingMockitoWarnings.java",
+    "signature": "org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -5925150219446765679L;",
+    "begin_line": 8,
+    "end_line": 8,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.exceptions.base.ConditionalStackTraceFilter",
+    "src_path": "src/org/mockito/internal/exceptions/base/ConditionalStackTraceFilter.java",
+    "signature": "org.mockito.internal.exceptions.base.ConditionalStackTraceFilter.serialVersionUID",
+    "snippet": "    static final long serialVersionUID = -8085849703510292641L;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.exceptions.base.ConditionalStackTraceFilter",
+    "src_path": "src/org/mockito/internal/exceptions/base/ConditionalStackTraceFilter.java",
+    "signature": "org.mockito.internal.exceptions.base.ConditionalStackTraceFilter.config",
+    "snippet": "    private IMockitoConfiguration config = new GlobalConfiguration();",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.exceptions.base.ConditionalStackTraceFilter",
+    "src_path": "src/org/mockito/internal/exceptions/base/ConditionalStackTraceFilter.java",
+    "signature": "org.mockito.internal.exceptions.base.ConditionalStackTraceFilter.filter",
+    "snippet": "    private StackTraceFilter filter = new StackTraceFilter();",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.exceptions.base.StackTraceFilter",
+    "src_path": "src/org/mockito/internal/exceptions/base/StackTraceFilter.java",
+    "signature": "org.mockito.internal.exceptions.base.StackTraceFilter.serialVersionUID",
+    "snippet": "    static final long serialVersionUID = -5499819791513105700L;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.Invocation",
+    "src_path": "src/org/mockito/internal/invocation/Invocation.java",
+    "signature": "org.mockito.internal.invocation.Invocation.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 8240069639250980199L;",
+    "begin_line": 39,
+    "end_line": 39,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.Invocation",
+    "src_path": "src/org/mockito/internal/invocation/Invocation.java",
+    "signature": "org.mockito.internal.invocation.Invocation.MAX_LINE_LENGTH",
+    "snippet": "    private static final int MAX_LINE_LENGTH = 45;",
+    "begin_line": 40,
+    "end_line": 40,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.Invocation",
+    "src_path": "src/org/mockito/internal/invocation/Invocation.java",
+    "signature": "org.mockito.internal.invocation.Invocation.sequenceNumber",
+    "snippet": "    private final int sequenceNumber;",
+    "begin_line": 41,
+    "end_line": 41,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.Invocation",
+    "src_path": "src/org/mockito/internal/invocation/Invocation.java",
+    "signature": "org.mockito.internal.invocation.Invocation.mock",
+    "snippet": "    private final Object mock;",
+    "begin_line": 42,
+    "end_line": 42,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.Invocation",
+    "src_path": "src/org/mockito/internal/invocation/Invocation.java",
+    "signature": "org.mockito.internal.invocation.Invocation.method",
+    "snippet": "    private final MockitoMethod method;",
+    "begin_line": 43,
+    "end_line": 43,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.Invocation",
+    "src_path": "src/org/mockito/internal/invocation/Invocation.java",
+    "signature": "org.mockito.internal.invocation.Invocation.arguments",
+    "snippet": "    private final Object[] arguments;",
+    "begin_line": 44,
+    "end_line": 44,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.Invocation",
+    "src_path": "src/org/mockito/internal/invocation/Invocation.java",
+    "signature": "org.mockito.internal.invocation.Invocation.rawArguments",
+    "snippet": "    private final Object[] rawArguments;",
+    "begin_line": 45,
+    "end_line": 45,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.Invocation",
+    "src_path": "src/org/mockito/internal/invocation/Invocation.java",
+    "signature": "org.mockito.internal.invocation.Invocation.location",
+    "snippet": "    private final Location location;",
+    "begin_line": 47,
+    "end_line": 47,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.Invocation",
+    "src_path": "src/org/mockito/internal/invocation/Invocation.java",
+    "signature": "org.mockito.internal.invocation.Invocation.verified",
+    "snippet": "    private boolean verified;",
+    "begin_line": 48,
+    "end_line": 48,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.Invocation",
+    "src_path": "src/org/mockito/internal/invocation/Invocation.java",
+    "signature": "org.mockito.internal.invocation.Invocation.realMethod",
+    "snippet": "    final RealMethod realMethod;",
+    "begin_line": 50,
+    "end_line": 50,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.Invocation",
+    "src_path": "src/org/mockito/internal/invocation/Invocation.java",
+    "signature": "org.mockito.internal.invocation.Invocation.stubInfo",
+    "snippet": "    private StubInfo stubInfo;",
+    "begin_line": 51,
+    "end_line": 51,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.InvocationMatcher",
+    "src_path": "src/org/mockito/internal/invocation/InvocationMatcher.java",
+    "signature": "org.mockito.internal.invocation.InvocationMatcher.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -3047126096857467610L;",
+    "begin_line": 23,
+    "end_line": 23,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.InvocationMatcher",
+    "src_path": "src/org/mockito/internal/invocation/InvocationMatcher.java",
+    "signature": "org.mockito.internal.invocation.InvocationMatcher.invocation",
+    "snippet": "    private final Invocation invocation;",
+    "begin_line": 24,
+    "end_line": 24,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.InvocationMatcher",
+    "src_path": "src/org/mockito/internal/invocation/InvocationMatcher.java",
+    "signature": "org.mockito.internal.invocation.InvocationMatcher.matchers",
+    "snippet": "    private final List<Matcher> matchers;",
+    "begin_line": 25,
+    "end_line": 25,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.InvocationsFinder.RemoveNotMatching",
+    "src_path": "src/org/mockito/internal/invocation/InvocationsFinder.java",
+    "signature": "org.mockito.internal.invocation.InvocationsFinder.RemoveNotMatching.wanted",
+    "snippet": "        private final InvocationMatcher wanted;",
+    "begin_line": 127,
+    "end_line": 127,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.InvocationsFinder.RemoveUnverifiedInOrder",
+    "src_path": "src/org/mockito/internal/invocation/InvocationsFinder.java",
+    "signature": "org.mockito.internal.invocation.InvocationsFinder.RemoveUnverifiedInOrder.orderingContext",
+    "snippet": "        private final InOrderContext orderingContext;",
+    "begin_line": 139,
+    "end_line": 139,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.MatchersBinder",
+    "src_path": "src/org/mockito/internal/invocation/MatchersBinder.java",
+    "signature": "org.mockito.internal.invocation.MatchersBinder.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -311433939339443463L;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.SerializableMethod",
+    "src_path": "src/org/mockito/internal/invocation/SerializableMethod.java",
+    "signature": "org.mockito.internal.invocation.SerializableMethod.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 6005610965006048445L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.SerializableMethod",
+    "src_path": "src/org/mockito/internal/invocation/SerializableMethod.java",
+    "signature": "org.mockito.internal.invocation.SerializableMethod.declaringClass",
+    "snippet": "    private Class<?> declaringClass;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.SerializableMethod",
+    "src_path": "src/org/mockito/internal/invocation/SerializableMethod.java",
+    "signature": "org.mockito.internal.invocation.SerializableMethod.methodName",
+    "snippet": "    private String methodName;",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.SerializableMethod",
+    "src_path": "src/org/mockito/internal/invocation/SerializableMethod.java",
+    "signature": "org.mockito.internal.invocation.SerializableMethod.parameterTypes",
+    "snippet": "    private Class<?>[] parameterTypes;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.SerializableMethod",
+    "src_path": "src/org/mockito/internal/invocation/SerializableMethod.java",
+    "signature": "org.mockito.internal.invocation.SerializableMethod.returnType",
+    "snippet": "    private Class<?> returnType;",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.SerializableMethod",
+    "src_path": "src/org/mockito/internal/invocation/SerializableMethod.java",
+    "signature": "org.mockito.internal.invocation.SerializableMethod.exceptionTypes",
+    "snippet": "    private Class<?>[] exceptionTypes;",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.SerializableMethod",
+    "src_path": "src/org/mockito/internal/invocation/SerializableMethod.java",
+    "signature": "org.mockito.internal.invocation.SerializableMethod.isVarArgs",
+    "snippet": "    private boolean isVarArgs;",
+    "begin_line": 22,
+    "end_line": 22,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.StubInfo",
+    "src_path": "src/org/mockito/internal/invocation/StubInfo.java",
+    "signature": "org.mockito.internal.invocation.StubInfo.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 2125827349332068867L;",
+    "begin_line": 12,
+    "end_line": 12,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.StubInfo",
+    "src_path": "src/org/mockito/internal/invocation/StubInfo.java",
+    "signature": "org.mockito.internal.invocation.StubInfo.stubbedAt",
+    "snippet": "    private PrintableInvocation stubbedAt;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.realmethod.CGLIBProxyRealMethod",
+    "src_path": "src/org/mockito/internal/invocation/realmethod/CGLIBProxyRealMethod.java",
+    "signature": "org.mockito.internal.invocation.realmethod.CGLIBProxyRealMethod.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -4596470901191501582L;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.realmethod.CGLIBProxyRealMethod",
+    "src_path": "src/org/mockito/internal/invocation/realmethod/CGLIBProxyRealMethod.java",
+    "signature": "org.mockito.internal.invocation.realmethod.CGLIBProxyRealMethod.methodProxy",
+    "snippet": "    private final MockitoMethodProxy methodProxy;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod",
+    "src_path": "src/org/mockito/internal/invocation/realmethod/FilteredCGLIBProxyRealMethod.java",
+    "signature": "org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 3596550785818938496L;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod",
+    "src_path": "src/org/mockito/internal/invocation/realmethod/FilteredCGLIBProxyRealMethod.java",
+    "signature": "org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod.realMethod",
+    "snippet": "    private final RealMethod realMethod;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.listeners.CollectCreatedMocks",
+    "src_path": "src/org/mockito/internal/listeners/CollectCreatedMocks.java",
+    "signature": "org.mockito.internal.listeners.CollectCreatedMocks.toBeFilled",
+    "snippet": "    private List toBeFilled;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.And",
+    "src_path": "src/org/mockito/internal/matchers/And.java",
+    "signature": "org.mockito.internal.matchers.And.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -4624719625691177501L;",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.And",
+    "src_path": "src/org/mockito/internal/matchers/And.java",
+    "signature": "org.mockito.internal.matchers.And.matchers",
+    "snippet": "    private final List<Matcher> matchers;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Any",
+    "src_path": "src/org/mockito/internal/matchers/Any.java",
+    "signature": "org.mockito.internal.matchers.Any.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -4062420125651019029L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Any",
+    "src_path": "src/org/mockito/internal/matchers/Any.java",
+    "signature": "org.mockito.internal.matchers.Any.ANY",
+    "snippet": "    public static final Any ANY = new Any();    ",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.AnyVararg",
+    "src_path": "src/org/mockito/internal/matchers/AnyVararg.java",
+    "signature": "org.mockito.internal.matchers.AnyVararg.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1700721373094731555L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.AnyVararg",
+    "src_path": "src/org/mockito/internal/matchers/AnyVararg.java",
+    "signature": "org.mockito.internal.matchers.AnyVararg.ANY_VARARG",
+    "snippet": "    public static final Matcher ANY_VARARG = new AnyVararg();",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.ArrayEquals",
+    "src_path": "src/org/mockito/internal/matchers/ArrayEquals.java",
+    "signature": "org.mockito.internal.matchers.ArrayEquals.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -7167812844261087583L;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.CapturingMatcher",
+    "src_path": "src/org/mockito/internal/matchers/CapturingMatcher.java",
+    "signature": "org.mockito.internal.matchers.CapturingMatcher.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 4274067078639307295L;",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.CapturingMatcher",
+    "src_path": "src/org/mockito/internal/matchers/CapturingMatcher.java",
+    "signature": "org.mockito.internal.matchers.CapturingMatcher.arguments",
+    "snippet": "    private LinkedList<Object> arguments = new LinkedList<Object>();",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.CompareEqual",
+    "src_path": "src/org/mockito/internal/matchers/CompareEqual.java",
+    "signature": "org.mockito.internal.matchers.CompareEqual.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 2998586260452920429L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.CompareTo",
+    "src_path": "src/org/mockito/internal/matchers/CompareTo.java",
+    "signature": "org.mockito.internal.matchers.CompareTo.wanted",
+    "snippet": "    private final Comparable<T> wanted;",
+    "begin_line": 12,
+    "end_line": 12,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Contains",
+    "src_path": "src/org/mockito/internal/matchers/Contains.java",
+    "signature": "org.mockito.internal.matchers.Contains.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -1909837398271763801L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Contains",
+    "src_path": "src/org/mockito/internal/matchers/Contains.java",
+    "signature": "org.mockito.internal.matchers.Contains.substring",
+    "snippet": "    private final String substring;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.EndsWith",
+    "src_path": "src/org/mockito/internal/matchers/EndsWith.java",
+    "signature": "org.mockito.internal.matchers.EndsWith.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 8556443228350129421L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.EndsWith",
+    "src_path": "src/org/mockito/internal/matchers/EndsWith.java",
+    "signature": "org.mockito.internal.matchers.EndsWith.suffix",
+    "snippet": "    private final String suffix;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Equals",
+    "src_path": "src/org/mockito/internal/matchers/Equals.java",
+    "signature": "org.mockito.internal.matchers.Equals.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -3395637450058086891L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Equals",
+    "src_path": "src/org/mockito/internal/matchers/Equals.java",
+    "signature": "org.mockito.internal.matchers.Equals.wanted",
+    "snippet": "    private final Object wanted;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.EqualsWithDelta",
+    "src_path": "src/org/mockito/internal/matchers/EqualsWithDelta.java",
+    "signature": "org.mockito.internal.matchers.EqualsWithDelta.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 5066980489920383664L;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.EqualsWithDelta",
+    "src_path": "src/org/mockito/internal/matchers/EqualsWithDelta.java",
+    "signature": "org.mockito.internal.matchers.EqualsWithDelta.wanted",
+    "snippet": "    private final Number wanted;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.EqualsWithDelta",
+    "src_path": "src/org/mockito/internal/matchers/EqualsWithDelta.java",
+    "signature": "org.mockito.internal.matchers.EqualsWithDelta.delta",
+    "snippet": "    private final Number delta;",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Find",
+    "src_path": "src/org/mockito/internal/matchers/Find.java",
+    "signature": "org.mockito.internal.matchers.Find.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 8895781429480404872L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Find",
+    "src_path": "src/org/mockito/internal/matchers/Find.java",
+    "signature": "org.mockito.internal.matchers.Find.regex",
+    "snippet": "    private final String regex;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.GreaterOrEqual",
+    "src_path": "src/org/mockito/internal/matchers/GreaterOrEqual.java",
+    "signature": "org.mockito.internal.matchers.GreaterOrEqual.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 87695769061286092L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.GreaterThan",
+    "src_path": "src/org/mockito/internal/matchers/GreaterThan.java",
+    "signature": "org.mockito.internal.matchers.GreaterThan.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 7446529803235604408L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.InstanceOf",
+    "src_path": "src/org/mockito/internal/matchers/InstanceOf.java",
+    "signature": "org.mockito.internal.matchers.InstanceOf.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 517358915876138366L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.InstanceOf",
+    "src_path": "src/org/mockito/internal/matchers/InstanceOf.java",
+    "signature": "org.mockito.internal.matchers.InstanceOf.clazz",
+    "snippet": "    private final Class<?> clazz;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.LessOrEqual",
+    "src_path": "src/org/mockito/internal/matchers/LessOrEqual.java",
+    "signature": "org.mockito.internal.matchers.LessOrEqual.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -6648773374429103565L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.LessThan",
+    "src_path": "src/org/mockito/internal/matchers/LessThan.java",
+    "signature": "org.mockito.internal.matchers.LessThan.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -133860804462310942L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.LocalizedMatcher",
+    "src_path": "src/org/mockito/internal/matchers/LocalizedMatcher.java",
+    "signature": "org.mockito.internal.matchers.LocalizedMatcher.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 6748641229659825725L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.LocalizedMatcher",
+    "src_path": "src/org/mockito/internal/matchers/LocalizedMatcher.java",
+    "signature": "org.mockito.internal.matchers.LocalizedMatcher.actualMatcher",
+    "snippet": "    private final Matcher actualMatcher;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.LocalizedMatcher",
+    "src_path": "src/org/mockito/internal/matchers/LocalizedMatcher.java",
+    "signature": "org.mockito.internal.matchers.LocalizedMatcher.location",
+    "snippet": "    private Location location;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Matches",
+    "src_path": "src/org/mockito/internal/matchers/Matches.java",
+    "signature": "org.mockito.internal.matchers.Matches.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 8787704593379472029L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Matches",
+    "src_path": "src/org/mockito/internal/matchers/Matches.java",
+    "signature": "org.mockito.internal.matchers.Matches.regex",
+    "snippet": "    private final String regex;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Not",
+    "src_path": "src/org/mockito/internal/matchers/Not.java",
+    "signature": "org.mockito.internal.matchers.Not.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 4627373642333593264L;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Not",
+    "src_path": "src/org/mockito/internal/matchers/Not.java",
+    "signature": "org.mockito.internal.matchers.Not.first",
+    "snippet": "    private final Matcher first;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.NotNull",
+    "src_path": "src/org/mockito/internal/matchers/NotNull.java",
+    "signature": "org.mockito.internal.matchers.NotNull.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 7278261081285153228L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.NotNull",
+    "src_path": "src/org/mockito/internal/matchers/NotNull.java",
+    "signature": "org.mockito.internal.matchers.NotNull.NOT_NULL",
+    "snippet": "    public static final NotNull NOT_NULL = new NotNull();",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Null",
+    "src_path": "src/org/mockito/internal/matchers/Null.java",
+    "signature": "org.mockito.internal.matchers.Null.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 2823082637424390314L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Null",
+    "src_path": "src/org/mockito/internal/matchers/Null.java",
+    "signature": "org.mockito.internal.matchers.Null.NULL",
+    "snippet": "    public static final Null NULL = new Null();",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Or",
+    "src_path": "src/org/mockito/internal/matchers/Or.java",
+    "signature": "org.mockito.internal.matchers.Or.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 5888739035212283087L;",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Or",
+    "src_path": "src/org/mockito/internal/matchers/Or.java",
+    "signature": "org.mockito.internal.matchers.Or.matchers",
+    "snippet": "    private final List<Matcher> matchers;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Same",
+    "src_path": "src/org/mockito/internal/matchers/Same.java",
+    "signature": "org.mockito.internal.matchers.Same.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -1226959355938572597L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.Same",
+    "src_path": "src/org/mockito/internal/matchers/Same.java",
+    "signature": "org.mockito.internal.matchers.Same.wanted",
+    "snippet": "    private final Object wanted;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.StartsWith",
+    "src_path": "src/org/mockito/internal/matchers/StartsWith.java",
+    "signature": "org.mockito.internal.matchers.StartsWith.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -5978092285707998431L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.StartsWith",
+    "src_path": "src/org/mockito/internal/matchers/StartsWith.java",
+    "signature": "org.mockito.internal.matchers.StartsWith.prefix",
+    "snippet": "    private final String prefix;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.apachecommons.EqualsBuilder",
+    "src_path": "src/org/mockito/internal/matchers/apachecommons/EqualsBuilder.java",
+    "signature": "org.mockito.internal.matchers.apachecommons.EqualsBuilder.isEquals",
+    "snippet": "    private boolean isEquals = true;",
+    "begin_line": 95,
+    "end_line": 95,
+    "comment": "/**\r\n     * If the fields tested are equals.\r\n     * The default value is <code>true</code>.\r\n     */"
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.apachecommons.ReflectionEquals",
+    "src_path": "src/org/mockito/internal/matchers/apachecommons/ReflectionEquals.java",
+    "signature": "org.mockito.internal.matchers.apachecommons.ReflectionEquals.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 2022780425116330014L;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.apachecommons.ReflectionEquals",
+    "src_path": "src/org/mockito/internal/matchers/apachecommons/ReflectionEquals.java",
+    "signature": "org.mockito.internal.matchers.apachecommons.ReflectionEquals.wanted",
+    "snippet": "    private final Object wanted;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.matchers.apachecommons.ReflectionEquals",
+    "src_path": "src/org/mockito/internal/matchers/apachecommons/ReflectionEquals.java",
+    "signature": "org.mockito.internal.matchers.apachecommons.ReflectionEquals.excludeFields",
+    "snippet": "    private final String[] excludeFields;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.progress.ArgumentMatcherStorageImpl",
+    "src_path": "src/org/mockito/internal/progress/ArgumentMatcherStorageImpl.java",
+    "signature": "org.mockito.internal.progress.ArgumentMatcherStorageImpl.matcherStack",
+    "snippet": "    private Stack<LocalizedMatcher> matcherStack = new Stack<LocalizedMatcher>();",
+    "begin_line": 24,
+    "end_line": 24,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.progress.MockingProgressImpl",
+    "src_path": "src/org/mockito/internal/progress/MockingProgressImpl.java",
+    "signature": "org.mockito.internal.progress.MockingProgressImpl.reporter",
+    "snippet": "    private final Reporter reporter = new Reporter();",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.progress.MockingProgressImpl",
+    "src_path": "src/org/mockito/internal/progress/MockingProgressImpl.java",
+    "signature": "org.mockito.internal.progress.MockingProgressImpl.argumentMatcherStorage",
+    "snippet": "    private final ArgumentMatcherStorage argumentMatcherStorage = new ArgumentMatcherStorageImpl();",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.progress.MockingProgressImpl",
+    "src_path": "src/org/mockito/internal/progress/MockingProgressImpl.java",
+    "signature": "org.mockito.internal.progress.MockingProgressImpl.iOngoingStubbing",
+    "snippet": "    IOngoingStubbing iOngoingStubbing;",
+    "begin_line": 23,
+    "end_line": 23,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.progress.MockingProgressImpl",
+    "src_path": "src/org/mockito/internal/progress/MockingProgressImpl.java",
+    "signature": "org.mockito.internal.progress.MockingProgressImpl.verificationMode",
+    "snippet": "    private Localized<VerificationMode> verificationMode;",
+    "begin_line": 24,
+    "end_line": 24,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.progress.MockingProgressImpl",
+    "src_path": "src/org/mockito/internal/progress/MockingProgressImpl.java",
+    "signature": "org.mockito.internal.progress.MockingProgressImpl.stubbingInProgress",
+    "snippet": "    private Location stubbingInProgress = null;",
+    "begin_line": 25,
+    "end_line": 25,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.progress.MockingProgressImpl",
+    "src_path": "src/org/mockito/internal/progress/MockingProgressImpl.java",
+    "signature": "org.mockito.internal.progress.MockingProgressImpl.listener",
+    "snippet": "    private MockingProgressListener listener;",
+    "begin_line": 26,
+    "end_line": 26,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.progress.SequenceNumber",
+    "src_path": "src/org/mockito/internal/progress/SequenceNumber.java",
+    "signature": "org.mockito.internal.progress.SequenceNumber.sequenceNumber",
+    "snippet": "    private static int sequenceNumber = 1;",
+    "begin_line": 9,
+    "end_line": 9,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.progress.ThreadSafeMockingProgress",
+    "src_path": "src/org/mockito/internal/progress/ThreadSafeMockingProgress.java",
+    "signature": "org.mockito.internal.progress.ThreadSafeMockingProgress.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 6839454041642082618L;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.progress.ThreadSafeMockingProgress",
+    "src_path": "src/org/mockito/internal/progress/ThreadSafeMockingProgress.java",
+    "signature": "org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress",
+    "snippet": "    private static ThreadLocal<MockingProgress> mockingProgress = new ThreadLocal<MockingProgress>();",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.reporting.PrintSettings",
+    "src_path": "src/org/mockito/internal/reporting/PrintSettings.java",
+    "signature": "org.mockito.internal.reporting.PrintSettings.multiline",
+    "snippet": "    private boolean multiline;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.reporting.PrintSettings",
+    "src_path": "src/org/mockito/internal/reporting/PrintSettings.java",
+    "signature": "org.mockito.internal.reporting.PrintSettings.withTypeInfo",
+    "snippet": "    private List<Integer> withTypeInfo = new LinkedList<Integer>();",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.reporting.SmartPrinter",
+    "src_path": "src/org/mockito/internal/reporting/SmartPrinter.java",
+    "signature": "org.mockito.internal.reporting.SmartPrinter.wanted",
+    "snippet": "    private final String wanted;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.reporting.SmartPrinter",
+    "src_path": "src/org/mockito/internal/reporting/SmartPrinter.java",
+    "signature": "org.mockito.internal.reporting.SmartPrinter.actual",
+    "snippet": "    private final String actual;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.runners.JUnit44RunnerImpl",
+    "src_path": "src/org/mockito/internal/runners/JUnit44RunnerImpl.java",
+    "signature": "org.mockito.internal.runners.JUnit44RunnerImpl.runner",
+    "snippet": "\tJUnit4ClassRunner runner;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.runners.JUnit45AndHigherRunnerImpl",
+    "src_path": "src/org/mockito/internal/runners/JUnit45AndHigherRunnerImpl.java",
+    "signature": "org.mockito.internal.runners.JUnit45AndHigherRunnerImpl.runner",
+    "snippet": "    private BlockJUnit4ClassRunner runner;",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.runners.RunnerFactory",
+    "src_path": "src/org/mockito/internal/runners/RunnerFactory.java",
+    "signature": "org.mockito.internal.runners.RunnerFactory.runnerProvider",
+    "snippet": "    private final RunnerProvider runnerProvider;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.runners.util.FrameworkUsageValidator",
+    "src_path": "src/org/mockito/internal/runners/util/FrameworkUsageValidator.java",
+    "signature": "org.mockito.internal.runners.util.FrameworkUsageValidator.notifier",
+    "snippet": "    private final RunNotifier notifier;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.runners.util.RunnerProvider",
+    "src_path": "src/org/mockito/internal/runners/util/RunnerProvider.java",
+    "signature": "org.mockito.internal.runners.util.RunnerProvider.hasJUnit45OrHigher",
+    "snippet": "    private static boolean hasJUnit45OrHigher; ",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.ConsecutiveStubbing",
+    "src_path": "src/org/mockito/internal/stubbing/ConsecutiveStubbing.java",
+    "signature": "org.mockito.internal.stubbing.ConsecutiveStubbing.invocationContainerImpl",
+    "snippet": "    private final InvocationContainerImpl invocationContainerImpl;",
+    "begin_line": 12,
+    "end_line": 12,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.InvocationContainerImpl",
+    "src_path": "src/org/mockito/internal/stubbing/InvocationContainerImpl.java",
+    "signature": "org.mockito.internal.stubbing.InvocationContainerImpl.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -5334301962749537176L;",
+    "begin_line": 23,
+    "end_line": 23,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.InvocationContainerImpl",
+    "src_path": "src/org/mockito/internal/stubbing/InvocationContainerImpl.java",
+    "signature": "org.mockito.internal.stubbing.InvocationContainerImpl.stubbed",
+    "snippet": "    private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();",
+    "begin_line": 24,
+    "end_line": 24,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.InvocationContainerImpl",
+    "src_path": "src/org/mockito/internal/stubbing/InvocationContainerImpl.java",
+    "signature": "org.mockito.internal.stubbing.InvocationContainerImpl.mockingProgress",
+    "snippet": "    private final MockingProgress mockingProgress;",
+    "begin_line": 25,
+    "end_line": 25,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.InvocationContainerImpl",
+    "src_path": "src/org/mockito/internal/stubbing/InvocationContainerImpl.java",
+    "signature": "org.mockito.internal.stubbing.InvocationContainerImpl.answersForStubbing",
+    "snippet": "    private final List<Answer> answersForStubbing = new ArrayList<Answer>();",
+    "begin_line": 26,
+    "end_line": 26,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.InvocationContainerImpl",
+    "src_path": "src/org/mockito/internal/stubbing/InvocationContainerImpl.java",
+    "signature": "org.mockito.internal.stubbing.InvocationContainerImpl.registeredInvocations",
+    "snippet": "    private final RegisteredInvocations registeredInvocations = new RegisteredInvocations();",
+    "begin_line": 27,
+    "end_line": 27,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.InvocationContainerImpl",
+    "src_path": "src/org/mockito/internal/stubbing/InvocationContainerImpl.java",
+    "signature": "org.mockito.internal.stubbing.InvocationContainerImpl.invocationForStubbing",
+    "snippet": "    private InvocationMatcher invocationForStubbing;",
+    "begin_line": 29,
+    "end_line": 29,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.OngoingStubbingImpl",
+    "src_path": "src/org/mockito/internal/stubbing/OngoingStubbingImpl.java",
+    "signature": "org.mockito.internal.stubbing.OngoingStubbingImpl.invocationContainerImpl",
+    "snippet": "    private final InvocationContainerImpl invocationContainerImpl;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.StubbedInvocationMatcher",
+    "src_path": "src/org/mockito/internal/stubbing/StubbedInvocationMatcher.java",
+    "signature": "org.mockito.internal.stubbing.StubbedInvocationMatcher.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 4919105134123672727L;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.StubbedInvocationMatcher",
+    "src_path": "src/org/mockito/internal/stubbing/StubbedInvocationMatcher.java",
+    "signature": "org.mockito.internal.stubbing.StubbedInvocationMatcher.answers",
+    "snippet": "    private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.StubbedInvocationMatcher",
+    "src_path": "src/org/mockito/internal/stubbing/StubbedInvocationMatcher.java",
+    "signature": "org.mockito.internal.stubbing.StubbedInvocationMatcher.usedAt",
+    "snippet": "    private PrintableInvocation usedAt;",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.StubberImpl",
+    "src_path": "src/org/mockito/internal/stubbing/StubberImpl.java",
+    "signature": "org.mockito.internal.stubbing.StubberImpl.answers",
+    "snippet": "    final List<Answer> answers = new LinkedList<Answer>();",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.StubberImpl",
+    "src_path": "src/org/mockito/internal/stubbing/StubberImpl.java",
+    "signature": "org.mockito.internal.stubbing.StubberImpl.reporter",
+    "snippet": "    private final Reporter reporter = new Reporter();",
+    "begin_line": 22,
+    "end_line": 22,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.VoidMethodStubbableImpl",
+    "src_path": "src/org/mockito/internal/stubbing/VoidMethodStubbableImpl.java",
+    "signature": "org.mockito.internal.stubbing.VoidMethodStubbableImpl.mock",
+    "snippet": "    private final T mock;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.VoidMethodStubbableImpl",
+    "src_path": "src/org/mockito/internal/stubbing/VoidMethodStubbableImpl.java",
+    "signature": "org.mockito.internal.stubbing.VoidMethodStubbableImpl.invocationContainerImpl",
+    "snippet": "    private InvocationContainerImpl invocationContainerImpl;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter",
+    "src_path": "src/org/mockito/internal/stubbing/answers/AnswerReturnValuesAdapter.java",
+    "signature": "org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1418158596876713469L;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter",
+    "src_path": "src/org/mockito/internal/stubbing/answers/AnswerReturnValuesAdapter.java",
+    "signature": "org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter.returnValues",
+    "snippet": "    private final ReturnValues returnValues;",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.answers.AnswersValidator",
+    "src_path": "src/org/mockito/internal/stubbing/answers/AnswersValidator.java",
+    "signature": "org.mockito.internal.stubbing.answers.AnswersValidator.reporter",
+    "snippet": "    private Reporter reporter = new Reporter();",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.answers.CallsRealMethods",
+    "src_path": "src/org/mockito/internal/stubbing/answers/CallsRealMethods.java",
+    "signature": "org.mockito.internal.stubbing.answers.CallsRealMethods.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 9057165148930624087L;",
+    "begin_line": 33,
+    "end_line": 33,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.answers.DoesNothing",
+    "src_path": "src/org/mockito/internal/stubbing/answers/DoesNothing.java",
+    "signature": "org.mockito.internal.stubbing.answers.DoesNothing.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 4840880517740698416L;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.answers.Returns",
+    "src_path": "src/org/mockito/internal/stubbing/answers/Returns.java",
+    "signature": "org.mockito.internal.stubbing.answers.Returns.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -6245608253574215396L;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.answers.Returns",
+    "src_path": "src/org/mockito/internal/stubbing/answers/Returns.java",
+    "signature": "org.mockito.internal.stubbing.answers.Returns.value",
+    "snippet": "    private final Object value;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.answers.ThrowsException",
+    "src_path": "src/org/mockito/internal/stubbing/answers/ThrowsException.java",
+    "signature": "org.mockito.internal.stubbing.answers.ThrowsException.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1128820328555183980L;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.answers.ThrowsException",
+    "src_path": "src/org/mockito/internal/stubbing/answers/ThrowsException.java",
+    "signature": "org.mockito.internal.stubbing.answers.ThrowsException.throwable",
+    "snippet": "    private final Throwable throwable;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.answers.ThrowsException",
+    "src_path": "src/org/mockito/internal/stubbing/answers/ThrowsException.java",
+    "signature": "org.mockito.internal.stubbing.answers.ThrowsException.filter",
+    "snippet": "    private final ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.Answers",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/Answers.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.Answers.implementation",
+    "snippet": "    private Answer<Object> implementation;",
+    "begin_line": 30,
+    "end_line": 30,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.GloballyConfiguredAnswer",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/GloballyConfiguredAnswer.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.GloballyConfiguredAnswer.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 3585893470101750917L;",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -6926328908792880098L;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs.delegate",
+    "snippet": "    private Answer<Object> delegate = new ReturnsEmptyValues();",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsEmptyValues.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 1998191268711234347L;",
+    "begin_line": 53,
+    "end_line": 53,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsMocks",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsMocks.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsMocks.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -6755257986994634579L;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsMocks",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsMocks.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsMocks.mockitoCore",
+    "snippet": "    private MockitoCore mockitoCore = new MockitoCore();",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsMocks",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsMocks.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsMocks.delegate",
+    "snippet": "    private Answer<Object> delegate = new ReturnsMoreEmptyValues();",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsMoreEmptyValues.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -2816745041482698471L;",
+    "begin_line": 46,
+    "end_line": 46,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsMoreEmptyValues.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues.delegate",
+    "snippet": "    private Answer<Object> delegate = new ReturnsEmptyValues();",
+    "begin_line": 47,
+    "end_line": 47,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 7618312406617949441L;",
+    "begin_line": 40,
+    "end_line": 40,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls.ThrowingInterceptor",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls.ThrowingInterceptor.invocation",
+    "snippet": "        private final InvocationOnMock invocation;",
+    "begin_line": 43,
+    "end_line": 43,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls.ThrowingInterceptor",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls.ThrowingInterceptor.location",
+    "snippet": "        private final Location location = new Location();",
+    "begin_line": 44,
+    "end_line": 44,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls",
+    "src_path": "src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java",
+    "signature": "org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls.delegate",
+    "snippet": "    private final Answer<Object> delegate = new ReturnsMoreEmptyValues();",
+    "begin_line": 60,
+    "end_line": 60,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.Decamelizer",
+    "src_path": "src/org/mockito/internal/util/Decamelizer.java",
+    "signature": "org.mockito.internal.util.Decamelizer.CAPS",
+    "snippet": "private static final Pattern CAPS = Pattern.compile(\"([A-Z\\\\d][^A-Z\\\\d]*)\");",
+    "begin_line": 12,
+    "end_line": 12,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.IdentitySet",
+    "src_path": "src/org/mockito/internal/util/IdentitySet.java",
+    "signature": "org.mockito.internal.util.IdentitySet.list",
+    "snippet": "    LinkedList list = new LinkedList();",
+    "begin_line": 12,
+    "end_line": 12,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.MockName",
+    "src_path": "src/org/mockito/internal/util/MockName.java",
+    "signature": "org.mockito.internal.util.MockName.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = 8014974700844306925L;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.MockName",
+    "src_path": "src/org/mockito/internal/util/MockName.java",
+    "signature": "org.mockito.internal.util.MockName.mockName",
+    "snippet": "    private final String mockName;",
+    "begin_line": 12,
+    "end_line": 12,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.MockName",
+    "src_path": "src/org/mockito/internal/util/MockName.java",
+    "signature": "org.mockito.internal.util.MockName.surrogate",
+    "snippet": "    private boolean surrogate;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.MockUtil",
+    "src_path": "src/org/mockito/internal/util/MockUtil.java",
+    "signature": "org.mockito.internal.util.MockUtil.creationValidator",
+    "snippet": "    private final MockCreationValidator creationValidator;",
+    "begin_line": 24,
+    "end_line": 24,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.ObjectMethodsGuru",
+    "src_path": "src/org/mockito/internal/util/ObjectMethodsGuru.java",
+    "signature": "org.mockito.internal.util.ObjectMethodsGuru.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -1286718569065470494L;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.Primitives",
+    "src_path": "src/org/mockito/internal/util/Primitives.java",
+    "signature": "org.mockito.internal.util.Primitives.wrapperReturnValues",
+    "snippet": "    private static Map<Class<?>, Object> wrapperReturnValues = new HashMap<Class<?>, Object>();",
+    "begin_line": 29,
+    "end_line": 29,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.Primitives",
+    "src_path": "src/org/mockito/internal/util/Primitives.java",
+    "signature": "org.mockito.internal.util.Primitives.primitiveTypes",
+    "snippet": "    private static Map<Class<?>, Class<?>> primitiveTypes = new HashMap<Class<?>, Class<?>>();",
+    "begin_line": 30,
+    "end_line": 30,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.Primitives",
+    "src_path": "src/org/mockito/internal/util/Primitives.java",
+    "signature": "org.mockito.internal.util.Primitives.primitiveValues",
+    "snippet": "    private static Map<Class<?>, Object> primitiveValues = new HashMap<Class<?>, Object>();",
+    "begin_line": 31,
+    "end_line": 31,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.SimpleMockitoLogger",
+    "src_path": "src/org/mockito/internal/util/SimpleMockitoLogger.java",
+    "signature": "org.mockito.internal.util.SimpleMockitoLogger.loggedInfo",
+    "snippet": "    StringBuilder loggedInfo = new StringBuilder();",
+    "begin_line": 9,
+    "end_line": 9,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.reflection.AccessibilityChanger",
+    "src_path": "src/org/mockito/internal/util/reflection/AccessibilityChanger.java",
+    "signature": "org.mockito.internal.util.reflection.AccessibilityChanger.wasAccessible",
+    "snippet": "    private Boolean wasAccessible = null;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.reflection.FieldReader",
+    "src_path": "src/org/mockito/internal/util/reflection/FieldReader.java",
+    "signature": "org.mockito.internal.util.reflection.FieldReader.target",
+    "snippet": "    final Object target;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.reflection.FieldReader",
+    "src_path": "src/org/mockito/internal/util/reflection/FieldReader.java",
+    "signature": "org.mockito.internal.util.reflection.FieldReader.field",
+    "snippet": "    final Field field;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.reflection.FieldReader",
+    "src_path": "src/org/mockito/internal/util/reflection/FieldReader.java",
+    "signature": "org.mockito.internal.util.reflection.FieldReader.changer",
+    "snippet": "    final AccessibilityChanger changer = new AccessibilityChanger();",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.reflection.FieldSetter",
+    "src_path": "src/org/mockito/internal/util/reflection/FieldSetter.java",
+    "signature": "org.mockito.internal.util.reflection.FieldSetter.target",
+    "snippet": "    private final Object target;",
+    "begin_line": 11,
+    "end_line": 11,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.reflection.FieldSetter",
+    "src_path": "src/org/mockito/internal/util/reflection/FieldSetter.java",
+    "signature": "org.mockito.internal.util.reflection.FieldSetter.field",
+    "snippet": "    private final Field field;",
+    "begin_line": 12,
+    "end_line": 12,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.util.reflection.LenientCopyTool",
+    "src_path": "src/org/mockito/internal/util/reflection/LenientCopyTool.java",
+    "signature": "org.mockito.internal.util.reflection.LenientCopyTool.fieldCopier",
+    "snippet": "    FieldCopier fieldCopier = new FieldCopier();",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.AtLeast",
+    "src_path": "src/org/mockito/internal/verification/AtLeast.java",
+    "signature": "org.mockito.internal.verification.AtLeast.wantedCount",
+    "snippet": "    final int wantedCount;",
+    "begin_line": 23,
+    "end_line": 23,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.AtMost",
+    "src_path": "src/org/mockito/internal/verification/AtMost.java",
+    "signature": "org.mockito.internal.verification.AtMost.maxNumberOfInvocations",
+    "snippet": "    private final int maxNumberOfInvocations;",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.AtMost",
+    "src_path": "src/org/mockito/internal/verification/AtMost.java",
+    "signature": "org.mockito.internal.verification.AtMost.invocationMarker",
+    "snippet": "    private final InvocationMarker invocationMarker = new InvocationMarker();",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.InOrderContextImpl",
+    "src_path": "src/org/mockito/internal/verification/InOrderContextImpl.java",
+    "signature": "org.mockito.internal.verification.InOrderContextImpl.verified",
+    "snippet": "    final IdentitySet verified = new IdentitySet();",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.InOrderWrapper",
+    "src_path": "src/org/mockito/internal/verification/InOrderWrapper.java",
+    "signature": "org.mockito.internal.verification.InOrderWrapper.mode",
+    "snippet": "    private final VerificationInOrderMode mode;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.InOrderWrapper",
+    "src_path": "src/org/mockito/internal/verification/InOrderWrapper.java",
+    "signature": "org.mockito.internal.verification.InOrderWrapper.inOrder",
+    "snippet": "    private final InOrderImpl inOrder;",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.MockAwareVerificationMode",
+    "src_path": "src/org/mockito/internal/verification/MockAwareVerificationMode.java",
+    "signature": "org.mockito.internal.verification.MockAwareVerificationMode.mock",
+    "snippet": "    private final Object mock;",
+    "begin_line": 12,
+    "end_line": 12,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.MockAwareVerificationMode",
+    "src_path": "src/org/mockito/internal/verification/MockAwareVerificationMode.java",
+    "signature": "org.mockito.internal.verification.MockAwareVerificationMode.mode",
+    "snippet": "    private final VerificationMode mode;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.Only",
+    "src_path": "src/org/mockito/internal/verification/Only.java",
+    "signature": "org.mockito.internal.verification.Only.finder",
+    "snippet": "\tprivate final InvocationsFinder finder = new InvocationsFinder();",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.Only",
+    "src_path": "src/org/mockito/internal/verification/Only.java",
+    "signature": "org.mockito.internal.verification.Only.marker",
+    "snippet": "\tprivate final InvocationMarker marker = new InvocationMarker();",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.Only",
+    "src_path": "src/org/mockito/internal/verification/Only.java",
+    "signature": "org.mockito.internal.verification.Only.reporter",
+    "snippet": "\tprivate final Reporter reporter = new Reporter();",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.RegisteredInvocations",
+    "src_path": "src/org/mockito/internal/verification/RegisteredInvocations.java",
+    "signature": "org.mockito.internal.verification.RegisteredInvocations.serialVersionUID",
+    "snippet": "    private static final long serialVersionUID = -2674402327380736290L;",
+    "begin_line": 17,
+    "end_line": 17,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.RegisteredInvocations",
+    "src_path": "src/org/mockito/internal/verification/RegisteredInvocations.java",
+    "signature": "org.mockito.internal.verification.RegisteredInvocations.invocations",
+    "snippet": "    private final List<Invocation> invocations = Collections.synchronizedList(new LinkedList<Invocation>());",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.Times",
+    "src_path": "src/org/mockito/internal/verification/Times.java",
+    "signature": "org.mockito.internal.verification.Times.wantedCount",
+    "snippet": "    final int wantedCount;",
+    "begin_line": 23,
+    "end_line": 23,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.VerificationDataImpl",
+    "src_path": "src/org/mockito/internal/verification/VerificationDataImpl.java",
+    "signature": "org.mockito.internal.verification.VerificationDataImpl.wanted",
+    "snippet": "    private final InvocationMatcher wanted;",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.VerificationDataImpl",
+    "src_path": "src/org/mockito/internal/verification/VerificationDataImpl.java",
+    "signature": "org.mockito.internal.verification.VerificationDataImpl.invocations",
+    "snippet": "    private final InvocationContainer invocations;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.VerificationWithTimeoutImpl",
+    "src_path": "src/org/mockito/internal/verification/VerificationWithTimeoutImpl.java",
+    "signature": "org.mockito.internal.verification.VerificationWithTimeoutImpl.delegate",
+    "snippet": "    VerificationMode delegate;",
+    "begin_line": 13,
+    "end_line": 13,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.VerificationWithTimeoutImpl",
+    "src_path": "src/org/mockito/internal/verification/VerificationWithTimeoutImpl.java",
+    "signature": "org.mockito.internal.verification.VerificationWithTimeoutImpl.timeout",
+    "snippet": "    int timeout;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.VerificationWithTimeoutImpl",
+    "src_path": "src/org/mockito/internal/verification/VerificationWithTimeoutImpl.java",
+    "signature": "org.mockito.internal.verification.VerificationWithTimeoutImpl.treshhold",
+    "snippet": "    int treshhold;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.api.VerificationDataInOrderImpl",
+    "src_path": "src/org/mockito/internal/verification/api/VerificationDataInOrderImpl.java",
+    "signature": "org.mockito.internal.verification.api.VerificationDataInOrderImpl.inOrder",
+    "snippet": "    private final InOrderContext inOrder;",
+    "begin_line": 14,
+    "end_line": 14,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.api.VerificationDataInOrderImpl",
+    "src_path": "src/org/mockito/internal/verification/api/VerificationDataInOrderImpl.java",
+    "signature": "org.mockito.internal.verification.api.VerificationDataInOrderImpl.allInvocations",
+    "snippet": "    private final List<Invocation> allInvocations;",
+    "begin_line": 15,
+    "end_line": 15,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.api.VerificationDataInOrderImpl",
+    "src_path": "src/org/mockito/internal/verification/api/VerificationDataInOrderImpl.java",
+    "signature": "org.mockito.internal.verification.api.VerificationDataInOrderImpl.wanted",
+    "snippet": "    private final InvocationMatcher wanted;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/AtLeastXNumberOfInvocationsChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker.reporter",
+    "snippet": "    Reporter reporter = new Reporter();",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/AtLeastXNumberOfInvocationsChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker.finder",
+    "snippet": "    InvocationsFinder finder = new InvocationsFinder();",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/AtLeastXNumberOfInvocationsChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker.invocationMarker",
+    "snippet": "    InvocationMarker invocationMarker = new InvocationMarker();",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsInOrderChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/AtLeastXNumberOfInvocationsInOrderChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsInOrderChecker.reporter",
+    "snippet": "    private final Reporter reporter = new Reporter();",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsInOrderChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/AtLeastXNumberOfInvocationsInOrderChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsInOrderChecker.finder",
+    "snippet": "    private final InvocationsFinder finder = new InvocationsFinder();",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsInOrderChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/AtLeastXNumberOfInvocationsInOrderChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsInOrderChecker.invocationMarker",
+    "snippet": "    private final InvocationMarker invocationMarker = new InvocationMarker();",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsInOrderChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/AtLeastXNumberOfInvocationsInOrderChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsInOrderChecker.orderingContext",
+    "snippet": "    private final InOrderContext orderingContext;",
+    "begin_line": 22,
+    "end_line": 22,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.MissingInvocationChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/MissingInvocationChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.MissingInvocationChecker.reporter",
+    "snippet": "    private final Reporter reporter;",
+    "begin_line": 18,
+    "end_line": 18,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.MissingInvocationChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/MissingInvocationChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.MissingInvocationChecker.finder",
+    "snippet": "    private final InvocationsFinder finder;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.MissingInvocationInOrderChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/MissingInvocationInOrderChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.MissingInvocationInOrderChecker.reporter",
+    "snippet": "    private final Reporter reporter;",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.MissingInvocationInOrderChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/MissingInvocationInOrderChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.MissingInvocationInOrderChecker.finder",
+    "snippet": "    private final InvocationsFinder finder;",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.NumberOfInvocationsChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/NumberOfInvocationsChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.NumberOfInvocationsChecker.reporter",
+    "snippet": "    private final Reporter reporter;",
+    "begin_line": 19,
+    "end_line": 19,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.NumberOfInvocationsChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/NumberOfInvocationsChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.NumberOfInvocationsChecker.finder",
+    "snippet": "    private final InvocationsFinder finder;",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.NumberOfInvocationsChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/NumberOfInvocationsChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.NumberOfInvocationsChecker.invocationMarker",
+    "snippet": "    private final InvocationMarker invocationMarker = new InvocationMarker();",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.NumberOfInvocationsInOrderChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/NumberOfInvocationsInOrderChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.NumberOfInvocationsInOrderChecker.reporter",
+    "snippet": "    private final Reporter reporter;",
+    "begin_line": 20,
+    "end_line": 20,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.NumberOfInvocationsInOrderChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/NumberOfInvocationsInOrderChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.NumberOfInvocationsInOrderChecker.finder",
+    "snippet": "    private final InvocationsFinder finder;",
+    "begin_line": 21,
+    "end_line": 21,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.internal.verification.checkers.NumberOfInvocationsInOrderChecker",
+    "src_path": "src/org/mockito/internal/verification/checkers/NumberOfInvocationsInOrderChecker.java",
+    "signature": "org.mockito.internal.verification.checkers.NumberOfInvocationsInOrderChecker.invocationMarker",
+    "snippet": "    private final InvocationMarker invocationMarker = new InvocationMarker();",
+    "begin_line": 22,
+    "end_line": 22,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.runners.ConsoleSpammingMockitoJUnitRunner",
+    "src_path": "src/org/mockito/runners/ConsoleSpammingMockitoJUnitRunner.java",
+    "signature": "org.mockito.runners.ConsoleSpammingMockitoJUnitRunner.logger",
+    "snippet": "    private final MockitoLogger logger;",
+    "begin_line": 91,
+    "end_line": 91,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.runners.ConsoleSpammingMockitoJUnitRunner",
+    "src_path": "src/org/mockito/runners/ConsoleSpammingMockitoJUnitRunner.java",
+    "signature": "org.mockito.runners.ConsoleSpammingMockitoJUnitRunner.runner",
+    "snippet": "    private RunnerImpl runner;",
+    "begin_line": 92,
+    "end_line": 92,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.runners.ConsoleSpammingMockitoJUnitRunner.anonymous_L105",
+    "src_path": "src/org/mockito/runners/ConsoleSpammingMockitoJUnitRunner.java",
+    "signature": "org.mockito.runners.ConsoleSpammingMockitoJUnitRunner.anonymous_L105.warningsCollector",
+    "snippet": "            WarningsCollector warningsCollector;",
+    "begin_line": 106,
+    "end_line": 106,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.runners.MockitoJUnitRunner",
+    "src_path": "src/org/mockito/runners/MockitoJUnitRunner.java",
+    "signature": "org.mockito.runners.MockitoJUnitRunner.runner",
+    "snippet": "    private final RunnerImpl runner;",
+    "begin_line": 54,
+    "end_line": 54,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.runners.VerboseMockitoJUnitRunner",
+    "src_path": "src/org/mockito/runners/VerboseMockitoJUnitRunner.java",
+    "signature": "org.mockito.runners.VerboseMockitoJUnitRunner.runner",
+    "snippet": "    private RunnerImpl runner;",
+    "begin_line": 40,
+    "end_line": 40,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.runners.VerboseMockitoJUnitRunner.anonymous_L54",
+    "src_path": "src/org/mockito/runners/VerboseMockitoJUnitRunner.java",
+    "signature": "org.mockito.runners.VerboseMockitoJUnitRunner.anonymous_L54.warningsCollector",
+    "snippet": "            WarningsCollector warningsCollector;",
+    "begin_line": 56,
+    "end_line": 56,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.stubbing.answers.ReturnsElementsOf",
+    "src_path": "src/org/mockito/stubbing/answers/ReturnsElementsOf.java",
+    "signature": "org.mockito.stubbing.answers.ReturnsElementsOf.elements",
+    "snippet": "    final LinkedList elements;",
+    "begin_line": 28,
+    "end_line": 28,
+    "comment": ""
+  },
+  {
+    "class_name": "org.mockito.verification.Timeout",
+    "src_path": "src/org/mockito/verification/Timeout.java",
+    "signature": "org.mockito.verification.Timeout.impl",
+    "snippet": "    VerificationWithTimeoutImpl impl;",
+    "begin_line": 16,
+    "end_line": 16,
+    "comment": ""
+  }
+]

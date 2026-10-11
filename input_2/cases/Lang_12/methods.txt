@@ -1,0 +1,194 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.RandomStringUtils.random(int,int,int,boolean,boolean,char[],Random)
+Source: src/main/java/org/apache/commons/lang3/RandomStringUtils.java
+Original range: 223-282
+Documentation:
+/**
+     * <p>Creates a random string based on a variety of options, using
+     * supplied source of randomness.</p>
+     *
+     * <p>If start and end are both {@code 0}, start and end are set
+     * to {@code ' '} and {@code 'z'}, the ASCII printable
+     * characters, will be used, unless letters and numbers are both
+     * {@code false}, in which case, start and end are set to
+     * {@code 0} and {@code Integer.MAX_VALUE}.
+     *
+     * <p>If set is not {@code null}, characters between start and
+     * end are chosen.</p>
+     *
+     * <p>This method accepts a user-supplied {@link Random}
+     * instance to use as a source of randomness. By seeding a single 
+     * {@link Random} instance with a fixed seed and using it for each call,
+     * the same random sequence of strings can be generated repeatedly
+     * and predictably.</p>
+     *
+     * @param count  the length of random string to create
+     * @param start  the position in set of chars to start at
+     * @param end  the position in set of chars to end before
+     * @param letters  only allow letters?
+     * @param numbers  only allow numbers?
+     * @param chars  the set of chars to choose randoms from, must not be empty.
+     *  If {@code null}, then it will use the set of all chars.
+     * @param random  a source of randomness.
+     * @return the random string
+     * @throws ArrayIndexOutOfBoundsException if there are not
+     *  {@code (end - start) + 1} characters in the set array.
+     * @throws IllegalArgumentException if {@code count} &lt; 0 or the provided chars array is empty.
+     * @since 2.0
+     */
+Method code:
+223 |     public static String random(int count, int start, int end, boolean letters, boolean numbers,
+224 |                                 char[] chars, Random random) {
+225 |         if (count == 0) {
+226 |             return "";
+227 |         } else if (count < 0) {
+228 |             throw new IllegalArgumentException("Requested random string length " + count + " is less than 0.");
+229 |         }
+230 | 
+231 |         if (start == 0 && end == 0) {
+232 |                 if (!letters && !numbers) {
+233 |                     end = Integer.MAX_VALUE;
+234 |                 } else {
+235 |                     end = 'z' + 1;
+236 |                     start = ' ';                
+237 |                 }
+238 |         }
+239 | 
+240 |         char[] buffer = new char[count];
+241 |         int gap = end - start;
+242 | 
+243 |         while (count-- != 0) {
+244 |             char ch;
+245 |             if (chars == null) {
+246 |                 ch = (char) (random.nextInt(gap) + start);
+247 |             } else {
+248 |                 ch = chars[random.nextInt(gap) + start];
+249 |             }
+250 |             if (letters && Character.isLetter(ch)
+251 |                     || numbers && Character.isDigit(ch)
+252 |                     || !letters && !numbers) {
+253 |                 if(ch >= 56320 && ch <= 57343) {
+254 |                     if(count == 0) {
+255 |                         count++;
+256 |                     } else {
+257 |                         // low surrogate, insert high surrogate after putting it in
+258 |                         buffer[count] = ch;
+259 |                         count--;
+260 |                         buffer[count] = (char) (55296 + random.nextInt(128));
+261 |                     }
+262 |                 } else if(ch >= 55296 && ch <= 56191) {
+263 |                     if(count == 0) {
+264 |                         count++;
+265 |                     } else {
+266 |                         // high surrogate, insert low surrogate before putting it in
+267 |                         buffer[count] = (char) (56320 + random.nextInt(128));
+268 |                         count--;
+269 |                         buffer[count] = ch;
+270 |                     }
+271 |                 } else if(ch >= 56192 && ch <= 56319) {
+272 |                     // private high surrogate, no effing clue, so skip it
+273 |                     count++;
+274 |                 } else {
+275 |                     buffer[count] = ch;
+276 |                 }
+277 |             } else {
+278 |                 count++;
+279 |             }
+280 |         }
+281 |         return new String(buffer);
+282 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.RandomStringUtils.random(int,int,int,boolean,boolean)
+Source: src/main/java/org/apache/commons/lang3/RandomStringUtils.java
+Original range: 162-164
+Documentation:
+/**
+     * <p>Creates a random string whose length is the number of characters
+     * specified.</p>
+     *
+     * <p>Characters will be chosen from the set of alpha-numeric
+     * characters as indicated by the arguments.</p>
+     *
+     * @param count  the length of random string to create
+     * @param start  the position in set of chars to start at
+     * @param end  the position in set of chars to end before
+     * @param letters  if {@code true}, generated string will include
+     *  alphabetic characters
+     * @param numbers  if {@code true}, generated string will include
+     *  numeric characters
+     * @return the random string
+     */
+Method code:
+162 |     public static String random(int count, int start, int end, boolean letters, boolean numbers) {
+163 |         return random(count, start, end, letters, numbers, null, RANDOM);
+164 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang3.RandomStringUtils.random(int,char...)
+Source: src/main/java/org/apache/commons/lang3/RandomStringUtils.java
+Original range: 317-322
+Documentation:
+/**
+     * <p>Creates a random string whose length is the number of characters
+     * specified.</p>
+     *
+     * <p>Characters will be chosen from the set of characters specified.</p>
+     *
+     * @param count  the length of random string to create
+     * @param chars  the character array containing the set of characters to use,
+     *  may be null
+     * @return the random string
+     * @throws IllegalArgumentException if {@code count} &lt; 0.
+     */
+Method code:
+317 |     public static String random(int count, char... chars) {
+318 |         if (chars == null) {
+319 |             return random(count, 0, 0, false, false, null, RANDOM);
+320 |         }
+321 |         return random(count, 0, chars.length, false, false, chars, RANDOM);
+322 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang3.RandomStringUtils.random(int)
+Source: src/main/java/org/apache/commons/lang3/RandomStringUtils.java
+Original range: 68-70
+Documentation:
+/**
+     * <p>Creates a random string whose length is the number of characters
+     * specified.</p>
+     *
+     * <p>Characters will be chosen from the set of all characters.</p>
+     *
+     * @param count  the length of random string to create
+     * @return the random string
+     */
+Method code:
+68 |     public static String random(int count) {
+69 |         return random(count, false, false);
+70 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang3.RandomStringUtils.random(int,boolean,boolean)
+Source: src/main/java/org/apache/commons/lang3/RandomStringUtils.java
+Original range: 142-144
+Documentation:
+/**
+     * <p>Creates a random string whose length is the number of characters
+     * specified.</p>
+     *
+     * <p>Characters will be chosen from the set of alpha-numeric
+     * characters as indicated by the arguments.</p>
+     *
+     * @param count  the length of random string to create
+     * @param letters  if {@code true}, generated string will include
+     *  alphabetic characters
+     * @param numbers  if {@code true}, generated string will include
+     *  numeric characters
+     * @return the random string
+     */
+Method code:
+142 |     public static String random(int count, boolean letters, boolean numbers) {
+143 |         return random(count, 0, 0, letters, numbers);
+144 |     }
+

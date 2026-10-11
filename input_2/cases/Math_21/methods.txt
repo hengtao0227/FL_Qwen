@@ -1,0 +1,999 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.copyIn(double[][])
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 524-527
+Documentation:
+/**
+     * Replace data with a fresh copy of the input array.
+     *
+     * @param in Data to copy.
+     * @throws NoDataException if the input array is empty.
+     * @throws DimensionMismatchException if the input array is not rectangular.
+     * @throws NullArgumentException if
+     * the input array is {@code null}.
+     */
+Method code:
+524 |     private void copyIn(final double[][] in)
+525 |         throws DimensionMismatchException, NoDataException, NullArgumentException {
+526 |         setSubMatrix(in, 0, 0);
+527 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 98-101
+Documentation:
+/**
+     * Create an instance with a custom number format for components.
+     * @param format the custom format for components.
+     */
+Method code:
+98 |     public RealMatrixFormat(final NumberFormat format) {
+99 |         this(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_ROW_PREFIX, DEFAULT_ROW_SUFFIX,
+100 |                 DEFAULT_ROW_SEPARATOR, DEFAULT_COLUMN_SEPARATOR, format);
+101 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.createMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 135-139
+Documentation:
+/** {@inheritDoc} */
+Method code:
+135 |     @Override
+136 |     public RealMatrix createMatrix(final int rowDimension,
+137 |                                    final int columnDimension) {
+138 |         return new Array2DRowRealMatrix(rowDimension, columnDimension);
+139 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.Array2DRowRealMatrix(double[][])
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 73-76
+Documentation:
+/**
+     * Create a new {@code RealMatrix} using the input array as the underlying
+     * data array.
+     * <p>The input array is copied, not referenced. This constructor has
+     * the same effect as calling {@link #Array2DRowRealMatrix(double[][], boolean)}
+     * with the second argument set to {@code true}.</p>
+     *
+     * @param d Data for the new matrix.
+     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws NoDataException if {@code d} row or colum dimension is zero.
+     * @throws NullArgumentException if {@code d} is {@code null}.
+     * @see #Array2DRowRealMatrix(double[][], boolean)
+     */
+Method code:
+73 |     public Array2DRowRealMatrix(final double[][] d)
+74 |         throws DimensionMismatchException, NoDataException, NullArgumentException {
+75 |         copyIn(d);
+76 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math3.util.FastMath.sqrt(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 374-376
+Documentation:
+/** Compute the square root of a number.
+     * <p><b>Note:</b> this implementation currently delegates to {@link Math#sqrt}
+     * @param a number on which evaluation is done
+     * @return square root of a
+     */
+Method code:
+374 |     public static double sqrt(final double a) {
+375 |         return Math.sqrt(a);
+376 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math3.util.FastMath.abs(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 2991-2993
+Documentation:
+/**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x)
+     */
+Method code:
+2991 |     public static double abs(double x) {
+2992 |         return (x < 0.0) ? -x : (x == 0.0) ? 0.0 : x; // -0.0 => +0.0
+2993 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.multiply(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 140-159
+Documentation:
+/** {@inheritDoc} */
+Method code:
+140 |     public RealMatrix multiply(final RealMatrix m) {
+141 |         // Safety check.
+142 |         MatrixUtils.checkMultiplicationCompatible(this, m);
+143 | 
+144 |         final int nRows = getRowDimension();
+145 |         final int nCols = m.getColumnDimension();
+146 |         final int nSum  = getColumnDimension();
+147 |         final RealMatrix out = createMatrix(nRows, nCols);
+148 |         for (int row = 0; row < nRows; ++row) {
+149 |             for (int col = 0; col < nCols; ++col) {
+150 |                 double sum = 0;
+151 |                 for (int i = 0; i < nSum; ++i) {
+152 |                     sum += getEntry(row, i) * m.getEntry(i, col);
+153 |                 }
+154 |                 out.setEntry(row, col, sum);
+155 |             }
+156 |         }
+157 | 
+158 |         return out;
+159 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.createRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 80-83
+Documentation:
+/**
+     * Returns a {@link RealMatrix} with specified dimensions.
+     * <p>The type of matrix returned depends on the dimension. Below
+     * 2<sup>12</sup> elements (i.e. 4096 elements or 64&times;64 for a
+     * square matrix) which can be stored in a 32kB array, a {@link
+     * Array2DRowRealMatrix} instance is built. Above this threshold a {@link
+     * BlockRealMatrix} instance is built.</p>
+     * <p>The matrix elements are all set to 0.0.</p>
+     * @param rows number of rows of the matrix
+     * @param columns number of columns of the matrix
+     * @return  RealMatrix with specified dimensions
+     * @see #createRealMatrix(double[][])
+     */
+Method code:
+80 |     public static RealMatrix createRealMatrix(final int rows, final int columns) {
+81 |         return (rows * columns <= 4096) ?
+82 |                 new Array2DRowRealMatrix(rows, columns) : new BlockRealMatrix(rows, columns);
+83 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.getNorm()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 240-275
+Documentation:
+/** {@inheritDoc} */
+Method code:
+240 |     public double getNorm() {
+241 |         return walkInColumnOrder(new RealMatrixPreservingVisitor() {
+242 | 
+243 |             /** Last row index. */
+244 |             private double endRow;
+245 | 
+246 |             /** Sum of absolute values on one column. */
+247 |             private double columnSum;
+248 | 
+249 |             /** Maximal sum across all columns. */
+250 |             private double maxColSum;
+251 | 
+252 |             /** {@inheritDoc} */
+253 |             public void start(final int rows, final int columns,
+254 |                               final int startRow, final int endRow,
+255 |                               final int startColumn, final int endColumn) {
+256 |                 this.endRow = endRow;
+257 |                 columnSum   = 0;
+258 |                 maxColSum   = 0;
+259 |             }
+260 | 
+261 |             /** {@inheritDoc} */
+262 |             public void visit(final int row, final int column, final double value) {
+263 |                 columnSum += FastMath.abs(value);
+264 |                 if (row == endRow) {
+265 |                     maxColSum = FastMath.max(maxColSum, columnSum);
+266 |                     columnSum = 0;
+267 |                 }
+268 |             }
+269 | 
+270 |             /** {@inheritDoc} */
+271 |             public double end() {
+272 |                 return maxColSum;
+273 |             }
+274 |         });
+275 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.walkInOptimizedOrder(RealMatrixPreservingVisitor)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 859-861
+Documentation:
+/** {@inheritDoc} */
+Method code:
+859 |     public double walkInOptimizedOrder(final RealMatrixPreservingVisitor visitor) {
+860 |         return walkInRowOrder(visitor);
+861 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.setEntry(int,int,double)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 300-304
+Documentation:
+/** {@inheritDoc} */
+Method code:
+300 |     @Override
+301 |     public void setEntry(final int row, final int column, final double value) {
+302 |         MatrixUtils.checkMatrixIndex(this, row, column);
+303 |         data[row][column] = value;
+304 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.anonymous_L241.start(int,int,int,int,int,int)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 253-259
+Documentation:
+/** {@inheritDoc} */
+Method code:
+253 |             public void start(final int rows, final int columns,
+254 |                               final int startRow, final int endRow,
+255 |                               final int startColumn, final int endColumn) {
+256 |                 this.endRow = endRow;
+257 |                 columnSum   = 0;
+258 |                 maxColSum   = 0;
+259 |             }
+
+===== M0013 =====
+Signature: org.apache.commons.math3.linear.RectangularCholeskyDecomposition.getRootMatrix()
+Source: src/main/java/org/apache/commons/math3/linear/RectangularCholeskyDecomposition.java
+Original range: 159-161
+Documentation:
+/** Get the root of the covariance matrix.
+     * The root is the rectangular matrix <code>B</code> such that
+     * the covariance matrix is equal to <code>B.B<sup>T</sup></code>
+     * @return root of the square matrix
+     * @see #getRank()
+     */
+Method code:
+159 |     public RealMatrix getRootMatrix() {
+160 |         return root;
+161 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getInstance(Locale)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 223-225
+Documentation:
+/**
+     * Returns the default real vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the real vector format specific to the given locale.
+     */
+Method code:
+223 |     public static RealMatrixFormat getInstance(final Locale locale) {
+224 |         return new RealMatrixFormat(CompositeFormat.getDefaultNumberFormat(locale));
+225 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.walkInRowOrder(RealMatrixPreservingVisitor)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 390-402
+Documentation:
+/** {@inheritDoc} */
+Method code:
+390 |     @Override
+391 |     public double walkInRowOrder(final RealMatrixPreservingVisitor visitor) {
+392 |         final int rows    = getRowDimension();
+393 |         final int columns = getColumnDimension();
+394 |         visitor.start(rows, columns, 0, rows - 1, 0, columns - 1);
+395 |         for (int i = 0; i < rows; ++i) {
+396 |             final double[] rowI = data[i];
+397 |             for (int j = 0; j < columns; ++j) {
+398 |                 visitor.visit(i, j, rowI[j]);
+399 |             }
+400 |         }
+401 |         return visitor.end();
+402 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkSubtractionCompatible(AnyMatrix,AnyMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 521-528
+Documentation:
+/**
+     * Check if matrices are subtraction compatible
+     *
+     * @param left Left hand side matrix.
+     * @param right Right hand side matrix.
+     * @throws MatrixDimensionMismatchException if the matrices are not addition
+     * compatible.
+     */
+Method code:
+521 |     public static void checkSubtractionCompatible(final AnyMatrix left, final AnyMatrix right)
+522 |         throws MatrixDimensionMismatchException {
+523 |         if ((left.getRowDimension()    != right.getRowDimension()) ||
+524 |             (left.getColumnDimension() != right.getColumnDimension())) {
+525 |             throw new MatrixDimensionMismatchException(left.getRowDimension(), left.getColumnDimension(),
+526 |                                                        right.getRowDimension(), right.getColumnDimension());
+527 |         }
+528 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkRowIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 400-407
+Documentation:
+/**
+     * Check if a row index is valid.
+     *
+     * @param m Matrix.
+     * @param row Row index to check.
+     * @throws OutOfRangeException if {@code row} is not a valid index.
+     */
+Method code:
+400 |     public static void checkRowIndex(final AnyMatrix m, final int row)
+401 |         throws OutOfRangeException {
+402 |         if (row < 0 ||
+403 |             row >= m.getRowDimension()) {
+404 |             throw new OutOfRangeException(LocalizedFormats.ROW_INDEX,
+405 |                                           row, 0, m.getRowDimension() - 1);
+406 |         }
+407 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math3.util.CompositeFormat.getDefaultNumberFormat(Locale)
+Source: src/main/java/org/apache/commons/math3/util/CompositeFormat.java
+Original range: 53-57
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance(java.util.Locale)} with the only
+     * customizing that the maximum number of fraction digits is set to 10.
+     * @param locale the specific locale used by the format.
+     * @return the default number format specific to the given locale.
+     */
+Method code:
+53 |     public static NumberFormat getDefaultNumberFormat(final Locale locale) {
+54 |         final NumberFormat nf = NumberFormat.getInstance(locale);
+55 |         nf.setMaximumFractionDigits(10);
+56 |         return nf;
+57 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(String,String,String,String,String,String)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 112-117
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix and separator.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param rowPrefix row prefix to use instead of the default "{"
+     * @param rowSuffix row suffix to use instead of the default "}"
+     * @param rowSeparator tow separator to use instead of the default ";"
+     * @param columnSeparator column separator to use instead of the default ", "
+     */
+Method code:
+112 |     public RealMatrixFormat(final String prefix, final String suffix,
+113 |                             final String rowPrefix, final String rowSuffix,
+114 |                             final String rowSeparator, final String columnSeparator) {
+115 |         this(prefix, suffix, rowPrefix, rowSuffix, rowSeparator, columnSeparator,
+116 |                 CompositeFormat.getDefaultNumberFormat());
+117 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.transpose()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 588-603
+Documentation:
+/** {@inheritDoc} */
+Method code:
+588 |     public RealMatrix transpose() {
+589 |         final int nRows = getRowDimension();
+590 |         final int nCols = getColumnDimension();
+591 |         final RealMatrix out = createMatrix(nCols, nRows);
+592 |         walkInOptimizedOrder(new DefaultRealMatrixPreservingVisitor() {
+593 | 
+594 |             /** {@inheritDoc} */
+595 |             @Override
+596 |             public void visit(final int row, final int column, final double value) {
+597 |                 out.setEntry(column, row, value);
+598 |             }
+599 | 
+600 |         });
+601 | 
+602 |         return out;
+603 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.Array2DRowRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 55-58
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension Number of rows in the new matrix.
+     * @param columnDimension Number of columns in the new matrix.
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
+     * if the row or column dimension is not positive.
+     */
+Method code:
+55 |     public Array2DRowRealMatrix(final int rowDimension, final int columnDimension) {
+56 |         super(rowDimension, columnDimension);
+57 |         data = new double[rowDimension][columnDimension];
+58 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkMatrixIndex(AnyMatrix,int,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 386-391
+Documentation:
+/**
+     * Check if matrix indices are valid.
+     *
+     * @param m Matrix.
+     * @param row Row index to check.
+     * @param column Column index to check.
+     * @throws OutOfRangeException if {@code row} or {@code column} is not
+     * a valid index.
+     */
+Method code:
+386 |     public static void checkMatrixIndex(final AnyMatrix m,
+387 |                                         final int row, final int column)
+388 |         throws OutOfRangeException {
+389 |         checkRowIndex(m, row);
+390 |         checkColumnIndex(m, column);
+391 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math3.util.MathUtils.checkNotNull(Object)
+Source: src/main/java/org/apache/commons/math3/util/MathUtils.java
+Original range: 262-267
+Documentation:
+/**
+     * Checks that an object is not null.
+     *
+     * @param o Object to be checked.
+     * @throws NullArgumentException if {@code o} is {@code null}.
+     */
+Method code:
+262 |     public static void checkNotNull(Object o)
+263 |         throws NullArgumentException {
+264 |         if (o == null) {
+265 |             throw new NullArgumentException();
+266 |         }
+267 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.anonymous_L241.end()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 271-273
+Documentation:
+/** {@inheritDoc} */
+Method code:
+271 |             public double end() {
+272 |                 return maxColSum;
+273 |             }
+
+===== M0025 =====
+Signature: org.apache.commons.math3.linear.RectangularCholeskyDecomposition.RectangularCholeskyDecomposition(RealMatrix,double)
+Source: src/main/java/org/apache/commons/math3/linear/RectangularCholeskyDecomposition.java
+Original range: 62-151
+Documentation:
+/**
+     * Decompose a symmetric positive semidefinite matrix.
+     *
+     * @param matrix Symmetric positive semidefinite matrix.
+     * @param small Diagonal elements threshold under which  column are
+     * considered to be dependent on previous ones and are discarded.
+     * @exception NonPositiveDefiniteMatrixException if the matrix is not
+     * positive semidefinite.
+     */
+Method code:
+62 |     public RectangularCholeskyDecomposition(RealMatrix matrix, double small)
+63 |         throws NonPositiveDefiniteMatrixException {
+64 | 
+65 |         final int order = matrix.getRowDimension();
+66 |         final double[][] c = matrix.getData();
+67 |         final double[][] b = new double[order][order];
+68 | 
+69 |         int[] swap  = new int[order];
+70 |         int[] index = new int[order];
+71 |         for (int i = 0; i < order; ++i) {
+72 |             index[i] = i;
+73 |         }
+74 | 
+75 |         int r = 0;
+76 |         for (boolean loop = true; loop;) {
+77 | 
+78 |             // find maximal diagonal element
+79 |             swap[r] = r;
+80 |             for (int i = r + 1; i < order; ++i) {
+81 |                 int ii  = index[i];
+82 |                 int isi = index[swap[i]];
+83 |                 if (c[ii][ii] > c[isi][isi]) {
+84 |                     swap[r] = i;
+85 |                 }
+86 |             }
+87 | 
+88 | 
+89 |             // swap elements
+90 |             if (swap[r] != r) {
+91 |                 int tmp = index[r];
+92 |                 index[r] = index[swap[r]];
+93 |                 index[swap[r]] = tmp;
+94 |             }
+95 | 
+96 |             // check diagonal element
+97 |             int ir = index[r];
+98 |             if (c[ir][ir] < small) {
+99 | 
+100 |                 if (r == 0) {
+101 |                     throw new NonPositiveDefiniteMatrixException(c[ir][ir], ir, small);
+102 |                 }
+103 | 
+104 |                 // check remaining diagonal elements
+105 |                 for (int i = r; i < order; ++i) {
+106 |                     if (c[index[i]][index[i]] < -small) {
+107 |                         // there is at least one sufficiently negative diagonal element,
+108 |                         // the symmetric positive semidefinite matrix is wrong
+109 |                         throw new NonPositiveDefiniteMatrixException(c[index[i]][index[i]], i, small);
+110 |                     }
+111 |                 }
+112 | 
+113 |                 // all remaining diagonal elements are close to zero, we consider we have
+114 |                 // found the rank of the symmetric positive semidefinite matrix
+115 |                 ++r;
+116 |                 loop = false;
+117 | 
+118 |             } else {
+119 | 
+120 |                 // transform the matrix
+121 |                 final double sqrt = FastMath.sqrt(c[ir][ir]);
+122 |                 b[r][r] = sqrt;
+123 |                 final double inverse  = 1 / sqrt;
+124 |                 for (int i = r + 1; i < order; ++i) {
+125 |                     final int ii = index[i];
+126 |                     final double e = inverse * c[ii][ir];
+127 |                     b[i][r] = e;
+128 |                     c[ii][ii] -= e * e;
+129 |                     for (int j = r + 1; j < i; ++j) {
+130 |                         final int ij = index[j];
+131 |                         final double f = c[ii][ij] - e * b[j][r];
+132 |                         c[ii][ij] = f;
+133 |                         c[ij][ii] = f;
+134 |                     }
+135 |                 }
+136 | 
+137 |                 // prepare next iteration
+138 |                 loop = ++r < order;
+139 |             }
+140 |         }
+141 | 
+142 |         // build the root matrix
+143 |         rank = r;
+144 |         root = MatrixUtils.createRealMatrix(order, r);
+145 |         for (int i = 0; i < order; ++i) {
+146 |             for (int j = 0; j < r; ++j) {
+147 |                 root.setEntry(index[i], j, b[i][j]);
+148 |             }
+149 |         }
+150 | 
+151 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math3.util.FastMath.max(double,double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3506-3524
+Documentation:
+/** Compute the maximum of two values
+     * @param a first value
+     * @param b second value
+     * @return b if a is lesser or equal to b, a otherwise
+     */
+Method code:
+3506 |     public static double max(final double a, final double b) {
+3507 |         if (a > b) {
+3508 |             return a;
+3509 |         }
+3510 |         if (a < b) {
+3511 |             return b;
+3512 |         }
+3513 |         /* if either arg is NaN, return NaN */
+3514 |         if (a != b) {
+3515 |             return Double.NaN;
+3516 |         }
+3517 |         /* min(+0.0,-0.0) == -0.0 */
+3518 |         /* 0x8000000000000000L == Double.doubleToRawLongBits(-0.0d) */
+3519 |         long bits = Double.doubleToRawLongBits(a);
+3520 |         if (bits == 0x8000000000000000L) {
+3521 |             return b;
+3522 |         }
+3523 |         return a;
+3524 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.createRealMatrix(double[][])
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 127-136
+Documentation:
+/**
+     * Returns a {@link RealMatrix} whose entries are the the values in the
+     * the input array.
+     * <p>The type of matrix returned depends on the dimension. Below
+     * 2<sup>12</sup> elements (i.e. 4096 elements or 64&times;64 for a
+     * square matrix) which can be stored in a 32kB array, a {@link
+     * Array2DRowRealMatrix} instance is built. Above this threshold a {@link
+     * BlockRealMatrix} instance is built.</p>
+     * <p>The input array is copied, not referenced.</p>
+     *
+     * @param data input array
+     * @return  RealMatrix containing the values of the array
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException
+     * if {@code data} is not rectangular (not all rows have the same length).
+     * @throws NoDataException if a row or column is empty.
+     * @throws NullArgumentException if either {@code data} or {@code data[0]}
+     * is {@code null}.
+     * @throws DimensionMismatchException if {@code data} is not rectangular.
+     * @see #createRealMatrix(int, int)
+     */
+Method code:
+127 |     public static RealMatrix createRealMatrix(double[][] data)
+128 |         throws NullArgumentException, DimensionMismatchException,
+129 |         NoDataException {
+130 |         if (data == null ||
+131 |             data[0] == null) {
+132 |             throw new NullArgumentException();
+133 |         }
+134 |         return (data.length * data[0].length <= 4096) ?
+135 |                 new Array2DRowRealMatrix(data) : new BlockRealMatrix(data);
+136 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.anonymous_L592.visit(int,int,double)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 595-598
+Documentation:
+/** {@inheritDoc} */
+Method code:
+595 |             @Override
+596 |             public void visit(final int row, final int column, final double value) {
+597 |                 out.setEntry(column, row, value);
+598 |             }
+
+===== M0029 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkMultiplicationCompatible(AnyMatrix,AnyMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 538-545
+Documentation:
+/**
+     * Check if matrices are multiplication compatible
+     *
+     * @param left Left hand side matrix.
+     * @param right Right hand side matrix.
+     * @throws DimensionMismatchException if matrices are not multiplication
+     * compatible.
+     */
+Method code:
+538 |     public static void checkMultiplicationCompatible(final AnyMatrix left, final AnyMatrix right)
+539 |         throws DimensionMismatchException {
+540 | 
+541 |         if (left.getColumnDimension() != right.getRowDimension()) {
+542 |             throw new DimensionMismatchException(left.getColumnDimension(),
+543 |                                                  right.getRowDimension());
+544 |         }
+545 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.anonymous_L241.visit(int,int,double)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 262-268
+Documentation:
+/** {@inheritDoc} */
+Method code:
+262 |             public void visit(final int row, final int column, final double value) {
+263 |                 columnSum += FastMath.abs(value);
+264 |                 if (row == endRow) {
+265 |                     maxColSum = FastMath.max(maxColSum, columnSum);
+266 |                     columnSum = 0;
+267 |                 }
+268 |             }
+
+===== M0031 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkColumnIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 416-422
+Documentation:
+/**
+     * Check if a column index is valid.
+     *
+     * @param m Matrix.
+     * @param column Column index to check.
+     * @throws OutOfRangeException if {@code column} is not a valid index.
+     */
+Method code:
+416 |     public static void checkColumnIndex(final AnyMatrix m, final int column)
+417 |         throws OutOfRangeException {
+418 |         if (column < 0 || column >= m.getColumnDimension()) {
+419 |             throw new OutOfRangeException(LocalizedFormats.COLUMN_INDEX,
+420 |                                            column, 0, m.getColumnDimension() - 1);
+421 |         }
+422 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getColumnDimension()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 327-330
+Documentation:
+/** {@inheritDoc} */
+Method code:
+327 |     @Override
+328 |     public int getColumnDimension() {
+329 |         return ((data == null) || (data[0] == null)) ? 0 : data[0].length;
+330 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math3.linear.DefaultRealMatrixPreservingVisitor.start(int,int,int,int,int,int)
+Source: src/main/java/org/apache/commons/math3/linear/DefaultRealMatrixPreservingVisitor.java
+Original range: 32-34
+Documentation:
+/** {@inheritDoc} */
+Method code:
+32 |     public void start(int rows, int columns,
+33 |                       int startRow, int endRow, int startColumn, int endColumn) {
+34 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.AbstractRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 62-69
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension  the number of rows in the new matrix
+     * @param columnDimension  the number of columns in the new matrix
+     * @throws NotStrictlyPositiveException if row or column dimension is not positive
+     */
+Method code:
+62 |     protected AbstractRealMatrix(final int rowDimension, final int columnDimension) {
+63 |         if (rowDimension < 1) {
+64 |             throw new NotStrictlyPositiveException(rowDimension);
+65 |         }
+66 |         if (columnDimension < 1) {
+67 |             throw new NotStrictlyPositiveException(columnDimension);
+68 |         }
+69 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math3.util.CompositeFormat.getDefaultNumberFormat()
+Source: src/main/java/org/apache/commons/math3/util/CompositeFormat.java
+Original range: 42-44
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance()} with the only customizing that the
+     * maximum number of fraction digits is set to 10.
+     * @return the default number format.
+     */
+Method code:
+42 |     public static NumberFormat getDefaultNumberFormat() {
+43 |         return getDefaultNumberFormat(Locale.getDefault());
+44 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getEntry(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 293-297
+Documentation:
+/** {@inheritDoc} */
+Method code:
+293 |     @Override
+294 |     public double getEntry(final int row, final int column) {
+295 |         MatrixUtils.checkMatrixIndex(this, row, column);
+296 |         return data[row][column];
+297 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getFormat()
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 206-208
+Documentation:
+/**
+     * Get the components format.
+     * @return components format.
+     */
+Method code:
+206 |     public NumberFormat getFormat() {
+207 |         return format;
+208 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math3.linear.DefaultRealMatrixPreservingVisitor.end()
+Source: src/main/java/org/apache/commons/math3/linear/DefaultRealMatrixPreservingVisitor.java
+Original range: 40-42
+Documentation:
+/** {@inheritDoc} */
+Method code:
+40 |     public double end() {
+41 |         return 0;
+42 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.walkInColumnOrder(RealMatrixPreservingVisitor)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 454-465
+Documentation:
+/** {@inheritDoc} */
+Method code:
+454 |     @Override
+455 |     public double walkInColumnOrder(final RealMatrixPreservingVisitor visitor) {
+456 |         final int rows    = getRowDimension();
+457 |         final int columns = getColumnDimension();
+458 |         visitor.start(rows, columns, 0, rows - 1, 0, columns - 1);
+459 |         for (int j = 0; j < columns; ++j) {
+460 |             for (int i = 0; i < rows; ++i) {
+461 |                 visitor.visit(i, j, data[i][j]);
+462 |             }
+463 |         }
+464 |         return visitor.end();
+465 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getData()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 244-247
+Documentation:
+/** {@inheritDoc} */
+Method code:
+244 |     @Override
+245 |     public double[][] getData() {
+246 |         return copyOut();
+247 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getRowDimension()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 321-324
+Documentation:
+/** {@inheritDoc} */
+Method code:
+321 |     @Override
+322 |     public int getRowDimension() {
+323 |         return (data == null) ? 0 : data.length;
+324 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getInstance()
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 214-216
+Documentation:
+/**
+     * Returns the default real vector format for the current locale.
+     * @return the default real vector format.
+     */
+Method code:
+214 |     public static RealMatrixFormat getInstance() {
+215 |         return getInstance(Locale.getDefault());
+216 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.AbstractRealMatrix()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 53-53
+Documentation:
+/**
+     * Creates a matrix with no data
+     */
+Method code:
+53 |     protected AbstractRealMatrix() {}
+
+===== M0044 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.copyOut()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 505-513
+Documentation:
+/**
+     * Get a fresh copy of the underlying data array.
+     *
+     * @return a copy of the underlying data array.
+     */
+Method code:
+505 |     private double[][] copyOut() {
+506 |         final int nRows = this.getRowDimension();
+507 |         final double[][] out = new double[nRows][this.getColumnDimension()];
+508 |         // can't copy 2-d array in one shot, otherwise get row references
+509 |         for (int i = 0; i < nRows; i++) {
+510 |             System.arraycopy(data[i], 0, out[i], 0, data[i].length);
+511 |         }
+512 |         return out;
+513 |     }
+
+===== M0045 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.subtract(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 95-109
+Documentation:
+/** {@inheritDoc} */
+Method code:
+95 |     public RealMatrix subtract(final RealMatrix m) {
+96 |         // Safety check.
+97 |         MatrixUtils.checkSubtractionCompatible(this, m);
+98 | 
+99 |         final int rowCount    = getRowDimension();
+100 |         final int columnCount = getColumnDimension();
+101 |         final RealMatrix out = createMatrix(rowCount, columnCount);
+102 |         for (int row = 0; row < rowCount; ++row) {
+103 |             for (int col = 0; col < columnCount; ++col) {
+104 |                 out.setEntry(row, col, getEntry(row, col) - m.getEntry(row, col));
+105 |             }
+106 |         }
+107 | 
+108 |         return out;
+109 |     }
+
+===== M0046 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.setSubMatrix(double[][],int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 259-290
+Documentation:
+/** {@inheritDoc} */
+Method code:
+259 |     @Override
+260 |     public void setSubMatrix(final double[][] subMatrix,
+261 |                              final int row, final int column) {
+262 |         if (data == null) {
+263 |             if (row > 0) {
+264 |                 throw new MathIllegalStateException(LocalizedFormats.FIRST_ROWS_NOT_INITIALIZED_YET, row);
+265 |             }
+266 |             if (column > 0) {
+267 |                 throw new MathIllegalStateException(LocalizedFormats.FIRST_COLUMNS_NOT_INITIALIZED_YET, column);
+268 |             }
+269 |             MathUtils.checkNotNull(subMatrix);
+270 |             final int nRows = subMatrix.length;
+271 |             if (nRows == 0) {
+272 |                 throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+273 |             }
+274 | 
+275 |             final int nCols = subMatrix[0].length;
+276 |             if (nCols == 0) {
+277 |                 throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+278 |             }
+279 |             data = new double[subMatrix.length][nCols];
+280 |             for (int i = 0; i < data.length; ++i) {
+281 |                 if (subMatrix[i].length != nCols) {
+282 |                     throw new DimensionMismatchException(subMatrix[i].length, nCols);
+283 |                 }
+284 |                 System.arraycopy(subMatrix[i], 0, data[i + row], column, nCols);
+285 |             }
+286 |         } else {
+287 |             super.setSubMatrix(subMatrix, row, column);
+288 |         }
+289 | 
+290 |     }
+
+===== M0047 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(String,String,String,String,String,String,NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 130-143
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix, separator and format
+     * for components.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param rowPrefix row prefix to use instead of the default "{"
+     * @param rowSuffix row suffix to use instead of the default "}"
+     * @param rowSeparator tow separator to use instead of the default ";"
+     * @param columnSeparator column separator to use instead of the default ", "
+     * @param format the custom format for components.
+     */
+Method code:
+130 |     public RealMatrixFormat(final String prefix, final String suffix,
+131 |                             final String rowPrefix, final String rowSuffix,
+132 |                             final String rowSeparator, final String columnSeparator,
+133 |                             final NumberFormat format) {
+134 |         this.prefix            = prefix;
+135 |         this.suffix            = suffix;
+136 |         this.rowPrefix         = rowPrefix;
+137 |         this.rowSuffix         = rowSuffix;
+138 |         this.rowSeparator      = rowSeparator;
+139 |         this.columnSeparator   = columnSeparator;
+140 |         this.format            = format;
+141 |         // disable grouping to prevent parsing problems
+142 |         this.format.setGroupingUsed(false);
+143 |     }
+

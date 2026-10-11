@@ -1,0 +1,212 @@
+===== M0001 =====
+Signature: org.apache.commons.lang.text.StrBuilder.ensureCapacity(int)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 227-234
+Documentation:
+/**
+     * Checks the capacity and ensures that it is at least the size specified.
+     *
+     * @param capacity  the capacity to ensure
+     * @return this, to enable chaining
+     */
+Method code:
+227 |     public StrBuilder ensureCapacity(int capacity) {
+228 |         if (capacity > buffer.length) {
+229 |             char[] old = buffer;
+230 |             buffer = new char[capacity];
+231 |             System.arraycopy(old, 0, buffer, 0, size);
+232 |         }
+233 |         return this;
+234 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang.text.StrBuilder.StrBuilder()
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 97-99
+Documentation:
+/**
+     * Constructor that creates an empty builder initial capacity 32 characters.
+     */
+Method code:
+97 |     public StrBuilder() {
+98 |         this(CAPACITY);
+99 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang.text.StrBuilder.appendFixedWidthPadLeft(Object,int,char)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 1182-1199
+Documentation:
+/**
+     * Appends an object to the builder padding on the left to a fixed width.
+     * The <code>toString</code> of the object is used.
+     * If the object is larger than the length, the left hand side is lost.
+     * If the object is null, the null text value is used.
+     * 
+     * @param obj  the object to append, null uses null text
+     * @param width  the fixed field width, zero or negative has no effect
+     * @param padChar  the pad character to use
+     * @return this, to enable chaining
+     */
+Method code:
+1182 |     public StrBuilder appendFixedWidthPadLeft(Object obj, int width, char padChar) {
+1183 |         if (width > 0) {
+1184 |             ensureCapacity(size + width);
+1185 |             String str = (obj == null ? getNullText() : obj.toString());
+1186 |             int strLen = str.length();
+1187 |             if (strLen >= width) {
+1188 |                 str.getChars(strLen - width, strLen, buffer, size);
+1189 |             } else {
+1190 |                 int padLen = width - strLen;
+1191 |                 for (int i = 0; i < padLen; i++) {
+1192 |                     buffer[size + i] = padChar;
+1193 |                 }
+1194 |                 str.getChars(0, strLen, buffer, size + padLen);
+1195 |             }
+1196 |             size += width;
+1197 |         }
+1198 |         return this;
+1199 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang.text.StrMatcher.TrimMatcher.TrimMatcher()
+Source: src/java/org/apache/commons/lang/text/StrMatcher.java
+Original range: 412-414
+Documentation:
+/**
+         * Constructs a new instance of <code>TrimMatcher</code>.
+         */
+Method code:
+412 |         TrimMatcher() {
+413 |             super();
+414 |         }
+
+===== M0005 =====
+Signature: org.apache.commons.lang.text.StrMatcher.StrMatcher()
+Source: src/java/org/apache/commons/lang/text/StrMatcher.java
+Original range: 215-217
+Documentation:
+/**
+     * Constructor.
+     */
+Method code:
+215 |     protected StrMatcher() {
+216 |         super();
+217 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.lang.text.StrMatcher.CharMatcher.CharMatcher(char)
+Source: src/java/org/apache/commons/lang/text/StrMatcher.java
+Original range: 316-319
+Documentation:
+/**
+         * Constructor that creates a matcher that matches a single character.
+         *
+         * @param ch  the character to match
+         */
+Method code:
+316 |         CharMatcher(char ch) {
+317 |             super();
+318 |             this.ch = ch;
+319 |         }
+
+===== M0007 =====
+Signature: org.apache.commons.lang.text.StrMatcher.CharSetMatcher.CharSetMatcher(char[])
+Source: src/java/org/apache/commons/lang/text/StrMatcher.java
+Original range: 283-287
+Documentation:
+/**
+         * Constructor that creates a matcher from a character array.
+         *
+         * @param chars  the characters to match, must not be null
+         */
+Method code:
+283 |         CharSetMatcher(char chars[]) {
+284 |             super();
+285 |             this.chars = (char[]) chars.clone();
+286 |             Arrays.sort(this.chars);
+287 |         }
+
+===== M0008 =====
+Signature: org.apache.commons.lang.text.StrBuilder.appendFixedWidthPadRight(Object,int,char)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 1226-1243
+Documentation:
+/**
+     * Appends an object to the builder padding on the right to a fixed length.
+     * The <code>toString</code> of the object is used.
+     * If the object is larger than the length, the right hand side is lost.
+     * If the object is null, null text value is used.
+     * 
+     * @param obj  the object to append, null uses null text
+     * @param width  the fixed field width, zero or negative has no effect
+     * @param padChar  the pad character to use
+     * @return this, to enable chaining
+     */
+Method code:
+1226 |     public StrBuilder appendFixedWidthPadRight(Object obj, int width, char padChar) {
+1227 |         if (width > 0) {
+1228 |             ensureCapacity(size + width);
+1229 |             String str = (obj == null ? getNullText() : obj.toString());
+1230 |             int strLen = str.length();
+1231 |             if (strLen >= width) {
+1232 |                 str.getChars(0, width, buffer, size);
+1233 |             } else {
+1234 |                 int padLen = width - strLen;
+1235 |                 str.getChars(0, strLen, buffer, size);
+1236 |                 for (int i = 0; i < padLen; i++) {
+1237 |                     buffer[size + strLen + i] = padChar;
+1238 |                 }
+1239 |             }
+1240 |             size += width;
+1241 |         }
+1242 |         return this;
+1243 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.lang.text.StrBuilder.StrBuilder(int)
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 106-112
+Documentation:
+/**
+     * Constructor that creates an empty builder the specified initial capacity.
+     *
+     * @param initialCapacity  the initial capacity, zero or less will be converted to 32
+     */
+Method code:
+106 |     public StrBuilder(int initialCapacity) {
+107 |         super();
+108 |         if (initialCapacity <= 0) {
+109 |             initialCapacity = CAPACITY;
+110 |         }
+111 |         buffer = new char[initialCapacity];
+112 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.lang.text.StrMatcher.NoMatcher.NoMatcher()
+Source: src/java/org/apache/commons/lang/text/StrMatcher.java
+Original range: 385-387
+Documentation:
+/**
+         * Constructs a new instance of <code>NoMatcher</code>.
+         */
+Method code:
+385 |         NoMatcher() {
+386 |             super();
+387 |         }
+
+===== M0011 =====
+Signature: org.apache.commons.lang.text.StrBuilder.getNullText()
+Source: src/java/org/apache/commons/lang/text/StrBuilder.java
+Original range: 157-159
+Documentation:
+/**
+     * Gets the text to be appended when null is added.
+     *
+     * @return the null text, null means no append
+     */
+Method code:
+157 |     public String getNullText() {
+158 |         return nullText;
+159 |     }
+

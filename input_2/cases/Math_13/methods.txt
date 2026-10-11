@@ -1,0 +1,1477 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.analysis.polynomials.PolynomialFunction.evaluate(double[],double)
+Source: src/main/java/org/apache/commons/math3/analysis/polynomials/PolynomialFunction.java
+Original range: 128-140
+Documentation:
+/**
+     * Uses Horner's Method to evaluate the polynomial with the given coefficients at
+     * the argument.
+     *
+     * @param coefficients Coefficients of the polynomial to evaluate.
+     * @param argument Input value.
+     * @return the value of the polynomial.
+     * @throws NoDataException if {@code coefficients} is empty.
+     * @throws NullArgumentException if {@code coefficients} is {@code null}.
+     */
+Method code:
+128 |     protected static double evaluate(double[] coefficients, double argument)
+129 |         throws NullArgumentException, NoDataException {
+130 |         MathUtils.checkNotNull(coefficients);
+131 |         int n = coefficients.length;
+132 |         if (n == 0) {
+133 |             throw new NoDataException(LocalizedFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
+134 |         }
+135 |         double result = coefficients[n - 1];
+136 |         for (int j = n - 2; j >= 0; j--) {
+137 |             result = argument * result + coefficients[j];
+138 |         }
+139 |         return result;
+140 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.optimization.general.AbstractLeastSquaresOptimizer.squareRoot(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/optimization/general/AbstractLeastSquaresOptimizer.java
+Original range: 561-564
+Documentation:
+/**
+     * Computes the square-root of the weight matrix.
+     *
+     * @param m Symmetric, positive-definite (weight) matrix.
+     * @return the square-root of the weight matrix.
+     */
+Method code:
+561 |     private RealMatrix squareRoot(RealMatrix m) {
+562 |             final EigenDecomposition dec = new EigenDecomposition(m);
+563 |             return dec.getSquareRoot();
+564 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(String,String,String,String,String,String)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 112-117
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix and separator.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param rowPrefix row prefix to use instead of the default "{"
+     * @param rowSuffix row suffix to use instead of the default "}"
+     * @param rowSeparator tow separator to use instead of the default ";"
+     * @param columnSeparator column separator to use instead of the default ", "
+     */
+Method code:
+112 |     public RealMatrixFormat(final String prefix, final String suffix,
+113 |                             final String rowPrefix, final String rowSuffix,
+114 |                             final String rowSeparator, final String columnSeparator) {
+115 |         this(prefix, suffix, rowPrefix, rowSuffix, rowSeparator, columnSeparator,
+116 |                 CompositeFormat.getDefaultNumberFormat());
+117 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.isSymmetricInternal(RealMatrix,double,boolean)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 388-414
+Documentation:
+/**
+     * Checks whether a matrix is symmetric, within a given relative tolerance.
+     *
+     * @param matrix Matrix to check.
+     * @param relativeTolerance Tolerance of the symmetry check.
+     * @param raiseException If {@code true}, an exception will be raised if
+     * the matrix is not symmetric.
+     * @return {@code true} if {@code matrix} is symmetric.
+     * @throws NonSquareMatrixException if the matrix is not square.
+     * @throws NonSymmetricMatrixException if the matrix is not symmetric.
+     */
+Method code:
+388 |     private static boolean isSymmetricInternal(RealMatrix matrix,
+389 |                                                double relativeTolerance,
+390 |                                                boolean raiseException) {
+391 |         final int rows = matrix.getRowDimension();
+392 |         if (rows != matrix.getColumnDimension()) {
+393 |             if (raiseException) {
+394 |                 throw new NonSquareMatrixException(rows, matrix.getColumnDimension());
+395 |             } else {
+396 |                 return false;
+397 |             }
+398 |         }
+399 |         for (int i = 0; i < rows; i++) {
+400 |             for (int j = i + 1; j < rows; j++) {
+401 |                 final double mij = matrix.getEntry(i, j);
+402 |                 final double mji = matrix.getEntry(j, i);
+403 |                 if (FastMath.abs(mij - mji) >
+404 |                     FastMath.max(FastMath.abs(mij), FastMath.abs(mji)) * relativeTolerance) {
+405 |                     if (raiseException) {
+406 |                         throw new NonSymmetricMatrixException(i, j, relativeTolerance);
+407 |                     } else {
+408 |                         return false;
+409 |                     }
+410 |                 }
+411 |             }
+412 |         }
+413 |         return true;
+414 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math3.util.CompositeFormat.getDefaultNumberFormat(Locale)
+Source: src/main/java/org/apache/commons/math3/util/CompositeFormat.java
+Original range: 53-57
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance(java.util.Locale)} with the only
+     * customizing that the maximum number of fraction digits is set to 10.
+     * @param locale the specific locale used by the format.
+     * @return the default number format specific to the given locale.
+     */
+Method code:
+53 |     public static NumberFormat getDefaultNumberFormat(final Locale locale) {
+54 |         final NumberFormat nf = NumberFormat.getInstance(locale);
+55 |         nf.setMaximumFractionDigits(10);
+56 |         return nf;
+57 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.transformToTridiagonal(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 559-564
+Documentation:
+/**
+     * Transforms the matrix to tridiagonal form.
+     *
+     * @param matrix Matrix to transform.
+     */
+Method code:
+559 |     private void transformToTridiagonal(final RealMatrix matrix) {
+560 |         // transform the matrix to tridiagonal
+561 |         transformer = new TriDiagonalTransformer(matrix);
+562 |         main = transformer.getMainDiagonalRef();
+563 |         secondary = transformer.getSecondaryDiagonalRef();
+564 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math3.util.MathUtils.checkNotNull(Object)
+Source: src/main/java/org/apache/commons/math3/util/MathUtils.java
+Original range: 262-267
+Documentation:
+/**
+     * Checks that an object is not null.
+     *
+     * @param o Object to be checked.
+     * @throws NullArgumentException if {@code o} is {@code null}.
+     */
+Method code:
+262 |     public static void checkNotNull(Object o)
+263 |         throws NullArgumentException {
+264 |         if (o == null) {
+265 |             throw new NullArgumentException();
+266 |         }
+267 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math3.linear.DiagonalMatrix.DiagonalMatrix(double[])
+Source: src/main/java/org/apache/commons/math3/linear/DiagonalMatrix.java
+Original range: 67-69
+Documentation:
+/**
+     * Creates a matrix using the input array as the underlying data. 
+     * <br/>
+     * The input array is copied, not referenced.
+     *
+     * @param d Data for the new matrix.
+     */
+Method code:
+67 |     public DiagonalMatrix(final double[] d) {
+68 |         data = d.clone();
+69 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math3.util.Incrementor.Incrementor(int)
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 61-69
+Documentation:
+/**
+     * Defines a maximal count.
+     *
+     * @param max Maximal count.
+     */
+Method code:
+61 |     public Incrementor(int max) {
+62 |         this(max,
+63 |              new MaxCountExceededCallback() {
+64 |                  /** {@inheritDoc} */
+65 |                  public void trigger(int max) {
+66 |                      throw new MaxCountExceededException(max);
+67 |                  }
+68 |              });
+69 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getInstance()
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 214-216
+Documentation:
+/**
+     * Returns the default real vector format for the current locale.
+     * @return the default real vector format.
+     */
+Method code:
+214 |     public static RealMatrixFormat getInstance() {
+215 |         return getInstance(Locale.getDefault());
+216 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.AbstractRealMatrix()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 56-56
+Documentation:
+/**
+     * Creates a matrix with no data
+     */
+Method code:
+56 |     protected AbstractRealMatrix() {}
+
+===== M0012 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 98-101
+Documentation:
+/**
+     * Create an instance with a custom number format for components.
+     * @param format the custom format for components.
+     */
+Method code:
+98 |     public RealMatrixFormat(final NumberFormat format) {
+99 |         this(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_ROW_PREFIX, DEFAULT_ROW_SUFFIX,
+100 |                 DEFAULT_ROW_SEPARATOR, DEFAULT_COLUMN_SEPARATOR, format);
+101 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math3.optimization.fitting.CurveFitter.fit(int,T,double[])
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/CurveFitter.java
+Original range: 173-198
+Documentation:
+/**
+     * Fit a curve.
+     * This method compute the coefficients of the curve that best
+     * fit the sample of observed points previously given through calls
+     * to the {@link #addObservedPoint(WeightedObservedPoint)
+     * addObservedPoint} method.
+     *
+     * @param f parametric function to fit.
+     * @param initialGuess first guess of the function parameters.
+     * @param maxEval Maximum number of function evaluations.
+     * @return the fitted parameters.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
+     * if the number of allowed evaluations is exceeded.
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException
+     * if the start point dimension is wrong.
+     * @since 3.0
+     */
+Method code:
+173 |     public double[] fit(int maxEval, T f,
+174 |                         final double[] initialGuess) {
+175 |         // prepare least squares problem
+176 |         double[] target  = new double[observations.size()];
+177 |         double[] weights = new double[observations.size()];
+178 |         int i = 0;
+179 |         for (WeightedObservedPoint point : observations) {
+180 |             target[i]  = point.getY();
+181 |             weights[i] = point.getWeight();
+182 |             ++i;
+183 |         }
+184 | 
+185 |         // perform the fit
+186 |         final PointVectorValuePair optimum;
+187 |         if (optimizer == null) {
+188 |             // to be removed in 4.0
+189 |             optimum = oldOptimizer.optimize(maxEval, new OldTheoreticalValuesFunction(f),
+190 |                                             target, weights, initialGuess);
+191 |         } else {
+192 |             optimum = optimizer.optimize(maxEval, new TheoreticalValuesFunction(f),
+193 |                                          target, weights, initialGuess);
+194 |         }
+195 | 
+196 |         // extract the coefficients
+197 |         return optimum.getPointRef();
+198 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math3.linear.DiagonalMatrix.getData()
+Source: src/main/java/org/apache/commons/math3/linear/DiagonalMatrix.java
+Original range: 201-211
+Documentation:
+/** {@inheritDoc} */
+Method code:
+201 |     @Override
+202 |     public double[][] getData() {
+203 |         final int dim = getRowDimension();
+204 |         final double[][] out = new double[dim][dim];
+205 | 
+206 |         for (int i = 0; i < dim; i++) {
+207 |             out[i][i] = data[i];
+208 |         }
+209 | 
+210 |         return out;
+211 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math3.analysis.FunctionUtils.toMultivariateDifferentiableVectorFunction(DifferentiableMultivariateVectorFunction)
+Source: src/main/java/org/apache/commons/math3/analysis/FunctionUtils.java
+Original range: 725-789
+Documentation:
+/** Convert a {@link DifferentiableMultivariateVectorFunction} into a {@link MultivariateDifferentiableVectorFunction}.
+     * <p>
+     * Note that the converted function is able to handle {@link DerivativeStructure} elements
+     * that all have the same number of free parameters and order, and with order at most 1.
+     * If the function is called with inconsistent numbers of free parameters or higher order, a
+     * {@link DimensionMismatchException} or a {@link NumberIsTooLargeException} will be thrown.
+     * </p>
+     * @param f function to convert
+     * @return converted function
+     * @deprecated this conversion method is temporary in version 3.1, as the {@link
+     * DifferentiableMultivariateFunction} interface itself is deprecated
+     */
+Method code:
+725 |     @Deprecated
+726 |     public static MultivariateDifferentiableVectorFunction toMultivariateDifferentiableVectorFunction(final DifferentiableMultivariateVectorFunction f) {
+727 |         return new MultivariateDifferentiableVectorFunction() {
+728 | 
+729 |             /** {@inheritDoc} */
+730 |             public double[] value(final double[] x) {
+731 |                 return f.value(x);
+732 |             }
+733 | 
+734 |             /** {@inheritDoc}
+735 |              * @exception DimensionMismatchException if number of parameters or derivation
+736 |              * order are higher than 1
+737 |              */
+738 |             public DerivativeStructure[] value(final DerivativeStructure[] t)
+739 |                 throws DimensionMismatchException, NumberIsTooLargeException {
+740 | 
+741 |                 // check parameters and orders limits
+742 |                 final int parameters = t[0].getFreeParameters();
+743 |                 final int order      = t[0].getOrder();
+744 |                 final int n          = t.length;
+745 |                 if (order > 1) {
+746 |                     throw new NumberIsTooLargeException(order, 1, true);
+747 |                 }
+748 | 
+749 |                 // check all elements in the array are consistent
+750 |                 for (int i = 0; i < n; ++i) {
+751 |                     if (t[i].getFreeParameters() != parameters) {
+752 |                         throw new DimensionMismatchException(t[i].getFreeParameters(), parameters);
+753 |                     }
+754 | 
+755 |                     if (t[i].getOrder() != order) {
+756 |                         throw new DimensionMismatchException(t[i].getOrder(), order);
+757 |                     }
+758 |                 }
+759 | 
+760 |                 // delegate computation to underlying function
+761 |                 final double[] point = new double[n];
+762 |                 for (int i = 0; i < n; ++i) {
+763 |                     point[i] = t[i].getValue();
+764 |                 }
+765 |                 final double[] value      = f.value(point);
+766 |                 final double[][] jacobian = f.jacobian().value(point);
+767 | 
+768 |                 // merge value and Jacobian into a DerivativeStructure array
+769 |                 final DerivativeStructure[] merged = new DerivativeStructure[value.length];
+770 |                 for (int k = 0; k < merged.length; ++k) {
+771 |                     final double[] derivatives = new double[parameters + 1];
+772 |                     derivatives[0] = value[k];
+773 |                     final int[] orders = new int[parameters];
+774 |                     for (int i = 0; i < parameters; ++i) {
+775 |                         orders[i] = 1;
+776 |                         for (int j = 0; j < n; ++j) {
+777 |                             derivatives[i + 1] += jacobian[k][j] * t[j].getPartialDerivative(orders);
+778 |                         }
+779 |                         orders[i] = 0;
+780 |                     }
+781 |                     merged[k] = new DerivativeStructure(parameters, order, derivatives);
+782 |                 }
+783 | 
+784 |                 return merged;
+785 | 
+786 |             }
+787 | 
+788 |         };
+789 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math3.analysis.FunctionUtils.toDifferentiableMultivariateVectorFunction(MultivariateDifferentiableVectorFunction)
+Source: src/main/java/org/apache/commons/math3/analysis/FunctionUtils.java
+Original range: 670-711
+Documentation:
+/** Convert a {@link MultivariateDifferentiableVectorFunction} into a {@link DifferentiableMultivariateVectorFunction}.
+     * @param f function to convert
+     * @return converted function
+     * @deprecated this conversion method is temporary in version 3.1, as the {@link
+     * DifferentiableMultivariateVectorFunction} interface itself is deprecated
+     */
+Method code:
+670 |     @Deprecated
+671 |     public static DifferentiableMultivariateVectorFunction toDifferentiableMultivariateVectorFunction(final MultivariateDifferentiableVectorFunction f) {
+672 |         return new DifferentiableMultivariateVectorFunction() {
+673 | 
+674 |             /** {@inheritDoc} */
+675 |             public double[] value(final double[] x) {
+676 |                 return f.value(x);
+677 |             }
+678 | 
+679 |             public MultivariateMatrixFunction jacobian() {
+680 |                 return new MultivariateMatrixFunction() {
+681 |                     /** {@inheritDoc} */
+682 |                     public double[][] value(final double[] x) {
+683 | 
+684 |                         final int n = x.length;
+685 | 
+686 |                         // delegate computation to underlying function
+687 |                         final DerivativeStructure[] dsX = new DerivativeStructure[n];
+688 |                         for (int i = 0; i < n; ++i) {
+689 |                             dsX[i] = new DerivativeStructure(n, 1, i, x[i]);
+690 |                         }
+691 |                         final DerivativeStructure[] y = f.value(dsX);
+692 | 
+693 |                         // extract Jacobian
+694 |                         final double[][] jacobian = new double[y.length][n];
+695 |                         final int[] orders = new int[n];
+696 |                         for (int i = 0; i < y.length; ++i) {
+697 |                             for (int j = 0; j < n; ++j) {
+698 |                                 orders[j]      = 1;
+699 |                                 jacobian[i][j] = y[i].getPartialDerivative(orders);
+700 |                                 orders[j]      = 0;
+701 |                             }
+702 |                         }
+703 | 
+704 |                         return jacobian;
+705 | 
+706 |                     }
+707 |                 };
+708 |             }
+709 | 
+710 |         };
+711 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getInstance(Locale)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 223-225
+Documentation:
+/**
+     * Returns the default real vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the real vector format specific to the given locale.
+     */
+Method code:
+223 |     public static RealMatrixFormat getInstance(final Locale locale) {
+224 |         return new RealMatrixFormat(CompositeFormat.getDefaultNumberFormat(locale));
+225 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math3.optimization.fitting.WeightedObservedPoint.getY()
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/WeightedObservedPoint.java
+Original range: 72-74
+Documentation:
+/** Get the observed value of the function at x.
+     * @return observed value of the function at x
+     */
+Method code:
+72 |     public double getY() {
+73 |         return y;
+74 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math3.optimization.general.AbstractLeastSquaresOptimizer.setUp()
+Source: src/main/java/org/apache/commons/math3/optimization/general/AbstractLeastSquaresOptimizer.java
+Original range: 500-522
+Documentation:
+/** {@inheritDoc} */
+Method code:
+500 |     @Override
+501 |     protected void setUp() {
+502 |         super.setUp();
+503 | 
+504 |         // Reset counter.
+505 |         jacobianEvaluations = 0;
+506 | 
+507 |         // Square-root of the weight matrix.
+508 |         weightMatrixSqrt = squareRoot(getWeight());
+509 | 
+510 |         // Store least squares problem characteristics.
+511 |         // XXX The conversion won't be necessary when the generic argument of
+512 |         // the base class becomes "MultivariateDifferentiableVectorFunction".
+513 |         // XXX "jF" is not strictly necessary anymore but is currently more
+514 |         // efficient than converting the value returned from "getObjectiveFunction()"
+515 |         // every time it is used.
+516 |         jF = FunctionUtils.toMultivariateDifferentiableVectorFunction((DifferentiableMultivariateVectorFunction) getObjectiveFunction());
+517 | 
+518 |         // Arrays shared with "private" and "protected" methods.
+519 |         point = getStartPoint();
+520 |         rows = getTarget().length;
+521 |         cols = point.length;
+522 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateVectorOptimizer.checkParameters()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateVectorOptimizer.java
+Original range: 364-369
+Documentation:
+/**
+     * Check parameters consistency.
+     *
+     * @throws DimensionMismatchException if {@link #target} and
+     * {@link #weightMatrix} have inconsistent dimensions.
+     */
+Method code:
+364 |     private void checkParameters() {
+365 |         if (target.length != weightMatrix.getColumnDimension()) {
+366 |             throw new DimensionMismatchException(target.length,
+367 |                                                  weightMatrix.getColumnDimension());
+368 |         }
+369 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateVectorOptimizer.optimizeInternal(int,FUNC,OptimizationData...)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateVectorOptimizer.java
+Original range: 225-242
+Documentation:
+/**
+     * Optimize an objective function.
+     *
+     * @param maxEval Allowed number of evaluations of the objective function.
+     * @param f Objective function.
+     * @param optData Optimization data. The following data will be looked for:
+     * <ul>
+     *  <li>{@link Target}</li>
+     *  <li>{@link Weight}</li>
+     *  <li>{@link InitialGuess}</li>
+     * </ul>
+     * @return the point/value pair giving the optimal value of the objective
+     * function.
+     * @throws TooManyEvaluationsException if the maximal number of
+     * evaluations is exceeded.
+     * @throws DimensionMismatchException if the initial guess, target, and weight
+     * arguments have inconsistent dimensions.
+     *
+     * @since 3.1
+     */
+Method code:
+225 |     protected PointVectorValuePair optimizeInternal(int maxEval,
+226 |                                                     FUNC f,
+227 |                                                     OptimizationData... optData)
+228 |         throws TooManyEvaluationsException,
+229 |                DimensionMismatchException {
+230 |         // Set internal state.
+231 |         evaluations.setMaximalCount(maxEval);
+232 |         evaluations.resetCount();
+233 |         function = f;
+234 |         // Retrieve other settings.
+235 |         parseOptimizationData(optData);
+236 |         // Check input consistency.
+237 |         checkParameters();
+238 |         // Allow subclasses to reset their own internal state.
+239 |         setUp();
+240 |         // Perform computation.
+241 |         return doOptimize();
+242 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkRowIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 466-473
+Documentation:
+/**
+     * Check if a row index is valid.
+     *
+     * @param m Matrix.
+     * @param row Row index to check.
+     * @throws OutOfRangeException if {@code row} is not a valid index.
+     */
+Method code:
+466 |     public static void checkRowIndex(final AnyMatrix m, final int row)
+467 |         throws OutOfRangeException {
+468 |         if (row < 0 ||
+469 |             row >= m.getRowDimension()) {
+470 |             throw new OutOfRangeException(LocalizedFormats.ROW_INDEX,
+471 |                                           row, 0, m.getRowDimension() - 1);
+472 |         }
+473 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math3.util.Incrementor.resetCount()
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 163-165
+Documentation:
+/**
+     * Resets the counter to 0.
+     */
+Method code:
+163 |     public void resetCount() {
+164 |         count = 0;
+165 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkMatrixIndex(AnyMatrix,int,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 452-457
+Documentation:
+/**
+     * Check if matrix indices are valid.
+     *
+     * @param m Matrix.
+     * @param row Row index to check.
+     * @param column Column index to check.
+     * @throws OutOfRangeException if {@code row} or {@code column} is not
+     * a valid index.
+     */
+Method code:
+452 |     public static void checkMatrixIndex(final AnyMatrix m,
+453 |                                         final int row, final int column)
+454 |         throws OutOfRangeException {
+455 |         checkRowIndex(m, row);
+456 |         checkColumnIndex(m, column);
+457 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math3.optimization.fitting.CurveFitter.addObservedPoint(double,double,double)
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/CurveFitter.java
+Original range: 108-110
+Documentation:
+/** Add an observed weighted (x,y) point to the sample.
+     * @param weight weight of the observed point in the fit
+     * @param x abscissa of the point
+     * @param y observed value of the point at x, after fitting we should
+     * have f(x) as close as possible to this value
+     * @see #addObservedPoint(double, double)
+     * @see #addObservedPoint(WeightedObservedPoint)
+     * @see #getObservations()
+     */
+Method code:
+108 |     public void addObservedPoint(double weight, double x, double y) {
+109 |         observations.add(new WeightedObservedPoint(weight, x, y));
+110 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math3.optimization.fitting.WeightedObservedPoint.getWeight()
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/WeightedObservedPoint.java
+Original range: 58-60
+Documentation:
+/** Get the weight of the measurement in the fitting process.
+     * @return weight of the measurement in the fitting process
+     */
+Method code:
+58 |     public double getWeight() {
+59 |         return weight;
+60 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math3.analysis.polynomials.PolynomialFunction.value(double)
+Source: src/main/java/org/apache/commons/math3/analysis/polynomials/PolynomialFunction.java
+Original range: 93-95
+Documentation:
+/**
+     * Compute the value of the function for the given argument.
+     * <p>
+     *  The value returned is <br/>
+     *  <code>coefficients[n] * x^n + ... + coefficients[1] * x  + coefficients[0]</code>
+     * </p>
+     *
+     * @param x Argument for which the function value should be computed.
+     * @return the value of the polynomial at the given point.
+     * @see UnivariateFunction#value(double)
+     */
+Method code:
+93 |     public double value(double x) {
+94 |        return evaluate(coefficients, x);
+95 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math3.optimization.general.AbstractLeastSquaresOptimizer.optimize(int,DifferentiableMultivariateVectorFunction,double[],double[],double[])
+Source: src/main/java/org/apache/commons/math3/optimization/general/AbstractLeastSquaresOptimizer.java
+Original range: 417-428
+Documentation:
+/** {@inheritDoc}
+     * @deprecated As of 3.1. Please use
+     * {@link BaseAbstractMultivariateVectorOptimizer#optimize(int,MultivariateVectorFunction,OptimizationData[])
+     * optimize(int,MultivariateDifferentiableVectorFunction,OptimizationData...)}
+     * instead.
+     */
+Method code:
+417 |     @Override
+418 |     @Deprecated
+419 |     public PointVectorValuePair optimize(int maxEval,
+420 |                                          final DifferentiableMultivariateVectorFunction f,
+421 |                                          final double[] target, final double[] weights,
+422 |                                          final double[] startPoint) {
+423 |         return optimizeInternal(maxEval,
+424 |                                 FunctionUtils.toMultivariateDifferentiableVectorFunction(f),
+425 |                                 new Target(target),
+426 |                                 new Weight(weights),
+427 |                                 new InitialGuess(startPoint));
+428 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.isSquare()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 615-617
+Documentation:
+/** {@inheritDoc} */
+Method code:
+615 |     public boolean isSquare() {
+616 |         return getColumnDimension() == getRowDimension();
+617 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.isSymmetric(RealMatrix,double)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 438-441
+Documentation:
+/**
+     * Checks whether a matrix is symmetric.
+     *
+     * @param matrix Matrix to check.
+     * @param eps Relative tolerance.
+     * @return {@code true} if {@code matrix} is symmetric.
+     * @since 3.1
+     */
+Method code:
+438 |     public static boolean isSymmetric(RealMatrix matrix,
+439 |                                       double eps) {
+440 |         return isSymmetricInternal(matrix, eps, false);
+441 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math3.optimization.InitialGuess.InitialGuess(double[])
+Source: src/main/java/org/apache/commons/math3/optimization/InitialGuess.java
+Original range: 37-39
+Documentation:
+/**
+     * @param startPoint Initial guess.
+     */
+Method code:
+37 |     public InitialGuess(double[] startPoint) {
+38 |         init = startPoint.clone();
+39 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math3.util.FastMath.abs(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3016-3018
+Documentation:
+/**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x)
+     */
+Method code:
+3016 |     public static double abs(double x) {
+3017 |         return (x < 0.0) ? -x : (x == 0.0) ? 0.0 : x; // -0.0 => +0.0
+3018 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math3.linear.DiagonalMatrix.getRowDimension()
+Source: src/main/java/org/apache/commons/math3/linear/DiagonalMatrix.java
+Original range: 288-291
+Documentation:
+/** {@inheritDoc} */
+Method code:
+288 |     @Override
+289 |     public int getRowDimension() {
+290 |         return data == null ? 0 : data.length;
+291 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math3.optimization.general.AbstractLeastSquaresOptimizer.optimizeInternal(int,MultivariateDifferentiableVectorFunction,OptimizationData...)
+Source: src/main/java/org/apache/commons/math3/optimization/general/AbstractLeastSquaresOptimizer.java
+Original range: 490-497
+Documentation:
+/**
+     * Optimize an objective function.
+     * Optimization is considered to be a weighted least-squares minimization.
+     * The cost function to be minimized is
+     * <code>&sum;weight<sub>i</sub>(objective<sub>i</sub> - target<sub>i</sub>)<sup>2</sup></code>
+     *
+     * @param maxEval Allowed number of evaluations of the objective function.
+     * @param f Objective function.
+     * @param optData Optimization data. The following data will be looked for:
+     * <ul>
+     *  <li>{@link Target}</li>
+     *  <li>{@link Weight}</li>
+     *  <li>{@link InitialGuess}</li>
+     * </ul>
+     * @return the point/value pair giving the optimal value of the objective
+     * function.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if
+     * the maximal number of evaluations is exceeded.
+     * @throws DimensionMismatchException if the target, and weight arguments
+     * have inconsistent dimensions.
+     * @see BaseAbstractMultivariateVectorOptimizer#optimizeInternal(int,MultivariateVectorFunction,OptimizationData[])
+     * @since 3.1
+     * @deprecated As of 3.1. Override is necessary only until this class's generic
+     * argument is changed to {@code MultivariateDifferentiableVectorFunction}.
+     */
+Method code:
+490 |     @Deprecated
+491 |     protected PointVectorValuePair optimizeInternal(final int maxEval,
+492 |                                                     final MultivariateDifferentiableVectorFunction f,
+493 |                                                     OptimizationData... optData) {
+494 |         // XXX Conversion will be removed when the generic argument of the
+495 |         // base class becomes "MultivariateDifferentiableVectorFunction".
+496 |         return super.optimizeInternal(maxEval, FunctionUtils.toDifferentiableMultivariateVectorFunction(f), optData);
+497 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math3.optimization.Target.Target(double[])
+Source: src/main/java/org/apache/commons/math3/optimization/Target.java
+Original range: 39-41
+Documentation:
+/**
+     * @param observations Target values.
+     */
+Method code:
+39 |     public Target(double[] observations) {
+40 |         target = observations.clone();
+41 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math3.analysis.polynomials.PolynomialFunction.PolynomialFunction(double[])
+Source: src/main/java/org/apache/commons/math3/analysis/polynomials/PolynomialFunction.java
+Original range: 67-80
+Documentation:
+/**
+     * Construct a polynomial with the given coefficients.  The first element
+     * of the coefficients array is the constant term.  Higher degree
+     * coefficients follow in sequence.  The degree of the resulting polynomial
+     * is the index of the last non-null element of the array, or 0 if all elements
+     * are null.
+     * <p>
+     * The constructor makes a copy of the input array and assigns the copy to
+     * the coefficients property.</p>
+     *
+     * @param c Polynomial coefficients.
+     * @throws NullArgumentException if {@code c} is {@code null}.
+     * @throws NoDataException if {@code c} is empty.
+     */
+Method code:
+67 |     public PolynomialFunction(double c[])
+68 |         throws NullArgumentException, NoDataException {
+69 |         super();
+70 |         MathUtils.checkNotNull(c);
+71 |         int n = c.length;
+72 |         if (n == 0) {
+73 |             throw new NoDataException(LocalizedFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
+74 |         }
+75 |         while ((n > 1) && (c[n - 1] == 0)) {
+76 |             --n;
+77 |         }
+78 |         this.coefficients = new double[n];
+79 |         System.arraycopy(c, 0, this.coefficients, 0, n);
+80 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math3.optimization.general.AbstractLeastSquaresOptimizer.AbstractLeastSquaresOptimizer(ConvergenceChecker<PointVectorValuePair>)
+Source: src/main/java/org/apache/commons/math3/optimization/general/AbstractLeastSquaresOptimizer.java
+Original range: 133-135
+Documentation:
+/**
+     * @param checker Convergence checker.
+     */
+Method code:
+133 |     protected AbstractLeastSquaresOptimizer(ConvergenceChecker<PointVectorValuePair> checker) {
+134 |         super(checker);
+135 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkColumnIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 482-488
+Documentation:
+/**
+     * Check if a column index is valid.
+     *
+     * @param m Matrix.
+     * @param column Column index to check.
+     * @throws OutOfRangeException if {@code column} is not a valid index.
+     */
+Method code:
+482 |     public static void checkColumnIndex(final AnyMatrix m, final int column)
+483 |         throws OutOfRangeException {
+484 |         if (column < 0 || column >= m.getColumnDimension()) {
+485 |             throw new OutOfRangeException(LocalizedFormats.COLUMN_INDEX,
+486 |                                            column, 0, m.getColumnDimension() - 1);
+487 |         }
+488 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math3.optimization.fitting.PolynomialFitter.PolynomialFitter(DifferentiableMultivariateVectorOptimizer)
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/PolynomialFitter.java
+Original range: 62-65
+Documentation:
+/**
+     * Simple constructor.
+     *
+     * @param optimizer Optimizer to use for the fitting.
+     * @since 3.1
+     */
+Method code:
+62 |     public PolynomialFitter(DifferentiableMultivariateVectorOptimizer optimizer) {
+63 |         super(optimizer);
+64 |         degree = -1; // To avoid compilation error until the instance variable is removed.
+65 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getFormat()
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 206-208
+Documentation:
+/**
+     * Get the components format.
+     * @return components format.
+     */
+Method code:
+206 |     public NumberFormat getFormat() {
+207 |         return format;
+208 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math3.optimization.fitting.CurveFitter.CurveFitter(DifferentiableMultivariateVectorOptimizer)
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/CurveFitter.java
+Original range: 69-73
+Documentation:
+/** Simple constructor.
+     * @param optimizer optimizer to use for the fitting
+     * @deprecated as of 3.1 replaced by {@link #CurveFitter(MultivariateDifferentiableVectorOptimizer)}
+     */
+Method code:
+69 |     public CurveFitter(final DifferentiableMultivariateVectorOptimizer optimizer) {
+70 |         this.oldOptimizer = optimizer;
+71 |         this.optimizer    = null;
+72 |         observations      = new ArrayList<WeightedObservedPoint>();
+73 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.math3.optimization.general.LevenbergMarquardtOptimizer.LevenbergMarquardtOptimizer()
+Source: src/main/java/org/apache/commons/math3/optimization/general/LevenbergMarquardtOptimizer.java
+Original range: 157-159
+Documentation:
+/**
+     * Build an optimizer for least squares problems with default values
+     * for all the tuning parameters (see the {@link
+     * #LevenbergMarquardtOptimizer(double,double,double,double,double)
+     * other contructor}.
+     * The default values for the algorithm settings are:
+     * <ul>
+     *  <li>Initial step bound factor: 100</li>
+     *  <li>Cost relative tolerance: 1e-10</li>
+     *  <li>Parameters relative tolerance: 1e-10</li>
+     *  <li>Orthogonality tolerance: 1e-10</li>
+     *  <li>QR ranking threshold: {@link Precision#SAFE_MIN}</li>
+     * </ul>
+     */
+Method code:
+157 |     public LevenbergMarquardtOptimizer() {
+158 |         this(100, 1e-10, 1e-10, 1e-10, Precision.SAFE_MIN);
+159 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateVectorOptimizer.parseOptimizationData(OptimizationData...)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateVectorOptimizer.java
+Original range: 339-356
+Documentation:
+/**
+     * Scans the list of (required and optional) optimization data that
+     * characterize the problem.
+     *
+     * @param optData Optimization data. The following data will be looked for:
+     * <ul>
+     *  <li>{@link Target}</li>
+     *  <li>{@link Weight}</li>
+     *  <li>{@link InitialGuess}</li>
+     * </ul>
+     */
+Method code:
+339 |     private void parseOptimizationData(OptimizationData... optData) {
+340 |         // The existing values (as set by the previous call) are reused if
+341 |         // not provided in the argument list.
+342 |         for (OptimizationData data : optData) {
+343 |             if (data instanceof Target) {
+344 |                 target = ((Target) data).getTarget();
+345 |                 continue;
+346 |             }
+347 |             if (data instanceof Weight) {
+348 |                 weightMatrix = ((Weight) data).getWeight();
+349 |                 continue;
+350 |             }
+351 |             if (data instanceof InitialGuess) {
+352 |                 start = ((InitialGuess) data).getInitialGuess();
+353 |                 continue;
+354 |             }
+355 |         }
+356 |     }
+
+===== M0044 =====
+Signature: org.apache.commons.math3.optimization.fitting.CurveFitter.fit(T,double[])
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/CurveFitter.java
+Original range: 152-154
+Documentation:
+/**
+     * Fit a curve.
+     * This method compute the coefficients of the curve that best
+     * fit the sample of observed points previously given through calls
+     * to the {@link #addObservedPoint(WeightedObservedPoint)
+     * addObservedPoint} method.
+     *
+     * @param f parametric function to fit.
+     * @param initialGuess first guess of the function parameters.
+     * @return the fitted parameters.
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException
+     * if the start point dimension is wrong.
+     */
+Method code:
+152 |     public double[] fit(T f, final double[] initialGuess) {
+153 |         return fit(Integer.MAX_VALUE, f, initialGuess);
+154 |     }
+
+===== M0045 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(String,String,String,String,String,String,NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 130-143
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix, separator and format
+     * for components.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param rowPrefix row prefix to use instead of the default "{"
+     * @param rowSuffix row suffix to use instead of the default "}"
+     * @param rowSeparator tow separator to use instead of the default ";"
+     * @param columnSeparator column separator to use instead of the default ", "
+     * @param format the custom format for components.
+     */
+Method code:
+130 |     public RealMatrixFormat(final String prefix, final String suffix,
+131 |                             final String rowPrefix, final String rowSuffix,
+132 |                             final String rowSeparator, final String columnSeparator,
+133 |                             final NumberFormat format) {
+134 |         this.prefix            = prefix;
+135 |         this.suffix            = suffix;
+136 |         this.rowPrefix         = rowPrefix;
+137 |         this.rowSuffix         = rowSuffix;
+138 |         this.rowSeparator      = rowSeparator;
+139 |         this.columnSeparator   = columnSeparator;
+140 |         this.format            = format;
+141 |         // disable grouping to prevent parsing problems
+142 |         this.format.setGroupingUsed(false);
+143 |     }
+
+===== M0046 =====
+Signature: org.apache.commons.math3.util.FastMath.max(double,double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3531-3549
+Documentation:
+/** Compute the maximum of two values
+     * @param a first value
+     * @param b second value
+     * @return b if a is lesser or equal to b, a otherwise
+     */
+Method code:
+3531 |     public static double max(final double a, final double b) {
+3532 |         if (a > b) {
+3533 |             return a;
+3534 |         }
+3535 |         if (a < b) {
+3536 |             return b;
+3537 |         }
+3538 |         /* if either arg is NaN, return NaN */
+3539 |         if (a != b) {
+3540 |             return Double.NaN;
+3541 |         }
+3542 |         /* min(+0.0,-0.0) == -0.0 */
+3543 |         /* 0x8000000000000000L == Double.doubleToRawLongBits(-0.0d) */
+3544 |         long bits = Double.doubleToRawLongBits(a);
+3545 |         if (bits == 0x8000000000000000L) {
+3546 |             return b;
+3547 |         }
+3548 |         return a;
+3549 |     }
+
+===== M0047 =====
+Signature: org.apache.commons.math3.linear.EigenDecomposition.EigenDecomposition(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/EigenDecomposition.java
+Original range: 117-128
+Documentation:
+/**
+     * Calculates the eigen decomposition of the given real matrix.
+     * <p>
+     * Supports decomposition of a general matrix since 3.1.
+     *
+     * @param matrix Matrix to decompose.
+     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathArithmeticException if the decomposition of a general matrix
+     * results in a matrix with zero norm
+     * @since 3.1
+     */
+Method code:
+117 |     public EigenDecomposition(final RealMatrix matrix)
+118 |         throws MathArithmeticException {
+119 |         final double symTol = 10 * matrix.getRowDimension() * matrix.getColumnDimension() * Precision.EPSILON;
+120 |         isSymmetric = MatrixUtils.isSymmetric(matrix, symTol);
+121 |         if (isSymmetric) {
+122 |             transformToTridiagonal(matrix);
+123 |             findEigenVectors(transformer.getQ().getData());
+124 |         } else {
+125 |             final SchurTransformer t = transformToSchur(matrix);
+126 |             findEigenVectorsFromSchur(t);
+127 |         }
+128 |     }
+
+===== M0048 =====
+Signature: org.apache.commons.math3.linear.TriDiagonalTransformer.TriDiagonalTransformer(RealMatrix)
+Source: src/main/java/org/apache/commons/math3/linear/TriDiagonalTransformer.java
+Original range: 62-78
+Documentation:
+/**
+     * Build the transformation to tridiagonal shape of a symmetrical matrix.
+     * <p>The specified matrix is assumed to be symmetrical without any check.
+     * Only the upper triangular part of the matrix is used.</p>
+     *
+     * @param matrix Symmetrical matrix to transform.
+     * @throws NonSquareMatrixException if the matrix is not square.
+     */
+Method code:
+62 |     public TriDiagonalTransformer(RealMatrix matrix) {
+63 |         if (!matrix.isSquare()) {
+64 |             throw new NonSquareMatrixException(matrix.getRowDimension(),
+65 |                                                matrix.getColumnDimension());
+66 |         }
+67 | 
+68 |         final int m = matrix.getRowDimension();
+69 |         householderVectors = matrix.getData();
+70 |         main      = new double[m];
+71 |         secondary = new double[m - 1];
+72 |         cachedQ   = null;
+73 |         cachedQt  = null;
+74 |         cachedT   = null;
+75 | 
+76 |         // transform matrix
+77 |         transform();
+78 |     }
+
+===== M0049 =====
+Signature: org.apache.commons.math3.optimization.Weight.getWeight()
+Source: src/main/java/org/apache/commons/math3/optimization/Weight.java
+Original range: 66-68
+Documentation:
+/**
+     * Gets the initial guess.
+     *
+     * @return the initial guess.
+     */
+Method code:
+66 |     public RealMatrix getWeight() {
+67 |         return weightMatrix.copy();
+68 |     }
+
+===== M0050 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateVectorOptimizer.setUp()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateVectorOptimizer.java
+Original range: 319-326
+Documentation:
+/**
+     * Method which a subclass <em>must</em> override whenever its internal
+     * state depend on the {@link OptimizationData input} parsed by this base
+     * class.
+     * It will be called after the parsing step performed in the
+     * {@link #optimize(int,MultivariateVectorFunction,OptimizationData[])
+     * optimize} method and just before {@link #doOptimize()}.
+     *
+     * @since 3.1
+     */
+Method code:
+319 |     protected void setUp() {
+320 |         // XXX Temporary code until the new internal data is used everywhere.
+321 |         final int dim = target.length;
+322 |         weight = new double[dim];
+323 |         for (int i = 0; i < dim; i++) {
+324 |             weight[i] = weightMatrix.getEntry(i, i);
+325 |         }
+326 |     }
+
+===== M0051 =====
+Signature: org.apache.commons.math3.optimization.fitting.WeightedObservedPoint.WeightedObservedPoint(double,double,double)
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/WeightedObservedPoint.java
+Original range: 49-53
+Documentation:
+/** Simple constructor.
+     * @param weight weight of the measurement in the fitting process
+     * @param x abscissa of the measurement
+     * @param y ordinate of the measurement
+     */
+Method code:
+49 |     public WeightedObservedPoint(final double weight, final double x, final double y) {
+50 |         this.weight = weight;
+51 |         this.x      = x;
+52 |         this.y      = y;
+53 |     }
+
+===== M0052 =====
+Signature: org.apache.commons.math3.optimization.general.LevenbergMarquardtOptimizer.LevenbergMarquardtOptimizer(double,double,double,double,double)
+Source: src/main/java/org/apache/commons/math3/optimization/general/LevenbergMarquardtOptimizer.java
+Original range: 265-276
+Documentation:
+/**
+     * The arguments control the behaviour of the default convergence checking
+     * procedure.
+     * Additional criteria can defined through the setting of a {@link
+     * ConvergenceChecker}.
+     *
+     * @param initialStepBoundFactor Positive input variable used in
+     * determining the initial step bound. This bound is set to the
+     * product of initialStepBoundFactor and the euclidean norm of
+     * {@code diag * x} if non-zero, or else to {@code initialStepBoundFactor}
+     * itself. In most cases factor should lie in the interval
+     * {@code (0.1, 100.0)}. {@code 100} is a generally recommended value.
+     * @param costRelativeTolerance Desired relative error in the sum of
+     * squares.
+     * @param parRelativeTolerance Desired relative error in the approximate
+     * solution parameters.
+     * @param orthoTolerance Desired max cosine on the orthogonality between
+     * the function vector and the columns of the Jacobian.
+     * @param threshold Desired threshold for QR ranking. If the squared norm
+     * of a column vector is smaller or equal to this threshold during QR
+     * decomposition, it is considered to be a zero vector and hence the rank
+     * of the matrix is reduced.
+     */
+Method code:
+265 |     public LevenbergMarquardtOptimizer(double initialStepBoundFactor,
+266 |                                        double costRelativeTolerance,
+267 |                                        double parRelativeTolerance,
+268 |                                        double orthoTolerance,
+269 |                                        double threshold) {
+270 |         super(null); // No custom convergence criterion.
+271 |         this.initialStepBoundFactor = initialStepBoundFactor;
+272 |         this.costRelativeTolerance = costRelativeTolerance;
+273 |         this.parRelativeTolerance = parRelativeTolerance;
+274 |         this.orthoTolerance = orthoTolerance;
+275 |         this.qrRankingThreshold = threshold;
+276 |     }
+
+===== M0053 =====
+Signature: org.apache.commons.math3.util.Incrementor.setMaximalCount(int)
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 95-97
+Documentation:
+/**
+     * Sets the upper limit for the counter.
+     * This does not automatically reset the current count to zero (see
+     * {@link #resetCount()}).
+     *
+     * @param max Upper limit of the counter.
+     */
+Method code:
+95 |     public void setMaximalCount(int max) {
+96 |         maximalCount = max;
+97 |     }
+
+===== M0054 =====
+Signature: org.apache.commons.math3.optimization.InitialGuess.getInitialGuess()
+Source: src/main/java/org/apache/commons/math3/optimization/InitialGuess.java
+Original range: 46-48
+Documentation:
+/**
+     * Gets the initial guess.
+     *
+     * @return the initial guess.
+     */
+Method code:
+46 |     public double[] getInitialGuess() {
+47 |         return init.clone();
+48 |     }
+
+===== M0055 =====
+Signature: org.apache.commons.math3.optimization.fitting.CurveFitter.OldTheoreticalValuesFunction.OldTheoreticalValuesFunction(ParametricUnivariateFunction)
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/CurveFitter.java
+Original range: 210-212
+Documentation:
+/** Simple constructor.
+         * @param f function to fit.
+         */
+Method code:
+210 |         public OldTheoreticalValuesFunction(final ParametricUnivariateFunction f) {
+211 |             this.f = f;
+212 |         }
+
+===== M0056 =====
+Signature: org.apache.commons.math3.optimization.Weight.Weight(double[])
+Source: src/main/java/org/apache/commons/math3/optimization/Weight.java
+Original range: 43-45
+Documentation:
+/**
+     * Creates a diagonal weight matrix.
+     *
+     * @param weight List of the values of the diagonal.
+     */
+Method code:
+43 |     public Weight(double[] weight) {
+44 |         weightMatrix = new DiagonalMatrix(weight);
+45 |     }
+
+===== M0057 =====
+Signature: org.apache.commons.math3.linear.DiagonalMatrix.getEntry(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/DiagonalMatrix.java
+Original range: 234-239
+Documentation:
+/** {@inheritDoc} */
+Method code:
+234 |     @Override
+235 |     public double getEntry(final int row, final int column)
+236 |         throws OutOfRangeException {
+237 |         MatrixUtils.checkMatrixIndex(this, row, column);
+238 |         return row == column ? data[row] : 0;
+239 |     }
+
+===== M0058 =====
+Signature: org.apache.commons.math3.util.Incrementor.Incrementor()
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 52-54
+Documentation:
+/**
+     * Default constructor.
+     * For the new instance to be useful, the maximal count must be set
+     * by calling {@link #setMaximalCount(int) setMaximalCount}.
+     */
+Method code:
+52 |     public Incrementor() {
+53 |         this(0);
+54 |     }
+
+===== M0059 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateVectorOptimizer.BaseAbstractMultivariateVectorOptimizer(ConvergenceChecker<PointVectorValuePair>)
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateVectorOptimizer.java
+Original range: 79-81
+Documentation:
+/**
+     * @param checker Convergence checker.
+     */
+Method code:
+79 |     protected BaseAbstractMultivariateVectorOptimizer(ConvergenceChecker<PointVectorValuePair> checker) {
+80 |         this.checker = checker;
+81 |     }
+
+===== M0060 =====
+Signature: org.apache.commons.math3.linear.DiagonalMatrix.copy()
+Source: src/main/java/org/apache/commons/math3/linear/DiagonalMatrix.java
+Original range: 105-108
+Documentation:
+/** {@inheritDoc} */
+Method code:
+105 |     @Override
+106 |     public RealMatrix copy() {
+107 |         return new DiagonalMatrix(data);
+108 |     }
+
+===== M0061 =====
+Signature: org.apache.commons.math3.util.Incrementor.Incrementor(int,MaxCountExceededCallback)
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 79-86
+Documentation:
+/**
+     * Defines a maximal count and a callback method to be triggered at
+     * counter exhaustion.
+     *
+     * @param max Maximal count.
+     * @param cb Function to be called when the maximal count has been reached.
+     * @throws NullArgumentException if {@code cb} is {@code null}
+     */
+Method code:
+79 |     public Incrementor(int max,
+80 |                        MaxCountExceededCallback cb) {
+81 |         if (cb == null){
+82 |             throw new NullArgumentException();
+83 |         }
+84 |         maximalCount = max;
+85 |         maxCountCallback = cb;
+86 |     }
+
+===== M0062 =====
+Signature: org.apache.commons.math3.linear.DiagonalMatrix.getColumnDimension()
+Source: src/main/java/org/apache/commons/math3/linear/DiagonalMatrix.java
+Original range: 294-297
+Documentation:
+/** {@inheritDoc} */
+Method code:
+294 |     @Override
+295 |     public int getColumnDimension() {
+296 |         return getRowDimension();
+297 |     }
+
+===== M0063 =====
+Signature: org.apache.commons.math3.util.CompositeFormat.getDefaultNumberFormat()
+Source: src/main/java/org/apache/commons/math3/util/CompositeFormat.java
+Original range: 42-44
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance()} with the only customizing that the
+     * maximum number of fraction digits is set to 10.
+     * @return the default number format.
+     */
+Method code:
+42 |     public static NumberFormat getDefaultNumberFormat() {
+43 |         return getDefaultNumberFormat(Locale.getDefault());
+44 |     }
+
+===== M0064 =====
+Signature: org.apache.commons.math3.optimization.Target.getTarget()
+Source: src/main/java/org/apache/commons/math3/optimization/Target.java
+Original range: 48-50
+Documentation:
+/**
+     * Gets the initial guess.
+     *
+     * @return the initial guess.
+     */
+Method code:
+48 |     public double[] getTarget() {
+49 |         return target.clone();
+50 |     }
+
+===== M0065 =====
+Signature: org.apache.commons.math3.optimization.fitting.PolynomialFitter.fit(double[])
+Source: src/main/java/org/apache/commons/math3/optimization/fitting/PolynomialFitter.java
+Original range: 109-111
+Documentation:
+/**
+     * Get the coefficients of the polynomial fitting the weighted data points.
+     * The degree of the fitting polynomial is {@code guess.length - 1}.
+     *
+     * @param guess First guess for the coefficients. They must be sorted in
+     * increasing order of the polynomial's degree.
+     * @return the coefficients of the polynomial that best fits the observed points.
+     * @throws org.apache.commons.math3.exception.ConvergenceException
+     * if the algorithm failed to converge.
+     * @since 3.1
+     */
+Method code:
+109 |     public double[] fit(double[] guess) {
+110 |         return fit(new PolynomialFunction.Parametric(), guess);
+111 |     }
+
+===== M0066 =====
+Signature: org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateVectorOptimizer.getWeight()
+Source: src/main/java/org/apache/commons/math3/optimization/direct/BaseAbstractMultivariateVectorOptimizer.java
+Original range: 259-261
+Documentation:
+/**
+     * Gets the weight matrix of the observations.
+     *
+     * @return the weight matrix.
+     * @since 3.1
+     */
+Method code:
+259 |     public RealMatrix getWeight() {
+260 |         return weightMatrix.copy();
+261 |     }
+

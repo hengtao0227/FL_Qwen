@@ -1,0 +1,1089 @@
+===== M0001 =====
+Signature: org.apache.commons.math.estimation.SimpleEstimationProblem.getUnboundParameters()
+Source: src/java/org/apache/commons/math/estimation/SimpleEstimationProblem.java
+Original range: 65-79
+Documentation:
+/** 
+     * Get the unbound parameters of the problem.
+     * @return unbound parameters
+     */
+Method code:
+65 |     public EstimatedParameter[] getUnboundParameters() {
+66 | 
+67 |         // filter the unbound parameters
+68 |         List unbound = new ArrayList(parameters.size());
+69 |         for (Iterator iterator = parameters.iterator(); iterator.hasNext();) {
+70 |             EstimatedParameter p = (EstimatedParameter) iterator.next();
+71 |             if (! p.isBound()) {
+72 |                 unbound.add(p);
+73 |             }
+74 |         }
+75 | 
+76 |         // convert to an array
+77 |         return (EstimatedParameter[]) unbound.toArray(new EstimatedParameter[unbound.size()]);
+78 |         
+79 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.estimation.WeightedMeasurement.setIgnored(boolean)
+Source: src/java/org/apache/commons/math/estimation/WeightedMeasurement.java
+Original range: 145-147
+Documentation:
+/** 
+   * Set the ignore flag to the specified value
+   * Setting the ignore flag to true allow to reject wrong
+   * measurements, which sometimes can be detected only rather late.
+   * 
+   * @param ignored value for the ignore flag
+   */
+Method code:
+145 |   public void setIgnored(boolean ignored) {
+146 |     this.ignored = ignored;
+147 |   }
+
+===== M0003 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.add(RealMatrix)
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 146-160
+Documentation:
+/**
+     * Compute the sum of this and <code>m</code>.
+     *
+     * @param m    matrix to be added
+     * @return     this + m
+     * @throws  IllegalArgumentException if m is not the same size as this
+     */
+Method code:
+146 |     public RealMatrix add(RealMatrix m) throws IllegalArgumentException {
+147 |         if (this.getColumnDimension() != m.getColumnDimension() ||
+148 |                 this.getRowDimension() != m.getRowDimension()) {
+149 |             throw new IllegalArgumentException("matrix dimension mismatch");
+150 |         }
+151 |         int rowCount = this.getRowDimension();
+152 |         int columnCount = this.getColumnDimension();
+153 |         double[][] outData = new double[rowCount][columnCount];
+154 |         for (int row = 0; row < rowCount; row++) {
+155 |             for (int col = 0; col < columnCount; col++) {
+156 |                 outData[row][col] = data[row][col] + m.getEntry(row, col);
+157 |             }  
+158 |         }
+159 |         return new RealMatrixImpl(outData);
+160 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.isSquare()
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 580-582
+Documentation:
+/**
+     * @return true if the matrix is square (rowDimension = columnDimension)
+     */
+Method code:
+580 |     public boolean isSquare() {
+581 |         return (this.getColumnDimension() == this.getRowDimension());
+582 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.copyOut()
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 999-1007
+Documentation:
+/**
+     * Returns a fresh copy of the underlying data array.
+     *
+     * @return a copy of the underlying data array.
+     */
+Method code:
+999 |     private double[][] copyOut() {
+1000 |         int nRows = this.getRowDimension();
+1001 |         double[][] out = new double[nRows][this.getColumnDimension()];
+1002 |         // can't copy 2-d array in one shot, otherwise get row references
+1003 |         for (int i = 0; i < nRows; i++) {
+1004 |             System.arraycopy(data[i], 0, out[i], 0, data[i].length);
+1005 |         }
+1006 |         return out;
+1007 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.isSingular()
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 587-598
+Documentation:
+/**
+     * @return true if the matrix is singular
+     */
+Method code:
+587 |     public boolean isSingular() {
+588 |         if (lu == null) {
+589 |             try {
+590 |                 luDecompose();
+591 |                 return false;
+592 |             } catch (InvalidMatrixException ex) {
+593 |                 return true;
+594 |             }
+595 |         } else { // LU decomp must have been successfully performed
+596 |             return false; // so the matrix is not singular
+597 |         }
+598 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.estimation.EstimatedParameter.isBound()
+Source: src/java/org/apache/commons/math/estimation/EstimatedParameter.java
+Original range: 106-108
+Documentation:
+/** Check if the parameter is bound
+   * @return true if the parameter is bound */
+Method code:
+106 |   public boolean isBound() {
+107 |     return bound;
+108 |   }
+
+===== M0008 =====
+Signature: org.apache.commons.math.estimation.SimpleEstimationProblem.addParameter(EstimatedParameter)
+Source: src/java/org/apache/commons/math/estimation/SimpleEstimationProblem.java
+Original range: 92-94
+Documentation:
+/** Add a parameter to the problem.
+     * @param p parameter to add
+     */
+Method code:
+92 |     protected void addParameter(EstimatedParameter p) {
+93 |         parameters.add(p);
+94 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.estimation.AbstractEstimator.updateJacobian()
+Source: src/java/org/apache/commons/math/estimation/AbstractEstimator.java
+Original range: 72-82
+Documentation:
+/** 
+     * Update the jacobian matrix.
+     */
+Method code:
+72 |     protected void updateJacobian() {
+73 |         incrementJacobianEvaluationsCounter();
+74 |         Arrays.fill(jacobian, 0);
+75 |         for (int i = 0, index = 0; i < rows; i++) {
+76 |             WeightedMeasurement wm = measurements[i];
+77 |             double factor = -Math.sqrt(wm.getWeight());
+78 |             for (int j = 0; j < cols; ++j) {
+79 |                 jacobian[index++] = factor * wm.getPartial(parameters[j]);
+80 |             }
+81 |         }
+82 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.estimation.SimpleEstimationProblem.getAllParameters()
+Source: src/java/org/apache/commons/math/estimation/SimpleEstimationProblem.java
+Original range: 57-59
+Documentation:
+/** 
+     * Get all the parameters of the problem.
+     * @return parameters
+     */
+Method code:
+57 |     public EstimatedParameter[] getAllParameters() {
+58 |         return (EstimatedParameter[]) parameters.toArray(new EstimatedParameter[parameters.size()]);
+59 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.estimation.AbstractEstimator.getCostEvaluations()
+Source: src/java/org/apache/commons/math/estimation/AbstractEstimator.java
+Original range: 56-58
+Documentation:
+/**
+     * Get the number of cost evaluations.
+     * 
+     * @return number of cost evaluations
+     * */
+Method code:
+56 |     public final int getCostEvaluations() {
+57 |         return costEvaluations;
+58 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.isValidCoordinate(int,int)
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 1030-1035
+Documentation:
+/**
+     * Tests a given coordinate as being valid or invalid
+     *
+     * @param row the row index.
+     * @param col the column index.
+     * @return true if the coordinate is with the current dimensions
+     */
+Method code:
+1030 |     private boolean isValidCoordinate(int row, int col) {
+1031 |         int nRows = this.getRowDimension();
+1032 |         int nCols = this.getColumnDimension();
+1033 | 
+1034 |         return !(row < 0 || row > nRows - 1 || col < 0 || col > nCols -1);
+1035 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.estimation.AbstractEstimator.incrementJacobianEvaluationsCounter()
+Source: src/java/org/apache/commons/math/estimation/AbstractEstimator.java
+Original range: 87-89
+Documentation:
+/**
+     * Increment the jacobian evaluations counter.
+     */
+Method code:
+87 |     protected final void incrementJacobianEvaluationsCounter() {
+88 |       ++jacobianEvaluations;
+89 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.getEntry(int,int)
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 521-527
+Documentation:
+/**
+     * Returns the entry in the specified row and column.
+     * <p>
+     * Row and column indices start at 0 and must satisfy 
+     * <ul>
+     * <li><code>0 <= row < rowDimension</code></li>
+     * <li><code> 0 <= column < columnDimension</code></li>
+     * </ul>
+     * otherwise a <code>MatrixIndexException</code> is thrown.</p>
+     * 
+     * @param row  row location of entry to be fetched
+     * @param column  column location of entry to be fetched
+     * @return matrix entry in row,column
+     * @throws MatrixIndexException if the row or column index is not valid
+     */
+Method code:
+521 |     public double getEntry(int row, int column)
+522 |         throws MatrixIndexException {
+523 |         if (!isValidCoordinate(row,column)) {
+524 |             throw new MatrixIndexException("matrix entry does not exist");
+525 |         }
+526 |         return data[row][column];
+527 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.getRowDimension()
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 603-605
+Documentation:
+/**
+     * @return rowDimension
+     */
+Method code:
+603 |     public int getRowDimension() {
+604 |         return data.length;
+605 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.RealMatrixImpl(int,int)
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 88-95
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension  the number of rows in the new matrix
+     * @param columnDimension  the number of columns in the new matrix
+     * @throws IllegalArgumentException if row or column dimension is not
+     *  positive
+     */
+Method code:
+88 |     public RealMatrixImpl(int rowDimension, int columnDimension) {
+89 |         if (rowDimension <= 0 || columnDimension <= 0) {
+90 |             throw new IllegalArgumentException(
+91 |                     "row and column dimensions must be postive");
+92 |         }
+93 |         data = new double[rowDimension][columnDimension];
+94 |         lu = null;
+95 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.RealMatrixImpl(double[][])
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 108-111
+Documentation:
+/**
+     * Create a new RealMatrix using the input array as the underlying
+     * data array.
+     * <p>
+     * The input array is copied, not referenced.</p>
+     *
+     * @param d data for new matrix
+     * @throws IllegalArgumentException if <code>d</code> is not rectangular
+     *  (not all rows have the same length) or empty
+     * @throws NullPointerException if <code>d</code> is null
+     */
+Method code:
+108 |     public RealMatrixImpl(double[][] d) {
+109 |         this.copyIn(d);
+110 |         lu = null;
+111 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.solve(RealMatrix)
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 709-755
+Documentation:
+/**
+     * Returns a matrix of (column) solution vectors for linear systems with
+     * coefficient matrix = this and constant vectors = columns of
+     * <code>b</code>.
+     *
+     * @param b  matrix of constant vectors forming RHS of linear systems to
+     * to solve
+     * @return matrix of solution vectors
+     * @throws IllegalArgumentException if this.rowDimension != row dimension
+     * @throws InvalidMatrixException if this matrix is not square or is singular
+     */
+Method code:
+709 |     public RealMatrix solve(RealMatrix b) throws IllegalArgumentException, InvalidMatrixException  {
+710 |         if (b.getRowDimension() != this.getRowDimension()) {
+711 |             throw new IllegalArgumentException("Incorrect row dimension");
+712 |         }
+713 |         if (!this.isSquare()) {
+714 |             throw new InvalidMatrixException("coefficient matrix is not square");
+715 |         }
+716 |         if (this.isSingular()) { // side effect: compute LU decomp
+717 |             throw new InvalidMatrixException("Matrix is singular.");
+718 |         }
+719 | 
+720 |         int nCol = this.getColumnDimension();
+721 |         int nColB = b.getColumnDimension();
+722 |         int nRowB = b.getRowDimension();
+723 | 
+724 |         // Apply permutations to b
+725 |         double[][] bp = new double[nRowB][nColB];
+726 |         for (int row = 0; row < nRowB; row++) {
+727 |             for (int col = 0; col < nColB; col++) {
+728 |                 bp[row][col] = b.getEntry(permutation[row], col);
+729 |             }
+730 |         }
+731 | 
+732 |         // Solve LY = b
+733 |         for (int col = 0; col < nCol; col++) {
+734 |             for (int i = col + 1; i < nCol; i++) {
+735 |                 for (int j = 0; j < nColB; j++) {
+736 |                     bp[i][j] -= bp[col][j] * lu[i][col];
+737 |                 }
+738 |             }
+739 |         }
+740 | 
+741 |         // Solve UX = Y
+742 |         for (int col = nCol - 1; col >= 0; col--) {
+743 |             for (int j = 0; j < nColB; j++) {
+744 |                 bp[col][j] /= lu[col][col];
+745 |             }
+746 |             for (int i = 0; i < col; i++) {
+747 |                 for (int j = 0; j < nColB; j++) {
+748 |                     bp[i][j] -= bp[col][j] * lu[i][col];
+749 |                 }
+750 |             }
+751 |         }
+752 | 
+753 |         RealMatrixImpl outMat = new RealMatrixImpl(bp);
+754 |         return outMat;
+755 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.luDecompose()
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 775-847
+Documentation:
+/**
+     * Computes a new
+     * <a href="http://www.math.gatech.edu/~bourbaki/math2601/Web-notes/2num.pdf">
+     * LU decomposition</a> for this matrix, storing the result for use by other methods.
+     * <p>
+     * <strong>Implementation Note</strong>:<br>
+     * Uses <a href="http://www.damtp.cam.ac.uk/user/fdl/people/sd/lectures/nummeth98/linear.htm">
+     * Crout's algorithm</a>, with partial pivoting.</p>
+     * <p>
+     * <strong>Usage Note</strong>:<br>
+     * This method should rarely be invoked directly. Its only use is
+     * to force recomputation of the LU decomposition when changes have been
+     * made to the underlying data using direct array references. Changes
+     * made using setXxx methods will trigger recomputation when needed
+     * automatically.</p>
+     *
+     * @throws InvalidMatrixException if the matrix is non-square or singular.
+     */
+Method code:
+775 |     public void luDecompose() throws InvalidMatrixException {
+776 | 
+777 |         int nRows = this.getRowDimension();
+778 |         int nCols = this.getColumnDimension();
+779 |         if (nRows != nCols) {
+780 |             throw new InvalidMatrixException("LU decomposition requires that the matrix be square.");
+781 |         }
+782 |         lu = this.getData();
+783 | 
+784 |         // Initialize permutation array and parity
+785 |         permutation = new int[nRows];
+786 |         for (int row = 0; row < nRows; row++) {
+787 |             permutation[row] = row;
+788 |         }
+789 |         parity = 1;
+790 | 
+791 |         // Loop over columns
+792 |         for (int col = 0; col < nCols; col++) {
+793 | 
+794 |             double sum = 0;
+795 | 
+796 |             // upper
+797 |             for (int row = 0; row < col; row++) {
+798 |                 sum = lu[row][col];
+799 |                 for (int i = 0; i < row; i++) {
+800 |                     sum -= lu[row][i] * lu[i][col];
+801 |                 }
+802 |                 lu[row][col] = sum;
+803 |             }
+804 | 
+805 |             // lower
+806 |             int max = col; // permutation row
+807 |             double largest = 0d;
+808 |             for (int row = col; row < nRows; row++) {
+809 |                 sum = lu[row][col];
+810 |                 for (int i = 0; i < col; i++) {
+811 |                     sum -= lu[row][i] * lu[i][col];
+812 |                 }
+813 |                 lu[row][col] = sum;
+814 | 
+815 |                 // maintain best permutation choice
+816 |                 if (Math.abs(sum) > largest) {
+817 |                     largest = Math.abs(sum);
+818 |                     max = row;
+819 |                 }
+820 |             }
+821 | 
+822 |             // Singularity check
+823 |             if (Math.abs(lu[max][col]) < TOO_SMALL) {
+824 |                 lu = null;
+825 |                 throw new InvalidMatrixException("matrix is singular");
+826 |             }
+827 | 
+828 |             // Pivot if necessary
+829 |             if (max != col) {
+830 |                 double tmp = 0;
+831 |                 for (int i = 0; i < nCols; i++) {
+832 |                     tmp = lu[max][i];
+833 |                     lu[max][i] = lu[col][i];
+834 |                     lu[col][i] = tmp;
+835 |                 }
+836 |                 int temp = permutation[max];
+837 |                 permutation[max] = permutation[col];
+838 |                 permutation[col] = temp;
+839 |                 parity = -parity;
+840 |             }
+841 | 
+842 |             //Divide the lower elements by the "winning" diagonal elt.
+843 |             for (int row = col + 1; row < nRows; row++) {
+844 |                 lu[row][col] /= lu[col][col];
+845 |             }
+846 |         }
+847 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math.estimation.WeightedMeasurement.getResidual()
+Source: src/java/org/apache/commons/math/estimation/WeightedMeasurement.java
+Original range: 110-112
+Documentation:
+/** 
+   * Get the residual for this measurement
+   * The residual is the measured value minus the theoretical value.
+   * 
+   * @return residual
+   */
+Method code:
+110 |   public double getResidual() {
+111 |     return measuredValue - getTheoreticalValue();
+112 |   }
+
+===== M0021 =====
+Signature: org.apache.commons.math.estimation.WeightedMeasurement.WeightedMeasurement(double,double,boolean)
+Source: src/java/org/apache/commons/math/estimation/WeightedMeasurement.java
+Original range: 79-84
+Documentation:
+/** Simple constructor.
+   * 
+   * Build a measurement with the given parameters
+   * 
+   * @param weight weight of the measurement in the least squares problem
+   * @param measuredValue measured value
+   * @param ignored true if the measurement should be ignored
+   */
+Method code:
+79 |   public WeightedMeasurement(double weight, double measuredValue,
+80 |                              boolean ignored) {
+81 |     this.weight        = weight;
+82 |     this.measuredValue = measuredValue;
+83 |     this.ignored       = ignored;
+84 |   }
+
+===== M0022 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.copyIn(double[][])
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 1019-1021
+Documentation:
+/**
+     * Replaces data with a fresh copy of the input array.
+     * <p>
+     * Verifies that the input array is rectangular and non-empty.</p>
+     *
+     * @param in data to copy in
+     * @throws IllegalArgumentException if input array is empty or not
+     *    rectangular
+     * @throws NullPointerException if input array is null
+     */
+Method code:
+1019 |     private void copyIn(double[][] in) {
+1020 |         setSubMatrix(in,0,0);
+1021 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math.estimation.AbstractEstimator.setMaxCostEval(int)
+Source: src/java/org/apache/commons/math/estimation/AbstractEstimator.java
+Original range: 47-49
+Documentation:
+/**
+     * Set the maximal number of cost evaluations allowed.
+     * 
+     * @param maxCostEval maximal number of cost evaluations allowed
+     * @see #estimate
+     */
+Method code:
+47 |     public final void setMaxCostEval(int maxCostEval) {
+48 |         this.maxCostEval = maxCostEval;
+49 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.getDataRef()
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 277-279
+Documentation:
+/**
+     * Returns a reference to the underlying data array.
+     * <p>
+     * Does not make a fresh copy of the underlying data.</p>
+     *
+     * @return 2-dimensional array of entries
+     */
+Method code:
+277 |     public double[][] getDataRef() {
+278 |         return data;
+279 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math.estimation.AbstractEstimator.initializeEstimate(EstimationProblem)
+Source: src/java/org/apache/commons/math/estimation/AbstractEstimator.java
+Original range: 223-241
+Documentation:
+/**
+     * Initialization of the common parts of the estimation.
+     * <p>This method <em>must</em> be called at the start
+     * of the {@link #estimate(EstimationProblem) estimate}
+     * method.</p>
+     * @param problem estimation problem to solve
+     */
+Method code:
+223 |     protected void initializeEstimate(EstimationProblem problem) {
+224 | 
+225 |         // reset counters
+226 |         costEvaluations     = 0;
+227 |         jacobianEvaluations = 0;
+228 | 
+229 |         // retrieve the equations and the parameters
+230 |         measurements = problem.getMeasurements();
+231 |         parameters   = problem.getUnboundParameters();
+232 | 
+233 |         // arrays shared with the other private methods
+234 |         rows      = measurements.length;
+235 |         cols      = parameters.length;
+236 |         jacobian  = new double[rows * cols];
+237 |         residuals = new double[rows];
+238 | 
+239 |         cost = Double.POSITIVE_INFINITY;
+240 | 
+241 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math.estimation.WeightedMeasurement.isIgnored()
+Source: src/java/org/apache/commons/math/estimation/WeightedMeasurement.java
+Original range: 154-156
+Documentation:
+/** 
+   * Check if this measurement should be ignored
+   * 
+   * @return true if the measurement should be ignored
+   */
+Method code:
+154 |   public boolean isIgnored() {
+155 |     return ignored;
+156 |   }
+
+===== M0027 =====
+Signature: org.apache.commons.math.estimation.EstimatedParameter.EstimatedParameter(String,double,boolean)
+Source: src/java/org/apache/commons/math/estimation/EstimatedParameter.java
+Original range: 57-63
+Documentation:
+/** Simple constructor.
+   * Build an instance from a first estimate of the parameter and a
+   * bound flag
+   * @param name name of the parameter
+   * @param firstEstimate first estimate of the parameter
+   * @param bound flag, should be true if the parameter is bound
+   */
+Method code:
+57 |   public EstimatedParameter(String name,
+58 |                             double firstEstimate,
+59 |                             boolean bound) {
+60 |     this.name  = name;
+61 |     estimate   = firstEstimate;
+62 |     this.bound = bound;
+63 |   }
+
+===== M0028 =====
+Signature: org.apache.commons.math.estimation.AbstractEstimator.getRMS(EstimationProblem)
+Source: src/java/org/apache/commons/math/estimation/AbstractEstimator.java
+Original range: 126-134
+Documentation:
+/** 
+     * Get the Root Mean Square value.
+     * Get the Root Mean Square value, i.e. the root of the arithmetic
+     * mean of the square of all weighted residuals. This is related to the
+     * criterion that is minimized by the estimator as follows: if
+     * <em>c</em> if the criterion, and <em>n</em> is the number of
+     * measurements, then the RMS is <em>sqrt (c/n)</em>.
+     * 
+     * @param problem estimation problem
+     * @return RMS value
+     */
+Method code:
+126 |     public double getRMS(EstimationProblem problem) {
+127 |         WeightedMeasurement[] wm = problem.getMeasurements();
+128 |         double criterion = 0;
+129 |         for (int i = 0; i < wm.length; ++i) {
+130 |             double residual = wm[i].getResidual();
+131 |             criterion += wm[i].getWeight() * residual * residual;
+132 |         }
+133 |         return Math.sqrt(criterion / wm.length);
+134 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math.estimation.GaussNewtonEstimator.estimate(EstimationProblem)
+Source: src/java/org/apache/commons/math/estimation/GaussNewtonEstimator.java
+Original range: 102-172
+Documentation:
+/** 
+     * Solve an estimation problem using a least squares criterion.
+     *
+     * <p>This method set the unbound parameters of the given problem
+     * starting from their current values through several iterations. At
+     * each step, the unbound parameters are changed in order to
+     * minimize a weighted least square criterion based on the
+     * measurements of the problem.</p>
+     *
+     * <p>The iterations are stopped either when the criterion goes
+     * below a physical threshold under which improvement are considered
+     * useless or when the algorithm is unable to improve it (even if it
+     * is still high). The first condition that is met stops the
+     * iterations. If the convergence it nos reached before the maximum
+     * number of iterations, an {@link EstimationException} is
+     * thrown.</p>
+     *
+     * @param problem estimation problem to solve
+     * @exception EstimationException if the problem cannot be solved
+     *
+     * @see EstimationProblem
+     *
+     */
+Method code:
+102 |     public void estimate(EstimationProblem problem)
+103 |     throws EstimationException {
+104 | 
+105 |         initializeEstimate(problem);
+106 | 
+107 |         // work matrices
+108 |         double[] grad             = new double[parameters.length];
+109 |         RealMatrixImpl bDecrement = new RealMatrixImpl(parameters.length, 1);
+110 |         double[][] bDecrementData = bDecrement.getDataRef();
+111 |         RealMatrixImpl wGradGradT = new RealMatrixImpl(parameters.length, parameters.length);
+112 |         double[][] wggData        = wGradGradT.getDataRef();
+113 | 
+114 |         // iterate until convergence is reached
+115 |         double previous = Double.POSITIVE_INFINITY;
+116 |         do {
+117 | 
+118 |             // build the linear problem
+119 |             incrementJacobianEvaluationsCounter();
+120 |             RealMatrix b = new RealMatrixImpl(parameters.length, 1);
+121 |             RealMatrix a = new RealMatrixImpl(parameters.length, parameters.length);
+122 |             for (int i = 0; i < measurements.length; ++i) {
+123 |                 if (! measurements [i].isIgnored()) {
+124 | 
+125 |                     double weight   = measurements[i].getWeight();
+126 |                     double residual = measurements[i].getResidual();
+127 | 
+128 |                     // compute the normal equation
+129 |                     for (int j = 0; j < parameters.length; ++j) {
+130 |                         grad[j] = measurements[i].getPartial(parameters[j]);
+131 |                         bDecrementData[j][0] = weight * residual * grad[j];
+132 |                     }
+133 | 
+134 |                     // build the contribution matrix for measurement i
+135 |                     for (int k = 0; k < parameters.length; ++k) {
+136 |                         double[] wggRow = wggData[k];
+137 |                         double gk = grad[k];
+138 |                         for (int l = 0; l < parameters.length; ++l) {
+139 |                             wggRow[l] =  weight * gk * grad[l];
+140 |                         }
+141 |                     }
+142 | 
+143 |                     // update the matrices
+144 |                     a = a.add(wGradGradT);
+145 |                     b = b.add(bDecrement);
+146 | 
+147 |                 }
+148 |             }
+149 | 
+150 |             try {
+151 | 
+152 |                 // solve the linearized least squares problem
+153 |                 RealMatrix dX = a.solve(b);
+154 | 
+155 |                 // update the estimated parameters
+156 |                 for (int i = 0; i < parameters.length; ++i) {
+157 |                     parameters[i].setEstimate(parameters[i].getEstimate() + dX.getEntry(i, 0));
+158 |                 }
+159 | 
+160 |             } catch(InvalidMatrixException e) {
+161 |                 throw new EstimationException("unable to solve: singular problem", new Object[0]);
+162 |             }
+163 | 
+164 | 
+165 |             previous = cost;
+166 |             updateResidualsAndCost();
+167 | 
+168 |         } while ((getCostEvaluations() < 2) ||
+169 |                  (Math.abs(previous - cost) > (cost * steadyStateThreshold) &&
+170 |                   (Math.abs(cost) > convergence)));
+171 | 
+172 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math.estimation.AbstractEstimator.getCovariances(EstimationProblem)
+Source: src/java/org/apache/commons/math/estimation/AbstractEstimator.java
+Original range: 158-188
+Documentation:
+/**
+     * Get the covariance matrix of unbound estimated parameters.
+     * @param problem estimation problem
+     * @return covariance matrix
+     * @exception EstimationException if the covariance matrix
+     * cannot be computed (singular problem)
+     */
+Method code:
+158 |     public double[][] getCovariances(EstimationProblem problem)
+159 |       throws EstimationException {
+160 |  
+161 |         // set up the jacobian
+162 |         updateJacobian();
+163 | 
+164 |         // compute transpose(J).J, avoiding building big intermediate matrices
+165 |         final int rows = problem.getMeasurements().length;
+166 |         final int cols = problem.getAllParameters().length;
+167 |         final int max  = cols * rows;
+168 |         double[][] jTj = new double[cols][cols];
+169 |         for (int i = 0; i < cols; ++i) {
+170 |             for (int j = i; j < cols; ++j) {
+171 |                 double sum = 0;
+172 |                 for (int k = 0; k < max; k += cols) {
+173 |                     sum += jacobian[k + i] * jacobian[k + j];
+174 |                 }
+175 |                 jTj[i][j] = sum;
+176 |                 jTj[j][i] = sum;
+177 |             }
+178 |         }
+179 | 
+180 |         try {
+181 |             // compute the covariances matrix
+182 |             return new RealMatrixImpl(jTj).inverse().getData();
+183 |         } catch (InvalidMatrixException ime) {
+184 |             throw new EstimationException("unable to compute covariances: singular problem",
+185 |                                           new Object[0]);
+186 |         }
+187 | 
+188 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.getColumnDimension()
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 610-612
+Documentation:
+/**
+     * @return columnDimension
+     */
+Method code:
+610 |     public int getColumnDimension() {
+611 |         return data[0].length;
+612 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math.estimation.EstimatedParameter.setEstimate(double)
+Source: src/java/org/apache/commons/math/estimation/EstimatedParameter.java
+Original range: 78-80
+Documentation:
+/** Set a new estimated value for the parameter.
+   * @param estimate new estimate for the parameter
+   */
+Method code:
+78 |   public void setEstimate(double estimate) {
+79 |     this.estimate = estimate;
+80 |   }
+
+===== M0033 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.setSubMatrix(double[][],int,int)
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 388-424
+Documentation:
+/**
+     * Replace the submatrix starting at <code>row, column</code> using data in
+     * the input <code>subMatrix</code> array. Indexes are 0-based.
+     * <p> 
+     * Example:<br>
+     * Starting with <pre>
+     * 1  2  3  4
+     * 5  6  7  8
+     * 9  0  1  2
+     * </pre>
+     * and <code>subMatrix = {{3, 4} {5,6}}</code>, invoking 
+     * <code>setSubMatrix(subMatrix,1,1))</code> will result in <pre>
+     * 1  2  3  4
+     * 5  3  4  8
+     * 9  5  6  2
+     * </pre></p>
+     * 
+     * @param subMatrix  array containing the submatrix replacement data
+     * @param row  row coordinate of the top, left element to be replaced
+     * @param column  column coordinate of the top, left element to be replaced
+     * @throws MatrixIndexException  if subMatrix does not fit into this 
+     *    matrix from element in (row, column) 
+     * @throws IllegalArgumentException if <code>subMatrix</code> is not rectangular
+     *  (not all rows have the same length) or empty
+     * @throws NullPointerException if <code>subMatrix</code> is null
+     * @since 1.1
+     */
+Method code:
+388 |     public void setSubMatrix(double[][] subMatrix, int row, int column) 
+389 |         throws MatrixIndexException {
+390 |         if ((row < 0) || (column < 0)){
+391 |             throw new MatrixIndexException
+392 |                 ("invalid row or column index selection");          
+393 |         }
+394 |         int nRows = subMatrix.length;
+395 |         if (nRows == 0) {
+396 |             throw new IllegalArgumentException(
+397 |             "Matrix must have at least one row."); 
+398 |         }
+399 |         int nCols = subMatrix[0].length;
+400 |         if (nCols == 0) {
+401 |             throw new IllegalArgumentException(
+402 |             "Matrix must have at least one column."); 
+403 |         }
+404 |         for (int r = 1; r < nRows; r++) {
+405 |             if (subMatrix[r].length != nCols) {
+406 |                 throw new IllegalArgumentException(
+407 |                 "All input rows must have the same length.");
+408 |             }
+409 |         }       
+410 |         if (data == null) {
+411 |             if ((row > 0)||(column > 0)) throw new MatrixIndexException
+412 |                 ("matrix must be initialized to perfom this method");
+413 |             data = new double[nRows][nCols];
+414 |             System.arraycopy(subMatrix, 0, data, 0, subMatrix.length);          
+415 |         }   
+416 |         if (((nRows + row) > this.getRowDimension()) ||
+417 |             (nCols + column > this.getColumnDimension()))
+418 |             throw new MatrixIndexException(
+419 |                     "invalid row or column index selection");                   
+420 |         for (int i = 0; i < nRows; i++) {
+421 |             System.arraycopy(subMatrix[i], 0, data[row + i], column, nCols);
+422 |         } 
+423 |         lu = null;
+424 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math.estimation.GaussNewtonEstimator.GaussNewtonEstimator(int,double,double)
+Source: src/java/org/apache/commons/math/estimation/GaussNewtonEstimator.java
+Original range: 71-77
+Documentation:
+/** 
+     * Simple constructor.
+     *
+     * <p>This constructor builds an estimator and stores its convergence
+     * characteristics.</p>
+     *
+     * <p>An estimator is considered to have converged whenever either
+     * the criterion goes below a physical threshold under which
+     * improvements are considered useless or when the algorithm is
+     * unable to improve it (even if it is still high). The first
+     * condition that is met stops the iterations.</p>
+     *
+     * <p>The fact an estimator has converged does not mean that the
+     * model accurately fits the measurements. It only means no better
+     * solution can be found, it does not mean this one is good. Such an
+     * analysis is left to the caller.</p>
+     *
+     * <p>If neither conditions are fulfilled before a given number of
+     * iterations, the algorithm is considered to have failed and an
+     * {@link EstimationException} is thrown.</p>
+     *
+     * @param maxCostEval maximal number of cost evaluations allowed
+     * @param convergence criterion threshold below which we do not need
+     * to improve the criterion anymore
+     * @param steadyStateThreshold steady state detection threshold, the
+     * problem has converged has reached a steady state if
+     * <code>Math.abs (Jn - Jn-1) < Jn * convergence</code>, where
+     * <code>Jn</code> and <code>Jn-1</code> are the current and
+     * preceding criterion value (square sum of the weighted residuals
+     * of considered measurements).
+     */
+Method code:
+71 |     public GaussNewtonEstimator(int maxCostEval,
+72 |             double convergence,
+73 |             double steadyStateThreshold) {
+74 |         setMaxCostEval(maxCostEval);
+75 |         this.steadyStateThreshold = steadyStateThreshold;
+76 |         this.convergence          = convergence;
+77 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math.estimation.AbstractEstimator.updateResidualsAndCost()
+Source: src/java/org/apache/commons/math/estimation/AbstractEstimator.java
+Original range: 96-113
+Documentation:
+/** 
+     * Update the residuals array and cost function value.
+     * @exception EstimationException if the number of cost evaluations
+     * exceeds the maximum allowed
+     */
+Method code:
+96 |     protected void updateResidualsAndCost()
+97 |     throws EstimationException {
+98 | 
+99 |         if (++costEvaluations > maxCostEval) {
+100 |             throw new EstimationException("maximal number of evaluations exceeded ({0})",
+101 |                                           new Object[] { new Integer(maxCostEval) });
+102 |         }
+103 | 
+104 |         cost = 0;
+105 |         for (int i = 0, index = 0; i < rows; i++, index += cols) {
+106 |             WeightedMeasurement wm = measurements[i];
+107 |             double residual = wm.getResidual();
+108 |             residuals[i] = Math.sqrt(wm.getWeight()) * residual;
+109 |             cost += wm.getWeight() * residual * residual;
+110 |         }
+111 |         cost = Math.sqrt(cost);
+112 | 
+113 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math.estimation.SimpleEstimationProblem.getMeasurements()
+Source: src/java/org/apache/commons/math/estimation/SimpleEstimationProblem.java
+Original range: 85-87
+Documentation:
+/** 
+     * Get the measurements of an estimation problem.
+     * @return measurements
+     */
+Method code:
+85 |     public WeightedMeasurement[] getMeasurements() {
+86 |         return (WeightedMeasurement[]) measurements.toArray(new WeightedMeasurement[measurements.size()]);
+87 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math.estimation.WeightedMeasurement.getWeight()
+Source: src/java/org/apache/commons/math/estimation/WeightedMeasurement.java
+Original range: 91-93
+Documentation:
+/** 
+   * Get the weight of the measurement in the least squares problem
+   * 
+   * @return weight
+   */
+Method code:
+91 |   public double getWeight() {
+92 |     return weight;
+93 |   }
+
+===== M0038 =====
+Signature: org.apache.commons.math.estimation.EstimatedParameter.getEstimate()
+Source: src/java/org/apache/commons/math/estimation/EstimatedParameter.java
+Original range: 85-87
+Documentation:
+/** Get the current estimate of the parameter
+   * @return current estimate
+   */
+Method code:
+85 |   public double getEstimate() {
+86 |     return estimate;
+87 |   }
+
+===== M0039 =====
+Signature: org.apache.commons.math.estimation.AbstractEstimator.AbstractEstimator()
+Source: src/java/org/apache/commons/math/estimation/AbstractEstimator.java
+Original range: 38-39
+Documentation:
+/**
+     * Build an abstract estimator for least squares problems.
+     */
+Method code:
+38 |     protected AbstractEstimator() {
+39 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math.estimation.SimpleEstimationProblem.SimpleEstimationProblem()
+Source: src/java/org/apache/commons/math/estimation/SimpleEstimationProblem.java
+Original range: 48-51
+Documentation:
+/**
+     * Build an empty instance without parameters nor measurements.
+     */
+Method code:
+48 |     public SimpleEstimationProblem() {
+49 |         parameters   = new ArrayList();
+50 |         measurements = new ArrayList();
+51 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math.estimation.SimpleEstimationProblem.addMeasurement(WeightedMeasurement)
+Source: src/java/org/apache/commons/math/estimation/SimpleEstimationProblem.java
+Original range: 100-102
+Documentation:
+/**
+     * Add a new measurement to the set.
+     * @param m measurement to add
+     */
+Method code:
+100 |     protected void addMeasurement(WeightedMeasurement m) {
+101 |         measurements.add(m);
+102 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.math.linear.RealMatrixImpl.getData()
+Source: src/java/org/apache/commons/math/linear/RealMatrixImpl.java
+Original range: 266-268
+Documentation:
+/**
+     * Returns matrix entries as a two-dimensional array.
+     * <p>
+     * Makes a fresh copy of the underlying data.</p>
+     *
+     * @return    2-dimensional array of entries
+     */
+Method code:
+266 |     public double[][] getData() {
+267 |         return copyOut();
+268 |     }
+

@@ -1,0 +1,49 @@
+===== M0001 =====
+Signature: org.apache.commons.math.util.MathUtils.equals(double[],double[])
+Source: src/main/java/org/apache/commons/math/util/MathUtils.java
+Original range: 522-535
+Documentation:
+/**
+     * Returns true iff both arguments are null or have same dimensions and all
+     * their elements are equal as defined by
+     * {@link #equals(double,double) this method}.
+     *
+     * @param x first array
+     * @param y second array
+     * @return true if the values are both null or have same dimension
+     * and equal elements.
+     */
+Method code:
+522 |     public static boolean equals(double[] x, double[] y) {
+523 |         if ((x == null) || (y == null)) {
+524 |             return !((x == null) ^ (y == null));
+525 |         }
+526 |         if (x.length != y.length) {
+527 |             return false;
+528 |         }
+529 |         for (int i = 0; i < x.length; ++i) {
+530 |             if (!equals(x[i], y[i])) {
+531 |                 return false;
+532 |             }
+533 |         }
+534 |         return true;
+535 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.util.MathUtils.equals(double,double)
+Source: src/main/java/org/apache/commons/math/util/MathUtils.java
+Original range: 416-418
+Documentation:
+/**
+     * Returns true iff they are equal as defined by
+     * {@link #equals(double,double,int) equals(x, y, 1)}.
+     *
+     * @param x first value
+     * @param y second value
+     * @return {@code true} if the values are equal.
+     */
+Method code:
+416 |     public static boolean equals(double x, double y) {
+417 |         return (Double.isNaN(x) && Double.isNaN(y)) || x == y;
+418 |     }
+

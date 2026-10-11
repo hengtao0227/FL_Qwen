@@ -1,0 +1,984 @@
+===== M0001 =====
+Signature: org.joda.time.DateTimeZone.getDefaultProvider()
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 442-474
+Documentation:
+/**
+     * Gets the default zone provider.
+     * <p>
+     * Tries the system property <code>org.joda.time.DateTimeZone.Provider</code>.
+     * Then tries a <code>ZoneInfoProvider</code> using the data in <code>org/joda/time/tz/data</code>.
+     * Then uses <code>UTCProvider</code>.
+     * 
+     * @return the default name provider
+     */
+Method code:
+442 |     private static Provider getDefaultProvider() {
+443 |         Provider provider = null;
+444 | 
+445 |         try {
+446 |             String providerClass =
+447 |                 System.getProperty("org.joda.time.DateTimeZone.Provider");
+448 |             if (providerClass != null) {
+449 |                 try {
+450 |                     provider = (Provider) Class.forName(providerClass).newInstance();
+451 |                 } catch (Exception ex) {
+452 |                     Thread thread = Thread.currentThread();
+453 |                     thread.getThreadGroup().uncaughtException(thread, ex);
+454 |                 }
+455 |             }
+456 |         } catch (SecurityException ex) {
+457 |             // ignored
+458 |         }
+459 | 
+460 |         if (provider == null) {
+461 |             try {
+462 |                 provider = new ZoneInfoProvider("org/joda/time/tz/data");
+463 |             } catch (Exception ex) {
+464 |                 Thread thread = Thread.currentThread();
+465 |                 thread.getThreadGroup().uncaughtException(thread, ex);
+466 |             }
+467 |         }
+468 | 
+469 |         if (provider == null) {
+470 |             provider = new UTCProvider();
+471 |         }
+472 | 
+473 |         return provider;
+474 |     }
+
+===== M0002 =====
+Signature: org.joda.time.DateTimeZone.getConvertedId(String)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 558-598
+Documentation:
+/**
+     * Converts an old style id to a new style id.
+     * 
+     * @param id  the old style id
+     * @return the new style id, null if not found
+     */
+Method code:
+558 |     private static synchronized String getConvertedId(String id) {
+559 |         Map<String, String> map = cZoneIdConversion;
+560 |         if (map == null) {
+561 |             // Backwards compatibility with TimeZone.
+562 |             map = new HashMap<String, String>();
+563 |             map.put("GMT", "UTC");
+564 |             map.put("MIT", "Pacific/Apia");
+565 |             map.put("HST", "Pacific/Honolulu");  // JDK 1.1 compatible
+566 |             map.put("AST", "America/Anchorage");
+567 |             map.put("PST", "America/Los_Angeles");
+568 |             map.put("MST", "America/Denver");  // JDK 1.1 compatible
+569 |             map.put("PNT", "America/Phoenix");
+570 |             map.put("CST", "America/Chicago");
+571 |             map.put("EST", "America/New_York");  // JDK 1.1 compatible
+572 |             map.put("IET", "America/Indianapolis");
+573 |             map.put("PRT", "America/Puerto_Rico");
+574 |             map.put("CNT", "America/St_Johns");
+575 |             map.put("AGT", "America/Buenos_Aires");
+576 |             map.put("BET", "America/Sao_Paulo");
+577 |             map.put("WET", "Europe/London");
+578 |             map.put("ECT", "Europe/Paris");
+579 |             map.put("ART", "Africa/Cairo");
+580 |             map.put("CAT", "Africa/Harare");
+581 |             map.put("EET", "Europe/Bucharest");
+582 |             map.put("EAT", "Africa/Addis_Ababa");
+583 |             map.put("MET", "Asia/Tehran");
+584 |             map.put("NET", "Asia/Yerevan");
+585 |             map.put("PLT", "Asia/Karachi");
+586 |             map.put("IST", "Asia/Calcutta");
+587 |             map.put("BST", "Asia/Dhaka");
+588 |             map.put("VST", "Asia/Saigon");
+589 |             map.put("CTT", "Asia/Shanghai");
+590 |             map.put("JST", "Asia/Tokyo");
+591 |             map.put("ACT", "Australia/Darwin");
+592 |             map.put("AET", "Australia/Sydney");
+593 |             map.put("SST", "Pacific/Guadalcanal");
+594 |             map.put("NST", "Pacific/Auckland");
+595 |             cZoneIdConversion = map;
+596 |         }
+597 |         return map.get(id);
+598 |     }
+
+===== M0003 =====
+Signature: org.joda.time.DateTimeZone.setNameProvider0(NameProvider)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 513-518
+Documentation:
+/**
+     * Sets the name provider factory without performing the security check.
+     * 
+     * @param nameProvider  provider to use, or null for default
+     * @throws IllegalArgumentException if the provider is invalid
+     */
+Method code:
+513 |     private static void setNameProvider0(NameProvider nameProvider) {
+514 |         if (nameProvider == null) {
+515 |             nameProvider = getDefaultNameProvider();
+516 |         }
+517 |         cNameProvider = nameProvider;
+518 |     }
+
+===== M0004 =====
+Signature: org.joda.time.DateTimeZone.setProvider0(Provider)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 414-431
+Documentation:
+/**
+     * Sets the zone provider factory without performing the security check.
+     * 
+     * @param provider  provider to use, or null for default
+     * @throws IllegalArgumentException if the provider is invalid
+     */
+Method code:
+414 |     private static void setProvider0(Provider provider) {
+415 |         if (provider == null) {
+416 |             provider = getDefaultProvider();
+417 |         }
+418 |         Set<String> ids = provider.getAvailableIDs();
+419 |         if (ids == null || ids.size() == 0) {
+420 |             throw new IllegalArgumentException
+421 |                 ("The provider doesn't have any available ids");
+422 |         }
+423 |         if (!ids.contains("UTC")) {
+424 |             throw new IllegalArgumentException("The provider doesn't support UTC");
+425 |         }
+426 |         if (!UTC.equals(provider.getZone("UTC"))) {
+427 |             throw new IllegalArgumentException("Invalid UTC zone provided");
+428 |         }
+429 |         cProvider = provider;
+430 |         cAvailableIDs = ids;
+431 |     }
+
+===== M0005 =====
+Signature: org.joda.time.tz.DefaultNameProvider.DefaultNameProvider()
+Source: src/main/java/org/joda/time/tz/DefaultNameProvider.java
+Original range: 39-40
+Documentation:
+
+Method code:
+39 |     public DefaultNameProvider() {
+40 |     }
+
+===== M0006 =====
+Signature: org.joda.time.tz.CachedDateTimeZone.forZone(DateTimeZone)
+Source: src/main/java/org/joda/time/tz/CachedDateTimeZone.java
+Original range: 67-72
+Documentation:
+/**
+     * Returns a new CachedDateTimeZone unless given zone is already cached.
+     */
+Method code:
+67 |     public static CachedDateTimeZone forZone(DateTimeZone zone) {
+68 |         if (zone instanceof CachedDateTimeZone) {
+69 |             return (CachedDateTimeZone)zone;
+70 |         }
+71 |         return new CachedDateTimeZone(zone);
+72 |     }
+
+===== M0007 =====
+Signature: org.joda.time.DateTimeZone.getDefault()
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 132-162
+Documentation:
+/**
+     * Gets the default time zone.
+     * <p>
+     * The default time zone is derived from the system property {@code user.timezone}.
+     * If that is {@code null} or is not a valid identifier, then the value of the
+     * JDK {@code TimeZone} default is converted. If that fails, {@code UTC} is used.
+     * <p>
+     * NOTE: If the {@code java.util.TimeZone} default is updated <i>after</i> calling this
+     * method, then the change will not be picked up here.
+     * 
+     * @return the default datetime zone object
+     */
+Method code:
+132 |     public static DateTimeZone getDefault() {
+133 |         DateTimeZone zone = cDefault;
+134 |         if (zone == null) {
+135 |             synchronized(DateTimeZone.class) {
+136 |                 zone = cDefault;
+137 |                 if (zone == null) {
+138 |                     DateTimeZone temp = null;
+139 |                     try {
+140 |                         try {
+141 |                             String id = System.getProperty("user.timezone");
+142 |                             if (id != null) {  // null check avoids stack overflow
+143 |                                 temp = forID(id);
+144 |                             }
+145 |                         } catch (RuntimeException ex) {
+146 |                             // ignored
+147 |                         }
+148 |                         if (temp == null) {
+149 |                             temp = forTimeZone(TimeZone.getDefault());
+150 |                         }
+151 |                     } catch (IllegalArgumentException ex) {
+152 |                         // ignored
+153 |                     }
+154 |                     if (temp == null) {
+155 |                         temp = UTC;
+156 |                     }
+157 |                     cDefault = zone = temp;
+158 |                 }
+159 |             }
+160 |         }
+161 |         return zone;
+162 |     }
+
+===== M0008 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.Recurrence.readFrom(DataInput)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 739-741
+Documentation:
+
+Method code:
+739 |         static Recurrence readFrom(DataInput in) throws IOException {
+740 |             return new Recurrence(OfYear.readFrom(in), in.readUTF(), (int)readMillis(in));
+741 |         }
+
+===== M0009 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.DSTZone.readFrom(DataInput,String)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 1165-1168
+Documentation:
+
+Method code:
+1165 |         static DSTZone readFrom(DataInput in, String id) throws IOException {
+1166 |             return new DSTZone(id, (int)readMillis(in), 
+1167 |                                Recurrence.readFrom(in), Recurrence.readFrom(in));
+1168 |         }
+
+===== M0010 =====
+Signature: org.joda.time.DateTimeZone.getID()
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 703-706
+Documentation:
+/**
+     * Gets the ID of this datetime zone.
+     * 
+     * @return the ID of this datetime zone
+     */
+Method code:
+703 |     @ToString
+704 |     public final String getID() {
+705 |         return iID;
+706 |     }
+
+===== M0011 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.loadZoneData(String)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 223-242
+Documentation:
+/**
+     * Loads the time zone data for one id.
+     * 
+     * @param id  the id to load
+     * @return the zone
+     */
+Method code:
+223 |     private DateTimeZone loadZoneData(String id) {
+224 |         InputStream in = null;
+225 |         try {
+226 |             in = openResource(id);
+227 |             DateTimeZone tz = DateTimeZoneBuilder.readFrom(in, id);
+228 |             iZoneInfoMap.put(id, new SoftReference<DateTimeZone>(tz));
+229 |             return tz;
+230 |         } catch (IOException e) {
+231 |             uncaughtException(e);
+232 |             iZoneInfoMap.remove(id);
+233 |             return null;
+234 |         } finally {
+235 |             try {
+236 |                 if (in != null) {
+237 |                     in.close();
+238 |                 }
+239 |             } catch (IOException e) {
+240 |             }
+241 |         }
+242 |     }
+
+===== M0012 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.getZone(String)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 135-163
+Documentation:
+/**
+     * If an error is thrown while loading zone data, uncaughtException is
+     * called to log the error and null is returned for this and all future
+     * requests.
+     * 
+     * @param id  the id to load
+     * @return the loaded zone
+     */
+Method code:
+135 |     public DateTimeZone getZone(String id) {
+136 |         if (id == null) {
+137 |             return null;
+138 |         }
+139 | 
+140 |         Object obj = iZoneInfoMap.get(id);
+141 |         if (obj == null) {
+142 |             return null;
+143 |         }
+144 | 
+145 |         if (id.equals(obj)) {
+146 |             // Load zone data for the first time.
+147 |             return loadZoneData(id);
+148 |         }
+149 | 
+150 |         if (obj instanceof SoftReference<?>) {
+151 |             @SuppressWarnings("unchecked")
+152 |             SoftReference<DateTimeZone> ref = (SoftReference<DateTimeZone>) obj;
+153 |             DateTimeZone tz = ref.get();
+154 |             if (tz != null) {
+155 |                 return tz;
+156 |             }
+157 |             // Reference cleared; load data again.
+158 |             return loadZoneData(id);
+159 |         }
+160 | 
+161 |         // If this point is reached, mapping must link to another.
+162 |         return getZone((String)obj);
+163 |     }
+
+===== M0013 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.ZoneInfoProvider(String)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 81-83
+Documentation:
+/**
+     * ZoneInfoProvider searches the given ClassLoader resource path for
+     * compiled data files. Resources are loaded from the ClassLoader that
+     * loaded this class.
+     *
+     * @throws IOException if directory or map file cannot be read
+     */
+Method code:
+81 |     public ZoneInfoProvider(String resourcePath) throws IOException {
+82 |         this(resourcePath, null, false);
+83 |     }
+
+===== M0014 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.OfYear.OfYear(char,int,int,int,boolean,int)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 499-515
+Documentation:
+
+Method code:
+499 |         OfYear(char mode,
+500 |                int monthOfYear,
+501 |                int dayOfMonth,
+502 |                int dayOfWeek, boolean advanceDayOfWeek,
+503 |                int millisOfDay)
+504 |         {
+505 |             if (mode != 'u' && mode != 'w' && mode != 's') {
+506 |                 throw new IllegalArgumentException("Unknown mode: " + mode);
+507 |             }
+508 | 
+509 |             iMode = mode;
+510 |             iMonthOfYear = monthOfYear;
+511 |             iDayOfMonth = dayOfMonth;
+512 |             iDayOfWeek = dayOfWeek;
+513 |             iAdvance = advanceDayOfWeek;
+514 |             iMillisOfDay = millisOfDay;
+515 |         }
+
+===== M0015 =====
+Signature: org.joda.time.DateTimeZone.forID(String)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 202-224
+Documentation:
+/**
+     * Gets a time zone instance for the specified time zone id.
+     * <p>
+     * The time zone id may be one of those returned by getAvailableIDs.
+     * Short ids, as accepted by {@link java.util.TimeZone}, are not accepted.
+     * All IDs must be specified in the long format.
+     * The exception is UTC, which is an acceptable id.
+     * <p>
+     * Alternatively a locale independent, fixed offset, datetime zone can
+     * be specified. The form <code>[+-]hh:mm</code> can be used.
+     * 
+     * @param id  the ID of the datetime zone, null means default
+     * @return the DateTimeZone object for the ID
+     * @throws IllegalArgumentException if the ID is not recognised
+     */
+Method code:
+202 |     @FromString
+203 |     public static DateTimeZone forID(String id) {
+204 |         if (id == null) {
+205 |             return getDefault();
+206 |         }
+207 |         if (id.equals("UTC")) {
+208 |             return DateTimeZone.UTC;
+209 |         }
+210 |         DateTimeZone zone = cProvider.getZone(id);
+211 |         if (zone != null) {
+212 |             return zone;
+213 |         }
+214 |         if (id.startsWith("+") || id.startsWith("-")) {
+215 |             int offset = parseOffset(id);
+216 |             if (offset == 0L) {
+217 |                 return DateTimeZone.UTC;
+218 |             } else {
+219 |                 id = printOffset(offset);
+220 |                 return fixedOffsetZone(id, offset);
+221 |             }
+222 |         }
+223 |         throw new IllegalArgumentException("The datetime zone id '" + id + "' is not recognised");
+224 |     }
+
+===== M0016 =====
+Signature: org.joda.time.tz.FixedDateTimeZone.FixedDateTimeZone(String,String,int,int)
+Source: src/main/java/org/joda/time/tz/FixedDateTimeZone.java
+Original range: 36-42
+Documentation:
+
+Method code:
+36 |     public FixedDateTimeZone(String id, String nameKey,
+37 |                              int wallOffset, int standardOffset) {
+38 |         super(id);
+39 |         iNameKey = nameKey;
+40 |         iWallOffset = wallOffset;
+41 |         iStandardOffset = standardOffset;
+42 |     }
+
+===== M0017 =====
+Signature: org.joda.time.tz.DefaultNameProvider.createCache()
+Source: src/main/java/org/joda/time/tz/DefaultNameProvider.java
+Original range: 86-88
+Documentation:
+
+Method code:
+86 |     private HashMap createCache() {
+87 |         return new HashMap(7);
+88 |     }
+
+===== M0018 =====
+Signature: org.joda.time.DateTimeZone.getDefaultNameProvider()
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 528-549
+Documentation:
+/**
+     * Gets the default name provider.
+     * <p>
+     * Tries the system property <code>org.joda.time.DateTimeZone.NameProvider</code>.
+     * Then uses <code>DefaultNameProvider</code>.
+     * 
+     * @return the default name provider
+     */
+Method code:
+528 |     private static NameProvider getDefaultNameProvider() {
+529 |         NameProvider nameProvider = null;
+530 |         try {
+531 |             String providerClass = System.getProperty("org.joda.time.DateTimeZone.NameProvider");
+532 |             if (providerClass != null) {
+533 |                 try {
+534 |                     nameProvider = (NameProvider) Class.forName(providerClass).newInstance();
+535 |                 } catch (Exception ex) {
+536 |                     Thread thread = Thread.currentThread();
+537 |                     thread.getThreadGroup().uncaughtException(thread, ex);
+538 |                 }
+539 |             }
+540 |         } catch (SecurityException ex) {
+541 |             // ignore
+542 |         }
+543 | 
+544 |         if (nameProvider == null) {
+545 |             nameProvider = new DefaultNameProvider();
+546 |         }
+547 | 
+548 |         return nameProvider;
+549 |     }
+
+===== M0019 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.loadZoneInfoMap(InputStream)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 251-264
+Documentation:
+/**
+     * Loads the zone info map.
+     * 
+     * @param in  the input stream
+     * @return the map
+     */
+Method code:
+251 |     private static Map<String, Object> loadZoneInfoMap(InputStream in) throws IOException {
+252 |         Map<String, Object> map = new ConcurrentHashMap<String, Object>();
+253 |         DataInputStream din = new DataInputStream(in);
+254 |         try {
+255 |             readZoneInfoMap(din, map);
+256 |         } finally {
+257 |             try {
+258 |                 din.close();
+259 |             } catch (IOException e) {
+260 |             }
+261 |         }
+262 |         map.put("UTC", new SoftReference<DateTimeZone>(DateTimeZone.UTC));
+263 |         return map;
+264 |     }
+
+===== M0020 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.DSTZone.DSTZone(String,int,Recurrence,Recurrence)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 1174-1180
+Documentation:
+
+Method code:
+1174 |         DSTZone(String id, int standardOffset,
+1175 |                 Recurrence startRecurrence, Recurrence endRecurrence) {
+1176 |             super(id);
+1177 |             iStandardOffset = standardOffset;
+1178 |             iStartRecurrence = startRecurrence;
+1179 |             iEndRecurrence = endRecurrence;
+1180 |         }
+
+===== M0021 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.OfYear.readFrom(DataInput)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 481-488
+Documentation:
+
+Method code:
+481 |         static OfYear readFrom(DataInput in) throws IOException {
+482 |             return new OfYear((char)in.readUnsignedByte(),
+483 |                               (int)in.readUnsignedByte(),
+484 |                               (int)in.readByte(),
+485 |                               (int)in.readUnsignedByte(),
+486 |                               in.readBoolean(),
+487 |                               (int)readMillis(in));
+488 |         }
+
+===== M0022 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.openResource(String)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 194-215
+Documentation:
+/**
+     * Opens a resource from file or classpath.
+     * 
+     * @param name  the name to open
+     * @return the input stream
+     * @throws IOException if an error occurs
+     */
+Method code:
+194 |     private InputStream openResource(String name) throws IOException {
+195 |         InputStream in;
+196 |         if (iFileDir != null) {
+197 |             in = new FileInputStream(new File(iFileDir, name));
+198 |         } else {
+199 |             String path = iResourcePath.concat(name);
+200 |             if (iLoader != null) {
+201 |                 in = iLoader.getResourceAsStream(path);
+202 |             } else {
+203 |                 in = ClassLoader.getSystemResourceAsStream(path);
+204 |             }
+205 |             if (in == null) {
+206 |                 StringBuffer buf = new StringBuffer(40)
+207 |                     .append("Resource not found: \"")
+208 |                     .append(path)
+209 |                     .append("\" ClassLoader: ")
+210 |                     .append(iLoader != null ? iLoader.toString() : "system");
+211 |                 throw new IOException(buf.toString());
+212 |             }
+213 |         }
+214 |         return in;
+215 |     }
+
+===== M0023 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.PrecalculatedZone.readFrom(DataInput,String)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 1339-1377
+Documentation:
+
+Method code:
+1339 |         static PrecalculatedZone readFrom(DataInput in, String id) throws IOException {
+1340 |             // Read string pool.
+1341 |             int poolSize = in.readUnsignedShort();
+1342 |             String[] pool = new String[poolSize];
+1343 |             for (int i=0; i<poolSize; i++) {
+1344 |                 pool[i] = in.readUTF();
+1345 |             }
+1346 | 
+1347 |             int size = in.readInt();
+1348 |             long[] transitions = new long[size];
+1349 |             int[] wallOffsets = new int[size];
+1350 |             int[] standardOffsets = new int[size];
+1351 |             String[] nameKeys = new String[size];
+1352 |             
+1353 |             for (int i=0; i<size; i++) {
+1354 |                 transitions[i] = readMillis(in);
+1355 |                 wallOffsets[i] = (int)readMillis(in);
+1356 |                 standardOffsets[i] = (int)readMillis(in);
+1357 |                 try {
+1358 |                     int index;
+1359 |                     if (poolSize < 256) {
+1360 |                         index = in.readUnsignedByte();
+1361 |                     } else {
+1362 |                         index = in.readUnsignedShort();
+1363 |                     }
+1364 |                     nameKeys[i] = pool[index];
+1365 |                 } catch (ArrayIndexOutOfBoundsException e) {
+1366 |                     throw new IOException("Invalid encoding");
+1367 |                 }
+1368 |             }
+1369 | 
+1370 |             DSTZone tailZone = null;
+1371 |             if (in.readBoolean()) {
+1372 |                 tailZone = DSTZone.readFrom(in, id);
+1373 |             }
+1374 | 
+1375 |             return new PrecalculatedZone
+1376 |                 (id, transitions, wallOffsets, standardOffsets, nameKeys, tailZone);
+1377 |         }
+
+===== M0024 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.ZoneInfoProvider(String,ClassLoader,boolean)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 103-124
+Documentation:
+/**
+     * @param favorSystemLoader when true, use the system class loader if
+     * loader null. When false, use the current class loader if loader is null.
+     */
+Method code:
+103 |     private ZoneInfoProvider(String resourcePath,
+104 |                              ClassLoader loader, boolean favorSystemLoader) 
+105 |         throws IOException
+106 |     {
+107 |         if (resourcePath == null) {
+108 |             throw new IllegalArgumentException("No resource path provided");
+109 |         }
+110 |         if (!resourcePath.endsWith("/")) {
+111 |             resourcePath += '/';
+112 |         }
+113 | 
+114 |         iFileDir = null;
+115 |         iResourcePath = resourcePath;
+116 | 
+117 |         if (loader == null && !favorSystemLoader) {
+118 |             loader = getClass().getClassLoader();
+119 |         }
+120 | 
+121 |         iLoader = loader;
+122 | 
+123 |         iZoneInfoMap = loadZoneInfoMap(openResource("ZoneInfoMap"));
+124 |     }
+
+===== M0025 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.Recurrence.Recurrence(OfYear,String,int)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 747-751
+Documentation:
+
+Method code:
+747 |         Recurrence(OfYear ofYear, String nameKey, int saveMillis) {
+748 |             iOfYear = ofYear;
+749 |             iNameKey = nameKey;
+750 |             iSaveMillis = saveMillis;
+751 |         }
+
+===== M0026 =====
+Signature: org.joda.time.DateTimeZone.forTimeZone(TimeZone)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 301-338
+Documentation:
+/**
+     * Gets a time zone instance for a JDK TimeZone.
+     * <p>
+     * DateTimeZone only accepts a subset of the IDs from TimeZone. The
+     * excluded IDs are the short three letter form (except UTC). This 
+     * method will attempt to convert between time zones created using the
+     * short IDs and the full version.
+     * <p>
+     * This method is not designed to parse time zones with rules created by
+     * applications using <code>SimpleTimeZone</code> directly.
+     * 
+     * @param zone  the zone to convert, null means default
+     * @return the DateTimeZone object for the zone
+     * @throws IllegalArgumentException if the zone is not recognised
+     */
+Method code:
+301 |     public static DateTimeZone forTimeZone(TimeZone zone) {
+302 |         if (zone == null) {
+303 |             return getDefault();
+304 |         }
+305 |         final String id = zone.getID();
+306 |         if (id.equals("UTC")) {
+307 |             return DateTimeZone.UTC;
+308 |         }
+309 | 
+310 |         // Convert from old alias before consulting provider since they may differ.
+311 |         DateTimeZone dtz = null;
+312 |         String convId = getConvertedId(id);
+313 |         if (convId != null) {
+314 |             dtz = cProvider.getZone(convId);
+315 |         }
+316 |         if (dtz == null) {
+317 |             dtz = cProvider.getZone(id);
+318 |         }
+319 |         if (dtz != null) {
+320 |             return dtz;
+321 |         }
+322 | 
+323 |         // Support GMT+/-hh:mm formats
+324 |         if (convId == null) {
+325 |             convId = zone.getDisplayName();
+326 |             if (convId.startsWith("GMT+") || convId.startsWith("GMT-")) {
+327 |                 convId = convId.substring(3);
+328 |                 int offset = parseOffset(convId);
+329 |                 if (offset == 0L) {
+330 |                     return DateTimeZone.UTC;
+331 |                 } else {
+332 |                     convId = printOffset(offset);
+333 |                     return fixedOffsetZone(convId, offset);
+334 |                 }
+335 |             }
+336 |         }
+337 |         throw new IllegalArgumentException("The datetime zone id '" + id + "' is not recognised");
+338 |     }
+
+===== M0027 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.getAvailableIDs()
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 170-175
+Documentation:
+/**
+     * Gets a list of all the available zone ids.
+     * 
+     * @return the zone ids
+     */
+Method code:
+170 |     public Set<String> getAvailableIDs() {
+171 |         // Return a copy of the keys rather than an umodifiable collection.
+172 |         // This prevents ConcurrentModificationExceptions from being thrown by
+173 |         // some JVMs if zones are opened while this set is iterated over.
+174 |         return new TreeSet<String>(iZoneInfoMap.keySet());
+175 |     }
+
+===== M0028 =====
+Signature: org.joda.time.DateTimeZone.DateTimeZone(String)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 688-693
+Documentation:
+/**
+     * Constructor.
+     * 
+     * @param id  the id to use
+     * @throws IllegalArgumentException if the id is null
+     */
+Method code:
+688 |     protected DateTimeZone(String id) {
+689 |         if (id == null) {
+690 |             throw new IllegalArgumentException("Id must not be null");
+691 |         }
+692 |         iID = id;
+693 |     }
+
+===== M0029 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.readFrom(DataInput,String)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 109-125
+Documentation:
+/**
+     * Decodes a built DateTimeZone from the given stream, as encoded by
+     * writeTo.
+     *
+     * @param in input stream to read encoded DateTimeZone from.
+     * @param id time zone id to assign
+     */
+Method code:
+109 |     public static DateTimeZone readFrom(DataInput in, String id) throws IOException {
+110 |         switch (in.readUnsignedByte()) {
+111 |         case 'F':
+112 |             DateTimeZone fixed = new FixedDateTimeZone
+113 |                 (id, in.readUTF(), (int)readMillis(in), (int)readMillis(in));
+114 |             if (fixed.equals(DateTimeZone.UTC)) {
+115 |                 fixed = DateTimeZone.UTC;
+116 |             }
+117 |             return fixed;
+118 |         case 'C':
+119 |             return CachedDateTimeZone.forZone(PrecalculatedZone.readFrom(in, id));
+120 |         case 'P':
+121 |             return PrecalculatedZone.readFrom(in, id);
+122 |         default:
+123 |             throw new IOException("Invalid encoding");
+124 |         }
+125 |     }
+
+===== M0030 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.readFrom(InputStream,String)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 94-100
+Documentation:
+/**
+     * Decodes a built DateTimeZone from the given stream, as encoded by
+     * writeTo.
+     *
+     * @param in input stream to read encoded DateTimeZone from.
+     * @param id time zone id to assign
+     */
+Method code:
+94 |     public static DateTimeZone readFrom(InputStream in, String id) throws IOException {
+95 |         if (in instanceof DataInput) {
+96 |             return readFrom((DataInput)in, id);
+97 |         } else {
+98 |             return readFrom((DataInput)new DataInputStream(in), id);
+99 |         }
+100 |     }
+
+===== M0031 =====
+Signature: org.joda.time.tz.CachedDateTimeZone.CachedDateTimeZone(DateTimeZone)
+Source: src/main/java/org/joda/time/tz/CachedDateTimeZone.java
+Original range: 86-90
+Documentation:
+
+Method code:
+86 |     private CachedDateTimeZone(DateTimeZone zone) {
+87 |         super(zone.getID());
+88 |         iZone = zone;
+89 |         iInfoCache = new Info[cInfoCacheMask + 1];
+90 |     }
+
+===== M0032 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.readMillis(DataInput)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 182-211
+Documentation:
+/**
+     * Reads encoding generated by writeMillis.
+     */
+Method code:
+182 |     static long readMillis(DataInput in) throws IOException {
+183 |         int v = in.readUnsignedByte();
+184 |         switch (v >> 6) {
+185 |         case 0: default:
+186 |             // Form 00 (6 bits effective precision)
+187 |             v = (v << (32 - 6)) >> (32 - 6);
+188 |             return v * (30 * 60000L);
+189 | 
+190 |         case 1:
+191 |             // Form 01 (30 bits effective precision)
+192 |             v = (v << (32 - 6)) >> (32 - 30);
+193 |             v |= (in.readUnsignedByte()) << 16;
+194 |             v |= (in.readUnsignedByte()) << 8;
+195 |             v |= (in.readUnsignedByte());
+196 |             return v * 60000L;
+197 | 
+198 |         case 2:
+199 |             // Form 10 (38 bits effective precision)
+200 |             long w = (((long)v) << (64 - 6)) >> (64 - 38);
+201 |             w |= (in.readUnsignedByte()) << 24;
+202 |             w |= (in.readUnsignedByte()) << 16;
+203 |             w |= (in.readUnsignedByte()) << 8;
+204 |             w |= (in.readUnsignedByte());
+205 |             return w * 1000L;
+206 | 
+207 |         case 3:
+208 |             // Form 11 (64 bits effective precision)
+209 |             return in.readLong();
+210 |         }
+211 |     }
+
+===== M0033 =====
+Signature: org.joda.time.tz.ZoneInfoProvider.readZoneInfoMap(DataInputStream,Map<String, Object>)
+Source: src/main/java/org/joda/time/tz/ZoneInfoProvider.java
+Original range: 272-289
+Documentation:
+/**
+     * Reads the zone info map from file.
+     * 
+     * @param din  the input stream
+     * @param zimap  gets filled with string id to string id mappings
+     */
+Method code:
+272 |     private static void readZoneInfoMap(DataInputStream din, Map<String, Object> zimap) throws IOException {
+273 |         // Read the string pool.
+274 |         int size = din.readUnsignedShort();
+275 |         String[] pool = new String[size];
+276 |         for (int i=0; i<size; i++) {
+277 |             pool[i] = din.readUTF().intern();
+278 |         }
+279 | 
+280 |         // Read the mappings.
+281 |         size = din.readUnsignedShort();
+282 |         for (int i=0; i<size; i++) {
+283 |             try {
+284 |                 zimap.put(pool[din.readUnsignedShort()], pool[din.readUnsignedShort()]);
+285 |             } catch (ArrayIndexOutOfBoundsException e) {
+286 |                 throw new IOException("Corrupt zone info map");
+287 |             }
+288 |         }
+289 |     }
+
+===== M0034 =====
+Signature: org.joda.time.tz.DateTimeZoneBuilder.PrecalculatedZone.PrecalculatedZone(String,long[],int[],int[],String[],DSTZone)
+Source: src/main/java/org/joda/time/tz/DateTimeZoneBuilder.java
+Original range: 1497-1506
+Documentation:
+/**
+         * Constructor used ONLY for valid input, loaded via static methods.
+         */
+Method code:
+1497 |         private PrecalculatedZone(String id, long[] transitions, int[] wallOffsets,
+1498 |                           int[] standardOffsets, String[] nameKeys, DSTZone tailZone)
+1499 |         {
+1500 |             super(id);
+1501 |             iTransitions = transitions;
+1502 |             iWallOffsets = wallOffsets;
+1503 |             iStandardOffsets = standardOffsets;
+1504 |             iNameKeys = nameKeys;
+1505 |             iTailZone = tailZone;
+1506 |         }
+
+===== M0035 =====
+Signature: org.joda.time.DateTimeZone.setDefault(DateTimeZone)
+Source: src/main/java/org/joda/time/DateTimeZone.java
+Original range: 173-184
+Documentation:
+/**
+     * Sets the default time zone.
+     * <p>
+     * NOTE: Calling this method does <i>not</i> set the {@code java.util.TimeZone} default.
+     * 
+     * @param zone  the default datetime zone object, must not be null
+     * @throws IllegalArgumentException if the zone is null
+     * @throws SecurityException if the application has insufficient security rights
+     */
+Method code:
+173 |     public static void setDefault(DateTimeZone zone) throws SecurityException {
+174 |         SecurityManager sm = System.getSecurityManager();
+175 |         if (sm != null) {
+176 |             sm.checkPermission(new JodaTimePermission("DateTimeZone.setDefault"));
+177 |         }
+178 |         if (zone == null) {
+179 |             throw new IllegalArgumentException("The datetime zone must not be null");
+180 |         }
+181 |         synchronized(DateTimeZone.class) {
+182 |             cDefault = zone;
+183 |         }
+184 |     }
+
+===== M0036 =====
+Signature: org.joda.time.tz.FixedDateTimeZone.equals(Object)
+Source: src/main/java/org/joda/time/tz/FixedDateTimeZone.java
+Original range: 87-99
+Documentation:
+
+Method code:
+87 |     public boolean equals(Object obj) {
+88 |         if (this == obj) {
+89 |             return true;
+90 |         }
+91 |         if (obj instanceof FixedDateTimeZone) {
+92 |             FixedDateTimeZone other = (FixedDateTimeZone)obj;
+93 |             return
+94 |                 getID().equals(other.getID()) &&
+95 |                 iStandardOffset == other.iStandardOffset &&
+96 |                 iWallOffset == other.iWallOffset;
+97 |         }
+98 |         return false;
+99 |     }
+

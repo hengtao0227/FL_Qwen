@@ -1,0 +1,2076 @@
+===== M0001 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.subtract(RealMatrix)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 231-239
+Documentation:
+/** {@inheritDoc} */
+Method code:
+231 |     @Override
+232 |     public RealMatrix subtract(final RealMatrix m)
+233 |         throws IllegalArgumentException {
+234 |         try {
+235 |             return subtract((Array2DRowRealMatrix) m);
+236 |         } catch (ClassCastException cce) {
+237 |             return super.subtract(m);
+238 |         }
+239 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.linear.MatrixUtils.createRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math/linear/MatrixUtils.java
+Original range: 60-63
+Documentation:
+/**
+     * Returns a {@link RealMatrix} with specified dimensions.
+     * <p>The type of matrix returned depends on the dimension. Below
+     * 2<sup>12</sup> elements (i.e. 4096 elements or 64&times;64 for a
+     * square matrix) which can be stored in a 32kB array, a {@link
+     * Array2DRowRealMatrix} instance is built. Above this threshold a {@link
+     * BlockRealMatrix} instance is built.</p>
+     * <p>The matrix elements are all set to 0.0.</p>
+     * @param rows number of rows of the matrix
+     * @param columns number of columns of the matrix
+     * @return  RealMatrix with specified dimensions
+     * @see #createRealMatrix(double[][])
+     */
+Method code:
+60 |     public static RealMatrix createRealMatrix(final int rows, final int columns) {
+61 |         return (rows * columns <= 4096) ?
+62 |                 new Array2DRowRealMatrix(rows, columns) : new BlockRealMatrix(rows, columns);
+63 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.linear.RealVectorFormat.RealVectorFormat(String,String,String,NumberFormat)
+Source: src/main/java/org/apache/commons/math/linear/RealVectorFormat.java
+Original range: 116-125
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix, separator and format
+     * for components.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param separator separator to use instead of the default "; "
+     * @param format the custom format for components.
+     */
+Method code:
+116 |     public RealVectorFormat(final String prefix, final String suffix,
+117 |                             final String separator, final NumberFormat format) {
+118 |         this.prefix      = prefix;
+119 |         this.suffix      = suffix;
+120 |         this.separator   = separator;
+121 |         trimmedPrefix    = prefix.trim();
+122 |         trimmedSuffix    = suffix.trim();
+123 |         trimmedSeparator = separator.trim();
+124 |         this.format      = format;
+125 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.getSubMatrix(int,int,int,int)
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 260-276
+Documentation:
+/** {@inheritDoc} */
+Method code:
+260 |     public RealMatrix getSubMatrix(final int startRow, final int endRow,
+261 |                                    final int startColumn, final int endColumn)
+262 |         throws MatrixIndexException {
+263 | 
+264 |         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
+265 | 
+266 |         final RealMatrix subMatrix =
+267 |             createMatrix(endRow - startRow + 1, endColumn - startColumn + 1);
+268 |         for (int i = startRow; i <= endRow; ++i) {
+269 |             for (int j = startColumn; j <= endColumn; ++j) {
+270 |                 subMatrix.setEntry(i - startRow, j - startColumn, getEntry(i, j));
+271 |             }
+272 |         }
+273 | 
+274 |         return subMatrix;
+275 | 
+276 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.linear.MatrixUtils.createRealMatrix(double[][])
+Source: src/main/java/org/apache/commons/math/linear/MatrixUtils.java
+Original range: 105-108
+Documentation:
+/**
+     * Returns a {@link RealMatrix} whose entries are the the values in the
+     * the input array.
+     * <p>The type of matrix returned depends on the dimension. Below
+     * 2<sup>12</sup> elements (i.e. 4096 elements or 64&times;64 for a
+     * square matrix) which can be stored in a 32kB array, a {@link
+     * Array2DRowRealMatrix} instance is built. Above this threshold a {@link
+     * BlockRealMatrix} instance is built.</p>
+     * <p>The input array is copied, not referenced.</p>
+     *
+     * @param data input array
+     * @return  RealMatrix containing the values of the array
+     * @throws IllegalArgumentException if <code>data</code> is not rectangular
+     *  (not all rows have the same length) or empty
+     * @throws NullPointerException if either <code>data</code> or
+     * <code>data[0]</code> is null
+     * @see #createRealMatrix(int, int)
+     */
+Method code:
+105 |     public static RealMatrix createRealMatrix(double[][] data) {
+106 |         return (data.length * data[0].length <= 4096) ?
+107 |                 new Array2DRowRealMatrix(data) : new BlockRealMatrix(data);
+108 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.multiply(Array2DRowRealMatrix)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 288-312
+Documentation:
+/**
+     * Returns the result of postmultiplying this by <code>m</code>.
+     * @param m    matrix to postmultiply by
+     * @return     this*m
+     * @throws     IllegalArgumentException
+     *             if columnDimension(this) != rowDimension(m)
+     */
+Method code:
+288 |     public Array2DRowRealMatrix multiply(final Array2DRowRealMatrix m)
+289 |         throws IllegalArgumentException {
+290 | 
+291 |         // safety check
+292 |         MatrixUtils.checkMultiplicationCompatible(this, m);
+293 | 
+294 |         final int nRows = this.getRowDimension();
+295 |         final int nCols = m.getColumnDimension();
+296 |         final int nSum = this.getColumnDimension();
+297 |         final double[][] outData = new double[nRows][nCols];
+298 |         for (int row = 0; row < nRows; row++) {
+299 |             final double[] dataRow    = data[row];
+300 |             final double[] outDataRow = outData[row];
+301 |             for (int col = 0; col < nCols; col++) {
+302 |                 double sum = 0;
+303 |                 for (int i = 0; i < nSum; i++) {
+304 |                     sum += dataRow[i] * m.data[i][col];
+305 |                 }
+306 |                 outDataRow[col] = sum;
+307 |             }
+308 |         }
+309 | 
+310 |         return new Array2DRowRealMatrix(outData, false);
+311 | 
+312 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.stationaryQuotientDifferenceWithShift(double[],double[],double)
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 1827-1866
+Documentation:
+/**
+     * Decompose matrix LDL<sup>T</sup> - &lambda; I as
+     * L<sub>+</sub>D<sub>+</sub>L<sub>+</sub><sup>T</sup>.
+     * <p>This method corresponds to algorithm 4.4.3 (dstqds) from Dhillon's thesis.</p>
+     * @param d diagonal elements of D,
+     * @param l off-diagonal elements of L
+     * @param lambda shift to apply
+     */
+Method code:
+1827 |     private void stationaryQuotientDifferenceWithShift(final double[] d, final double[] l,
+1828 |                                                        final double lambda) {
+1829 |         final int nM1 = d.length - 1;
+1830 |         double si = -lambda;
+1831 |         int sixI = 0;
+1832 |         for (int i = 0; i < nM1; ++i) {
+1833 |             final double di   = d[i];
+1834 |             final double li   = l[i];
+1835 |             final double ldi  = li * di;
+1836 |             final double diP1 = di + si;
+1837 |             final double liP1 = ldi / diP1;
+1838 |             work[sixI]        = si;
+1839 |             work[sixI + 1]    = diP1;
+1840 |             work[sixI + 2]    = liP1;
+1841 |             si = li * liP1 * si - lambda;
+1842 |             sixI += 6;
+1843 |         }
+1844 |         if (Double.isNaN(si)) {
+1845 |             // one of the pivot was null, use a slower but safer version of dstqds
+1846 |             si = -lambda;
+1847 |             sixI = 0;
+1848 |             for (int i = 0; i < nM1; ++i) {
+1849 |                 final double di   = d[i];
+1850 |                 final double li   = l[i];
+1851 |                 final double ldi  = li * di;
+1852 |                 double diP1 = di + si;
+1853 |                 if (Math.abs(diP1) < minPivot) {
+1854 |                     diP1 = -minPivot;
+1855 |                 }
+1856 |                 final double liP1 = ldi / diP1;
+1857 |                 work[sixI]        = si;
+1858 |                 work[sixI + 1]    = diP1;
+1859 |                 work[sixI + 2]    = liP1;
+1860 |                 si = li * ((liP1 == 0) ? li * di : liP1 * si) - lambda;
+1861 |                 sixI += 6;
+1862 |             }
+1863 |         }
+1864 |         work[6 * nM1 + 1] = d[nM1] + si;
+1865 |         work[6 * nM1]     = si;
+1866 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.setSubMatrix(double[][],int,int)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 332-367
+Documentation:
+/** {@inheritDoc} */
+Method code:
+332 |     @Override
+333 |     public void setSubMatrix(final double[][] subMatrix, final int row, final int column)
+334 |     throws MatrixIndexException {
+335 |         if (data == null) {
+336 |             if (row > 0) {
+337 |                 throw MathRuntimeException.createIllegalStateException(
+338 |                       "first {0} rows are not initialized yet", row);
+339 |             }
+340 |             if (column > 0) {
+341 |                 throw MathRuntimeException.createIllegalStateException(
+342 |                       "first {0} columns are not initialized yet", column);
+343 |             }
+344 |             final int nRows = subMatrix.length;
+345 |             if (nRows == 0) {
+346 |                 throw MathRuntimeException.createIllegalArgumentException(
+347 |                       AT_LEAST_ONE_ROW_MESSAGE);
+348 |             }
+349 | 
+350 |             final int nCols = subMatrix[0].length;
+351 |             if (nCols == 0) {
+352 |                 throw MathRuntimeException.createIllegalArgumentException(
+353 |                       AT_LEAST_ONE_COLUMN_MESSAGE);
+354 |             }
+355 |             data = new double[subMatrix.length][nCols];
+356 |             for (int i = 0; i < data.length; ++i) {
+357 |                 if (subMatrix[i].length != nCols) {
+358 |                     throw MathRuntimeException.createIllegalArgumentException(
+359 |                           DIFFERENT_ROWS_LENGTHS_MESSAGE, nCols, subMatrix[i].length);
+360 |                 }
+361 |                 System.arraycopy(subMatrix[i], 0, data[i + row], column, nCols);
+362 |             }
+363 |         } else {
+364 |             super.setSubMatrix(subMatrix, row, column);
+365 |         }
+366 | 
+367 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.linear.ArrayRealVector.ArrayRealVector(double[],boolean)
+Source: src/main/java/org/apache/commons/math/linear/ArrayRealVector.java
+Original range: 100-109
+Documentation:
+/**
+     * Create a new ArrayRealVector using the input array as the underlying
+     * data array.
+     * <p>If an array is built specially in order to be embedded in a
+     * ArrayRealVector and not used directly, the <code>copyArray</code> may be
+     * set to <code>false</code. This will prevent the copying and improve
+     * performance as no new array will be built and no data will be copied.</p>
+     * @param d data for new vector
+     * @param copyArray if true, the input array will be copied, otherwise
+     * it will be referenced
+     * @throws IllegalArgumentException if <code>d</code> is empty
+     * @throws NullPointerException if <code>d</code> is null
+     * @see #ArrayRealVector(double[])
+     */
+Method code:
+100 |     public ArrayRealVector(double[] d, boolean copyArray)
+101 |         throws NullPointerException, IllegalArgumentException {
+102 |         if (d == null) {
+103 |             throw new NullPointerException();
+104 |         }
+105 |         if (d.length == 0) {
+106 |             throw MathRuntimeException.createIllegalArgumentException("vector must have at least one element");
+107 |         }
+108 |         data = copyArray ? d.clone() :  d;
+109 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.copyIn(double[][])
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 635-637
+Documentation:
+/**
+     * Replaces data with a fresh copy of the input array.
+     * <p>
+     * Verifies that the input array is rectangular and non-empty.</p>
+     *
+     * @param in data to copy in
+     * @throws IllegalArgumentException if input array is empty or not
+     *    rectangular
+     * @throws NullPointerException if input array is null
+     */
+Method code:
+635 |     private void copyIn(final double[][] in) {
+636 |         setSubMatrix(in, 0, 0);
+637 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.copyOut()
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 615-623
+Documentation:
+/**
+     * Returns a fresh copy of the underlying data array.
+     *
+     * @return a copy of the underlying data array.
+     */
+Method code:
+615 |     private double[][] copyOut() {
+616 |         final int nRows = this.getRowDimension();
+617 |         final double[][] out = new double[nRows][this.getColumnDimension()];
+618 |         // can't copy 2-d array in one shot, otherwise get row references
+619 |         for (int i = 0; i < nRows; i++) {
+620 |             System.arraycopy(data[i], 0, out[i], 0, data[i].length);
+621 |         }
+622 |         return out;
+623 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.getNorm()
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 194-230
+Documentation:
+/** {@inheritDoc} */
+Method code:
+194 |     public double getNorm() {
+195 |         return walkInColumnOrder(new RealMatrixPreservingVisitor() {
+196 | 
+197 |             /** Last row index. */
+198 |             private double endRow;
+199 | 
+200 |             /** Sum of absolute values on one column. */
+201 |             private double columnSum;
+202 | 
+203 |             /** Maximal sum across all columns. */
+204 |             private double maxColSum;
+205 | 
+206 |             /** {@inheritDoc} */
+207 |             public void start(final int rows, final int columns,
+208 |                               final int startRow, final int endRow,
+209 |                               final int startColumn, final int endColumn) {
+210 |                 this.endRow = endRow;
+211 |                 columnSum   = 0;
+212 |                 maxColSum   = 0;
+213 |             }
+214 | 
+215 |             /** {@inheritDoc} */
+216 |             public void visit(final int row, final int column, final double value) {
+217 |                 columnSum += Math.abs(value);
+218 |                 if (row == endRow) {
+219 |                     maxColSum = Math.max(maxColSum, columnSum);
+220 |                     columnSum = 0;
+221 |                 }
+222 |             }
+223 | 
+224 |             /** {@inheritDoc} */
+225 |             public double end() {
+226 |                 return maxColSum;
+227 |             }
+228 | 
+229 |         });
+230 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.linear.SingularValueDecompositionImpl.SingularValueDecompositionImpl(RealMatrix)
+Source: src/main/java/org/apache/commons/math/linear/SingularValueDecompositionImpl.java
+Original range: 96-99
+Documentation:
+/**
+     * Calculates the compact Singular Value Decomposition of the given matrix.
+     * @param matrix The matrix to decompose.
+     * @exception InvalidMatrixException (wrapping a {@link
+     * org.apache.commons.math.ConvergenceException} if algorithm fails to converge
+     */
+Method code:
+96 |     public SingularValueDecompositionImpl(final RealMatrix matrix)
+97 |         throws InvalidMatrixException {
+98 |         this(matrix, Math.min(matrix.getRowDimension(), matrix.getColumnDimension()));
+99 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.transpose()
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 601-618
+Documentation:
+/** {@inheritDoc} */
+Method code:
+601 |     public RealMatrix transpose() {
+602 | 
+603 |         final int nRows = getRowDimension();
+604 |         final int nCols = getColumnDimension();
+605 |         final RealMatrix out = createMatrix(nCols, nRows);
+606 |         walkInOptimizedOrder(new DefaultRealMatrixPreservingVisitor() {
+607 | 
+608 |             /** {@inheritDoc} */
+609 |             @Override
+610 |             public void visit(final int row, final int column, final double value) {
+611 |                 out.setEntry(column, row, value);
+612 |             }
+613 | 
+614 |         });
+615 | 
+616 |         return out;
+617 | 
+618 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.linear.BiDiagonalTransformer.getU()
+Source: src/main/java/org/apache/commons/math/linear/BiDiagonalTransformer.java
+Original range: 86-129
+Documentation:
+/**
+     * Returns the matrix U of the transform.
+     * <p>U is an orthogonal matrix, i.e. its transpose is also its inverse.</p>
+     * @return the U matrix
+     */
+Method code:
+86 |     public RealMatrix getU() {
+87 | 
+88 |         if (cachedU == null) {
+89 | 
+90 |             final int m = householderVectors.length;
+91 |             final int n = householderVectors[0].length;
+92 |             final int p = main.length;
+93 |             final int diagOffset    = (m >= n) ? 0 : 1;
+94 |             final double[] diagonal = (m >= n) ? main : secondary;
+95 |             cachedU = MatrixUtils.createRealMatrix(m, m);
+96 | 
+97 |             // fill up the part of the matrix not affected by Householder transforms
+98 |             for (int k = m - 1; k >= p; --k) {
+99 |                 cachedU.setEntry(k, k, 1);
+100 |             }
+101 | 
+102 |             // build up first part of the matrix by applying Householder transforms
+103 |             for (int k = p - 1; k >= diagOffset; --k) {
+104 |                 final double[] hK = householderVectors[k];
+105 |                 cachedU.setEntry(k, k, 1);
+106 |                 if (hK[k - diagOffset] != 0.0) {
+107 |                     for (int j = k; j < m; ++j) {
+108 |                         double alpha = 0;
+109 |                         for (int i = k; i < m; ++i) {
+110 |                             alpha -= cachedU.getEntry(i, j) * householderVectors[i][k - diagOffset];
+111 |                         }
+112 |                         alpha /= diagonal[k - diagOffset] * hK[k - diagOffset];
+113 | 
+114 |                         for (int i = k; i < m; ++i) {
+115 |                             cachedU.addToEntry(i, j, -alpha * householderVectors[i][k - diagOffset]);
+116 |                         }
+117 |                     }
+118 |                 }
+119 |             }
+120 |             if (diagOffset > 0) {
+121 |                 cachedU.setEntry(0, 0, 1);
+122 |             }
+123 | 
+124 |         }
+125 | 
+126 |         // return the cached matrix
+127 |         return cachedU;
+128 | 
+129 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.walkInRowOrder(RealMatrixPreservingVisitor)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 493-506
+Documentation:
+/** {@inheritDoc} */
+Method code:
+493 |     @Override
+494 |     public double walkInRowOrder(final RealMatrixPreservingVisitor visitor)
+495 |         throws MatrixVisitorException {
+496 |         final int rows    = getRowDimension();
+497 |         final int columns = getColumnDimension();
+498 |         visitor.start(rows, columns, 0, rows - 1, 0, columns - 1);
+499 |         for (int i = 0; i < rows; ++i) {
+500 |             final double[] rowI = data[i];
+501 |             for (int j = 0; j < columns; ++j) {
+502 |                 visitor.visit(i, j, rowI[j]);
+503 |             }
+504 |         }
+505 |         return visitor.end();
+506 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.anonymous_L195.visit(int,int,double)
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 216-222
+Documentation:
+/** {@inheritDoc} */
+Method code:
+216 |             public void visit(final int row, final int column, final double value) {
+217 |                 columnSum += Math.abs(value);
+218 |                 if (row == endRow) {
+219 |                     maxColSum = Math.max(maxColSum, columnSum);
+220 |                     columnSum = 0;
+221 |                 }
+222 |             }
+
+===== M0018 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.findEigenvalues()
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 612-685
+Documentation:
+/**
+     * Find the realEigenvalues.
+     * @exception InvalidMatrixException if a block cannot be diagonalized
+     */
+Method code:
+612 |     private void findEigenvalues()
+613 |         throws InvalidMatrixException {
+614 | 
+615 |         // compute splitting points
+616 |         List<Integer> splitIndices = computeSplits();
+617 | 
+618 |         // find realEigenvalues in each block
+619 |         realEigenvalues = new double[main.length];
+620 |         imagEigenvalues = new double[main.length];
+621 |         int begin = 0;
+622 |         for (final int end : splitIndices) {
+623 |             final int n = end - begin;
+624 |             switch (n) {
+625 | 
+626 |             case 1:
+627 |                 // apply dedicated method for dimension 1
+628 |                 process1RowBlock(begin);
+629 |                 break;
+630 | 
+631 |             case 2:
+632 |                 // apply dedicated method for dimension 2
+633 |                 process2RowsBlock(begin);
+634 |                 break;
+635 | 
+636 |             case 3:
+637 |                 // apply dedicated method for dimension 3
+638 |                 process3RowsBlock(begin);
+639 |                 break;
+640 | 
+641 |             default:
+642 | 
+643 |                 // choose an initial shift for LDL<sup>T</sup> decomposition
+644 |                 final double[] range       = eigenvaluesRange(begin, n);
+645 |                 final double oneFourth     = 0.25 * (3 * range[0] + range[1]);
+646 |                 final int oneFourthCount   = countEigenValues(oneFourth, begin, n);
+647 |                 final double threeFourth   = 0.25 * (range[0] + 3 * range[1]);
+648 |                 final int threeFourthCount = countEigenValues(threeFourth, begin, n);
+649 |                 final boolean chooseLeft   = (oneFourthCount - 1) >= (n - threeFourthCount);
+650 |                 final double lambda        = chooseLeft ? range[0] : range[1];
+651 | 
+652 |                 tau = (range[1] - range[0]) * MathUtils.EPSILON * n + 2 * minPivot;
+653 | 
+654 |                 // decompose T-&lambda;I as LDL<sup>T</sup>
+655 |                 ldlTDecomposition(lambda, begin, n);
+656 | 
+657 |                 // apply general dqd/dqds method
+658 |                 processGeneralBlock(n);
+659 | 
+660 |                 // extract realEigenvalues
+661 |                 if (chooseLeft) {
+662 |                     for (int i = 0; i < n; ++i) {
+663 |                         realEigenvalues[begin + i] = lambda + work[4 * i];
+664 |                     }
+665 |                 } else {
+666 |                     for (int i = 0; i < n; ++i) {
+667 |                         realEigenvalues[begin + i] = lambda - work[4 * i];
+668 |                     }
+669 |                 }
+670 | 
+671 |             }
+672 |             begin = end;
+673 |         }
+674 | 
+675 |         // sort the realEigenvalues in decreasing order
+676 |         Arrays.sort(realEigenvalues);
+677 |         int j = realEigenvalues.length - 1;
+678 |         for (int i = 0; i < j; ++i) {
+679 |             final double tmp = realEigenvalues[i];
+680 |             realEigenvalues[i] = realEigenvalues[j];
+681 |             realEigenvalues[j] = tmp;
+682 |             --j;
+683 |         }
+684 | 
+685 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math.linear.BiDiagonalTransformer.getSecondaryDiagonalRef()
+Source: src/main/java/org/apache/commons/math/linear/BiDiagonalTransformer.java
+Original range: 238-240
+Documentation:
+/**
+     * Get the secondary diagonal elements of the matrix B of the transform.
+     * <p>Note that since this class is only intended for internal use,
+     * it returns directly a reference to its internal arrays, not a copy.</p>
+     * @return the secondary diagonal elements of the B matrix
+     */
+Method code:
+238 |     double[] getSecondaryDiagonalRef() {
+239 |         return secondary;
+240 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.multiply(RealMatrix)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 271-279
+Documentation:
+/** {@inheritDoc} */
+Method code:
+271 |     @Override
+272 |     public RealMatrix multiply(final RealMatrix m)
+273 |         throws IllegalArgumentException {
+274 |         try {
+275 |             return multiply((Array2DRowRealMatrix) m);
+276 |         } catch (ClassCastException cce) {
+277 |             return super.multiply(m);
+278 |         }
+279 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math.linear.BiDiagonalTransformer.getV()
+Source: src/main/java/org/apache/commons/math/linear/BiDiagonalTransformer.java
+Original range: 167-210
+Documentation:
+/**
+     * Returns the matrix V of the transform.
+     * <p>V is an orthogonal matrix, i.e. its transpose is also its inverse.</p>
+     * @return the V matrix
+     */
+Method code:
+167 |     public RealMatrix getV() {
+168 | 
+169 |         if (cachedV == null) {
+170 | 
+171 |             final int m = householderVectors.length;
+172 |             final int n = householderVectors[0].length;
+173 |             final int p = main.length;
+174 |             final int diagOffset    = (m >= n) ? 1 : 0;
+175 |             final double[] diagonal = (m >= n) ? secondary : main;
+176 |             cachedV = MatrixUtils.createRealMatrix(n, n);
+177 | 
+178 |             // fill up the part of the matrix not affected by Householder transforms
+179 |             for (int k = n - 1; k >= p; --k) {
+180 |                 cachedV.setEntry(k, k, 1);
+181 |             }
+182 | 
+183 |             // build up first part of the matrix by applying Householder transforms
+184 |             for (int k = p - 1; k >= diagOffset; --k) {
+185 |                 final double[] hK = householderVectors[k - diagOffset];
+186 |                 cachedV.setEntry(k, k, 1);
+187 |                 if (hK[k] != 0.0) {
+188 |                     for (int j = k; j < n; ++j) {
+189 |                         double beta = 0;
+190 |                         for (int i = k; i < n; ++i) {
+191 |                             beta -= cachedV.getEntry(i, j) * hK[i];
+192 |                         }
+193 |                         beta /= diagonal[k - diagOffset] * hK[k];
+194 | 
+195 |                         for (int i = k; i < n; ++i) {
+196 |                             cachedV.addToEntry(i, j, -beta * hK[i]);
+197 |                         }
+198 |                     }
+199 |                 }
+200 |             }
+201 |             if (diagOffset > 0) {
+202 |                 cachedV.setEntry(0, 0, 1);
+203 |             }
+204 | 
+205 |         }
+206 | 
+207 |         // return the cached matrix
+208 |         return cachedV;
+209 | 
+210 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math.linear.SingularValueDecompositionImpl.getV()
+Source: src/main/java/org/apache/commons/math/linear/SingularValueDecompositionImpl.java
+Original range: 233-277
+Documentation:
+/** {@inheritDoc} */
+Method code:
+233 |     public RealMatrix getV()
+234 |         throws InvalidMatrixException {
+235 | 
+236 |         if (cachedV == null) {
+237 | 
+238 |             final int p = singularValues.length;
+239 |             if (m >= n) {
+240 |                 // the tridiagonal matrix is Bt.B, where B is upper bidiagonal
+241 |                 final RealMatrix e =
+242 |                     eigenDecomposition.getV().getSubMatrix(0, n - 1, 0, p - 1);
+243 |                 cachedV = transformer.getV().multiply(e);
+244 |             } else {
+245 |                 // the tridiagonal matrix is B.Bt, where B is lower bidiagonal
+246 |                 // compute W = Bt.E.S^(-1) where E is the eigenvectors matrix
+247 |                 final RealMatrix e =
+248 |                     eigenDecomposition.getV().getSubMatrix(0, p - 1, 0, p - 1);
+249 |                 final double[][] eData = e.getData();
+250 |                 final double[][] wData = new double[n][p];
+251 |                 double[] ei1 = eData[0];
+252 |                 for (int i = 0; i < p - 1; ++i) {
+253 |                     final double mi = mainBidiagonal[i];
+254 |                     final double[] ei0 = ei1;
+255 |                     final double[] wi  = wData[i];
+256 |                         ei1 = eData[i + 1];
+257 |                         final double si = secondaryBidiagonal[i];
+258 |                         for (int j = 0; j < p; ++j) {
+259 |                             wi[j] = (mi * ei0[j] + si * ei1[j]) / singularValues[j];
+260 |                         }
+261 |                 }
+262 |                         for (int j = 0; j < p; ++j) {
+263 |                             wData[p - 1][j] = ei1[j] * mainBidiagonal[p - 1] / singularValues[j];
+264 |                         }
+265 |                 for (int i = p; i < n; ++i) {
+266 |                     wData[i] = new double[p];
+267 |                 }
+268 |                 cachedV =
+269 |                     transformer.getV().multiply(MatrixUtils.createRealMatrix(wData));
+270 |             }
+271 | 
+272 |         }
+273 | 
+274 |         // return the cached matrix
+275 |         return cachedV;
+276 | 
+277 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math.util.CompositeFormat.getDefaultNumberFormat(Locale)
+Source: src/main/java/org/apache/commons/math/util/CompositeFormat.java
+Original range: 52-56
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance(java.util.Locale)} with the only
+     * customizing that the maximum number of fraction digits is set to 2.
+     * @param locale the specific locale used by the format.
+     * @return the default number format specific to the given locale.
+     */
+Method code:
+52 |     protected static NumberFormat getDefaultNumberFormat(final Locale locale) {
+53 |         final NumberFormat nf = NumberFormat.getInstance(locale);
+54 |         nf.setMaximumFractionDigits(2);
+55 |         return nf;
+56 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.anonymous_L195.start(int,int,int,int,int,int)
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 207-213
+Documentation:
+/** {@inheritDoc} */
+Method code:
+207 |             public void start(final int rows, final int columns,
+208 |                               final int startRow, final int endRow,
+209 |                               final int startColumn, final int endColumn) {
+210 |                 this.endRow = endRow;
+211 |                 columnSum   = 0;
+212 |                 maxColSum   = 0;
+213 |             }
+
+===== M0025 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.walkInColumnOrder(RealMatrixPreservingVisitor)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 561-573
+Documentation:
+/** {@inheritDoc} */
+Method code:
+561 |     @Override
+562 |     public double walkInColumnOrder(final RealMatrixPreservingVisitor visitor)
+563 |         throws MatrixVisitorException {
+564 |         final int rows    = getRowDimension();
+565 |         final int columns = getColumnDimension();
+566 |         visitor.start(rows, columns, 0, rows - 1, 0, columns - 1);
+567 |         for (int j = 0; j < columns; ++j) {
+568 |             for (int i = 0; i < rows; ++i) {
+569 |                 visitor.visit(i, j, data[i][j]);
+570 |             }
+571 |         }
+572 |         return visitor.end();
+573 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math.linear.MatrixUtils.checkSubtractionCompatible(AnyMatrix,AnyMatrix)
+Source: src/main/java/org/apache/commons/math/linear/MatrixUtils.java
+Original range: 631-640
+Documentation:
+/**
+     * Check if matrices are subtraction compatible
+     * @param left left hand side matrix
+     * @param right right hand side matrix
+     * @exception IllegalArgumentException if matrices are not subtraction compatible
+     */
+Method code:
+631 |     public static void checkSubtractionCompatible(final AnyMatrix left, final AnyMatrix right)
+632 |         throws IllegalArgumentException {
+633 |         if ((left.getRowDimension()    != right.getRowDimension()) ||
+634 |             (left.getColumnDimension() != right.getColumnDimension())) {
+635 |             throw MathRuntimeException.createIllegalArgumentException(
+636 |                     "{0}x{1} and {2}x{3} matrices are not subtraction compatible",
+637 |                     left.getRowDimension(), left.getColumnDimension(),
+638 |                     right.getRowDimension(), right.getColumnDimension());
+639 |         }
+640 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.Array2DRowRealMatrix(double[][])
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 113-116
+Documentation:
+/**
+     * Create a new RealMatrix using the input array as the underlying
+     * data array.
+     * <p>The input array is copied, not referenced. This constructor has
+     * the same effect as calling {@link #Array2DRowRealMatrix(double[][], boolean)}
+     * with the second argument set to <code>true</code>.</p>
+     *
+     * @param d data for new matrix
+     * @throws IllegalArgumentException if <code>d</code> is not rectangular
+     *  (not all rows have the same length) or empty
+     * @throws NullPointerException if <code>d</code> is null
+     * @see #Array2DRowRealMatrix(double[][], boolean)
+     */
+Method code:
+113 |     public Array2DRowRealMatrix(final double[][] d)
+114 |         throws IllegalArgumentException, NullPointerException {
+115 |         copyIn(d);
+116 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.decompose()
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 235-251
+Documentation:
+/**
+     * Decompose a tridiagonal symmetric matrix.
+     * @exception InvalidMatrixException (wrapping a {@link
+     * org.apache.commons.math.ConvergenceException} if algorithm fails to converge
+     */
+Method code:
+235 |     private void decompose() {
+236 | 
+237 |         cachedV  = null;
+238 |         cachedD  = null;
+239 |         cachedVt = null;
+240 |         work     = new double[6 * main.length];
+241 | 
+242 |         // compute the Gershgorin circles
+243 |         computeGershgorinCircles();
+244 | 
+245 |         // find all the realEigenvalues
+246 |         findEigenvalues();
+247 | 
+248 |         // we will search for eigenvectors only if required
+249 |         eigenvectors = null;
+250 | 
+251 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math.linear.ArrayRealVector.getDimension()
+Source: src/main/java/org/apache/commons/math/linear/ArrayRealVector.java
+Original range: 950-952
+Documentation:
+/** {@inheritDoc} */
+Method code:
+950 |     public int getDimension() {
+951 |         return data.length;
+952 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.walkInOptimizedOrder(RealMatrixPreservingVisitor)
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 917-920
+Documentation:
+/** {@inheritDoc} */
+Method code:
+917 |     public double walkInOptimizedOrder(final RealMatrixPreservingVisitor visitor)
+918 |         throws MatrixVisitorException {
+919 |         return walkInRowOrder(visitor);
+920 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math.linear.BiDiagonalTransformer.getMainDiagonalRef()
+Source: src/main/java/org/apache/commons/math/linear/BiDiagonalTransformer.java
+Original range: 228-230
+Documentation:
+/**
+     * Get the main diagonal elements of the matrix B of the transform.
+     * <p>Note that since this class is only intended for internal use,
+     * it returns directly a reference to its internal arrays, not a copy.</p>
+     * @return the main diagonal elements of the B matrix
+     */
+Method code:
+228 |     double[] getMainDiagonalRef() {
+229 |         return main;
+230 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math.linear.MatrixUtils.checkMultiplicationCompatible(AnyMatrix,AnyMatrix)
+Source: src/main/java/org/apache/commons/math/linear/MatrixUtils.java
+Original range: 648-656
+Documentation:
+/**
+     * Check if matrices are multiplication compatible
+     * @param left left hand side matrix
+     * @param right right hand side matrix
+     * @exception IllegalArgumentException if matrices are not multiplication compatible
+     */
+Method code:
+648 |     public static void checkMultiplicationCompatible(final AnyMatrix left, final AnyMatrix right)
+649 |         throws IllegalArgumentException {
+650 |         if (left.getColumnDimension() != right.getRowDimension()) {
+651 |             throw MathRuntimeException.createIllegalArgumentException(
+652 |                     "{0}x{1} and {2}x{3} matrices are not multiplication compatible",
+653 |                     left.getRowDimension(), left.getColumnDimension(),
+654 |                     right.getRowDimension(), right.getColumnDimension());
+655 |         }
+656 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.EigenDecompositionImpl(double[],double[],double)
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 189-207
+Documentation:
+/**
+     * Calculates the eigen decomposition of the given tridiagonal symmetric matrix.
+     * @param main the main diagonal of the matrix (will be copied)
+     * @param secondary the secondary diagonal of the matrix (will be copied)
+     * @param splitTolerance tolerance on the off-diagonal elements relative to the
+     * geometric mean to split the tridiagonal matrix (a suggested value is
+     * {@link MathUtils#SAFE_MIN})
+     * @exception InvalidMatrixException (wrapping a {@link
+     * org.apache.commons.math.ConvergenceException} if algorithm fails to converge
+     */
+Method code:
+189 |     public EigenDecompositionImpl(final double[] main, double[] secondary,
+190 |             final double splitTolerance)
+191 |         throws InvalidMatrixException {
+192 | 
+193 |         this.main      = main.clone();
+194 |         this.secondary = secondary.clone();
+195 |         transformer    = null;
+196 | 
+197 |         // pre-compute some elements
+198 |         squaredSecondary = new double[secondary.length];
+199 |         for (int i = 0; i < squaredSecondary.length; ++i) {
+200 |             final double s = secondary[i];
+201 |             squaredSecondary[i] = s * s;
+202 |         }
+203 | 
+204 |         this.splitTolerance = splitTolerance;
+205 |         decompose();
+206 | 
+207 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math.linear.SingularValueDecompositionImpl.getU()
+Source: src/main/java/org/apache/commons/math/linear/SingularValueDecompositionImpl.java
+Original range: 153-198
+Documentation:
+/** {@inheritDoc} */
+Method code:
+153 |     public RealMatrix getU()
+154 |         throws InvalidMatrixException {
+155 | 
+156 |         if (cachedU == null) {
+157 | 
+158 |             final int p = singularValues.length;
+159 |             if (m >= n) {
+160 |                 // the tridiagonal matrix is Bt.B, where B is upper bidiagonal
+161 |                 final RealMatrix e =
+162 |                     eigenDecomposition.getV().getSubMatrix(0, p - 1, 0, p - 1);
+163 |                 final double[][] eData = e.getData();
+164 |                 final double[][] wData = new double[m][p];
+165 |                 double[] ei1 = eData[0];
+166 |                 for (int i = 0; i < p - 1; ++i) {
+167 |                     // compute W = B.E.S^(-1) where E is the eigenvectors matrix
+168 |                     final double mi = mainBidiagonal[i];
+169 |                     final double[] ei0 = ei1;
+170 |                     final double[] wi  = wData[i];
+171 |                         ei1 = eData[i + 1];
+172 |                         final double si = secondaryBidiagonal[i];
+173 |                         for (int j = 0; j < p; ++j) {
+174 |                             wi[j] = (mi * ei0[j] + si * ei1[j]) / singularValues[j];
+175 |                         }
+176 |                 }
+177 |                         for (int j = 0; j < p; ++j) {
+178 |                             wData[p - 1][j] = ei1[j] * mainBidiagonal[p - 1] / singularValues[j];
+179 |                         }
+180 | 
+181 |                 for (int i = p; i < m; ++i) {
+182 |                     wData[i] = new double[p];
+183 |                 }
+184 |                 cachedU =
+185 |                     transformer.getU().multiply(MatrixUtils.createRealMatrix(wData));
+186 |             } else {
+187 |                 // the tridiagonal matrix is B.Bt, where B is lower bidiagonal
+188 |                 final RealMatrix e =
+189 |                     eigenDecomposition.getV().getSubMatrix(0, m - 1, 0, p - 1);
+190 |                 cachedU = transformer.getU().multiply(e);
+191 |             }
+192 | 
+193 |         }
+194 | 
+195 |         // return the cached matrix
+196 |         return cachedU;
+197 | 
+198 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math.linear.MatrixUtils.checkRowIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math/linear/MatrixUtils.java
+Original range: 529-534
+Documentation:
+/**
+     * Check if a row index is valid.
+     * @param m matrix containing the submatrix
+     * @param row row index to check
+     * @exception MatrixIndexException if index is not valid
+     */
+Method code:
+529 |     public static void checkRowIndex(final AnyMatrix m, final int row) {
+530 |         if (row < 0 || row >= m.getRowDimension()) {
+531 |             throw new MatrixIndexException("row index {0} out of allowed range [{1}, {2}]",
+532 |                                            row, 0, m.getRowDimension() - 1);
+533 |         }
+534 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math.linear.MatrixUtils.checkSubMatrixIndex(AnyMatrix,int,int,int,int)
+Source: src/main/java/org/apache/commons/math/linear/MatrixUtils.java
+Original range: 561-579
+Documentation:
+/**
+     * Check if submatrix ranges indices are valid.
+     * Rows and columns are indicated counting from 0 to n-1.
+     *
+     * @param m matrix containing the submatrix
+     * @param startRow Initial row index
+     * @param endRow Final row index
+     * @param startColumn Initial column index
+     * @param endColumn Final column index
+     * @exception MatrixIndexException  if the indices are not valid
+     */
+Method code:
+561 |     public static void checkSubMatrixIndex(final AnyMatrix m,
+562 |                                            final int startRow, final int endRow,
+563 |                                            final int startColumn, final int endColumn) {
+564 |         checkRowIndex(m, startRow);
+565 |         checkRowIndex(m, endRow);
+566 |         if (startRow > endRow) {
+567 |             throw new MatrixIndexException("initial row {0} after final row {1}",
+568 |                                            startRow, endRow);
+569 |         }
+570 | 
+571 |         checkColumnIndex(m, startColumn);
+572 |         checkColumnIndex(m, endColumn);
+573 |         if (startColumn > endColumn) {
+574 |             throw new MatrixIndexException("initial column {0} after final column {1}",
+575 |                                            startColumn, endColumn);
+576 |         }
+577 | 
+578 | 
+579 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.progressiveQuotientDifferenceWithShift(double[],double[],double)
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 1876-1913
+Documentation:
+/**
+     * Decompose matrix LDL<sup>T</sup> - &lambda; I as
+     * U<sub>-</sub>D<sub>-</sub>U<sub>-</sub><sup>T</sup>.
+     * <p>This method corresponds to algorithm 4.4.5 (dqds) from Dhillon's thesis.</p>
+     * @param d diagonal elements of D
+     * @param l off-diagonal elements of L
+     * @param lambda shift to apply
+     */
+Method code:
+1876 |     private void progressiveQuotientDifferenceWithShift(final double[] d, final double[] l,
+1877 |                                                         final double lambda) {
+1878 |         final int nM1 = d.length - 1;
+1879 |         double pi = d[nM1] - lambda;
+1880 |         int sixI = 6 * (nM1 - 1);
+1881 |         for (int i = nM1 - 1; i >= 0; --i) {
+1882 |             final double di   = d[i];
+1883 |             final double li   = l[i];
+1884 |             final double diP1 = di * li * li + pi;
+1885 |             final double t    = di / diP1;
+1886 |             work[sixI +  9]   = pi;
+1887 |             work[sixI + 10]   = diP1;
+1888 |             work[sixI +  5]   = li * t;
+1889 |             pi = pi * t - lambda;
+1890 |             sixI -= 6;
+1891 |         }
+1892 |         if (Double.isNaN(pi)) {
+1893 |             // one of the pivot was null, use a slower but safer version of dqds
+1894 |             pi = d[nM1] - lambda;
+1895 |             sixI = 6 * (nM1 - 1);
+1896 |             for (int i = nM1 - 1; i >= 0; --i) {
+1897 |                 final double di   = d[i];
+1898 |                 final double li   = l[i];
+1899 |                 double diP1 = di * li * li + pi;
+1900 |                 if (Math.abs(diP1) < minPivot) {
+1901 |                     diP1 = -minPivot;
+1902 |                 }
+1903 |                 final double t    = di / diP1;
+1904 |                 work[sixI +  9]   = pi;
+1905 |                 work[sixI + 10]   = diP1;
+1906 |                 work[sixI +  5]   = li * t;
+1907 |                 pi = ((t == 0) ? di : pi * t) - lambda;
+1908 |                 sixI -= 6;
+1909 |             }
+1910 |         }
+1911 |         work[3] = pi;
+1912 |         work[4] = pi;
+1913 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.subtract(Array2DRowRealMatrix)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 248-268
+Documentation:
+/**
+     * Compute  this minus <code>m</code>.
+     *
+     * @param m    matrix to be subtracted
+     * @return     this + m
+     * @throws  IllegalArgumentException if m is not the same size as this
+     */
+Method code:
+248 |     public Array2DRowRealMatrix subtract(final Array2DRowRealMatrix m)
+249 |         throws IllegalArgumentException {
+250 | 
+251 |         // safety check
+252 |         MatrixUtils.checkSubtractionCompatible(this, m);
+253 | 
+254 |         final int rowCount    = getRowDimension();
+255 |         final int columnCount = getColumnDimension();
+256 |         final double[][] outData = new double[rowCount][columnCount];
+257 |         for (int row = 0; row < rowCount; row++) {
+258 |             final double[] dataRow    = data[row];
+259 |             final double[] mRow       = m.data[row];
+260 |             final double[] outDataRow = outData[row];
+261 |             for (int col = 0; col < columnCount; col++) {
+262 |                 outDataRow[col] = dataRow[col] - mRow[col];
+263 |             }
+264 |         }
+265 | 
+266 |         return new Array2DRowRealMatrix(outData, false);
+267 | 
+268 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.addToEntry(int,int,double)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 394-403
+Documentation:
+/** {@inheritDoc} */
+Method code:
+394 |     @Override
+395 |     public void addToEntry(final int row, final int column, final double increment)
+396 |         throws MatrixIndexException {
+397 |         try {
+398 |             data[row][column] += increment;
+399 |         } catch (ArrayIndexOutOfBoundsException e) {
+400 |             throw new MatrixIndexException(
+401 |                       NO_ENTRY_MESSAGE, row, column, getRowDimension(), getColumnDimension());
+402 |         }
+403 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math.linear.MatrixUtils.checkColumnIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math/linear/MatrixUtils.java
+Original range: 542-548
+Documentation:
+/**
+     * Check if a column index is valid.
+     * @param m matrix containing the submatrix
+     * @param column column index to check
+     * @exception MatrixIndexException if index is not valid
+     */
+Method code:
+542 |     public static void checkColumnIndex(final AnyMatrix m, final int column)
+543 |         throws MatrixIndexException {
+544 |         if (column < 0 || column >= m.getColumnDimension()) {
+545 |             throw new MatrixIndexException("column index {0} out of allowed range [{1}, {2}]",
+546 |                                            column, 0, m.getColumnDimension() - 1);
+547 |         }
+548 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.anonymous_L195.end()
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 225-227
+Documentation:
+/** {@inheritDoc} */
+Method code:
+225 |             public double end() {
+226 |                 return maxColSum;
+227 |             }
+
+===== M0042 =====
+Signature: org.apache.commons.math.linear.BiDiagonalTransformer.BiDiagonalTransformer(RealMatrix)
+Source: src/main/java/org/apache/commons/math/linear/BiDiagonalTransformer.java
+Original range: 60-79
+Documentation:
+/**
+     * Build the transformation to bi-diagonal shape of a matrix.
+     * @param matrix the matrix to transform.
+     */
+Method code:
+60 |     public BiDiagonalTransformer(RealMatrix matrix) {
+61 | 
+62 |         final int m = matrix.getRowDimension();
+63 |         final int n = matrix.getColumnDimension();
+64 |         final int p = Math.min(m, n);
+65 |         householderVectors = matrix.getData();
+66 |         main      = new double[p];
+67 |         secondary = new double[p - 1];
+68 |         cachedU   = null;
+69 |         cachedB   = null;
+70 |         cachedV   = null;
+71 | 
+72 |         // transform matrix
+73 |         if (m >= n) {
+74 |             transformToUpperBiDiagonal();
+75 |         } else {
+76 |             transformToLowerBiDiagonal();
+77 |         }
+78 | 
+79 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.findEigenvector(double,double[],double[])
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 1766-1817
+Documentation:
+/**
+     * Find an eigenvector corresponding to an eigenvalue, using bidiagonals.
+     * <p>This method corresponds to algorithm X from Dhillon's thesis.</p>
+     *
+     * @param eigenvalue eigenvalue for which eigenvector is desired
+     * @param d diagonal elements of the initial non-shifted D matrix
+     * @param l off-diagonal elements of the initial non-shifted L matrix
+     * @return an eigenvector
+     */
+Method code:
+1766 |     private ArrayRealVector findEigenvector(final double eigenvalue,
+1767 |                                            final double[] d, final double[] l) {
+1768 | 
+1769 |         // compute the LDLt and UDUt decompositions of the
+1770 |         // perfectly shifted tridiagonal matrix
+1771 |         final int m = main.length;
+1772 |         stationaryQuotientDifferenceWithShift(d, l, eigenvalue);
+1773 |         progressiveQuotientDifferenceWithShift(d, l, eigenvalue);
+1774 | 
+1775 |         // select the twist index leading to
+1776 |         // the least diagonal element in the twisted factorization
+1777 |         int r = m - 1;
+1778 |         double minG = Math.abs(work[6 * r] + work[6 * r + 3] + eigenvalue);
+1779 |         int sixI = 0;
+1780 |         for (int i = 0; i < m - 1; ++i) {
+1781 |             final double absG = Math.abs(work[sixI] + d[i] * work[sixI + 9] / work[sixI + 10]);
+1782 |             if (absG < minG) {
+1783 |                 r = i;
+1784 |                 minG = absG;
+1785 |             }
+1786 |             sixI += 6;
+1787 |         }
+1788 | 
+1789 |         // solve the singular system by ignoring the equation
+1790 |         // at twist index and propagating upwards and downwards
+1791 |         double[] eigenvector = new double[m];
+1792 |         double n2 = 1;
+1793 |         eigenvector[r] = 1;
+1794 |         double z = 1;
+1795 |         for (int i = r - 1; i >= 0; --i) {
+1796 |             z *= -work[6 * i + 2];
+1797 |             eigenvector[i] = z;
+1798 |             n2 += z * z;
+1799 |         }
+1800 |         z = 1;
+1801 |         for (int i = r + 1; i < m; ++i) {
+1802 |             z *= -work[6 * i - 1];
+1803 |             eigenvector[i] = z;
+1804 |             n2 += z * z;
+1805 |         }
+1806 | 
+1807 |         // normalize vector
+1808 |         final double inv = 1.0 / Math.sqrt(n2);
+1809 |         for (int i = 0; i < m; ++i) {
+1810 |             eigenvector[i] *= inv;
+1811 |         }
+1812 | 
+1813 |         return (transformer == null) ?
+1814 |                new ArrayRealVector(eigenvector, false) :
+1815 |                new ArrayRealVector(transformer.getQ().operate(eigenvector), false);
+1816 | 
+1817 |     }
+
+===== M0044 =====
+Signature: org.apache.commons.math.linear.RealVectorFormat.RealVectorFormat(NumberFormat)
+Source: src/main/java/org/apache/commons/math/linear/RealVectorFormat.java
+Original range: 93-95
+Documentation:
+/**
+     * Create an instance with a custom number format for components.
+     * @param format the custom format for components.
+     */
+Method code:
+93 |     public RealVectorFormat(final NumberFormat format) {
+94 |         this(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_SEPARATOR, format);
+95 |     }
+
+===== M0045 =====
+Signature: org.apache.commons.math.linear.DefaultRealMatrixPreservingVisitor.start(int,int,int,int,int,int)
+Source: src/main/java/org/apache/commons/math/linear/DefaultRealMatrixPreservingVisitor.java
+Original range: 33-35
+Documentation:
+/** {@inheritDoc} */
+Method code:
+33 |     public void start(int rows, int columns,
+34 |                       int startRow, int endRow, int startColumn, int endColumn) {
+35 |     }
+
+===== M0046 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.createMatrix(int,int)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 178-182
+Documentation:
+/** {@inheritDoc} */
+Method code:
+178 |     @Override
+179 |     public RealMatrix createMatrix(final int rowDimension, final int columnDimension)
+180 |         throws IllegalArgumentException {
+181 |         return new Array2DRowRealMatrix(rowDimension, columnDimension);
+182 |     }
+
+===== M0047 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.getColumnDimension()
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 424-427
+Documentation:
+/** {@inheritDoc} */
+Method code:
+424 |     @Override
+425 |     public int getColumnDimension() {
+426 |         return ((data == null) || (data[0] == null)) ? 0 : data[0].length;
+427 |     }
+
+===== M0048 =====
+Signature: org.apache.commons.math.linear.RealVectorFormat.getInstance(Locale)
+Source: src/main/java/org/apache/commons/math/linear/RealVectorFormat.java
+Original range: 181-183
+Documentation:
+/**
+     * Returns the default real vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the real vector format specific to the given locale.
+     */
+Method code:
+181 |     public static RealVectorFormat getInstance(final Locale locale) {
+182 |         return new RealVectorFormat(getDefaultNumberFormat(locale));
+183 |     }
+
+===== M0049 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.findEigenVectors()
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 1730-1755
+Documentation:
+/**
+     * Find eigenvectors.
+     */
+Method code:
+1730 |     private void findEigenVectors() {
+1731 | 
+1732 |         final int m = main.length;
+1733 |         eigenvectors = new ArrayRealVector[m];
+1734 | 
+1735 |         // perform an initial non-shifted LDLt decomposition
+1736 |         final double[] d = new double[m];
+1737 |         final double[] l = new double[m - 1];
+1738 |         // avoid zero divide on indefinite matrix
+1739 |         final double mu = realEigenvalues[m-1] <= 0 && realEigenvalues[0] > 0 ? 0.5-realEigenvalues[m-1] : 0;
+1740 |         double di = main[0]+mu;
+1741 |         d[0] = di;
+1742 |         for (int i = 1; i < m; ++i) {
+1743 |             final double eiM1  = secondary[i - 1];
+1744 |             final double ratio = eiM1 / di;
+1745 |             di       = main[i] - eiM1 * ratio + mu;
+1746 |             l[i - 1] = ratio;
+1747 |             d[i]     = di;
+1748 |         }
+1749 | 
+1750 |         // compute eigenvectors
+1751 |         for (int i = 0; i < m; ++i) {
+1752 |             eigenvectors[i] = findEigenvector(realEigenvalues[i]+mu, d, l);
+1753 |         }
+1754 | 
+1755 |     }
+
+===== M0050 =====
+Signature: org.apache.commons.math.linear.SingularValueDecompositionImpl.getSingularValues()
+Source: src/main/java/org/apache/commons/math/linear/SingularValueDecompositionImpl.java
+Original range: 227-230
+Documentation:
+/** {@inheritDoc} */
+Method code:
+227 |     public double[] getSingularValues()
+228 |         throws InvalidMatrixException {
+229 |         return singularValues.clone();
+230 |     }
+
+===== M0051 =====
+Signature: org.apache.commons.math.linear.SingularValueDecompositionImpl.getVT()
+Source: src/main/java/org/apache/commons/math/linear/SingularValueDecompositionImpl.java
+Original range: 280-290
+Documentation:
+/** {@inheritDoc} */
+Method code:
+280 |     public RealMatrix getVT()
+281 |         throws InvalidMatrixException {
+282 | 
+283 |         if (cachedVt == null) {
+284 |             cachedVt = getV().transpose();
+285 |         }
+286 | 
+287 |         // return the cached matrix
+288 |         return cachedVt;
+289 | 
+290 |     }
+
+===== M0052 =====
+Signature: org.apache.commons.math.linear.BiDiagonalTransformer.transformToUpperBiDiagonal()
+Source: src/main/java/org/apache/commons/math/linear/BiDiagonalTransformer.java
+Original range: 255-312
+Documentation:
+/**
+     * Transform original matrix to upper bi-diagonal form.
+     * <p>Transformation is done using alternate Householder transforms
+     * on columns and rows.</p>
+     */
+Method code:
+255 |     private void transformToUpperBiDiagonal() {
+256 | 
+257 |         final int m = householderVectors.length;
+258 |         final int n = householderVectors[0].length;
+259 |         for (int k = 0; k < n; k++) {
+260 | 
+261 |             //zero-out a column
+262 |             double xNormSqr = 0;
+263 |             for (int i = k; i < m; ++i) {
+264 |                 final double c = householderVectors[i][k];
+265 |                 xNormSqr += c * c;
+266 |             }
+267 |             final double[] hK = householderVectors[k];
+268 |             final double a = (hK[k] > 0) ? -Math.sqrt(xNormSqr) : Math.sqrt(xNormSqr);
+269 |             main[k] = a;
+270 |             if (a != 0.0) {
+271 |                 hK[k] -= a;
+272 |                 for (int j = k + 1; j < n; ++j) {
+273 |                     double alpha = 0;
+274 |                     for (int i = k; i < m; ++i) {
+275 |                         final double[] hI = householderVectors[i];
+276 |                         alpha -= hI[j] * hI[k];
+277 |                     }
+278 |                     alpha /= a * householderVectors[k][k];
+279 |                     for (int i = k; i < m; ++i) {
+280 |                         final double[] hI = householderVectors[i];
+281 |                         hI[j] -= alpha * hI[k];
+282 |                     }
+283 |                 }
+284 |             }
+285 | 
+286 |             if (k < n - 1) {
+287 |                 //zero-out a row
+288 |                 xNormSqr = 0;
+289 |                 for (int j = k + 1; j < n; ++j) {
+290 |                     final double c = hK[j];
+291 |                     xNormSqr += c * c;
+292 |                 }
+293 |                 final double b = (hK[k + 1] > 0) ? -Math.sqrt(xNormSqr) : Math.sqrt(xNormSqr);
+294 |                 secondary[k] = b;
+295 |                 if (b != 0.0) {
+296 |                     hK[k + 1] -= b;
+297 |                     for (int i = k + 1; i < m; ++i) {
+298 |                         final double[] hI = householderVectors[i];
+299 |                         double beta = 0;
+300 |                         for (int j = k + 1; j < n; ++j) {
+301 |                             beta -= hI[j] * hK[j];
+302 |                         }
+303 |                         beta /= b * hK[k + 1];
+304 |                         for (int j = k + 1; j < n; ++j) {
+305 |                             hI[j] -= beta * hK[j];
+306 |                         }
+307 |                     }
+308 |                 }
+309 |             }
+310 | 
+311 |         }
+312 |     }
+
+===== M0053 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.AbstractRealMatrix()
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 43-45
+Documentation:
+/**
+     * Creates a matrix with no data
+     */
+Method code:
+43 |     protected AbstractRealMatrix() {
+44 |         lu = null;
+45 |     }
+
+===== M0054 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.getRealEigenvalues()
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 310-313
+Documentation:
+/** {@inheritDoc} */
+Method code:
+310 |     public double[] getRealEigenvalues()
+311 |         throws InvalidMatrixException {
+312 |         return realEigenvalues.clone();
+313 |     }
+
+===== M0055 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.process3RowsBlock(int)
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 756-810
+Documentation:
+/**
+     * Find realEigenvalues in a block with 3 rows.
+     * <p>In low dimensions, we simply solve the characteristic polynomial.</p>
+     * @param index index of the first row of the block
+     * @exception InvalidMatrixException if diagonal elements are not positive
+     */
+Method code:
+756 |     private void process3RowsBlock(final int index)
+757 |         throws InvalidMatrixException {
+758 | 
+759 |         // the characteristic polynomial is
+760 |         // X^3 - (q0 + q1 + q2) X^2 + (q0 q1 + q0 q2 + q1 q2 - e1^2 - e2^2) X + q0 e2^2 + q2 e1^2 - q0 q1 q2
+761 |         final double q0       = main[index];
+762 |         final double q1       = main[index + 1];
+763 |         final double q2       = main[index + 2];
+764 |         final double e12      = squaredSecondary[index];
+765 |         final double q1q2Me22 = q1 * q2 - squaredSecondary[index + 1];
+766 | 
+767 |         // compute coefficients of the cubic equation as: x^3 + b x^2 + c x + d = 0
+768 |         final double b        = -(q0 + q1 + q2);
+769 |         final double c        = q0 * q1 + q0 * q2 + q1q2Me22 - e12;
+770 |         final double d        = q2 * e12 - q0 * q1q2Me22;
+771 | 
+772 |         // solve cubic equation
+773 |         final double b2       = b * b;
+774 |         final double q        = (3 * c - b2) / 9;
+775 |         final double r        = ((9 * c - 2 * b2) * b - 27 * d) / 54;
+776 |         final double delta    = q * q * q + r * r;
+777 |         if (delta >= 0) {
+778 |             // in fact, there are solutions to the equation, but in the context
+779 |             // of symmetric realEigenvalues problem, there should be three distinct
+780 |             // real roots, so we throw an error if this condition is not met
+781 |             throw new InvalidMatrixException("cannot solve degree {0} equation", 3);
+782 |         }
+783 |         final double sqrtMq = Math.sqrt(-q);
+784 |         final double theta  = Math.acos(r / (-q * sqrtMq));
+785 |         final double alpha  = 2 * sqrtMq;
+786 |         final double beta   = b / 3;
+787 | 
+788 |         double z0 = alpha * Math.cos(theta / 3) - beta;
+789 |         double z1 = alpha * Math.cos((theta + 2 * Math.PI) / 3) - beta;
+790 |         double z2 = alpha * Math.cos((theta + 4 * Math.PI) / 3) - beta;
+791 |         if (z0 < z1) {
+792 |             final double t = z0;
+793 |             z0 = z1;
+794 |             z1 = t;
+795 |         }
+796 |         if (z1 < z2) {
+797 |             final double t = z1;
+798 |             z1 = z2;
+799 |             z2 = t;
+800 |         }
+801 |         if (z0 < z1) {
+802 |             final double t = z0;
+803 |             z0 = z1;
+804 |             z1 = t;
+805 |         }
+806 |         realEigenvalues[index]     = z0;
+807 |         realEigenvalues[index + 1] = z1;
+808 |         realEigenvalues[index + 2] = z2;
+809 | 
+810 |     }
+
+===== M0056 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.getData()
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 315-318
+Documentation:
+/** {@inheritDoc} */
+Method code:
+315 |     @Override
+316 |     public double[][] getData() {
+317 |         return copyOut();
+318 |     }
+
+===== M0057 =====
+Signature: org.apache.commons.math.linear.SingularValueDecompositionImpl.SingularValueDecompositionImpl(RealMatrix,int)
+Source: src/main/java/org/apache/commons/math/linear/SingularValueDecompositionImpl.java
+Original range: 108-150
+Documentation:
+/**
+     * Calculates the Singular Value Decomposition of the given matrix.
+     * @param matrix The matrix to decompose.
+     * @param max maximal number of singular values to compute
+     * @exception InvalidMatrixException (wrapping a {@link
+     * org.apache.commons.math.ConvergenceException} if algorithm fails to converge
+     */
+Method code:
+108 |     public SingularValueDecompositionImpl(final RealMatrix matrix, final int max)
+109 |         throws InvalidMatrixException {
+110 | 
+111 |         m = matrix.getRowDimension();
+112 |         n = matrix.getColumnDimension();
+113 | 
+114 |         cachedU  = null;
+115 |         cachedS  = null;
+116 |         cachedV  = null;
+117 |         cachedVt = null;
+118 | 
+119 |         // transform the matrix to bidiagonal
+120 |         transformer         = new BiDiagonalTransformer(matrix);
+121 |         mainBidiagonal      = transformer.getMainDiagonalRef();
+122 |         secondaryBidiagonal = transformer.getSecondaryDiagonalRef();
+123 | 
+124 |         // compute Bt.B (if upper diagonal) or B.Bt (if lower diagonal)
+125 |         mainTridiagonal      = new double[mainBidiagonal.length];
+126 |         secondaryTridiagonal = new double[mainBidiagonal.length - 1];
+127 |         double a = mainBidiagonal[0];
+128 |         mainTridiagonal[0] = a * a;
+129 |         for (int i = 1; i < mainBidiagonal.length; ++i) {
+130 |             final double b  = secondaryBidiagonal[i - 1];
+131 |             secondaryTridiagonal[i - 1] = a * b;
+132 |             a = mainBidiagonal[i];
+133 |             mainTridiagonal[i] = a * a + b * b;
+134 |         }
+135 | 
+136 |         // compute singular values
+137 |         eigenDecomposition =
+138 |             new EigenDecompositionImpl(mainTridiagonal, secondaryTridiagonal,
+139 |                                        MathUtils.SAFE_MIN);
+140 |         final double[] eigenValues = eigenDecomposition.getRealEigenvalues();
+141 |         int p = Math.min(max, eigenValues.length);
+142 |         while ((p > 0) && (eigenValues[p - 1] <= 0)) {
+143 |             --p;
+144 |         }
+145 |         singularValues = new double[p];
+146 |         for (int i = 0; i < p; ++i) {
+147 |             singularValues[i] = Math.sqrt(eigenValues[i]);
+148 |         }
+149 | 
+150 |     }
+
+===== M0058 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.getRowDimension()
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 418-421
+Documentation:
+/** {@inheritDoc} */
+Method code:
+418 |     @Override
+419 |     public int getRowDimension() {
+420 |         return (data == null) ? 0 : data.length;
+421 |     }
+
+===== M0059 =====
+Signature: org.apache.commons.math.linear.ArrayRealVector.getEntry(int)
+Source: src/main/java/org/apache/commons/math/linear/ArrayRealVector.java
+Original range: 945-947
+Documentation:
+/** {@inheritDoc} */
+Method code:
+945 |     public double getEntry(int index) throws MatrixIndexException {
+946 |         return data[index];
+947 |     }
+
+===== M0060 =====
+Signature: org.apache.commons.math.linear.SingularValueDecompositionImpl.getS()
+Source: src/main/java/org/apache/commons/math/linear/SingularValueDecompositionImpl.java
+Original range: 214-224
+Documentation:
+/** {@inheritDoc} */
+Method code:
+214 |     public RealMatrix getS()
+215 |         throws InvalidMatrixException {
+216 | 
+217 |         if (cachedS == null) {
+218 | 
+219 |             // cache the matrix for subsequent calls
+220 |             cachedS = MatrixUtils.createRealDiagonalMatrix(singularValues);
+221 | 
+222 |         }
+223 |         return cachedS;
+224 |     }
+
+===== M0061 =====
+Signature: org.apache.commons.math.linear.RealVectorFormat.getInstance()
+Source: src/main/java/org/apache/commons/math/linear/RealVectorFormat.java
+Original range: 172-174
+Documentation:
+/**
+     * Returns the default real vector format for the current locale.
+     * @return the default real vector format.
+     */
+Method code:
+172 |     public static RealVectorFormat getInstance() {
+173 |         return getInstance(Locale.getDefault());
+174 |     }
+
+===== M0062 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.setColumnVector(int,RealVector)
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 504-518
+Documentation:
+/** {@inheritDoc} */
+Method code:
+504 |     public void setColumnVector(final int column, final RealVector vector)
+505 |         throws MatrixIndexException, InvalidMatrixException {
+506 | 
+507 |         MatrixUtils.checkColumnIndex(this, column);
+508 |         final int nRows = getRowDimension();
+509 |         if (vector.getDimension() != nRows) {
+510 |             throw new InvalidMatrixException(
+511 |                     "dimensions mismatch: got {0}x{1} but expected {2}x{3}",
+512 |                     vector.getDimension(), 1, nRows, 1);
+513 |         }
+514 |         for (int i = 0; i < nRows; ++i) {
+515 |             setEntry(i, column, vector.getEntry(i));
+516 |         }
+517 | 
+518 |     }
+
+===== M0063 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.anonymous_L606.visit(int,int,double)
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 609-612
+Documentation:
+/** {@inheritDoc} */
+Method code:
+609 |             @Override
+610 |             public void visit(final int row, final int column, final double value) {
+611 |                 out.setEntry(column, row, value);
+612 |             }
+
+===== M0064 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.getV()
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 254-274
+Documentation:
+/** {@inheritDoc} */
+Method code:
+254 |     public RealMatrix getV()
+255 |         throws InvalidMatrixException {
+256 | 
+257 |         if (cachedV == null) {
+258 | 
+259 |             if (eigenvectors == null) {
+260 |                 findEigenVectors();
+261 |             }
+262 | 
+263 |             final int m = eigenvectors.length;
+264 |             cachedV = MatrixUtils.createRealMatrix(m, m);
+265 |             for (int k = 0; k < m; ++k) {
+266 |                 cachedV.setColumnVector(k, eigenvectors[k]);
+267 |             }
+268 | 
+269 |         }
+270 | 
+271 |         // return the cached matrix
+272 |         return cachedV;
+273 | 
+274 |     }
+
+===== M0065 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.computeGershgorinCircles()
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 569-606
+Documentation:
+/**
+     * Compute the Gershgorin circles for all rows.
+     */
+Method code:
+569 |     private void computeGershgorinCircles() {
+570 | 
+571 |         final int m     = main.length;
+572 |         final int lowerStart = 4 * m;
+573 |         final int upperStart = 5 * m;
+574 |         lowerSpectra = Double.POSITIVE_INFINITY;
+575 |         upperSpectra = Double.NEGATIVE_INFINITY;
+576 |         double eMax = 0;
+577 | 
+578 |         double eCurrent = 0;
+579 |         for (int i = 0; i < m - 1; ++i) {
+580 | 
+581 |             final double dCurrent = main[i];
+582 |             final double ePrevious = eCurrent;
+583 |             eCurrent = Math.abs(secondary[i]);
+584 |             eMax = Math.max(eMax, eCurrent);
+585 |             final double radius = ePrevious + eCurrent;
+586 | 
+587 |             final double lower = dCurrent - radius;
+588 |             work[lowerStart + i] = lower;
+589 |             lowerSpectra = Math.min(lowerSpectra, lower);
+590 | 
+591 |             final double upper = dCurrent + radius;
+592 |             work[upperStart + i] = upper;
+593 |             upperSpectra = Math.max(upperSpectra, upper);
+594 | 
+595 |         }
+596 | 
+597 |         final double dCurrent = main[m - 1];
+598 |         final double lower = dCurrent - eCurrent;
+599 |         work[lowerStart + m - 1] = lower;
+600 |         lowerSpectra = Math.min(lowerSpectra, lower);
+601 |         final double upper = dCurrent + eCurrent;
+602 |         work[upperStart + m - 1] = upper;
+603 |         upperSpectra = Math.max(upperSpectra, upper);
+604 |         minPivot = MathUtils.SAFE_MIN * Math.max(1.0, eMax * eMax);
+605 | 
+606 |     }
+
+===== M0066 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.Array2DRowRealMatrix(double[][],boolean)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 133-159
+Documentation:
+/**
+     * Create a new RealMatrix using the input array as the underlying
+     * data array.
+     * <p>If an array is built specially in order to be embedded in a
+     * RealMatrix and not used directly, the <code>copyArray</code> may be
+     * set to <code>false</code. This will prevent the copying and improve
+     * performance as no new array will be built and no data will be copied.</p>
+     * @param d data for new matrix
+     * @param copyArray if true, the input array will be copied, otherwise
+     * it will be referenced
+     * @throws IllegalArgumentException if <code>d</code> is not rectangular
+     *  (not all rows have the same length) or empty
+     * @throws NullPointerException if <code>d</code> is null
+     * @see #Array2DRowRealMatrix(double[][])
+     */
+Method code:
+133 |     public Array2DRowRealMatrix(final double[][] d, final boolean copyArray)
+134 |         throws IllegalArgumentException, NullPointerException {
+135 |         if (copyArray) {
+136 |             copyIn(d);
+137 |         } else {
+138 |             if (d == null) {
+139 |                 throw new NullPointerException();
+140 |             }
+141 |             final int nRows = d.length;
+142 |             if (nRows == 0) {
+143 |                 throw MathRuntimeException.createIllegalArgumentException(
+144 |                       AT_LEAST_ONE_ROW_MESSAGE);
+145 |             }
+146 |             final int nCols = d[0].length;
+147 |             if (nCols == 0) {
+148 |                 throw MathRuntimeException.createIllegalArgumentException(
+149 |                       AT_LEAST_ONE_COLUMN_MESSAGE);
+150 |             }
+151 |             for (int r = 1; r < nRows; r++) {
+152 |                 if (d[r].length != nCols) {
+153 |                     throw MathRuntimeException.createIllegalArgumentException(
+154 |                           DIFFERENT_ROWS_LENGTHS_MESSAGE, nCols, d[r].length);
+155 |                 }
+156 |             }
+157 |             data = d;
+158 |         }
+159 |     }
+
+===== M0067 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.setEntry(int,int,double)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 382-391
+Documentation:
+/** {@inheritDoc} */
+Method code:
+382 |     @Override
+383 |     public void setEntry(final int row, final int column, final double value)
+384 |         throws MatrixIndexException {
+385 |         try {
+386 |             data[row][column] = value;
+387 |         } catch (ArrayIndexOutOfBoundsException e) {
+388 |             throw new MatrixIndexException(
+389 |                       NO_ENTRY_MESSAGE, row, column, getRowDimension(), getColumnDimension());
+390 |         }
+391 |     }
+
+===== M0068 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.AbstractRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 54-67
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension  the number of rows in the new matrix
+     * @param columnDimension  the number of columns in the new matrix
+     * @throws IllegalArgumentException if row or column dimension is not positive
+     */
+Method code:
+54 |     protected AbstractRealMatrix(final int rowDimension, final int columnDimension)
+55 |         throws IllegalArgumentException {
+56 |         if (rowDimension <= 0 ) {
+57 |             throw MathRuntimeException.createIllegalArgumentException(
+58 |                     "invalid row dimension {0} (must be positive)",
+59 |                     rowDimension);
+60 |         }
+61 |         if (columnDimension <= 0) {
+62 |             throw MathRuntimeException.createIllegalArgumentException(
+63 |                     "invalid column dimension {0} (must be positive)",
+64 |                     columnDimension);
+65 |         }
+66 |         lu = null;
+67 |     }
+
+===== M0069 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.Array2DRowRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 94-98
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension  the number of rows in the new matrix
+     * @param columnDimension  the number of columns in the new matrix
+     * @throws IllegalArgumentException if row or column dimension is not
+     *  positive
+     */
+Method code:
+94 |     public Array2DRowRealMatrix(final int rowDimension, final int columnDimension)
+95 |         throws IllegalArgumentException {
+96 |         super(rowDimension, columnDimension);
+97 |         data = new double[rowDimension][columnDimension];
+98 |     }
+
+===== M0070 =====
+Signature: org.apache.commons.math.linear.DefaultRealMatrixPreservingVisitor.end()
+Source: src/main/java/org/apache/commons/math/linear/DefaultRealMatrixPreservingVisitor.java
+Original range: 43-45
+Documentation:
+/** {@inheritDoc} */
+Method code:
+43 |     public double end() {
+44 |         return 0;
+45 |     }
+
+===== M0071 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.process2RowsBlock(int)
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 728-748
+Documentation:
+/**
+     * Find realEigenvalues in a block with 2 rows.
+     * <p>In low dimensions, we simply solve the characteristic polynomial.</p>
+     * @param index index of the first row of the block
+     * @exception InvalidMatrixException if characteristic polynomial cannot be solved
+     */
+Method code:
+728 |     private void process2RowsBlock(final int index)
+729 |         throws InvalidMatrixException {
+730 | 
+731 |         // the characteristic polynomial is
+732 |         // X^2 - (q0 + q1) X + q0 q1 - e1^2
+733 |         final double q0   = main[index];
+734 |         final double q1   = main[index + 1];
+735 |         final double e12  = squaredSecondary[index];
+736 | 
+737 |         final double s     = q0 + q1;
+738 |         final double p     = q0 * q1 - e12;
+739 |         final double delta = s * s - 4 * p;
+740 |         if (delta < 0) {
+741 |             throw new InvalidMatrixException("cannot solve degree {0} equation", 2);
+742 |         }
+743 | 
+744 |         final double largestRoot = 0.5 * (s + Math.sqrt(delta));
+745 |         realEigenvalues[index]     = largestRoot;
+746 |         realEigenvalues[index + 1] = p / largestRoot;
+747 | 
+748 |     }
+
+===== M0072 =====
+Signature: org.apache.commons.math.linear.Array2DRowRealMatrix.getEntry(int,int)
+Source: src/main/java/org/apache/commons/math/linear/Array2DRowRealMatrix.java
+Original range: 370-379
+Documentation:
+/** {@inheritDoc} */
+Method code:
+370 |     @Override
+371 |     public double getEntry(final int row, final int column)
+372 |         throws MatrixIndexException {
+373 |         try {
+374 |             return data[row][column];
+375 |         } catch (ArrayIndexOutOfBoundsException e) {
+376 |             throw new MatrixIndexException(
+377 |                       NO_ENTRY_MESSAGE, row, column, getRowDimension(), getColumnDimension());
+378 |         }
+379 |     }
+
+===== M0073 =====
+Signature: org.apache.commons.math.linear.EigenDecompositionImpl.computeSplits()
+Source: src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java
+Original range: 691-711
+Documentation:
+/**
+     * Compute splitting points.
+     * @return list of indices after matrix can be split
+     */
+Method code:
+691 |     private List<Integer> computeSplits() {
+692 | 
+693 |         final List<Integer> list = new ArrayList<Integer>();
+694 | 
+695 |         // splitting preserving relative accuracy
+696 |         double absDCurrent = Math.abs(main[0]);
+697 |         for (int i = 0; i < secondary.length; ++i) {
+698 |             final double absDPrevious = absDCurrent;
+699 |             absDCurrent = Math.abs(main[i + 1]);
+700 |             final double max = splitTolerance * Math.sqrt(absDPrevious * absDCurrent);
+701 |             if (Math.abs(secondary[i]) <= max) {
+702 |                 list.add(i + 1);
+703 |                 secondary[i] = 0;
+704 |                 squaredSecondary[i] = 0;
+705 |             }
+706 |         }
+707 | 
+708 |         list.add(secondary.length + 1);
+709 |         return list;
+710 | 
+711 |     }
+
+===== M0074 =====
+Signature: org.apache.commons.math.linear.MatrixUtils.createRealDiagonalMatrix(double[])
+Source: src/main/java/org/apache/commons/math/linear/MatrixUtils.java
+Original range: 201-207
+Documentation:
+/**
+     * Returns a diagonal matrix with specified elements.
+     *
+     * @param diagonal diagonal elements of the matrix (the array elements
+     * will be copied)
+     * @return diagonal matrix
+     * @since 2.0
+     */
+Method code:
+201 |     public static RealMatrix createRealDiagonalMatrix(final double[] diagonal) {
+202 |         final RealMatrix m = createRealMatrix(diagonal.length, diagonal.length);
+203 |         for (int i = 0; i < diagonal.length; ++i) {
+204 |             m.setEntry(i, i, diagonal[i]);
+205 |         }
+206 |         return m;
+207 |     }
+

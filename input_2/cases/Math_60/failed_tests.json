@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math.distribution.NormalDistributionTest.testExtremeValues()",
+    "resolved_signature": "org.apache.commons.math.distribution.NormalDistributionTest.testExtremeValues()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math/distribution/NormalDistributionTest.java",
+    "begin_line": 157,
+    "end_line": 179,
+    "comment": "/**\r\n     * Check to make sure top-coding of extreme values works correctly.\r\n     * Verifies fixes for JIRA MATH-167, MATH-414\r\n     */",
+    "snippet": "    public void testExtremeValues() throws Exception {\n        NormalDistribution distribution = new NormalDistributionImpl(0, 1);\n        for (int i = 0; i < 100; i++) { // make sure no convergence exception\n            double lowerTail = distribution.cumulativeProbability(-i);\n            double upperTail = distribution.cumulativeProbability(i);\n            if (i < 9) { // make sure not top-coded \n                // For i = 10, due to bad tail precision in erf (MATH-364), 1 is returned\n                // TODO: once MATH-364 is resolved, replace 9 with 30\n                assertTrue(lowerTail > 0.0d);\n                assertTrue(upperTail < 1.0d);\n            }\n            else { // make sure top coding not reversed\n                assertTrue(lowerTail < 0.00001);\n                assertTrue(upperTail > 0.99999);\n            }\n        }\n        \n        assertEquals(distribution.cumulativeProbability(Double.MAX_VALUE), 1, 0);\n        assertEquals(distribution.cumulativeProbability(-Double.MAX_VALUE), 0, 0);\n        assertEquals(distribution.cumulativeProbability(Double.POSITIVE_INFINITY), 1, 0);\n        assertEquals(distribution.cumulativeProbability(Double.NEGATIVE_INFINITY), 0, 0);\n        \n   }"
+  }
+]

@@ -1,0 +1,136 @@
+===== M0001 =====
+Signature: org.apache.commons.math.util.MathUtils.checkNotNull(Object)
+Source: src/main/java/org/apache/commons/math/util/MathUtils.java
+Original range: 2329-2334
+Documentation:
+/**
+     * Checks that an object is not null.
+     *
+     * @param o Object to be checked.
+     * @throws NullArgumentException if {@code o} is {@code null}.
+     */
+Method code:
+2329 |     public static void checkNotNull(Object o)
+2330 |         throws NullArgumentException {
+2331 |         if (o == null) {
+2332 |             throw new NullArgumentException();
+2333 |         }
+2334 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.complex.Complex.Complex(double,double)
+Source: src/main/java/org/apache/commons/math/complex/Complex.java
+Original range: 89-97
+Documentation:
+/**
+     * Create a complex number given the real and imaginary parts.
+     *
+     * @param real the real part
+     * @param imaginary the imaginary part
+     */
+Method code:
+89 |     public Complex(double real, double imaginary) {
+90 |         super();
+91 |         this.real = real;
+92 |         this.imaginary = imaginary;
+93 | 
+94 |         isNaN = Double.isNaN(real) || Double.isNaN(imaginary);
+95 |         isInfinite = !isNaN &&
+96 |         (Double.isInfinite(real) || Double.isInfinite(imaginary));
+97 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.complex.Complex.getImaginary()
+Source: src/main/java/org/apache/commons/math/complex/Complex.java
+Original range: 298-300
+Documentation:
+/**
+     * Access the imaginary part.
+     *
+     * @return the imaginary part
+     */
+Method code:
+298 |     public double getImaginary() {
+299 |         return imaginary;
+300 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.complex.Complex.add(Complex)
+Source: src/main/java/org/apache/commons/math/complex/Complex.java
+Original range: 150-155
+Documentation:
+/**
+     * Return the sum of this complex number and the given complex number.
+     * <p>
+     * Uses the definitional formula
+     * <pre>
+     * (a + bi) + (c + di) = (a+c) + (b+d)i
+     * </pre></p>
+     * <p>
+     * If either this or <code>rhs</code> has a NaN value in either part,
+     * {@link #NaN} is returned; otherwise Infinite and NaN values are
+     * returned in the parts of the result according to the rules for
+     * {@link java.lang.Double} arithmetic.</p>
+     *
+     * @param rhs the other complex number
+     * @return the complex number sum
+     * @throws NullArgumentException if <code>rhs</code> is null
+     */
+Method code:
+150 |     public Complex add(Complex rhs)
+151 |         throws NullArgumentException {
+152 |         MathUtils.checkNotNull(rhs);
+153 |         return createComplex(real + rhs.getReal(),
+154 |             imaginary + rhs.getImaginary());
+155 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.complex.Complex.isNaN()
+Source: src/main/java/org/apache/commons/math/complex/Complex.java
+Original range: 318-320
+Documentation:
+/**
+     * Returns true if either or both parts of this complex number is NaN;
+     * false otherwise
+     *
+     * @return  true if either or both parts of this complex number is NaN;
+     * false otherwise
+     */
+Method code:
+318 |     public boolean isNaN() {
+319 |         return isNaN;
+320 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.complex.Complex.getReal()
+Source: src/main/java/org/apache/commons/math/complex/Complex.java
+Original range: 307-309
+Documentation:
+/**
+     * Access the real part.
+     *
+     * @return the real part
+     */
+Method code:
+307 |     public double getReal() {
+308 |         return real;
+309 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.complex.Complex.createComplex(double,double)
+Source: src/main/java/org/apache/commons/math/complex/Complex.java
+Original range: 996-998
+Documentation:
+/**
+     * Create a complex number given the real and imaginary parts.
+     *
+     * @param realPart the real part
+     * @param imaginaryPart the imaginary part
+     * @return a new complex number instance
+     * @since 1.2
+     */
+Method code:
+996 |     protected Complex createComplex(double realPart, double imaginaryPart) {
+997 |         return new Complex(realPart, imaginaryPart);
+998 |     }
+

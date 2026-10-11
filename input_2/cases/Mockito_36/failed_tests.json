@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "org.mockito.internal.invocation.InvocationTest.shouldScreamWhenCallingRealMethodOnInterface()",
+    "resolved_signature": "org.mockito.internal.invocation.InvocationTest.shouldScreamWhenCallingRealMethodOnInterface()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/internal/invocation/InvocationTest.java",
+    "begin_line": 168,
+    "end_line": 179,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldScreamWhenCallingRealMethodOnInterface() throws Throwable {\n        //given\n        Invocation invocationOnInterface = new InvocationBuilder().toInvocation();\n\n        try {\n            //when\n            invocationOnInterface.callRealMethod();\n            //then\n            fail();\n        } catch(MockitoException e) {}\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.spies.SpyingOnInterfacesTest.shouldFailInRuntimeWhenCallingRealMethodOnInterface()",
+    "resolved_signature": "org.mockitousage.spies.SpyingOnInterfacesTest.shouldFailInRuntimeWhenCallingRealMethodOnInterface()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/spies/SpyingOnInterfacesTest.java",
+    "begin_line": 31,
+    "end_line": 48,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldFailInRuntimeWhenCallingRealMethodOnInterface() throws Exception {\n        //given\n        List list = mock(List.class);\n        when(list.get(0)).thenAnswer(\n            new Answer() {\n                public Object answer(InvocationOnMock invocation) throws Throwable {\n                    return invocation.callRealMethod();\n                }\n            }\n        );\n        try {\n            //when\n            list.get(0);            \n            //then\n            fail();\n        } catch (MockitoException e) {}\n    }"
+  }
+]

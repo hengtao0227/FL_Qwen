@@ -1,0 +1,753 @@
+===== M0001 =====
+Signature: org.apache.commons.math.distribution.FDistributionImpl.cumulativeProbability(double)
+Source: src/java/org/apache/commons/math/distribution/FDistributionImpl.java
+Original range: 70-83
+Documentation:
+/**
+     * For this distribution, X, this method returns P(X &lt; x).
+     * 
+     * The implementation of this method is based on:
+     * <ul>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/F-Distribution.html">
+     * F-Distribution</a>, equation (4).</li>
+     * </ul>
+     * 
+     * @param x the value at which the CDF is evaluated.
+     * @return CDF for this distribution. 
+     * @throws MathException if the cumulative probability can not be
+     *            computed due to convergence or other numerical errors.
+     */
+Method code:
+70 |     public double cumulativeProbability(double x) throws MathException {
+71 |         double ret;
+72 |         if (x <= 0.0) {
+73 |             ret = 0.0;
+74 |         } else {
+75 |             double n = getNumeratorDegreesOfFreedom();
+76 |             double m = getDenominatorDegreesOfFreedom();
+77 |             
+78 |             ret = Beta.regularizedBeta((n * x) / (m + n * x),
+79 |                 0.5 * n,
+80 |                 0.5 * m);
+81 |         }
+82 |         return ret;
+83 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.special.Beta.regularizedBeta(double,double,double,double,int)
+Source: src/java/org/apache/commons/math/special/Beta.java
+Original range: 121-162
+Documentation:
+/**
+     * Returns the regularized beta function I(x, a, b).
+     * 
+     * The implementation of this method is based on:
+     * <ul>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/RegularizedBetaFunction.html">
+     * Regularized Beta Function</a>.</li>
+     * <li>
+     * <a href="http://functions.wolfram.com/06.21.10.0001.01">
+     * Regularized Beta Function</a>.</li>
+     * </ul>
+     * 
+     * @param x the value.
+     * @param a the a parameter.
+     * @param b the b parameter.
+     * @param epsilon When the absolute value of the nth item in the
+     *                series is less than epsilon the approximation ceases
+     *                to calculate further elements in the series.
+     * @param maxIterations Maximum number of "iterations" to complete. 
+     * @return the regularized beta function I(x, a, b)
+     * @throws MathException if the algorithm fails to converge.
+     */
+Method code:
+121 |     public static double regularizedBeta(double x, final double a,
+122 |         final double b, double epsilon, int maxIterations) throws MathException
+123 |     {
+124 |         double ret;
+125 | 
+126 |         if (Double.isNaN(x) || Double.isNaN(a) || Double.isNaN(b) || (x < 0) ||
+127 |             (x > 1) || (a <= 0.0) || (b <= 0.0))
+128 |         {
+129 |             ret = Double.NaN;
+130 |         } else if (x > (a + 1.0) / (a + b + 2.0)) {
+131 |             ret = 1.0 - regularizedBeta(1.0 - x, b, a, epsilon, maxIterations);
+132 |         } else {
+133 |             ContinuedFraction fraction = new ContinuedFraction() {
+134 | 
+135 |                 private static final long serialVersionUID = -7658917278956100597L;
+136 | 
+137 |                 protected double getB(int n, double x) {
+138 |                     double ret;
+139 |                     double m;
+140 |                     if (n % 2 == 0) { // even
+141 |                         m = n / 2.0;
+142 |                         ret = (m * (b - m) * x) /
+143 |                             ((a + (2 * m) - 1) * (a + (2 * m)));
+144 |                     } else {
+145 |                         m = (n - 1.0) / 2.0;
+146 |                         ret = -((a + m) * (a + b + m) * x) /
+147 |                                 ((a + (2 * m)) * (a + (2 * m) + 1.0));
+148 |                     }
+149 |                     return ret;
+150 |                 }
+151 | 
+152 |                 protected double getA(int n, double x) {
+153 |                     return 1.0;
+154 |                 }
+155 |             };
+156 |             ret = Math.exp((a * Math.log(x)) + (b * Math.log(1.0 - x)) -
+157 |                 Math.log(a) - logBeta(a, b, epsilon, maxIterations)) *
+158 |                 1.0 / fraction.evaluate(x, epsilon, maxIterations);
+159 |         }
+160 | 
+161 |         return ret;
+162 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.util.ContinuedFraction.evaluate(double,double,int)
+Source: src/java/org/apache/commons/math/util/ContinuedFraction.java
+Original range: 130-179
+Documentation:
+/**
+     * <p>
+     * Evaluates the continued fraction at the value x.
+     * </p>
+     * 
+     * <p>
+     * The implementation of this method is based on equations 14-17 of:
+     * <ul>
+     * <li>
+     *   Eric W. Weisstein. "Continued Fraction." From MathWorld--A Wolfram Web
+     *   Resource. <a target="_blank"
+     *   href="http://mathworld.wolfram.com/ContinuedFraction.html">
+     *   http://mathworld.wolfram.com/ContinuedFraction.html</a>
+     * </li>
+     * </ul>
+     * The recurrence relationship defined in those equations can result in
+     * very large intermediate results which can result in numerical overflow.
+     * As a means to combat these overflow conditions, the intermediate results
+     * are scaled whenever they threaten to become numerically unstable.</p>
+     *   
+     * @param x the evaluation point.
+     * @param epsilon maximum error allowed.
+     * @param maxIterations maximum number of convergents
+     * @return the value of the continued fraction evaluated at x. 
+     * @throws MathException if the algorithm fails to converge.
+     */
+Method code:
+130 |     public double evaluate(double x, double epsilon, int maxIterations)
+131 |         throws MathException
+132 |     {
+133 |         double p0 = 1.0;
+134 |         double p1 = getA(0, x);
+135 |         double q0 = 0.0;
+136 |         double q1 = 1.0;
+137 |         double c = p1 / q1;
+138 |         int n = 0;
+139 |         double relativeError = Double.MAX_VALUE;
+140 |         while (n < maxIterations && relativeError > epsilon) {
+141 |             ++n;
+142 |             double a = getA(n, x);
+143 |             double b = getB(n, x);
+144 |             double p2 = a * p1 + b * p0;
+145 |             double q2 = a * q1 + b * q0;
+146 |             if (Double.isInfinite(p2) || Double.isInfinite(q2)) {
+147 |                 // need to scale
+148 |                 if (a != 0.0) {
+149 |                     p2 = p1 + (b / a * p0);
+150 |                     q2 = q1 + (b / a * q0);
+151 |                 } else if (b != 0) {
+152 |                     p2 = (a / b * p1) + p0;
+153 |                     q2 = (a / b * q1) + q0;
+154 |                 } else {
+155 |                     // can not scale an convergent is unbounded.
+156 |                     throw new ConvergenceException(
+157 |                         "Continued fraction convergents diverged to +/- infinity for value {0}",
+158 |                         new Object[] { Double.valueOf(x) });
+159 |                 }
+160 |             }
+161 |             double r = p2 / q2;
+162 |             relativeError = Math.abs(r / c - 1.0);
+163 |                 
+164 |             // prepare for next iteration
+165 |             c = p2 / q2;
+166 |             p0 = p1;
+167 |             p1 = p2;
+168 |             q0 = q1;
+169 |             q1 = q2;
+170 |         }
+171 | 
+172 |         if (n >= maxIterations) {
+173 |             throw new MaxIterationsExceededException(maxIterations,
+174 |                 "Continued fraction convergents failed to converge for value {0}",
+175 |                 new Object[] { Double.valueOf(x) });
+176 |         }
+177 | 
+178 |         return c;
+179 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.distribution.FDistributionImpl.getDomainLowerBound(double)
+Source: src/java/org/apache/commons/math/distribution/FDistributionImpl.java
+Original range: 118-120
+Documentation:
+/**
+     * Access the domain value lower bound, based on <code>p</code>, used to
+     * bracket a CDF root.  This method is used by
+     * {@link #inverseCumulativeProbability(double)} to find critical values.
+     * 
+     * @param p the desired probability for the critical value
+     * @return domain value lower bound, i.e.
+     *         P(X &lt; <i>lower bound</i>) &lt; <code>p</code> 
+     */
+Method code:
+118 |     protected double getDomainLowerBound(double p) {
+119 |         return 0.0;
+120 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.special.Beta.regularizedBeta(double,double,double)
+Source: src/java/org/apache/commons/math/special/Beta.java
+Original range: 56-60
+Documentation:
+/**
+     * Returns the
+     * <a href="http://mathworld.wolfram.com/RegularizedBetaFunction.html">
+     * regularized beta function</a> I(x, a, b).
+     * 
+     * @param x the value.
+     * @param a the a parameter.
+     * @param b the b parameter.
+     * @return the regularized beta function I(x, a, b)
+     * @throws MathException if the algorithm fails to converge.
+     */
+Method code:
+56 |     public static double regularizedBeta(double x, double a, double b)
+57 |         throws MathException
+58 |     {
+59 |         return regularizedBeta(x, a, b, DEFAULT_EPSILON, Integer.MAX_VALUE);
+60 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.distribution.FDistributionImpl.FDistributionImpl(double,double)
+Source: src/java/org/apache/commons/math/distribution/FDistributionImpl.java
+Original range: 48-53
+Documentation:
+/**
+     * Create a F distribution using the given degrees of freedom.
+     * @param numeratorDegreesOfFreedom the numerator degrees of freedom.
+     * @param denominatorDegreesOfFreedom the denominator degrees of freedom.
+     */
+Method code:
+48 |     public FDistributionImpl(double numeratorDegreesOfFreedom,
+49 |             double denominatorDegreesOfFreedom) {
+50 |         super();
+51 |         setNumeratorDegreesOfFreedom(numeratorDegreesOfFreedom);
+52 |         setDenominatorDegreesOfFreedom(denominatorDegreesOfFreedom);
+53 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.distribution.FDistributionImpl.setNumeratorDegreesOfFreedom(double)
+Source: src/java/org/apache/commons/math/distribution/FDistributionImpl.java
+Original range: 157-163
+Documentation:
+/**
+     * Modify the numerator degrees of freedom.
+     * @param degreesOfFreedom the new numerator degrees of freedom.
+     * @throws IllegalArgumentException if <code>degreesOfFreedom</code> is not
+     *         positive.
+     */
+Method code:
+157 |     public void setNumeratorDegreesOfFreedom(double degreesOfFreedom) {
+158 |         if (degreesOfFreedom <= 0.0) {
+159 |             throw new IllegalArgumentException(
+160 |                 "degrees of freedom must be positive.");
+161 |         }
+162 |         this.numeratorDegreesOfFreedom = degreesOfFreedom;
+163 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.analysis.UnivariateRealSolverUtils.bracket(UnivariateRealFunction,double,double,double)
+Source: src/java/org/apache/commons/math/analysis/UnivariateRealSolverUtils.java
+Original range: 125-130
+Documentation:
+/**
+     * This method attempts to find two values a and b satisfying <ul>
+    * <li> <code> lowerBound <= a < initial < b <= upperBound</code> </li>
+     * <li> <code> f(a) * f(b) < 0 </code></li>
+     * </ul>
+     * If f is continuous on <code>[a,b],</code> this means that <code>a</code>
+     * and <code>b</code> bracket a root of f.
+     * <p>
+     * The algorithm starts by setting 
+     * <code>a := initial -1; b := initial +1,</code> examines the value of the
+     * function at <code>a</code> and <code>b</code> and keeps moving
+     * the endpoints out by one unit each time through a loop that terminates 
+     * when one of the following happens: <ul>
+     * <li> <code> f(a) * f(b) < 0 </code> --  success!</li>
+     * <li> <code> a = lower </code> and <code> b = upper</code> 
+     * -- ConvergenceException </li>
+     * <li> <code> Integer.MAX_VALUE</code> iterations elapse 
+     * -- ConvergenceException </li>
+     * </ul></p>
+     * <p>
+     * <strong>Note: </strong> this method can take 
+     * <code>Integer.MAX_VALUE</code> iterations to throw a 
+     * <code>ConvergenceException.</code>  Unless you are confident that there
+     * is a root between <code>lowerBound</code> and <code>upperBound</code>
+     * near <code>initial,</code> it is better to use 
+     * {@link #bracket(UnivariateRealFunction, double, double, double, int)}, 
+     * explicitly specifying the maximum number of iterations.</p>
+     *
+     * @param function the function
+     * @param initial initial midpoint of interval being expanded to
+     * bracket a root
+     * @param lowerBound lower bound (a is never lower than this value)
+     * @param upperBound upper bound (b never is greater than this
+     * value)
+     * @return a two element array holding {a, b}
+     * @throws ConvergenceException if a root can not be bracketted
+     * @throws FunctionEvaluationException if an error occurs evaluating the
+     * function
+     * @throws IllegalArgumentException if function is null, maximumIterations
+     * is not positive, or initial is not between lowerBound and upperBound
+     */
+Method code:
+125 |     public static double[] bracket(UnivariateRealFunction function, 
+126 |             double initial, double lowerBound, double upperBound) 
+127 |     throws ConvergenceException, FunctionEvaluationException {
+128 |         return bracket( function, initial, lowerBound, upperBound,
+129 |             Integer.MAX_VALUE ) ;
+130 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.util.ContinuedFraction.ContinuedFraction()
+Source: src/java/org/apache/commons/math/util/ContinuedFraction.java
+Original range: 50-52
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+50 |     protected ContinuedFraction() {
+51 |         super();
+52 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.distribution.FDistributionImpl.getInitialDomain(double)
+Source: src/java/org/apache/commons/math/distribution/FDistributionImpl.java
+Original range: 143-149
+Documentation:
+/**
+     * Access the initial domain value, based on <code>p</code>, used to
+     * bracket a CDF root.  This method is used by
+     * {@link #inverseCumulativeProbability(double)} to find critical values.
+     * 
+     * @param p the desired probability for the critical value
+     * @return initial domain value
+     */
+Method code:
+143 |     protected double getInitialDomain(double p) {
+144 |         double ret;
+145 |         double d = getDenominatorDegreesOfFreedom();
+146 |             // use mean
+147 |             ret = d / (d - 2.0);
+148 |         return ret;
+149 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.distribution.AbstractContinuousDistribution.AbstractContinuousDistribution()
+Source: src/java/org/apache/commons/math/distribution/AbstractContinuousDistribution.java
+Original range: 44-46
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+44 |     protected AbstractContinuousDistribution() {
+45 |         super();
+46 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.analysis.UnivariateRealSolverUtils.bracket(UnivariateRealFunction,double,double,double,int)
+Source: src/java/org/apache/commons/math/analysis/UnivariateRealSolverUtils.java
+Original range: 166-208
+Documentation:
+/**
+     * This method attempts to find two values a and b satisfying <ul>
+     * <li> <code> lowerBound <= a < initial < b <= upperBound</code> </li>
+     * <li> <code> f(a) * f(b) < 0 </code> </li>
+     * </ul>
+     * If f is continuous on <code>[a,b],</code> this means that <code>a</code>
+     * and <code>b</code> bracket a root of f.
+     * <p>
+     * The algorithm starts by setting 
+     * <code>a := initial -1; b := initial +1,</code> examines the value of the
+     * function at <code>a</code> and <code>b</code> and keeps moving
+     * the endpoints out by one unit each time through a loop that terminates 
+     * when one of the following happens: <ul>
+     * <li> <code> f(a) * f(b) < 0 </code> --  success!</li>
+     * <li> <code> a = lower </code> and <code> b = upper</code> 
+     * -- ConvergenceException </li>
+     * <li> <code> maximumIterations</code> iterations elapse 
+     * -- ConvergenceException </li></ul></p>
+     * 
+     * @param function the function
+     * @param initial initial midpoint of interval being expanded to
+     * bracket a root
+     * @param lowerBound lower bound (a is never lower than this value)
+     * @param upperBound upper bound (b never is greater than this
+     * value)
+     * @param maximumIterations maximum number of iterations to perform
+     * @return a two element array holding {a, b}.
+     * @throws ConvergenceException if the algorithm fails to find a and b
+     * satisfying the desired conditions
+     * @throws FunctionEvaluationException if an error occurs evaluating the 
+     * function
+     * @throws IllegalArgumentException if function is null, maximumIterations
+     * is not positive, or initial is not between lowerBound and upperBound
+     */
+Method code:
+166 |     public static double[] bracket(UnivariateRealFunction function,
+167 |             double initial, double lowerBound, double upperBound, 
+168 |             int maximumIterations) throws ConvergenceException, 
+169 |             FunctionEvaluationException {
+170 |         
+171 |         if (function == null) {
+172 |             throw new IllegalArgumentException ("function is null.");
+173 |         }
+174 |         if (maximumIterations <= 0)  {
+175 |             throw new IllegalArgumentException
+176 |             ("bad value for maximumIterations: " + maximumIterations);
+177 |         }
+178 |         if (initial < lowerBound || initial > upperBound || lowerBound >= upperBound) {
+179 |             throw new IllegalArgumentException
+180 |             ("Invalid endpoint parameters:  lowerBound=" + lowerBound + 
+181 |               " initial=" + initial + " upperBound=" + upperBound);
+182 |         }
+183 |         double a = initial;
+184 |         double b = initial;
+185 |         double fa;
+186 |         double fb;
+187 |         int numIterations = 0 ;
+188 |     
+189 |         do {
+190 |             a = Math.max(a - 1.0, lowerBound);
+191 |             b = Math.min(b + 1.0, upperBound);
+192 |             fa = function.value(a);
+193 |             
+194 |             fb = function.value(b);
+195 |             numIterations++ ;
+196 |         } while ((fa * fb > 0.0) && (numIterations < maximumIterations) && 
+197 |                 ((a > lowerBound) || (b < upperBound)));
+198 |    
+199 |         if (fa * fb >= 0.0 ) {
+200 |             throw new ConvergenceException
+201 |             ("Number of iterations={0}, maximum iterations={1}, initial={2}, lower bound={3}, upper bound={4}, final a value={5}, final b value={6}, f(a)={7}, f(b)={8}",
+202 |              new Object[] { Integer.valueOf(numIterations), Integer.valueOf(maximumIterations),
+203 |                             Double.valueOf(initial), Double.valueOf(lowerBound), Double.valueOf(upperBound),
+204 |                             Double.valueOf(a), Double.valueOf(b), Double.valueOf(fa), Double.valueOf(fb) });
+205 |         }
+206 |         
+207 |         return new double[]{a, b};
+208 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.distribution.FDistributionImpl.getDomainUpperBound(double)
+Source: src/java/org/apache/commons/math/distribution/FDistributionImpl.java
+Original range: 131-133
+Documentation:
+/**
+     * Access the domain value upper bound, based on <code>p</code>, used to
+     * bracket a CDF root.  This method is used by
+     * {@link #inverseCumulativeProbability(double)} to find critical values.
+     * 
+     * @param p the desired probability for the critical value
+     * @return domain value upper bound, i.e.
+     *         P(X &lt; <i>upper bound</i>) &gt; <code>p</code> 
+     */
+Method code:
+131 |     protected double getDomainUpperBound(double p) {
+132 |         return Double.MAX_VALUE;
+133 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.distribution.FDistributionImpl.setDenominatorDegreesOfFreedom(double)
+Source: src/java/org/apache/commons/math/distribution/FDistributionImpl.java
+Original range: 179-185
+Documentation:
+/**
+     * Modify the denominator degrees of freedom.
+     * @param degreesOfFreedom the new denominator degrees of freedom.
+     * @throws IllegalArgumentException if <code>degreesOfFreedom</code> is not
+     *         positive.
+     */
+Method code:
+179 |     public void setDenominatorDegreesOfFreedom(double degreesOfFreedom) {
+180 |         if (degreesOfFreedom <= 0.0) {
+181 |             throw new IllegalArgumentException(
+182 |                 "degrees of freedom must be positive.");
+183 |         }
+184 |         this.denominatorDegreesOfFreedom = degreesOfFreedom;
+185 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.special.Beta.logBeta(double,double,double,int)
+Source: src/java/org/apache/commons/math/special/Beta.java
+Original range: 192-205
+Documentation:
+/**
+     * Returns the natural logarithm of the beta function B(a, b).
+     *
+     * The implementation of this method is based on:
+     * <ul>
+     * <li><a href="http://mathworld.wolfram.com/BetaFunction.html">
+     * Beta Function</a>, equation (1).</li>
+     * </ul>
+     * 
+     * @param a the a parameter.
+     * @param b the b parameter.
+     * @param epsilon When the absolute value of the nth item in the
+     *                series is less than epsilon the approximation ceases
+     *                to calculate further elements in the series.
+     * @param maxIterations Maximum number of "iterations" to complete. 
+     * @return log(B(a, b))
+     */
+Method code:
+192 |     public static double logBeta(double a, double b, double epsilon,
+193 |         int maxIterations) {
+194 |             
+195 |         double ret;
+196 | 
+197 |         if (Double.isNaN(a) || Double.isNaN(b) || (a <= 0.0) || (b <= 0.0)) {
+198 |             ret = Double.NaN;
+199 |         } else {
+200 |             ret = Gamma.logGamma(a) + Gamma.logGamma(b) -
+201 |                 Gamma.logGamma(a + b);
+202 |         }
+203 | 
+204 |         return ret;
+205 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math.special.Beta.anonymous_L133.getB(int,double)
+Source: src/java/org/apache/commons/math/special/Beta.java
+Original range: 137-150
+Documentation:
+
+Method code:
+137 |                 protected double getB(int n, double x) {
+138 |                     double ret;
+139 |                     double m;
+140 |                     if (n % 2 == 0) { // even
+141 |                         m = n / 2.0;
+142 |                         ret = (m * (b - m) * x) /
+143 |                             ((a + (2 * m) - 1) * (a + (2 * m)));
+144 |                     } else {
+145 |                         m = (n - 1.0) / 2.0;
+146 |                         ret = -((a + m) * (a + b + m) * x) /
+147 |                                 ((a + (2 * m)) * (a + (2 * m) + 1.0));
+148 |                     }
+149 |                     return ret;
+150 |                 }
+
+===== M0017 =====
+Signature: org.apache.commons.math.special.Beta.anonymous_L133.getA(int,double)
+Source: src/java/org/apache/commons/math/special/Beta.java
+Original range: 152-154
+Documentation:
+
+Method code:
+152 |                 protected double getA(int n, double x) {
+153 |                     return 1.0;
+154 |                 }
+
+===== M0018 =====
+Signature: org.apache.commons.math.distribution.FDistributionImpl.inverseCumulativeProbability(double)
+Source: src/java/org/apache/commons/math/distribution/FDistributionImpl.java
+Original range: 98-107
+Documentation:
+/**
+     * For this distribution, X, this method returns the critical point x, such
+     * that P(X &lt; x) = <code>p</code>.
+     * <p>
+     * Returns 0 for p=0 and <code>Double.POSITIVE_INFINITY</code> for p=1.</p>
+     *
+     * @param p the desired probability
+     * @return x, such that P(X &lt; x) = <code>p</code>
+     * @throws MathException if the inverse cumulative probability can not be
+     *         computed due to convergence or other numerical errors.
+     * @throws IllegalArgumentException if <code>p</code> is not a valid
+     *         probability.
+     */
+Method code:
+98 |     public double inverseCumulativeProbability(final double p) 
+99 |         throws MathException {
+100 |         if (p == 0) {
+101 |             return 0d;
+102 |         }
+103 |         if (p == 1) {
+104 |             return Double.POSITIVE_INFINITY;
+105 |         }
+106 |         return super.inverseCumulativeProbability(p);
+107 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math.distribution.AbstractDistribution.AbstractDistribution()
+Source: src/java/org/apache/commons/math/distribution/AbstractDistribution.java
+Original range: 37-39
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+37 |     protected AbstractDistribution() {
+38 |         super();
+39 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math.distribution.FDistributionImpl.getNumeratorDegreesOfFreedom()
+Source: src/java/org/apache/commons/math/distribution/FDistributionImpl.java
+Original range: 169-171
+Documentation:
+/**
+     * Access the numerator degrees of freedom.
+     * @return the numerator degrees of freedom.
+     */
+Method code:
+169 |     public double getNumeratorDegreesOfFreedom() {
+170 |         return numeratorDegreesOfFreedom;
+171 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math.distribution.FDistributionImpl.getDenominatorDegreesOfFreedom()
+Source: src/java/org/apache/commons/math/distribution/FDistributionImpl.java
+Original range: 191-193
+Documentation:
+/**
+     * Access the denominator degrees of freedom.
+     * @return the denominator degrees of freedom.
+     */
+Method code:
+191 |     public double getDenominatorDegreesOfFreedom() {
+192 |         return denominatorDegreesOfFreedom;
+193 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math.distribution.AbstractContinuousDistribution.inverseCumulativeProbability(double)
+Source: src/java/org/apache/commons/math/distribution/AbstractContinuousDistribution.java
+Original range: 59-110
+Documentation:
+/**
+     * For this distribution, X, this method returns the critical point x, such
+     * that P(X &lt; x) = <code>p</code>.
+     *
+     * @param p the desired probability
+     * @return x, such that P(X &lt; x) = <code>p</code>
+     * @throws MathException if the inverse cumulative probability can not be
+     *         computed due to convergence or other numerical errors.
+     * @throws IllegalArgumentException if <code>p</code> is not a valid
+     *         probability.
+     */
+Method code:
+59 |     public double inverseCumulativeProbability(final double p)
+60 |         throws MathException {
+61 |         if (p < 0.0 || p > 1.0) {
+62 |             throw new IllegalArgumentException("p must be between 0.0 and 1.0, inclusive.");
+63 |         }
+64 | 
+65 |         // by default, do simple root finding using bracketing and default solver.
+66 |         // subclasses can overide if there is a better method.
+67 |         UnivariateRealFunction rootFindingFunction =
+68 |             new UnivariateRealFunction() {
+69 | 
+70 |             public double value(double x) throws FunctionEvaluationException {
+71 |                 try {
+72 |                     return cumulativeProbability(x) - p;
+73 |                 } catch (MathException ex) {
+74 |                     throw new FunctionEvaluationException(x, ex.getPattern(), ex.getArguments(), ex);
+75 |                 }
+76 |             }
+77 |         };
+78 |               
+79 |         // Try to bracket root, test domain endoints if this fails     
+80 |         double lowerBound = getDomainLowerBound(p);
+81 |         double upperBound = getDomainUpperBound(p);
+82 |         double[] bracket = null;
+83 |         try {
+84 |             bracket = UnivariateRealSolverUtils.bracket(
+85 |                     rootFindingFunction, getInitialDomain(p),
+86 |                     lowerBound, upperBound);
+87 |         }  catch (ConvergenceException ex) {
+88 |             /* 
+89 |              * Check domain endpoints to see if one gives value that is within
+90 |              * the default solver's defaultAbsoluteAccuracy of 0 (will be the
+91 |              * case if density has bounded support and p is 0 or 1).
+92 |              * 
+93 |              * TODO: expose the default solver, defaultAbsoluteAccuracy as
+94 |              * a constant.
+95 |              */ 
+96 |             if (Math.abs(rootFindingFunction.value(lowerBound)) < 1E-6) {
+97 |                 return lowerBound;
+98 |             }
+99 |             if (Math.abs(rootFindingFunction.value(upperBound)) < 1E-6) {
+100 |                 return upperBound;
+101 |             }     
+102 |             // Failed bracket convergence was not because of corner solution
+103 |             throw new MathException(ex);
+104 |         }
+105 | 
+106 |         // find root
+107 |         double root = UnivariateRealSolverUtils.solve(rootFindingFunction,
+108 |                 bracket[0],bracket[1]);
+109 |         return root;
+110 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math.special.Gamma.logGamma(double)
+Source: src/java/org/apache/commons/math/special/Gamma.java
+Original range: 87-107
+Documentation:
+/**
+     * Returns the natural logarithm of the gamma function &#915;(x).
+     *
+     * The implementation of this method is based on:
+     * <ul>
+     * <li><a href="http://mathworld.wolfram.com/GammaFunction.html">
+     * Gamma Function</a>, equation (28).</li>
+     * <li><a href="http://mathworld.wolfram.com/LanczosApproximation.html">
+     * Lanczos Approximation</a>, equations (1) through (5).</li>
+     * <li><a href="http://my.fit.edu/~gabdo/gamma.txt">Paul Godfrey, A note on
+     * the computation of the convergent Lanczos complex Gamma approximation
+     * </a></li>
+     * </ul>
+     * 
+     * @param x the value.
+     * @return log(&#915;(x))
+     */
+Method code:
+87 |     public static double logGamma(double x) {
+88 |         double ret;
+89 | 
+90 |         if (Double.isNaN(x) || (x <= 0.0)) {
+91 |             ret = Double.NaN;
+92 |         } else {
+93 |             double g = 607.0 / 128.0;
+94 |             
+95 |             double sum = 0.0;
+96 |             for (int i = lanczos.length - 1; i > 0; --i) {
+97 |                 sum = sum + (lanczos[i] / (x + i));
+98 |             }
+99 |             sum = sum + lanczos[0];
+100 | 
+101 |             double tmp = x + g + .5;
+102 |             ret = ((x + .5) * Math.log(tmp)) - tmp +
+103 |                 HALF_LOG_2_PI + Math.log(sum / x);
+104 |         }
+105 | 
+106 |         return ret;
+107 |     }
+

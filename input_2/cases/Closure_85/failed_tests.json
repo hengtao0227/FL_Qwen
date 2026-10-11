@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testCascadedRemovalOfUnlessUnconditonalJumps()",
+    "resolved_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testCascadedRemovalOfUnlessUnconditonalJumps()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/UnreachableCodeEliminationTest.java",
+    "begin_line": 234,
+    "end_line": 250,
+    "comment": "",
+    "snippet": "  public void testCascadedRemovalOfUnlessUnconditonalJumps() {\n    test(\"switch (a) { case 'a': break; case 'b': break; case 'c': break }\",\n         \"switch (a) { case 'a': break; case 'b': case 'c': }\");\n    // Only one break removed per pass.\n    test(\"switch (a) { case 'a': break; case 'b': case 'c': }\",\n         \"switch (a) { case 'a': case 'b': case 'c': }\");\n\n    test(\"function foo() {\" +\n      \"  switch (a) { case 'a':return; case 'b':return; case 'c':return }}\",\n      \"function foo() { switch (a) { case 'a':return; case 'b': case 'c': }}\");\n    test(\"function foo() {\" +\n      \"  switch (a) { case 'a':return; case 'b': case 'c': }}\",\n      \"function foo() { switch (a) { case 'a': case 'b': case 'c': }}\");\n\n    testSame(\"function foo() {\" +\n             \"switch (a) { case 'a':return 2; case 'b':return 1}}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testIssue311()",
+    "resolved_signature": "com.google.javascript.jscomp.UnreachableCodeEliminationTest.testIssue311()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/UnreachableCodeEliminationTest.java",
+    "begin_line": 252,
+    "end_line": 273,
+    "comment": "",
+    "snippet": "  public void testIssue311() {\n    test(\"function a(b) {\\n\" +\n         \"  switch (b.v) {\\n\" +\n         \"    case 'SWITCH':\\n\" +\n         \"      if (b.i >= 0) {\\n\" +\n         \"        return b.o;\\n\" +\n         \"      } else {\\n\" +\n         \"        return;\\n\" +\n         \"      }\\n\" +\n         \"      break;\\n\" +\n         \"  }\\n\" +\n         \"}\",\n         \"function a(b) {\\n\" +\n         \"  switch (b.v) {\\n\" +\n         \"    case 'SWITCH':\\n\" +\n         \"      if (b.i >= 0) {\\n\" +\n         \"        return b.o;\\n\" +\n         \"      } else {\\n\" +\n         \"      }\\n\" +\n         \"  }\\n\" +\n         \"}\");\n  }"
+  }
+]

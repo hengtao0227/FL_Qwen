@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial()",
+    "resolved_signature": "org.apache.commons.math.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math/ode/nonstiff/AdamsMoultonIntegratorTest.java",
+    "begin_line": 135,
+    "end_line": 154,
+    "comment": "",
+    "snippet": "    @Test\n    public void polynomial() throws DerivativeException, IntegratorException {\n        TestProblem6 pb = new TestProblem6();\n        double range = Math.abs(pb.getFinalTime() - pb.getInitialTime());\n\n        for (int nSteps = 1; nSteps < 7; ++nSteps) {\n            AdamsMoultonIntegrator integ =\n                new AdamsMoultonIntegrator(nSteps, 1.0e-6 * range, 0.1 * range, 1.0e-9, 1.0e-9);\n            TestProblemHandler handler = new TestProblemHandler(pb, integ);\n            integ.addStepHandler(handler);\n            integ.integrate(pb, pb.getInitialTime(), pb.getInitialState(),\n                            pb.getFinalTime(), new double[pb.getDimension()]);\n            if (nSteps < 4) {\n                assertTrue(integ.getEvaluations() > 140);\n            } else {\n                assertTrue(integ.getEvaluations() < 90);\n            }\n        }\n\n    }"
+  }
+]

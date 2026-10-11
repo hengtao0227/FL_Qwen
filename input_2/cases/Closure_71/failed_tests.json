@@ -1,0 +1,22 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.CheckAccessControlsTest.testNoPrivateAccessForProperties6()",
+    "resolved_signature": "com.google.javascript.jscomp.CheckAccessControlsTest.testNoPrivateAccessForProperties6()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CheckAccessControlsTest.java",
+    "begin_line": 399,
+    "end_line": 409,
+    "comment": "",
+    "snippet": "  public void testNoPrivateAccessForProperties6() {\n    // Overriding a private property with a non-private property\n    // in a different file causes problems.\n    test(new String[] {\n      \"/** @constructor */ function Foo() {} \" +\n      \"/** @private */ Foo.prototype.bar_ = function() {};\",\n      \"/** @constructor \\n * @extends {Foo} */ \" +\n      \"function SubFoo() {};\" +\n      \"SubFoo.prototype.bar_ = function() {};\"\n    }, null, BAD_PRIVATE_PROPERTY_ACCESS);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.CheckAccessControlsTest.testNoPrivateAccessForProperties8()",
+    "resolved_signature": "com.google.javascript.jscomp.CheckAccessControlsTest.testNoPrivateAccessForProperties8()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CheckAccessControlsTest.java",
+    "begin_line": 424,
+    "end_line": 430,
+    "comment": "",
+    "snippet": "  public void testNoPrivateAccessForProperties8() {\n    test(new String[] {\n      \"/** @constructor */ function Foo() { /** @private */ this.bar_ = 3; }\",\n      \"/** @constructor \\n * @extends {Foo} */ \" +\n      \"function SubFoo() { /** @private */ this.bar_ = 3; };\"\n    }, null, PRIVATE_OVERRIDE);\n  }"
+  }
+]

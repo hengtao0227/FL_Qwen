@@ -1,0 +1,32 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.CheckMissingReturnTest.testIssue779()",
+    "resolved_signature": "com.google.javascript.jscomp.CheckMissingReturnTest.testIssue779()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CheckMissingReturnTest.java",
+    "begin_line": 194,
+    "end_line": 198,
+    "comment": "",
+    "snippet": "  public void testIssue779() {\n    testNotMissing(\n        \"var a = f(); try { alert(); if (a > 0) return 1; }\" +\n        \"finally { a = 5; } return 2;\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.ControlFlowAnalysisTest.testDeepNestedFinally()",
+    "resolved_signature": "com.google.javascript.jscomp.ControlFlowAnalysisTest.testDeepNestedFinally()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java",
+    "begin_line": 1112,
+    "end_line": 1119,
+    "comment": "",
+    "snippet": "  public void testDeepNestedFinally() {\n    String src = \"try{try{try{throw 1}\" +\n        \"finally{1;var a}}finally{2;if(a);}}finally{3;a()}\";\n    ControlFlowGraph<Node> cfg = createCfg(src);\n    assertCrossEdge(cfg, Token.THROW, Token.BLOCK, Branch.ON_EX);\n    assertCrossEdge(cfg, Token.VAR, Token.BLOCK, Branch.UNCOND);\n    assertCrossEdge(cfg, Token.IF, Token.BLOCK, Branch.ON_EX);\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.ControlFlowAnalysisTest.testDeepNestedBreakwithFinally()",
+    "resolved_signature": "com.google.javascript.jscomp.ControlFlowAnalysisTest.testDeepNestedBreakwithFinally()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java",
+    "begin_line": 1097,
+    "end_line": 1110,
+    "comment": "",
+    "snippet": "  public void testDeepNestedBreakwithFinally() {\n    String src = \"X:while(1){try{while(2){try{var a;break X;}\" +\n        \"finally{}}}finally{}}\";\n    ControlFlowGraph<Node> cfg = createCfg(src);\n    assertDownEdge(cfg, Token.WHILE, Token.BLOCK, Branch.ON_TRUE);\n    assertDownEdge(cfg, Token.BLOCK, Token.TRY, Branch.UNCOND);\n    assertDownEdge(cfg, Token.BLOCK, Token.VAR, Branch.UNCOND);\n    // BREAK to FINALLY.\n    assertCrossEdge(cfg, Token.BREAK, Token.BLOCK, Branch.UNCOND);\n    // FINALLY to FINALLY.\n    assertCrossEdge(cfg, Token.BLOCK, Token.BLOCK, Branch.ON_EX);\n    assertCrossEdge(cfg, Token.WHILE, Token.BLOCK, Branch.ON_FALSE);\n    assertReturnEdge(cfg, Token.BLOCK);\n  }"
+  }
+]

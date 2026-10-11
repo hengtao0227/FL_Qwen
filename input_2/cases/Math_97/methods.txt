@@ -1,0 +1,289 @@
+===== M0001 =====
+Signature: org.apache.commons.math.analysis.UnivariateRealSolverImpl.getAbsoluteAccuracy()
+Source: src/java/org/apache/commons/math/analysis/UnivariateRealSolverImpl.java
+Original range: 168-170
+Documentation:
+/**
+     * Get the actual absolute accuracy.
+     * 
+     * @return the accuracy
+     */
+Method code:
+168 |     public double getAbsoluteAccuracy() {
+169 |         return absoluteAccuracy;
+170 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.analysis.UnivariateRealSolverImpl.verifyInterval(double,double)
+Source: src/java/org/apache/commons/math/analysis/UnivariateRealSolverImpl.java
+Original range: 294-300
+Documentation:
+/**
+     * Verifies that the endpoints specify an interval, 
+     * throws IllegalArgumentException if not
+     * 
+     * @param lower  lower endpoint
+     * @param upper upper endpoint
+     * @throws IllegalArgumentException
+     */
+Method code:
+294 |     protected void verifyInterval(double lower, double upper) {
+295 |         if (lower >= upper) {
+296 |             throw new IllegalArgumentException
+297 |                 ("Endpoints do not specify an interval: [" + lower + 
+298 |                         "," + upper + "]");
+299 |         }       
+300 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.analysis.BrentSolver.BrentSolver(UnivariateRealFunction)
+Source: src/java/org/apache/commons/math/analysis/BrentSolver.java
+Original range: 41-43
+Documentation:
+/**
+     * Construct a solver for the given function.
+     * 
+     * @param f function to solve.
+     */
+Method code:
+41 |     public BrentSolver(UnivariateRealFunction f) {
+42 |         super(f, 100, 1E-6);
+43 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.analysis.UnivariateRealSolverImpl.clearResult()
+Source: src/java/org/apache/commons/math/analysis/UnivariateRealSolverImpl.java
+Original range: 148-150
+Documentation:
+/**
+     * Convenience function for implementations.
+     */
+Method code:
+148 |     protected final void clearResult() {
+149 |         this.resultComputed = false;
+150 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.analysis.BrentSolver.solve(double,double,double,double,double,double)
+Source: src/java/org/apache/commons/math/analysis/BrentSolver.java
+Original range: 170-264
+Documentation:
+/**
+     * Find a zero starting search according to the three provided points.
+     * @param x0 old approximation for the root
+     * @param y0 function value at the approximation for the root
+     * @param x1 last calculated approximation for the root
+     * @param y1 function value at the last calculated approximation
+     * for the root
+     * @param x2 bracket point (must be set to x0 if no bracket point is
+     * known, this will force starting with linear interpolation)
+     * @param y2 function value at the bracket point.
+     * @return the value where the function is zero
+     * @throws MaxIterationsExceededException if the maximum iteration count
+     * is exceeded
+     * @throws FunctionEvaluationException if an error occurs evaluating
+     * the function 
+     */
+Method code:
+170 |     private double solve(double x0, double y0,
+171 |                          double x1, double y1,
+172 |                          double x2, double y2)
+173 |     throws MaxIterationsExceededException, FunctionEvaluationException {
+174 | 
+175 |         double delta = x1 - x0;
+176 |         double oldDelta = delta;
+177 | 
+178 |         int i = 0;
+179 |         while (i < maximalIterationCount) {
+180 |             if (Math.abs(y2) < Math.abs(y1)) {
+181 |                 // use the bracket point if is better than last approximation
+182 |                 x0 = x1;
+183 |                 x1 = x2;
+184 |                 x2 = x0;
+185 |                 y0 = y1;
+186 |                 y1 = y2;
+187 |                 y2 = y0;
+188 |             }
+189 |             if (Math.abs(y1) <= functionValueAccuracy) {
+190 |                 // Avoid division by very small values. Assume
+191 |                 // the iteration has converged (the problem may
+192 |                 // still be ill conditioned)
+193 |                 setResult(x1, i);
+194 |                 return result;
+195 |             }
+196 |             double dx = (x2 - x1);
+197 |             double tolerance =
+198 |                 Math.max(relativeAccuracy * Math.abs(x1), absoluteAccuracy);
+199 |             if (Math.abs(dx) <= tolerance) {
+200 |                 setResult(x1, i);
+201 |                 return result;
+202 |             }
+203 |             if ((Math.abs(oldDelta) < tolerance) ||
+204 |                     (Math.abs(y0) <= Math.abs(y1))) {
+205 |                 // Force bisection.
+206 |                 delta = 0.5 * dx;
+207 |                 oldDelta = delta;
+208 |             } else {
+209 |                 double r3 = y1 / y0;
+210 |                 double p;
+211 |                 double p1;
+212 |                 // the equality test (x0 == x2) is intentional,
+213 |                 // it is part of the original Brent's method,
+214 |                 // it should NOT be replaced by proximity test
+215 |                 if (x0 == x2) {
+216 |                     // Linear interpolation.
+217 |                     p = dx * r3;
+218 |                     p1 = 1.0 - r3;
+219 |                 } else {
+220 |                     // Inverse quadratic interpolation.
+221 |                     double r1 = y0 / y2;
+222 |                     double r2 = y1 / y2;
+223 |                     p = r3 * (dx * r1 * (r1 - r2) - (x1 - x0) * (r2 - 1.0));
+224 |                     p1 = (r1 - 1.0) * (r2 - 1.0) * (r3 - 1.0);
+225 |                 }
+226 |                 if (p > 0.0) {
+227 |                     p1 = -p1;
+228 |                 } else {
+229 |                     p = -p;
+230 |                 }
+231 |                 if (2.0 * p >= 1.5 * dx * p1 - Math.abs(tolerance * p1) ||
+232 |                         p >= Math.abs(0.5 * oldDelta * p1)) {
+233 |                     // Inverse quadratic interpolation gives a value
+234 |                     // in the wrong direction, or progress is slow.
+235 |                     // Fall back to bisection.
+236 |                     delta = 0.5 * dx;
+237 |                     oldDelta = delta;
+238 |                 } else {
+239 |                     oldDelta = delta;
+240 |                     delta = p / p1;
+241 |                 }
+242 |             }
+243 |             // Save old X1, Y1 
+244 |             x0 = x1;
+245 |             y0 = y1;
+246 |             // Compute new X1, Y1
+247 |             if (Math.abs(delta) > tolerance) {
+248 |                 x1 = x1 + delta;
+249 |             } else if (dx > 0.0) {
+250 |                 x1 = x1 + 0.5 * tolerance;
+251 |             } else if (dx <= 0.0) {
+252 |                 x1 = x1 - 0.5 * tolerance;
+253 |             }
+254 |             y1 = f.value(x1);
+255 |             if ((y1 > 0) == (y2 > 0)) {
+256 |                 x2 = x0;
+257 |                 y2 = y0;
+258 |                 delta = x1 - x0;
+259 |                 oldDelta = delta;
+260 |             }
+261 |             i++;
+262 |         }
+263 |         throw new MaxIterationsExceededException(maximalIterationCount);
+264 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.analysis.BrentSolver.solve(double,double)
+Source: src/java/org/apache/commons/math/analysis/BrentSolver.java
+Original range: 125-152
+Documentation:
+/**
+     * Find a zero in the given interval.
+     * <p>
+     * Requires that the values of the function at the endpoints have opposite
+     * signs. An <code>IllegalArgumentException</code> is thrown if this is not
+     * the case.</p>
+     * 
+     * @param min the lower bound for the interval.
+     * @param max the upper bound for the interval.
+     * @return the value where the function is zero
+     * @throws MaxIterationsExceededException if the maximum iteration count is exceeded
+     * @throws FunctionEvaluationException if an error occurs evaluating the
+     * function 
+     * @throws IllegalArgumentException if min is not less than max or the
+     * signs of the values of the function at the endpoints are not opposites
+     */
+Method code:
+125 |     public double solve(double min, double max) throws MaxIterationsExceededException, 
+126 |         FunctionEvaluationException {
+127 |         
+128 |         clearResult();
+129 |         verifyInterval(min, max);
+130 |         
+131 |         double ret = Double.NaN;
+132 |         
+133 |         double yMin = f.value(min);
+134 |         double yMax = f.value(max);
+135 |         
+136 |         // Verify bracketing
+137 |         double sign = yMin * yMax;
+138 |         if (sign >= 0) {
+139 |             // check if either value is close to a zero
+140 |                 // neither value is close to zero and min and max do not bracket root.
+141 |                 throw new IllegalArgumentException
+142 |                 ("Function values at endpoints do not have different signs." +
+143 |                         "  Endpoints: [" + min + "," + max + "]" + 
+144 |                         "  Values: [" + yMin + "," + yMax + "]");
+145 |         } else {
+146 |             // solve using only the first endpoint as initial guess
+147 |             ret = solve(min, yMin, max, yMax, min, yMin);
+148 |             // either min or max is a root
+149 |         }
+150 | 
+151 |         return ret;
+152 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.analysis.UnivariateRealSolverImpl.UnivariateRealSolverImpl(UnivariateRealFunction,int,double)
+Source: src/java/org/apache/commons/math/analysis/UnivariateRealSolverImpl.java
+Original range: 82-102
+Documentation:
+/**
+     * Construct a solver with given iteration count and accuracy.
+     * 
+     * @param f the function to solve.
+     * @param defaultAbsoluteAccuracy maximum absolute error
+     * @param defaultMaximalIterationCount maximum number of iterations
+     * @throws IllegalArgumentException if f is null or the 
+     * defaultAbsoluteAccuracy is not valid
+     */
+Method code:
+82 |     protected UnivariateRealSolverImpl(
+83 |         UnivariateRealFunction f,
+84 |         int defaultMaximalIterationCount,
+85 |         double defaultAbsoluteAccuracy) {
+86 |         
+87 |         super();
+88 |         
+89 |         if (f == null) {
+90 |             throw new IllegalArgumentException("function can not be null.");
+91 |         }
+92 |         
+93 |         this.f = f;
+94 |         this.defaultAbsoluteAccuracy = defaultAbsoluteAccuracy;
+95 |         this.defaultRelativeAccuracy = 1E-14;
+96 |         this.defaultFunctionValueAccuracy = 1E-15;
+97 |         this.absoluteAccuracy = defaultAbsoluteAccuracy;
+98 |         this.relativeAccuracy = defaultRelativeAccuracy;
+99 |         this.functionValueAccuracy = defaultFunctionValueAccuracy;
+100 |         this.defaultMaximalIterationCount = defaultMaximalIterationCount;
+101 |         this.maximalIterationCount = defaultMaximalIterationCount;
+102 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.analysis.UnivariateRealSolverImpl.setResult(double,int)
+Source: src/java/org/apache/commons/math/analysis/UnivariateRealSolverImpl.java
+Original range: 139-143
+Documentation:
+/**
+     * Convenience function for implementations.
+     * 
+     * @param result the result to set
+     * @param iterationCount the iteration count to set
+     */
+Method code:
+139 |     protected final void setResult(double result, int iterationCount) {
+140 |         this.result = result;
+141 |         this.iterationCount = iterationCount;
+142 |         this.resultComputed = true;
+143 |     }
+

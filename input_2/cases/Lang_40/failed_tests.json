@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.lang.StringUtilsEqualsIndexOfTest.testContainsIgnoreCase_LocaleIndependence()",
+    "resolved_signature": "org.apache.commons.lang.StringUtilsEqualsIndexOfTest.testContainsIgnoreCase_LocaleIndependence()",
+    "resolution": "exact",
+    "src_path": "src/test/org/apache/commons/lang/StringUtilsEqualsIndexOfTest.java",
+    "begin_line": 316,
+    "end_line": 348,
+    "comment": "",
+    "snippet": "    public void testContainsIgnoreCase_LocaleIndependence() {\n        Locale orig = Locale.getDefault();\n\n        Locale[] locales = { Locale.ENGLISH, new Locale(\"tr\"), Locale.getDefault() };\n\n        String[][] tdata = { \n            { \"i\", \"I\" },\n            { \"I\", \"i\" },\n            { \"\\u03C2\", \"\\u03C3\" },\n            { \"\\u03A3\", \"\\u03C2\" },\n            { \"\\u03A3\", \"\\u03C3\" },\n        };\n\n        String[][] fdata = { \n            { \"\\u00DF\", \"SS\" },\n        };\n\n        try {\n            for (int i = 0; i < locales.length; i++) {\n                Locale.setDefault(locales[i]);\n                for (int j = 0; j < tdata.length; j++) {\n                    assertTrue(Locale.getDefault() + \": \" + j + \" \" + tdata[j][0] + \" \" + tdata[j][1], StringUtils\n                            .containsIgnoreCase(tdata[j][0], tdata[j][1]));\n                }\n                for (int j = 0; j < fdata.length; j++) {\n                    assertFalse(Locale.getDefault() + \": \" + j + \" \" + fdata[j][0] + \" \" + fdata[j][1], StringUtils\n                            .containsIgnoreCase(fdata[j][0], fdata[j][1]));\n                }\n            }\n        } finally {\n            Locale.setDefault(orig);\n        }\n    }"
+  }
+]

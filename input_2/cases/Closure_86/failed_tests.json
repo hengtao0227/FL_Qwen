@@ -1,0 +1,72 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.NodeUtilTest.testLocalValue1()",
+    "resolved_signature": "com.google.javascript.jscomp.NodeUtilTest.testLocalValue1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/NodeUtilTest.java",
+    "begin_line": 1014,
+    "end_line": 1109,
+    "comment": "",
+    "snippet": "  public void testLocalValue1() throws Exception {\n    // Names are not known to be local.\n    assertFalse(testLocalValue(\"x\"));\n    assertFalse(testLocalValue(\"x()\"));\n    assertFalse(testLocalValue(\"this\"));\n    assertFalse(testLocalValue(\"arguments\"));\n\n    // We can't know if new objects are local unless we know\n    // that they don't alias themselves.\n    assertFalse(testLocalValue(\"new x()\"));\n\n    // property references are assume to be non-local\n    assertFalse(testLocalValue(\"(new x()).y\"));\n    assertFalse(testLocalValue(\"(new x())['y']\"));\n\n    // Primitive values are local\n    assertTrue(testLocalValue(\"null\"));\n    assertTrue(testLocalValue(\"undefined\"));\n    assertTrue(testLocalValue(\"Infinity\"));\n    assertTrue(testLocalValue(\"NaN\"));\n    assertTrue(testLocalValue(\"1\"));\n    assertTrue(testLocalValue(\"'a'\"));\n    assertTrue(testLocalValue(\"true\"));\n    assertTrue(testLocalValue(\"false\"));\n    assertTrue(testLocalValue(\"[]\"));\n    assertTrue(testLocalValue(\"{}\"));\n\n    // The contents of arrays and objects don't matter\n    assertTrue(testLocalValue(\"[x]\"));\n    assertTrue(testLocalValue(\"{'a':x}\"));\n\n    // Pre-increment results in primitive number\n    assertTrue(testLocalValue(\"++x\"));\n    assertTrue(testLocalValue(\"--x\"));\n\n    // Post-increment, the previous value matters.\n    assertFalse(testLocalValue(\"x++\"));\n    assertFalse(testLocalValue(\"x--\"));\n\n    // The left side of an only assign matters if it is an alias or mutable.\n    assertTrue(testLocalValue(\"x=1\"));\n    assertFalse(testLocalValue(\"x=[]\"));\n    assertFalse(testLocalValue(\"x=y\"));\n    // The right hand side of assignment opts don't matter, as they force\n    // a local result.\n    assertTrue(testLocalValue(\"x+=y\"));\n    assertTrue(testLocalValue(\"x*=y\"));\n    // Comparisons always result in locals, as they force a local boolean\n    // result.\n    assertTrue(testLocalValue(\"x==y\"));\n    assertTrue(testLocalValue(\"x!=y\"));\n    assertTrue(testLocalValue(\"x>y\"));\n    // Only the right side of a comma matters\n    assertTrue(testLocalValue(\"(1,2)\"));\n    assertTrue(testLocalValue(\"(x,1)\"));\n    assertFalse(testLocalValue(\"(x,y)\"));\n\n    // Both the operands of OR matter\n    assertTrue(testLocalValue(\"1||2\"));\n    assertFalse(testLocalValue(\"x||1\"));\n    assertFalse(testLocalValue(\"x||y\"));\n    assertFalse(testLocalValue(\"1||y\"));\n\n    // Both the operands of AND matter\n    assertTrue(testLocalValue(\"1&&2\"));\n    assertFalse(testLocalValue(\"x&&1\"));\n    assertFalse(testLocalValue(\"x&&y\"));\n    assertFalse(testLocalValue(\"1&&y\"));\n\n    // Only the results of HOOK matter\n    assertTrue(testLocalValue(\"x?1:2\"));\n    assertFalse(testLocalValue(\"x?x:2\"));\n    assertFalse(testLocalValue(\"x?1:x\"));\n    assertFalse(testLocalValue(\"x?x:y\"));\n\n    // Results of ops are local values\n    assertTrue(testLocalValue(\"!y\"));\n    assertTrue(testLocalValue(\"~y\"));\n    assertTrue(testLocalValue(\"y + 1\"));\n    assertTrue(testLocalValue(\"y + z\"));\n    assertTrue(testLocalValue(\"y * z\"));\n\n    assertTrue(testLocalValue(\"'a' in x\"));\n    assertTrue(testLocalValue(\"typeof x\"));\n    assertTrue(testLocalValue(\"x instanceof y\"));\n\n    assertTrue(testLocalValue(\"void x\"));\n    assertTrue(testLocalValue(\"void 0\"));\n\n    assertFalse(testLocalValue(\"{}.x\"));\n\n    assertTrue(testLocalValue(\"{}.toString()\"));\n    assertTrue(testLocalValue(\"o.toString()\"));\n\n    assertFalse(testLocalValue(\"o.valueOf()\"));\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testLocalizedSideEffects8()",
+    "resolved_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testLocalizedSideEffects8()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PureFunctionIdentifierTest.java",
+    "begin_line": 769,
+    "end_line": 780,
+    "comment": "",
+    "snippet": "  public void testLocalizedSideEffects8() throws Exception {\n    // Returning a local object that has been modified\n    // is not a global side-effect.\n    checkMarkedCalls(\"/** @constructor A */ function A() {};\" +\n                     \"function f() {\" +\n                     \"  var a = new A; a.foo = 1; return a;\" +\n                     \"}\" +\n                     \"f()\",\n                     BROKEN_NEW ?\n                         ImmutableList.<String>of(\"A\") :\n                         ImmutableList.<String>of(\"A\", \"f\"));\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testLocalizedSideEffects9()",
+    "resolved_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testLocalizedSideEffects9()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PureFunctionIdentifierTest.java",
+    "begin_line": 782,
+    "end_line": 793,
+    "comment": "",
+    "snippet": "  public void testLocalizedSideEffects9() throws Exception {\n    // Returning a local object that has been modified\n    // is not a global side-effect.\n    checkMarkedCalls(\"/** @constructor A */ function A() {this.x = 1};\" +\n                     \"function f() {\" +\n                     \"  var a = new A; a.foo = 1; return a;\" +\n                     \"}\" +\n                     \"f()\",\n                     BROKEN_NEW ?\n                         ImmutableList.<String>of(\"A\") :\n                         ImmutableList.<String>of(\"A\", \"f\"));\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testAnnotationInExterns_new4()",
+    "resolved_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testAnnotationInExterns_new4()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PureFunctionIdentifierTest.java",
+    "begin_line": 237,
+    "end_line": 247,
+    "comment": "",
+    "snippet": "  public void testAnnotationInExterns_new4() throws Exception {\n    // The entire expression containing \"externObjSEThisMethod\" is considered\n    // side-effect free in this context.\n\n    checkMarkedCalls(\"new externObjSEThis().externObjSEThisMethod('')\",\n        BROKEN_NEW ?\n            ImmutableList.<String>of(\n               \"externObjSEThis\") :\n            ImmutableList.<String>of(\n               \"externObjSEThis\", \"NEW STRING externObjSEThisMethod\"));\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testAnnotationInExterns_new6()",
+    "resolved_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testAnnotationInExterns_new6()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PureFunctionIdentifierTest.java",
+    "begin_line": 256,
+    "end_line": 270,
+    "comment": "",
+    "snippet": "  public void testAnnotationInExterns_new6() throws Exception {\n    // While \"externObjSEThisMethod\" has modifies \"this\"\n    // it does not have global side-effects with \"this\" is\n    // a known local value.\n    checkMarkedCalls(\n        \"function f() {\" +\n        \"  new externObjSEThis().externObjSEThisMethod('') \" +\n        \"};\" +\n        \"f();\",\n        BROKEN_NEW ?\n            ImmutableList.<String>of(\n                \"externObjSEThis\") :\n           ImmutableList.<String>of(\n               \"externObjSEThis\", \"NEW STRING externObjSEThisMethod\", \"f\"));\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testIssue303b()",
+    "resolved_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testIssue303b()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PureFunctionIdentifierTest.java",
+    "begin_line": 205,
+    "end_line": 220,
+    "comment": "",
+    "snippet": "  public void testIssue303b() throws Exception {\n    checkMarkedCalls(\n        \"/** @constructor */ function F() {\" +\n        \"  var self = this;\" +\n        \"  window.setTimeout(function() {\" +\n        \"    window.location = self.location;\" +\n        \"  }, 0);\" +\n        \"}\" +\n        \"F.prototype.setLocation = function(x) {\" +\n        \"  this.location = x;\" +\n        \"};\" +\n        \"function x() {\" +\n        \"  (new F()).setLocation('http://www.google.com/');\" +\n        \"} window['x'] = x;\",\n        ImmutableList.<String>of());\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testIssue303()",
+    "resolved_signature": "com.google.javascript.jscomp.PureFunctionIdentifierTest.testIssue303()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PureFunctionIdentifierTest.java",
+    "begin_line": 190,
+    "end_line": 203,
+    "comment": "",
+    "snippet": "  public void testIssue303() throws Exception {\n    checkMarkedCalls(\n        \"/** @constructor */ function F() {\" +\n        \"  var self = this;\" +\n        \"  window.setTimeout(function() {\" +\n        \"    window.location = self.location;\" +\n        \"  }, 0);\" +\n        \"}\" +\n        \"F.prototype.setLocation = function(x) {\" +\n        \"  this.location = x;\" +\n        \"};\" +\n        \"(new F()).setLocation('http://www.google.com/');\",\n        ImmutableList.<String>of());\n  }"
+  }
+]

@@ -1,0 +1,95 @@
+junit.framework.AssertionFailedError: 
+Expected: function f(b){var a;return(a=b.id)&&(a=parseInt(a.substr(1)))&&a>0}
+Result: function f(b){var a;return b.id&&(a=parseInt(a.substr(1)))&&a>0}
+Node tree inequality:
+Tree1:
+BLOCK [synthetic: 1]
+    SCRIPT 1 [sourcename: input0] [synthetic: 1]
+        FUNCTION  1 [sourcename: input0]
+            NAME f 1 [sourcename: input0]
+            LP 1 [sourcename: input0]
+                NAME b 1 [sourcename: input0]
+            BLOCK 1 [sourcename: input0]
+                VAR 1 [sourcename: input0]
+                    NAME a 1 [sourcename: input0]
+                RETURN 1 [sourcename: input0]
+                    AND 1 [sourcename: input0] [parenthesized: true]
+                        ASSIGN 1 [sourcename: input0] [parenthesized: true]
+                            NAME a 1 [sourcename: input0]
+                            GETPROP 1 [sourcename: input0]
+                                NAME b 1 [sourcename: input0]
+                                STRING id 1 [sourcename: input0]
+                        AND 1 [sourcename: input0]
+                            ASSIGN 1 [sourcename: input0] [parenthesized: true]
+                                NAME a 1 [sourcename: input0]
+                                CALL 1 [sourcename: input0] [free_call: 1]
+                                    NAME parseInt 1 [sourcename: input0]
+                                    CALL 1 [sourcename: input0]
+                                        GETPROP 1 [sourcename: input0]
+                                            NAME a 1 [sourcename: input0]
+                                            STRING substr 1 [sourcename: input0]
+                                        NUMBER 1.0 1 [sourcename: input0]
+                            GT 1 [sourcename: input0]
+                                NAME a 1 [sourcename: input0]
+                                NUMBER 0.0 1 [sourcename: input0]
+
+
+Tree2:
+BLOCK [synthetic: 1]
+    SCRIPT 1 [sourcename: input0] [synthetic: 1]
+        FUNCTION  1 [sourcename: input0]
+            NAME f 1 [sourcename: input0]
+            LP 1 [sourcename: input0]
+                NAME b 1 [sourcename: input0]
+            BLOCK 1 [sourcename: input0]
+                VAR 1 [sourcename: input0]
+                    NAME a 1 [sourcename: input0]
+                RETURN 1 [sourcename: input0]
+                    AND 1 [sourcename: input0] [parenthesized: true]
+                        GETPROP 1 [sourcename: input0]
+                            NAME b 1 [sourcename: input0]
+                            STRING id 1 [sourcename: input0]
+                        AND 1 [sourcename: input0]
+                            ASSIGN 1 [sourcename: input0] [parenthesized: true]
+                                NAME a 1 [sourcename: input0]
+                                CALL 1 [sourcename: input0] [free_call: 1]
+                                    NAME parseInt 1 [sourcename: input0]
+                                    CALL 1 [sourcename: input0]
+                                        GETPROP 1 [sourcename: input0]
+                                            NAME a 1 [sourcename: input0]
+                                            STRING substr 1 [sourcename: input0]
+                                        NUMBER 1.0 1 [sourcename: input0]
+                            GT 1 [sourcename: input0]
+                                NAME a 1 [sourcename: input0]
+                                NUMBER 0.0 1 [sourcename: input0]
+
+
+Subtree1: ASSIGN 1 [sourcename: input0] [parenthesized: true]
+    NAME a 1 [sourcename: input0]
+    GETPROP 1 [sourcename: input0]
+        NAME b 1 [sourcename: input0]
+        STRING id 1 [sourcename: input0]
+
+
+Subtree2: GETPROP 1 [sourcename: input0]
+    NAME b 1 [sourcename: input0]
+    STRING id 1 [sourcename: input0]
+
+	at junit.framework.Assert.fail(Assert.java:47)
+	at junit.framework.Assert.assertTrue(Assert.java:20)
+	at junit.framework.Assert.assertNull(Assert.java:233)
+	at com.google.javascript.jscomp.CommandLineRunnerTest.test(CommandLineRunnerTest.java:655)
+	at com.google.javascript.jscomp.CommandLineRunnerTest.test(CommandLineRunnerTest.java:626)
+	at com.google.javascript.jscomp.CommandLineRunnerTest.test(CommandLineRunnerTest.java:618)
+	at com.google.javascript.jscomp.CommandLineRunnerTest.testIssue297(CommandLineRunnerTest.java:252)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at junit.framework.TestCase.runTest(TestCase.java:168)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:110)
+	at junit.framework.TestResult.runProtected(TestResult.java:128)
+	at junit.framework.TestResult.run(TestResult.java:113)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at TriggerRunner.main(TriggerRunner.java:18)

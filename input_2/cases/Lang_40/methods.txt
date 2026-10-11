@@ -1,0 +1,70 @@
+===== M0001 =====
+Signature: org.apache.commons.lang.StringUtils.containsIgnoreCase(String,String)
+Source: src/java/org/apache/commons/lang/StringUtils.java
+Original range: 1044-1049
+Documentation:
+/**
+     * <p>Checks if String contains a search String irrespective of case,
+     * handling <code>null</code>. Case-insensitivity is defined as by
+     * {@link String#equalsIgnoreCase(String)}.
+     *
+     * <p>A <code>null</code> String will return <code>false</code>.</p>
+     *
+     * <pre>
+     * StringUtils.contains(null, *) = false
+     * StringUtils.contains(*, null) = false
+     * StringUtils.contains("", "") = true
+     * StringUtils.contains("abc", "") = true
+     * StringUtils.contains("abc", "a") = true
+     * StringUtils.contains("abc", "z") = false
+     * StringUtils.contains("abc", "A") = true
+     * StringUtils.contains("abc", "Z") = false
+     * </pre>
+     *
+     * @param str  the String to check, may be null
+     * @param searchStr  the String to find, may be null
+     * @return true if the String contains the search String irrespective of
+     * case or false if not or <code>null</code> string input
+     */
+Method code:
+1044 |     public static boolean containsIgnoreCase(String str, String searchStr) {
+1045 |         if (str == null || searchStr == null) {
+1046 |             return false;
+1047 |         }
+1048 |         return contains(str.toUpperCase(), searchStr.toUpperCase());
+1049 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang.StringUtils.contains(String,String)
+Source: src/java/org/apache/commons/lang/StringUtils.java
+Original range: 1014-1019
+Documentation:
+/**
+     * <p>Checks if String contains a search String, handling <code>null</code>.
+     * This method uses {@link String#indexOf(String)}.</p>
+     *
+     * <p>A <code>null</code> String will return <code>false</code>.</p>
+     *
+     * <pre>
+     * StringUtils.contains(null, *)     = false
+     * StringUtils.contains(*, null)     = false
+     * StringUtils.contains("", "")      = true
+     * StringUtils.contains("abc", "")   = true
+     * StringUtils.contains("abc", "a")  = true
+     * StringUtils.contains("abc", "z")  = false
+     * </pre>
+     *
+     * @param str  the String to check, may be null
+     * @param searchStr  the String to find, may be null
+     * @return true if the String contains the search String,
+     *  false if not or <code>null</code> string input
+     * @since 2.0
+     */
+Method code:
+1014 |     public static boolean contains(String str, String searchStr) {
+1015 |         if (str == null || searchStr == null) {
+1016 |             return false;
+1017 |         }
+1018 |         return str.indexOf(searchStr) >= 0;
+1019 |     }
+

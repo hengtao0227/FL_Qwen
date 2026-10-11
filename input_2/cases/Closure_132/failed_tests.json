@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.PeepholeSubstituteAlternateSyntaxTest.testIssue925()",
+    "resolved_signature": "com.google.javascript.jscomp.PeepholeSubstituteAlternateSyntaxTest.testIssue925()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PeepholeSubstituteAlternateSyntaxTest.java",
+    "begin_line": 966,
+    "end_line": 988,
+    "comment": "",
+    "snippet": "  public void testIssue925() {\n    test(\n        \"if (x[--y] === 1) {\\n\" +\n        \"    x[y] = 0;\\n\" +\n        \"} else {\\n\" +\n        \"    x[y] = 1;\\n\" +\n        \"}\",\n        \"(x[--y] === 1) ? x[y] = 0 : x[y] = 1;\");\n\n    test(\n        \"if (x[--y]) {\\n\" +\n        \"    a = 0;\\n\" +\n        \"} else {\\n\" +\n        \"    a = 1;\\n\" +\n        \"}\",\n        \"a = (x[--y]) ? 0 : 1;\");\n\n    test(\"if (x++) { x += 2 } else { x += 3 }\",\n         \"x++ ? x += 2 : x += 3\");\n\n    test(\"if (x++) { x = x + 2 } else { x = x + 3 }\",\n        \"x = x++ ? x + 2 : x + 3\");\n  }"
+  }
+]

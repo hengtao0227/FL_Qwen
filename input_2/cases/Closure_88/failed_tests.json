@@ -1,0 +1,72 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.CommandLineRunnerTest.testIssue297()",
+    "resolved_signature": "com.google.javascript.jscomp.CommandLineRunnerTest.testIssue297()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CommandLineRunnerTest.java",
+    "begin_line": 250,
+    "end_line": 260,
+    "comment": "",
+    "snippet": "  public void testIssue297() {\n    args.add(\"--compilation_level=SIMPLE_OPTIMIZATIONS\");\n    test(\"function f(p) {\" +\n         \" var x;\" +\n         \" return ((x=p.id) && (x=parseInt(x.substr(1))) && x>0);\" +\n         \"}\",\n         \"function f(b) {\" +\n         \" var a;\" +\n         \" return ((a=b.id) && (a=parseInt(a.substr(1))) && a>0);\" +\n         \"}\");\n  }  "
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297a()",
+    "resolved_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297a()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/DeadAssignmentsEliminationTest.java",
+    "begin_line": 367,
+    "end_line": 372,
+    "comment": "",
+    "snippet": "  public void testIssue297a() {\n    testSame(\"function f(p) {\" +\n         \" var x;\" +\n         \" return ((x=p.id) && (x=parseInt(x.substr(1))) && x>0);\" +\n         \"}; f('');\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297b()",
+    "resolved_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297b()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/DeadAssignmentsEliminationTest.java",
+    "begin_line": 374,
+    "end_line": 383,
+    "comment": "",
+    "snippet": "  public void testIssue297b() {\n    test(\"function f() {\" +\n         \" var x;\" +\n         \" return (x='') && (x = x.substr(1));\" +\n         \"};\",\n         \"function f() {\" +\n         \" var x;\" +\n         \" return (x='') && (x.substr(1));\" +\n         \"};\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297c()",
+    "resolved_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297c()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/DeadAssignmentsEliminationTest.java",
+    "begin_line": 385,
+    "end_line": 394,
+    "comment": "",
+    "snippet": "  public void testIssue297c() {\n    test(\"function f() {\" +\n         \" var x;\" +\n         \" return (x=1) && (x = f(x));\" +\n         \"};\",\n         \"function f() {\" +\n         \" var x;\" +\n         \" return (x=1) && f(x);\" +\n         \"};\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297d()",
+    "resolved_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297d()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/DeadAssignmentsEliminationTest.java",
+    "begin_line": 396,
+    "end_line": 403,
+    "comment": "",
+    "snippet": "  public void testIssue297d() {\n    test(\"function f(a) {\" +\n         \" return (a=1) && (a = f(a));\" +\n         \"};\",\n         \"function f(a) {\" +\n         \" return (a=1) && (f(a));\" +\n         \"};\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297e()",
+    "resolved_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297e()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/DeadAssignmentsEliminationTest.java",
+    "begin_line": 405,
+    "end_line": 412,
+    "comment": "",
+    "snippet": "  public void testIssue297e() {\n    test(\"function f(a) {\" +\n         \" return (a=1) - (a = g(a));\" +\n         \"};\",\n         \"function f(a) {\" +\n         \" return (a=1) - (g(a));\" +\n         \"};\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297f()",
+    "resolved_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue297f()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/DeadAssignmentsEliminationTest.java",
+    "begin_line": 414,
+    "end_line": 421,
+    "comment": "",
+    "snippet": "  public void testIssue297f() {\n    test(\"function f(a) {\" +\n         \" h((a=1) - (a = g(a)));\" +\n         \"};\",\n         \"function f(a) {\" +\n         \" h((a=1) - (g(a)));\" +\n         \"};\");\n  }"
+  }
+]

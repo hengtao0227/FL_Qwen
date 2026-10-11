@@ -1,0 +1,282 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testTrivial()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testTrivial()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/gradient/NonLinearConjugateGradientOptimizerTest.java",
+    "begin_line": 124,
+    "end_line": 142,
+    "comment": "",
+    "snippet": "    @Test\n    public void testTrivial() {\n        LinearProblem problem\n            = new LinearProblem(new double[][] { { 2 } }, new double[] { 3 });\n        NonLinearConjugateGradientOptimizer optimizer\n            = new NonLinearConjugateGradientOptimizer(NonLinearConjugateGradientOptimizer.Formula.POLAK_RIBIERE,\n                                                      new SimpleValueChecker(1e-6, 1e-6));\n        PointValuePair optimum\n            = optimizer.optimize(new MaxEval(100),\n                                 problem.getObjectiveFunction(),\n                                 problem.getObjectiveFunctionGradient(),\n                                 GoalType.MINIMIZE,\n                                 new InitialGuess(new double[] { 0 }));\n        Assert.assertEquals(1.5, optimum.getPoint()[0], 1.0e-10);\n        Assert.assertEquals(0.0, optimum.getValue(), 1.0e-10);\n\n        // Check that the number of iterations is updated (MATH-949).\n        Assert.assertTrue(optimizer.getIterations() > 0);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testConstrainedRosen()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testConstrainedRosen()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 341,
+    "end_line": 354,
+    "comment": "",
+    "snippet": "    @Test\n    public void testConstrainedRosen() {\n        double[] startPoint = point(DIM, 0.1);\n        double[] insigma = point(DIM, 0.1);\n        double[][] boundaries = boundaries(DIM, -1, 2);\n        PointValuePair expected =\n            new PointValuePair(point(DIM,1.0),0.0);\n        doTest(new Rosen(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, 2*LAMBDA, true, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n        doTest(new Rosen(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, 2*LAMBDA, false, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testElliRotated()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testElliRotated()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 176,
+    "end_line": 189,
+    "comment": "",
+    "snippet": "    @Test\n    public void testElliRotated() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new ElliRotated(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n        doTest(new ElliRotated(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, false, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testEllipse()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testEllipse()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 161,
+    "end_line": 174,
+    "comment": "",
+    "snippet": "    @Test\n    public void testEllipse() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new Elli(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n        doTest(new Elli(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, false, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testTwoAxes()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testTwoAxes()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 221,
+    "end_line": 234,
+    "comment": "",
+    "snippet": "    @Test\n    public void testTwoAxes() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new TwoAxes(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, 2*LAMBDA, true, 0, 1e-13,\n                1e-13, 1e-6, 200000, expected);\n        doTest(new TwoAxes(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, 2*LAMBDA, false, 0, 1e-13,\n                1e-8, 1e-3, 200000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testCigar()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testCigar()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 191,
+    "end_line": 204,
+    "comment": "",
+    "snippet": "    @Test\n    public void testCigar() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new Cigar(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,\n                1e-13, 1e-6, 200000, expected);\n        doTest(new Cigar(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, false, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testRosen()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testRosen()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 124,
+    "end_line": 138,
+    "comment": "",
+    "snippet": "    @Test\n    @Retry(3)\n    public void testRosen() {\n        double[] startPoint = point(DIM,0.1);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,1.0),0.0);\n        doTest(new Rosen(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n        doTest(new Rosen(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, false, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testRastrigin()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testRastrigin()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 326,
+    "end_line": 339,
+    "comment": "",
+    "snippet": "    @Test\n    public void testRastrigin() {\n        double[] startPoint = point(DIM,0.1);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new Rastrigin(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, (int)(200*Math.sqrt(DIM)), true, 0, 1e-13,\n                1e-13, 1e-6, 200000, expected);\n        doTest(new Rastrigin(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, (int)(200*Math.sqrt(DIM)), false, 0, 1e-13,\n                1e-13, 1e-6, 200000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testDiagonalRosen()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testDiagonalRosen()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 356,
+    "end_line": 366,
+    "comment": "",
+    "snippet": "    @Test\n    public void testDiagonalRosen() {\n        double[] startPoint = point(DIM,0.1);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,1.0),0.0);\n        doTest(new Rosen(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, false, 1, 1e-13,\n                1e-10, 1e-4, 1000000, expected);\n     }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testSsDiffPow()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testSsDiffPow()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 296,
+    "end_line": 309,
+    "comment": "",
+    "snippet": "    @Test\n    public void testSsDiffPow() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new SsDiffPow(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, 10, true, 0, 1e-13,\n                1e-4, 1e-1, 200000, expected);\n        doTest(new SsDiffPow(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, 10, false, 0, 1e-13,\n                1e-4, 1e-1, 200000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testMaximize()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testMaximize()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 140,
+    "end_line": 159,
+    "comment": "",
+    "snippet": "    @Test\n    @Retry(3)\n    public void testMaximize() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),1.0);\n        doTest(new MinusElli(), startPoint, insigma, boundaries,\n                GoalType.MAXIMIZE, LAMBDA, true, 0, 1.0-1e-13,\n                2e-10, 5e-6, 100000, expected);\n        doTest(new MinusElli(), startPoint, insigma, boundaries,\n                GoalType.MAXIMIZE, LAMBDA, false, 0, 1.0-1e-13,\n                2e-10, 5e-6, 100000, expected);\n        boundaries = boundaries(DIM,-0.3,0.3); \n        startPoint = point(DIM,0.1);\n        doTest(new MinusElli(), startPoint, insigma, boundaries,\n                GoalType.MAXIMIZE, LAMBDA, true, 0, 1.0-1e-13,\n                2e-10, 5e-6, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testAckley()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testAckley()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 311,
+    "end_line": 324,
+    "comment": "",
+    "snippet": "    @Test\n    public void testAckley() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,1.0);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new Ackley(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, 2*LAMBDA, true, 0, 1e-13,\n                1e-9, 1e-5, 100000, expected);\n        doTest(new Ackley(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, 2*LAMBDA, false, 0, 1e-13,\n                1e-9, 1e-5, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testCigTab()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testCigTab()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 236,
+    "end_line": 249,
+    "comment": "",
+    "snippet": "    @Test\n    public void testCigTab() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,0.3);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new CigTab(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,\n                1e-13, 5e-5, 100000, expected);\n        doTest(new CigTab(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, false, 0, 1e-13,\n                1e-13, 5e-5, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testDiffPow()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testDiffPow()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 281,
+    "end_line": 294,
+    "comment": "",
+    "snippet": "    @Test\n    public void testDiffPow() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new DiffPow(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, 10, true, 0, 1e-13,\n                1e-8, 1e-1, 100000, expected);\n        doTest(new DiffPow(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, 10, false, 0, 1e-13,\n                1e-8, 2e-1, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testSphere()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testSphere()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 251,
+    "end_line": 264,
+    "comment": "",
+    "snippet": "    @Test\n    public void testSphere() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new Sphere(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n        doTest(new Sphere(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, false, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testTablet()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testTablet()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 266,
+    "end_line": 279,
+    "comment": "",
+    "snippet": "    @Test\n    public void testTablet() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = null;\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new Tablet(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n        doTest(new Tablet(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, false, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testCigarWithBoundaries()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testCigarWithBoundaries()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/CMAESOptimizerTest.java",
+    "begin_line": 206,
+    "end_line": 219,
+    "comment": "",
+    "snippet": "    @Test\n    public void testCigarWithBoundaries() {\n        double[] startPoint = point(DIM,1.0);\n        double[] insigma = point(DIM,0.1);\n        double[][] boundaries = boundaries(DIM, -1e100, Double.POSITIVE_INFINITY);\n        PointValuePair expected =\n            new PointValuePair(point(DIM,0.0),0.0);\n        doTest(new Cigar(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,\n                1e-13, 1e-6, 200000, expected);\n        doTest(new Cigar(), startPoint, insigma, boundaries,\n                GoalType.MINIMIZE, LAMBDA, false, 0, 1e-13,\n                1e-13, 1e-6, 100000, expected);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest.testSumSinc()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest.testSumSinc()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/PowellOptimizerTest.java",
+    "begin_line": 50,
+    "end_line": 76,
+    "comment": "",
+    "snippet": "    @Test\n    public void testSumSinc() {\n        final MultivariateFunction func = new SumSincFunction(-1);\n\n        int dim = 2;\n        final double[] minPoint = new double[dim];\n        for (int i = 0; i < dim; i++) {\n            minPoint[i] = 0;\n        }\n\n        double[] init = new double[dim];\n\n        // Initial is minimum.\n        for (int i = 0; i < dim; i++) {\n            init[i] = minPoint[i];\n        }\n        doTest(func, minPoint, init, GoalType.MINIMIZE, 1e-9, 1e-9);\n\n        // Initial is far from minimum.\n        for (int i = 0; i < dim; i++) {\n            init[i] = minPoint[i] + 3;\n        }\n        doTest(func, minPoint, init, GoalType.MINIMIZE, 1e-9, 1e-5);\n        // More stringent line search tolerance enhances the precision\n        // of the result.\n        doTest(func, minPoint, init, GoalType.MINIMIZE, 1e-9, 1e-9, 1e-7);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMaximize1()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMaximize1()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/SimplexOptimizerMultiDirectionalTest.java",
+    "begin_line": 90,
+    "end_line": 109,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMaximize1() {\n        SimplexOptimizer optimizer = new SimplexOptimizer(1e-11, 1e-30);\n        final FourExtrema fourExtrema = new FourExtrema();\n\n        final PointValuePair optimum\n            = optimizer.optimize(new MaxEval(200),\n                                 new ObjectiveFunction(fourExtrema),\n                                 GoalType.MAXIMIZE,\n                                 new InitialGuess(new double[] { -3.0, 0.0 }),\n                                 new MultiDirectionalSimplex(new double[] { 0.2, 0.2 }));\n        Assert.assertEquals(fourExtrema.xM, optimum.getPoint()[0], 7e-7);\n        Assert.assertEquals(fourExtrema.yM, optimum.getPoint()[1], 3e-7);\n        Assert.assertEquals(fourExtrema.valueXmYm, optimum.getValue(), 2e-14);\n        Assert.assertTrue(optimizer.getEvaluations() > 120);\n        Assert.assertTrue(optimizer.getEvaluations() < 150);\n\n        // Check that the number of iterations is updated (MATH-949).\n        Assert.assertTrue(optimizer.getIterations() > 0);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMaximize2()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMaximize2()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/SimplexOptimizerMultiDirectionalTest.java",
+    "begin_line": 111,
+    "end_line": 130,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMaximize2() {\n        SimplexOptimizer optimizer = new SimplexOptimizer(new SimpleValueChecker(1e-15, 1e-30));\n        final FourExtrema fourExtrema = new FourExtrema();\n\n        final PointValuePair optimum\n            = optimizer.optimize(new MaxEval(200),\n                                 new ObjectiveFunction(fourExtrema),\n                                 GoalType.MAXIMIZE,\n                                 new InitialGuess(new double[] { 1, 0 }),\n                                 new MultiDirectionalSimplex(new double[] { 0.2, 0.2 }));\n        Assert.assertEquals(fourExtrema.xP, optimum.getPoint()[0], 2e-8);\n        Assert.assertEquals(fourExtrema.yP, optimum.getPoint()[1], 3e-6);\n        Assert.assertEquals(fourExtrema.valueXpYp, optimum.getValue(), 2e-12);\n        Assert.assertTrue(optimizer.getEvaluations() > 180);\n        Assert.assertTrue(optimizer.getEvaluations() < 220);\n\n        // Check that the number of iterations is updated (MATH-949).\n        Assert.assertTrue(optimizer.getIterations() > 0);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMinimize1()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMinimize1()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/SimplexOptimizerMultiDirectionalTest.java",
+    "begin_line": 48,
+    "end_line": 67,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMinimize1() {\n        SimplexOptimizer optimizer = new SimplexOptimizer(1e-11, 1e-30);\n        final FourExtrema fourExtrema = new FourExtrema();\n\n        final PointValuePair optimum\n            = optimizer.optimize(new MaxEval(200),\n                                 new ObjectiveFunction(fourExtrema),\n                                 GoalType.MINIMIZE,\n                                 new InitialGuess(new double[] { -3, 0 }),\n                                 new MultiDirectionalSimplex(new double[] { 0.2, 0.2 }));\n        Assert.assertEquals(fourExtrema.xM, optimum.getPoint()[0], 4e-6);\n        Assert.assertEquals(fourExtrema.yP, optimum.getPoint()[1], 3e-6);\n        Assert.assertEquals(fourExtrema.valueXmYp, optimum.getValue(), 8e-13);\n        Assert.assertTrue(optimizer.getEvaluations() > 120);\n        Assert.assertTrue(optimizer.getEvaluations() < 150);\n\n        // Check that the number of iterations is updated (MATH-949).\n        Assert.assertTrue(optimizer.getIterations() > 0);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMinimize2()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMinimize2()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/SimplexOptimizerMultiDirectionalTest.java",
+    "begin_line": 69,
+    "end_line": 88,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMinimize2() {\n        SimplexOptimizer optimizer = new SimplexOptimizer(1e-11, 1e-30);\n        final FourExtrema fourExtrema = new FourExtrema();\n\n        final PointValuePair optimum\n            = optimizer.optimize(new MaxEval(200),\n                                 new ObjectiveFunction(fourExtrema),\n                                 GoalType.MINIMIZE,\n                                 new InitialGuess(new double[] { 1, 0 }),\n                                 new MultiDirectionalSimplex(new double[] { 0.2, 0.2 }));\n        Assert.assertEquals(fourExtrema.xP, optimum.getPoint()[0], 2e-8);\n        Assert.assertEquals(fourExtrema.yM, optimum.getPoint()[1], 3e-6);\n        Assert.assertEquals(fourExtrema.valueXpYm, optimum.getValue(), 2e-12);\n        Assert.assertTrue(optimizer.getEvaluations() > 120);\n        Assert.assertTrue(optimizer.getEvaluations() < 150);\n\n        // Check that the number of iterations is updated (MATH-949).\n        Assert.assertTrue(optimizer.getIterations() > 0);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMaximize1()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMaximize1()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/SimplexOptimizerNelderMeadTest.java",
+    "begin_line": 95,
+    "end_line": 114,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMaximize1() {\n        SimplexOptimizer optimizer = new SimplexOptimizer(1e-10, 1e-30);\n        final FourExtrema fourExtrema = new FourExtrema();\n\n        final PointValuePair optimum\n            = optimizer.optimize(new MaxEval(100),\n                                 new ObjectiveFunction(fourExtrema),\n                                 GoalType.MAXIMIZE,\n                                 new InitialGuess(new double[] { -3, 0 }),\n                                 new NelderMeadSimplex(new double[] { 0.2, 0.2 }));\n        Assert.assertEquals(fourExtrema.xM, optimum.getPoint()[0], 1e-5);\n        Assert.assertEquals(fourExtrema.yM, optimum.getPoint()[1], 3e-6);\n        Assert.assertEquals(fourExtrema.valueXmYm, optimum.getValue(), 3e-12);\n        Assert.assertTrue(optimizer.getEvaluations() > 60);\n        Assert.assertTrue(optimizer.getEvaluations() < 90);\n\n        // Check that the number of iterations is updated (MATH-949).\n        Assert.assertTrue(optimizer.getIterations() > 0);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMaximize2()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMaximize2()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/SimplexOptimizerNelderMeadTest.java",
+    "begin_line": 116,
+    "end_line": 135,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMaximize2() {\n        SimplexOptimizer optimizer = new SimplexOptimizer(1e-10, 1e-30);\n        final FourExtrema fourExtrema = new FourExtrema();\n\n        final PointValuePair optimum\n            = optimizer.optimize(new MaxEval(100),\n                                 new ObjectiveFunction(fourExtrema),\n                                 GoalType.MAXIMIZE,\n                                 new InitialGuess(new double[] { 1, 0 }),\n                                 new NelderMeadSimplex(new double[] { 0.2, 0.2 }));\n        Assert.assertEquals(fourExtrema.xP, optimum.getPoint()[0], 4e-6);\n        Assert.assertEquals(fourExtrema.yP, optimum.getPoint()[1], 5e-6);\n        Assert.assertEquals(fourExtrema.valueXpYp, optimum.getValue(), 7e-12);\n        Assert.assertTrue(optimizer.getEvaluations() > 60);\n        Assert.assertTrue(optimizer.getEvaluations() < 90);\n\n        // Check that the number of iterations is updated (MATH-949).\n        Assert.assertTrue(optimizer.getIterations() > 0);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMinimize1()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMinimize1()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/SimplexOptimizerNelderMeadTest.java",
+    "begin_line": 53,
+    "end_line": 72,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMinimize1() {\n        SimplexOptimizer optimizer = new SimplexOptimizer(1e-10, 1e-30);\n        final FourExtrema fourExtrema = new FourExtrema();\n\n        final PointValuePair optimum\n            = optimizer.optimize(new MaxEval(100),\n                                 new ObjectiveFunction(fourExtrema),\n                                 GoalType.MINIMIZE,\n                                 new InitialGuess(new double[] { -3, 0 }),\n                                 new NelderMeadSimplex(new double[] { 0.2, 0.2 }));\n        Assert.assertEquals(fourExtrema.xM, optimum.getPoint()[0], 2e-7);\n        Assert.assertEquals(fourExtrema.yP, optimum.getPoint()[1], 2e-5);\n        Assert.assertEquals(fourExtrema.valueXmYp, optimum.getValue(), 6e-12);\n        Assert.assertTrue(optimizer.getEvaluations() > 60);\n        Assert.assertTrue(optimizer.getEvaluations() < 90);\n\n        // Check that the number of iterations is updated (MATH-949).\n        Assert.assertTrue(optimizer.getIterations() > 0);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMinimize2()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMinimize2()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/SimplexOptimizerNelderMeadTest.java",
+    "begin_line": 74,
+    "end_line": 93,
+    "comment": "",
+    "snippet": "    @Test\n    public void testMinimize2() {\n        SimplexOptimizer optimizer = new SimplexOptimizer(1e-10, 1e-30);\n        final FourExtrema fourExtrema = new FourExtrema();\n\n        final PointValuePair optimum\n            = optimizer.optimize(new MaxEval(100),\n                                 new ObjectiveFunction(fourExtrema),\n                                 GoalType.MINIMIZE,\n                                 new InitialGuess(new double[] { 1, 0 }),\n                                 new NelderMeadSimplex(new double[] { 0.2, 0.2 }));\n        Assert.assertEquals(fourExtrema.xP, optimum.getPoint()[0], 5e-6);\n        Assert.assertEquals(fourExtrema.yM, optimum.getPoint()[1], 6e-6);\n        Assert.assertEquals(fourExtrema.valueXpYm, optimum.getValue(), 1e-11);\n        Assert.assertTrue(optimizer.getEvaluations() > 60);\n        Assert.assertTrue(optimizer.getEvaluations() < 90);\n\n        // Check that the number of iterations is updated (MATH-949).\n        Assert.assertTrue(optimizer.getIterations() > 0);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testGetIterations()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.vector.jacobian.AbstractLeastSquaresOptimizerAbstractTest.testGetIterations()",
+    "resolution": "inherited",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/vector/jacobian/AbstractLeastSquaresOptimizerAbstractTest.java",
+    "begin_line": 108,
+    "end_line": 132,
+    "comment": "",
+    "snippet": "    @Test\n    public void testGetIterations() {\n        AbstractLeastSquaresOptimizer optim = createOptimizer();\n        optim.optimize(new MaxEval(100), new Target(new double[] { 1 }),\n                       new Weight(new double[] { 1 }),\n                       new InitialGuess(new double[] { 3 }),\n                       new ModelFunction(new MultivariateVectorFunction() {\n                               @Override\n                               public double[] value(double[] point) {\n                                   return new double[] {\n                                       FastMath.pow(point[0], 4)\n                                   };\n                               }\n                           }),\n                       new ModelFunctionJacobian(new MultivariateMatrixFunction() {\n                               @Override\n                               public double[][] value(double[] point) {\n                                   return new double[][] {\n                                       { 0.25 * FastMath.pow(point[0], 3) }\n                                   };\n                               }\n                           }));\n\n        Assert.assertTrue(optim.getIterations() > 0);\n    }"
+  },
+  {
+    "requested_signature": "org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testGetIterations()",
+    "resolved_signature": "org.apache.commons.math3.optim.nonlinear.vector.jacobian.AbstractLeastSquaresOptimizerAbstractTest.testGetIterations()",
+    "resolution": "inherited",
+    "src_path": "src/test/java/org/apache/commons/math3/optim/nonlinear/vector/jacobian/AbstractLeastSquaresOptimizerAbstractTest.java",
+    "begin_line": 108,
+    "end_line": 132,
+    "comment": "",
+    "snippet": "    @Test\n    public void testGetIterations() {\n        AbstractLeastSquaresOptimizer optim = createOptimizer();\n        optim.optimize(new MaxEval(100), new Target(new double[] { 1 }),\n                       new Weight(new double[] { 1 }),\n                       new InitialGuess(new double[] { 3 }),\n                       new ModelFunction(new MultivariateVectorFunction() {\n                               @Override\n                               public double[] value(double[] point) {\n                                   return new double[] {\n                                       FastMath.pow(point[0], 4)\n                                   };\n                               }\n                           }),\n                       new ModelFunctionJacobian(new MultivariateMatrixFunction() {\n                               @Override\n                               public double[][] value(double[] point) {\n                                   return new double[][] {\n                                       { 0.25 * FastMath.pow(point[0], 3) }\n                                   };\n                               }\n                           }));\n\n        Assert.assertTrue(optim.getIterations() > 0);\n    }"
+  }
+]

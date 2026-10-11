@@ -1,0 +1,2275 @@
+===== M0001 =====
+Signature: org.jfree.chart.plot.DefaultDrawingSupplier.intArray(double,double,double,double)
+Source: source/org/jfree/chart/plot/DefaultDrawingSupplier.java
+Original range: 531-533
+Documentation:
+/**
+     * Helper method to avoid lots of explicit casts in getShape().  Returns
+     * an array containing the provided doubles cast to ints.
+     *
+     * @param a  x
+     * @param b  y
+     * @param c  z
+     * @param d  t
+     *
+     * @return int[4] with converted params.
+     */
+Method code:
+531 |     private static int[] intArray(double a, double b, double c, double d) {
+532 |         return new int[] {(int) a, (int) b, (int) c, (int) d};
+533 |     }
+
+===== M0002 =====
+Signature: org.jfree.chart.util.DefaultShadowGenerator.DefaultShadowGenerator(int,Color,float,int,double)
+Source: source/org/jfree/chart/util/DefaultShadowGenerator.java
+Original range: 90-100
+Documentation:
+/**
+     * Creates a new instance with the specified attributes.
+     *
+     * @param size  the shadow size.
+     * @param color  the shadow color.
+     * @param opacity  the shadow opacity.
+     * @param distance  the shadow offset distance.
+     * @param angle  the shadow offset angle (in radians).
+     */
+Method code:
+90 |     public DefaultShadowGenerator(int size, Color color, float opacity,
+91 |             int distance, double angle) {
+92 |         if (color == null) {
+93 |             throw new IllegalArgumentException("Null 'color' argument.");
+94 |         }
+95 |         this.shadowSize = size;
+96 |         this.shadowColor = color;
+97 |         this.shadowOpacity = opacity;
+98 |         this.distance = distance;
+99 |         this.angle = angle;
+100 |     }
+
+===== M0003 =====
+Signature: org.jfree.data.general.DatasetGroup.DatasetGroup()
+Source: source/org/jfree/data/general/DatasetGroup.java
+Original range: 62-65
+Documentation:
+/**
+     * Constructs a new group.
+     */
+Method code:
+62 |     public DatasetGroup() {
+63 |         super();
+64 |         this.id = "NOID";
+65 |     }
+
+===== M0004 =====
+Signature: org.jfree.chart.plot.CategoryPlot.mapDatasetToRangeAxes(int,List)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1522-1534
+Documentation:
+/**
+     * Maps the specified dataset to the axes in the list.  Note that the
+     * conversion of data values into Java2D space is always performed using
+     * the first axis in the list.
+     *
+     * @param index  the dataset index (zero-based).
+     * @param axisIndices  the axis indices (<code>null</code> permitted).
+     *
+     * @since 1.0.12
+     */
+Method code:
+1522 |     public void mapDatasetToRangeAxes(int index, List axisIndices) {
+1523 |         if (index < 0) {
+1524 |             throw new IllegalArgumentException("Requires 'index' >= 0.");
+1525 |         }
+1526 |         checkAxisIndices(axisIndices);
+1527 |         Integer key = new Integer(index);
+1528 |         this.datasetToRangeAxesMap.put(key, new ArrayList(axisIndices));
+1529 |         // fake a dataset change event to update axes...
+1530 |         datasetChanged(new DatasetChangeEvent(this, getDataset(index),
+1531 |                 new DatasetChangeInfo()));
+1532 | 
+1533 |         // TODO: fill in real dataset change info
+1534 |     }
+
+===== M0005 =====
+Signature: org.jfree.chart.LegendItemCollection.getItemCount()
+Source: source/org/jfree/chart/LegendItemCollection.java
+Original range: 106-108
+Documentation:
+/**
+     * Returns the number of legend items in the collection.
+     *
+     * @return The item count.
+     */
+Method code:
+106 |     public int getItemCount() {
+107 |         return this.items.size();
+108 |     }
+
+===== M0006 =====
+Signature: org.jfree.chart.plot.CategoryPlot.mapDatasetToRangeAxis(int,int)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1506-1510
+Documentation:
+/**
+     * Maps a dataset to a particular range axis.
+     *
+     * @param index  the dataset index (zero-based).
+     * @param axisIndex  the axis index (zero-based).
+     *
+     * @see #getRangeAxisForDataset(int)
+     */
+Method code:
+1506 |     public void mapDatasetToRangeAxis(int index, int axisIndex) {
+1507 |         List axisIndices = new java.util.ArrayList(1);
+1508 |         axisIndices.add(new Integer(axisIndex));
+1509 |         mapDatasetToRangeAxes(index, axisIndices);
+1510 |     }
+
+===== M0007 =====
+Signature: org.jfree.chart.plot.DefaultDrawingSupplier.DefaultDrawingSupplier()
+Source: source/org/jfree/chart/plot/DefaultDrawingSupplier.java
+Original range: 148-156
+Documentation:
+/**
+     * Creates a new supplier, with default sequences for fill paint, outline
+     * paint, stroke and shapes.
+     */
+Method code:
+148 |     public DefaultDrawingSupplier() {
+149 | 
+150 |         this(DEFAULT_PAINT_SEQUENCE, DEFAULT_FILL_PAINT_SEQUENCE,
+151 |              DEFAULT_OUTLINE_PAINT_SEQUENCE,
+152 |              DEFAULT_STROKE_SEQUENCE,
+153 |              DEFAULT_OUTLINE_STROKE_SEQUENCE,
+154 |              DEFAULT_SHAPE_SEQUENCE);
+155 | 
+156 |     }
+
+===== M0008 =====
+Signature: org.jfree.data.KeyedObjects2D.setObject(Object,Comparable,Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 267-292
+Documentation:
+/**
+     * Adds or updates an object.
+     *
+     * @param object  the object.
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     */
+Method code:
+267 |     public void setObject(Object object, Comparable rowKey,
+268 |             Comparable columnKey) {
+269 | 
+270 |         if (rowKey == null) {
+271 |             throw new IllegalArgumentException("Null 'rowKey' argument.");
+272 |         }
+273 |         if (columnKey == null) {
+274 |             throw new IllegalArgumentException("Null 'columnKey' argument.");
+275 |         }
+276 |         KeyedObjects row;
+277 |         int rowIndex = this.rowKeys.indexOf(rowKey);
+278 |         if (rowIndex >= 0) {
+279 |             row = (KeyedObjects) this.rows.get(rowIndex);
+280 |         }
+281 |         else {
+282 |             this.rowKeys.add(rowKey);
+283 |             row = new KeyedObjects();
+284 |             this.rows.add(row);
+285 |         }
+286 |         row.setObject(columnKey, object);
+287 |         int columnIndex = this.columnKeys.indexOf(columnKey);
+288 |         if (columnIndex < 0) {
+289 |             this.columnKeys.add(columnKey);
+290 |         }
+291 | 
+292 |     }
+
+===== M0009 =====
+Signature: org.jfree.data.category.AbstractCategoryDataset.setSelectionState(CategoryDatasetSelectionState)
+Source: source/org/jfree/data/category/AbstractCategoryDataset.java
+Original range: 86-90
+Documentation:
+/**
+     * Sets the selection state for this dataset.
+     *
+     * @param state  the selection state (<code>null</code> permitted).
+     *
+     * @since 1.2.0
+     */
+Method code:
+86 |     public void setSelectionState(CategoryDatasetSelectionState state) {
+87 |         this.selectionState = state;
+88 |         fireDatasetChanged(new DatasetChangeInfo());
+89 |         // TODO:  fill in real change details
+90 |     }
+
+===== M0010 =====
+Signature: org.jfree.chart.plot.CategoryPlot.mapDatasetToDomainAxis(int,int)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1409-1413
+Documentation:
+/**
+     * Maps a dataset to a particular domain axis.
+     *
+     * @param index  the dataset index (zero-based).
+     * @param axisIndex  the axis index (zero-based).
+     *
+     * @see #getDomainAxisForDataset(int)
+     */
+Method code:
+1409 |     public void mapDatasetToDomainAxis(int index, int axisIndex) {
+1410 |         List axisIndices = new java.util.ArrayList(1);
+1411 |         axisIndices.add(new Integer(axisIndex));
+1412 |         mapDatasetToDomainAxes(index, axisIndices);
+1413 |     }
+
+===== M0011 =====
+Signature: org.jfree.chart.plot.DefaultDrawingSupplier.createStandardSeriesShapes()
+Source: source/org/jfree/chart/plot/DefaultDrawingSupplier.java
+Original range: 287-337
+Documentation:
+/**
+     * Creates an array of standard shapes to display for the items in series
+     * on charts.
+     *
+     * @return The array of shapes.
+     */
+Method code:
+287 |     public static Shape[] createStandardSeriesShapes() {
+288 | 
+289 |         Shape[] result = new Shape[10];
+290 | 
+291 |         double size = 6.0;
+292 |         double delta = size / 2.0;
+293 |         int[] xpoints = null;
+294 |         int[] ypoints = null;
+295 | 
+296 |         // square
+297 |         result[0] = new Rectangle2D.Double(-delta, -delta, size, size);
+298 |         // circle
+299 |         result[1] = new Ellipse2D.Double(-delta, -delta, size, size);
+300 | 
+301 |         // up-pointing triangle
+302 |         xpoints = intArray(0.0, delta, -delta);
+303 |         ypoints = intArray(-delta, delta, delta);
+304 |         result[2] = new Polygon(xpoints, ypoints, 3);
+305 | 
+306 |         // diamond
+307 |         xpoints = intArray(0.0, delta, 0.0, -delta);
+308 |         ypoints = intArray(-delta, 0.0, delta, 0.0);
+309 |         result[3] = new Polygon(xpoints, ypoints, 4);
+310 | 
+311 |         // horizontal rectangle
+312 |         result[4] = new Rectangle2D.Double(-delta, -delta / 2, size, size / 2);
+313 | 
+314 |         // down-pointing triangle
+315 |         xpoints = intArray(-delta, +delta, 0.0);
+316 |         ypoints = intArray(-delta, -delta, delta);
+317 |         result[5] = new Polygon(xpoints, ypoints, 3);
+318 | 
+319 |         // horizontal ellipse
+320 |         result[6] = new Ellipse2D.Double(-delta, -delta / 2, size, size / 2);
+321 | 
+322 |         // right-pointing triangle
+323 |         xpoints = intArray(-delta, delta, -delta);
+324 |         ypoints = intArray(-delta, 0.0, delta);
+325 |         result[7] = new Polygon(xpoints, ypoints, 3);
+326 | 
+327 |         // vertical rectangle
+328 |         result[8] = new Rectangle2D.Double(-delta / 2, -delta, size / 2, size);
+329 | 
+330 |         // left-pointing triangle
+331 |         xpoints = intArray(-delta, delta, delta);
+332 |         ypoints = intArray(0.0, -delta, +delta);
+333 |         result[9] = new Polygon(xpoints, ypoints, 3);
+334 | 
+335 |         return result;
+336 | 
+337 |     }
+
+===== M0012 =====
+Signature: org.jfree.chart.plot.CategoryPlot.setRangeAxisLocation(int,AxisLocation,boolean)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1225-1235
+Documentation:
+/**
+     * Sets the location for a range axis and sends a {@link PlotChangeEvent}
+     * to all registered listeners.
+     *
+     * @param index  the axis index.
+     * @param location  the location.
+     * @param notify  notify listeners?
+     *
+     * @see #getRangeAxisLocation(int)
+     * @see #setDomainAxisLocation(int, AxisLocation, boolean)
+     */
+Method code:
+1225 |     public void setRangeAxisLocation(int index, AxisLocation location,
+1226 |                                      boolean notify) {
+1227 |         if (index == 0 && location == null) {
+1228 |             throw new IllegalArgumentException(
+1229 |                     "Null 'location' for index 0 not permitted.");
+1230 |         }
+1231 |         this.rangeAxisLocations.set(index, location);
+1232 |         if (notify) {
+1233 |             fireChangeEvent();
+1234 |         }
+1235 |     }
+
+===== M0013 =====
+Signature: org.jfree.chart.util.StrokeList.StrokeList()
+Source: source/org/jfree/chart/util/StrokeList.java
+Original range: 57-59
+Documentation:
+/**
+     * Creates a new list.
+     */
+Method code:
+57 |     public StrokeList() {
+58 |         super();
+59 |     }
+
+===== M0014 =====
+Signature: org.jfree.chart.plot.CategoryPlot.mapDatasetToDomainAxes(int,List)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1425-1436
+Documentation:
+/**
+     * Maps the specified dataset to the axes in the list.  Note that the
+     * conversion of data values into Java2D space is always performed using
+     * the first axis in the list.
+     *
+     * @param index  the dataset index (zero-based).
+     * @param axisIndices  the axis indices (<code>null</code> permitted).
+     *
+     * @since 1.0.12
+     */
+Method code:
+1425 |     public void mapDatasetToDomainAxes(int index, List axisIndices) {
+1426 |         if (index < 0) {
+1427 |             throw new IllegalArgumentException("Requires 'index' >= 0.");
+1428 |         }
+1429 |         checkAxisIndices(axisIndices);
+1430 |         Integer key = new Integer(index);
+1431 |         this.datasetToDomainAxesMap.put(key, new ArrayList(axisIndices));
+1432 |         // fake a dataset change event to update axes...
+1433 |         datasetChanged(new DatasetChangeEvent(this, getDataset(index),
+1434 |                 new DatasetChangeInfo()));
+1435 |         // TODO: fill in real dataset change info
+1436 |     }
+
+===== M0015 =====
+Signature: org.jfree.data.event.DatasetChangeEvent.DatasetChangeEvent(Object,Dataset,DatasetChangeInfo)
+Source: source/org/jfree/data/event/DatasetChangeEvent.java
+Original range: 85-93
+Documentation:
+/**
+     * Constructs a new event.  The source is either the dataset or the
+     * {@link Plot} class.  The dataset can be <code>null</code> (in this case
+     * the source will be the {@link Plot} class).
+     *
+     * @param source  the source of the event.
+     * @param dataset  the dataset that generated the event (<code>null</code>
+     *                 permitted).
+     * @param info  information about the change (<code>null</code> not
+     *         permitted).
+     *
+     * @since 1.2.0
+     */
+Method code:
+85 |     public DatasetChangeEvent(Object source, Dataset dataset,
+86 |             DatasetChangeInfo info) {
+87 |         super(source);
+88 |         if (info == null) {
+89 |             throw new IllegalArgumentException("Null 'info' argument.");
+90 |         }
+91 |         this.dataset = dataset;
+92 |         this.info = info;
+93 |     }
+
+===== M0016 =====
+Signature: org.jfree.chart.labels.ItemLabelAnchor.ItemLabelAnchor(String)
+Source: source/org/jfree/chart/labels/ItemLabelAnchor.java
+Original range: 167-169
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+167 |     private ItemLabelAnchor(String name) {
+168 |         this.name = name;
+169 |     }
+
+===== M0017 =====
+Signature: org.jfree.chart.util.ShapeList.ShapeList()
+Source: source/org/jfree/chart/util/ShapeList.java
+Original range: 58-60
+Documentation:
+/**
+     * Creates a new list.
+     */
+Method code:
+58 |     public ShapeList() {
+59 |         super();
+60 |     }
+
+===== M0018 =====
+Signature: org.jfree.chart.event.PlotChangeEvent.PlotChangeEvent(Plot)
+Source: source/org/jfree/chart/event/PlotChangeEvent.java
+Original range: 63-66
+Documentation:
+/**
+     * Creates a new PlotChangeEvent.
+     *
+     * @param plot  the plot that generated the event.
+     */
+Method code:
+63 |     public PlotChangeEvent(Plot plot) {
+64 |         super(plot);
+65 |         this.plot = plot;
+66 |     }
+
+===== M0019 =====
+Signature: org.jfree.data.category.AbstractCategoryDataset.AbstractCategoryDataset()
+Source: source/org/jfree/data/category/AbstractCategoryDataset.java
+Original range: 63-65
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+63 |     public AbstractCategoryDataset() {
+64 |         super();
+65 |     }
+
+===== M0020 =====
+Signature: org.jfree.chart.renderer.category.AbstractCategoryItemRenderer.setPlot(CategoryPlot)
+Source: source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
+Original range: 292-297
+Documentation:
+/**
+     * Sets the plot that the renderer has been assigned to.  This method is
+     * usually called by the {@link CategoryPlot}, in normal usage you
+     * shouldn't need to call this method directly.
+     *
+     * @param plot  the plot (<code>null</code> not permitted).
+     *
+     * @see #getPlot()
+     */
+Method code:
+292 |     public void setPlot(CategoryPlot plot) {
+293 |         if (plot == null) {
+294 |             throw new IllegalArgumentException("Null 'plot' argument.");
+295 |         }
+296 |         this.plot = plot;
+297 |     }
+
+===== M0021 =====
+Signature: org.jfree.chart.util.ObjectList.indexOf(Object)
+Source: source/org/jfree/chart/util/ObjectList.java
+Original range: 106-108
+Documentation:
+/**
+     * Returns the index of the specified object, or -1 if the object is not
+     * in the list.
+     *
+     * @param object  the object.
+     *
+     * @return The index or -1.
+     */
+Method code:
+106 |     public int indexOf(Object object) {
+107 |         return super.indexOf(object);
+108 |     }
+
+===== M0022 =====
+Signature: org.jfree.chart.labels.StandardCategorySeriesLabelGenerator.StandardCategorySeriesLabelGenerator(String)
+Source: source/org/jfree/chart/labels/StandardCategorySeriesLabelGenerator.java
+Original range: 83-88
+Documentation:
+/**
+     * Creates a new series label generator.
+     *
+     * @param format  the format pattern (<code>null</code> not permitted).
+     */
+Method code:
+83 |     public StandardCategorySeriesLabelGenerator(String format) {
+84 |         if (format == null) {
+85 |             throw new IllegalArgumentException("Null 'format' argument.");
+86 |         }
+87 |         this.formatPattern = format;
+88 |     }
+
+===== M0023 =====
+Signature: org.jfree.chart.plot.CategoryPlot.CategoryPlot(CategoryDataset,CategoryAxis,ValueAxis,CategoryItemRenderer)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 579-671
+Documentation:
+/**
+     * Creates a new plot.
+     *
+     * @param dataset  the dataset (<code>null</code> permitted).
+     * @param domainAxis  the domain axis (<code>null</code> permitted).
+     * @param rangeAxis  the range axis (<code>null</code> permitted).
+     * @param renderer  the item renderer (<code>null</code> permitted).
+     *
+     */
+Method code:
+579 |     public CategoryPlot(CategoryDataset dataset,
+580 |                         CategoryAxis domainAxis,
+581 |                         ValueAxis rangeAxis,
+582 |                         CategoryItemRenderer renderer) {
+583 | 
+584 |         super();
+585 | 
+586 |         this.orientation = PlotOrientation.VERTICAL;
+587 | 
+588 |         // allocate storage for dataset, axes and renderers
+589 |         this.domainAxes = new ObjectList();
+590 |         this.domainAxisLocations = new ObjectList();
+591 |         this.rangeAxes = new ObjectList();
+592 |         this.rangeAxisLocations = new ObjectList();
+593 | 
+594 |         this.datasetToDomainAxesMap = new TreeMap();
+595 |         this.datasetToRangeAxesMap = new TreeMap();
+596 | 
+597 |         this.renderers = new ObjectList();
+598 | 
+599 |         this.datasets = new ObjectList();
+600 |         this.datasets.set(0, dataset);
+601 |         if (dataset != null) {
+602 |             dataset.addChangeListener(this);
+603 |         }
+604 | 
+605 |         this.axisOffset = new RectangleInsets(4.0, 4.0, 4.0, 4.0);
+606 | 
+607 |         setDomainAxisLocation(AxisLocation.BOTTOM_OR_LEFT, false);
+608 |         setRangeAxisLocation(AxisLocation.TOP_OR_LEFT, false);
+609 | 
+610 |         this.renderers.set(0, renderer);
+611 |         if (renderer != null) {
+612 |             renderer.setPlot(this);
+613 |             renderer.addChangeListener(this);
+614 |         }
+615 | 
+616 |         this.domainAxes.set(0, domainAxis);
+617 |         this.mapDatasetToDomainAxis(0, 0);
+618 |         if (domainAxis != null) {
+619 |             domainAxis.setPlot(this);
+620 |             domainAxis.addChangeListener(this);
+621 |         }
+622 |         this.drawSharedDomainAxis = false;
+623 | 
+624 |         this.rangeAxes.set(0, rangeAxis);
+625 |         this.mapDatasetToRangeAxis(0, 0);
+626 |         if (rangeAxis != null) {
+627 |             rangeAxis.setPlot(this);
+628 |             rangeAxis.addChangeListener(this);
+629 |         }
+630 | 
+631 |         configureDomainAxes();
+632 |         configureRangeAxes();
+633 | 
+634 |         this.domainGridlinesVisible = DEFAULT_DOMAIN_GRIDLINES_VISIBLE;
+635 |         this.domainGridlinePosition = CategoryAnchor.MIDDLE;
+636 |         this.domainGridlineStroke = DEFAULT_GRIDLINE_STROKE;
+637 |         this.domainGridlinePaint = DEFAULT_GRIDLINE_PAINT;
+638 | 
+639 |         this.rangeZeroBaselineVisible = false;
+640 |         this.rangeZeroBaselinePaint = Color.black;
+641 |         this.rangeZeroBaselineStroke = new BasicStroke(0.5f);
+642 | 
+643 |         this.rangeGridlinesVisible = DEFAULT_RANGE_GRIDLINES_VISIBLE;
+644 |         this.rangeGridlineStroke = DEFAULT_GRIDLINE_STROKE;
+645 |         this.rangeGridlinePaint = DEFAULT_GRIDLINE_PAINT;
+646 | 
+647 |         this.rangeMinorGridlinesVisible = false;
+648 |         this.rangeMinorGridlineStroke = DEFAULT_GRIDLINE_STROKE;
+649 |         this.rangeMinorGridlinePaint = Color.white;
+650 | 
+651 |         this.foregroundDomainMarkers = new HashMap();
+652 |         this.backgroundDomainMarkers = new HashMap();
+653 |         this.foregroundRangeMarkers = new HashMap();
+654 |         this.backgroundRangeMarkers = new HashMap();
+655 | 
+656 |         this.anchorValue = 0.0;
+657 | 
+658 |         this.domainCrosshairVisible = false;
+659 |         this.domainCrosshairStroke = DEFAULT_CROSSHAIR_STROKE;
+660 |         this.domainCrosshairPaint = DEFAULT_CROSSHAIR_PAINT;
+661 | 
+662 |         this.rangeCrosshairVisible = DEFAULT_CROSSHAIR_VISIBLE;
+663 |         this.rangeCrosshairValue = 0.0;
+664 |         this.rangeCrosshairStroke = DEFAULT_CROSSHAIR_STROKE;
+665 |         this.rangeCrosshairPaint = DEFAULT_CROSSHAIR_PAINT;
+666 | 
+667 |         this.annotations = new java.util.ArrayList();
+668 | 
+669 |         this.rangePannable = false;
+670 |         this.shadowGenerator = new DefaultShadowGenerator();
+671 |     }
+
+===== M0024 =====
+Signature: org.jfree.data.category.DefaultCategoryDataset.DefaultCategoryDataset()
+Source: source/org/jfree/data/category/DefaultCategoryDataset.java
+Original range: 80-84
+Documentation:
+/**
+     * Creates a new (empty) dataset.
+     */
+Method code:
+80 |     public DefaultCategoryDataset() {
+81 |         this.data = new KeyedObjects2D();
+82 |         // FIXME: will need to remove this later, because it should be optional
+83 |         setSelectionState(this);
+84 |     }
+
+===== M0025 =====
+Signature: org.jfree.chart.plot.PlotOrientation.PlotOrientation(String)
+Source: source/org/jfree/chart/plot/PlotOrientation.java
+Original range: 72-74
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+72 |     private PlotOrientation(String name) {
+73 |         this.name = name;
+74 |     }
+
+===== M0026 =====
+Signature: org.jfree.chart.plot.CategoryPlot.checkAxisIndices(List)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1445-1468
+Documentation:
+/**
+     * This method is used to perform argument checking on the list of
+     * axis indices passed to mapDatasetToDomainAxes() and
+     * mapDatasetToRangeAxes().
+     *
+     * @param indices  the list of indices (<code>null</code> permitted).
+     */
+Method code:
+1445 |     private void checkAxisIndices(List indices) {
+1446 |         // axisIndices can be:
+1447 |         // 1.  null;
+1448 |         // 2.  non-empty, containing only Integer objects that are unique.
+1449 |         if (indices == null) {
+1450 |             return;  // OK
+1451 |         }
+1452 |         int count = indices.size();
+1453 |         if (count == 0) {
+1454 |             throw new IllegalArgumentException("Empty list not permitted.");
+1455 |         }
+1456 |         HashSet set = new HashSet();
+1457 |         for (int i = 0; i < count; i++) {
+1458 |             Object item = indices.get(i);
+1459 |             if (!(item instanceof Integer)) {
+1460 |                 throw new IllegalArgumentException(
+1461 |                         "Indices must be Integer instances.");
+1462 |             }
+1463 |             if (set.contains(item)) {
+1464 |                 throw new IllegalArgumentException("Indices must be unique.");
+1465 |             }
+1466 |             set.add(item);
+1467 |         }
+1468 |     }
+
+===== M0027 =====
+Signature: org.jfree.chart.plot.CategoryPlot.configureDomainAxes()
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1012-1019
+Documentation:
+/**
+     * Configures the domain axes.
+     */
+Method code:
+1012 |     public void configureDomainAxes() {
+1013 |         for (int i = 0; i < this.domainAxes.size(); i++) {
+1014 |             CategoryAxis axis = (CategoryAxis) this.domainAxes.get(i);
+1015 |             if (axis != null) {
+1016 |                 axis.configure();
+1017 |             }
+1018 |         }
+1019 |     }
+
+===== M0028 =====
+Signature: org.jfree.chart.util.RectangleInsets.RectangleInsets(double,double,double,double)
+Source: source/org/jfree/chart/util/RectangleInsets.java
+Original range: 100-103
+Documentation:
+/**
+     * Creates a new instance with the specified insets (as 'absolute' units).
+     *
+     * @param top  the top insets.
+     * @param left  the left insets.
+     * @param bottom  the bottom insets.
+     * @param right  the right insets.
+     */
+Method code:
+100 |     public RectangleInsets(double top, double left, double bottom,
+101 |             double right) {
+102 |         this(UnitType.ABSOLUTE, top, left, bottom, right);
+103 |     }
+
+===== M0029 =====
+Signature: org.jfree.chart.renderer.category.AbstractCategoryItemRenderer.AbstractCategoryItemRenderer()
+Source: source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
+Original range: 249-257
+Documentation:
+/**
+     * Creates a new renderer with no tool tip generator and no URL generator.
+     * The defaults (no tool tip or URL generators) have been chosen to
+     * minimise the processing required to generate a default chart.  If you
+     * require tool tips or URLs, then you can easily add the required
+     * generators.
+     */
+Method code:
+249 |     protected AbstractCategoryItemRenderer() {
+250 |         this.itemLabelGeneratorList = new ObjectList();
+251 |         this.toolTipGeneratorList = new ObjectList();
+252 |         this.urlGeneratorList = new ObjectList();
+253 |         this.legendItemLabelGenerator
+254 |                 = new StandardCategorySeriesLabelGenerator();
+255 |         this.backgroundAnnotations = new ArrayList();
+256 |         this.foregroundAnnotations = new ArrayList();
+257 |     }
+
+===== M0030 =====
+Signature: org.jfree.chart.util.AbstractObjectList.size()
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 148-150
+Documentation:
+/**
+     * Returns the size of the list.
+     *
+     * @return The size of the list.
+     */
+Method code:
+148 |     public int size() {
+149 |         return this.size;
+150 |     }
+
+===== M0031 =====
+Signature: org.jfree.data.SelectableValue.SelectableValue(Number)
+Source: source/org/jfree/data/SelectableValue.java
+Original range: 64-66
+Documentation:
+/**
+     * Creates a new instance with the specified value and the selection
+     * state set to <code>false</code>.
+     *
+     * @param value  the value (<code>null</code> permitted).
+     */
+Method code:
+64 |     public SelectableValue(Number value) {
+65 |         this(value, false);
+66 |     }
+
+===== M0032 =====
+Signature: org.jfree.chart.renderer.RenderAttributes.setDefaultFillPaint(Paint)
+Source: source/org/jfree/chart/renderer/RenderAttributes.java
+Original range: 264-269
+Documentation:
+
+Method code:
+264 |     public void setDefaultFillPaint(Paint paint) {
+265 |         if (paint == null && !this.allowNull) {
+266 |             throw new IllegalArgumentException("Null 'paint' argument.");
+267 |         }
+268 |         this.defaultFillPaint = paint;
+269 |     }
+
+===== M0033 =====
+Signature: org.jfree.data.category.DefaultCategoryDataset.addValue(double,Comparable,Comparable)
+Source: source/org/jfree/data/category/DefaultCategoryDataset.java
+Original range: 257-260
+Documentation:
+/**
+     * Adds a value to the table.
+     *
+     * @param value  the value.
+     * @param rowKey  the row key.
+     * @param columnKey  the column key.
+     *
+     * @see #getValue(Comparable, Comparable)
+     */
+Method code:
+257 |     public void addValue(double value, Comparable rowKey,
+258 |                          Comparable columnKey) {
+259 |         addValue(new Double(value), rowKey, columnKey);
+260 |     }
+
+===== M0034 =====
+Signature: org.jfree.chart.plot.CategoryPlot.CategoryPlot()
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 566-568
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+566 |     public CategoryPlot() {
+567 |         this(null, null, null, null);
+568 |     }
+
+===== M0035 =====
+Signature: org.jfree.chart.plot.CategoryPlot.setDataset(CategoryDataset)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1338-1340
+Documentation:
+/**
+     * Sets the dataset for the plot, replacing the existing dataset, if there
+     * is one.  This method also calls the
+     * {@link #datasetChanged(DatasetChangeEvent)} method, which adjusts the
+     * axis ranges if necessary and sends a {@link PlotChangeEvent} to all
+     * registered listeners.
+     *
+     * @param dataset  the dataset (<code>null</code> permitted).
+     *
+     * @see #getDataset()
+     */
+Method code:
+1338 |     public void setDataset(CategoryDataset dataset) {
+1339 |         setDataset(0, dataset);
+1340 |     }
+
+===== M0036 =====
+Signature: org.jfree.chart.plot.Plot.notifyListeners(PlotChangeEvent)
+Source: source/org/jfree/chart/plot/Plot.java
+Original range: 966-978
+Documentation:
+/**
+     * Notifies all registered listeners that the plot has been modified.
+     *
+     * @param event  information about the change event.
+     */
+Method code:
+966 |     public void notifyListeners(PlotChangeEvent event) {
+967 |         // if the 'notify' flag has been switched to false, we don't notify
+968 |         // the listeners
+969 |         if (!this.notify) {
+970 |             return;
+971 |         }
+972 |         Object[] listeners = this.listenerList.getListenerList();
+973 |         for (int i = listeners.length - 2; i >= 0; i -= 2) {
+974 |             if (listeners[i] == PlotChangeListener.class) {
+975 |                 ((PlotChangeListener) listeners[i + 1]).plotChanged(event);
+976 |             }
+977 |         }
+978 |     }
+
+===== M0037 =====
+Signature: org.jfree.data.general.AbstractDataset.notifyListeners(DatasetChangeEvent)
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 188-196
+Documentation:
+/**
+     * Notifies all registered listeners that the dataset has changed.
+     *
+     * @param event  contains information about the event that triggered the
+     *               notification.
+     *
+     * @see #addChangeListener(DatasetChangeListener)
+     * @see #removeChangeListener(DatasetChangeListener)
+     */
+Method code:
+188 |     protected void notifyListeners(DatasetChangeEvent event) {
+189 |         Object[] listeners = this.listenerList.getListenerList();
+190 |         for (int i = listeners.length - 2; i >= 0; i -= 2) {
+191 |             if (listeners[i] == DatasetChangeListener.class) {
+192 |                 ((DatasetChangeListener) listeners[i + 1]).datasetChanged(
+193 |                         event);
+194 |             }
+195 |         }
+196 |     }
+
+===== M0038 =====
+Signature: org.jfree.chart.util.BooleanList.BooleanList()
+Source: source/org/jfree/chart/util/BooleanList.java
+Original range: 60-61
+Documentation:
+/**
+     * Creates a new list.
+     */
+Method code:
+60 |     public BooleanList() {
+61 |     }
+
+===== M0039 =====
+Signature: org.jfree.chart.renderer.category.AbstractCategoryItemRenderer.getLegendItems()
+Source: source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
+Original range: 1790-1822
+Documentation:
+/**
+     * Returns a (possibly empty) collection of legend items for the series
+     * that this renderer is responsible for drawing.
+     *
+     * @return The legend item collection (never <code>null</code>).
+     *
+     * @see #getLegendItem(int, int)
+     */
+Method code:
+1790 |     public LegendItemCollection getLegendItems() {
+1791 |         LegendItemCollection result = new LegendItemCollection();
+1792 |         if (this.plot == null) {
+1793 |             return result;
+1794 |         }
+1795 |         int index = this.plot.getIndexOf(this);
+1796 |         CategoryDataset dataset = this.plot.getDataset(index);
+1797 |         if (dataset != null) {
+1798 |             return result;
+1799 |         }
+1800 |         int seriesCount = dataset.getRowCount();
+1801 |         if (plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)) {
+1802 |             for (int i = 0; i < seriesCount; i++) {
+1803 |                 if (isSeriesVisibleInLegend(i)) {
+1804 |                     LegendItem item = getLegendItem(index, i);
+1805 |                     if (item != null) {
+1806 |                         result.add(item);
+1807 |                     }
+1808 |                 }
+1809 |             }
+1810 |         }
+1811 |         else {
+1812 |             for (int i = seriesCount - 1; i >= 0; i--) {
+1813 |                 if (isSeriesVisibleInLegend(i)) {
+1814 |                     LegendItem item = getLegendItem(index, i);
+1815 |                     if (item != null) {
+1816 |                         result.add(item);
+1817 |                     }
+1818 |                 }
+1819 |             }
+1820 |         }
+1821 |         return result;
+1822 |     }
+
+===== M0040 =====
+Signature: org.jfree.chart.plot.CategoryPlot.setDomainAxisLocation(AxisLocation,boolean)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 911-914
+Documentation:
+/**
+     * Sets the location of the domain axis and, if requested, sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param location  the axis location (<code>null</code> not permitted).
+     * @param notify  a flag that controls whether listeners are notified.
+     */
+Method code:
+911 |     public void setDomainAxisLocation(AxisLocation location, boolean notify) {
+912 |         // delegate...
+913 |         setDomainAxisLocation(0, location, notify);
+914 |     }
+
+===== M0041 =====
+Signature: org.jfree.chart.text.TextAnchor.TextAnchor(String)
+Source: source/org/jfree/chart/text/TextAnchor.java
+Original range: 124-126
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+124 |     private TextAnchor(String name) {
+125 |         this.name = name;
+126 |     }
+
+===== M0042 =====
+Signature: org.jfree.chart.util.ObjectList.ObjectList()
+Source: source/org/jfree/chart/util/ObjectList.java
+Original range: 58-59
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+58 |     public ObjectList() {
+59 |     }
+
+===== M0043 =====
+Signature: org.jfree.chart.plot.CategoryPlot.setDataset(int,CategoryDataset)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1350-1367
+Documentation:
+/**
+     * Sets a dataset for the plot.
+     *
+     * @param index  the dataset index.
+     * @param dataset  the dataset (<code>null</code> permitted).
+     *
+     * @see #getDataset(int)
+     */
+Method code:
+1350 |     public void setDataset(int index, CategoryDataset dataset) {
+1351 | 
+1352 |         CategoryDataset existing = (CategoryDataset) this.datasets.get(index);
+1353 |         if (existing != null) {
+1354 |             existing.removeChangeListener(this);
+1355 |         }
+1356 |         this.datasets.set(index, dataset);
+1357 |         if (dataset != null) {
+1358 |             dataset.addChangeListener(this);
+1359 |         }
+1360 | 
+1361 |         // send a dataset change event to self...
+1362 |         DatasetChangeEvent event = new DatasetChangeEvent(this, dataset,
+1363 |                 new DatasetChangeInfo());
+1364 |         // TODO: fill in real dataset change info
+1365 |         datasetChanged(event);
+1366 | 
+1367 |     }
+
+===== M0044 =====
+Signature: org.jfree.chart.labels.ItemLabelPosition.ItemLabelPosition(ItemLabelAnchor,TextAnchor)
+Source: source/org/jfree/chart/labels/ItemLabelPosition.java
+Original range: 88-91
+Documentation:
+/**
+     * Creates a new position record (with zero rotation).
+     *
+     * @param itemLabelAnchor  the item label anchor (<code>null</code> not
+     *                         permitted).
+     * @param textAnchor  the text anchor (<code>null</code> not permitted).
+     */
+Method code:
+88 |     public ItemLabelPosition(ItemLabelAnchor itemLabelAnchor,
+89 |                              TextAnchor textAnchor) {
+90 |         this(itemLabelAnchor, textAnchor, TextAnchor.CENTER, 0.0);
+91 |     }
+
+===== M0045 =====
+Signature: org.jfree.data.KeyedObjects2D.addObject(Object,Comparable,Comparable)
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 255-258
+Documentation:
+/**
+     * Adds an object to the table.  Performs the same function as setObject().
+     *
+     * @param object  the object.
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     */
+Method code:
+255 |     public void addObject(Object object, Comparable rowKey,
+256 |             Comparable columnKey) {
+257 |         setObject(object, rowKey, columnKey);
+258 |     }
+
+===== M0046 =====
+Signature: org.jfree.chart.util.AbstractObjectList.AbstractObjectList(int,int)
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 95-98
+Documentation:
+/**
+     * Creates a new list.
+     *
+     * @param initialCapacity  the initial capacity.
+     * @param increment  the increment.
+     */
+Method code:
+95 |     protected AbstractObjectList(int initialCapacity, int increment) {
+96 |         this.objects = new Object[initialCapacity];
+97 |         this.increment = increment;
+98 |     }
+
+===== M0047 =====
+Signature: org.jfree.chart.plot.CategoryPlot.setRenderer(CategoryItemRenderer)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1612-1614
+Documentation:
+/**
+     * Sets the renderer at index 0 (sometimes referred to as the "primary"
+     * renderer) and sends a {@link PlotChangeEvent} to all registered
+     * listeners.
+     *
+     * @param renderer  the renderer (<code>null</code> permitted.
+     *
+     * @see #getRenderer()
+     */
+Method code:
+1612 |     public void setRenderer(CategoryItemRenderer renderer) {
+1613 |         setRenderer(0, renderer, true);
+1614 |     }
+
+===== M0048 =====
+Signature: org.jfree.chart.util.RectangleInsets.RectangleInsets(UnitType,double,double,double,double)
+Source: source/org/jfree/chart/util/RectangleInsets.java
+Original range: 115-125
+Documentation:
+/**
+     * Creates a new instance.
+     *
+     * @param unitType  absolute or relative units (<code>null</code> not
+     *                  permitted).
+     * @param top  the top insets.
+     * @param left  the left insets.
+     * @param bottom  the bottom insets.
+     * @param right  the right insets.
+     */
+Method code:
+115 |     public RectangleInsets(UnitType unitType, double top, double left,
+116 |                            double bottom, double right) {
+117 |         if (unitType == null) {
+118 |             throw new IllegalArgumentException("Null 'unitType' argument.");
+119 |         }
+120 |         this.unitType = unitType;
+121 |         this.top = top;
+122 |         this.bottom = bottom;
+123 |         this.left = left;
+124 |         this.right = right;
+125 |     }
+
+===== M0049 =====
+Signature: org.jfree.chart.util.AbstractObjectList.set(int,Object)
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 122-133
+Documentation:
+/**
+     * Sets an object reference (overwriting any existing object).
+     *
+     * @param index  the object index.
+     * @param object  the object (<code>null</code> permitted).
+     */
+Method code:
+122 |     protected void set(int index, Object object) {
+123 |         if (index < 0) {
+124 |             throw new IllegalArgumentException("Requires index >= 0.");
+125 |         }
+126 |         if (index >= this.objects.length) {
+127 |             Object[] enlarged = new Object[index + this.increment];
+128 |             System.arraycopy(this.objects, 0, enlarged, 0, this.objects.length);
+129 |             this.objects = enlarged;
+130 |         }
+131 |         this.objects[index] = object;
+132 |         this.size = Math.max(this.size, index + 1);
+133 |     }
+
+===== M0050 =====
+Signature: org.jfree.data.KeyedObjects.KeyedObjects()
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 72-74
+Documentation:
+/**
+     * Creates a new collection (initially empty).
+     */
+Method code:
+72 |     public KeyedObjects() {
+73 |         this.data = new java.util.ArrayList();
+74 |     }
+
+===== M0051 =====
+Signature: org.jfree.data.SelectableValue.SelectableValue(Number,boolean)
+Source: source/org/jfree/data/SelectableValue.java
+Original range: 74-77
+Documentation:
+/**
+     * Creates a new instance with the specified value and selection state.
+     *
+     * @param value  the value (<code>null</code> permitted).
+     * @param selected  the selection state.
+     */
+Method code:
+74 |     public SelectableValue(Number value, boolean selected) {
+75 |         this.value = value;
+76 |         this.selected = selected;
+77 |     }
+
+===== M0052 =====
+Signature: org.jfree.chart.plot.CategoryPlot.configureRangeAxes()
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1290-1297
+Documentation:
+/**
+     * Configures the range axes.
+     */
+Method code:
+1290 |     public void configureRangeAxes() {
+1291 |         for (int i = 0; i < this.rangeAxes.size(); i++) {
+1292 |             ValueAxis axis = (ValueAxis) this.rangeAxes.get(i);
+1293 |             if (axis != null) {
+1294 |                 axis.configure();
+1295 |             }
+1296 |         }
+1297 |     }
+
+===== M0053 =====
+Signature: org.jfree.chart.renderer.RenderAttributes.RenderAttributes(boolean)
+Source: source/org/jfree/chart/renderer/RenderAttributes.java
+Original range: 123-133
+Documentation:
+
+Method code:
+123 |     public RenderAttributes(boolean allowNull) {
+124 |         this.paintList = new PaintList();
+125 |         this.defaultPaint = allowNull ? null : Color.BLACK;
+126 |         this.strokeList = new StrokeList();
+127 |         this.defaultStroke = allowNull ? null : new BasicStroke(1.0f);
+128 |         this.fillPaintList = new PaintList();
+129 |         this.defaultFillPaint = allowNull ? null : Color.BLACK;
+130 |         this.outlinePaintList = new PaintList();
+131 |         this.defaultOutlinePaint = allowNull ? null : Color.BLACK;
+132 |         this.shapeList = new ShapeList();
+133 |     }
+
+===== M0054 =====
+Signature: org.jfree.chart.LegendItemCollection.LegendItemCollection()
+Source: source/org/jfree/chart/LegendItemCollection.java
+Original range: 68-70
+Documentation:
+/**
+     * Constructs a new legend item collection, initially empty.
+     */
+Method code:
+68 |     public LegendItemCollection() {
+69 |         this.items = new java.util.ArrayList();
+70 |     }
+
+===== M0055 =====
+Signature: org.jfree.chart.plot.CategoryPlot.setDomainAxisLocation(int,AxisLocation,boolean)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 944-954
+Documentation:
+/**
+     * Sets the location for a domain axis and sends a {@link PlotChangeEvent}
+     * to all registered listeners.
+     *
+     * @param index  the axis index.
+     * @param location  the location.
+     * @param notify  notify listeners?
+     *
+     * @since 1.0.5
+     *
+     * @see #getDomainAxisLocation(int)
+     * @see #setRangeAxisLocation(int, AxisLocation, boolean)
+     */
+Method code:
+944 |     public void setDomainAxisLocation(int index, AxisLocation location,
+945 |             boolean notify) {
+946 |         if (index == 0 && location == null) {
+947 |             throw new IllegalArgumentException(
+948 |                     "Null 'location' for index 0 not permitted.");
+949 |         }
+950 |         this.domainAxisLocations.set(index, location);
+951 |         if (notify) {
+952 |             fireChangeEvent();
+953 |         }
+954 |     }
+
+===== M0056 =====
+Signature: org.jfree.chart.plot.CategoryPlot.setRangeAxisLocation(AxisLocation,boolean)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1196-1198
+Documentation:
+/**
+     * Sets the location of the range axis and, if requested, sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param location  the location (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     *
+     * @see #setDomainAxisLocation(AxisLocation, boolean)
+     */
+Method code:
+1196 |     public void setRangeAxisLocation(AxisLocation location, boolean notify) {
+1197 |         setRangeAxisLocation(0, location, notify);
+1198 |     }
+
+===== M0057 =====
+Signature: org.jfree.chart.labels.ItemLabelPosition.ItemLabelPosition(ItemLabelAnchor,TextAnchor,TextAnchor,double)
+Source: source/org/jfree/chart/labels/ItemLabelPosition.java
+Original range: 106-128
+Documentation:
+/**
+     * Creates a new position record.  The item label anchor is a point
+     * relative to the data item (dot, bar or other visual item) on a chart.
+     * The item label is aligned by aligning the text anchor with the
+     * item label anchor.
+     *
+     * @param itemLabelAnchor  the item label anchor (<code>null</code> not
+     *                         permitted).
+     * @param textAnchor  the text anchor (<code>null</code> not permitted).
+     * @param rotationAnchor  the rotation anchor (<code>null</code> not
+     *                        permitted).
+     * @param angle  the rotation angle (in radians).
+     */
+Method code:
+106 |     public ItemLabelPosition(ItemLabelAnchor itemLabelAnchor,
+107 |                              TextAnchor textAnchor,
+108 |                              TextAnchor rotationAnchor,
+109 |                              double angle) {
+110 | 
+111 |         if (itemLabelAnchor == null) {
+112 |             throw new IllegalArgumentException(
+113 |                     "Null 'itemLabelAnchor' argument.");
+114 |         }
+115 |         if (textAnchor == null) {
+116 |             throw new IllegalArgumentException("Null 'textAnchor' argument.");
+117 |         }
+118 |         if (rotationAnchor == null) {
+119 |             throw new IllegalArgumentException(
+120 |                     "Null 'rotationAnchor' argument.");
+121 |         }
+122 | 
+123 |         this.itemLabelAnchor = itemLabelAnchor;
+124 |         this.textAnchor = textAnchor;
+125 |         this.rotationAnchor = rotationAnchor;
+126 |         this.angle = angle;
+127 | 
+128 |     }
+
+===== M0058 =====
+Signature: org.jfree.chart.axis.AxisLocation.AxisLocation(String)
+Source: source/org/jfree/chart/axis/AxisLocation.java
+Original range: 84-86
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+84 |     private AxisLocation(String name) {
+85 |         this.name = name;
+86 |     }
+
+===== M0059 =====
+Signature: org.jfree.chart.util.AbstractObjectList.get(int)
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 108-114
+Documentation:
+/**
+     * Returns the object at the specified index, if there is one, or
+     * <code>null</code>.
+     *
+     * @param index  the object index.
+     *
+     * @return The object or <code>null</code>.
+     */
+Method code:
+108 |     protected Object get(int index) {
+109 |         Object result = null;
+110 |         if (index >= 0 && index < this.size) {
+111 |             result = this.objects[index];
+112 |         }
+113 |         return result;
+114 |     }
+
+===== M0060 =====
+Signature: org.jfree.data.category.DefaultCategoryDataset.addValue(Number,Comparable,Comparable)
+Source: source/org/jfree/data/category/DefaultCategoryDataset.java
+Original range: 241-246
+Documentation:
+/**
+     * Adds a value to the table.  Performs the same function as setValue().
+     *
+     * @param value  the value.
+     * @param rowKey  the row key.
+     * @param columnKey  the column key.
+     *
+     * @see #getValue(Comparable, Comparable)
+     * @see #removeValue(Comparable, Comparable)
+     */
+Method code:
+241 |     public void addValue(Number value, Comparable rowKey,
+242 |                          Comparable columnKey) {
+243 |         this.data.addObject(new SelectableValue(value), rowKey, columnKey);
+244 |         fireDatasetChanged(new DatasetChangeInfo());
+245 |         // TODO:  fill in real change details
+246 |     }
+
+===== M0061 =====
+Signature: org.jfree.data.KeyedObjects2D.KeyedObjects2D()
+Source: source/org/jfree/data/KeyedObjects2D.java
+Original range: 73-77
+Documentation:
+/**
+     * Creates a new instance (initially empty).
+     */
+Method code:
+73 |     public KeyedObjects2D() {
+74 |         this.rowKeys = new java.util.ArrayList();
+75 |         this.columnKeys = new java.util.ArrayList();
+76 |         this.rows = new java.util.ArrayList();
+77 |     }
+
+===== M0062 =====
+Signature: org.jfree.chart.axis.CategoryAnchor.CategoryAnchor(String)
+Source: source/org/jfree/chart/axis/CategoryAnchor.java
+Original range: 75-77
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+75 |     private CategoryAnchor(String name) {
+76 |         this.name = name;
+77 |     }
+
+===== M0063 =====
+Signature: org.jfree.chart.util.ResourceBundleWrapper.getBundle(String)
+Source: source/org/jfree/chart/util/ResourceBundleWrapper.java
+Original range: 118-130
+Documentation:
+/**
+     * Finds and returns the specified resource bundle.
+     *
+     * @param baseName  the base name.
+     *
+     * @return The resource bundle.
+     */
+Method code:
+118 |     public static final ResourceBundle getBundle(String baseName) {
+119 |         // the noCodeBaseClassLoader is configured by a call to the
+120 |         // removeCodeBase() method, typically in the init() method of an
+121 |         // applet...
+122 |         if (noCodeBaseClassLoader != null) {
+123 |             return ResourceBundle.getBundle(baseName, Locale.getDefault(),
+124 |                     noCodeBaseClassLoader);
+125 |         }
+126 |         else {
+127 |             // standard ResourceBundle behaviour
+128 |             return ResourceBundle.getBundle(baseName);
+129 |         }
+130 |     }
+
+===== M0064 =====
+Signature: org.jfree.chart.util.DefaultShadowGenerator.DefaultShadowGenerator()
+Source: source/org/jfree/chart/util/DefaultShadowGenerator.java
+Original range: 77-79
+Documentation:
+/**
+     * Creates a new instance with default attributes.
+     */
+Method code:
+77 |     public DefaultShadowGenerator() {
+78 |         this(5, Color.black, 0.5f, 5, -Math.PI / 4);
+79 |     }
+
+===== M0065 =====
+Signature: org.jfree.chart.event.ChartChangeEvent.setType(ChartChangeEventType)
+Source: source/org/jfree/chart/event/ChartChangeEvent.java
+Original range: 130-132
+Documentation:
+/**
+     * Sets the event type.
+     *
+     * @param type  the event type.
+     */
+Method code:
+130 |     public void setType(ChartChangeEventType type) {
+131 |         this.type = type;
+132 |     }
+
+===== M0066 =====
+Signature: org.jfree.chart.plot.CategoryPlot.getDataset(int)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1319-1325
+Documentation:
+/**
+     * Returns the dataset at the given index.
+     *
+     * @param index  the dataset index.
+     *
+     * @return The dataset (possibly <code>null</code>).
+     *
+     * @see #setDataset(int, CategoryDataset)
+     */
+Method code:
+1319 |     public CategoryDataset getDataset(int index) {
+1320 |         CategoryDataset result = null;
+1321 |         if (this.datasets.size() > index) {
+1322 |             result = (CategoryDataset) this.datasets.get(index);
+1323 |         }
+1324 |         return result;
+1325 |     }
+
+===== M0067 =====
+Signature: org.jfree.chart.labels.StandardCategorySeriesLabelGenerator.StandardCategorySeriesLabelGenerator()
+Source: source/org/jfree/chart/labels/StandardCategorySeriesLabelGenerator.java
+Original range: 74-76
+Documentation:
+/**
+     * Creates a default series label generator (uses
+     * {@link #DEFAULT_LABEL_FORMAT}).
+     */
+Method code:
+74 |     public StandardCategorySeriesLabelGenerator() {
+75 |         this(DEFAULT_LABEL_FORMAT);
+76 |     }
+
+===== M0068 =====
+Signature: org.jfree.data.KeyedObject.KeyedObject(Comparable,Object)
+Source: source/org/jfree/data/KeyedObject.java
+Original range: 71-74
+Documentation:
+/**
+     * Creates a new (key, object) pair.
+     *
+     * @param key  the key.
+     * @param object  the object (<code>null</code> permitted).
+     */
+Method code:
+71 |     public KeyedObject(Comparable key, Object object) {
+72 |         this.key = key;
+73 |         this.object = object;
+74 |     }
+
+===== M0069 =====
+Signature: org.jfree.chart.plot.CategoryPlot.getIndexOf(CategoryItemRenderer)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1726-1728
+Documentation:
+/**
+     * Returns the index of the specified renderer, or <code>-1</code> if the
+     * renderer is not assigned to this plot.
+     *
+     * @param renderer  the renderer (<code>null</code> permitted).
+     *
+     * @return The renderer index.
+     */
+Method code:
+1726 |     public int getIndexOf(CategoryItemRenderer renderer) {
+1727 |         return this.renderers.indexOf(renderer);
+1728 |     }
+
+===== M0070 =====
+Signature: org.jfree.data.general.AbstractDataset.fireDatasetChanged(DatasetChangeInfo)
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 175-177
+Documentation:
+/**
+     * Notifies all registered listeners that the dataset has changed.
+     *
+     * @param info  information about the change (<code>null</code> not
+     *         permitted).
+     *
+     * @see #addChangeListener(DatasetChangeListener)
+     *
+     * @since 1.2.0
+     */
+Method code:
+175 |     protected void fireDatasetChanged(DatasetChangeInfo info) {
+176 |         notifyListeners(new DatasetChangeEvent(this, this, info));
+177 |     }
+
+===== M0071 =====
+Signature: org.jfree.chart.renderer.category.LineAndShapeRenderer.LineAndShapeRenderer(boolean,boolean)
+Source: source/org/jfree/chart/renderer/category/LineAndShapeRenderer.java
+Original range: 210-223
+Documentation:
+/**
+     * Creates a new renderer with lines and/or shapes visible.
+     *
+     * @param lines  draw lines?
+     * @param shapes  draw shapes?
+     */
+Method code:
+210 |     public LineAndShapeRenderer(boolean lines, boolean shapes) {
+211 |         super();
+212 |         this.seriesLinesVisible = new BooleanList();
+213 |         this.baseLinesVisible = lines;
+214 |         this.seriesShapesVisible = new BooleanList();
+215 |         this.baseShapesVisible = shapes;
+216 |         this.seriesShapesFilled = new BooleanList();
+217 |         this.baseShapesFilled = true;
+218 |         this.useFillPaint = false;
+219 |         this.drawOutlines = true;
+220 |         this.useOutlinePaint = false;
+221 |         this.useSeriesOffset = false;  // preserves old behaviour
+222 |         this.itemMargin = 0.0;
+223 |     }
+
+===== M0072 =====
+Signature: org.jfree.chart.util.AbstractObjectList.indexOf(Object)
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 160-167
+Documentation:
+/**
+     * Returns the index of the specified object, or -1 if the object is not in
+     * the list.
+     *
+     * @param object  the object.
+     *
+     * @return The index or -1.
+     */
+Method code:
+160 |     protected int indexOf(Object object) {
+161 |         for (int index = 0; index < this.size; index++) {
+162 |             if (this.objects[index] == object) {
+163 |                 return (index);
+164 |             }
+165 |         }
+166 |         return -1;
+167 |     }
+
+===== M0073 =====
+Signature: org.jfree.chart.util.UnitType.UnitType(String)
+Source: source/org/jfree/chart/util/UnitType.java
+Original range: 69-71
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+69 |     private UnitType(String name) {
+70 |         this.name = name;
+71 |     }
+
+===== M0074 =====
+Signature: org.jfree.chart.event.ChartChangeEventType.ChartChangeEventType(String)
+Source: source/org/jfree/chart/event/ChartChangeEventType.java
+Original range: 74-76
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+74 |     private ChartChangeEventType(String name) {
+75 |         this.name = name;
+76 |     }
+
+===== M0075 =====
+Signature: org.jfree.chart.util.ObjectList.get(int)
+Source: source/org/jfree/chart/util/ObjectList.java
+Original range: 84-86
+Documentation:
+/**
+     * Returns the object at the specified index, if there is one, or
+     * <code>null</code>.
+     *
+     * @param index  the object index.
+     *
+     * @return The object or <code>null</code>.
+     */
+Method code:
+84 |     public Object get(int index) {
+85 |         return super.get(index);
+86 |     }
+
+===== M0076 =====
+Signature: org.jfree.chart.util.AbstractObjectList.AbstractObjectList()
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 76-78
+Documentation:
+/**
+     * Creates a new list with the default initial capacity.
+     */
+Method code:
+76 |     protected AbstractObjectList() {
+77 |         this(DEFAULT_INITIAL_CAPACITY);
+78 |     }
+
+===== M0077 =====
+Signature: org.jfree.chart.renderer.category.LineAndShapeRenderer.LineAndShapeRenderer()
+Source: source/org/jfree/chart/renderer/category/LineAndShapeRenderer.java
+Original range: 200-202
+Documentation:
+/**
+     * Creates a renderer with both lines and shapes visible by default.
+     */
+Method code:
+200 |     public LineAndShapeRenderer() {
+201 |         this(true, true);
+202 |     }
+
+===== M0078 =====
+Signature: org.jfree.chart.event.ChartChangeEvent.ChartChangeEvent(Object)
+Source: source/org/jfree/chart/event/ChartChangeEvent.java
+Original range: 68-70
+Documentation:
+/**
+     * Creates a new chart change event.
+     *
+     * @param source  the source of the event (could be the chart, a title,
+     *                an axis etc.)
+     */
+Method code:
+68 |     public ChartChangeEvent(Object source) {
+69 |         this(source, null, ChartChangeEventType.GENERAL);
+70 |     }
+
+===== M0079 =====
+Signature: org.jfree.chart.plot.DatasetRenderingOrder.DatasetRenderingOrder(String)
+Source: source/org/jfree/chart/plot/DatasetRenderingOrder.java
+Original range: 80-82
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+80 |     private DatasetRenderingOrder(String name) {
+81 |         this.name = name;
+82 |     }
+
+===== M0080 =====
+Signature: org.jfree.data.general.AbstractDataset.addChangeListener(DatasetChangeListener)
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 132-134
+Documentation:
+/**
+     * Registers an object to receive notification of changes to the dataset.
+     *
+     * @param listener  the object to register.
+     *
+     * @see #removeChangeListener(DatasetChangeListener)
+     */
+Method code:
+132 |     public void addChangeListener(DatasetChangeListener listener) {
+133 |         this.listenerList.add(DatasetChangeListener.class, listener);
+134 |     }
+
+===== M0081 =====
+Signature: org.jfree.chart.util.SortOrder.SortOrder(String)
+Source: source/org/jfree/chart/util/SortOrder.java
+Original range: 74-76
+Documentation:
+/**
+     * Private constructor.
+     *
+     * @param name  the name.
+     */
+Method code:
+74 |     private SortOrder(String name) {
+75 |         this.name = name;
+76 |     }
+
+===== M0082 =====
+Signature: org.jfree.data.KeyedObjects.setObject(Comparable,Object)
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 204-214
+Documentation:
+/**
+     * Replaces an existing object, or adds a new object to the collection.
+     * This is the same as the {@link #addObject(Comparable, Object)}
+     * method.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     * @param object  the object.
+     *
+     * @see #getObject(Comparable)
+     */
+Method code:
+204 |     public void setObject(Comparable key, Object object) {
+205 |         int keyIndex = getIndex(key);
+206 |         if (keyIndex >= 0) {
+207 |             KeyedObject ko = (KeyedObject) this.data.get(keyIndex);
+208 |             ko.setObject(object);
+209 |         }
+210 |         else {
+211 |             KeyedObject ko = new KeyedObject(key, object);
+212 |             this.data.add(ko);
+213 |         }
+214 |     }
+
+===== M0083 =====
+Signature: org.jfree.chart.ChartColor.createDefaultPaintArray()
+Source: source/org/jfree/chart/ChartColor.java
+Original range: 149-187
+Documentation:
+/**
+     * Convenience method to return an array of <code>Paint</code> objects that
+     * represent the pre-defined colors in the <code>Color<code> and
+     * <code>ChartColor</code> objects.
+     *
+     * @return An array of objects with the <code>Paint</code> interface.
+     */
+Method code:
+149 |     public static Paint[] createDefaultPaintArray() {
+150 | 
+151 |         return new Paint[] {
+152 |             new Color(0xFF, 0x55, 0x55),
+153 |             new Color(0x55, 0x55, 0xFF),
+154 |             new Color(0x55, 0xFF, 0x55),
+155 |             new Color(0xFF, 0xFF, 0x55),
+156 |             new Color(0xFF, 0x55, 0xFF),
+157 |             new Color(0x55, 0xFF, 0xFF),
+158 |             Color.pink,
+159 |             Color.gray,
+160 |             ChartColor.DARK_RED,
+161 |             ChartColor.DARK_BLUE,
+162 |             ChartColor.DARK_GREEN,
+163 |             ChartColor.DARK_YELLOW,
+164 |             ChartColor.DARK_MAGENTA,
+165 |             ChartColor.DARK_CYAN,
+166 |             Color.darkGray,
+167 |             ChartColor.LIGHT_RED,
+168 |             ChartColor.LIGHT_BLUE,
+169 |             ChartColor.LIGHT_GREEN,
+170 |             ChartColor.LIGHT_YELLOW,
+171 |             ChartColor.LIGHT_MAGENTA,
+172 |             ChartColor.LIGHT_CYAN,
+173 |             Color.lightGray,
+174 |             ChartColor.VERY_DARK_RED,
+175 |             ChartColor.VERY_DARK_BLUE,
+176 |             ChartColor.VERY_DARK_GREEN,
+177 |             ChartColor.VERY_DARK_YELLOW,
+178 |             ChartColor.VERY_DARK_MAGENTA,
+179 |             ChartColor.VERY_DARK_CYAN,
+180 |             ChartColor.VERY_LIGHT_RED,
+181 |             ChartColor.VERY_LIGHT_BLUE,
+182 |             ChartColor.VERY_LIGHT_GREEN,
+183 |             ChartColor.VERY_LIGHT_YELLOW,
+184 |             ChartColor.VERY_LIGHT_MAGENTA,
+185 |             ChartColor.VERY_LIGHT_CYAN
+186 |         };
+187 |     }
+
+===== M0084 =====
+Signature: org.jfree.chart.plot.CategoryPlot.getRangeAxis(int)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1039-1052
+Documentation:
+/**
+     * Returns a range axis.
+     *
+     * @param index  the axis index.
+     *
+     * @return The axis (<code>null</code> possible).
+     */
+Method code:
+1039 |     public ValueAxis getRangeAxis(int index) {
+1040 |         ValueAxis result = null;
+1041 |         if (index < this.rangeAxes.size()) {
+1042 |             result = (ValueAxis) this.rangeAxes.get(index);
+1043 |         }
+1044 |         if (result == null) {
+1045 |             Plot parent = getParent();
+1046 |             if (parent instanceof CategoryPlot) {
+1047 |                 CategoryPlot cp = (CategoryPlot) parent;
+1048 |                 result = cp.getRangeAxis(index);
+1049 |             }
+1050 |         }
+1051 |         return result;
+1052 |     }
+
+===== M0085 =====
+Signature: org.jfree.data.KeyedObjects.getIndex(Comparable)
+Source: source/org/jfree/data/KeyedObjects.java
+Original range: 132-146
+Documentation:
+/**
+     * Returns the index for a given key, or <code>-1</code>.
+     *
+     * @param key  the key (<code>null</code> not permitted).
+     *
+     * @return The index, or <code>-1</code> if the key is unrecognised.
+     *
+     * @see #getKey(int)
+     */
+Method code:
+132 |     public int getIndex(Comparable key) {
+133 |         if (key == null) {
+134 |             throw new IllegalArgumentException("Null 'key' argument.");
+135 |         }
+136 |         int i = 0;
+137 |         Iterator iterator = this.data.iterator();
+138 |         while (iterator.hasNext()) {
+139 |             KeyedObject ko = (KeyedObject) iterator.next();
+140 |             if (ko.getKey().equals(key)) {
+141 |                 return i;
+142 |             }
+143 |             i++;
+144 |         }
+145 |         return -1;
+146 |     }
+
+===== M0086 =====
+Signature: org.jfree.chart.plot.CategoryPlot.datasetChanged(DatasetChangeEvent)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 2332-2350
+Documentation:
+/**
+     * Receives notification of a change to the plot's dataset.
+     * <P>
+     * The range axis bounds will be recalculated if necessary.
+     *
+     * @param event  information about the event (not used here).
+     */
+Method code:
+2332 |     public void datasetChanged(DatasetChangeEvent event) {
+2333 | 
+2334 |         int count = this.rangeAxes.size();
+2335 |         for (int axisIndex = 0; axisIndex < count; axisIndex++) {
+2336 |             ValueAxis yAxis = getRangeAxis(axisIndex);
+2337 |             if (yAxis != null) {
+2338 |                 yAxis.configure();
+2339 |             }
+2340 |         }
+2341 |         if (getParent() != null) {
+2342 |             getParent().datasetChanged(event);
+2343 |         }
+2344 |         else {
+2345 |             PlotChangeEvent e = new PlotChangeEvent(this);
+2346 |             e.setType(ChartChangeEventType.DATASET_UPDATED);
+2347 |             notifyListeners(e);
+2348 |         }
+2349 | 
+2350 |     }
+
+===== M0087 =====
+Signature: org.jfree.chart.util.PaintList.PaintList()
+Source: source/org/jfree/chart/util/PaintList.java
+Original range: 58-60
+Documentation:
+/**
+     * Creates a new list.
+     */
+Method code:
+58 |     public PaintList() {
+59 |         super();
+60 |     }
+
+===== M0088 =====
+Signature: org.jfree.chart.plot.DefaultDrawingSupplier.intArray(double,double,double)
+Source: source/org/jfree/chart/plot/DefaultDrawingSupplier.java
+Original range: 516-518
+Documentation:
+/**
+     * Helper method to avoid lots of explicit casts in getShape().  Returns
+     * an array containing the provided doubles cast to ints.
+     *
+     * @param a  x
+     * @param b  y
+     * @param c  z
+     *
+     * @return int[3] with converted params.
+     */
+Method code:
+516 |     private static int[] intArray(double a, double b, double c) {
+517 |         return new int[] {(int) a, (int) b, (int) c};
+518 |     }
+
+===== M0089 =====
+Signature: org.jfree.chart.util.AbstractObjectList.AbstractObjectList(int)
+Source: source/org/jfree/chart/util/AbstractObjectList.java
+Original range: 85-87
+Documentation:
+/**
+     * Creates a new list.
+     *
+     * @param initialCapacity  the initial capacity.
+     */
+Method code:
+85 |     protected AbstractObjectList(int initialCapacity) {
+86 |         this (initialCapacity, initialCapacity);
+87 |     }
+
+===== M0090 =====
+Signature: org.jfree.chart.plot.Plot.getParent()
+Source: source/org/jfree/chart/plot/Plot.java
+Original range: 455-457
+Documentation:
+/**
+     * Returns the parent plot (or <code>null</code> if this plot is not part
+     * of a combined plot).
+     *
+     * @return The parent plot.
+     *
+     * @see #setParent(Plot)
+     * @see #getRootPlot()
+     */
+Method code:
+455 |     public Plot getParent() {
+456 |         return this.parent;
+457 |     }
+
+===== M0091 =====
+Signature: org.jfree.chart.plot.DefaultDrawingSupplier.DefaultDrawingSupplier(Paint[],Paint[],Paint[],Stroke[],Stroke[],Shape[])
+Source: source/org/jfree/chart/plot/DefaultDrawingSupplier.java
+Original range: 194-205
+Documentation:
+/**
+     * Creates a new supplier.
+     *
+     * @param paintSequence  the paint sequence.
+     * @param fillPaintSequence  the fill paint sequence.
+     * @param outlinePaintSequence  the outline paint sequence.
+     * @param strokeSequence  the stroke sequence.
+     * @param outlineStrokeSequence  the outline stroke sequence.
+     * @param shapeSequence  the shape sequence.
+     *
+     * @since 1.0.6
+     */
+Method code:
+194 |     public DefaultDrawingSupplier(Paint[] paintSequence,
+195 |             Paint[] fillPaintSequence, Paint[] outlinePaintSequence,
+196 |             Stroke[] strokeSequence, Stroke[] outlineStrokeSequence,
+197 |             Shape[] shapeSequence) {
+198 | 
+199 |         this.paintSequence = paintSequence;
+200 |         this.fillPaintSequence = fillPaintSequence;
+201 |         this.outlinePaintSequence = outlinePaintSequence;
+202 |         this.strokeSequence = strokeSequence;
+203 |         this.outlineStrokeSequence = outlineStrokeSequence;
+204 |         this.shapeSequence = shapeSequence;
+205 |     }
+
+===== M0092 =====
+Signature: org.jfree.chart.util.ObjectList.set(int,Object)
+Source: source/org/jfree/chart/util/ObjectList.java
+Original range: 94-96
+Documentation:
+/**
+     * Sets an object reference (overwriting any existing object).
+     *
+     * @param index  the object index.
+     * @param object  the object (<code>null</code> permitted).
+     */
+Method code:
+94 |     public void set(int index, Object object) {
+95 |         super.set(index, object);
+96 |     }
+
+===== M0093 =====
+Signature: org.jfree.chart.plot.Plot.fireChangeEvent()
+Source: source/org/jfree/chart/plot/Plot.java
+Original range: 985-987
+Documentation:
+/**
+     * Sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @since 1.0.10
+     */
+Method code:
+985 |     protected void fireChangeEvent() {
+986 |         notifyListeners(new PlotChangeEvent(this));
+987 |     }
+
+===== M0094 =====
+Signature: org.jfree.chart.event.ChartChangeEvent.ChartChangeEvent(Object,JFreeChart,ChartChangeEventType)
+Source: source/org/jfree/chart/event/ChartChangeEvent.java
+Original range: 91-96
+Documentation:
+/**
+     * Creates a new chart change event.
+     *
+     * @param source  the source of the event (could be the chart, a title, an
+                      axis etc.)
+     * @param chart  the chart that generated the event.
+     * @param type  the type of event.
+     */
+Method code:
+91 |     public ChartChangeEvent(Object source, JFreeChart chart,
+92 |                             ChartChangeEventType type) {
+93 |         super(source);
+94 |         this.chart = chart;
+95 |         this.type = type;
+96 |     }
+
+===== M0095 =====
+Signature: org.jfree.chart.plot.Plot.Plot()
+Source: source/org/jfree/chart/plot/Plot.java
+Original range: 306-327
+Documentation:
+/**
+     * Creates a new plot.
+     */
+Method code:
+306 |     protected Plot() {
+307 | 
+308 |         this.parent = null;
+309 |         this.insets = DEFAULT_INSETS;
+310 |         this.backgroundPaint = DEFAULT_BACKGROUND_PAINT;
+311 |         this.backgroundAlpha = DEFAULT_BACKGROUND_ALPHA;
+312 |         this.backgroundImage = null;
+313 |         this.outlineVisible = true;
+314 |         this.outlineStroke = DEFAULT_OUTLINE_STROKE;
+315 |         this.outlinePaint = DEFAULT_OUTLINE_PAINT;
+316 |         this.foregroundAlpha = DEFAULT_FOREGROUND_ALPHA;
+317 | 
+318 |         this.noDataMessage = null;
+319 |         this.noDataMessageFont = new Font("Tahoma", Font.PLAIN, 12);
+320 |         this.noDataMessagePaint = Color.black;
+321 | 
+322 |         this.drawingSupplier = new DefaultDrawingSupplier();
+323 | 
+324 |         this.notify = true;
+325 |         this.listenerList = new EventListenerList();
+326 | 
+327 |     }
+
+===== M0096 =====
+Signature: org.jfree.data.general.AbstractDataset.AbstractDataset()
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 95-98
+Documentation:
+/**
+     * Constructs a dataset. By default, the dataset is assigned to its own
+     * group.
+     */
+Method code:
+95 |     protected AbstractDataset() {
+96 |         this.group = new DatasetGroup();
+97 |         this.listenerList = new EventListenerList();
+98 |     }
+
+===== M0097 =====
+Signature: org.jfree.chart.renderer.AbstractRenderer.AbstractRenderer()
+Source: source/org/jfree/chart/renderer/AbstractRenderer.java
+Original range: 396-465
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+396 |     public AbstractRenderer() {
+397 | 
+398 |         this.seriesVisibleList = new BooleanList();
+399 |         this.baseSeriesVisible = true;
+400 | 
+401 |         this.seriesVisibleInLegendList = new BooleanList();
+402 |         this.baseSeriesVisibleInLegend = true;
+403 | 
+404 |         this.paintList = new PaintList();
+405 |         this.basePaint = DEFAULT_PAINT;
+406 |         this.autoPopulateSeriesPaint = true;
+407 | 
+408 |         this.fillPaintList = new PaintList();
+409 |         this.baseFillPaint = Color.white;
+410 |         this.autoPopulateSeriesFillPaint = false;
+411 | 
+412 |         this.outlinePaintList = new PaintList();
+413 |         this.baseOutlinePaint = DEFAULT_OUTLINE_PAINT;
+414 |         this.autoPopulateSeriesOutlinePaint = false;
+415 | 
+416 |         this.strokeList = new StrokeList();
+417 |         this.baseStroke = DEFAULT_STROKE;
+418 |         this.autoPopulateSeriesStroke = true;
+419 | 
+420 |         this.outlineStrokeList = new StrokeList();
+421 |         this.baseOutlineStroke = DEFAULT_OUTLINE_STROKE;
+422 |         this.autoPopulateSeriesOutlineStroke = false;
+423 | 
+424 |         this.shapeList = new ShapeList();
+425 |         this.baseShape = DEFAULT_SHAPE;
+426 |         this.autoPopulateSeriesShape = true;
+427 | 
+428 |         this.itemLabelsVisibleList = new BooleanList();
+429 |         this.baseItemLabelsVisible = false;
+430 | 
+431 |         this.itemLabelFontList = new ObjectList();
+432 |         this.baseItemLabelFont = new Font("Tahoma", Font.PLAIN, 10);
+433 | 
+434 |         this.itemLabelPaintList = new PaintList();
+435 |         this.baseItemLabelPaint = Color.black;
+436 | 
+437 |         this.positiveItemLabelPositionList = new ObjectList();
+438 |         this.basePositiveItemLabelPosition = new ItemLabelPosition(
+439 |                 ItemLabelAnchor.OUTSIDE12, TextAnchor.BOTTOM_CENTER);
+440 | 
+441 |         this.negativeItemLabelPositionList = new ObjectList();
+442 |         this.baseNegativeItemLabelPosition = new ItemLabelPosition(
+443 |                 ItemLabelAnchor.OUTSIDE6, TextAnchor.TOP_CENTER);
+444 | 
+445 |         this.createEntitiesList = new BooleanList();
+446 |         this.baseCreateEntities = true;
+447 | 
+448 |         this.defaultEntityRadius = 3;
+449 | 
+450 |         this.legendShapeList = new ShapeList();
+451 |         this.baseLegendShape = null;
+452 | 
+453 |         this.treatLegendShapeAsLine = false;
+454 | 
+455 |         this.legendTextFont = new ObjectList();
+456 |         this.baseLegendTextFont = null;
+457 | 
+458 |         this.legendTextPaint = new PaintList();
+459 |         this.baseLegendTextPaint = null;
+460 | 
+461 |         this.listenerList = new EventListenerList();
+462 | 
+463 |         this.selectedItemAttributes = new RenderAttributes();
+464 |         this.selectedItemAttributes.setDefaultFillPaint(Color.WHITE);
+465 |     }
+
+===== M0098 =====
+Signature: org.jfree.chart.plot.CategoryPlot.setRenderer(int,CategoryItemRenderer,boolean)
+Source: source/org/jfree/chart/plot/CategoryPlot.java
+Original range: 1661-1684
+Documentation:
+/**
+     * Sets a renderer.  A {@link PlotChangeEvent} is sent to all registered
+     * listeners.
+     *
+     * @param index  the index.
+     * @param renderer  the renderer (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     *
+     * @see #getRenderer(int)
+     */
+Method code:
+1661 |     public void setRenderer(int index, CategoryItemRenderer renderer,
+1662 |                             boolean notify) {
+1663 | 
+1664 |         // stop listening to the existing renderer...
+1665 |         CategoryItemRenderer existing
+1666 |             = (CategoryItemRenderer) this.renderers.get(index);
+1667 |         if (existing != null) {
+1668 |             existing.removeChangeListener(this);
+1669 |         }
+1670 | 
+1671 |         // register the new renderer...
+1672 |         this.renderers.set(index, renderer);
+1673 |         if (renderer != null) {
+1674 |             renderer.setPlot(this);
+1675 |             renderer.addChangeListener(this);
+1676 |         }
+1677 | 
+1678 |         configureDomainAxes();
+1679 |         configureRangeAxes();
+1680 | 
+1681 |         if (notify) {
+1682 |             fireChangeEvent();
+1683 |         }
+1684 |     }
+
+===== M0099 =====
+Signature: org.jfree.chart.renderer.AbstractRenderer.addChangeListener(RendererChangeListener)
+Source: source/org/jfree/chart/renderer/AbstractRenderer.java
+Original range: 2891-2896
+Documentation:
+/**
+     * Registers an object to receive notification of changes to the renderer.
+     *
+     * @param listener  the listener (<code>null</code> not permitted).
+     *
+     * @see #removeChangeListener(RendererChangeListener)
+     */
+Method code:
+2891 |     public void addChangeListener(RendererChangeListener listener) {
+2892 |         if (listener == null) {
+2893 |             throw new IllegalArgumentException("Null 'listener' argument.");
+2894 |         }
+2895 |         this.listenerList.add(RendererChangeListener.class, listener);
+2896 |     }
+
+===== M0100 =====
+Signature: org.jfree.chart.renderer.RenderAttributes.RenderAttributes()
+Source: source/org/jfree/chart/renderer/RenderAttributes.java
+Original range: 119-121
+Documentation:
+/**
+     * Creates a new instance.
+     */
+Method code:
+119 |     public RenderAttributes() {
+120 |         this(true);
+121 |     }
+

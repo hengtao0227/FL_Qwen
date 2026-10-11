@@ -1,0 +1,59 @@
+===== M0001 =====
+Signature: org.jfree.chart.renderer.GrayPaintScale.getPaint(double)
+Source: source/org/jfree/chart/renderer/GrayPaintScale.java
+Original range: 123-129
+Documentation:
+/**
+     * Returns a paint for the specified value.
+     * 
+     * @param value  the value (must be within the range specified by the
+     *         lower and upper bounds for the scale).
+     * 
+     * @return A paint for the specified value.
+     */
+Method code:
+123 |     public Paint getPaint(double value) {
+124 |         double v = Math.max(value, this.lowerBound);
+125 |         v = Math.min(v, this.upperBound);
+126 |         int g = (int) ((value - this.lowerBound) / (this.upperBound 
+127 |                 - this.lowerBound) * 255.0);
+128 |         return new Color(g, g, g);
+129 |     }
+
+===== M0002 =====
+Signature: org.jfree.chart.renderer.GrayPaintScale.GrayPaintScale()
+Source: source/org/jfree/chart/renderer/GrayPaintScale.java
+Original range: 71-73
+Documentation:
+/**
+     * Creates a new <code>GrayPaintScale</code> instance with default values.
+     */
+Method code:
+71 |     public GrayPaintScale() {
+72 |         this(0.0, 1.0);
+73 |     }
+
+===== M0003 =====
+Signature: org.jfree.chart.renderer.GrayPaintScale.GrayPaintScale(double,double)
+Source: source/org/jfree/chart/renderer/GrayPaintScale.java
+Original range: 84-91
+Documentation:
+/**
+     * Creates a new paint scale for values in the specified range.
+     * 
+     * @param lowerBound  the lower bound.
+     * @param upperBound  the upper bound.
+     * 
+     * @throws IllegalArgumentException if <code>lowerBound</code> is not
+     *       less than <code>upperBound</code>.
+     */
+Method code:
+84 |     public GrayPaintScale(double lowerBound, double upperBound) {
+85 |         if (lowerBound >= upperBound) {
+86 |             throw new IllegalArgumentException(
+87 |                     "Requires lowerBound < upperBound.");
+88 |         }
+89 |         this.lowerBound = lowerBound;
+90 |         this.upperBound = upperBound;
+91 |     }
+

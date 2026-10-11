@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.PeepholeFoldConstantsTest.testFoldBitShifts()",
+    "resolved_signature": "com.google.javascript.jscomp.PeepholeFoldConstantsTest.testFoldBitShifts()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+    "begin_line": 240,
+    "end_line": 288,
+    "comment": "",
+    "snippet": "  public void testFoldBitShifts() {\n    fold(\"x = 1 << 0\", \"x = 1\");\n    fold(\"x = -1 << 0\", \"x = -1\");\n    fold(\"x = 1 << 1\", \"x = 2\");\n    fold(\"x = 3 << 1\", \"x = 6\");\n    fold(\"x = 1 << 8\", \"x = 256\");\n\n    fold(\"x = 1 >> 0\", \"x = 1\");\n    fold(\"x = -1 >> 0\", \"x = -1\");\n    fold(\"x = 1 >> 1\", \"x = 0\");\n    fold(\"x = 2 >> 1\", \"x = 1\");\n    fold(\"x = 5 >> 1\", \"x = 2\");\n    fold(\"x = 127 >> 3\", \"x = 15\");\n    fold(\"x = 3 >> 1\", \"x = 1\");\n    fold(\"x = 3 >> 2\", \"x = 0\");\n    fold(\"x = 10 >> 1\", \"x = 5\");\n    fold(\"x = 10 >> 2\", \"x = 2\");\n    fold(\"x = 10 >> 5\", \"x = 0\");\n\n    fold(\"x = 10 >>> 1\", \"x = 5\");\n    fold(\"x = 10 >>> 2\", \"x = 2\");\n    fold(\"x = 10 >>> 5\", \"x = 0\");\n    fold(\"x = -1 >>> 1\", \"x = 2147483647\"); // 0x7fffffff\n    fold(\"x = -1 >>> 0\", \"x = 4294967295\"); // 0xffffffff\n    fold(\"x = -2 >>> 0\", \"x = 4294967294\"); // 0xfffffffe\n\n    fold(\"3000000000 << 1\", \"3000000000<<1\",\n         PeepholeFoldConstants.BITWISE_OPERAND_OUT_OF_RANGE);\n    fold(\"1 << 32\", \"1<<32\",\n        PeepholeFoldConstants.SHIFT_AMOUNT_OUT_OF_BOUNDS);\n    fold(\"1 << -1\", \"1<<32\",\n        PeepholeFoldConstants.SHIFT_AMOUNT_OUT_OF_BOUNDS);\n    fold(\"3000000000 >> 1\", \"3000000000>>1\",\n        PeepholeFoldConstants.BITWISE_OPERAND_OUT_OF_RANGE);\n    fold(\"1 >> 32\", \"1>>32\",\n        PeepholeFoldConstants.SHIFT_AMOUNT_OUT_OF_BOUNDS);\n    fold(\"1.5 << 0\",  \"1.5<<0\",\n        PeepholeFoldConstants.FRACTIONAL_BITWISE_OPERAND);\n    fold(\"1 << .5\",   \"1.5<<0\",\n        PeepholeFoldConstants.FRACTIONAL_BITWISE_OPERAND);\n    fold(\"1.5 >>> 0\", \"1.5>>>0\",\n        PeepholeFoldConstants.FRACTIONAL_BITWISE_OPERAND);\n    fold(\"1 >>> .5\",  \"1.5>>>0\",\n        PeepholeFoldConstants.FRACTIONAL_BITWISE_OPERAND);\n    fold(\"1.5 >> 0\",  \"1.5>>0\",\n        PeepholeFoldConstants.FRACTIONAL_BITWISE_OPERAND);\n    fold(\"1 >> .5\",   \"1.5>>0\",\n        PeepholeFoldConstants.FRACTIONAL_BITWISE_OPERAND);\n  }"
+  }
+]

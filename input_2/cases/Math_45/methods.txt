@@ -1,0 +1,163 @@
+===== M0001 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.OpenIntToDoubleHashMap(double)
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 99-101
+Documentation:
+/**
+     * Build an empty map with default size
+     * @param missingEntries value to return when a missing entry is fetched
+     */
+Method code:
+99 |     public OpenIntToDoubleHashMap(final double missingEntries) {
+100 |         this(DEFAULT_EXPECTED_SIZE, missingEntries);
+101 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.util.FastMath.ceil(double)
+Source: src/main/java/org/apache/commons/math/util/FastMath.java
+Original range: 3341-3360
+Documentation:
+/** Get the smallest whole number larger than x.
+     * @param x number from which ceil is requested
+     * @return a double number c such that c is an integer c - 1.0 < x <= c
+     */
+Method code:
+3341 |     public static double ceil(double x) {
+3342 |         double y;
+3343 | 
+3344 |         if (x != x) { // NaN
+3345 |             return x;
+3346 |         }
+3347 | 
+3348 |         y = floor(x);
+3349 |         if (y == x) {
+3350 |             return y;
+3351 |         }
+3352 | 
+3353 |         y += 1.0;
+3354 | 
+3355 |         if (y == 0) {
+3356 |             return x*y;
+3357 |         }
+3358 | 
+3359 |         return y;
+3360 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.linear.OpenMapRealMatrix.OpenMapRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math/linear/OpenMapRealMatrix.java
+Original range: 48-53
+Documentation:
+/**
+     * Build a sparse matrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension Number of rows of the matrix.
+     * @param columnDimension Number of columns of the matrix.
+     */
+Method code:
+48 |     public OpenMapRealMatrix(int rowDimension, int columnDimension) {
+49 |         super(rowDimension, columnDimension);
+50 |         this.rows = rowDimension;
+51 |         this.columns = columnDimension;
+52 |         this.entries = new OpenIntToDoubleHashMap(0.0);
+53 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.linear.AbstractRealMatrix.AbstractRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math/linear/AbstractRealMatrix.java
+Original range: 53-60
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension  the number of rows in the new matrix
+     * @param columnDimension  the number of columns in the new matrix
+     * @throws NotStrictlyPositiveException if row or column dimension is not positive
+     */
+Method code:
+53 |     protected AbstractRealMatrix(final int rowDimension, final int columnDimension) {
+54 |         if (rowDimension < 1) {
+55 |             throw new NotStrictlyPositiveException(rowDimension);
+56 |         }
+57 |         if (columnDimension < 1) {
+58 |             throw new NotStrictlyPositiveException(columnDimension);
+59 |         }
+60 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.OpenIntToDoubleHashMap(int,double)
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 116-124
+Documentation:
+/**
+     * Build an empty map with specified size.
+     * @param expectedSize expected number of elements in the map
+     * @param missingEntries value to return when a missing entry is fetched
+     */
+Method code:
+116 |     public OpenIntToDoubleHashMap(final int expectedSize,
+117 |                                   final double missingEntries) {
+118 |         final int capacity = computeCapacity(expectedSize);
+119 |         keys   = new int[capacity];
+120 |         values = new double[capacity];
+121 |         states = new byte[capacity];
+122 |         this.missingEntries = missingEntries;
+123 |         mask   = capacity - 1;
+124 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.util.OpenIntToDoubleHashMap.computeCapacity(int)
+Source: src/main/java/org/apache/commons/math/util/OpenIntToDoubleHashMap.java
+Original range: 149-159
+Documentation:
+/**
+     * Compute the capacity needed for a given size.
+     * @param expectedSize expected size of the map
+     * @return capacity to use for the specified size
+     */
+Method code:
+149 |     private static int computeCapacity(final int expectedSize) {
+150 |         if (expectedSize == 0) {
+151 |             return 1;
+152 |         }
+153 |         final int capacity   = (int) FastMath.ceil(expectedSize / LOAD_FACTOR);
+154 |         final int powerOfTwo = Integer.highestOneBit(capacity);
+155 |         if (powerOfTwo == capacity) {
+156 |             return capacity;
+157 |         }
+158 |         return nextPowerOfTwo(capacity);
+159 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.util.FastMath.floor(double)
+Source: src/main/java/org/apache/commons/math/util/FastMath.java
+Original range: 3314-3335
+Documentation:
+/** Get the largest whole number smaller than x.
+     * @param x number from which floor is requested
+     * @return a double number f such that f is an integer f <= x < f + 1.0
+     */
+Method code:
+3314 |     public static double floor(double x) {
+3315 |         long y;
+3316 | 
+3317 |         if (x != x) { // NaN
+3318 |             return x;
+3319 |         }
+3320 | 
+3321 |         if (x >= TWO_POWER_52 || x <= -TWO_POWER_52) {
+3322 |             return x;
+3323 |         }
+3324 | 
+3325 |         y = (long) x;
+3326 |         if (x < 0 && y != x) {
+3327 |             y--;
+3328 |         }
+3329 | 
+3330 |         if (y == 0) {
+3331 |             return x*y;
+3332 |         }
+3333 | 
+3334 |         return y;
+3335 |     }
+

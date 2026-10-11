@@ -1,0 +1,1511 @@
+===== M0001 =====
+Signature: org.apache.commons.math.stat.descriptive.SummaryStatistics.setVarianceImpl(StorelessUnivariateStatistic)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/SummaryStatistics.java
+Original range: 634-637
+Documentation:
+/**
+     * <p>
+     * Sets the implementation for the variance.
+     * </p>
+     * <p>
+     * This method must be activated before any data has been added - i.e.,
+     * before {@link #addValue(double) addValue} has been used to add data;
+     * otherwise an IllegalStateException will be thrown.
+     * </p>
+     * @param varianceImpl the StorelessUnivariateStatistic instance to use for
+     *        computing the variance
+     * @throws IllegalStateException if data has already been added (i.e if n >
+     *         0)
+     * @since 1.2
+     */
+Method code:
+634 |     public void setVarianceImpl(StorelessUnivariateStatistic varianceImpl) {
+635 |         checkEmpty();
+636 |         this.varianceImpl = varianceImpl;
+637 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Mean.evaluate(double[],int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Mean.java
+Original range: 155-172
+Documentation:
+/**
+     * Returns the arithmetic mean of the entries in the specified portion of
+     * the input array, or <code>Double.NaN</code> if the designated subarray
+     * is empty.
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if the array is null.</p>
+     * <p>
+     * See {@link Mean} for details on the computing algorithm.</p>
+     *
+     * @param values the input array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return the mean of the values or Double.NaN if length = 0
+     * @throws IllegalArgumentException if the array is null or the array index
+     *  parameters are not valid
+     */
+Method code:
+155 |     @Override
+156 |     public double evaluate(final double[] values,final int begin, final int length) {
+157 |         if (test(values, begin, length)) {
+158 |             Sum sum = new Sum();
+159 |             double sampleSize = length;
+160 | 
+161 |             // Compute initial estimate using definitional formula
+162 |             double xbar = sum.evaluate(values, begin, length) / sampleSize;
+163 | 
+164 |             // Compute correction factor in second pass
+165 |             double correction = 0;
+166 |             for (int i = begin; i < begin + length; i++) {
+167 |                 correction += values[i] - xbar;
+168 |             }
+169 |             return xbar + (correction/sampleSize);
+170 |         }
+171 |         return Double.NaN;
+172 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.stat.descriptive.SummaryStatistics.getVariance()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/SummaryStatistics.java
+Original range: 238-240
+Documentation:
+/**
+     * Returns the (sample) variance of the available values.
+     *
+     * <p>This method returns the bias-corrected sample variance (using {@code n - 1} in
+     * the denominator).  Use {@link #getPopulationVariance()} for the non-bias-corrected
+     * population variance.</p>
+     *
+     * <p>Double.NaN is returned if no values have been added.</p>
+     *
+     * @return the variance
+     */
+Method code:
+238 |     public double getVariance() {
+239 |         return varianceImpl.getResult();
+240 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.FirstMoment.FirstMoment()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/FirstMoment.java
+Original range: 79-84
+Documentation:
+/**
+     * Create a FirstMoment instance
+     */
+Method code:
+79 |     public FirstMoment() {
+80 |         n = 0;
+81 |         m1 = Double.NaN;
+82 |         dev = Double.NaN;
+83 |         nDev = Double.NaN;
+84 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.stat.descriptive.rank.Max.Max()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/rank/Max.java
+Original range: 56-59
+Documentation:
+/**
+     * Create a Max instance
+     */
+Method code:
+56 |     public Max() {
+57 |         n = 0;
+58 |         value = Double.NaN;
+59 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.SumOfSquares.SumOfSquares()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/SumOfSquares.java
+Original range: 55-58
+Documentation:
+/**
+     * Create a SumOfSquares instance
+     */
+Method code:
+55 |     public SumOfSquares() {
+56 |         n = 0;
+57 |         value = 0;
+58 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.SumOfLogs.SumOfLogs()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/SumOfLogs.java
+Original range: 64-67
+Documentation:
+/**
+     * Create a SumOfLogs instance
+     */
+Method code:
+64 |     public SumOfLogs() {
+65 |        value = 0d;
+66 |        n = 0;
+67 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.SecondMoment.SecondMoment()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/SecondMoment.java
+Original range: 59-62
+Documentation:
+/**
+     * Create a SecondMoment instance
+     */
+Method code:
+59 |     public SecondMoment() {
+60 |         super();
+61 |         m2 = Double.NaN;
+62 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.GeometricMean.GeometricMean(SumOfLogs)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/GeometricMean.java
+Original range: 84-86
+Documentation:
+/**
+     * Create a GeometricMean instance using the given SumOfLogs instance
+     * @param sumOfLogs sum of logs instance to use for computation
+     */
+Method code:
+84 |     public GeometricMean(SumOfLogs sumOfLogs) {
+85 |         this.sumOfLogs = sumOfLogs;
+86 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.stat.descriptive.SummaryStatistics.setMeanImpl(StorelessUnivariateStatistic)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/SummaryStatistics.java
+Original range: 605-608
+Documentation:
+/**
+     * <p>
+     * Sets the implementation for the mean.
+     * </p>
+     * <p>
+     * This method must be activated before any data has been added - i.e.,
+     * before {@link #addValue(double) addValue} has been used to add data;
+     * otherwise an IllegalStateException will be thrown.
+     * </p>
+     * @param meanImpl the StorelessUnivariateStatistic instance to use for
+     *        computing the mean
+     * @throws IllegalStateException if data has already been added (i.e if n >
+     *         0)
+     * @since 1.2
+     */
+Method code:
+605 |     public void setMeanImpl(StorelessUnivariateStatistic meanImpl) {
+606 |         checkEmpty();
+607 |         this.meanImpl = meanImpl;
+608 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.Sum.increment(double)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/Sum.java
+Original range: 74-78
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+74 |     @Override
+75 |     public void increment(final double d) {
+76 |         value += d;
+77 |         n++;
+78 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.stat.descriptive.SummaryStatistics.SummaryStatistics()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/SummaryStatistics.java
+Original range: 123-124
+Documentation:
+/**
+     * Construct a SummaryStatistics instance
+     */
+Method code:
+123 |     public SummaryStatistics() {
+124 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.Variance(boolean)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 124-127
+Documentation:
+/**
+     * Constructs a Variance with the specified <code>isBiasCorrected</code>
+     * property
+     *
+     * @param isBiasCorrected  setting for bias correction - true means
+     * bias will be corrected and is equivalent to using the argumentless
+     * constructor
+     */
+Method code:
+124 |     public Variance(boolean isBiasCorrected) {
+125 |         moment = new SecondMoment();
+126 |         this.isBiasCorrected = isBiasCorrected;
+127 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.stat.descriptive.SummaryStatistics.setGeoMeanImpl(StorelessUnivariateStatistic)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/SummaryStatistics.java
+Original range: 576-579
+Documentation:
+/**
+     * <p>
+     * Sets the implementation for the geometric mean.
+     * </p>
+     * <p>
+     * This method must be activated before any data has been added - i.e.,
+     * before {@link #addValue(double) addValue} has been used to add data;
+     * otherwise an IllegalStateException will be thrown.
+     * </p>
+     * @param geoMeanImpl the StorelessUnivariateStatistic instance to use for
+     *        computing the geometric mean
+     * @throws IllegalStateException if data has already been added (i.e if n >
+     *         0)
+     * @since 1.2
+     */
+Method code:
+576 |     public void setGeoMeanImpl(StorelessUnivariateStatistic geoMeanImpl) {
+577 |         checkEmpty();
+578 |         this.geoMeanImpl = geoMeanImpl;
+579 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.stat.descriptive.SummaryStatistics.addValue(double)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/SummaryStatistics.java
+Original range: 149-168
+Documentation:
+/**
+     * Add a value to the data
+     * @param value the value to add
+     */
+Method code:
+149 |     public void addValue(double value) {
+150 |         sumImpl.increment(value);
+151 |         sumsqImpl.increment(value);
+152 |         minImpl.increment(value);
+153 |         maxImpl.increment(value);
+154 |         sumLogImpl.increment(value);
+155 |         secondMoment.increment(value);
+156 |         // If mean, variance or geomean have been overridden,
+157 |         // need to increment these
+158 |         if (!(meanImpl instanceof Mean)) {
+159 |             meanImpl.increment(value);
+160 |         }
+161 |         if (!(varianceImpl instanceof Variance)) {
+162 |             varianceImpl.increment(value);
+163 |         }
+164 |         if (!(geoMeanImpl instanceof GeometricMean)) {
+165 |             geoMeanImpl.increment(value);
+166 |         }
+167 |         n++;
+168 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.SumOfLogs.increment(double)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/SumOfLogs.java
+Original range: 82-86
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+82 |     @Override
+83 |     public void increment(final double d) {
+84 |         value += FastMath.log(d);
+85 |         n++;
+86 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math.stat.descriptive.AbstractStorelessUnivariateStatistic.evaluate(double[])
+Source: src/main/java/org/apache/commons/math/stat/descriptive/AbstractStorelessUnivariateStatistic.java
+Original range: 57-63
+Documentation:
+/**
+     * This default implementation calls {@link #clear}, then invokes
+     * {@link #increment} in a loop over the the input array, and then uses
+     * {@link #getResult} to compute the return value.
+     * <p>
+     * Note that this implementation changes the internal state of the
+     * statistic.  Its side effects are the same as invoking {@link #clear} and
+     * then {@link #incrementAll(double[])}.</p>
+     * <p>
+     * Implementations may override this method with a more efficient and
+     * possibly more accurate implementation that works directly with the
+     * input array.</p>
+     * <p>
+     * If the array is null, an IllegalArgumentException is thrown.</p>
+     * @param values input array
+     * @return the value of the statistic applied to the input array
+     * @see org.apache.commons.math.stat.descriptive.UnivariateStatistic#evaluate(double[])
+     */
+Method code:
+57 |     @Override
+58 |     public double evaluate(final double[] values) {
+59 |         if (values == null) {
+60 |             throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+61 |         }
+62 |         return evaluate(values, 0, values.length);
+63 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math.util.FastMath.exp(double,double,double[])
+Source: src/main/java/org/apache/commons/math/util/FastMath.java
+Original range: 817-932
+Documentation:
+/**
+     * Internal helper method for exponential function.
+     * @param x original argument of the exponential function
+     * @param extra extra bits of precision on input (To Be Confirmed)
+     * @param hiPrec extra bits of precision on output (To Be Confirmed)
+     * @return exp(x)
+     */
+Method code:
+817 |     private static double exp(double x, double extra, double[] hiPrec) {
+818 |         double intPartA;
+819 |         double intPartB;
+820 |         int intVal;
+821 | 
+822 |         /* Lookup exp(floor(x)).
+823 |          * intPartA will have the upper 22 bits, intPartB will have the lower
+824 |          * 52 bits.
+825 |          */
+826 |         if (x < 0.0) {
+827 |             intVal = (int) -x;
+828 | 
+829 |             if (intVal > 746) {
+830 |                 if (hiPrec != null) {
+831 |                     hiPrec[0] = 0.0;
+832 |                     hiPrec[1] = 0.0;
+833 |                 }
+834 |                 return 0.0;
+835 |             }
+836 | 
+837 |             if (intVal > 709) {
+838 |                 /* This will produce a subnormal output */
+839 |                 final double result = exp(x+40.19140625, extra, hiPrec) / 285040095144011776.0;
+840 |                 if (hiPrec != null) {
+841 |                     hiPrec[0] /= 285040095144011776.0;
+842 |                     hiPrec[1] /= 285040095144011776.0;
+843 |                 }
+844 |                 return result;
+845 |             }
+846 | 
+847 |             if (intVal == 709) {
+848 |                 /* exp(1.494140625) is nearly a machine number... */
+849 |                 final double result = exp(x+1.494140625, extra, hiPrec) / 4.455505956692756620;
+850 |                 if (hiPrec != null) {
+851 |                     hiPrec[0] /= 4.455505956692756620;
+852 |                     hiPrec[1] /= 4.455505956692756620;
+853 |                 }
+854 |                 return result;
+855 |             }
+856 | 
+857 |             intVal++;
+858 | 
+859 |             intPartA = ExpIntTable.EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX-intVal];
+860 |             intPartB = ExpIntTable.EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX-intVal];
+861 | 
+862 |             intVal = -intVal;
+863 |         } else {
+864 |             intVal = (int) x;
+865 | 
+866 |             if (intVal > 709) {
+867 |                 if (hiPrec != null) {
+868 |                     hiPrec[0] = Double.POSITIVE_INFINITY;
+869 |                     hiPrec[1] = 0.0;
+870 |                 }
+871 |                 return Double.POSITIVE_INFINITY;
+872 |             }
+873 | 
+874 |             intPartA = ExpIntTable.EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX+intVal];
+875 |             intPartB = ExpIntTable.EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX+intVal];
+876 |         }
+877 | 
+878 |         /* Get the fractional part of x, find the greatest multiple of 2^-10 less than
+879 |          * x and look up the exp function of it.
+880 |          * fracPartA will have the upper 22 bits, fracPartB the lower 52 bits.
+881 |          */
+882 |         final int intFrac = (int) ((x - intVal) * 1024.0);
+883 |         final double fracPartA = ExpFracTable.EXP_FRAC_TABLE_A[intFrac];
+884 |         final double fracPartB = ExpFracTable.EXP_FRAC_TABLE_B[intFrac];
+885 | 
+886 |         /* epsilon is the difference in x from the nearest multiple of 2^-10.  It
+887 |          * has a value in the range 0 <= epsilon < 2^-10.
+888 |          * Do the subtraction from x as the last step to avoid possible loss of percison.
+889 |          */
+890 |         final double epsilon = x - (intVal + intFrac / 1024.0);
+891 | 
+892 |         /* Compute z = exp(epsilon) - 1.0 via a minimax polynomial.  z has
+893 |        full double precision (52 bits).  Since z < 2^-10, we will have
+894 |        62 bits of precision when combined with the contant 1.  This will be
+895 |        used in the last addition below to get proper rounding. */
+896 | 
+897 |         /* Remez generated polynomial.  Converges on the interval [0, 2^-10], error
+898 |        is less than 0.5 ULP */
+899 |         double z = 0.04168701738764507;
+900 |         z = z * epsilon + 0.1666666505023083;
+901 |         z = z * epsilon + 0.5000000000042687;
+902 |         z = z * epsilon + 1.0;
+903 |         z = z * epsilon + -3.940510424527919E-20;
+904 | 
+905 |         /* Compute (intPartA+intPartB) * (fracPartA+fracPartB) by binomial
+906 |        expansion.
+907 |        tempA is exact since intPartA and intPartB only have 22 bits each.
+908 |        tempB will have 52 bits of precision.
+909 |          */
+910 |         double tempA = intPartA * fracPartA;
+911 |         double tempB = intPartA * fracPartB + intPartB * fracPartA + intPartB * fracPartB;
+912 | 
+913 |         /* Compute the result.  (1+z)(tempA+tempB).  Order of operations is
+914 |        important.  For accuracy add by increasing size.  tempA is exact and
+915 |        much larger than the others.  If there are extra bits specified from the
+916 |        pow() function, use them. */
+917 |         final double tempC = tempB + tempA;
+918 |         final double result;
+919 |         if (extra != 0.0) {
+920 |             result = tempC*extra*z + tempC*extra + tempC*z + tempB + tempA;
+921 |         } else {
+922 |             result = tempC*z + tempB + tempA;
+923 |         }
+924 | 
+925 |         if (hiPrec != null) {
+926 |             // If requesting high precision
+927 |             hiPrec[0] = tempA;
+928 |             hiPrec[1] = tempC*extra*z + tempC*extra + tempC*z + tempB;
+929 |         }
+930 | 
+931 |         return result;
+932 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.SecondMoment.clear()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/SecondMoment.java
+Original range: 90-94
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+90 |     @Override
+91 |     public void clear() {
+92 |         super.clear();
+93 |         m2 = Double.NaN;
+94 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math.util.FastMathLiteralArrays.loadExpIntA()
+Source: src/main/java/org/apache/commons/math/util/FastMathLiteralArrays.java
+Original range: 6141-6143
+Documentation:
+/**
+     * Load "EXP_INT_A".
+     *
+     * @return the data array.
+     */
+Method code:
+6141 |     static double[] loadExpIntA() {
+6142 |         return EXP_INT_A;
+6143 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.Sum.Sum()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/Sum.java
+Original range: 56-59
+Documentation:
+/**
+     * Create a Sum instance
+     */
+Method code:
+56 |     public Sum() {
+57 |         n = 0;
+58 |         value = 0;
+59 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math.util.FastMathLiteralArrays.loadExpIntB()
+Source: src/main/java/org/apache/commons/math/util/FastMathLiteralArrays.java
+Original range: 6149-6151
+Documentation:
+/**
+     * Load "EXP_INT_B".
+     *
+     * @return the data array.
+     */
+Method code:
+6149 |     static double[] loadExpIntB() {
+6150 |         return EXP_INT_B;
+6151 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math.stat.descriptive.rank.Min.increment(double)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/rank/Min.java
+Original range: 74-80
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+74 |     @Override
+75 |     public void increment(final double d) {
+76 |         if (d < value || Double.isNaN(value)) {
+77 |             value = d;
+78 |         }
+79 |         n++;
+80 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math.util.FastMathLiteralArrays.loadExpFracB()
+Source: src/main/java/org/apache/commons/math/util/FastMathLiteralArrays.java
+Original range: 6165-6167
+Documentation:
+/**
+     * Load "EXP_FRAC_B".
+     *
+     * @return the data array.
+     */
+Method code:
+6165 |     static double[] loadExpFracB() {
+6166 |         return EXP_FRAC_B;
+6167 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math.stat.descriptive.AbstractUnivariateStatistic.test(double[],int,int,boolean)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/AbstractUnivariateStatistic.java
+Original range: 161-186
+Documentation:
+/**
+     * This method is used by <code>evaluate(double[], int, int)</code> methods
+     * to verify that the input parameters designate a subarray of positive length.
+     * <p>
+     * <ul>
+     * <li>returns <code>true</code> iff the parameters designate a subarray of
+     * non-negative length</li>
+     * <li>throws <code>IllegalArgumentException</code> if the array is null or
+     * or the indices are invalid</li>
+     * <li>returns <code>false</li> if the array is non-null, but
+     * <code>length</code> is 0 unless <code>allowEmpty</code> is <code>true</code>
+     * </ul></p>
+     *
+     * @param values the input array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @param allowEmpty if <code>true</code> then zero length arrays are allowed
+     * @return true if the parameters are valid
+     * @throws IllegalArgumentException if the indices are invalid or the array is null
+     * @since 3.0
+     */
+Method code:
+161 |     protected boolean test(final double[] values, final int begin, final int length, final boolean allowEmpty){
+162 | 
+163 |         if (values == null) {
+164 |             throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+165 |         }
+166 | 
+167 |         if (begin < 0) {
+168 |             throw new NotPositiveException(LocalizedFormats.START_POSITION, begin);
+169 |         }
+170 | 
+171 |         if (length < 0) {
+172 |             throw new NotPositiveException(LocalizedFormats.LENGTH, length);
+173 |         }
+174 | 
+175 |         if (begin + length > values.length) {
+176 |             throw new NumberIsTooLargeException(LocalizedFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
+177 |                                                 begin + length, values.length, true);
+178 |         }
+179 | 
+180 |         if (length == 0 && !allowEmpty) {
+181 |             return false;
+182 |         }
+183 | 
+184 |         return true;
+185 | 
+186 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.SumOfLogs.evaluate(double[],int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/SumOfLogs.java
+Original range: 129-139
+Documentation:
+/**
+     * Returns the sum of the natural logs of the entries in the specified portion of
+     * the input array, or <code>Double.NaN</code> if the designated subarray
+     * is empty.
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if the array is null.</p>
+     * <p>
+     * See {@link SumOfLogs}.</p>
+     *
+     * @param values the input array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return the sum of the natural logs of the values or 0 if
+     * length = 0
+     * @throws IllegalArgumentException if the array is null or the array index
+     *  parameters are not valid
+     */
+Method code:
+129 |     @Override
+130 |     public double evaluate(final double[] values, final int begin, final int length) {
+131 |         double sumLog = Double.NaN;
+132 |         if (test(values, begin, length, true)) {
+133 |             sumLog = 0.0;
+134 |             for (int i = begin; i < begin + length; i++) {
+135 |                 sumLog += FastMath.log(values[i]);
+136 |             }
+137 |         }
+138 |         return sumLog;
+139 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.GeometricMean.evaluate(double[],int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/GeometricMean.java
+Original range: 142-147
+Documentation:
+/**
+     * Returns the geometric mean of the entries in the specified portion
+     * of the input array.
+     * <p>
+     * See {@link GeometricMean} for details on the computing algorithm.</p>
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if the array is null.</p>
+     *
+     * @param values input array containing the values
+     * @param begin first array element to include
+     * @param length the number of elements to include
+     * @return the geometric mean or Double.NaN if length = 0 or
+     * any of the values are &lt;= 0.
+     * @throws IllegalArgumentException if the input array is null or the array
+     * index parameters are not valid
+     */
+Method code:
+142 |     @Override
+143 |     public double evaluate(
+144 |         final double[] values, final int begin, final int length) {
+145 |         return FastMath.exp(
+146 |             sumOfLogs.evaluate(values, begin, length) / length);
+147 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.SumOfLogs.getN()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/SumOfLogs.java
+Original range: 99-101
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+99 |     public long getN() {
+100 |         return n;
+101 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.Sum.evaluate(double[],int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/Sum.java
+Original range: 118-128
+Documentation:
+/**
+     * The sum of the entries in the specified portion of
+     * the input array, or 0 if the designated subarray
+     * is empty.
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if the array is null.</p>
+     *
+     * @param values the input array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return the sum of the values or 0 if length = 0
+     * @throws IllegalArgumentException if the array is null or the array index
+     *  parameters are not valid
+     */
+Method code:
+118 |     @Override
+119 |     public double evaluate(final double[] values, final int begin, final int length) {
+120 |         double sum = Double.NaN;
+121 |         if (test(values, begin, length, true)) {
+122 |             sum = 0.0;
+123 |             for (int i = begin; i < begin + length; i++) {
+124 |                 sum += values[i];
+125 |             }
+126 |         }
+127 |         return sum;
+128 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math.util.FastMath.log(double)
+Source: src/main/java/org/apache/commons/math/util/FastMath.java
+Original range: 1095-1097
+Documentation:
+/**
+     * Natural logarithm.
+     *
+     * @param x   a double
+     * @return log(x)
+     */
+Method code:
+1095 |     public static double log(final double x) {
+1096 |         return log(x, null);
+1097 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math.util.FastMath.log(double,double[])
+Source: src/main/java/org/apache/commons/math/util/FastMath.java
+Original range: 1105-1325
+Documentation:
+/**
+     * Internal helper method for natural logarithm function.
+     * @param x original argument of the natural logarithm function
+     * @param hiPrec extra bits of precision on output (To Be Confirmed)
+     * @return log(x)
+     */
+Method code:
+1105 |     private static double log(final double x, final double[] hiPrec) {
+1106 |         if (x==0) { // Handle special case of +0/-0
+1107 |             return Double.NEGATIVE_INFINITY;
+1108 |         }
+1109 |         long bits = Double.doubleToLongBits(x);
+1110 | 
+1111 |         /* Handle special cases of negative input, and NaN */
+1112 |         if ((bits & 0x8000000000000000L) != 0 || x != x) {
+1113 |             if (x != 0.0) {
+1114 |                 if (hiPrec != null) {
+1115 |                     hiPrec[0] = Double.NaN;
+1116 |                 }
+1117 | 
+1118 |                 return Double.NaN;
+1119 |             }
+1120 |         }
+1121 | 
+1122 |         /* Handle special cases of Positive infinity. */
+1123 |         if (x == Double.POSITIVE_INFINITY) {
+1124 |             if (hiPrec != null) {
+1125 |                 hiPrec[0] = Double.POSITIVE_INFINITY;
+1126 |             }
+1127 | 
+1128 |             return Double.POSITIVE_INFINITY;
+1129 |         }
+1130 | 
+1131 |         /* Extract the exponent */
+1132 |         int exp = (int)(bits >> 52)-1023;
+1133 | 
+1134 |         if ((bits & 0x7ff0000000000000L) == 0) {
+1135 |             // Subnormal!
+1136 |             if (x == 0) {
+1137 |                 // Zero
+1138 |                 if (hiPrec != null) {
+1139 |                     hiPrec[0] = Double.NEGATIVE_INFINITY;
+1140 |                 }
+1141 | 
+1142 |                 return Double.NEGATIVE_INFINITY;
+1143 |             }
+1144 | 
+1145 |             /* Normalize the subnormal number. */
+1146 |             bits <<= 1;
+1147 |             while ( (bits & 0x0010000000000000L) == 0) {
+1148 |                 exp--;
+1149 |                 bits <<= 1;
+1150 |             }
+1151 |         }
+1152 | 
+1153 | 
+1154 |         if (exp == -1 || exp == 0) {
+1155 |             if (x < 1.01 && x > 0.99 && hiPrec == null) {
+1156 |                 /* The normal method doesn't work well in the range [0.99, 1.01], so call do a straight
+1157 |            polynomial expansion in higer precision. */
+1158 | 
+1159 |                /* Compute x - 1.0 and split it */
+1160 |                 double xa = x - 1.0;
+1161 |                 double xb = xa - x + 1.0;
+1162 |                 double tmp = xa * HEX_40000000;
+1163 |                 double aa = xa + tmp - tmp;
+1164 |                 double ab = xa - aa;
+1165 |                 xa = aa;
+1166 |                 xb = ab;
+1167 | 
+1168 |                 double ya = LN_QUICK_COEF[LN_QUICK_COEF.length-1][0];
+1169 |                 double yb = LN_QUICK_COEF[LN_QUICK_COEF.length-1][1];
+1170 | 
+1171 |                 for (int i = LN_QUICK_COEF.length - 2; i >= 0; i--) {
+1172 |                     /* Multiply a = y * x */
+1173 |                     aa = ya * xa;
+1174 |                     ab = ya * xb + yb * xa + yb * xb;
+1175 |                     /* split, so now y = a */
+1176 |                     tmp = aa * HEX_40000000;
+1177 |                     ya = aa + tmp - tmp;
+1178 |                     yb = aa - ya + ab;
+1179 | 
+1180 |                     /* Add  a = y + lnQuickCoef */
+1181 |                     aa = ya + LN_QUICK_COEF[i][0];
+1182 |                     ab = yb + LN_QUICK_COEF[i][1];
+1183 |                     /* Split y = a */
+1184 |                     tmp = aa * HEX_40000000;
+1185 |                     ya = aa + tmp - tmp;
+1186 |                     yb = aa - ya + ab;
+1187 |                 }
+1188 | 
+1189 |                 /* Multiply a = y * x */
+1190 |                 aa = ya * xa;
+1191 |                 ab = ya * xb + yb * xa + yb * xb;
+1192 |                 /* split, so now y = a */
+1193 |                 tmp = aa * HEX_40000000;
+1194 |                 ya = aa + tmp - tmp;
+1195 |                 yb = aa - ya + ab;
+1196 | 
+1197 |                 return ya + yb;
+1198 |             }
+1199 |         }
+1200 | 
+1201 |         // lnm is a log of a number in the range of 1.0 - 2.0, so 0 <= lnm < ln(2)
+1202 |         double lnm[] = lnMant.LN_MANT[(int)((bits & 0x000ffc0000000000L) >> 42)];
+1203 | 
+1204 |         /*
+1205 |     double epsilon = x / Double.longBitsToDouble(bits & 0xfffffc0000000000L);
+1206 | 
+1207 |     epsilon -= 1.0;
+1208 |          */
+1209 | 
+1210 |         // y is the most significant 10 bits of the mantissa
+1211 |         //double y = Double.longBitsToDouble(bits & 0xfffffc0000000000L);
+1212 |         //double epsilon = (x - y) / y;
+1213 |         double epsilon = (bits & 0x3ffffffffffL) / (TWO_POWER_52 + (bits & 0x000ffc0000000000L));
+1214 | 
+1215 |         double lnza = 0.0;
+1216 |         double lnzb = 0.0;
+1217 | 
+1218 |         if (hiPrec != null) {
+1219 |             /* split epsilon -> x */
+1220 |             double tmp = epsilon * HEX_40000000;
+1221 |             double aa = epsilon + tmp - tmp;
+1222 |             double ab = epsilon - aa;
+1223 |             double xa = aa;
+1224 |             double xb = ab;
+1225 | 
+1226 |             /* Need a more accurate epsilon, so adjust the division. */
+1227 |             double numer = bits & 0x3ffffffffffL;
+1228 |             double denom = TWO_POWER_52 + (bits & 0x000ffc0000000000L);
+1229 |             aa = numer - xa*denom - xb * denom;
+1230 |             xb += aa / denom;
+1231 | 
+1232 |             /* Remez polynomial evaluation */
+1233 |             double ya = LN_HI_PREC_COEF[LN_HI_PREC_COEF.length-1][0];
+1234 |             double yb = LN_HI_PREC_COEF[LN_HI_PREC_COEF.length-1][1];
+1235 | 
+1236 |             for (int i = LN_HI_PREC_COEF.length - 2; i >= 0; i--) {
+1237 |                 /* Multiply a = y * x */
+1238 |                 aa = ya * xa;
+1239 |                 ab = ya * xb + yb * xa + yb * xb;
+1240 |                 /* split, so now y = a */
+1241 |                 tmp = aa * HEX_40000000;
+1242 |                 ya = aa + tmp - tmp;
+1243 |                 yb = aa - ya + ab;
+1244 | 
+1245 |                 /* Add  a = y + lnHiPrecCoef */
+1246 |                 aa = ya + LN_HI_PREC_COEF[i][0];
+1247 |                 ab = yb + LN_HI_PREC_COEF[i][1];
+1248 |                 /* Split y = a */
+1249 |                 tmp = aa * HEX_40000000;
+1250 |                 ya = aa + tmp - tmp;
+1251 |                 yb = aa - ya + ab;
+1252 |             }
+1253 | 
+1254 |             /* Multiply a = y * x */
+1255 |             aa = ya * xa;
+1256 |             ab = ya * xb + yb * xa + yb * xb;
+1257 | 
+1258 |             /* split, so now lnz = a */
+1259 |             /*
+1260 |       tmp = aa * 1073741824.0;
+1261 |       lnza = aa + tmp - tmp;
+1262 |       lnzb = aa - lnza + ab;
+1263 |              */
+1264 |             lnza = aa + ab;
+1265 |             lnzb = -(lnza - aa - ab);
+1266 |         } else {
+1267 |             /* High precision not required.  Eval Remez polynomial
+1268 |          using standard double precision */
+1269 |             lnza = -0.16624882440418567;
+1270 |             lnza = lnza * epsilon + 0.19999954120254515;
+1271 |             lnza = lnza * epsilon + -0.2499999997677497;
+1272 |             lnza = lnza * epsilon + 0.3333333333332802;
+1273 |             lnza = lnza * epsilon + -0.5;
+1274 |             lnza = lnza * epsilon + 1.0;
+1275 |             lnza = lnza * epsilon;
+1276 |         }
+1277 | 
+1278 |         /* Relative sizes:
+1279 |          * lnzb     [0, 2.33E-10]
+1280 |          * lnm[1]   [0, 1.17E-7]
+1281 |          * ln2B*exp [0, 1.12E-4]
+1282 |          * lnza      [0, 9.7E-4]
+1283 |          * lnm[0]   [0, 0.692]
+1284 |          * ln2A*exp [0, 709]
+1285 |          */
+1286 | 
+1287 |         /* Compute the following sum:
+1288 |          * lnzb + lnm[1] + ln2B*exp + lnza + lnm[0] + ln2A*exp;
+1289 |          */
+1290 | 
+1291 |         //return lnzb + lnm[1] + ln2B*exp + lnza + lnm[0] + ln2A*exp;
+1292 |         double a = LN_2_A*exp;
+1293 |         double b = 0.0;
+1294 |         double c = a+lnm[0];
+1295 |         double d = -(c-a-lnm[0]);
+1296 |         a = c;
+1297 |         b = b + d;
+1298 | 
+1299 |         c = a + lnza;
+1300 |         d = -(c - a - lnza);
+1301 |         a = c;
+1302 |         b = b + d;
+1303 | 
+1304 |         c = a + LN_2_B*exp;
+1305 |         d = -(c - a - LN_2_B*exp);
+1306 |         a = c;
+1307 |         b = b + d;
+1308 | 
+1309 |         c = a + lnm[1];
+1310 |         d = -(c - a - lnm[1]);
+1311 |         a = c;
+1312 |         b = b + d;
+1313 | 
+1314 |         c = a + lnzb;
+1315 |         d = -(c - a - lnzb);
+1316 |         a = c;
+1317 |         b = b + d;
+1318 | 
+1319 |         if (hiPrec != null) {
+1320 |             hiPrec[0] = a;
+1321 |             hiPrec[1] = b;
+1322 |         }
+1323 | 
+1324 |         return a + b;
+1325 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.evaluate(double[],int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 253-269
+Documentation:
+/**
+     * Returns the variance of the entries in the specified portion of
+     * the input array, or <code>Double.NaN</code> if the designated subarray
+     * is empty.
+     * <p>
+     * See {@link Variance} for details on the computing algorithm.</p>
+     * <p>
+     * Returns 0 for a single-value (i.e. length = 1) sample.</p>
+     * <p>
+     * Does not change the internal state of the statistic.</p>
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if the array is null.</p>
+     *
+     * @param values the input array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return the variance of the values or Double.NaN if length = 0
+     * @throws IllegalArgumentException if the array is null or the array index
+     *  parameters are not valid
+     */
+Method code:
+253 |     @Override
+254 |     public double evaluate(final double[] values, final int begin, final int length) {
+255 | 
+256 |         double var = Double.NaN;
+257 | 
+258 |         if (test(values, begin, length)) {
+259 |             clear();
+260 |             if (length == 1) {
+261 |                 var = 0.0;
+262 |             } else if (length > 1) {
+263 |                 Mean mean = new Mean();
+264 |                 double m = mean.evaluate(values, begin, length);
+265 |                 var = evaluate(values, m, begin, length);
+266 |             }
+267 |         }
+268 |         return var;
+269 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math.util.FastMath.exp(double)
+Source: src/main/java/org/apache/commons/math/util/FastMath.java
+Original range: 806-808
+Documentation:
+/**
+     * Exponential function.
+     *
+     * Computes exp(x), function result is nearly rounded.   It will be correctly
+     * rounded to the theoretical value for 99.9% of input values, otherwise it will
+     * have a 1 UPL error.
+     *
+     * Method:
+     *    Lookup intVal = exp(int(x))
+     *    Lookup fracVal = exp(int(x-int(x) / 1024.0) * 1024.0 );
+     *    Compute z as the exponential of the remaining bits by a polynomial minus one
+     *    exp(x) = intVal * fracVal * (1 + z)
+     *
+     * Accuracy:
+     *    Calculation is done with 63 bits of precision, so result should be correctly
+     *    rounded for 99.9% of input values, with less than 1 ULP error otherwise.
+     *
+     * @param x   a double
+     * @return double e<sup>x</sup>
+     */
+Method code:
+806 |     public static double exp(double x) {
+807 |         return exp(x, 0.0, null);
+808 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math.stat.descriptive.rank.Min.Min()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/rank/Min.java
+Original range: 56-59
+Documentation:
+/**
+     * Create a Min instance
+     */
+Method code:
+56 |     public Min() {
+57 |         n = 0;
+58 |         value = Double.NaN;
+59 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.GeometricMean.getResult()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/GeometricMean.java
+Original range: 109-116
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+109 |     @Override
+110 |     public double getResult() {
+111 |         if (sumOfLogs.getN() > 0) {
+112 |             return FastMath.exp(sumOfLogs.getResult() / sumOfLogs.getN());
+113 |         } else {
+114 |             return Double.NaN;
+115 |         }
+116 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.getResult()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 177-190
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+177 |     @Override
+178 |     public double getResult() {
+179 |             if (moment.n == 0) {
+180 |                 return Double.NaN;
+181 |             } else if (moment.n == 1) {
+182 |                 return 0d;
+183 |             } else {
+184 |                 if (isBiasCorrected) {
+185 |                     return moment.m2 / (moment.n - 1d);
+186 |                 } else {
+187 |                     return moment.m2 / (moment.n);
+188 |                 }
+189 |             }
+190 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.FirstMoment.increment(double)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/FirstMoment.java
+Original range: 100-110
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+100 |      @Override
+101 |     public void increment(final double d) {
+102 |         if (n == 0) {
+103 |             m1 = 0.0;
+104 |         }
+105 |         n++;
+106 |         double n0 = n;
+107 |         dev = d - m1;
+108 |         nDev = dev / n0;
+109 |         m1 += nDev;
+110 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.clear()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 202-207
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+202 |     @Override
+203 |     public void clear() {
+204 |         if (incMoment) {
+205 |             moment.clear();
+206 |         }
+207 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Mean.Mean()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Mean.java
+Original range: 79-82
+Documentation:
+/** Constructs a Mean. */
+Method code:
+79 |     public Mean() {
+80 |         incMoment = true;
+81 |         moment = new FirstMoment();
+82 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math.stat.descriptive.SummaryStatistics.getMean()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/SummaryStatistics.java
+Original range: 204-206
+Documentation:
+/**
+     * Returns the mean of the values that have been added.
+     * <p>
+     * Double.NaN is returned if no values have been added.
+     * </p>
+     * @return the mean
+     */
+Method code:
+204 |     public double getMean() {
+205 |         return meanImpl.getResult();
+206 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math.util.FastMath.sqrt(double)
+Source: src/main/java/org/apache/commons/math/util/FastMath.java
+Original range: 374-376
+Documentation:
+/** Compute the square root of a number.
+     * <p><b>Note:</b> this implementation currently delegates to {@link Math#sqrt}
+     * @param a number on which evaluation is done
+     * @return square root of a
+     */
+Method code:
+374 |     public static double sqrt(final double a) {
+375 |         return Math.sqrt(a);
+376 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.evaluate(double[],double,int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 399-425
+Documentation:
+/**
+     * Returns the variance of the entries in the specified portion of
+     * the input array, using the precomputed mean value.  Returns
+     * <code>Double.NaN</code> if the designated subarray is empty.
+     * <p>
+     * See {@link Variance} for details on the computing algorithm.</p>
+     * <p>
+     * The formula used assumes that the supplied mean value is the arithmetic
+     * mean of the sample data, not a known population parameter.  This method
+     * is supplied only to save computation when the mean has already been
+     * computed.</p>
+     * <p>
+     * Returns 0 for a single-value (i.e. length = 1) sample.</p>
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if the array is null.</p>
+     * <p>
+     * Does not change the internal state of the statistic.</p>
+     *
+     * @param values the input array
+     * @param mean the precomputed mean value
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return the variance of the values or Double.NaN if length = 0
+     * @throws IllegalArgumentException if the array is null or the array index
+     *  parameters are not valid
+     */
+Method code:
+399 |     public double evaluate(final double[] values, final double mean,
+400 |             final int begin, final int length) {
+401 | 
+402 |         double var = Double.NaN;
+403 | 
+404 |         if (test(values, begin, length)) {
+405 |             if (length == 1) {
+406 |                 var = 0.0;
+407 |             } else if (length > 1) {
+408 |                 double accum = 0.0;
+409 |                 double dev = 0.0;
+410 |                 double accum2 = 0.0;
+411 |                 for (int i = begin; i < begin + length; i++) {
+412 |                     dev = values[i] - mean;
+413 |                     accum += dev * dev;
+414 |                     accum2 += dev;
+415 |                 }
+416 |                 double len = length;
+417 |                 if (isBiasCorrected) {
+418 |                     var = (accum - (accum2 * accum2 / len)) / (len - 1.0);
+419 |                 } else {
+420 |                     var = (accum - (accum2 * accum2 / len)) / len;
+421 |                 }
+422 |             }
+423 |         }
+424 |         return var;
+425 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.FirstMoment.clear()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/FirstMoment.java
+Original range: 115-121
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+115 |     @Override
+116 |     public void clear() {
+117 |         m1 = Double.NaN;
+118 |         n = 0;
+119 |         dev = Double.NaN;
+120 |         nDev = Double.NaN;
+121 |     }
+
+===== M0044 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.Variance(SecondMoment)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 111-114
+Documentation:
+/**
+     * Constructs a Variance based on an external second moment.
+     * When this constructor is used, the statistic may only be
+     * incremented via the moment, i.e., {@link #increment(double)}
+     * does nothing; whereas {@code m2.increment(value)} increments
+     * both {@code m2} and the Variance instance constructed from it.
+     *
+     * @param m2 the SecondMoment (Third or Fourth moments work
+     * here as well.)
+     */
+Method code:
+111 |     public Variance(final SecondMoment m2) {
+112 |         incMoment = false;
+113 |         this.moment = m2;
+114 |     }
+
+===== M0045 =====
+Signature: org.apache.commons.math.stat.descriptive.SummaryStatistics.getGeometricMean()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/SummaryStatistics.java
+Original range: 285-287
+Documentation:
+/**
+     * Returns the geometric mean of the values that have been added.
+     * <p>
+     * Double.NaN is returned if no values have been added.
+     * </p>
+     * @return the geometric mean
+     */
+Method code:
+285 |     public double getGeometricMean() {
+286 |         return geoMeanImpl.getResult();
+287 |     }
+
+===== M0046 =====
+Signature: org.apache.commons.math.stat.descriptive.rank.Max.increment(double)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/rank/Max.java
+Original range: 74-80
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+74 |     @Override
+75 |     public void increment(final double d) {
+76 |         if (d > value || Double.isNaN(value)) {
+77 |             value = d;
+78 |         }
+79 |         n++;
+80 |     }
+
+===== M0047 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Mean.getResult()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Mean.java
+Original range: 127-130
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+127 |     @Override
+128 |     public double getResult() {
+129 |         return moment.m1;
+130 |     }
+
+===== M0048 =====
+Signature: org.apache.commons.math.stat.descriptive.summary.SumOfSquares.increment(double)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/summary/SumOfSquares.java
+Original range: 73-77
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+73 |     @Override
+74 |     public void increment(final double d) {
+75 |         value += d * d;
+76 |         n++;
+77 |     }
+
+===== M0049 =====
+Signature: org.apache.commons.math.util.FastMathLiteralArrays.loadLnMant()
+Source: src/main/java/org/apache/commons/math/util/FastMathLiteralArrays.java
+Original range: 6173-6175
+Documentation:
+/**
+     * Load "LN_MANT".
+     *
+     * @return the data array.
+     */
+Method code:
+6173 |     static double[][] loadLnMant() {
+6174 |         return LN_MANT;
+6175 |     }
+
+===== M0050 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Variance.evaluate(double[])
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Variance.java
+Original range: 225-231
+Documentation:
+/**
+     * Returns the variance of the entries in the input array, or
+     * <code>Double.NaN</code> if the array is empty.
+     * <p>
+     * See {@link Variance} for details on the computing algorithm.</p>
+     * <p>
+     * Returns 0 for a single-value (i.e. length = 1) sample.</p>
+     * <p>
+     * Throws <code>IllegalArgumentException</code> if the array is null.</p>
+     * <p>
+     * Does not change the internal state of the statistic.</p>
+     *
+     * @param values the input array
+     * @return the variance of the values or Double.NaN if length = 0
+     * @throws IllegalArgumentException if the array is null
+     */
+Method code:
+225 |     @Override
+226 |     public double evaluate(final double[] values) {
+227 |         if (values == null) {
+228 |             throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+229 |         }
+230 |         return evaluate(values, 0, values.length);
+231 |     }
+
+===== M0051 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.SecondMoment.increment(double)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/SecondMoment.java
+Original range: 78-85
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+78 |     @Override
+79 |     public void increment(final double d) {
+80 |         if (n < 1) {
+81 |             m1 = m2 = 0.0;
+82 |         }
+83 |         super.increment(d);
+84 |         m2 += ((double) n - 1) * dev * nDev;
+85 |     }
+
+===== M0052 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.Mean.Mean(FirstMoment)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/Mean.java
+Original range: 89-92
+Documentation:
+/**
+     * Constructs a Mean with an External Moment.
+     *
+     * @param m1 the moment
+     */
+Method code:
+89 |     public Mean(final FirstMoment m1) {
+90 |         this.moment = m1;
+91 |         incMoment = false;
+92 |     }
+
+===== M0053 =====
+Signature: org.apache.commons.math.stat.descriptive.moment.GeometricMean.GeometricMean()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/moment/GeometricMean.java
+Original range: 65-67
+Documentation:
+/**
+     * Create a GeometricMean instance
+     */
+Method code:
+65 |     public GeometricMean() {
+66 |         sumOfLogs = new SumOfLogs();
+67 |     }
+
+===== M0054 =====
+Signature: org.apache.commons.math.stat.descriptive.SummaryStatistics.checkEmpty()
+Source: src/main/java/org/apache/commons/math/stat/descriptive/SummaryStatistics.java
+Original range: 642-647
+Documentation:
+/**
+     * Throws IllegalStateException if n > 0.
+     */
+Method code:
+642 |     private void checkEmpty() {
+643 |         if (n > 0) {
+644 |             throw new MathIllegalStateException(
+645 |                 LocalizedFormats.VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC, n);
+646 |         }
+647 |     }
+
+===== M0055 =====
+Signature: org.apache.commons.math.stat.descriptive.AbstractUnivariateStatistic.test(double[],int,int)
+Source: src/main/java/org/apache/commons/math/stat/descriptive/AbstractUnivariateStatistic.java
+Original range: 133-138
+Documentation:
+/**
+     * This method is used by <code>evaluate(double[], int, int)</code> methods
+     * to verify that the input parameters designate a subarray of positive length.
+     * <p>
+     * <ul>
+     * <li>returns <code>true</code> iff the parameters designate a subarray of
+     * positive length</li>
+     * <li>throws <code>IllegalArgumentException</code> if the array is null or
+     * or the indices are invalid</li>
+     * <li>returns <code>false</li> if the array is non-null, but
+     * <code>length</code> is 0.
+     * </ul></p>
+     *
+     * @param values the input array
+     * @param begin index of the first array element to include
+     * @param length the number of elements to include
+     * @return true if the parameters are valid and designate a subarray of positive length
+     * @throws IllegalArgumentException if the indices are invalid or the array is null
+     */
+Method code:
+133 |     protected boolean test(
+134 |         final double[] values,
+135 |         final int begin,
+136 |         final int length) {
+137 |         return test(values, begin, length, false);
+138 |     }
+
+===== M0056 =====
+Signature: org.apache.commons.math.util.FastMathLiteralArrays.loadExpFracA()
+Source: src/main/java/org/apache/commons/math/util/FastMathLiteralArrays.java
+Original range: 6157-6159
+Documentation:
+/**
+     * Load "EXP_FRAC_A".
+     *
+     * @return the data array.
+     */
+Method code:
+6157 |     static double[] loadExpFracA() {
+6158 |         return EXP_FRAC_A;
+6159 |     }
+

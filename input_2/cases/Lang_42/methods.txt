@@ -1,0 +1,622 @@
+===== M0001 =====
+Signature: org.apache.commons.lang.Entities.LookupEntityMap.name(int)
+Source: src/java/org/apache/commons/lang/Entities.java
+Original range: 532-537
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+532 |         public String name(int value) {
+533 |             if (value < LOOKUP_TABLE_SIZE) {
+534 |                 return lookupTable()[value];
+535 |             }
+536 |             return super.name(value);
+537 |         }
+
+===== M0002 =====
+Signature: org.apache.commons.lang.StringEscapeUtils.escapeHtml(String)
+Source: src/java/org/apache/commons/lang/StringEscapeUtils.java
+Original range: 454-466
+Documentation:
+/**
+     * <p>Escapes the characters in a <code>String</code> using HTML entities.</p>
+     *
+     * <p>
+     * For example:
+     * </p> 
+     * <p><code>"bread" & "butter"</code></p>
+     * becomes:
+     * <p>
+     * <code>&amp;quot;bread&amp;quot; &amp;amp; &amp;quot;butter&amp;quot;</code>.
+     * </p>
+     *
+     * <p>Supports all known HTML 4.0 entities, including funky accents.
+     * Note that the commonly used apostrophe escape character (&amp;apos;)
+     * is not a legal entity and so is not supported). </p>
+     *
+     * @param str  the <code>String</code> to escape, may be null
+     * @return a new escaped <code>String</code>, <code>null</code> if null string input
+     * 
+     * @see #unescapeHtml(String)
+     * @see <a href="http://hotwired.lycos.com/webmonkey/reference/special_characters/">ISO Entities</a>
+     * @see <a href="http://www.w3.org/TR/REC-html32#latin1">HTML 3.2 Character Entities for ISO Latin-1</a>
+     * @see <a href="http://www.w3.org/TR/REC-html40/sgml/entities.html">HTML 4.0 Character entity references</a>
+     * @see <a href="http://www.w3.org/TR/html401/charset.html#h-5.3">HTML 4.01 Character References</a>
+     * @see <a href="http://www.w3.org/TR/html401/charset.html#code-position">HTML 4.01 Code positions</a>
+     */
+Method code:
+454 |     public static String escapeHtml(String str) {
+455 |         if (str == null) {
+456 |             return null;
+457 |         }
+458 |         try {
+459 |             StringWriter writer = new StringWriter ((int)(str.length() * 1.5));
+460 |             escapeHtml(writer, str);
+461 |             return writer.toString();
+462 |         } catch (IOException ioe) {
+463 |             //should be impossible
+464 |             throw new UnhandledException(ioe);
+465 |         }
+466 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang.StringEscapeUtils.escapeHtml(Writer,String)
+Source: src/java/org/apache/commons/lang/StringEscapeUtils.java
+Original range: 497-505
+Documentation:
+/**
+     * <p>Escapes the characters in a <code>String</code> using HTML entities and writes
+     * them to a <code>Writer</code>.</p>
+     *
+     * <p>
+     * For example:
+     * </p> 
+     * <code>"bread" & "butter"</code>
+     * <p>becomes:</p>
+     * <code>&amp;quot;bread&amp;quot; &amp;amp; &amp;quot;butter&amp;quot;</code>.
+     *
+     * <p>Supports all known HTML 4.0 entities, including funky accents.
+     * Note that the commonly used apostrophe escape character (&amp;apos;)
+     * is not a legal entity and so is not supported). </p>
+     *
+     * @param writer  the writer receiving the escaped string, not null
+     * @param string  the <code>String</code> to escape, may be null
+     * @throws IllegalArgumentException if the writer is null
+     * @throws IOException when <code>Writer</code> passed throws the exception from
+     *                                       calls to the {@link Writer#write(int)} methods.
+     * 
+     * @see #escapeHtml(String)
+     * @see #unescapeHtml(String)
+     * @see <a href="http://hotwired.lycos.com/webmonkey/reference/special_characters/">ISO Entities</a>
+     * @see <a href="http://www.w3.org/TR/REC-html32#latin1">HTML 3.2 Character Entities for ISO Latin-1</a>
+     * @see <a href="http://www.w3.org/TR/REC-html40/sgml/entities.html">HTML 4.0 Character entity references</a>
+     * @see <a href="http://www.w3.org/TR/html401/charset.html#h-5.3">HTML 4.01 Character References</a>
+     * @see <a href="http://www.w3.org/TR/html401/charset.html#code-position">HTML 4.01 Code positions</a>
+     */
+Method code:
+497 |     public static void escapeHtml(Writer writer, String string) throws IOException {
+498 |         if (writer == null ) {
+499 |             throw new IllegalArgumentException ("The Writer must not be null.");
+500 |         }
+501 |         if (string == null) {
+502 |             return;
+503 |         }
+504 |         Entities.HTML40.escape(writer, string);
+505 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang.Entities.addEntities(String[][])
+Source: src/java/org/apache/commons/lang/Entities.java
+Original range: 736-740
+Documentation:
+/**
+     * <p>
+     * Adds entities to this entity.
+     * </p>
+     * 
+     * @param entityArray
+     *            array of entities to be added
+     */
+Method code:
+736 |     public void addEntities(String[][] entityArray) {
+737 |         for (int i = 0; i < entityArray.length; ++i) {
+738 |             addEntity(entityArray[i][0], Integer.parseInt(entityArray[i][1]));
+739 |         }
+740 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang.Entities.doUnescape(Writer,String,int)
+Source: src/java/org/apache/commons/lang/Entities.java
+Original range: 927-988
+Documentation:
+/**
+     * Underlying unescape method that allows the optimisation of not starting from the 0 index again.
+     *
+     * @param writer
+     *            The <code>Writer</code> to write the results to; assumed to be non-null.
+     * @param str
+     *            The source <code>String</code> to unescape; assumed to be non-null.
+     * @param firstAmp
+     *            The <code>int</code> index of the first ampersand in the source String.
+     * @throws IOException
+     *             when <code>Writer</code> passed throws the exception from calls to the {@link Writer#write(int)}
+     *             methods.
+     */
+Method code:
+927 |     private void doUnescape(Writer writer, String str, int firstAmp) throws IOException {
+928 |         writer.write(str, 0, firstAmp);
+929 |         int len = str.length();
+930 |         for (int i = firstAmp; i < len; i++) {
+931 |             char c = str.charAt(i);
+932 |             if (c == '&') {
+933 |                 int nextIdx = i + 1;
+934 |                 int semiColonIdx = str.indexOf(';', nextIdx);
+935 |                 if (semiColonIdx == -1) {
+936 |                     writer.write(c);
+937 |                     continue;
+938 |                 }
+939 |                 int amphersandIdx = str.indexOf('&', i + 1);
+940 |                 if (amphersandIdx != -1 && amphersandIdx < semiColonIdx) {
+941 |                     // Then the text looks like &...&...;
+942 |                     writer.write(c);
+943 |                     continue;
+944 |                 }
+945 |                 String entityContent = str.substring(nextIdx, semiColonIdx);
+946 |                 int entityValue = -1;
+947 |                 int entityContentLen = entityContent.length();
+948 |                 if (entityContentLen > 0) {
+949 |                     if (entityContent.charAt(0) == '#') { // escaped value content is an integer (decimal or
+950 |                         // hexidecimal)
+951 |                         if (entityContentLen > 1) {
+952 |                             char isHexChar = entityContent.charAt(1);
+953 |                             try {
+954 |                                 switch (isHexChar) {
+955 |                                     case 'X' :
+956 |                                     case 'x' : {
+957 |                                         entityValue = Integer.parseInt(entityContent.substring(2), 16);
+958 |                                         break;
+959 |                                     }
+960 |                                     default : {
+961 |                                         entityValue = Integer.parseInt(entityContent.substring(1), 10);
+962 |                                     }
+963 |                                 }
+964 |                                 if (entityValue > 0xFFFF) {
+965 |                                     entityValue = -1;
+966 |                                 }
+967 |                             } catch (NumberFormatException e) {
+968 |                                 entityValue = -1;
+969 |                             }
+970 |                         }
+971 |                     } else { // escaped value content is an entity name
+972 |                         entityValue = this.entityValue(entityContent);
+973 |                     }
+974 |                 }
+975 | 
+976 |                 if (entityValue == -1) {
+977 |                     writer.write('&');
+978 |                     writer.write(entityContent);
+979 |                     writer.write(';');
+980 |                 } else {
+981 |                     writer.write(entityValue);
+982 |                 }
+983 |                 i = semiColonIdx; // move index up to the semi-colon
+984 |             } else {
+985 |                 writer.write(c);
+986 |             }
+987 |         }
+988 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.lang.Entities.PrimitiveEntityMap.add(String,int)
+Source: src/java/org/apache/commons/lang/Entities.java
+Original range: 448-451
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+448 |         public void add(String name, int value) {
+449 |             mapNameToValue.put(name, new Integer(value));
+450 |             mapValueToName.put(value, name);
+451 |         }
+
+===== M0007 =====
+Signature: org.apache.commons.lang.Entities.fillWithHtml40Entities(Entities)
+Source: src/java/org/apache/commons/lang/Entities.java
+Original range: 398-402
+Documentation:
+/**
+     * <p>
+     * Fills the specified entities instance with HTML 40 entities.
+     * </p>
+     * 
+     * @param entities
+     *            the instance to be filled.
+     */
+Method code:
+398 |     static void fillWithHtml40Entities(Entities entities) {
+399 |         entities.addEntities(BASIC_ARRAY);
+400 |         entities.addEntities(ISO8859_1_ARRAY);
+401 |         entities.addEntities(HTML40_ARRAY);
+402 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.lang.Entities.unescape(Writer,String)
+Source: src/java/org/apache/commons/lang/Entities.java
+Original range: 904-912
+Documentation:
+/**
+     * <p>
+     * Unescapes the escaped entities in the <code>String</code> passed and writes the result to the
+     * <code>Writer</code> passed.
+     * </p>
+     * 
+     * @param writer
+     *            The <code>Writer</code> to write the results to; assumed to be non-null.
+     * @param str
+     *            The source <code>String</code> to unescape; assumed to be non-null.
+     * @throws IOException
+     *             when <code>Writer</code> passed throws the exception from calls to the {@link Writer#write(int)}
+     *             methods.
+     * 
+     * @see #escape(String)
+     * @see Writer
+     */
+Method code:
+904 |     public void unescape(Writer writer, String str) throws IOException {
+905 |         int firstAmp = str.indexOf('&');
+906 |         if (firstAmp < 0) {
+907 |             writer.write(str);
+908 |             return;
+909 |         } else {
+910 |             doUnescape(writer, str, firstAmp);
+911 |         }
+912 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.lang.IntHashMap.put(int,Object)
+Source: src/java/org/apache/commons/lang/IntHashMap.java
+Original range: 294-320
+Documentation:
+/**
+     * <p>Maps the specified <code>key</code> to the specified
+     * <code>value</code> in this hashtable. The key cannot be
+     * <code>null</code>. </p>
+     *
+     * <p>The value can be retrieved by calling the <code>get</code> method
+     * with a key that is equal to the original key.</p>
+     *
+     * @param key     the hashtable key.
+     * @param value   the value.
+     * @return the previous value of the specified key in this hashtable,
+     *         or <code>null</code> if it did not have one.
+     * @throws  NullPointerException  if the key is <code>null</code>.
+     * @see     #get(int)
+     */
+Method code:
+294 |     public Object put(int key, Object value) {
+295 |         // Makes sure the key is not already in the hashtable.
+296 |         Entry tab[] = table;
+297 |         int hash = key;
+298 |         int index = (hash & 0x7FFFFFFF) % tab.length;
+299 |         for (Entry e = tab[index]; e != null; e = e.next) {
+300 |             if (e.hash == hash) {
+301 |                 Object old = e.value;
+302 |                 e.value = value;
+303 |                 return old;
+304 |             }
+305 |         }
+306 | 
+307 |         if (count >= threshold) {
+308 |             // Rehash the table if the threshold is exceeded
+309 |             rehash();
+310 | 
+311 |             tab = table;
+312 |             index = (hash & 0x7FFFFFFF) % tab.length;
+313 |         }
+314 | 
+315 |         // Creates the new entry.
+316 |         Entry e = new Entry(hash, key, value, tab[index]);
+317 |         tab[index] = e;
+318 |         count++;
+319 |         return null;
+320 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.lang.StringEscapeUtils.unescapeHtml(Writer,String)
+Source: src/java/org/apache/commons/lang/StringEscapeUtils.java
+Original range: 556-564
+Documentation:
+/**
+     * <p>Unescapes a string containing entity escapes to a string
+     * containing the actual Unicode characters corresponding to the
+     * escapes. Supports HTML 4.0 entities.</p>
+     *
+     * <p>For example, the string "&amp;lt;Fran&amp;ccedil;ais&amp;gt;"
+     * will become "&lt;Fran&ccedil;ais&gt;"</p>
+     *
+     * <p>If an entity is unrecognized, it is left alone, and inserted
+     * verbatim into the result string. e.g. "&amp;gt;&amp;zzzz;x" will
+     * become "&gt;&amp;zzzz;x".</p>
+     *
+     * @param writer  the writer receiving the unescaped string, not null
+     * @param string  the <code>String</code> to unescape, may be null
+     * @throws IllegalArgumentException if the writer is null
+     * @throws IOException if an IOException occurs
+     * @see #escapeHtml(String)
+     */
+Method code:
+556 |     public static void unescapeHtml(Writer writer, String string) throws IOException {
+557 |         if (writer == null ) {
+558 |             throw new IllegalArgumentException ("The Writer must not be null.");
+559 |         }
+560 |         if (string == null) {
+561 |             return;
+562 |         }
+563 |         Entities.HTML40.unescape(writer, string);
+564 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.lang.Entities.entityName(int)
+Source: src/java/org/apache/commons/lang/Entities.java
+Original range: 765-767
+Documentation:
+/**
+     * <p>
+     * Returns the name of the entity identified by the specified value.
+     * </p>
+     * 
+     * @param value
+     *            the value to locate
+     * @return entity name associated with the specified value
+     */
+Method code:
+765 |     public String entityName(int value) {
+766 |         return map.name(value);
+767 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.lang.Entities.PrimitiveEntityMap.name(int)
+Source: src/java/org/apache/commons/lang/Entities.java
+Original range: 456-458
+Documentation:
+/**
+         * {@inheritDoc}
+         */
+Method code:
+456 |         public String name(int value) {
+457 |             return (String) mapValueToName.get(value);
+458 |         }
+
+===== M0013 =====
+Signature: org.apache.commons.lang.Entities.addEntity(String,int)
+Source: src/java/org/apache/commons/lang/Entities.java
+Original range: 752-754
+Documentation:
+/**
+     * <p>
+     * Add an entity to this entity.
+     * </p>
+     * 
+     * @param name
+     *            name of the entity
+     * @param value
+     *            vale of the entity
+     */
+Method code:
+752 |     public void addEntity(String name, int value) {
+753 |         map.add(name, value);
+754 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.lang.IntHashMap.IntHashMap()
+Source: src/java/org/apache/commons/lang/IntHashMap.java
+Original range: 95-97
+Documentation:
+/**
+     * <p>Constructs a new, empty hashtable with a default capacity and load
+     * factor, which is <code>20</code> and <code>0.75</code> respectively.</p>
+     */
+Method code:
+95 |     public IntHashMap() {
+96 |         this(20, 0.75f);
+97 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.lang.IntHashMap.IntHashMap(int,float)
+Source: src/java/org/apache/commons/lang/IntHashMap.java
+Original range: 120-135
+Documentation:
+/**
+     * <p>Constructs a new, empty hashtable with the specified initial
+     * capacity and the specified load factor.</p>
+     *
+     * @param initialCapacity the initial capacity of the hashtable.
+     * @param loadFactor the load factor of the hashtable.
+     * @throws IllegalArgumentException  if the initial capacity is less
+     *             than zero, or if the load factor is nonpositive.
+     */
+Method code:
+120 |     public IntHashMap(int initialCapacity, float loadFactor) {
+121 |         super();
+122 |         if (initialCapacity < 0) {
+123 |             throw new IllegalArgumentException("Illegal Capacity: " + initialCapacity);
+124 |         }
+125 |         if (loadFactor <= 0) {
+126 |             throw new IllegalArgumentException("Illegal Load: " + loadFactor);
+127 |         }
+128 |         if (initialCapacity == 0) {
+129 |             initialCapacity = 1;
+130 |         }
+131 | 
+132 |         this.loadFactor = loadFactor;
+133 |         table = new Entry[initialCapacity];
+134 |         threshold = (int) (initialCapacity * loadFactor);
+135 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.lang.IntHashMap.Entry.Entry(int,int,Object,Entry)
+Source: src/java/org/apache/commons/lang/IntHashMap.java
+Original range: 83-88
+Documentation:
+/**
+         * <p>Create a new entry with the given values.</p>
+         *
+         * @param hash The code used to hash the object with
+         * @param key The key used to enter this in the table
+         * @param value The value for this key
+         * @param next A reference to the next entry in the table
+         */
+Method code:
+83 |         protected Entry(int hash, int key, Object value, Entry next) {
+84 |             this.hash = hash;
+85 |             this.key = key;
+86 |             this.value = value;
+87 |             this.next = next;
+88 |         }
+
+===== M0017 =====
+Signature: org.apache.commons.lang.IntHashMap.rehash()
+Source: src/java/org/apache/commons/lang/IntHashMap.java
+Original range: 257-277
+Documentation:
+/**
+     * <p>Increases the capacity of and internally reorganizes this
+     * hashtable, in order to accommodate and access its entries more
+     * efficiently.</p>
+     *
+     * <p>This method is called automatically when the number of keys
+     * in the hashtable exceeds this hashtable's capacity and load
+     * factor.</p>
+     */
+Method code:
+257 |     protected void rehash() {
+258 |         int oldCapacity = table.length;
+259 |         Entry oldMap[] = table;
+260 | 
+261 |         int newCapacity = oldCapacity * 2 + 1;
+262 |         Entry newMap[] = new Entry[newCapacity];
+263 | 
+264 |         threshold = (int) (newCapacity * loadFactor);
+265 |         table = newMap;
+266 | 
+267 |         for (int i = oldCapacity; i-- > 0;) {
+268 |             for (Entry old = oldMap[i]; old != null;) {
+269 |                 Entry e = old;
+270 |                 old = old.next;
+271 | 
+272 |                 int index = (e.hash & 0x7FFFFFFF) % newCapacity;
+273 |                 e.next = newMap[index];
+274 |                 newMap[index] = e;
+275 |             }
+276 |         }
+277 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.lang.Entities.escape(Writer,String)
+Source: src/java/org/apache/commons/lang/Entities.java
+Original range: 825-844
+Documentation:
+/**
+     * <p>
+     * Escapes the characters in the <code>String</code> passed and writes the result to the <code>Writer</code>
+     * passed.
+     * </p>
+     * 
+     * @param writer
+     *            The <code>Writer</code> to write the results of the escaping to. Assumed to be a non-null value.
+     * @param str
+     *            The <code>String</code> to escape. Assumed to be a non-null value.
+     * @throws IOException
+     *             when <code>Writer</code> passed throws the exception from calls to the {@link Writer#write(int)}
+     *             methods.
+     * 
+     * @see #escape(String)
+     * @see Writer
+     */
+Method code:
+825 |     public void escape(Writer writer, String str) throws IOException {
+826 |         int len = str.length();
+827 |         for (int i = 0; i < len; i++) {
+828 |             char c = str.charAt(i);
+829 |             String entityName = this.entityName(c);
+830 |             if (entityName == null) {
+831 |                 if (c > 0x7F) {
+832 |                     writer.write("&#");
+833 |                     writer.write(Integer.toString(c, 10));
+834 |                     writer.write(';');
+835 |                 } else {
+836 |                     writer.write(c);
+837 |                 }
+838 |             } else {
+839 |                 writer.write('&');
+840 |                 writer.write(entityName);
+841 |                 writer.write(';');
+842 |             }
+843 |         }
+844 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.lang.IntHashMap.get(int)
+Source: src/java/org/apache/commons/lang/IntHashMap.java
+Original range: 236-246
+Documentation:
+/**
+     * <p>Returns the value to which the specified key is mapped in this map.</p>
+     *
+     * @param   key   a key in the hashtable.
+     * @return  the value to which the key is mapped in this hashtable;
+     *          <code>null</code> if the key is not mapped to any value in
+     *          this hashtable.
+     * @see     #put(int, Object)
+     */
+Method code:
+236 |     public Object get(int key) {
+237 |         Entry tab[] = table;
+238 |         int hash = key;
+239 |         int index = (hash & 0x7FFFFFFF) % tab.length;
+240 |         for (Entry e = tab[index]; e != null; e = e.next) {
+241 |             if (e.hash == hash) {
+242 |                 return e.value;
+243 |             }
+244 |         }
+245 |         return null;
+246 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.lang.StringEscapeUtils.unescapeHtml(String)
+Source: src/java/org/apache/commons/lang/StringEscapeUtils.java
+Original range: 524-536
+Documentation:
+/**
+     * <p>Unescapes a string containing entity escapes to a string
+     * containing the actual Unicode characters corresponding to the
+     * escapes. Supports HTML 4.0 entities.</p>
+     *
+     * <p>For example, the string "&amp;lt;Fran&amp;ccedil;ais&amp;gt;"
+     * will become "&lt;Fran&ccedil;ais&gt;"</p>
+     *
+     * <p>If an entity is unrecognized, it is left alone, and inserted
+     * verbatim into the result string. e.g. "&amp;gt;&amp;zzzz;x" will
+     * become "&gt;&amp;zzzz;x".</p>
+     *
+     * @param str  the <code>String</code> to unescape, may be null
+     * @return a new unescaped <code>String</code>, <code>null</code> if null string input
+     * @see #escapeHtml(Writer, String)
+     */
+Method code:
+524 |     public static String unescapeHtml(String str) {
+525 |         if (str == null) {
+526 |             return null;
+527 |         }
+528 |         try {
+529 |             StringWriter writer = new StringWriter ((int)(str.length() * 1.5));
+530 |             unescapeHtml(writer, str);
+531 |             return writer.toString();
+532 |         } catch (IOException ioe) {
+533 |             //should be impossible
+534 |             throw new UnhandledException(ioe);
+535 |         }
+536 |     }
+

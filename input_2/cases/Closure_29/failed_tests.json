@@ -1,0 +1,52 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineObjectLiteralsTest.testObject10()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineObjectLiteralsTest.testObject10()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineObjectLiteralsTest.java",
+    "begin_line": 167,
+    "end_line": 207,
+    "comment": "",
+    "snippet": "  public void testObject10() {\n    testLocal(\"var x; var b = f(); x = {a:a, b:b}; if(x.a) g(x.b);\",\n         \"var JSCompiler_object_inline_a_0;\" +\n         \"var JSCompiler_object_inline_b_1;\" +\n         \"var b = f();\" +\n         \"JSCompiler_object_inline_a_0=a,JSCompiler_object_inline_b_1=b,true;\" +\n         \"if(JSCompiler_object_inline_a_0) g(JSCompiler_object_inline_b_1)\");\n    testLocal(\"var x = {}; var b = f(); x = {a:a, b:b}; if(x.a) g(x.b) + x.c\",\n         \"var x = {}; var b = f(); x = {a:a, b:b}; if(x.a) g(x.b) + x.c\");\n    testLocal(\"var x; var b = f(); x = {a:a, b:b}; x.c = c; if(x.a) g(x.b) + x.c\",\n         \"var JSCompiler_object_inline_a_0;\" +\n         \"var JSCompiler_object_inline_b_1;\" +\n         \"var JSCompiler_object_inline_c_2;\" +\n         \"var b = f();\" +\n         \"JSCompiler_object_inline_a_0 = a,JSCompiler_object_inline_b_1 = b, \" +\n         \"  JSCompiler_object_inline_c_2=void 0,true;\" +\n         \"JSCompiler_object_inline_c_2 = c;\" +\n         \"if (JSCompiler_object_inline_a_0)\" +\n         \"  g(JSCompiler_object_inline_b_1) + JSCompiler_object_inline_c_2;\");\n    testLocal(\"var x = {a:a}; if (b) x={b:b}; f(x.a||x.b);\",\n         \"var JSCompiler_object_inline_a_0 = a;\" +\n         \"var JSCompiler_object_inline_b_1;\" +\n         \"if(b) JSCompiler_object_inline_b_1 = b,\" +\n         \"      JSCompiler_object_inline_a_0 = void 0,\" +\n         \"      true;\" +\n         \"f(JSCompiler_object_inline_a_0 || JSCompiler_object_inline_b_1)\");\n    testLocal(\"var x; var y = 5; x = {a:a, b:b, c:c}; if (b) x={b:b}; f(x.a||x.b);\",\n         \"var JSCompiler_object_inline_a_0;\" +\n         \"var JSCompiler_object_inline_b_1;\" +\n         \"var JSCompiler_object_inline_c_2;\" +\n         \"var y=5;\" +\n         \"JSCompiler_object_inline_a_0=a,\" +\n         \"JSCompiler_object_inline_b_1=b,\" +\n         \"JSCompiler_object_inline_c_2=c,\" +\n         \"true;\" +\n         \"if (b) JSCompiler_object_inline_b_1=b,\" +\n         \"       JSCompiler_object_inline_a_0=void 0,\" +\n         \"       JSCompiler_object_inline_c_2=void 0,\" +\n         \"       true;\" +\n         \"f(JSCompiler_object_inline_a_0||JSCompiler_object_inline_b_1)\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineObjectLiteralsTest.testObject12()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineObjectLiteralsTest.testObject12()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineObjectLiteralsTest.java",
+    "begin_line": 214,
+    "end_line": 217,
+    "comment": "",
+    "snippet": "  public void testObject12() {\n    testLocal(\"var a; a = {x:1, y:2}; f(a.x, a.y2);\",\n        \"var a; a = {x:1, y:2}; f(a.x, a.y2);\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineObjectLiteralsTest.testObject22()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineObjectLiteralsTest.testObject22()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineObjectLiteralsTest.java",
+    "begin_line": 279,
+    "end_line": 290,
+    "comment": "",
+    "snippet": "  public void testObject22() {\n    testLocal(\"while(1) { var a = {y:1}; if (b) a.x = 2; f(a.y, a.x);}\",\n      \"for(;1;){\" +\n      \" var JSCompiler_object_inline_y_0=1;\" +\n      \" var JSCompiler_object_inline_x_1;\" +\n      \" if(b) JSCompiler_object_inline_x_1=2;\" +\n      \" f(JSCompiler_object_inline_y_0,JSCompiler_object_inline_x_1)\" +\n      \"}\");\n\n    testLocal(\"var a; while (1) { f(a.x, a.y); a = {x:1, y:1};}\",\n        \"var a; while (1) { f(a.x, a.y); a = {x:1, y:1};}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineObjectLiteralsTest.testIssue724()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineObjectLiteralsTest.testIssue724()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineObjectLiteralsTest.java",
+    "begin_line": 343,
+    "end_line": 349,
+    "comment": "",
+    "snippet": "  public void testIssue724() {\n    testSameLocal(\n        \"var getType; getType = {};\" +\n        \"return functionToCheck && \" +\n        \"   getType.toString.apply(functionToCheck) === \" +\n        \"   '[object Function]';\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.IntegrationTest.testIssue724()",
+    "resolved_signature": "com.google.javascript.jscomp.IntegrationTest.testIssue724()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/IntegrationTest.java",
+    "begin_line": 1672,
+    "end_line": 1688,
+    "comment": "",
+    "snippet": "  public void testIssue724() {\n    CompilerOptions options = createCompilerOptions();\n    CompilationLevel.ADVANCED_OPTIMIZATIONS\n        .setOptionsForCompilationLevel(options);\n    String code =\n        \"isFunction = function(functionToCheck) {\" +\n        \"  var getType = {};\" +\n        \"  return functionToCheck && \" +\n        \"      getType.toString.apply(functionToCheck) === \" +\n        \"     '[object Function]';\" +\n        \"};\";\n    String result =\n        \"isFunction=function(a){var b={};\" +\n        \"return a&&\\\"[object Function]\\\"===b.b.a(a)}\";\n\n    test(options, code, result);\n  }"
+  }
+]

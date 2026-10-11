@@ -1,0 +1,5517 @@
+===== M0001 =====
+Signature: com.google.javascript.jscomp.CodingConventions.Proxy.Proxy(CodingConvention)
+Source: src/com/google/javascript/jscomp/CodingConventions.java
+Original range: 55-57
+Documentation:
+
+Method code:
+55 |     protected Proxy(CodingConvention convention) {
+56 |       this.nextConvention = convention;
+57 |     }
+
+===== M0002 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.IRFactory(String,StaticSourceFile,Config,ErrorReporter)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 123-153
+Documentation:
+// TODO(johnlenz): Consider creating a template pool for ORIGINALNAME_PROP.
+Method code:
+123 |   private IRFactory(String sourceString,
+124 |                     StaticSourceFile sourceFile,
+125 |                     Config config,
+126 |                     ErrorReporter errorReporter) {
+127 |     this.sourceString = sourceString;
+128 |     this.sourceFile = sourceFile;
+129 | 
+130 |     // Sometimes this will be null in tests.
+131 |     this.sourceName = sourceFile == null ? null : sourceFile.getName();
+132 | 
+133 |     this.config = config;
+134 |     this.errorReporter = errorReporter;
+135 |     this.transformDispatcher = new TransformDispatcher();
+136 |     // The template node properties are applied to all nodes in this transform.
+137 |     this.templateNode = createTemplateNode();
+138 | 
+139 |     switch (config.languageMode) {
+140 |       case ECMASCRIPT3:
+141 |         // Reserved words are handled by the Rhino parser.
+142 |         reservedKeywords = null;
+143 |         break;
+144 |       case ECMASCRIPT5:
+145 |         reservedKeywords = ES5_RESERVED_KEYWORDS;
+146 |         break;
+147 |       case ECMASCRIPT5_STRICT:
+148 |         reservedKeywords = ES5_STRICT_RESERVED_KEYWORDS;
+149 |         break;
+150 |       default:
+151 |         throw new IllegalStateException("unknown language mode");
+152 |     }
+153 |   }
+
+===== M0003 =====
+Signature: com.google.javascript.jscomp.CodePrinter.CompactCodePrinter.append(String)
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 442-446
+Documentation:
+/**
+     * Appends a string to the code, keeping track of the current line length.
+     */
+Method code:
+442 |     @Override
+443 |     void append(String str) {
+444 |       code.append(str);
+445 |       lineLength += str.length();
+446 |     }
+
+===== M0004 =====
+Signature: com.google.javascript.rhino.Node.putProp(int,Object)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 832-843
+Documentation:
+
+Method code:
+832 |   public void putProp(int propType, Object value) {
+833 |     if (propType == SOURCENAME_PROP) {
+834 |       putProp(
+835 |           STATIC_SOURCE_FILE, new SimpleSourceFile((String) value, false));
+836 |       return;
+837 |     }
+838 | 
+839 |     removeProp(propType);
+840 |     if (value != null) {
+841 |       propListHead = createProp(propType, value, propListHead);
+842 |     }
+843 |   }
+
+===== M0005 =====
+Signature: com.google.javascript.jscomp.JSSourceFile.fromCode(String,String)
+Source: src/com/google/javascript/jscomp/JSSourceFile.java
+Original range: 55-57
+Documentation:
+
+Method code:
+55 |   public static JSSourceFile fromCode(String fileName, String code) {
+56 |     return new JSSourceFile(SourceFile.fromCode(fileName, code));
+57 |   }
+
+===== M0006 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.TransformDispatcher.processName(Name)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 730-733
+Documentation:
+
+Method code:
+730 |     @Override
+731 |     Node processName(Name nameNode) {
+732 |       return processName(nameNode, false);
+733 |     }
+
+===== M0007 =====
+Signature: com.google.javascript.jscomp.CompilerInput.CompilerInput(SourceAst,boolean)
+Source: src/com/google/javascript/jscomp/CompilerInput.java
+Original range: 67-69
+Documentation:
+
+Method code:
+67 |   public CompilerInput(SourceAst ast, boolean isExtern) {
+68 |     this(ast, ast.getInputId(), isExtern);
+69 |   }
+
+===== M0008 =====
+Signature: com.google.javascript.rhino.Node.Node(int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 360-364
+Documentation:
+
+Method code:
+360 |   public Node(int nodeType) {
+361 |     type = nodeType;
+362 |     parent = null;
+363 |     sourcePosition = -1;
+364 |   }
+
+===== M0009 =====
+Signature: com.google.javascript.jscomp.RhinoErrorReporter.OldRhinoErrorReporter.OldRhinoErrorReporter(AbstractCompiler)
+Source: src/com/google/javascript/jscomp/RhinoErrorReporter.java
+Original range: 142-144
+Documentation:
+
+Method code:
+142 |     private OldRhinoErrorReporter(AbstractCompiler compiler) {
+143 |       super(compiler);
+144 |     }
+
+===== M0010 =====
+Signature: com.google.javascript.jscomp.ComposeWarningsGuard.addGuard(WarningsGuard)
+Source: src/com/google/javascript/jscomp/ComposeWarningsGuard.java
+Original range: 86-96
+Documentation:
+
+Method code:
+86 |   void addGuard(WarningsGuard guard) {
+87 |     if (guard instanceof ComposeWarningsGuard) {
+88 |       // Reverse the guards, so that they have the same order in the result.
+89 |       addGuards(((ComposeWarningsGuard) guard).guards.descendingSet());
+90 |     } else {
+91 |       numberOfAdds++;
+92 |       orderOfAddition.put(guard, numberOfAdds);
+93 |       guards.remove(guard);
+94 |       guards.add(guard);
+95 |     }
+96 |   }
+
+===== M0011 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.TransformDispatcher.processName(Name,boolean)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 735-747
+Documentation:
+
+Method code:
+735 |     Node processName(Name nameNode, boolean asString) {
+736 |       if (asString) {
+737 |         return newStringNode(Token.STRING, nameNode.getIdentifier());
+738 |       } else {
+739 |         if (isReservedKeyword(nameNode.getIdentifier())) {
+740 |           errorReporter.error(
+741 |             "identifier is a reserved word",
+742 |             sourceName,
+743 |             nameNode.getLineno(), "", 0);
+744 |         }
+745 |         return newStringNode(Token.NAME, nameNode.getIdentifier());
+746 |       }
+747 |     }
+
+===== M0012 =====
+Signature: com.google.javascript.jscomp.CompilerOptions.shouldColorizeErrorOutput()
+Source: src/com/google/javascript/jscomp/CompilerOptions.java
+Original range: 1218-1220
+Documentation:
+
+Method code:
+1218 |   public boolean shouldColorizeErrorOutput() {
+1219 |     return colorizeErrorOutput;
+1220 |   }
+
+===== M0013 =====
+Signature: com.google.javascript.rhino.Node.addChildToBack(Node)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 607-618
+Documentation:
+
+Method code:
+607 |   public void addChildToBack(Node child) {
+608 |     Preconditions.checkArgument(child.parent == null);
+609 |     Preconditions.checkArgument(child.next == null);
+610 |     child.parent = this;
+611 |     child.next = null;
+612 |     if (last == null) {
+613 |       first = last = child;
+614 |       return;
+615 |     }
+616 |     last.next = child;
+617 |     last = child;
+618 |   }
+
+===== M0014 =====
+Signature: com.google.javascript.jscomp.ProcessTweaks.TweakFunction.TweakFunction(String,String,int)
+Source: src/com/google/javascript/jscomp/ProcessTweaks.java
+Original range: 127-130
+Documentation:
+
+Method code:
+127 |     TweakFunction(String name, String expectedTypeName,
+128 |         int validNodeTypeA) {
+129 |       this(name, expectedTypeName, validNodeTypeA, Token.ERROR, null);
+130 |     }
+
+===== M0015 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroups.DiagnosticGroups()
+Source: src/com/google/javascript/jscomp/DiagnosticGroups.java
+Original range: 31-31
+Documentation:
+
+Method code:
+31 |   public DiagnosticGroups() {}
+
+===== M0016 =====
+Signature: com.google.javascript.jscomp.SourceFile.setIsExtern(boolean)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 193-195
+Documentation:
+/** Sets that this is an extern. */
+Method code:
+193 |   void setIsExtern(boolean newVal) {
+194 |     isExternFile = newVal;
+195 |   }
+
+===== M0017 =====
+Signature: com.google.javascript.rhino.ScriptRuntime.getMessage(String,Object[])
+Source: src/com/google/javascript/rhino/ScriptRuntime.java
+Original range: 379-404
+Documentation:
+/* OPT there's a noticable delay for the first error!  Maybe it'd
+     * make sense to use a ListResourceBundle instead of a properties
+     * file to avoid (synchronized) text parsing.
+     */
+Method code:
+379 |     public static String getMessage(String messageId, Object[] arguments) {
+380 |         final String defaultResource
+381 |             = "rhino_ast.java.com.google.javascript.rhino.Messages";
+382 | 
+383 |         Locale locale = Locale.getDefault();
+384 | 
+385 |         // ResourceBundle does cacheing.
+386 |         ResourceBundle rb = ResourceBundle.getBundle(defaultResource, locale);
+387 | 
+388 |         String formatString;
+389 |         try {
+390 |             formatString = rb.getString(messageId);
+391 |         } catch (java.util.MissingResourceException mre) {
+392 |             throw new RuntimeException
+393 |                 ("no message resource found for message property "+ messageId);
+394 |         }
+395 | 
+396 |         /*
+397 |          * It's OK to format the string, even if 'arguments' is null;
+398 |          * we need to format it anyway, to make double ''s collapse to
+399 |          * single 's.
+400 |          */
+401 |         // TODO: MessageFormat is not available on pJava
+402 |         MessageFormat formatter = new MessageFormat(formatString);
+403 |         return formatter.format(arguments);
+404 |     }
+
+===== M0018 =====
+Signature: com.google.javascript.rhino.Node.getNext()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 547-549
+Documentation:
+
+Method code:
+547 |   public Node getNext() {
+548 |     return next;
+549 |   }
+
+===== M0019 =====
+Signature: com.google.javascript.jscomp.WarningsGuard.disables(DiagnosticGroup)
+Source: src/com/google/javascript/jscomp/WarningsGuard.java
+Original range: 94-96
+Documentation:
+/**
+   * Returns whether all warnings in the given diagnostic group will be
+   * filtered out. Used to determine which passes to skip.
+   *
+   * @param group A group of DiagnosticTypes.
+   * @return Whether all warnings of these types are disabled by this guard.
+   */
+Method code:
+94 |   protected boolean disables(DiagnosticGroup group) {
+95 |     return false;
+96 |   }
+
+===== M0020 =====
+Signature: com.google.javascript.jscomp.SourceFile.getCode()
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 139-141
+Documentation:
+/**
+   * Gets all the code in this source file.
+   * @throws IOException
+   */
+Method code:
+139 |   public String getCode() throws IOException {
+140 |     return code;
+141 |   }
+
+===== M0021 =====
+Signature: com.google.javascript.rhino.jstype.ObjectType.createDelegateSuffix(String)
+Source: src/com/google/javascript/rhino/jstype/ObjectType.java
+Original range: 224-226
+Documentation:
+/**
+   * Creates a suffix for a proxy delegate.
+   * @see #getNormalizedReferenceName
+   */
+Method code:
+224 |   public static String createDelegateSuffix(String suffix) {
+225 |     return "(" + suffix + ")";
+226 |   }
+
+===== M0022 =====
+Signature: com.google.javascript.jscomp.ErrorFormat.anonymous_L34.toFormatter(SourceExcerptProvider,boolean)
+Source: src/com/google/javascript/jscomp/ErrorFormat.java
+Original range: 35-42
+Documentation:
+
+Method code:
+35 |     @Override
+36 |     public MessageFormatter toFormatter(
+37 |         SourceExcerptProvider source, boolean colorize) {
+38 |       LightweightMessageFormatter formatter = new LightweightMessageFormatter(
+39 |           source);
+40 |       formatter.setColorize(colorize);
+41 |       return formatter;
+42 |     }
+
+===== M0023 =====
+Signature: com.google.javascript.rhino.Node.AbstractPropListItem.getType()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 281-284
+Documentation:
+
+Method code:
+281 |     @Override
+282 |     public int getType() {
+283 |       return propType;
+284 |     }
+
+===== M0024 =====
+Signature: com.google.javascript.jscomp.NodeTraversal.getSourceName(Node)
+Source: src/com/google/javascript/jscomp/NodeTraversal.java
+Original range: 653-656
+Documentation:
+
+Method code:
+653 |   private static String getSourceName(Node n) {
+654 |     String name = n.getSourceFileName();
+655 |     return name == null ? "" : name;
+656 |   }
+
+===== M0025 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.add(String)
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 181-204
+Documentation:
+
+Method code:
+181 |   void add(String newcode) {
+182 |     maybeEndStatement();
+183 | 
+184 |     if (newcode.length() == 0) {
+185 |       return;
+186 |     }
+187 | 
+188 |     char c = newcode.charAt(0);
+189 |     if ((isWordChar(c) || c == '\\') &&
+190 |         isWordChar(getLastChar())) {
+191 |       // need space to separate. This is not pretty printing.
+192 |       // For example: "return foo;"
+193 |       append(" ");
+194 |     } else if (c == '/' && getLastChar() == '/') {
+195 |       // Do not allow a forward slash to appear after a DIV.
+196 |       // For example,
+197 |       // REGEXP DIV REGEXP
+198 |       // is valid and should print like
+199 |       // / // / /
+200 |       append(" ");
+201 |     }
+202 | 
+203 |     append(newcode);
+204 |   }
+
+===== M0026 =====
+Signature: com.google.javascript.rhino.Node.getStaticSourceFile()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1096-1098
+Documentation:
+/** Returns the source file associated with this input. May be null */
+Method code:
+1096 |   public StaticSourceFile getStaticSourceFile() {
+1097 |     return ((StaticSourceFile) this.getProp(STATIC_SOURCE_FILE));
+1098 |   }
+
+===== M0027 =====
+Signature: com.google.javascript.rhino.Node.newString(int,String)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 515-517
+Documentation:
+
+Method code:
+515 |   public static Node newString(int type, String str) {
+516 |     return new StringNode(type, str);
+517 |   }
+
+===== M0028 =====
+Signature: com.google.javascript.jscomp.Compiler.Compiler()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 186-188
+Documentation:
+/**
+   * Creates a Compiler that reports errors and warnings to its logger.
+   */
+Method code:
+186 |   public Compiler() {
+187 |     this((PrintStream) null);
+188 |   }
+
+===== M0029 =====
+Signature: com.google.javascript.jscomp.JsAst.getSourceFile()
+Source: src/com/google/javascript/jscomp/JsAst.java
+Original range: 72-75
+Documentation:
+
+Method code:
+72 |   @Override
+73 |   public SourceFile getSourceFile() {
+74 |     return sourceFile;
+75 |   }
+
+===== M0030 =====
+Signature: com.google.javascript.jscomp.SourceFile.SourceFile(String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 86-94
+Documentation:
+/**
+   * Construct a new abstract source file.
+   *
+   * @param fileName The file name of the source file. It does not necessarily
+   *     need to correspond to a real path. But it should be unique. Will
+   *     appear in warning messages emitted by the compiler.
+   */
+Method code:
+86 |   public SourceFile(String fileName) {
+87 |     if (fileName == null || fileName.isEmpty()) {
+88 |       throw new IllegalArgumentException("a source must have a name");
+89 |     }
+90 |     this.fileName = fileName;
+91 |     // Starting point: offset 0 is at line 1.
+92 |     this.lastOffset = 0;
+93 |     this.lastLine = 1;
+94 |   }
+
+===== M0031 =====
+Signature: com.google.javascript.rhino.Node.AbstractPropListItem.AbstractPropListItem(int,PropListItem)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 276-279
+Documentation:
+
+Method code:
+276 |     AbstractPropListItem(int propType, PropListItem next) {
+277 |       this.propType = propType;
+278 |       this.next = next;
+279 |     }
+
+===== M0032 =====
+Signature: com.google.javascript.jscomp.CodingConventions.getDefault()
+Source: src/com/google/javascript/jscomp/CodingConventions.java
+Original range: 37-39
+Documentation:
+/** Gets the default coding convention. */
+Method code:
+37 |   public static CodingConvention getDefault() {
+38 |     return new DefaultCodingConvention();
+39 |   }
+
+===== M0033 =====
+Signature: com.google.javascript.rhino.Node.setLineno(int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1146-1152
+Documentation:
+
+Method code:
+1146 |   public void setLineno(int lineno) {
+1147 |       int charno = getCharno();
+1148 |       if (charno == -1) {
+1149 |         charno = 0;
+1150 |       }
+1151 |       sourcePosition = mergeLineCharNo(lineno, charno);
+1152 |   }
+
+===== M0034 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.endStatement()
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 134-136
+Documentation:
+/**
+   * Indicates the end of a statement and a ';' may need to be added.
+   * But we don't add it now, in case we're at the end of a block (in which
+   * case we don't have to add the ';').
+   * See maybeEndStatement()
+   */
+Method code:
+134 |   void endStatement() {
+135 |     endStatement(false);
+136 |   }
+
+===== M0035 =====
+Signature: com.google.javascript.rhino.Node.getChildCount()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1387-1393
+Documentation:
+
+Method code:
+1387 |   public int getChildCount() {
+1388 |     int c = 0;
+1389 |     for (Node n = first; n != null; n = n.next)
+1390 |       c++;
+1391 | 
+1392 |     return c;
+1393 |   }
+
+===== M0036 =====
+Signature: com.google.javascript.jscomp.Compiler.Compiler(PrintStream)
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 194-197
+Documentation:
+/**
+   * Creates n Compiler that reports errors and warnings to an output
+   * stream.
+   */
+Method code:
+194 |   public Compiler(PrintStream stream) {
+195 |     addChangeHandler(recentChange);
+196 |     outStream = stream;
+197 |   }
+
+===== M0037 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.TransformDispatcher.processExpressionStatement(ExpressionStatement)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 559-564
+Documentation:
+
+Method code:
+559 |     @Override
+560 |     Node processExpressionStatement(ExpressionStatement statementNode) {
+561 |       Node node = newNode(transformTokenType(statementNode.getType()));
+562 |       node.addChildToBack(transform(statementNode.getExpression()));
+563 |       return node;
+564 |     }
+
+===== M0038 =====
+Signature: com.google.javascript.jscomp.NodeTraversal.traverse(AbstractCompiler,Node,Callback)
+Source: src/com/google/javascript/jscomp/NodeTraversal.java
+Original range: 452-456
+Documentation:
+/**
+   * Traverses a node recursively.
+   */
+Method code:
+452 |   public static void traverse(
+453 |       AbstractCompiler compiler, Node root, Callback cb) {
+454 |     NodeTraversal t = new NodeTraversal(compiler, cb);
+455 |     t.traverse(root);
+456 |   }
+
+===== M0039 =====
+Signature: com.google.javascript.rhino.Node.getProp(int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 796-806
+Documentation:
+
+Method code:
+796 |   public Object getProp(int propType) {
+797 |     if (propType == SOURCENAME_PROP) {
+798 |       return getSourceFileName();
+799 |     }
+800 | 
+801 |     PropListItem item = lookupProperty(propType);
+802 |     if (item == null) {
+803 |       return null;
+804 |     }
+805 |     return item.getObjectValue();
+806 |   }
+
+===== M0040 =====
+Signature: com.google.javascript.jscomp.ComposeWarningsGuard.GuardComparator.compare(WarningsGuard,WarningsGuard)
+Source: src/com/google/javascript/jscomp/ComposeWarningsGuard.java
+Original range: 60-71
+Documentation:
+
+Method code:
+60 |     @Override
+61 |     public int compare(WarningsGuard a, WarningsGuard b) {
+62 |       int priorityDiff = a.getPriority() - b.getPriority();
+63 |       if (priorityDiff != 0) {
+64 |         return priorityDiff;
+65 |       }
+66 | 
+67 |       // If the warnings guards have the same priority, the one that
+68 |       // was added last wins.
+69 |       return orderOfAddition.get(b).intValue() -
+70 |           orderOfAddition.get(a).intValue();
+71 |     }
+
+===== M0041 =====
+Signature: com.google.javascript.rhino.Node.getCharno()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1131-1133
+Documentation:
+
+Method code:
+1131 |   public int getCharno() {
+1132 |     return extractCharno(sourcePosition);
+1133 |   }
+
+===== M0042 =====
+Signature: com.google.javascript.jscomp.CompilerOptions.disables(DiagnosticGroup)
+Source: src/com/google/javascript/jscomp/CompilerOptions.java
+Original range: 1024-1026
+Documentation:
+/**
+   * Whether the warnings guard in this Options object disables the given
+   * group of warnings.
+   */
+Method code:
+1024 |   boolean disables(DiagnosticGroup type) {
+1025 |     return warningsGuard.disables(type);
+1026 |   }
+
+===== M0043 =====
+Signature: com.google.javascript.jscomp.ProcessTweaks.TweakFunction.TweakFunction(String,String,int,int,TweakFunction)
+Source: src/com/google/javascript/jscomp/ProcessTweaks.java
+Original range: 141-149
+Documentation:
+
+Method code:
+141 |     TweakFunction(String name, String expectedTypeName,
+142 |         int validNodeTypeA, int validNodeTypeB,
+143 |         TweakFunction registerFunction) {
+144 |       this.name = name;
+145 |       this.expectedTypeName = expectedTypeName;
+146 |       this.validNodeTypeA = validNodeTypeA;
+147 |       this.validNodeTypeB = validNodeTypeB;
+148 |       this.registerFunction = registerFunction;
+149 |     }
+
+===== M0044 =====
+Signature: com.google.javascript.jscomp.Compiler.addChangeHandler(CodeChangeHandler)
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 1858-1861
+Documentation:
+
+Method code:
+1858 |   @Override
+1859 |   void addChangeHandler(CodeChangeHandler handler) {
+1860 |     codeChangeHandlers.add(handler);
+1861 |   }
+
+===== M0045 =====
+Signature: com.google.javascript.jscomp.CodePrinter.Builder.Builder(Node)
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 565-567
+Documentation:
+/**
+     * Sets the root node from which to generate the source code.
+     * @param node The root node.
+     */
+Method code:
+565 |     Builder(Node node) {
+566 |       root = node;
+567 |     }
+
+===== M0046 =====
+Signature: com.google.javascript.jscomp.ComposeWarningsGuard.ComposeWarningsGuard(WarningsGuard...)
+Source: src/com/google/javascript/jscomp/ComposeWarningsGuard.java
+Original range: 82-84
+Documentation:
+
+Method code:
+82 |   public ComposeWarningsGuard(WarningsGuard... guards) {
+83 |     this(Lists.newArrayList(guards));
+84 |   }
+
+===== M0047 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroup.DiagnosticGroup(String,DiagnosticType...)
+Source: src/com/google/javascript/jscomp/DiagnosticGroup.java
+Original range: 46-49
+Documentation:
+/**
+   * Create a group that matches all errors of the given types.
+   */
+Method code:
+46 |   DiagnosticGroup(String name, DiagnosticType ...types) {
+47 |     this.name = name;
+48 |     this.types = ImmutableSet.copyOf(Arrays.asList(types));
+49 |   }
+
+===== M0048 =====
+Signature: com.google.javascript.jscomp.parsing.TypeSafeDispatcher.process(AstNode)
+Source: src/com/google/javascript/jscomp/parsing/TypeSafeDispatcher.java
+Original range: 118-281
+Documentation:
+
+Method code:
+118 |   public T process(AstNode node) {
+119 |     switch (node.getType()) {
+120 |       case Token.ADD:
+121 |       case Token.AND:
+122 |       case Token.BITAND:
+123 |       case Token.BITOR:
+124 |       case Token.BITXOR:
+125 |       case Token.COMMA:
+126 |       case Token.DIV:
+127 |       case Token.EQ:
+128 |       case Token.GE:
+129 |       case Token.GT:
+130 |       case Token.IN:
+131 |       case Token.INSTANCEOF:
+132 |       case Token.LE:
+133 |       case Token.LSH:
+134 |       case Token.LT:
+135 |       case Token.MOD:
+136 |       case Token.MUL:
+137 |       case Token.NE:
+138 |       case Token.OR:
+139 |       case Token.RSH:
+140 |       case Token.SHEQ:
+141 |       case Token.SHNE:
+142 |       case Token.SUB:
+143 |       case Token.URSH:
+144 |         return processInfixExpression((InfixExpression) node);
+145 |       case Token.ARRAYLIT:
+146 |         return processArrayLiteral((ArrayLiteral) node);
+147 |       case Token.ASSIGN:
+148 |       case Token.ASSIGN_ADD:
+149 |       case Token.ASSIGN_BITAND:
+150 |       case Token.ASSIGN_BITOR:
+151 |       case Token.ASSIGN_BITXOR:
+152 |       case Token.ASSIGN_DIV:
+153 |       case Token.ASSIGN_LSH:
+154 |       case Token.ASSIGN_MOD:
+155 |       case Token.ASSIGN_MUL:
+156 |       case Token.ASSIGN_RSH:
+157 |       case Token.ASSIGN_SUB:
+158 |       case Token.ASSIGN_URSH:
+159 |         return processAssignment((Assignment) node);
+160 |       case Token.BITNOT:
+161 |       case Token.DEC:
+162 |       case Token.DELPROP:
+163 |       case Token.INC:
+164 |       case Token.NEG:
+165 |       case Token.NOT:
+166 |       case Token.POS:
+167 |       case Token.TYPEOF:
+168 |       case Token.VOID:
+169 |         return processUnaryExpression((UnaryExpression) node);
+170 |       case Token.BLOCK:
+171 |         if (node instanceof Block) {
+172 |           return processBlock((Block) node);
+173 |         } else  if (node instanceof Scope) {
+174 |           return processScope((Scope) node);
+175 |         } else {
+176 |           throw new IllegalStateException("Unexpected node type.  class: " +
+177 |                                           node.getClass() +
+178 |                                           " type: " +
+179 |                                           Token.typeToName(node.getType()));
+180 |         }
+181 |       case Token.BREAK:
+182 |         return processBreakStatement((BreakStatement) node);
+183 |       case Token.CALL:
+184 |         return processFunctionCall((FunctionCall) node);
+185 |       case Token.CASE:
+186 |       case Token.DEFAULT:
+187 |         return processSwitchCase((SwitchCase) node);
+188 |       case Token.CATCH:
+189 |         return processCatchClause((CatchClause) node);
+190 |       case Token.COLON:
+191 |         return processObjectProperty((ObjectProperty) node);
+192 |       case Token.CONTINUE:
+193 |         return processContinueStatement((ContinueStatement) node);
+194 |       case Token.DO:
+195 |         return processDoLoop((DoLoop) node);
+196 |       case Token.EMPTY:
+197 |         return processEmptyExpression((EmptyExpression) node);
+198 |       case Token.EXPR_RESULT:
+199 |       case Token.EXPR_VOID:
+200 |         if (node instanceof ExpressionStatement) {
+201 |           return processExpressionStatement((ExpressionStatement) node);
+202 |         } else  if (node instanceof LabeledStatement) {
+203 |           return processLabeledStatement((LabeledStatement) node);
+204 |         } else {
+205 |           throw new IllegalStateException("Unexpected node type.  class: " +
+206 |                                           node.getClass() +
+207 |                                           " type: " +
+208 |                                           Token.typeToName(node.getType()));
+209 |         }
+210 |       case Token.DEBUGGER:
+211 |       case Token.FALSE:
+212 |       case Token.NULL:
+213 |       case Token.THIS:
+214 |       case Token.TRUE:
+215 |         return processKeywordLiteral((KeywordLiteral) node);
+216 |       case Token.FOR:
+217 |         if (node instanceof ForInLoop) {
+218 |           return processForInLoop((ForInLoop) node);
+219 |         } else  if (node instanceof ForLoop) {
+220 |           return processForLoop((ForLoop) node);
+221 |         } else {
+222 |           throw new IllegalStateException("Unexpected node type.  class: " +
+223 |                                           node.getClass() +
+224 |                                           " type: " +
+225 |                                           Token.typeToName(node.getType()));
+226 |         }
+227 |       case Token.FUNCTION:
+228 |         return processFunctionNode((FunctionNode) node);
+229 |       case Token.GETELEM:
+230 |         return processElementGet((ElementGet) node);
+231 |       case Token.GETPROP:
+232 |         return processPropertyGet((PropertyGet) node);
+233 |       case Token.HOOK:
+234 |         return processConditionalExpression((ConditionalExpression) node);
+235 |       case Token.IF:
+236 |         return processIfStatement((IfStatement) node);
+237 |       case Token.LABEL:
+238 |         return processLabel((Label) node);
+239 |       case Token.LP:
+240 |         return processParenthesizedExpression((ParenthesizedExpression) node);
+241 |       case Token.NAME:
+242 |         return processName((Name) node);
+243 |       case Token.NEW:
+244 |         return processNewExpression((NewExpression) node);
+245 |       case Token.NUMBER:
+246 |         return processNumberLiteral((NumberLiteral) node);
+247 |       case Token.OBJECTLIT:
+248 |         return processObjectLiteral((ObjectLiteral) node);
+249 |       case Token.REGEXP:
+250 |         return processRegExpLiteral((RegExpLiteral) node);
+251 |       case Token.RETURN:
+252 |         return processReturnStatement((ReturnStatement) node);
+253 |       case Token.SCRIPT:
+254 |         return processAstRoot((AstRoot) node);
+255 |       case Token.STRING:
+256 |         return processStringLiteral((StringLiteral) node);
+257 |       case Token.SWITCH:
+258 |         return processSwitchStatement((SwitchStatement) node);
+259 |       case Token.THROW:
+260 |         return processThrowStatement((ThrowStatement) node);
+261 |       case Token.TRY:
+262 |         return processTryStatement((TryStatement) node);
+263 |       case Token.CONST:
+264 |       case Token.VAR:
+265 |         if (node instanceof VariableDeclaration) {
+266 |           return processVariableDeclaration((VariableDeclaration) node);
+267 |         } else  if (node instanceof VariableInitializer) {
+268 |           return processVariableInitializer((VariableInitializer) node);
+269 |         } else {
+270 |           throw new IllegalStateException("Unexpected node type.  class: " +
+271 |                                           node.getClass() +
+272 |                                           " type: " +
+273 |                                           Token.typeToName(node.getType()));
+274 |         }
+275 |       case Token.WHILE:
+276 |         return processWhileLoop((WhileLoop) node);
+277 |       case Token.WITH:
+278 |         return processWithStatement((WithStatement) node);
+279 |     }
+280 |     return processIllegalToken(node);
+281 |   }
+
+===== M0049 =====
+Signature: com.google.javascript.rhino.Node.AbstractPropListItem.getNext()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 286-289
+Documentation:
+
+Method code:
+286 |     @Override
+287 |     public PropListItem getNext() {
+288 |       return next;
+289 |     }
+
+===== M0050 =====
+Signature: com.google.javascript.jscomp.CompilerInput.CompilerInput(SourceAst,InputId,boolean)
+Source: src/com/google/javascript/jscomp/CompilerInput.java
+Original range: 75-84
+Documentation:
+
+Method code:
+75 |   public CompilerInput(SourceAst ast, InputId inputId, boolean isExtern) {
+76 |     this.ast = ast;
+77 |     this.id = inputId;
+78 | 
+79 |     // TODO(nicksantos): Add a precondition check here. People are passing
+80 |     // in null, but they should not be.
+81 |     if (ast != null && ast.getSourceFile() != null) {
+82 |       ast.getSourceFile().setIsExtern(isExtern);
+83 |     }
+84 |   }
+
+===== M0051 =====
+Signature: com.google.javascript.jscomp.CheckLevel.isOn()
+Source: src/com/google/javascript/jscomp/CheckLevel.java
+Original range: 29-31
+Documentation:
+
+Method code:
+29 |   boolean isOn() {
+30 |     return this != OFF;
+31 |   }
+
+===== M0052 =====
+Signature: com.google.javascript.jscomp.NodeTraversal.traverse(Node)
+Source: src/com/google/javascript/jscomp/NodeTraversal.java
+Original range: 271-282
+Documentation:
+/**
+   * Traverses a parse tree recursively.
+   */
+Method code:
+271 |   public void traverse(Node root) {
+272 |     try {
+273 |       inputId = NodeUtil.getInputId(root);
+274 |       sourceName = "";
+275 |       curNode = root;
+276 |       pushScope(root);
+277 |       traverseBranch(root, null);
+278 |       popScope();
+279 |     } catch (Exception unexpectedException) {
+280 |       throwUnexpectedException(unexpectedException);
+281 |     }
+282 |   }
+
+===== M0053 =====
+Signature: com.google.javascript.rhino.Node.mergeLineCharNo(int,int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1177-1185
+Documentation:
+/**
+   * Merges the line number and character number in one integer. The Character
+   * number takes the first 12 bits and the line number takes the rest. If
+   * the character number is greater than <code>2<sup>12</sup>-1</code> it is
+   * adjusted to <code>2<sup>12</sup>-1</code>.
+   */
+Method code:
+1177 |   protected static int mergeLineCharNo(int lineno, int charno) {
+1178 |     if (lineno < 0 || charno < 0) {
+1179 |       return -1;
+1180 |     } else if ((charno & ~COLUMN_MASK) != 0) {
+1181 |       return lineno << COLUMN_BITS | COLUMN_MASK;
+1182 |     } else {
+1183 |       return lineno << COLUMN_BITS | (charno & COLUMN_MASK);
+1184 |     }
+1185 |   }
+
+===== M0054 =====
+Signature: com.google.javascript.jscomp.CodePrinter.toSource(Node,Format,boolean,boolean,int,SourceMap,SourceMap.DetailLevel,Charset,boolean)
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 685-721
+Documentation:
+/**
+   * Converts a tree to js code
+   */
+Method code:
+685 |   private static String toSource(Node root, Format outputFormat,
+686 |                                  boolean lineBreak,  boolean preferEndOfFileBreak,
+687 |                                  int lineLengthThreshold,
+688 |                                  SourceMap sourceMap,
+689 |                                  SourceMap.DetailLevel sourceMapDetailLevel,
+690 |                                  Charset outputCharset,
+691 |                                  boolean tagAsStrict) {
+692 |     Preconditions.checkState(sourceMapDetailLevel != null);
+693 | 
+694 |     boolean createSourceMap = (sourceMap != null);
+695 |     MappedCodePrinter mcp =
+696 |         outputFormat == Format.COMPACT
+697 |         ? new CompactCodePrinter(
+698 |             lineBreak, preferEndOfFileBreak, lineLengthThreshold,
+699 |             createSourceMap, sourceMapDetailLevel)
+700 |         : new PrettyCodePrinter(
+701 |             lineLengthThreshold, createSourceMap, sourceMapDetailLevel);
+702 |     CodeGenerator cg =
+703 |         outputFormat == Format.TYPED
+704 |         ? new TypedCodeGenerator(mcp, outputCharset)
+705 |         : new CodeGenerator(mcp, outputCharset);
+706 | 
+707 |     if (tagAsStrict) {
+708 |       cg.tagAsStrict();
+709 |     }
+710 | 
+711 |     cg.add(root);
+712 |     mcp.endFile();
+713 | 
+714 |     String code = mcp.getCode();
+715 | 
+716 |     if (createSourceMap) {
+717 |       mcp.generateSourceMap(sourceMap);
+718 |     }
+719 | 
+720 |     return code;
+721 |   }
+
+===== M0055 =====
+Signature: com.google.javascript.jscomp.PrepareAst.PrepareAst(AbstractCompiler)
+Source: src/com/google/javascript/jscomp/PrepareAst.java
+Original range: 41-43
+Documentation:
+
+Method code:
+41 |   PrepareAst(AbstractCompiler compiler) {
+42 |     this(compiler, false);
+43 |   }
+
+===== M0056 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.isNegativeZero(double)
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 269-271
+Documentation:
+
+Method code:
+269 |   static boolean isNegativeZero(double x) {
+270 |     return x == 0.0 && Math.copySign(1, x) == -1.0;
+271 |   }
+
+===== M0057 =====
+Signature: com.google.javascript.jscomp.NodeTraversal.NodeTraversal(AbstractCompiler,Callback,ScopeCreator)
+Source: src/com/google/javascript/jscomp/NodeTraversal.java
+Original range: 229-239
+Documentation:
+/**
+   * Creates a node traversal using the specified callback interface
+   * and the scope creator.
+   */
+Method code:
+229 |   public NodeTraversal(AbstractCompiler compiler, Callback cb,
+230 |       ScopeCreator scopeCreator) {
+231 |     this.callback = cb;
+232 |     if (cb instanceof ScopedCallback) {
+233 |       this.scopeCallback = (ScopedCallback) cb;
+234 |     }
+235 |     this.compiler = compiler;
+236 |     this.inputId = null;
+237 |     this.sourceName = "";
+238 |     this.scopeCreator = scopeCreator;
+239 |   }
+
+===== M0058 =====
+Signature: com.google.javascript.rhino.Node.createProp(int,int,PropListItem)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 860-862
+Documentation:
+
+Method code:
+860 |   PropListItem createProp(int propType, int value, PropListItem next) {
+861 |     return new IntPropListItem(propType, value, next);
+862 |   }
+
+===== M0059 =====
+Signature: com.google.javascript.jscomp.JsAst.JsAst(SourceFile)
+Source: src/com/google/javascript/jscomp/JsAst.java
+Original range: 43-47
+Documentation:
+
+Method code:
+43 |   public JsAst(SourceFile sourceFile) {
+44 |     this.inputId = new InputId(sourceFile.getName());
+45 |     this.sourceFile = sourceFile;
+46 |     this.fileName = sourceFile.getName();
+47 |   }
+
+===== M0060 =====
+Signature: com.google.javascript.jscomp.NodeTraversal.NodeTraversal(AbstractCompiler,Callback)
+Source: src/com/google/javascript/jscomp/NodeTraversal.java
+Original range: 221-223
+Documentation:
+/**
+   * Creates a node traversal using the specified callback interface.
+   */
+Method code:
+221 |   public NodeTraversal(AbstractCompiler compiler, Callback cb) {
+222 |     this(compiler, cb, new SyntacticScopeCreator(compiler));
+223 |   }
+
+===== M0061 =====
+Signature: com.google.javascript.jscomp.CodePrinter.MappedCodePrinter.MappedCodePrinter(int,boolean,SourceMap.DetailLevel)
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 57-68
+Documentation:
+
+Method code:
+57 |     MappedCodePrinter(
+58 |         int lineLengthThreshold,
+59 |         boolean createSrcMap,
+60 |         SourceMap.DetailLevel sourceMapDetailLevel) {
+61 |       Preconditions.checkState(sourceMapDetailLevel != null);
+62 |       this.lineLengthThreshold = lineLengthThreshold <= 0 ? Integer.MAX_VALUE :
+63 |         lineLengthThreshold;
+64 |       this.createSrcMap = createSrcMap;
+65 |       this.sourceMapDetailLevel = sourceMapDetailLevel;
+66 |       this.mappings = createSrcMap ? new ArrayDeque<Mapping>() : null;
+67 |       this.allMappings = createSrcMap ? new ArrayList<Mapping>() : null;
+68 |     }
+
+===== M0062 =====
+Signature: com.google.javascript.jscomp.NodeTraversal.traverseBranch(Node,Node)
+Source: src/com/google/javascript/jscomp/NodeTraversal.java
+Original range: 476-505
+Documentation:
+/**
+   * Traverses a branch.
+   */
+Method code:
+476 |   @SuppressWarnings("fallthrough")
+477 |   private void traverseBranch(Node n, Node parent) {
+478 |     int type = n.getType();
+479 |     if (type == Token.SCRIPT) {
+480 |       inputId = n.getInputId();
+481 |       sourceName = getSourceName(n);
+482 |     }
+483 | 
+484 |     curNode = n;
+485 |     if (!callback.shouldTraverse(this, n, parent)) return;
+486 | 
+487 |     switch (type) {
+488 |       case Token.FUNCTION:
+489 |         traverseFunction(n, parent);
+490 |         break;
+491 | 
+492 |       default:
+493 |         for (Node child = n.getFirstChild(); child != null; ) {
+494 |           // child could be replaced, in which case our child node
+495 |           // would no longer point to the true next
+496 |           Node next = child.getNext();
+497 |           traverseBranch(child, n);
+498 |           child = next;
+499 |         }
+500 |         break;
+501 |     }
+502 | 
+503 |     curNode = n;
+504 |     callback.visit(this, n, parent);
+505 |   }
+
+===== M0063 =====
+Signature: com.google.javascript.jscomp.Compiler.parseTestCode(String)
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 1466-1476
+Documentation:
+
+Method code:
+1466 |   @Override
+1467 |   Node parseTestCode(String js) {
+1468 |     initCompilerOptionsIfTesting();
+1469 |     CompilerInput input = new CompilerInput(
+1470 |         JSSourceFile.fromCode(" [testcode] ", js));
+1471 |     if (inputsById == null) {
+1472 |       inputsById = Maps.newHashMap();
+1473 |     }
+1474 |     inputsById.put(input.getInputId(), input);
+1475 |     return input.getAstRoot(this);
+1476 |   }
+
+===== M0064 =====
+Signature: com.google.javascript.jscomp.Compiler.initCompilerOptionsIfTesting()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 1452-1458
+Documentation:
+
+Method code:
+1452 |   void initCompilerOptionsIfTesting() {
+1453 |     if (options == null) {
+1454 |       // initialization for tests that don't initialize the compiler
+1455 |       // by the normal mechanisms.
+1456 |       initOptions(newCompilerOptions());
+1457 |     }
+1458 |   }
+
+===== M0065 =====
+Signature: com.google.javascript.jscomp.Compiler.isIdeMode()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 1887-1890
+Documentation:
+
+Method code:
+1887 |   @Override
+1888 |   public boolean isIdeMode() {
+1889 |     return options.ideMode;
+1890 |   }
+
+===== M0066 =====
+Signature: com.google.javascript.jscomp.NodeTraversal.pushScope(Node)
+Source: src/com/google/javascript/jscomp/NodeTraversal.java
+Original range: 562-569
+Documentation:
+/** Creates a new scope (e.g. when entering a function). */
+Method code:
+562 |   private void pushScope(Node node) {
+563 |     Preconditions.checkState(curNode != null);
+564 |     scopeRoots.push(node);
+565 |     cfgs.push(null);
+566 |     if (scopeCallback != null) {
+567 |       scopeCallback.enterScope(this);
+568 |     }
+569 |   }
+
+===== M0067 =====
+Signature: com.google.javascript.rhino.Node.extractCharno(int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1203-1209
+Documentation:
+/**
+   * Extracts the character number and character number from a merged line
+   * char number (see {@link #mergeLineCharNo(int, int)}).
+   */
+Method code:
+1203 |   protected static int extractCharno(int lineCharNo) {
+1204 |     if (lineCharNo == -1) {
+1205 |       return -1;
+1206 |     } else {
+1207 |       return lineCharNo & COLUMN_MASK;
+1208 |     }
+1209 |   }
+
+===== M0068 =====
+Signature: com.google.javascript.rhino.Node.putIntProp(int,int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 849-854
+Documentation:
+
+Method code:
+849 |   public void putIntProp(int propType, int value) {
+850 |     removeProp(propType);
+851 |     if (value != 0) {
+852 |       propListHead = createProp(propType, value, propListHead);
+853 |     }
+854 |   }
+
+===== M0069 =====
+Signature: com.google.javascript.jscomp.Compiler.getErrors()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 924-926
+Documentation:
+/**
+   * Returns the array of errors (never null).
+   */
+Method code:
+924 |   public JSError[] getErrors() {
+925 |     return errorManager.getErrors();
+926 |   }
+
+===== M0070 =====
+Signature: com.google.javascript.jscomp.Compiler.getDiagnosticGroups()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 1952-1954
+Documentation:
+/**
+   * The warning classes that are available from the command-line, and
+   * are suppressable by the {@code @suppress} annotation.
+   */
+Method code:
+1952 |   protected DiagnosticGroups getDiagnosticGroups() {
+1953 |     return new DiagnosticGroups();
+1954 |   }
+
+===== M0071 =====
+Signature: com.google.javascript.jscomp.CodePrinter.CompactCodePrinter.CompactCodePrinter(boolean,boolean,int,boolean,SourceMap.DetailLevel)
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 431-437
+Documentation:
+/**
+   * @param lineBreak break the lines a bit more aggressively
+   * @param lineLengthThreshold The length of a line after which we force
+   *                            a newline when possible.
+   * @param createSrcMap Whether to gather source position
+   *                            mapping information when printing.
+   * @param sourceMapDetailLevel A filter to control which nodes get mapped into
+   *     the source map.
+   */
+Method code:
+431 |     private CompactCodePrinter(boolean lineBreak,
+432 |         boolean preferLineBreakAtEndOfFile, int lineLengthThreshold,
+433 |         boolean createSrcMap, SourceMap.DetailLevel sourceMapDetailLevel) {
+434 |       super(lineLengthThreshold, createSrcMap, sourceMapDetailLevel);
+435 |       this.lineBreak = lineBreak;
+436 |       this.preferLineBreakAtEndOfFile = preferLineBreakAtEndOfFile;
+437 |     }
+
+===== M0072 =====
+Signature: com.google.javascript.jscomp.parsing.Config.Config(Set<String>,Set<String>,boolean,LanguageMode,boolean)
+Source: src/com/google/javascript/jscomp/parsing/Config.java
+Original range: 73-82
+Documentation:
+/**
+   * Annotation names.
+   */
+Method code:
+73 |   Config(Set<String> annotationWhitelist, Set<String> suppressionNames,
+74 |       boolean isIdeMode, LanguageMode languageMode,
+75 |       boolean acceptConstKeyword) {
+76 |     this.annotationNames = buildAnnotationNames(annotationWhitelist);
+77 |     this.parseJsDocDocumentation = isIdeMode;
+78 |     this.suppressionNames = suppressionNames;
+79 |     this.isIdeMode = isIdeMode;
+80 |     this.languageMode = languageMode;
+81 |     this.acceptConstKeyword = acceptConstKeyword;
+82 |   }
+
+===== M0073 =====
+Signature: com.google.javascript.jscomp.CompilerOptions.addWarningsGuard(WarningsGuard)
+Source: src/com/google/javascript/jscomp/CompilerOptions.java
+Original range: 1057-1059
+Documentation:
+/**
+   * Add a guard to the set of warnings guards.
+   */
+Method code:
+1057 |   public void addWarningsGuard(WarningsGuard guard) {
+1058 |     warningsGuard.addGuard(guard);
+1059 |   }
+
+===== M0074 =====
+Signature: com.google.javascript.jscomp.ComposeWarningsGuard.addGuards(Iterable<WarningsGuard>)
+Source: src/com/google/javascript/jscomp/ComposeWarningsGuard.java
+Original range: 98-102
+Documentation:
+
+Method code:
+98 |   private void addGuards(Iterable<WarningsGuard> guards) {
+99 |     for (WarningsGuard guard : guards) {
+100 |       addGuard(guard);
+101 |     }
+102 |   }
+
+===== M0075 =====
+Signature: com.google.javascript.rhino.Node.lookupProperty(int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 745-752
+Documentation:
+
+Method code:
+745 |   @VisibleForTesting
+746 |   PropListItem lookupProperty(int propType) {
+747 |     PropListItem x = propListHead;
+748 |     while (x != null && propType != x.getType()) {
+749 |       x = x.getNext();
+750 |     }
+751 |     return x;
+752 |   }
+
+===== M0076 =====
+Signature: com.google.javascript.jscomp.Compiler.getDefaultErrorReporter()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 1478-1481
+Documentation:
+
+Method code:
+1478 |   @Override
+1479 |   ErrorReporter getDefaultErrorReporter() {
+1480 |     return defaultErrorReporter;
+1481 |   }
+
+===== M0077 =====
+Signature: com.google.javascript.jscomp.ProcessTweaks.TweakFunction.getName()
+Source: src/com/google/javascript/jscomp/ProcessTweaks.java
+Original range: 164-166
+Documentation:
+
+Method code:
+164 |     String getName() {
+165 |       return name;
+166 |     }
+
+===== M0078 =====
+Signature: com.google.javascript.jscomp.CodeGenerator.add(Node,Context)
+Source: src/com/google/javascript/jscomp/CodeGenerator.java
+Original range: 85-747
+Documentation:
+
+Method code:
+85 |   void add(Node n, Context context) {
+86 |     if (!cc.continueProcessing()) {
+87 |       return;
+88 |     }
+89 | 
+90 |     int type = n.getType();
+91 |     String opstr = NodeUtil.opToStr(type);
+92 |     int childCount = n.getChildCount();
+93 |     Node first = n.getFirstChild();
+94 |     Node last = n.getLastChild();
+95 | 
+96 |     // Handle all binary operators
+97 |     if (opstr != null && first != last) {
+98 |       Preconditions.checkState(
+99 |           childCount == 2,
+100 |           "Bad binary operator \"%s\": expected 2 arguments but got %s",
+101 |           opstr, childCount);
+102 |       int p = NodeUtil.precedence(type);
+103 |       addExpr(first, p, context);
+104 |       cc.addOp(opstr, true);
+105 | 
+106 |       // For right-hand-side of operations, only pass context if it's
+107 |       // the IN_FOR_INIT_CLAUSE one.
+108 |       Context rhsContext = getContextForNoInOperator(context);
+109 | 
+110 |       // Handle associativity.
+111 |       // e.g. if the parse tree is a * (b * c),
+112 |       // we can simply generate a * b * c.
+113 |       if (last.getType() == type &&
+114 |           NodeUtil.isAssociative(type)) {
+115 |         addExpr(last, p, rhsContext);
+116 |       } else if (NodeUtil.isAssignmentOp(n) && NodeUtil.isAssignmentOp(last)) {
+117 |         // Assignments are the only right-associative binary operators
+118 |         addExpr(last, p, rhsContext);
+119 |       } else {
+120 |         addExpr(last, p + 1, rhsContext);
+121 |       }
+122 |       return;
+123 |     }
+124 | 
+125 |     cc.startSourceMapping(n);
+126 | 
+127 |     switch (type) {
+128 |       case Token.TRY: {
+129 |         Preconditions.checkState(first.getNext().isBlock() &&
+130 |                 !first.getNext().hasMoreThanOneChild());
+131 |         Preconditions.checkState(childCount >= 2 && childCount <= 3);
+132 | 
+133 |         add("try");
+134 |         add(first, Context.PRESERVE_BLOCK);
+135 | 
+136 |         // second child contains the catch block, or nothing if there
+137 |         // isn't a catch block
+138 |         Node catchblock = first.getNext().getFirstChild();
+139 |         if (catchblock != null) {
+140 |           add(catchblock);
+141 |         }
+142 | 
+143 |         if (childCount == 3) {
+144 |           add("finally");
+145 |           add(last, Context.PRESERVE_BLOCK);
+146 |         }
+147 |         break;
+148 |       }
+149 | 
+150 |       case Token.CATCH:
+151 |         Preconditions.checkState(childCount == 2);
+152 |         add("catch(");
+153 |         add(first);
+154 |         add(")");
+155 |         add(last, Context.PRESERVE_BLOCK);
+156 |         break;
+157 | 
+158 |       case Token.THROW:
+159 |         Preconditions.checkState(childCount == 1);
+160 |         add("throw");
+161 |         add(first);
+162 | 
+163 |         // Must have a ';' after a throw statement, otherwise safari can't
+164 |         // parse this.
+165 |         cc.endStatement(true);
+166 |         break;
+167 | 
+168 |       case Token.RETURN:
+169 |         add("return");
+170 |         if (childCount == 1) {
+171 |           add(first);
+172 |         } else {
+173 |           Preconditions.checkState(childCount == 0);
+174 |         }
+175 |         cc.endStatement();
+176 |         break;
+177 | 
+178 |       case Token.VAR:
+179 |         if (first != null) {
+180 |           add("var ");
+181 |           addList(first, false, getContextForNoInOperator(context));
+182 |         }
+183 |         break;
+184 | 
+185 |       case Token.LABEL_NAME:
+186 |         Preconditions.checkState(!n.getString().isEmpty());
+187 |         addIdentifier(n.getString());
+188 |         break;
+189 | 
+190 |       case Token.NAME:
+191 |         if (first == null || first.isEmpty()) {
+192 |           addIdentifier(n.getString());
+193 |         } else {
+194 |           Preconditions.checkState(childCount == 1);
+195 |           addIdentifier(n.getString());
+196 |           cc.addOp("=", true);
+197 |           if (first.isComma()) {
+198 |             addExpr(first, NodeUtil.precedence(Token.ASSIGN), Context.OTHER);
+199 |           } else {
+200 |             // Add expression, consider nearby code at lowest level of
+201 |             // precedence.
+202 |             addExpr(first, 0, getContextForNoInOperator(context));
+203 |           }
+204 |         }
+205 |         break;
+206 | 
+207 |       case Token.ARRAYLIT:
+208 |         add("[");
+209 |         addArrayList(first);
+210 |         add("]");
+211 |         break;
+212 | 
+213 |       case Token.PARAM_LIST:
+214 |         add("(");
+215 |         addList(first);
+216 |         add(")");
+217 |         break;
+218 | 
+219 |       case Token.COMMA:
+220 |         Preconditions.checkState(childCount == 2);
+221 | 
+222 |         // We could use addList recursively here, but sometimes we produce
+223 |         // very deeply nested commas and run out of stack space, so we
+224 |         // just unroll the recursion.
+225 |         //
+226 |         // We assume COMMA nodes are left-recursive.
+227 |         Node firstNonComma = n.getFirstChild();
+228 |         while (firstNonComma.getType() == Token.COMMA) {
+229 |           firstNonComma = firstNonComma.getFirstChild();
+230 |         }
+231 | 
+232 |         addExpr(firstNonComma, 0, context);
+233 | 
+234 |         Node current = firstNonComma;
+235 |         do {
+236 |           current = current.getParent();
+237 |           cc.listSeparator();
+238 |           addExpr(current.getFirstChild().getNext(), 0, Context.OTHER);
+239 |         } while (current != n);
+240 | 
+241 |         break;
+242 | 
+243 |       case Token.NUMBER:
+244 |         Preconditions.checkState(childCount == 0);
+245 |         cc.addNumber(n.getDouble());
+246 |         break;
+247 | 
+248 |       case Token.TYPEOF:
+249 |       case Token.VOID:
+250 |       case Token.NOT:
+251 |       case Token.BITNOT:
+252 |       case Token.POS: {
+253 |         // All of these unary operators are right-associative
+254 |         Preconditions.checkState(childCount == 1);
+255 |         cc.addOp(NodeUtil.opToStrNoFail(type), false);
+256 |         addExpr(first, NodeUtil.precedence(type), Context.OTHER);
+257 |         break;
+258 |       }
+259 | 
+260 |       case Token.NEG: {
+261 |         Preconditions.checkState(childCount == 1);
+262 | 
+263 |         // It's important to our sanity checker that the code
+264 |         // we print produces the same AST as the code we parse back.
+265 |         // NEG is a weird case because Rhino parses "- -2" as "2".
+266 |         if (n.getFirstChild().isNumber()) {
+267 |           cc.addNumber(-n.getFirstChild().getDouble());
+268 |         } else {
+269 |           cc.addOp(NodeUtil.opToStrNoFail(type), false);
+270 |           addExpr(first, NodeUtil.precedence(type), Context.OTHER);
+271 |         }
+272 | 
+273 |         break;
+274 |       }
+275 | 
+276 |       case Token.HOOK: {
+277 |         Preconditions.checkState(childCount == 3);
+278 |         int p = NodeUtil.precedence(type);
+279 |         addExpr(first, p + 1, context);
+280 |         cc.addOp("?", true);
+281 |         addExpr(first.getNext(), 1, Context.OTHER);
+282 |         cc.addOp(":", true);
+283 |         addExpr(last, 1, Context.OTHER);
+284 |         break;
+285 |       }
+286 | 
+287 |       case Token.REGEXP:
+288 |         if (!first.isString() ||
+289 |             !last.isString()) {
+290 |           throw new Error("Expected children to be strings");
+291 |         }
+292 | 
+293 |         String regexp = regexpEscape(first.getString(), outputCharsetEncoder);
+294 | 
+295 |         // I only use one .add because whitespace matters
+296 |         if (childCount == 2) {
+297 |           add(regexp + last.getString());
+298 |         } else {
+299 |           Preconditions.checkState(childCount == 1);
+300 |           add(regexp);
+301 |         }
+302 |         break;
+303 | 
+304 |       case Token.FUNCTION:
+305 |         if (n.getClass() != Node.class) {
+306 |           throw new Error("Unexpected Node subclass.");
+307 |         }
+308 |         Preconditions.checkState(childCount == 3);
+309 |         boolean funcNeedsParens = (context == Context.START_OF_EXPR);
+310 |         if (funcNeedsParens) {
+311 |           add("(");
+312 |         }
+313 | 
+314 |         add("function");
+315 |         add(first);
+316 | 
+317 |         add(first.getNext());
+318 |         add(last, Context.PRESERVE_BLOCK);
+319 |         cc.endFunction(context == Context.STATEMENT);
+320 | 
+321 |         if (funcNeedsParens) {
+322 |           add(")");
+323 |         }
+324 |         break;
+325 | 
+326 |       case Token.GETTER_DEF:
+327 |       case Token.SETTER_DEF:
+328 |         Preconditions.checkState(n.getParent().isObjectLit());
+329 |         Preconditions.checkState(childCount == 1);
+330 |         Preconditions.checkState(first.isFunction());
+331 | 
+332 |         // Get methods are unnamed
+333 |         Preconditions.checkState(first.getFirstChild().getString().isEmpty());
+334 |         if (type == Token.GETTER_DEF) {
+335 |           // Get methods have no parameters.
+336 |           Preconditions.checkState(!first.getChildAtIndex(1).hasChildren());
+337 |           add("get ");
+338 |         } else {
+339 |           // Set methods have one parameter.
+340 |           Preconditions.checkState(first.getChildAtIndex(1).hasOneChild());
+341 |           add("set ");
+342 |         }
+343 | 
+344 |         // The name is on the GET or SET node.
+345 |         String name = n.getString();
+346 |         Node fn = first;
+347 |         Node parameters = fn.getChildAtIndex(1);
+348 |         Node body = fn.getLastChild();
+349 | 
+350 |         // Add the property name.
+351 |         if (!n.isQuotedString() &&
+352 |             TokenStream.isJSIdentifier(name) &&
+353 |             // do not encode literally any non-literal characters that were
+354 |             // unicode escaped.
+355 |             NodeUtil.isLatin(name)) {
+356 |           add(name);
+357 |         } else {
+358 |           // Determine if the string is a simple number.
+359 |           double d = getSimpleNumber(name);
+360 |           if (!Double.isNaN(d)) {
+361 |             cc.addNumber(d);
+362 |           } else {
+363 |             addJsString(n);
+364 |           }
+365 |         }
+366 | 
+367 |         add(parameters);
+368 |         add(body, Context.PRESERVE_BLOCK);
+369 |         break;
+370 | 
+371 |       case Token.SCRIPT:
+372 |       case Token.BLOCK: {
+373 |         if (n.getClass() != Node.class) {
+374 |           throw new Error("Unexpected Node subclass.");
+375 |         }
+376 |         boolean preserveBlock = context == Context.PRESERVE_BLOCK;
+377 |         if (preserveBlock) {
+378 |           cc.beginBlock();
+379 |         }
+380 | 
+381 |         boolean preferLineBreaks =
+382 |             type == Token.SCRIPT ||
+383 |             (type == Token.BLOCK &&
+384 |                 !preserveBlock &&
+385 |                 n.getParent() != null &&
+386 |                 n.getParent().isScript());
+387 |         for (Node c = first; c != null; c = c.getNext()) {
+388 |           add(c, Context.STATEMENT);
+389 | 
+390 |           // VAR doesn't include ';' since it gets used in expressions
+391 |           if (c.isVar()) {
+392 |             cc.endStatement();
+393 |           }
+394 | 
+395 |           if (c.isFunction()) {
+396 |             cc.maybeLineBreak();
+397 |           }
+398 | 
+399 |           // Prefer to break lines in between top-level statements
+400 |           // because top level statements are more homogeneous.
+401 |           if (preferLineBreaks) {
+402 |             cc.notePreferredLineBreak();
+403 |           }
+404 |         }
+405 |         if (preserveBlock) {
+406 |           cc.endBlock(cc.breakAfterBlockFor(n, context == Context.STATEMENT));
+407 |         }
+408 |         break;
+409 |       }
+410 | 
+411 |       case Token.FOR:
+412 |         if (childCount == 4) {
+413 |           add("for(");
+414 |           if (first.isVar()) {
+415 |             add(first, Context.IN_FOR_INIT_CLAUSE);
+416 |           } else {
+417 |             addExpr(first, 0, Context.IN_FOR_INIT_CLAUSE);
+418 |           }
+419 |           add(";");
+420 |           add(first.getNext());
+421 |           add(";");
+422 |           add(first.getNext().getNext());
+423 |           add(")");
+424 |           addNonEmptyStatement(
+425 |               last, getContextForNonEmptyExpression(context), false);
+426 |         } else {
+427 |           Preconditions.checkState(childCount == 3);
+428 |           add("for(");
+429 |           add(first);
+430 |           add("in");
+431 |           add(first.getNext());
+432 |           add(")");
+433 |           addNonEmptyStatement(
+434 |               last, getContextForNonEmptyExpression(context), false);
+435 |         }
+436 |         break;
+437 | 
+438 |       case Token.DO:
+439 |         Preconditions.checkState(childCount == 2);
+440 |         add("do");
+441 |         addNonEmptyStatement(first, Context.OTHER, false);
+442 |         add("while(");
+443 |         add(last);
+444 |         add(")");
+445 |         cc.endStatement();
+446 |         break;
+447 | 
+448 |       case Token.WHILE:
+449 |         Preconditions.checkState(childCount == 2);
+450 |         add("while(");
+451 |         add(first);
+452 |         add(")");
+453 |         addNonEmptyStatement(
+454 |             last, getContextForNonEmptyExpression(context), false);
+455 |         break;
+456 | 
+457 |       case Token.EMPTY:
+458 |         Preconditions.checkState(childCount == 0);
+459 |         break;
+460 | 
+461 |       case Token.GETPROP: {
+462 |         Preconditions.checkState(
+463 |             childCount == 2,
+464 |             "Bad GETPROP: expected 2 children, but got %s", childCount);
+465 |         Preconditions.checkState(
+466 |             last.isString(),
+467 |             "Bad GETPROP: RHS should be STRING");
+468 |         boolean needsParens = (first.isNumber());
+469 |         if (needsParens) {
+470 |           add("(");
+471 |         }
+472 |         addExpr(first, NodeUtil.precedence(type), context);
+473 |         if (needsParens) {
+474 |           add(")");
+475 |         }
+476 |         add(".");
+477 |         addIdentifier(last.getString());
+478 |         break;
+479 |       }
+480 | 
+481 |       case Token.GETELEM:
+482 |         Preconditions.checkState(
+483 |             childCount == 2,
+484 |             "Bad GETELEM: expected 2 children but got %s", childCount);
+485 |         addExpr(first, NodeUtil.precedence(type), context);
+486 |         add("[");
+487 |         add(first.getNext());
+488 |         add("]");
+489 |         break;
+490 | 
+491 |       case Token.WITH:
+492 |         Preconditions.checkState(childCount == 2);
+493 |         add("with(");
+494 |         add(first);
+495 |         add(")");
+496 |         addNonEmptyStatement(
+497 |             last, getContextForNonEmptyExpression(context), false);
+498 |         break;
+499 | 
+500 |       case Token.INC:
+501 |       case Token.DEC: {
+502 |         Preconditions.checkState(childCount == 1);
+503 |         String o = type == Token.INC ? "++" : "--";
+504 |         int postProp = n.getIntProp(Node.INCRDECR_PROP);
+505 |         // A non-zero post-prop value indicates a post inc/dec, default of zero
+506 |         // is a pre-inc/dec.
+507 |         if (postProp != 0) {
+508 |           addExpr(first, NodeUtil.precedence(type), context);
+509 |           cc.addOp(o, false);
+510 |         } else {
+511 |           cc.addOp(o, false);
+512 |           add(first);
+513 |         }
+514 |         break;
+515 |       }
+516 | 
+517 |       case Token.CALL:
+518 |         // We have two special cases here:
+519 |         // 1) If the left hand side of the call is a direct reference to eval,
+520 |         // then it must have a DIRECT_EVAL annotation. If it does not, then
+521 |         // that means it was originally an indirect call to eval, and that
+522 |         // indirectness must be preserved.
+523 |         // 2) If the left hand side of the call is a property reference,
+524 |         // then the call must not a FREE_CALL annotation. If it does, then
+525 |         // that means it was originally an call without an explicit this and
+526 |         // that must be preserved.
+527 |         if (isIndirectEval(first)
+528 |             || n.getBooleanProp(Node.FREE_CALL) && NodeUtil.isGet(first)) {
+529 |           add("(0,");
+530 |           addExpr(first, NodeUtil.precedence(Token.COMMA), Context.OTHER);
+531 |           add(")");
+532 |         } else {
+533 |           addExpr(first, NodeUtil.precedence(type), context);
+534 |         }
+535 |         add("(");
+536 |         addList(first.getNext());
+537 |         add(")");
+538 |         break;
+539 | 
+540 |       case Token.IF:
+541 |         boolean hasElse = childCount == 3;
+542 |         boolean ambiguousElseClause =
+543 |             context == Context.BEFORE_DANGLING_ELSE && !hasElse;
+544 |         if (ambiguousElseClause) {
+545 |           cc.beginBlock();
+546 |         }
+547 | 
+548 |         add("if(");
+549 |         add(first);
+550 |         add(")");
+551 | 
+552 |         if (hasElse) {
+553 |           addNonEmptyStatement(
+554 |               first.getNext(), Context.BEFORE_DANGLING_ELSE, false);
+555 |           add("else");
+556 |           addNonEmptyStatement(
+557 |               last, getContextForNonEmptyExpression(context), false);
+558 |         } else {
+559 |           addNonEmptyStatement(first.getNext(), Context.OTHER, false);
+560 |           Preconditions.checkState(childCount == 2);
+561 |         }
+562 | 
+563 |         if (ambiguousElseClause) {
+564 |           cc.endBlock();
+565 |         }
+566 |         break;
+567 | 
+568 |       case Token.NULL:
+569 |         Preconditions.checkState(childCount == 0);
+570 |         add("null");
+571 |         break;
+572 | 
+573 |       case Token.THIS:
+574 |         Preconditions.checkState(childCount == 0);
+575 |         add("this");
+576 |         break;
+577 | 
+578 |       case Token.FALSE:
+579 |         Preconditions.checkState(childCount == 0);
+580 |         add("false");
+581 |         break;
+582 | 
+583 |       case Token.TRUE:
+584 |         Preconditions.checkState(childCount == 0);
+585 |         add("true");
+586 |         break;
+587 | 
+588 |       case Token.CONTINUE:
+589 |         Preconditions.checkState(childCount <= 1);
+590 |         add("continue");
+591 |         if (childCount == 1) {
+592 |           if (!first.isLabelName()) {
+593 |             throw new Error("Unexpected token type. Should be LABEL_NAME.");
+594 |           }
+595 |           add(" ");
+596 |           add(first);
+597 |         }
+598 |         cc.endStatement();
+599 |         break;
+600 | 
+601 |       case Token.DEBUGGER:
+602 |         Preconditions.checkState(childCount == 0);
+603 |         add("debugger");
+604 |         cc.endStatement();
+605 |         break;
+606 | 
+607 |       case Token.BREAK:
+608 |         Preconditions.checkState(childCount <= 1);
+609 |         add("break");
+610 |         if (childCount == 1) {
+611 |           if (!first.isLabelName()) {
+612 |             throw new Error("Unexpected token type. Should be LABEL_NAME.");
+613 |           }
+614 |           add(" ");
+615 |           add(first);
+616 |         }
+617 |         cc.endStatement();
+618 |         break;
+619 | 
+620 |       case Token.EXPR_RESULT:
+621 |         Preconditions.checkState(childCount == 1);
+622 |         add(first, Context.START_OF_EXPR);
+623 |         cc.endStatement();
+624 |         break;
+625 | 
+626 |       case Token.NEW:
+627 |         add("new ");
+628 |         int precedence = NodeUtil.precedence(type);
+629 | 
+630 |         // If the first child contains a CALL, then claim higher precedence
+631 |         // to force parentheses. Otherwise, when parsed, NEW will bind to the
+632 |         // first viable parentheses (don't traverse into functions).
+633 |         if (NodeUtil.containsType(
+634 |             first, Token.CALL, NodeUtil.MATCH_NOT_FUNCTION)) {
+635 |           precedence = NodeUtil.precedence(first.getType()) + 1;
+636 |         }
+637 |         addExpr(first, precedence, Context.OTHER);
+638 | 
+639 |         // '()' is optional when no arguments are present
+640 |         Node next = first.getNext();
+641 |         if (next != null) {
+642 |           add("(");
+643 |           addList(next);
+644 |           add(")");
+645 |         }
+646 |         break;
+647 | 
+648 |       case Token.STRING:
+649 |         if (childCount !=
+650 |             ((n.getParent() != null &&
+651 |               n.getParent().isObjectLit()) ? 1 : 0)) {
+652 |           throw new IllegalStateException(
+653 |               "Unexpected String children: " + n.getParent().toStringTree());
+654 |         }
+655 |         addJsString(n);
+656 |         break;
+657 | 
+658 |       case Token.DELPROP:
+659 |         Preconditions.checkState(childCount == 1);
+660 |         add("delete ");
+661 |         add(first);
+662 |         break;
+663 | 
+664 |       case Token.OBJECTLIT: {
+665 |         boolean needsParens = (context == Context.START_OF_EXPR);
+666 |         if (needsParens) {
+667 |           add("(");
+668 |         }
+669 |         add("{");
+670 |         for (Node c = first; c != null; c = c.getNext()) {
+671 |           if (c != first) {
+672 |             cc.listSeparator();
+673 |           }
+674 | 
+675 |           if (c.isGetterDef() || c.isSetterDef()) {
+676 |             add(c);
+677 |           } else {
+678 |             Preconditions.checkState(c.isString());
+679 |             String key = c.getString();
+680 |             // Object literal property names don't have to be quoted if they
+681 |             // are not JavaScript keywords
+682 |             if (!c.isQuotedString() &&
+683 |                 !TokenStream.isKeyword(key) &&
+684 |                 TokenStream.isJSIdentifier(key) &&
+685 |                 // do not encode literally any non-literal characters that
+686 |                 // were unicode escaped.
+687 |                 NodeUtil.isLatin(key)) {
+688 |               add(key);
+689 |             } else {
+690 |               // Determine if the string is a simple number.
+691 |               double d = getSimpleNumber(key);
+692 |               if (!Double.isNaN(d)) {
+693 |                 cc.addNumber(d);
+694 |               } else {
+695 |                 addExpr(c, 1, Context.OTHER);
+696 |               }
+697 |             }
+698 |             add(":");
+699 |             addExpr(c.getFirstChild(), 1, Context.OTHER);
+700 |           }
+701 |         }
+702 |         add("}");
+703 |         if (needsParens) {
+704 |           add(")");
+705 |         }
+706 |         break;
+707 |       }
+708 | 
+709 |       case Token.SWITCH:
+710 |         add("switch(");
+711 |         add(first);
+712 |         add(")");
+713 |         cc.beginBlock();
+714 |         addAllSiblings(first.getNext());
+715 |         cc.endBlock(context == Context.STATEMENT);
+716 |         break;
+717 | 
+718 |       case Token.CASE:
+719 |         Preconditions.checkState(childCount == 2);
+720 |         add("case ");
+721 |         add(first);
+722 |         addCaseBody(last);
+723 |         break;
+724 | 
+725 |       case Token.DEFAULT_CASE:
+726 |         Preconditions.checkState(childCount == 1);
+727 |         add("default");
+728 |         addCaseBody(first);
+729 |         break;
+730 | 
+731 |       case Token.LABEL:
+732 |         Preconditions.checkState(childCount == 2);
+733 |         if (!first.isLabelName()) {
+734 |           throw new Error("Unexpected token type. Should be LABEL_NAME.");
+735 |         }
+736 |         add(first);
+737 |         add(":");
+738 |         addNonEmptyStatement(
+739 |             last, getContextForNonEmptyExpression(context), true);
+740 |         break;
+741 | 
+742 |       default:
+743 |         throw new Error("Unknown type " + type + "\n" + n.toStringTree());
+744 |     }
+745 | 
+746 |     cc.endSourceMapping(n);
+747 |   }
+
+===== M0079 =====
+Signature: com.google.javascript.jscomp.WarningsGuard.enables(DiagnosticGroup)
+Source: src/com/google/javascript/jscomp/WarningsGuard.java
+Original range: 105-107
+Documentation:
+/**
+   * Returns whether any of the warnings in the given diagnostic group will be
+   * upgraded to a warning or error.
+   *
+   * @param group A group of DiagnosticTypes.
+   * @return Whether any warnings of these types are enabled by this guard.
+   */
+Method code:
+105 |   protected boolean enables(DiagnosticGroup group) {
+106 |     return false;
+107 |   }
+
+===== M0080 =====
+Signature: com.google.javascript.rhino.Node.NumberNode.getDouble()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 164-167
+Documentation:
+
+Method code:
+164 |     @Override
+165 |     public double getDouble() {
+166 |       return this.number;
+167 |     }
+
+===== M0081 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroup.matches(DiagnosticType)
+Source: src/com/google/javascript/jscomp/DiagnosticGroup.java
+Original range: 110-112
+Documentation:
+/**
+   * Returns whether the given type matches a type in this group.
+   */
+Method code:
+110 |   public boolean matches(DiagnosticType type) {
+111 |     return types.contains(type);
+112 |   }
+
+===== M0082 =====
+Signature: com.google.javascript.rhino.Node.getJsDocBuilderForNode()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1816-1818
+Documentation:
+
+Method code:
+1816 |   public FileLevelJsDocBuilder getJsDocBuilderForNode() {
+1817 |     return new FileLevelJsDocBuilder();
+1818 |   }
+
+===== M0083 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.transformTokenType(int)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 1108-1288
+Documentation:
+
+Method code:
+1108 |   private static int transformTokenType(int token) {
+1109 |     switch (token) {
+1110 |       case com.google.javascript.rhino.head.Token.RETURN:
+1111 |         return Token.RETURN;
+1112 |       case com.google.javascript.rhino.head.Token.BITOR:
+1113 |         return Token.BITOR;
+1114 |       case com.google.javascript.rhino.head.Token.BITXOR:
+1115 |         return Token.BITXOR;
+1116 |       case com.google.javascript.rhino.head.Token.BITAND:
+1117 |         return Token.BITAND;
+1118 |       case com.google.javascript.rhino.head.Token.EQ:
+1119 |         return Token.EQ;
+1120 |       case com.google.javascript.rhino.head.Token.NE:
+1121 |         return Token.NE;
+1122 |       case com.google.javascript.rhino.head.Token.LT:
+1123 |         return Token.LT;
+1124 |       case com.google.javascript.rhino.head.Token.LE:
+1125 |         return Token.LE;
+1126 |       case com.google.javascript.rhino.head.Token.GT:
+1127 |         return Token.GT;
+1128 |       case com.google.javascript.rhino.head.Token.GE:
+1129 |         return Token.GE;
+1130 |       case com.google.javascript.rhino.head.Token.LSH:
+1131 |         return Token.LSH;
+1132 |       case com.google.javascript.rhino.head.Token.RSH:
+1133 |         return Token.RSH;
+1134 |       case com.google.javascript.rhino.head.Token.URSH:
+1135 |         return Token.URSH;
+1136 |       case com.google.javascript.rhino.head.Token.ADD:
+1137 |         return Token.ADD;
+1138 |       case com.google.javascript.rhino.head.Token.SUB:
+1139 |         return Token.SUB;
+1140 |       case com.google.javascript.rhino.head.Token.MUL:
+1141 |         return Token.MUL;
+1142 |       case com.google.javascript.rhino.head.Token.DIV:
+1143 |         return Token.DIV;
+1144 |       case com.google.javascript.rhino.head.Token.MOD:
+1145 |         return Token.MOD;
+1146 |       case com.google.javascript.rhino.head.Token.NOT:
+1147 |         return Token.NOT;
+1148 |       case com.google.javascript.rhino.head.Token.BITNOT:
+1149 |         return Token.BITNOT;
+1150 |       case com.google.javascript.rhino.head.Token.POS:
+1151 |         return Token.POS;
+1152 |       case com.google.javascript.rhino.head.Token.NEG:
+1153 |         return Token.NEG;
+1154 |       case com.google.javascript.rhino.head.Token.NEW:
+1155 |         return Token.NEW;
+1156 |       case com.google.javascript.rhino.head.Token.DELPROP:
+1157 |         return Token.DELPROP;
+1158 |       case com.google.javascript.rhino.head.Token.TYPEOF:
+1159 |         return Token.TYPEOF;
+1160 |       case com.google.javascript.rhino.head.Token.GETPROP:
+1161 |         return Token.GETPROP;
+1162 |       case com.google.javascript.rhino.head.Token.GETELEM:
+1163 |         return Token.GETELEM;
+1164 |       case com.google.javascript.rhino.head.Token.CALL:
+1165 |         return Token.CALL;
+1166 |       case com.google.javascript.rhino.head.Token.NAME:
+1167 |         return Token.NAME;
+1168 |       case com.google.javascript.rhino.head.Token.NUMBER:
+1169 |         return Token.NUMBER;
+1170 |       case com.google.javascript.rhino.head.Token.STRING:
+1171 |         return Token.STRING;
+1172 |       case com.google.javascript.rhino.head.Token.NULL:
+1173 |         return Token.NULL;
+1174 |       case com.google.javascript.rhino.head.Token.THIS:
+1175 |         return Token.THIS;
+1176 |       case com.google.javascript.rhino.head.Token.FALSE:
+1177 |         return Token.FALSE;
+1178 |       case com.google.javascript.rhino.head.Token.TRUE:
+1179 |         return Token.TRUE;
+1180 |       case com.google.javascript.rhino.head.Token.SHEQ:
+1181 |         return Token.SHEQ;
+1182 |       case com.google.javascript.rhino.head.Token.SHNE:
+1183 |         return Token.SHNE;
+1184 |       case com.google.javascript.rhino.head.Token.REGEXP:
+1185 |         return Token.REGEXP;
+1186 |       case com.google.javascript.rhino.head.Token.THROW:
+1187 |         return Token.THROW;
+1188 |       case com.google.javascript.rhino.head.Token.IN:
+1189 |         return Token.IN;
+1190 |       case com.google.javascript.rhino.head.Token.INSTANCEOF:
+1191 |         return Token.INSTANCEOF;
+1192 |       case com.google.javascript.rhino.head.Token.ARRAYLIT:
+1193 |         return Token.ARRAYLIT;
+1194 |       case com.google.javascript.rhino.head.Token.OBJECTLIT:
+1195 |         return Token.OBJECTLIT;
+1196 |       case com.google.javascript.rhino.head.Token.TRY:
+1197 |         return Token.TRY;
+1198 |       // The LP represents a parameter list
+1199 |       case com.google.javascript.rhino.head.Token.LP:
+1200 |         return Token.PARAM_LIST;
+1201 |       case com.google.javascript.rhino.head.Token.COMMA:
+1202 |         return Token.COMMA;
+1203 |       case com.google.javascript.rhino.head.Token.ASSIGN:
+1204 |         return Token.ASSIGN;
+1205 |       case com.google.javascript.rhino.head.Token.ASSIGN_BITOR:
+1206 |         return Token.ASSIGN_BITOR;
+1207 |       case com.google.javascript.rhino.head.Token.ASSIGN_BITXOR:
+1208 |         return Token.ASSIGN_BITXOR;
+1209 |       case com.google.javascript.rhino.head.Token.ASSIGN_BITAND:
+1210 |         return Token.ASSIGN_BITAND;
+1211 |       case com.google.javascript.rhino.head.Token.ASSIGN_LSH:
+1212 |         return Token.ASSIGN_LSH;
+1213 |       case com.google.javascript.rhino.head.Token.ASSIGN_RSH:
+1214 |         return Token.ASSIGN_RSH;
+1215 |       case com.google.javascript.rhino.head.Token.ASSIGN_URSH:
+1216 |         return Token.ASSIGN_URSH;
+1217 |       case com.google.javascript.rhino.head.Token.ASSIGN_ADD:
+1218 |         return Token.ASSIGN_ADD;
+1219 |       case com.google.javascript.rhino.head.Token.ASSIGN_SUB:
+1220 |         return Token.ASSIGN_SUB;
+1221 |       case com.google.javascript.rhino.head.Token.ASSIGN_MUL:
+1222 |         return Token.ASSIGN_MUL;
+1223 |       case com.google.javascript.rhino.head.Token.ASSIGN_DIV:
+1224 |         return Token.ASSIGN_DIV;
+1225 |       case com.google.javascript.rhino.head.Token.ASSIGN_MOD:
+1226 |         return Token.ASSIGN_MOD;
+1227 |       case com.google.javascript.rhino.head.Token.HOOK:
+1228 |         return Token.HOOK;
+1229 |       case com.google.javascript.rhino.head.Token.OR:
+1230 |         return Token.OR;
+1231 |       case com.google.javascript.rhino.head.Token.AND:
+1232 |         return Token.AND;
+1233 |       case com.google.javascript.rhino.head.Token.INC:
+1234 |         return Token.INC;
+1235 |       case com.google.javascript.rhino.head.Token.DEC:
+1236 |         return Token.DEC;
+1237 |       case com.google.javascript.rhino.head.Token.FUNCTION:
+1238 |         return Token.FUNCTION;
+1239 |       case com.google.javascript.rhino.head.Token.IF:
+1240 |         return Token.IF;
+1241 |       case com.google.javascript.rhino.head.Token.SWITCH:
+1242 |         return Token.SWITCH;
+1243 |       case com.google.javascript.rhino.head.Token.CASE:
+1244 |         return Token.CASE;
+1245 |       case com.google.javascript.rhino.head.Token.DEFAULT:
+1246 |         return Token.DEFAULT_CASE;
+1247 |       case com.google.javascript.rhino.head.Token.WHILE:
+1248 |         return Token.WHILE;
+1249 |       case com.google.javascript.rhino.head.Token.DO:
+1250 |         return Token.DO;
+1251 |       case com.google.javascript.rhino.head.Token.FOR:
+1252 |         return Token.FOR;
+1253 |       case com.google.javascript.rhino.head.Token.BREAK:
+1254 |         return Token.BREAK;
+1255 |       case com.google.javascript.rhino.head.Token.CONTINUE:
+1256 |         return Token.CONTINUE;
+1257 |       case com.google.javascript.rhino.head.Token.VAR:
+1258 |         return Token.VAR;
+1259 |       case com.google.javascript.rhino.head.Token.WITH:
+1260 |         return Token.WITH;
+1261 |       case com.google.javascript.rhino.head.Token.CATCH:
+1262 |         return Token.CATCH;
+1263 |       case com.google.javascript.rhino.head.Token.VOID:
+1264 |         return Token.VOID;
+1265 |       case com.google.javascript.rhino.head.Token.EMPTY:
+1266 |         return Token.EMPTY;
+1267 |       case com.google.javascript.rhino.head.Token.BLOCK:
+1268 |         return Token.BLOCK;
+1269 |       case com.google.javascript.rhino.head.Token.LABEL:
+1270 |         return Token.LABEL;
+1271 |       case com.google.javascript.rhino.head.Token.EXPR_VOID:
+1272 |       case com.google.javascript.rhino.head.Token.EXPR_RESULT:
+1273 |         return Token.EXPR_RESULT;
+1274 |       case com.google.javascript.rhino.head.Token.SCRIPT:
+1275 |         return Token.SCRIPT;
+1276 |       case com.google.javascript.rhino.head.Token.GET:
+1277 |         return Token.GETTER_DEF;
+1278 |       case com.google.javascript.rhino.head.Token.SET:
+1279 |         return Token.SETTER_DEF;
+1280 |       case com.google.javascript.rhino.head.Token.CONST:
+1281 |         return Token.CONST;
+1282 |       case com.google.javascript.rhino.head.Token.DEBUGGER:
+1283 |         return Token.DEBUGGER;
+1284 |     }
+1285 | 
+1286 |     // Token without name
+1287 |     throw new IllegalStateException(String.valueOf(token));
+1288 |   }
+
+===== M0084 =====
+Signature: com.google.javascript.jscomp.CompilerOptions.getLanguageIn()
+Source: src/com/google/javascript/jscomp/CompilerOptions.java
+Original range: 1350-1352
+Documentation:
+
+Method code:
+1350 |   public LanguageMode getLanguageIn() {
+1351 |     return languageIn;
+1352 |   }
+
+===== M0085 =====
+Signature: com.google.javascript.jscomp.CodeGenerator.add(Node)
+Source: src/com/google/javascript/jscomp/CodeGenerator.java
+Original range: 81-83
+Documentation:
+
+Method code:
+81 |   void add(Node n) {
+82 |     add(n, Context.OTHER);
+83 |   }
+
+===== M0086 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.isWordChar(char)
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 273-277
+Documentation:
+
+Method code:
+273 |   static boolean isWordChar(char ch) {
+274 |     return (ch == '_' ||
+275 |             ch == '$' ||
+276 |             Character.isLetterOrDigit(ch));
+277 |   }
+
+===== M0087 =====
+Signature: com.google.javascript.jscomp.CodePrinter.MappedCodePrinter.getLastChar()
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 205-208
+Documentation:
+
+Method code:
+205 |     @Override
+206 |     char getLastChar() {
+207 |       return (code.length() > 0) ? code.charAt(code.length() - 1) : '\0';
+208 |     }
+
+===== M0088 =====
+Signature: com.google.javascript.jscomp.AnonymousFunctionNamingPolicy.AnonymousFunctionNamingPolicy(char[])
+Source: src/com/google/javascript/jscomp/AnonymousFunctionNamingPolicy.java
+Original range: 47-49
+Documentation:
+
+Method code:
+47 |   AnonymousFunctionNamingPolicy(char[] reservedCharacters) {
+48 |     this.reservedCharacters = reservedCharacters;
+49 |   }
+
+===== M0089 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.TransformDispatcher.processUnaryExpression(UnaryExpression)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 973-1009
+Documentation:
+
+Method code:
+973 |     @Override
+974 |     Node processUnaryExpression(UnaryExpression exprNode) {
+975 |       int type = transformTokenType(exprNode.getType());
+976 |       Node operand = transform(exprNode.getOperand());
+977 |       if (type == Token.NEG && operand.isNumber()) {
+978 |         operand.setDouble(-operand.getDouble());
+979 |         return operand;
+980 |       } else {
+981 |         if (type == Token.DELPROP &&
+982 |             !(operand.isGetProp() ||
+983 |               operand.isGetElem() ||
+984 |               operand.isName())) {
+985 |           String msg =
+986 |               "Invalid delete operand. Only properties can be deleted.";
+987 |           errorReporter.error(
+988 |               msg,
+989 |               sourceName,
+990 |               operand.getLineno(), "", 0);
+991 |         } else  if (type == Token.INC || type == Token.DEC) {
+992 |           if (!validAssignmentTarget(operand)) {
+993 |             String msg = (type == Token.INC)
+994 |                 ? "invalid increment target"
+995 |                 : "invalid decrement target";
+996 |             errorReporter.error(
+997 |                 msg,
+998 |                 sourceName,
+999 |                 operand.getLineno(), "", 0);
+1000 |           }
+1001 |         }
+1002 | 
+1003 |         Node node = newNode(type, operand);
+1004 |         if (exprNode.isPostfix()) {
+1005 |           node.putBooleanProp(Node.INCRDECR_PROP, true);
+1006 |         }
+1007 |         return node;
+1008 |       }
+1009 |     }
+
+===== M0090 =====
+Signature: com.google.javascript.jscomp.RhinoErrorReporter.NewRhinoErrorReporter.NewRhinoErrorReporter(AbstractCompiler)
+Source: src/com/google/javascript/jscomp/RhinoErrorReporter.java
+Original range: 150-152
+Documentation:
+
+Method code:
+150 |     private NewRhinoErrorReporter(AbstractCompiler compiler) {
+151 |       super(compiler);
+152 |     }
+
+===== M0091 =====
+Signature: com.google.javascript.rhino.Node.getType()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 527-529
+Documentation:
+
+Method code:
+527 |   public int getType() {
+528 |     return type;
+529 |   }
+
+===== M0092 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.transformTree(AstRoot,StaticSourceFile,String,Config,ErrorReporter)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 165-188
+Documentation:
+
+Method code:
+165 |   public static Node transformTree(AstRoot node,
+166 |                                    StaticSourceFile sourceFile,
+167 |                                    String sourceString,
+168 |                                    Config config,
+169 |                                    ErrorReporter errorReporter) {
+170 |     IRFactory irFactory = new IRFactory(sourceString, sourceFile,
+171 |         config, errorReporter);
+172 |     Node irNode = irFactory.transform(node);
+173 | 
+174 |     if (node.getComments() != null) {
+175 |       for (Comment comment : node.getComments()) {
+176 |         if (comment.getCommentType() == CommentType.JSDOC &&
+177 |             !irFactory.parsedComments.contains(comment)) {
+178 |           irFactory.handlePossibleFileOverviewJsDoc(comment, irNode);
+179 |         } else if (comment.getCommentType() == CommentType.BLOCK_COMMENT) {
+180 |           irFactory.handleBlockComment(comment);
+181 |         }
+182 |       }
+183 |     }
+184 | 
+185 |     irFactory.setFileOverviewJsDoc(irNode);
+186 | 
+187 |     return irNode;
+188 |   }
+
+===== M0093 =====
+Signature: com.google.javascript.jscomp.parsing.ParserRunner.extractList(String)
+Source: src/com/google/javascript/jscomp/parsing/ParserRunner.java
+Original range: 86-93
+Documentation:
+
+Method code:
+86 |   private static Set<String> extractList(String configProp) {
+87 |     String[] names = configProp.split(",");
+88 |     Set<String> trimmedNames = Sets.newHashSet();
+89 |     for (String name : names) {
+90 |       trimmedNames.add(name.trim());
+91 |     }
+92 |     return ImmutableSet.copyOf(trimmedNames);
+93 |   }
+
+===== M0094 =====
+Signature: com.google.javascript.jscomp.CompilerOptions.getCodingConvention()
+Source: src/com/google/javascript/jscomp/CompilerOptions.java
+Original range: 1259-1261
+Documentation:
+
+Method code:
+1259 |   public CodingConvention getCodingConvention() {
+1260 |     return codingConvention;
+1261 |   }
+
+===== M0095 =====
+Signature: com.google.javascript.rhino.Node.isVar()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 2356-2358
+Documentation:
+
+Method code:
+2356 |   public boolean isVar() {
+2357 |     return this.getType() == Token.VAR;
+2358 |   }
+
+===== M0096 =====
+Signature: com.google.javascript.jscomp.DiagnosticType.disabled(String,String)
+Source: src/com/google/javascript/jscomp/DiagnosticType.java
+Original range: 75-78
+Documentation:
+/**
+   * Create a DiagnosticType at level CheckLevel.OFF
+   *
+   * @param name An identifier
+   * @param descriptionFormat A format string
+   * @return A new DiagnosticType
+   */
+Method code:
+75 |   public static DiagnosticType disabled(String name,
+76 |       String descriptionFormat) {
+77 |     return make(name, CheckLevel.OFF, descriptionFormat);
+78 |   }
+
+===== M0097 =====
+Signature: com.google.javascript.rhino.Node.newNumber(double)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 503-505
+Documentation:
+
+Method code:
+503 |   public static Node newNumber(double number) {
+504 |     return new NumberNode(number);
+505 |   }
+
+===== M0098 =====
+Signature: com.google.javascript.jscomp.CodeGenerator.addIdentifier(String)
+Source: src/com/google/javascript/jscomp/CodeGenerator.java
+Original range: 77-79
+Documentation:
+
+Method code:
+77 |   private void addIdentifier(String identifier) {
+78 |     cc.addIdentifier(identifierEscape(identifier));
+79 |   }
+
+===== M0099 =====
+Signature: com.google.javascript.rhino.Node.NumberNode.NumberNode(double)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 154-157
+Documentation:
+
+Method code:
+154 |     NumberNode(double number) {
+155 |       super(Token.NUMBER);
+156 |       this.number = number;
+157 |     }
+
+===== M0100 =====
+Signature: com.google.javascript.jscomp.DiagnosticType.make(String,CheckLevel,String)
+Source: src/com/google/javascript/jscomp/DiagnosticType.java
+Original range: 88-92
+Documentation:
+/**
+   * Create a DiagnosticType at a given CheckLevel.
+   *
+   * @param name An identifier
+   * @param level Either CheckLevel.ERROR or CheckLevel.WARNING
+   * @param descriptionFormat A format string
+   * @return A new DiagnosticType
+   */
+Method code:
+88 |   public static DiagnosticType make(String name, CheckLevel level,
+89 |                                     String descriptionFormat) {
+90 |     return
+91 |         new DiagnosticType(name, level, new MessageFormat(descriptionFormat));
+92 |   }
+
+===== M0101 =====
+Signature: com.google.javascript.jscomp.PrepareAst.process(Node,Node)
+Source: src/com/google/javascript/jscomp/PrepareAst.java
+Original range: 56-74
+Documentation:
+
+Method code:
+56 |   @Override
+57 |   public void process(Node externs, Node root) {
+58 |     if (checkOnly) {
+59 |       normalizeNodeTypes(root);
+60 |     } else {
+61 |       // Don't perform "PrepareAnnotations" when doing checks as
+62 |       // they currently aren't valid during sanity checks.  In particular,
+63 |       // they DIRECT_EVAL shouldn't be applied after inlining has been
+64 |       // performed.
+65 |       if (externs != null) {
+66 |         NodeTraversal.traverse(
+67 |             compiler, externs, new PrepareAnnotations(compiler));
+68 |       }
+69 |       if (root != null) {
+70 |         NodeTraversal.traverse(
+71 |             compiler, root, new PrepareAnnotations(compiler));
+72 |       }
+73 |     }
+74 |   }
+
+===== M0102 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.handleJsDoc(AstNode,Node)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 259-269
+Documentation:
+
+Method code:
+259 |   private JSDocInfo handleJsDoc(AstNode node, Node irNode) {
+260 |     Comment comment = node.getJsDocNode();
+261 |     if (comment != null) {
+262 |       JsDocInfoParser jsDocParser = createJsDocInfoParser(comment, irNode);
+263 |       parsedComments.add(comment);
+264 |       if (!handlePossibleFileOverviewJsDoc(jsDocParser)) {
+265 |         return jsDocParser.retrieveAndResetParsedJSDocInfo();
+266 |       }
+267 |     }
+268 |     return null;
+269 |   }
+
+===== M0103 =====
+Signature: com.google.javascript.rhino.Node.putBooleanProp(int,boolean)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 845-847
+Documentation:
+
+Method code:
+845 |   public void putBooleanProp(int propType, boolean value) {
+846 |     putIntProp(propType, value ? 1 : 0);
+847 |   }
+
+===== M0104 =====
+Signature: com.google.javascript.jscomp.parsing.ParserRunner.initResourceConfig()
+Source: src/com/google/javascript/jscomp/parsing/ParserRunner.java
+Original range: 76-84
+Documentation:
+
+Method code:
+76 |   private static synchronized void initResourceConfig() {
+77 |     if (annotationNames != null) {
+78 |       return;
+79 |     }
+80 | 
+81 |     ResourceBundle config = ResourceBundle.getBundle(configResource);
+82 |     annotationNames = extractList(config.getString("jsdoc.annotations"));
+83 |     suppressionNames = extractList(config.getString("jsdoc.suppressions"));
+84 |   }
+
+===== M0105 =====
+Signature: com.google.javascript.jscomp.SourceFile.setCode(String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 155-157
+Documentation:
+
+Method code:
+155 |   private void setCode(String sourceCode) {
+156 |     code = sourceCode;
+157 |   }
+
+===== M0106 =====
+Signature: com.google.javascript.jscomp.ClosureCodingConvention.ClosureCodingConvention()
+Source: src/com/google/javascript/jscomp/ClosureCodingConvention.java
+Original range: 45-47
+Documentation:
+
+Method code:
+45 |   public ClosureCodingConvention() {
+46 |     this(CodingConventions.getDefault());
+47 |   }
+
+===== M0107 =====
+Signature: com.google.javascript.jscomp.parsing.ParserRunner.createConfig(boolean,LanguageMode,boolean,Set<String>)
+Source: src/com/google/javascript/jscomp/parsing/ParserRunner.java
+Original range: 60-74
+Documentation:
+
+Method code:
+60 |   public static Config createConfig(boolean isIdeMode,
+61 |                                     LanguageMode languageMode,
+62 |                                     boolean acceptConstKeyword,
+63 |                                     Set<String> extraAnnotationNames) {
+64 |     initResourceConfig();
+65 |     Set<String> effectiveAnnotationNames;
+66 |     if (extraAnnotationNames == null) {
+67 |       effectiveAnnotationNames = annotationNames;
+68 |     } else {
+69 |       effectiveAnnotationNames = new HashSet<String>(annotationNames);
+70 |       effectiveAnnotationNames.addAll(extraAnnotationNames);
+71 |     }
+72 |     return new Config(effectiveAnnotationNames, suppressionNames,
+73 |         isIdeMode, languageMode, acceptConstKeyword);
+74 |   }
+
+===== M0108 =====
+Signature: com.google.javascript.jscomp.BasicErrorManager.getErrorCount()
+Source: src/com/google/javascript/jscomp/BasicErrorManager.java
+Original range: 74-77
+Documentation:
+
+Method code:
+74 |   @Override
+75 |   public int getErrorCount() {
+76 |     return errorCount;
+77 |   }
+
+===== M0109 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.setFileOverviewJsDoc(Node)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 190-208
+Documentation:
+
+Method code:
+190 |   private void setFileOverviewJsDoc(Node irNode) {
+191 |     // Only after we've seen all @fileoverview entries, attach the
+192 |     // last one to the root node, and copy the found license strings
+193 |     // to that node.
+194 |     JSDocInfo rootNodeJsDoc = rootNodeJsDocHolder.getJSDocInfo();
+195 |     if (rootNodeJsDoc != null) {
+196 |       irNode.setJSDocInfo(rootNodeJsDoc);
+197 |       rootNodeJsDoc.setAssociatedNode(irNode);
+198 |     }
+199 | 
+200 |     if (fileOverviewInfo != null) {
+201 |       if ((irNode.getJSDocInfo() != null) &&
+202 |           (irNode.getJSDocInfo().getLicense() != null)) {
+203 |         fileOverviewInfo.setLicense(irNode.getJSDocInfo().getLicense());
+204 |       }
+205 |       irNode.setJSDocInfo(fileOverviewInfo);
+206 |       fileOverviewInfo.setAssociatedNode(irNode);
+207 |     }
+208 |   }
+
+===== M0110 =====
+Signature: com.google.javascript.rhino.Node.removeProp(PropListItem,int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 781-794
+Documentation:
+/**
+   * @param item The item to inspect
+   * @param propType The property to look for
+   * @return The replacement list if the property was removed, or
+   *   'item' otherwise.
+   */
+Method code:
+781 |   private PropListItem removeProp(PropListItem item, int propType) {
+782 |     if (item == null) {
+783 |       return null;
+784 |     } else if (item.getType() == propType) {
+785 |       return item.getNext();
+786 |     } else {
+787 |       PropListItem result = removeProp(item.getNext(), propType);
+788 |       if (result != item.getNext()) {
+789 |         return item.chain(result);
+790 |       } else {
+791 |         return item;
+792 |       }
+793 |     }
+794 |   }
+
+===== M0111 =====
+Signature: com.google.javascript.jscomp.SourceFile.Builder.buildFromCode(String,String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 392-394
+Documentation:
+
+Method code:
+392 |     public SourceFile buildFromCode(String fileName, String code) {
+393 |       return new Preloaded(fileName, originalPath, code);
+394 |     }
+
+===== M0112 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.endFile()
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 299-299
+Documentation:
+/** Called when we're at the end of a file. */
+Method code:
+299 |   void endFile() {}
+
+===== M0113 =====
+Signature: com.google.javascript.jscomp.NodeUtil.precedence(int)
+Source: src/com/google/javascript/jscomp/NodeUtil.java
+Original range: 1161-1233
+Documentation:
+/*
+   *  0 comma ,
+   *  1 assignment = += -= *= /= %= <<= >>= >>>= &= ^= |=
+   *  2 conditional ?:
+   *  3 logical-or ||
+   *  4 logical-and &&
+   *  5 bitwise-or |
+   *  6 bitwise-xor ^
+   *  7 bitwise-and &
+   *  8 equality == !=
+   *  9 relational < <= > >=
+   * 10 bitwise shift << >> >>>
+   * 11 addition/subtraction + -
+   * 12 multiply/divide * / %
+   * 13 negation/increment ! ~ - ++ --
+   * 14 call, member () [] .
+   */
+Method code:
+1161 |   static int precedence(int type) {
+1162 |     switch (type) {
+1163 |       case Token.COMMA:  return 0;
+1164 |       case Token.ASSIGN_BITOR:
+1165 |       case Token.ASSIGN_BITXOR:
+1166 |       case Token.ASSIGN_BITAND:
+1167 |       case Token.ASSIGN_LSH:
+1168 |       case Token.ASSIGN_RSH:
+1169 |       case Token.ASSIGN_URSH:
+1170 |       case Token.ASSIGN_ADD:
+1171 |       case Token.ASSIGN_SUB:
+1172 |       case Token.ASSIGN_MUL:
+1173 |       case Token.ASSIGN_DIV:
+1174 |       case Token.ASSIGN_MOD:
+1175 |       case Token.ASSIGN: return 1;
+1176 |       case Token.HOOK:   return 2;  // ?: operator
+1177 |       case Token.OR:     return 3;
+1178 |       case Token.AND:    return 4;
+1179 |       case Token.BITOR:  return 5;
+1180 |       case Token.BITXOR: return 6;
+1181 |       case Token.BITAND: return 7;
+1182 |       case Token.EQ:
+1183 |       case Token.NE:
+1184 |       case Token.SHEQ:
+1185 |       case Token.SHNE:   return 8;
+1186 |       case Token.LT:
+1187 |       case Token.GT:
+1188 |       case Token.LE:
+1189 |       case Token.GE:
+1190 |       case Token.INSTANCEOF:
+1191 |       case Token.IN:     return 9;
+1192 |       case Token.LSH:
+1193 |       case Token.RSH:
+1194 |       case Token.URSH:   return 10;
+1195 |       case Token.SUB:
+1196 |       case Token.ADD:    return 11;
+1197 |       case Token.MUL:
+1198 |       case Token.MOD:
+1199 |       case Token.DIV:    return 12;
+1200 |       case Token.INC:
+1201 |       case Token.DEC:
+1202 |       case Token.NEW:
+1203 |       case Token.DELPROP:
+1204 |       case Token.TYPEOF:
+1205 |       case Token.VOID:
+1206 |       case Token.NOT:
+1207 |       case Token.BITNOT:
+1208 |       case Token.POS:
+1209 |       case Token.NEG:    return 13;
+1210 | 
+1211 |       case Token.CALL:
+1212 |       case Token.GETELEM:
+1213 |       case Token.GETPROP:
+1214 |       // Data values
+1215 |       case Token.ARRAYLIT:
+1216 |       case Token.EMPTY:  // TODO(johnlenz): remove this.
+1217 |       case Token.FALSE:
+1218 |       case Token.FUNCTION:
+1219 |       case Token.NAME:
+1220 |       case Token.NULL:
+1221 |       case Token.NUMBER:
+1222 |       case Token.OBJECTLIT:
+1223 |       case Token.REGEXP:
+1224 |       case Token.STRING:
+1225 |       case Token.THIS:
+1226 |       case Token.TRUE:
+1227 |         return 15;
+1228 | 
+1229 |       default: throw new Error("Unknown precedence for " +
+1230 |                                Token.name(type) +
+1231 |                                " (type " + type + ")");
+1232 |     }
+1233 |   }
+
+===== M0114 =====
+Signature: com.google.javascript.jscomp.SourceFile.builder()
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 356-358
+Documentation:
+/** Create a new builder for source files. */
+Method code:
+356 |   public static Builder builder() {
+357 |     return new Builder();
+358 |   }
+
+===== M0115 =====
+Signature: com.google.javascript.jscomp.BasicErrorManager.getWarnings()
+Source: src/com/google/javascript/jscomp/BasicErrorManager.java
+Original range: 89-92
+Documentation:
+
+Method code:
+89 |   @Override
+90 |   public JSError[] getWarnings() {
+91 |     return toArray(CheckLevel.WARNING);
+92 |   }
+
+===== M0116 =====
+Signature: com.google.javascript.jscomp.SuppressDocWarningsGuard.SuppressDocWarningsGuard(Map<String, DiagnosticGroup>)
+Source: src/com/google/javascript/jscomp/SuppressDocWarningsGuard.java
+Original range: 40-49
+Documentation:
+/**
+   * The suppressable groups, indexed by name.
+   */
+Method code:
+40 |   SuppressDocWarningsGuard(Map<String, DiagnosticGroup> suppressableGroups) {
+41 |     for (Map.Entry<String, DiagnosticGroup> entry :
+42 |              suppressableGroups.entrySet()) {
+43 |       suppressors.put(
+44 |           entry.getKey(),
+45 |           new DiagnosticGroupWarningsGuard(
+46 |               entry.getValue(),
+47 |               CheckLevel.OFF));
+48 |     }
+49 |   }
+
+===== M0117 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.TransformDispatcher.processAstRoot(AstRoot)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 440-448
+Documentation:
+
+Method code:
+440 |     @Override
+441 |     Node processAstRoot(AstRoot rootNode) {
+442 |       Node node = newNode(Token.SCRIPT);
+443 |       for (com.google.javascript.rhino.head.Node child : rootNode) {
+444 |         node.addChildToBack(transform((AstNode)child));
+445 |       }
+446 |       parseDirectives(node);
+447 |       return node;
+448 |     }
+
+===== M0118 =====
+Signature: com.google.javascript.rhino.Node.getFirstChild()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 539-541
+Documentation:
+
+Method code:
+539 |   public Node getFirstChild() {
+540 |     return first;
+541 |   }
+
+===== M0119 =====
+Signature: com.google.javascript.jscomp.PrepareAst.PrepareAst(AbstractCompiler,boolean)
+Source: src/com/google/javascript/jscomp/PrepareAst.java
+Original range: 45-48
+Documentation:
+
+Method code:
+45 |   PrepareAst(AbstractCompiler compiler, boolean checkOnly) {
+46 |     this.compiler = compiler;
+47 |     this.checkOnly = checkOnly;
+48 |   }
+
+===== M0120 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.addOp(String,boolean)
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 210-238
+Documentation:
+
+Method code:
+210 |   void addOp(String op, boolean binOp) {
+211 |     maybeEndStatement();
+212 | 
+213 |     char first = op.charAt(0);
+214 |     char prev = getLastChar();
+215 | 
+216 |     if ((first == '+' || first == '-') && prev == first) {
+217 |       // This is not pretty printing. This is to prevent misparsing of
+218 |       // things like "x + ++y" or "x++ + ++y"
+219 |       append(" ");
+220 |     } else if (Character.isLetter(first) &&
+221 |                isWordChar(prev)) {
+222 |       // Make sure there is a space after e.g. instanceof , typeof
+223 |       append(" ");
+224 |     } else if (prev == '-' && first == '>') {
+225 |       // Make sure that we don't emit -->
+226 |       append(" ");
+227 |     }
+228 | 
+229 |     // Allow formating around the operator.
+230 |     appendOp(op, binOp);
+231 | 
+232 |     // Line breaking after an operator is always safe. Line breaking before an
+233 |     // operator on the other hand is not. We only line break after a bin op
+234 |     // because it looks strange.
+235 |     if (binOp) {
+236 |       maybeCutLine();
+237 |     }
+238 |   }
+
+===== M0121 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.justTransform(AstNode)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 375-377
+Documentation:
+
+Method code:
+375 |   private Node justTransform(AstNode node) {
+376 |     return transformDispatcher.process(node);
+377 |   }
+
+===== M0122 =====
+Signature: com.google.javascript.jscomp.CodeGenerator.identifierEscape(String)
+Source: src/com/google/javascript/jscomp/CodeGenerator.java
+Original range: 1087-1107
+Documentation:
+
+Method code:
+1087 |   static String identifierEscape(String s) {
+1088 |     // First check if escaping is needed at all -- in most cases it isn't.
+1089 |     if (NodeUtil.isLatin(s)) {
+1090 |       return s;
+1091 |     }
+1092 | 
+1093 |     // Now going through the string to escape non-latin characters if needed.
+1094 |     StringBuilder sb = new StringBuilder();
+1095 |     for (int i = 0; i < s.length(); i++) {
+1096 |       char c = s.charAt(i);
+1097 |       // Identifiers should always go to Latin1/ ASCII characters because
+1098 |       // different browser's rules for valid identifier characters are
+1099 |       // crazy.
+1100 |       if (c > 0x1F && c < 0x7F) {
+1101 |         sb.append(c);
+1102 |       } else {
+1103 |         appendHexJavaScriptRepresentation(sb, c);
+1104 |       }
+1105 |     }
+1106 |     return sb.toString();
+1107 |   }
+
+===== M0123 =====
+Signature: com.google.javascript.rhino.Node.getJSDocInfo()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1850-1852
+Documentation:
+/**
+   * Get the {@link JSDocInfo} attached to this node.
+   * @return the information or {@code null} if no JSDoc is attached to this
+   * node
+   */
+Method code:
+1850 |   public JSDocInfo getJSDocInfo() {
+1851 |     return (JSDocInfo) getProp(JSDOC_INFO_PROP);
+1852 |   }
+
+===== M0124 =====
+Signature: com.google.javascript.jscomp.CodeGenerator.CodeGenerator(CodeConsumer,Charset)
+Source: src/com/google/javascript/jscomp/CodeGenerator.java
+Original range: 48-60
+Documentation:
+
+Method code:
+48 |   CodeGenerator(
+49 |       CodeConsumer consumer, Charset outputCharset) {
+50 |     cc = consumer;
+51 |     if (outputCharset == null || outputCharset == Charsets.US_ASCII) {
+52 |       // If we want our default (pretending to be UTF-8, but escaping anything
+53 |       // outside of straight ASCII), then don't use the encoder, but
+54 |       // just special-case the code.  This keeps the normal path through
+55 |       // the code identical to how it's been for years.
+56 |       this.outputCharsetEncoder = null;
+57 |     } else {
+58 |       this.outputCharsetEncoder = outputCharset.newEncoder();
+59 |     }
+60 |   }
+
+===== M0125 =====
+Signature: com.google.javascript.rhino.Node.getLineno()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1127-1129
+Documentation:
+
+Method code:
+1127 |   public int getLineno() {
+1128 |     return extractLineno(sourcePosition);
+1129 |   }
+
+===== M0126 =====
+Signature: com.google.javascript.jscomp.ComposeWarningsGuard.ComposeWarningsGuard(List<WarningsGuard>)
+Source: src/com/google/javascript/jscomp/ComposeWarningsGuard.java
+Original range: 78-80
+Documentation:
+
+Method code:
+78 |   public ComposeWarningsGuard(List<WarningsGuard> guards) {
+79 |     addGuards(guards);
+80 |   }
+
+===== M0127 =====
+Signature: com.google.javascript.jscomp.WarningsGuard.getPriority()
+Source: src/com/google/javascript/jscomp/WarningsGuard.java
+Original range: 83-85
+Documentation:
+/**
+   * The priority in which warnings guards are applied. Lower means the
+   * guard will be applied sooner. Expressed on a scale of 1 to 100.
+   */
+Method code:
+83 |   protected int getPriority() {
+84 |     return Priority.DEFAULT.value;
+85 |   }
+
+===== M0128 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroupWarningsGuard.enables(DiagnosticGroup)
+Source: src/com/google/javascript/jscomp/DiagnosticGroupWarningsGuard.java
+Original range: 48-59
+Documentation:
+
+Method code:
+48 |   @Override
+49 |   public boolean enables(DiagnosticGroup otherGroup) {
+50 |     if (level.isOn()) {
+51 |       for (DiagnosticType type : otherGroup.getTypes()) {
+52 |         if (group.matches(type)) {
+53 |           return true;
+54 |         }
+55 |       }
+56 |     }
+57 | 
+58 |     return false;
+59 |   }
+
+===== M0129 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroupWarningsGuard.DiagnosticGroupWarningsGuard(DiagnosticGroup,CheckLevel)
+Source: src/com/google/javascript/jscomp/DiagnosticGroupWarningsGuard.java
+Original range: 32-36
+Documentation:
+
+Method code:
+32 |   public DiagnosticGroupWarningsGuard(
+33 |       DiagnosticGroup group, CheckLevel level) {
+34 |     this.group = group;
+35 |     this.level = level;
+36 |   }
+
+===== M0130 =====
+Signature: com.google.javascript.jscomp.CodePrinter.Builder.setLineLengthThreshold(int)
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 613-616
+Documentation:
+/**
+     * Sets the line length threshold that will be used to determine
+     * when to break lines, if line breaking is on.
+     *
+     * @param threshold The line length threshold.
+     */
+Method code:
+613 |     Builder setLineLengthThreshold(int threshold) {
+614 |       this.lineLengthThreshold = threshold;
+615 |       return this;
+616 |     }
+
+===== M0131 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroup.DiagnosticGroup(DiagnosticType...)
+Source: src/com/google/javascript/jscomp/DiagnosticGroup.java
+Original range: 54-56
+Documentation:
+/**
+   * Create a group that matches all errors of the given types.
+   */
+Method code:
+54 |   public DiagnosticGroup(DiagnosticType ...types) {
+55 |     this(null, types);
+56 |   }
+
+===== M0132 =====
+Signature: com.google.javascript.rhino.Node.getSourceFileName()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1090-1093
+Documentation:
+
+Method code:
+1090 |   public String getSourceFileName() {
+1091 |     StaticSourceFile file = getStaticSourceFile();
+1092 |     return file == null ? null : file.getName();
+1093 |   }
+
+===== M0133 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.TransformDispatcher.processInfixExpression(InfixExpression)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 683-693
+Documentation:
+
+Method code:
+683 |     @Override
+684 |     Node processInfixExpression(InfixExpression exprNode) {
+685 |       Node n =  newNode(
+686 |           transformTokenType(exprNode.getType()),
+687 |           transform(exprNode.getLeft()),
+688 |           transform(exprNode.getRight()));
+689 |       n.setLineno(exprNode.getLineno());
+690 |       n.setCharno(position2charno(exprNode.getAbsolutePosition()));
+691 |       maybeSetLengthFrom(n, exprNode);
+692 |       return n;
+693 |     }
+
+===== M0134 =====
+Signature: com.google.javascript.jscomp.CodeGenerator.getContextForNoInOperator(Context)
+Source: src/com/google/javascript/jscomp/CodeGenerator.java
+Original range: 1165-1168
+Documentation:
+/**
+   * If we're in a IN_FOR_INIT_CLAUSE, we can't permit in operators in the
+   * expression.  Pass on the IN_FOR_INIT_CLAUSE flag through subexpressions.
+   */
+Method code:
+1165 |   private  Context getContextForNoInOperator(Context context) {
+1166 |     return (context == Context.IN_FOR_INIT_CLAUSE
+1167 |         ? Context.IN_FOR_INIT_CLAUSE : Context.OTHER);
+1168 |   }
+
+===== M0135 =====
+Signature: com.google.javascript.rhino.Node.isString()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 2328-2330
+Documentation:
+
+Method code:
+2328 |   public boolean isString() {
+2329 |     return this.getType() == Token.STRING;
+2330 |   }
+
+===== M0136 =====
+Signature: com.google.javascript.jscomp.SyntacticScopeCreator.SyntacticScopeCreator(AbstractCompiler)
+Source: src/com/google/javascript/jscomp/SyntacticScopeCreator.java
+Original range: 56-59
+Documentation:
+/**
+   * Creates a ScopeCreator.
+   */
+Method code:
+56 |   SyntacticScopeCreator(AbstractCompiler compiler) {
+57 |     this.compiler = compiler;
+58 |     this.redeclarationHandler = new DefaultRedeclarationHandler();
+59 |   }
+
+===== M0137 =====
+Signature: com.google.javascript.jscomp.SourceFile.Builder.Builder()
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 370-370
+Documentation:
+
+Method code:
+370 |     public Builder() {}
+
+===== M0138 =====
+Signature: com.google.javascript.jscomp.CodePrinter.MappedCodePrinter.startSourceMapping(Node)
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 89-106
+Documentation:
+/**
+     * Starts the source mapping for the given
+     * node at the current position.
+     */
+Method code:
+89 |     @Override
+90 |     void startSourceMapping(Node node) {
+91 |       Preconditions.checkState(sourceMapDetailLevel != null);
+92 |       Preconditions.checkState(node != null);
+93 |       if (createSrcMap
+94 |           && node.getSourceFileName() != null
+95 |           && node.getLineno() > 0
+96 |           && sourceMapDetailLevel.apply(node)) {
+97 |         int line = getCurrentLineIndex();
+98 |         int index = getCurrentCharIndex();
+99 |         Preconditions.checkState(line >= 0);
+100 |         Mapping mapping = new Mapping();
+101 |         mapping.node = node;
+102 |         mapping.start = new FilePosition(line, index);
+103 |         mappings.push(mapping);
+104 |         allMappings.add(mapping);
+105 |       }
+106 |     }
+
+===== M0139 =====
+Signature: com.google.javascript.jscomp.NodeUtil.isLatin(String)
+Source: src/com/google/javascript/jscomp/NodeUtil.java
+Original range: 2399-2409
+Documentation:
+/** Test if all characters in the string are in the Basic Latin (aka ASCII)
+   * character set - that they have UTF-16 values equal to or below 0x7f.
+   * This check can find which identifiers with Unicode characters need to be
+   * escaped in order to allow resulting files to be processed by non-Unicode
+   * aware UNIX tools and editors.
+   * *
+   * See http://en.wikipedia.org/wiki/Latin_characters_in_Unicode
+   * for more on Basic Latin.
+   *
+   * @param s The string to be checked for ASCII-goodness.
+   *
+   * @return True if all characters in the string are in Basic Latin set.
+   */
+Method code:
+2399 |   static boolean isLatin(String s) {
+2400 |     char LARGEST_BASIC_LATIN = 0x7f;
+2401 |     int len = s.length();
+2402 |     for (int index = 0; index < len; index++) {
+2403 |       char c = s.charAt(index);
+2404 |       if (c > LARGEST_BASIC_LATIN) {
+2405 |         return false;
+2406 |       }
+2407 |     }
+2408 |     return true;
+2409 |   }
+
+===== M0140 =====
+Signature: com.google.javascript.jscomp.CompilerInput.CompilerInput(JSSourceFile,boolean)
+Source: src/com/google/javascript/jscomp/CompilerInput.java
+Original range: 90-92
+Documentation:
+
+Method code:
+90 |   public CompilerInput(JSSourceFile file, boolean isExtern) {
+91 |     this(new JsAst(file), isExtern);
+92 |   }
+
+===== M0141 =====
+Signature: com.google.javascript.jscomp.SourceFile.Preloaded.Preloaded(String,String,String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 423-427
+Documentation:
+
+Method code:
+423 |     Preloaded(String fileName, String originalPath, String code) {
+424 |       super(fileName);
+425 |       super.setOriginalPath(originalPath);
+426 |       super.setCode(code);
+427 |     }
+
+===== M0142 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.transform(AstNode)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 271-279
+Documentation:
+
+Method code:
+271 |   private Node transform(AstNode node) {
+272 |     Node irNode = justTransform(node);
+273 |     JSDocInfo jsDocInfo = handleJsDoc(node, irNode);
+274 |     if (jsDocInfo != null) {
+275 |       irNode.setJSDocInfo(jsDocInfo);
+276 |     }
+277 |     setSourceInfo(irNode, node);
+278 |     return irNode;
+279 |   }
+
+===== M0143 =====
+Signature: com.google.javascript.rhino.Node.ObjectPropListItem.getObjectValue()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 312-315
+Documentation:
+
+Method code:
+312 |     @Override
+313 |     public Object getObjectValue() {
+314 |       return objectValue;
+315 |     }
+
+===== M0144 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.newNode(int)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 1291-1293
+Documentation:
+// Simple helper to create nodes and set the initial node properties.
+Method code:
+1291 |   private Node newNode(int type) {
+1292 |     return new Node(type).clonePropsFrom(templateNode);
+1293 |   }
+
+===== M0145 =====
+Signature: com.google.javascript.jscomp.Compiler.getCodingConvention()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 1880-1885
+Documentation:
+
+Method code:
+1880 |   @Override
+1881 |   public CodingConvention getCodingConvention() {
+1882 |     CodingConvention convention = options.getCodingConvention();
+1883 |     convention = convention != null ? convention : defaultCodingConvention;
+1884 |     return convention;
+1885 |   }
+
+===== M0146 =====
+Signature: com.google.javascript.jscomp.RhinoErrorReporter.RhinoErrorReporter(AbstractCompiler)
+Source: src/com/google/javascript/jscomp/RhinoErrorReporter.java
+Original range: 72-100
+Documentation:
+
+Method code:
+72 |   private RhinoErrorReporter(AbstractCompiler compiler) {
+73 |     this.compiler = compiler;
+74 |     typeMap = ImmutableMap.of(
+75 | 
+76 |         // Extra @fileoverview
+77 |         replacePlaceHolders(
+78 |             ScriptRuntime.getMessage0("msg.jsdoc.fileoverview.extra")),
+79 |         EXTRA_FILEOVERVIEW,
+80 | 
+81 |         // Trailing comma
+82 |         replacePlaceHolders(
+83 |             com.google.javascript.rhino.head.ScriptRuntime
+84 |               .getMessage0("msg.extra.trailing.comma")),
+85 |         TRAILING_COMMA,
+86 | 
+87 |         // Duplicate parameter
+88 |         replacePlaceHolders(
+89 |             com.google.javascript.rhino.head.ScriptRuntime
+90 |               .getMessage0("msg.dup.parms")),
+91 |         DUPLICATE_PARAM,
+92 | 
+93 |         // Unknown @annotations.
+94 |         replacePlaceHolders(ScriptRuntime.getMessage0("msg.bad.jsdoc.tag")),
+95 |         BAD_JSDOC_ANNOTATION,
+96 | 
+97 |         // Type annotation errors.
+98 |         Pattern.compile("^Bad type annotation.*"),
+99 |         TYPE_PARSE_ERROR);
+100 |   }
+
+===== M0147 =====
+Signature: com.google.javascript.jscomp.Compiler.getErrorCount()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 1997-1999
+Documentation:
+/**
+   * Gets the number of errors.
+   */
+Method code:
+1997 |   public int getErrorCount() {
+1998 |     return errorManager.getErrorCount();
+1999 |   }
+
+===== M0148 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.maybeEndStatement()
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 152-161
+Documentation:
+/**
+   * This is to be called when we're in a statement. If the prev statement
+   * needs to be ended, add a ';'.
+   */
+Method code:
+152 |   void maybeEndStatement() {
+153 |     // Add a ';' if we need to.
+154 |     if (statementNeedsEnded) {
+155 |       append(";");
+156 |       maybeLineBreak();
+157 |       endLine();
+158 |       statementNeedsEnded = false;
+159 |     }
+160 |     statementStarted = true;
+161 |   }
+
+===== M0149 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.appendOp(String,boolean)
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 206-208
+Documentation:
+
+Method code:
+206 |   void appendOp(String op, boolean binOp) {
+207 |     append(op);
+208 |   }
+
+===== M0150 =====
+Signature: com.google.javascript.jscomp.Compiler.acceptConstKeyword()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 1906-1909
+Documentation:
+
+Method code:
+1906 |   @Override
+1907 |   public boolean acceptConstKeyword() {
+1908 |     return options.acceptConstKeyword;
+1909 |   }
+
+===== M0151 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroups.getRegisteredGroups()
+Source: src/com/google/javascript/jscomp/DiagnosticGroups.java
+Original range: 57-59
+Documentation:
+/** Get the registered diagnostic groups, indexed by name. */
+Method code:
+57 |   protected Map<String, DiagnosticGroup> getRegisteredGroups() {
+58 |     return ImmutableMap.copyOf(groupsByName);
+59 |   }
+
+===== M0152 =====
+Signature: com.google.javascript.jscomp.DiagnosticType.warning(String,String)
+Source: src/com/google/javascript/jscomp/DiagnosticType.java
+Original range: 64-66
+Documentation:
+/**
+   * Create a DiagnosticType at level CheckLevel.WARNING
+   *
+   * @param name An identifier
+   * @param descriptionFormat A format string
+   * @return A new DiagnosticType
+   */
+Method code:
+64 |   public static DiagnosticType warning(String name, String descriptionFormat) {
+65 |     return make(name, CheckLevel.WARNING, descriptionFormat);
+66 |   }
+
+===== M0153 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroup.getTypes()
+Source: src/com/google/javascript/jscomp/DiagnosticGroup.java
+Original range: 129-131
+Documentation:
+/**
+   * Returns an iterator over all the types in this group.
+   */
+Method code:
+129 |   Collection<DiagnosticType> getTypes() {
+130 |     return types;
+131 |   }
+
+===== M0154 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.TransformDispatcher.isReservedKeyword(String)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 752-754
+Documentation:
+/**
+     * @return Whether the
+     */
+Method code:
+752 |     private boolean isReservedKeyword(String identifier) {
+753 |       return reservedKeywords != null && reservedKeywords.contains(identifier);
+754 |     }
+
+===== M0155 =====
+Signature: com.google.javascript.jscomp.CompilerOptions.getWarningsGuard()
+Source: src/com/google/javascript/jscomp/CompilerOptions.java
+Original range: 1035-1037
+Documentation:
+
+Method code:
+1035 |   WarningsGuard getWarningsGuard() {
+1036 |     return warningsGuard;
+1037 |   }
+
+===== M0156 =====
+Signature: com.google.javascript.jscomp.Compiler.hasHaltingErrors()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 2008-2011
+Documentation:
+
+Method code:
+2008 |   @Override
+2009 |   boolean hasHaltingErrors() {
+2010 |     return !isIdeMode() && getErrorCount() > 0;
+2011 |   }
+
+===== M0157 =====
+Signature: com.google.javascript.jscomp.AbstractMessageFormatter.setColorize(boolean)
+Source: src/com/google/javascript/jscomp/AbstractMessageFormatter.java
+Original range: 36-38
+Documentation:
+
+Method code:
+36 |   public void setColorize(boolean colorize) {
+37 |     this.colorize = colorize;
+38 |   }
+
+===== M0158 =====
+Signature: com.google.javascript.jscomp.LoggerErrorManager.LoggerErrorManager(MessageFormatter,Logger)
+Source: src/com/google/javascript/jscomp/LoggerErrorManager.java
+Original range: 37-40
+Documentation:
+/**
+   * Creates an instance.
+   */
+Method code:
+37 |   public LoggerErrorManager(MessageFormatter formatter, Logger logger) {
+38 |     this.formatter = formatter;
+39 |     this.logger = logger;
+40 |   }
+
+===== M0159 =====
+Signature: com.google.javascript.jscomp.ComposeWarningsGuard.disables(DiagnosticGroup)
+Source: src/com/google/javascript/jscomp/ComposeWarningsGuard.java
+Original range: 115-133
+Documentation:
+
+Method code:
+115 |   @Override
+116 |   public boolean disables(DiagnosticGroup group) {
+117 |     nextSingleton:
+118 |     for (DiagnosticType type : group.getTypes()) {
+119 |       DiagnosticGroup singleton = DiagnosticGroup.forType(type);
+120 | 
+121 |       for (WarningsGuard guard : guards) {
+122 |         if (guard.disables(singleton)) {
+123 |           continue nextSingleton;
+124 |         } else if (guard.enables(singleton)) {
+125 |           return false;
+126 |         }
+127 |       }
+128 | 
+129 |       return false;
+130 |     }
+131 | 
+132 |     return true;
+133 |   }
+
+===== M0160 =====
+Signature: com.google.javascript.jscomp.CompilerOptions.setLanguageIn(LanguageMode)
+Source: src/com/google/javascript/jscomp/CompilerOptions.java
+Original range: 1345-1348
+Documentation:
+/**
+   * Sets how goog.tweak calls are processed.
+   */
+Method code:
+1345 |   public void setLanguageIn(LanguageMode languageIn) {
+1346 |     this.languageIn = languageIn;
+1347 |     this.languageOut = languageIn;
+1348 |   }
+
+===== M0161 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroup.forType(DiagnosticType)
+Source: src/com/google/javascript/jscomp/DiagnosticGroup.java
+Original range: 71-76
+Documentation:
+/** Create a diagnostic group that matches only the given type. */
+Method code:
+71 |   static DiagnosticGroup forType(DiagnosticType type) {
+72 |     if (!singletons.containsKey(type)) {
+73 |       singletons.put(type, new DiagnosticGroup(type));
+74 |     }
+75 |     return singletons.get(type);
+76 |   }
+
+===== M0162 =====
+Signature: com.google.javascript.jscomp.CodePrinter.CompactCodePrinter.notePreferredLineBreak()
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 508-511
+Documentation:
+
+Method code:
+508 |     @Override
+509 |     void notePreferredLineBreak() {
+510 |       preferredBreakPosition = code.length();
+511 |     }
+
+===== M0163 =====
+Signature: com.google.javascript.jscomp.CodePrinter.MappedCodePrinter.endSourceMapping(Node)
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 112-121
+Documentation:
+/**
+     * Finishes the source mapping for the given
+     * node at the current position.
+     */
+Method code:
+112 |     @Override
+113 |     void endSourceMapping(Node node) {
+114 |       if (createSrcMap && !mappings.isEmpty() && mappings.peek().node == node) {
+115 |         Mapping mapping = mappings.pop();
+116 |         int line = getCurrentLineIndex();
+117 |         int index = getCurrentCharIndex();
+118 |         Preconditions.checkState(line >= 0);
+119 |         mapping.end = new FilePosition(line, index);
+120 |       }
+121 |     }
+
+===== M0164 =====
+Signature: com.google.javascript.rhino.ScriptRuntime.getMessage0(String)
+Source: src/com/google/javascript/rhino/ScriptRuntime.java
+Original range: 366-368
+Documentation:
+// ------------------
+Method code:
+366 |     public static String getMessage0(String messageId) {
+367 |         return getMessage(messageId, null);
+368 |     }
+
+===== M0165 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroup.DiagnosticGroup(String,DiagnosticGroup...)
+Source: src/com/google/javascript/jscomp/DiagnosticGroup.java
+Original range: 88-97
+Documentation:
+/**
+   * Create a composite group.
+   */
+Method code:
+88 |   public DiagnosticGroup(String name, DiagnosticGroup ...groups) {
+89 |     Set<DiagnosticType> set = Sets.newHashSet();
+90 | 
+91 |     for (DiagnosticGroup group : groups) {
+92 |       set.addAll(group.types);
+93 |     }
+94 | 
+95 |     this.name = name;
+96 |     this.types = ImmutableSet.copyOf(set);
+97 |   }
+
+===== M0166 =====
+Signature: com.google.javascript.rhino.Node.StringNode.StringNode(int,String)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 195-201
+Documentation:
+
+Method code:
+195 |     StringNode(int type, String str) {
+196 |       super(type);
+197 |       if (null == str) {
+198 |         throw new IllegalArgumentException("StringNode: str is null");
+199 |       }
+200 |       this.str = str;
+201 |     }
+
+===== M0167 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.TransformDispatcher.isDirective(Node)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 476-483
+Documentation:
+
+Method code:
+476 |     private boolean isDirective(Node n) {
+477 |       if (n == null) return false;
+478 | 
+479 |       int nType = n.getType();
+480 |       return nType == Token.EXPR_RESULT &&
+481 |           n.getFirstChild().isString() &&
+482 |           ALLOWED_DIRECTIVES.contains(n.getFirstChild().getString());
+483 |     }
+
+===== M0168 =====
+Signature: com.google.javascript.rhino.Node.clonePropsFrom(Node)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 761-766
+Documentation:
+/**
+   * Clone the properties from the provided node without copying
+   * the property object.  The recieving node may not have any
+   * existing properties.
+   * @param other The node to clone properties from.
+   * @return this node.
+   */
+Method code:
+761 |   public Node clonePropsFrom(Node other) {
+762 |     Preconditions.checkState(this.propListHead == null,
+763 |         "Node has existing properties.");
+764 |     this.propListHead = other.propListHead;
+765 |     return this;
+766 |   }
+
+===== M0169 =====
+Signature: com.google.javascript.jscomp.parsing.Config.buildAnnotationNames(Set<String>)
+Source: src/com/google/javascript/jscomp/parsing/Config.java
+Original range: 88-101
+Documentation:
+/**
+   * Create the annotation names from the user-specified
+   * annotation whitelist.
+   */
+Method code:
+88 |   private static Map<String, Annotation> buildAnnotationNames(
+89 |       Set<String> annotationWhitelist) {
+90 |     ImmutableMap.Builder<String, Annotation> annotationBuilder =
+91 |         ImmutableMap.builder();
+92 |     annotationBuilder.putAll(Annotation.recognizedAnnotations);
+93 |     for (String unrecognizedAnnotation : annotationWhitelist) {
+94 |       if (!Annotation.recognizedAnnotations.containsKey(
+95 |               unrecognizedAnnotation)) {
+96 |         annotationBuilder.put(
+97 |             unrecognizedAnnotation, Annotation.NOT_IMPLEMENTED);
+98 |       }
+99 |     }
+100 |     return annotationBuilder.build();
+101 |   }
+
+===== M0170 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.newNode(int,Node,Node)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 1299-1301
+Documentation:
+
+Method code:
+1299 |   private Node newNode(int type, Node child1, Node child2) {
+1300 |     return new Node(type, child1, child2).clonePropsFrom(templateNode);
+1301 |   }
+
+===== M0171 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroup.DiagnosticGroup(DiagnosticType)
+Source: src/com/google/javascript/jscomp/DiagnosticGroup.java
+Original range: 61-64
+Documentation:
+/**
+   * Create a diagnostic group with no name that only matches the given type.
+   */
+Method code:
+61 |   private DiagnosticGroup(DiagnosticType type) {
+62 |     this.name = null;
+63 |     this.types = ImmutableSet.of(type);
+64 |   }
+
+===== M0172 =====
+Signature: com.google.javascript.jscomp.JSSourceFile.getCode()
+Source: src/com/google/javascript/jscomp/JSSourceFile.java
+Original range: 77-80
+Documentation:
+
+Method code:
+77 |   @Override
+78 |   public String getCode() throws IOException {
+79 |     return referenced.getCode();
+80 |   }
+
+===== M0173 =====
+Signature: com.google.javascript.rhino.Node.ObjectPropListItem.ObjectPropListItem(int,Object,PropListItem)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 302-305
+Documentation:
+
+Method code:
+302 |     ObjectPropListItem(int propType, Object objectValue, PropListItem next) {
+303 |       super(propType, next);
+304 |       this.objectValue = objectValue;
+305 |     }
+
+===== M0174 =====
+Signature: com.google.javascript.jscomp.LightweightMessageFormatter.LightweightMessageFormatter(SourceExcerptProvider)
+Source: src/com/google/javascript/jscomp/LightweightMessageFormatter.java
+Original range: 44-46
+Documentation:
+
+Method code:
+44 |   public LightweightMessageFormatter(SourceExcerptProvider source) {
+45 |     this(source, LINE);
+46 |   }
+
+===== M0175 =====
+Signature: com.google.javascript.rhino.Node.isScript()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 2320-2322
+Documentation:
+
+Method code:
+2320 |   public boolean isScript() {
+2321 |     return this.getType() == Token.SCRIPT;
+2322 |   }
+
+===== M0176 =====
+Signature: com.google.javascript.rhino.InputId.hashCode()
+Source: src/com/google/javascript/rhino/InputId.java
+Original range: 59-62
+Documentation:
+
+Method code:
+59 |   @Override
+60 |   public int hashCode() {
+61 |     return id.hashCode();
+62 |   }
+
+===== M0177 =====
+Signature: com.google.javascript.jscomp.Compiler.initOptions(CompilerOptions)
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 231-294
+Documentation:
+/**
+   * Initialize the compiler options. Only necessary if you're not doing
+   * a normal compile() job.
+   */
+Method code:
+231 |   public void initOptions(CompilerOptions options) {
+232 |     this.options = options;
+233 |     if (errorManager == null) {
+234 |       if (outStream == null) {
+235 |         setErrorManager(
+236 |             new LoggerErrorManager(createMessageFormatter(), logger));
+237 |       } else {
+238 |         PrintStreamErrorManager printer =
+239 |             new PrintStreamErrorManager(createMessageFormatter(), outStream);
+240 |         printer.setSummaryDetailLevel(options.summaryDetailLevel);
+241 |         setErrorManager(printer);
+242 |       }
+243 |     }
+244 | 
+245 |     // DiagnosticGroups override the plain checkTypes option.
+246 |     if (options.enables(DiagnosticGroups.CHECK_TYPES)) {
+247 |       options.checkTypes = true;
+248 |     } else if (options.disables(DiagnosticGroups.CHECK_TYPES)) {
+249 |       options.checkTypes = false;
+250 |     } else if (!options.checkTypes) {
+251 |       // If DiagnosticGroups did not override the plain checkTypes
+252 |       // option, and checkTypes is enabled, then turn off the
+253 |       // parser type warnings.
+254 |       options.setWarningLevel(
+255 |           DiagnosticGroup.forType(
+256 |               RhinoErrorReporter.TYPE_PARSE_ERROR),
+257 |           CheckLevel.OFF);
+258 |     }
+259 | 
+260 |     if (options.checkGlobalThisLevel.isOn() &&
+261 |         !options.disables(DiagnosticGroups.GLOBAL_THIS)) {
+262 |       options.setWarningLevel(
+263 |           DiagnosticGroups.GLOBAL_THIS,
+264 |           options.checkGlobalThisLevel);
+265 |     }
+266 | 
+267 |     if (options.getLanguageIn() == LanguageMode.ECMASCRIPT5_STRICT) {
+268 |       options.setWarningLevel(
+269 |           DiagnosticGroups.ES5_STRICT,
+270 |           CheckLevel.ERROR);
+271 |     }
+272 | 
+273 |     // Initialize the warnings guard.
+274 |     List<WarningsGuard> guards = Lists.newArrayList();
+275 |     guards.add(
+276 |         new SuppressDocWarningsGuard(
+277 |             getDiagnosticGroups().getRegisteredGroups()));
+278 |     guards.add(options.getWarningsGuard());
+279 | 
+280 |     ComposeWarningsGuard composedGuards = new ComposeWarningsGuard(guards);
+281 | 
+282 |     // All passes must run the variable check. This synthesizes
+283 |     // variables later so that the compiler doesn't crash. It also
+284 |     // checks the externs file for validity. If you don't want to warn
+285 |     // about missing variable declarations, we shut that specific
+286 |     // error off.
+287 |     if (!options.checkSymbols &&
+288 |         !composedGuards.enables(DiagnosticGroups.CHECK_VARIABLES)) {
+289 |       composedGuards.addGuard(new DiagnosticGroupWarningsGuard(
+290 |           DiagnosticGroups.CHECK_VARIABLES, CheckLevel.OFF));
+291 |     }
+292 | 
+293 |     this.warningsGuard = composedGuards;
+294 |   }
+
+===== M0178 =====
+Signature: com.google.javascript.jscomp.Compiler.getParserConfig()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 1911-1936
+Documentation:
+
+Method code:
+1911 |   @Override
+1912 |   Config getParserConfig() {
+1913 |     if (parserConfig == null) {
+1914 |       Config.LanguageMode mode;
+1915 |       switch (options.getLanguageIn()) {
+1916 |         case ECMASCRIPT3:
+1917 |           mode = Config.LanguageMode.ECMASCRIPT3;
+1918 |           break;
+1919 |         case ECMASCRIPT5:
+1920 |           mode = Config.LanguageMode.ECMASCRIPT5;
+1921 |           break;
+1922 |         case ECMASCRIPT5_STRICT:
+1923 |           mode = Config.LanguageMode.ECMASCRIPT5_STRICT;
+1924 |           break;
+1925 |         default:
+1926 |           throw new IllegalStateException("unexpected language mode");
+1927 |       }
+1928 | 
+1929 |       parserConfig = ParserRunner.createConfig(
+1930 |         isIdeMode(),
+1931 |         mode,
+1932 |         acceptConstKeyword(),
+1933 |         options.extraAnnotationNames);
+1934 |     }
+1935 |     return parserConfig;
+1936 |   }
+
+===== M0179 =====
+Signature: com.google.javascript.rhino.Node.IntPropListItem.chain(PropListItem)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 354-357
+Documentation:
+
+Method code:
+354 |     @Override
+355 |     public PropListItem chain(PropListItem next) {
+356 |       return new IntPropListItem(getType(), intValue, next);
+357 |     }
+
+===== M0180 =====
+Signature: com.google.javascript.jscomp.SourceFile.setOriginalPath(String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 163-165
+Documentation:
+
+Method code:
+163 |   public void setOriginalPath(String originalPath) {
+164 |     this.originalPath = originalPath;
+165 |   }
+
+===== M0181 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.TransformDispatcher.processNumberLiteral(NumberLiteral)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 761-764
+Documentation:
+
+Method code:
+761 |     @Override
+762 |     Node processNumberLiteral(NumberLiteral literalNode) {
+763 |       return newNumberNode(literalNode.getNumber());
+764 |     }
+
+===== M0182 =====
+Signature: com.google.javascript.jscomp.DiagnosticType.hashCode()
+Source: src/com/google/javascript/jscomp/DiagnosticType.java
+Original range: 119-122
+Documentation:
+
+Method code:
+119 |   @Override
+120 |   public int hashCode() {
+121 |     return key.hashCode();
+122 |   }
+
+===== M0183 =====
+Signature: com.google.javascript.jscomp.CodePrinter.CompactCodePrinter.endFile()
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 513-542
+Documentation:
+
+Method code:
+513 |     @Override
+514 |     void endFile() {
+515 |       super.endFile();
+516 |       if (!preferLineBreakAtEndOfFile) {
+517 |         return;
+518 |       }
+519 |       if (lineLength > lineLengthThreshold / 2) {
+520 |         // Add an extra break at end of file.
+521 |         append(";");
+522 |         startNewLine();
+523 |       } else if (prevCutPosition > 0) {
+524 |         // Shift the previous break to end of file.
+525 |         for (int i = prevCutPosition; i < code.length() - 1; i++) {
+526 |           code.setCharAt(i, code.charAt(i+1));
+527 |         }
+528 |         code.setLength(code.length() - 1);
+529 |         lineStartPosition = prevLineStartPosition;
+530 |         lineLength = code.length() - lineStartPosition;
+531 |         reportLineCut(lineIndex, prevCutPosition, false);
+532 |         lineIndex--;
+533 |         prevCutPosition = 0;
+534 |         prevLineStartPosition = 0;
+535 |         append(";");
+536 |         startNewLine();
+537 |       } else {
+538 |         // A small file with no line breaks. We do nothing in this case to
+539 |         // avoid excessive line breaks. It's not ideal if a lot of these pile
+540 |         // up, but that is reasonably unlikely.
+541 |       }
+542 |     }
+
+===== M0184 =====
+Signature: com.google.javascript.jscomp.DiagnosticType.DiagnosticType(String,CheckLevel,MessageFormat)
+Source: src/com/google/javascript/jscomp/DiagnosticType.java
+Original range: 97-103
+Documentation:
+/**
+   * Create a DiagnosticType. Private to force use of static factory methods.
+   */
+Method code:
+97 |   private DiagnosticType(String key, CheckLevel level, MessageFormat format) {
+98 |     this.key = key;
+99 |     this.defaultLevel = level;
+100 |     this.format = format;
+101 | 
+102 |     this.level = this.defaultLevel;
+103 |   }
+
+===== M0185 =====
+Signature: com.google.javascript.rhino.Node.isFunction()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 2232-2234
+Documentation:
+
+Method code:
+2232 |   public boolean isFunction() {
+2233 |     return this.getType() == Token.FUNCTION;
+2234 |   }
+
+===== M0186 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.maybeSetLengthFrom(Node,AstNode)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 359-363
+Documentation:
+// Set the length on the node if we're in IDE mode.
+Method code:
+359 |   private void maybeSetLengthFrom(Node node, AstNode source) {
+360 |     if (config.isIdeMode) {
+361 |       node.setLength(source.getLength());
+362 |     }
+363 |   }
+
+===== M0187 =====
+Signature: com.google.javascript.jscomp.Compiler.getWarnings()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 931-933
+Documentation:
+/**
+   * Returns the array of warnings (never null).
+   */
+Method code:
+931 |   public JSError[] getWarnings() {
+932 |     return errorManager.getWarnings();
+933 |   }
+
+===== M0188 =====
+Signature: com.google.javascript.jscomp.NodeTraversal.popScope()
+Source: src/com/google/javascript/jscomp/NodeTraversal.java
+Original range: 582-592
+Documentation:
+/** Pops back to the previous scope (e.g. when leaving a function). */
+Method code:
+582 |   private void popScope() {
+583 |     if (scopeCallback != null) {
+584 |       scopeCallback.exitScope(this);
+585 |     }
+586 |     if (scopeRoots.isEmpty()) {
+587 |       scopes.pop();
+588 |     } else {
+589 |       scopeRoots.pop();
+590 |     }
+591 |     cfgs.pop();
+592 |   }
+
+===== M0189 =====
+Signature: com.google.javascript.jscomp.SuppressDocWarningsGuard.getPriority()
+Source: src/com/google/javascript/jscomp/SuppressDocWarningsGuard.java
+Original range: 95-100
+Documentation:
+
+Method code:
+95 |   @Override
+96 |   public int getPriority() {
+97 |     // Happens after path-based filtering, but before other times
+98 |     // of filtering.
+99 |     return WarningsGuard.Priority.SUPPRESS_DOC.value;
+100 |   }
+
+===== M0190 =====
+Signature: com.google.javascript.jscomp.CodePrinter.CompactCodePrinter.maybeCutLine()
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 489-506
+Documentation:
+/**
+     * This may start a new line if the current line is longer than the line
+     * length threshold.
+     */
+Method code:
+489 |     @Override
+490 |     void maybeCutLine() {
+491 |       if (lineLength > lineLengthThreshold) {
+492 |         // Use the preferred position provided it will break the line.
+493 |         if (preferredBreakPosition > lineStartPosition &&
+494 |             preferredBreakPosition < lineStartPosition + lineLength) {
+495 |           int position = preferredBreakPosition;
+496 |           code.insert(position, '\n');
+497 |           prevCutPosition = position;
+498 |           reportLineCut(lineIndex, position - lineStartPosition, true);
+499 |           lineIndex++;
+500 |           lineLength -= (position - lineStartPosition);
+501 |           lineStartPosition = position + 1;
+502 |         } else {
+503 |           startNewLine();
+504 |         }
+505 |       }
+506 |     }
+
+===== M0191 =====
+Signature: com.google.javascript.rhino.InputId.InputId(String)
+Source: src/com/google/javascript/rhino/InputId.java
+Original range: 51-53
+Documentation:
+
+Method code:
+51 |   public InputId(String id) {
+52 |     this.id = id;
+53 |   }
+
+===== M0192 =====
+Signature: com.google.javascript.rhino.Node.getLastChild()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 543-545
+Documentation:
+
+Method code:
+543 |   public Node getLastChild() {
+544 |     return last;
+545 |   }
+
+===== M0193 =====
+Signature: com.google.javascript.jscomp.NodeUtil.getInputId(Node)
+Source: src/com/google/javascript/jscomp/NodeUtil.java
+Original range: 2859-2865
+Documentation:
+/**
+   * @param n The node.
+   * @return The InputId property on the node or its ancestors.
+   */
+Method code:
+2859 |   public static InputId getInputId(Node n) {
+2860 |     while (n != null && !n.isScript()) {
+2861 |       n = n.getParent();
+2862 |     }
+2863 | 
+2864 |     return (n != null && n.isScript()) ? n.getInputId() : null;
+2865 |   }
+
+===== M0194 =====
+Signature: com.google.javascript.jscomp.RhinoErrorReporter.forNewRhino(AbstractCompiler)
+Source: src/com/google/javascript/jscomp/RhinoErrorReporter.java
+Original range: 102-105
+Documentation:
+
+Method code:
+102 |   public static com.google.javascript.rhino.head.ErrorReporter
+103 |       forNewRhino(AbstractCompiler compiler) {
+104 |     return new NewRhinoErrorReporter(compiler);
+105 |   }
+
+===== M0195 =====
+Signature: com.google.javascript.jscomp.CodePrinter.Builder.build()
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 658-673
+Documentation:
+/**
+     * Generates the source code and returns it.
+     */
+Method code:
+658 |     String build() {
+659 |       if (root == null) {
+660 |         throw new IllegalStateException(
+661 |             "Cannot build without root node being specified");
+662 |       }
+663 | 
+664 |       Format outputFormat = outputTypes
+665 |           ? Format.TYPED
+666 |           : prettyPrint
+667 |               ? Format.PRETTY
+668 |               : Format.COMPACT;
+669 | 
+670 |       return toSource(root, outputFormat, lineBreak, preferLineBreakAtEndOfFile,
+671 |           lineLengthThreshold, sourceMap, sourceMapDetailLevel, outputCharset,
+672 |           tagAsStrict);
+673 |     }
+
+===== M0196 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.continueProcessing()
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 52-54
+Documentation:
+/**
+   * Provides a means of interrupting the CodeGenerator. Derived classes should
+   * return false to stop further processing.
+   */
+Method code:
+52 |   boolean continueProcessing() {
+53 |     return true;
+54 |   }
+
+===== M0197 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.newNumberNode(Double)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 1315-1317
+Documentation:
+
+Method code:
+1315 |   private Node newNumberNode(Double value) {
+1316 |     return IR.number(value).clonePropsFrom(templateNode);
+1317 |   }
+
+===== M0198 =====
+Signature: com.google.javascript.rhino.Node.setStaticSourceFile(StaticSourceFile)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1081-1083
+Documentation:
+// Source position management
+Method code:
+1081 |   public void setStaticSourceFile(StaticSourceFile file) {
+1082 |     this.putProp(STATIC_SOURCE_FILE, file);
+1083 |   }
+
+===== M0199 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroups.registerGroup(String,DiagnosticType...)
+Source: src/com/google/javascript/jscomp/DiagnosticGroups.java
+Original range: 42-47
+Documentation:
+
+Method code:
+42 |   static DiagnosticGroup registerGroup(String name,
+43 |       DiagnosticType ... types) {
+44 |     DiagnosticGroup group = new DiagnosticGroup(name, types);
+45 |     groupsByName.put(name, group);
+46 |     return group;
+47 |   }
+
+===== M0200 =====
+Signature: com.google.javascript.rhino.Node.setInputId(InputId)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1103-1105
+Documentation:
+/**
+   * @param inputId
+   */
+Method code:
+1103 |   public void setInputId(InputId inputId) {
+1104 |     this.putProp(INPUT_ID, inputId);
+1105 |   }
+
+===== M0201 =====
+Signature: com.google.javascript.rhino.Node.extractLineno(int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1191-1197
+Documentation:
+/**
+   * Extracts the line number and character number from a merged line char
+   * number (see {@link #mergeLineCharNo(int, int)}).
+   */
+Method code:
+1191 |   protected static int extractLineno(int lineCharNo) {
+1192 |     if (lineCharNo == -1) {
+1193 |       return -1;
+1194 |     } else {
+1195 |       return lineCharNo >>> COLUMN_BITS;
+1196 |     }
+1197 |   }
+
+===== M0202 =====
+Signature: com.google.javascript.jscomp.ComposeWarningsGuard.GuardComparator.GuardComparator(Map<WarningsGuard, Integer>)
+Source: src/com/google/javascript/jscomp/ComposeWarningsGuard.java
+Original range: 56-58
+Documentation:
+
+Method code:
+56 |     private GuardComparator(Map<WarningsGuard, Integer> orderOfAddition) {
+57 |       this.orderOfAddition = orderOfAddition;
+58 |     }
+
+===== M0203 =====
+Signature: com.google.javascript.jscomp.Compiler.prepareAst(Node)
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 1831-1835
+Documentation:
+
+Method code:
+1831 |   @Override
+1832 |   void prepareAst(Node root) {
+1833 |     CompilerPass pass = new PrepareAst(this);
+1834 |     pass.process(null, root);
+1835 |   }
+
+===== M0204 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.endStatement(boolean)
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 138-146
+Documentation:
+
+Method code:
+138 |   void endStatement(boolean needSemiColon) {
+139 |     if (needSemiColon) {
+140 |       append(";");
+141 |       maybeLineBreak();
+142 |       statementNeedsEnded = false;
+143 |     } else if (statementStarted) {
+144 |       statementNeedsEnded = true;
+145 |     }
+146 |   }
+
+===== M0205 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.setSourceInfo(Node,AstNode)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 312-323
+Documentation:
+
+Method code:
+312 |   private void setSourceInfo(Node irNode, AstNode node) {
+313 |     if (irNode.getLineno() == -1) {
+314 |       // If we didn't already set the line, then set it now. This avoids
+315 |       // cases like ParenthesizedExpression where we just return a previous
+316 |       // node, but don't want the new node to get its parent's line number.
+317 |       int lineno = node.getLineno();
+318 |       irNode.setLineno(lineno);
+319 |       int charno = position2charno(node.getAbsolutePosition());
+320 |       irNode.setCharno(charno);
+321 |       maybeSetLengthFrom(irNode, node);
+322 |     }
+323 |   }
+
+===== M0206 =====
+Signature: com.google.javascript.jscomp.DiagnosticType.equals(Object)
+Source: src/com/google/javascript/jscomp/DiagnosticType.java
+Original range: 113-117
+Documentation:
+
+Method code:
+113 |   @Override
+114 |   public boolean equals(Object type) {
+115 |     return type instanceof DiagnosticType &&
+116 |         ((DiagnosticType) type).key.equals(key);
+117 |   }
+
+===== M0207 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.position2charno(int)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 365-373
+Documentation:
+
+Method code:
+365 |   private int position2charno(int position) {
+366 |     int lineIndex = sourceString.lastIndexOf('\n', position);
+367 |     if (lineIndex == -1) {
+368 |       return position;
+369 |     } else {
+370 |       // Subtract one for initial position being 0.
+371 |       return position - lineIndex - 1;
+372 |     }
+373 |   }
+
+===== M0208 =====
+Signature: com.google.javascript.rhino.Node.createProp(int,Object,PropListItem)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 856-858
+Documentation:
+
+Method code:
+856 |   PropListItem createProp(int propType, Object value, PropListItem next) {
+857 |     return new ObjectPropListItem(propType, value, next);
+858 |   }
+
+===== M0209 =====
+Signature: com.google.javascript.jscomp.WarningsGuard.Priority.Priority(int)
+Source: src/com/google/javascript/jscomp/WarningsGuard.java
+Original range: 58-60
+Documentation:
+
+Method code:
+58 |     Priority(int value) {
+59 |       this.value = value;
+60 |     }
+
+===== M0210 =====
+Signature: com.google.javascript.jscomp.JsAst.getInputId()
+Source: src/com/google/javascript/jscomp/JsAst.java
+Original range: 67-70
+Documentation:
+
+Method code:
+67 |   @Override
+68 |   public InputId getInputId() {
+69 |     return inputId;
+70 |   }
+
+===== M0211 =====
+Signature: com.google.javascript.jscomp.PassFactory.PassFactory(String,boolean)
+Source: src/com/google/javascript/jscomp/PassFactory.java
+Original range: 42-45
+Documentation:
+/**
+   * @param name The name of the pass that this factory creates.
+   * @param isOneTimePass If true, the pass produced by this factory can
+   *     only be run once.
+   */
+Method code:
+42 |   protected PassFactory(String name, boolean isOneTimePass) {
+43 |     this.name = name;
+44 |     this.isOneTimePass = isOneTimePass;
+45 |   }
+
+===== M0212 =====
+Signature: com.google.javascript.jscomp.NodeUtil.opToStr(int)
+Source: src/com/google/javascript/jscomp/NodeUtil.java
+Original range: 2123-2168
+Documentation:
+/**
+   * Converts an operator's token value (see {@link Token}) to a string
+   * representation.
+   *
+   * @param operator the operator's token value to convert
+   * @return the string representation or {@code null} if the token value is
+   * not an operator
+   */
+Method code:
+2123 |   static String opToStr(int operator) {
+2124 |     switch (operator) {
+2125 |       case Token.BITOR: return "|";
+2126 |       case Token.OR: return "||";
+2127 |       case Token.BITXOR: return "^";
+2128 |       case Token.AND: return "&&";
+2129 |       case Token.BITAND: return "&";
+2130 |       case Token.SHEQ: return "===";
+2131 |       case Token.EQ: return "==";
+2132 |       case Token.NOT: return "!";
+2133 |       case Token.NE: return "!=";
+2134 |       case Token.SHNE: return "!==";
+2135 |       case Token.LSH: return "<<";
+2136 |       case Token.IN: return "in";
+2137 |       case Token.LE: return "<=";
+2138 |       case Token.LT: return "<";
+2139 |       case Token.URSH: return ">>>";
+2140 |       case Token.RSH: return ">>";
+2141 |       case Token.GE: return ">=";
+2142 |       case Token.GT: return ">";
+2143 |       case Token.MUL: return "*";
+2144 |       case Token.DIV: return "/";
+2145 |       case Token.MOD: return "%";
+2146 |       case Token.BITNOT: return "~";
+2147 |       case Token.ADD: return "+";
+2148 |       case Token.SUB: return "-";
+2149 |       case Token.POS: return "+";
+2150 |       case Token.NEG: return "-";
+2151 |       case Token.ASSIGN: return "=";
+2152 |       case Token.ASSIGN_BITOR: return "|=";
+2153 |       case Token.ASSIGN_BITXOR: return "^=";
+2154 |       case Token.ASSIGN_BITAND: return "&=";
+2155 |       case Token.ASSIGN_LSH: return "<<=";
+2156 |       case Token.ASSIGN_RSH: return ">>=";
+2157 |       case Token.ASSIGN_URSH: return ">>>=";
+2158 |       case Token.ASSIGN_ADD: return "+=";
+2159 |       case Token.ASSIGN_SUB: return "-=";
+2160 |       case Token.ASSIGN_MUL: return "*=";
+2161 |       case Token.ASSIGN_DIV: return "/=";
+2162 |       case Token.ASSIGN_MOD: return "%=";
+2163 |       case Token.VOID: return "void";
+2164 |       case Token.TYPEOF: return "typeof";
+2165 |       case Token.INSTANCEOF: return "instanceof";
+2166 |       default: return null;
+2167 |     }
+2168 |   }
+
+===== M0213 =====
+Signature: com.google.javascript.jscomp.CompilerOptions.setWarningLevel(DiagnosticGroup,CheckLevel)
+Source: src/com/google/javascript/jscomp/CompilerOptions.java
+Original range: 1031-1033
+Documentation:
+/**
+   * Configure the given type of warning to the given level.
+   */
+Method code:
+1031 |   public void setWarningLevel(DiagnosticGroup type, CheckLevel level) {
+1032 |     addWarningsGuard(new DiagnosticGroupWarningsGuard(type, level));
+1033 |   }
+
+===== M0214 =====
+Signature: com.google.javascript.rhino.Node.NumberNode.setDouble(double)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 169-172
+Documentation:
+
+Method code:
+169 |     @Override
+170 |     public void setDouble(double d) {
+171 |       this.number = d;
+172 |     }
+
+===== M0215 =====
+Signature: com.google.javascript.jscomp.CompilerInput.CompilerInput(JSSourceFile)
+Source: src/com/google/javascript/jscomp/CompilerInput.java
+Original range: 86-88
+Documentation:
+
+Method code:
+86 |   public CompilerInput(JSSourceFile file) {
+87 |     this(file, false);
+88 |   }
+
+===== M0216 =====
+Signature: com.google.javascript.rhino.Node.StringNode.getString()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 215-218
+Documentation:
+/**
+     * returns the string content.
+     * @return non null.
+     */
+Method code:
+215 |     @Override
+216 |     public String getString() {
+217 |       return this.str;
+218 |     }
+
+===== M0217 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroup.isSubGroup(DiagnosticGroup)
+Source: src/com/google/javascript/jscomp/DiagnosticGroup.java
+Original range: 117-124
+Documentation:
+/**
+   * Returns whether all of the types in the given group are in this group.
+   */
+Method code:
+117 |   boolean isSubGroup(DiagnosticGroup group) {
+118 |     for (DiagnosticType type : group.types) {
+119 |       if (!matches(type)) {
+120 |         return false;
+121 |       }
+122 |     }
+123 |     return true;
+124 |   }
+
+===== M0218 =====
+Signature: com.google.javascript.jscomp.CompilerInput.getAstRoot(AbstractCompiler)
+Source: src/com/google/javascript/jscomp/CompilerInput.java
+Original range: 117-126
+Documentation:
+
+Method code:
+117 |   @Override
+118 |   public Node getAstRoot(AbstractCompiler compiler) {
+119 |     Node root = ast.getAstRoot(compiler);
+120 |     // The root maybe null if the AST can not be created.
+121 |     if (root != null) {
+122 |       Preconditions.checkState(root.isScript());
+123 |       Preconditions.checkNotNull(root.getInputId());
+124 |     }
+125 |     return root;
+126 |   }
+
+===== M0219 =====
+Signature: com.google.javascript.jscomp.Compiler.setErrorManager(ErrorManager)
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 212-216
+Documentation:
+/**
+   * Sets the error manager.
+   *
+   * @param errorManager the error manager, it cannot be {@code null}
+   */
+Method code:
+212 |   public void setErrorManager(ErrorManager errorManager) {
+213 |     Preconditions.checkNotNull(
+214 |         errorManager, "the error manager cannot be null");
+215 |     this.errorManager = errorManager;
+216 |   }
+
+===== M0220 =====
+Signature: com.google.javascript.jscomp.ProcessTweaks.TweakFunction.TweakFunction(String,String,int,int)
+Source: src/com/google/javascript/jscomp/ProcessTweaks.java
+Original range: 132-135
+Documentation:
+
+Method code:
+132 |     TweakFunction(String name, String expectedTypeName,
+133 |         int validNodeTypeA, int validNodeTypeB) {
+134 |       this(name, expectedTypeName, validNodeTypeA, validNodeTypeB, null);
+135 |     }
+
+===== M0221 =====
+Signature: com.google.javascript.jscomp.CompilerInput.getInputId()
+Source: src/com/google/javascript/jscomp/CompilerInput.java
+Original range: 95-98
+Documentation:
+/** Returns a name for this input. Must be unique across all inputs. */
+Method code:
+95 |   @Override
+96 |   public InputId getInputId() {
+97 |     return id;
+98 |   }
+
+===== M0222 =====
+Signature: com.google.javascript.jscomp.PrepareAst.PrepareAnnotations.shouldTraverse(NodeTraversal,Node,Node)
+Source: src/com/google/javascript/jscomp/PrepareAst.java
+Original range: 129-135
+Documentation:
+
+Method code:
+129 |     @Override
+130 |     public boolean shouldTraverse(NodeTraversal t, Node n, Node parent) {
+131 |       if (n.isObjectLit()) {
+132 |         normalizeObjectLiteralAnnotations(n);
+133 |       }
+134 |       return true;
+135 |     }
+
+===== M0223 =====
+Signature: com.google.javascript.jscomp.PrepareAst.PrepareAnnotations.PrepareAnnotations(AbstractCompiler)
+Source: src/com/google/javascript/jscomp/PrepareAst.java
+Original range: 125-127
+Documentation:
+
+Method code:
+125 |     PrepareAnnotations(AbstractCompiler compiler) {
+126 |       this.convention = compiler.getCodingConvention();
+127 |     }
+
+===== M0224 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.TransformDispatcher.parseDirectives(Node)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 459-474
+Documentation:
+/**
+     * Parse the directives, encode them in the AST, and remove their nodes.
+     *
+     * For information on ES5 directives, see section 14.1 of
+     * Ecma-262, Edition 5.
+     *
+     * It would be nice if Rhino would eventually take care of this for
+     * us, but right now their directive-processing is a one-off.
+     */
+Method code:
+459 |     private void parseDirectives(Node node) {
+460 |       // Remove all the directives, and encode them in the AST.
+461 |       Set<String> directives = null;
+462 |       while (isDirective(node.getFirstChild())) {
+463 |         String directive = node.removeFirstChild().getFirstChild().getString();
+464 |         if (directives == null) {
+465 |           directives = Sets.newHashSet(directive);
+466 |         } else {
+467 |           directives.add(directive);
+468 |         }
+469 |       }
+470 | 
+471 |       if (directives != null) {
+472 |         node.setDirectives(directives);
+473 |       }
+474 |     }
+
+===== M0225 =====
+Signature: com.google.javascript.jscomp.LightweightMessageFormatter.LightweightMessageFormatter(SourceExcerptProvider,SourceExcerpt)
+Source: src/com/google/javascript/jscomp/LightweightMessageFormatter.java
+Original range: 48-53
+Documentation:
+
+Method code:
+48 |   public LightweightMessageFormatter(SourceExcerptProvider source,
+49 |       SourceExcerpt excerpt) {
+50 |     super(source);
+51 |     Preconditions.checkNotNull(source);
+52 |     this.excerpt = excerpt;
+53 |   }
+
+===== M0226 =====
+Signature: com.google.javascript.jscomp.ComposeWarningsGuard.enables(DiagnosticGroup)
+Source: src/com/google/javascript/jscomp/ComposeWarningsGuard.java
+Original range: 139-150
+Documentation:
+/**
+   * Determines whether this guard will "elevate" the status of any disabled
+   * diagnostic type in the group to a warning or an error.
+   */
+Method code:
+139 |   @Override
+140 |   public boolean enables(DiagnosticGroup group) {
+141 |     for (WarningsGuard guard : guards) {
+142 |       if (guard.enables(group)) {
+143 |         return true;
+144 |       } else if (guard.disables(group)) {
+145 |         return false;
+146 |       }
+147 |     }
+148 | 
+149 |     return false;
+150 |   }
+
+===== M0227 =====
+Signature: com.google.javascript.jscomp.parsing.ParserRunner.parse(StaticSourceFile,String,Config,ErrorReporter,Logger)
+Source: src/com/google/javascript/jscomp/parsing/ParserRunner.java
+Original range: 104-148
+Documentation:
+/**
+   * Parses the JavaScript text given by a reader.
+   *
+   * @param sourceString Source code from the file.
+   * @param errorReporter An error.
+   * @param logger A logger.
+   * @return The AST of the given text.
+   * @throws IOException
+   */
+Method code:
+104 |   public static Node parse(StaticSourceFile sourceFile,
+105 |                            String sourceString,
+106 |                            Config config,
+107 |                            ErrorReporter errorReporter,
+108 |                            Logger logger) throws IOException {
+109 |     Context cx = Context.enter();
+110 |     cx.setErrorReporter(errorReporter);
+111 |     cx.setLanguageVersion(Context.VERSION_1_5);
+112 |     CompilerEnvirons compilerEnv = new CompilerEnvirons();
+113 |     compilerEnv.initFromContext(cx);
+114 |     compilerEnv.setRecordingComments(true);
+115 |     compilerEnv.setRecordingLocalJsDocComments(true);
+116 | 
+117 |     // ES5 specifically allows trailing commas
+118 |     compilerEnv.setWarnTrailingComma(
+119 |         config.languageMode == LanguageMode.ECMASCRIPT3);
+120 | 
+121 |     // Do our own identifier check for ECMASCRIPT 5
+122 |     boolean acceptEs5 =
+123 |         config.isIdeMode || config.languageMode != LanguageMode.ECMASCRIPT3;
+124 |     compilerEnv.setReservedKeywordAsIdentifier(acceptEs5);
+125 |     compilerEnv.setAllowKeywordAsObjectPropertyName(acceptEs5);
+126 | 
+127 |     compilerEnv.setAllowMemberExprAsFunctionName(false);
+128 |     compilerEnv.setIdeMode(config.isIdeMode);
+129 |     compilerEnv.setRecoverFromErrors(config.isIdeMode);
+130 | 
+131 |     Parser p = new Parser(compilerEnv, errorReporter);
+132 |     AstRoot astRoot = null;
+133 |     try {
+134 |       astRoot = p.parse(sourceString, sourceFile.getName(), 1);
+135 |     } catch (EvaluatorException e) {
+136 |       logger.info(
+137 |           "Error parsing " + sourceFile.getName() + ": " + e.getMessage());
+138 |     } finally {
+139 |       Context.exit();
+140 |     }
+141 |     Node root = null;
+142 |     if (astRoot != null) {
+143 |       root = IRFactory.transformTree(
+144 |           astRoot, sourceFile, sourceString, config, errorReporter);
+145 |       root.setIsSyntheticBlock(true);
+146 |     }
+147 |     return root;
+148 |   }
+
+===== M0228 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.newStringNode(int,String)
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 1311-1313
+Documentation:
+
+Method code:
+1311 |   private Node newStringNode(int type, String value) {
+1312 |     return Node.newString(type, value).clonePropsFrom(templateNode);
+1313 |   }
+
+===== M0229 =====
+Signature: com.google.javascript.jscomp.RhinoErrorReporter.forOldRhino(AbstractCompiler)
+Source: src/com/google/javascript/jscomp/RhinoErrorReporter.java
+Original range: 107-109
+Documentation:
+
+Method code:
+107 |   public static ErrorReporter forOldRhino(AbstractCompiler compiler) {
+108 |     return new OldRhinoErrorReporter(compiler);
+109 |   }
+
+===== M0230 =====
+Signature: com.google.javascript.rhino.Node.removeProp(int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 768-773
+Documentation:
+
+Method code:
+768 |   public void removeProp(int propType) {
+769 |     PropListItem result = removeProp(propListHead, propType);
+770 |     if (result != propListHead) {
+771 |       propListHead = result;
+772 |     }
+773 |   }
+
+===== M0231 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroupWarningsGuard.disables(DiagnosticGroup)
+Source: src/com/google/javascript/jscomp/DiagnosticGroupWarningsGuard.java
+Original range: 43-46
+Documentation:
+
+Method code:
+43 |   @Override
+44 |   public boolean disables(DiagnosticGroup otherGroup) {
+45 |     return !level.isOn() && group.isSubGroup(otherGroup);
+46 |   }
+
+===== M0232 =====
+Signature: com.google.javascript.jscomp.CodeGenerator.addExpr(Node,int,Context)
+Source: src/com/google/javascript/jscomp/CodeGenerator.java
+Original range: 873-883
+Documentation:
+
+Method code:
+873 |   private void addExpr(Node n, int minPrecedence, Context context) {
+874 |     if ((NodeUtil.precedence(n.getType()) < minPrecedence) ||
+875 |         ((context == Context.IN_FOR_INIT_CLAUSE) &&
+876 |         (n.isIn()))){
+877 |       add("(");
+878 |       add(n, clearContextForNoInOperator(context));
+879 |       add(")");
+880 |     } else {
+881 |       add(n, context);
+882 |     }
+883 |   }
+
+===== M0233 =====
+Signature: com.google.javascript.jscomp.SourceFile.getName()
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 181-184
+Documentation:
+/** Returns a unique name for the source file. */
+Method code:
+181 |   @Override
+182 |   public String getName() {
+183 |     return fileName;
+184 |   }
+
+===== M0234 =====
+Signature: com.google.javascript.rhino.Node.setIsSyntheticBlock(boolean)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1901-1903
+Documentation:
+/**
+   * Sets whether this is a synthetic block that should not be considered
+   * a real source block.
+   */
+Method code:
+1901 |   public void setIsSyntheticBlock(boolean val) {
+1902 |     putBooleanProp(SYNTHETIC_BLOCK_PROP, val);
+1903 |   }
+
+===== M0235 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.addIdentifier(String)
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 61-63
+Documentation:
+
+Method code:
+61 |   void addIdentifier(String identifier) {
+62 |     add(identifier);
+63 |   }
+
+===== M0236 =====
+Signature: com.google.javascript.rhino.Node.setCharno(int)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1154-1156
+Documentation:
+
+Method code:
+1154 |   public void setCharno(int charno) {
+1155 |       sourcePosition = mergeLineCharNo(getLineno(), charno);
+1156 |   }
+
+===== M0237 =====
+Signature: com.google.javascript.jscomp.SourceFile.fromCode(String,String)
+Source: src/com/google/javascript/jscomp/SourceFile.java
+Original range: 324-326
+Documentation:
+
+Method code:
+324 |   public static SourceFile fromCode(String fileName, String code) {
+325 |     return builder().buildFromCode(fileName, code);
+326 |   }
+
+===== M0238 =====
+Signature: com.google.javascript.jscomp.ProcessTweaks.TweakFunction.TweakFunction(String,TweakFunction)
+Source: src/com/google/javascript/jscomp/ProcessTweaks.java
+Original range: 137-139
+Documentation:
+
+Method code:
+137 |     TweakFunction(String name, TweakFunction registerFunction) {
+138 |       this(name, null, Token.ERROR, Token.ERROR, registerFunction);
+139 |     }
+
+===== M0239 =====
+Signature: com.google.javascript.rhino.Node.IntPropListItem.IntPropListItem(int,int,PropListItem)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 334-337
+Documentation:
+
+Method code:
+334 |     IntPropListItem(int propType, int intValue, PropListItem next) {
+335 |       super(propType, next);
+336 |       this.intValue = intValue;
+337 |     }
+
+===== M0240 =====
+Signature: com.google.javascript.rhino.Node.isObjectLit()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 2300-2302
+Documentation:
+
+Method code:
+2300 |   public boolean isObjectLit() {
+2301 |     return this.getType() == Token.OBJECTLIT;
+2302 |   }
+
+===== M0241 =====
+Signature: com.google.javascript.jscomp.JSSourceFile.JSSourceFile(SourceFile)
+Source: src/com/google/javascript/jscomp/JSSourceFile.java
+Original range: 72-75
+Documentation:
+
+Method code:
+72 |   private JSSourceFile(SourceFile referenced) {
+73 |     super(referenced.getName());
+74 |     this.referenced = referenced;
+75 |   }
+
+===== M0242 =====
+Signature: com.google.javascript.jscomp.CodeConsumer.addNumber(double)
+Source: src/com/google/javascript/jscomp/CodeConsumer.java
+Original range: 240-267
+Documentation:
+
+Method code:
+240 |   void addNumber(double x) {
+241 |     // This is not pretty printing. This is to prevent misparsing of x- -4 as
+242 |     // x--4 (which is a syntax error).
+243 |     char prev = getLastChar();
+244 |     boolean negativeZero = isNegativeZero(x);
+245 |     if (x < 0 && prev == '-') {
+246 |       add(" ");
+247 |     }
+248 | 
+249 |     if ((long) x == x && !negativeZero) {
+250 |       long value = (long) x;
+251 |       long mantissa = value;
+252 |       int exp = 0;
+253 |       if (Math.abs(x) >= 100) {
+254 |         while (mantissa / 10 * Math.pow(10, exp + 1) == value) {
+255 |           mantissa /= 10;
+256 |           exp++;
+257 |         }
+258 |       }
+259 |       if (exp > 2) {
+260 |         add(Long.toString(mantissa) + "E" + Integer.toString(exp));
+261 |       } else {
+262 |         add(Long.toString(value));
+263 |       }
+264 |     } else {
+265 |       add(String.valueOf(x));
+266 |     }
+267 |   }
+
+===== M0243 =====
+Signature: com.google.javascript.jscomp.Compiler.createMessageFormatter()
+Source: src/com/google/javascript/jscomp/Compiler.java
+Original range: 222-225
+Documentation:
+/**
+   * Creates a message formatter instance corresponding to the value of
+   * {@link CompilerOptions}.
+   */
+Method code:
+222 |   private MessageFormatter createMessageFormatter() {
+223 |     boolean colorize = options.shouldColorizeErrorOutput();
+224 |     return options.errorFormat.toFormatter(this, colorize);
+225 |   }
+
+===== M0244 =====
+Signature: com.google.javascript.jscomp.BasicErrorManager.toArray(CheckLevel)
+Source: src/com/google/javascript/jscomp/BasicErrorManager.java
+Original range: 104-112
+Documentation:
+
+Method code:
+104 |   private JSError[] toArray(CheckLevel level) {
+105 |     List<JSError> errors = new ArrayList<JSError>(messages.size());
+106 |     for (ErrorWithLevel p : messages) {
+107 |       if (p.level == level) {
+108 |         errors.add(p.error);
+109 |       }
+110 |     }
+111 |     return errors.toArray(new JSError[errors.size()]);
+112 |   }
+
+===== M0245 =====
+Signature: com.google.javascript.jscomp.CompilerOptions.enables(DiagnosticGroup)
+Source: src/com/google/javascript/jscomp/CompilerOptions.java
+Original range: 1016-1018
+Documentation:
+/**
+   * Whether the warnings guard in this Options object enables the given
+   * group of warnings.
+   */
+Method code:
+1016 |   boolean enables(DiagnosticGroup type) {
+1017 |     return warningsGuard.enables(type);
+1018 |   }
+
+===== M0246 =====
+Signature: com.google.javascript.jscomp.RhinoErrorReporter.replacePlaceHolders(String)
+Source: src/com/google/javascript/jscomp/RhinoErrorReporter.java
+Original range: 67-70
+Documentation:
+/**
+   * For each message such as "Not a good use of {0}", replace the place
+   * holder {0} with a wild card that matches all possible strings.
+   * Also put the any non-place-holder in quotes for regex matching later.
+   */
+Method code:
+67 |   private Pattern replacePlaceHolders(String s) {
+68 |     s = Pattern.quote(s);
+69 |     return Pattern.compile(s.replaceAll("\\{\\d+\\}", "\\\\E.*\\\\Q"));
+70 |   }
+
+===== M0247 =====
+Signature: com.google.javascript.jscomp.CompilerOptions.CompilerOptions()
+Source: src/com/google/javascript/jscomp/CompilerOptions.java
+Original range: 765-902
+Documentation:
+/**
+   * Initializes compiler options. All options are disabled by default.
+   *
+   * Command-line frontends to the compiler should set these properties
+   * like a builder.
+   */
+Method code:
+765 |   public CompilerOptions() {
+766 |     // Accepted language
+767 |     languageIn = LanguageMode.ECMASCRIPT3;
+768 | 
+769 |     // Language variation
+770 |     acceptConstKeyword = false;
+771 | 
+772 |     // Checks
+773 |     skipAllPasses = false;
+774 |     nameAnonymousFunctionsOnly = false;
+775 |     devMode = DevMode.OFF;
+776 |     checkSymbols = false;
+777 |     aggressiveVarCheck = CheckLevel.OFF;
+778 |     checkSuspiciousCode = false;
+779 |     checkControlStructures = false;
+780 |     checkTypes = false;
+781 |     tightenTypes = false;
+782 |     reportMissingOverride = CheckLevel.OFF;
+783 |     reportUnknownTypes = CheckLevel.OFF;
+784 |     checkRequires = CheckLevel.OFF;
+785 |     checkProvides = CheckLevel.OFF;
+786 |     checkGlobalNamesLevel = CheckLevel.OFF;
+787 |     brokenClosureRequiresLevel = CheckLevel.ERROR;
+788 |     checkGlobalThisLevel = CheckLevel.OFF;
+789 |     checkUnreachableCode = CheckLevel.OFF;
+790 |     checkMissingReturn = CheckLevel.OFF;
+791 |     checkMissingGetCssNameLevel = CheckLevel.OFF;
+792 |     checkMissingGetCssNameBlacklist = null;
+793 |     checkCaja = false;
+794 |     computeFunctionSideEffects = false;
+795 |     chainCalls = false;
+796 |     extraAnnotationNames = null;
+797 | 
+798 |     // Optimizations
+799 |     foldConstants = false;
+800 |     coalesceVariableNames = false;
+801 |     deadAssignmentElimination = false;
+802 |     inlineConstantVars = false;
+803 |     inlineFunctions = false;
+804 |     inlineLocalFunctions = false;
+805 |     assumeStrictThis = false;
+806 |     assumeClosuresOnlyCaptureReferences = false;
+807 |     crossModuleCodeMotion = false;
+808 |     crossModuleMethodMotion = false;
+809 |     inlineGetters = false;
+810 |     inlineVariables = false;
+811 |     inlineLocalVariables = false;
+812 |     smartNameRemoval = false;
+813 |     removeDeadCode = false;
+814 |     extractPrototypeMemberDeclarations = false;
+815 |     removeUnusedPrototypeProperties = false;
+816 |     removeUnusedPrototypePropertiesInExterns = false;
+817 |     removeUnusedVars = false;
+818 |     removeUnusedLocalVars = false;
+819 |     aliasExternals = false;
+820 |     collapseVariableDeclarations = false;
+821 |     groupVariableDeclarations = false;
+822 |     collapseAnonymousFunctions = false;
+823 |     aliasableStrings = Collections.emptySet();
+824 |     aliasStringsBlacklist = "";
+825 |     aliasAllStrings = false;
+826 |     outputJsStringUsage = false;
+827 |     convertToDottedProperties = false;
+828 |     rewriteFunctionExpressions = false;
+829 |     optimizeParameters = false;
+830 |     optimizeReturns = false;
+831 | 
+832 |     // Renaming
+833 |     variableRenaming = VariableRenamingPolicy.OFF;
+834 |     propertyRenaming = PropertyRenamingPolicy.OFF;
+835 |     propertyAffinity = false;
+836 |     labelRenaming = false;
+837 |     generatePseudoNames = false;
+838 |     shadowVariables = false;
+839 |     renamePrefix = null;
+840 |     aliasKeywords = false;
+841 |     collapseProperties = false;
+842 |     collapsePropertiesOnExternTypes = false;
+843 |     collapseObjectLiterals = false;
+844 |     devirtualizePrototypeMethods = false;
+845 |     disambiguateProperties = false;
+846 |     ambiguateProperties = false;
+847 |     anonymousFunctionNaming = AnonymousFunctionNamingPolicy.OFF;
+848 |     exportTestFunctions = false;
+849 | 
+850 |     // Alterations
+851 |     runtimeTypeCheck = false;
+852 |     runtimeTypeCheckLogFunction = null;
+853 |     ignoreCajaProperties = false;
+854 |     syntheticBlockStartMarker = null;
+855 |     syntheticBlockEndMarker = null;
+856 |     locale = null;
+857 |     markAsCompiled = false;
+858 |     removeTryCatchFinally = false;
+859 |     closurePass = false;
+860 |     jqueryPass = false;
+861 |     rewriteNewDateGoogNow = true;
+862 |     removeAbstractMethods = true;
+863 |     removeClosureAsserts = false;
+864 |     stripTypes = Collections.emptySet();
+865 |     stripNameSuffixes = Collections.emptySet();
+866 |     stripNamePrefixes = Collections.emptySet();
+867 |     stripTypePrefixes = Collections.emptySet();
+868 |     customPasses = null;
+869 |     markNoSideEffectCalls = false;
+870 |     defineReplacements = Maps.newHashMap();
+871 |     tweakProcessing = TweakProcessing.OFF;
+872 |     tweakReplacements = Maps.newHashMap();
+873 |     moveFunctionDeclarations = false;
+874 |     instrumentationTemplate = null;
+875 |     appNameStr = "";
+876 |     recordFunctionInformation = false;
+877 |     generateExports = false;
+878 |     cssRenamingMap = null;
+879 |     processObjectPropertyString = false;
+880 |     idGenerators = Collections.emptySet();
+881 |     replaceStringsFunctionDescriptions = Collections.emptyList();
+882 |     replaceStringsPlaceholderToken = "";
+883 |     replaceStringsReservedStrings = Collections.emptySet();
+884 |     propertyInvalidationErrors = Maps.newHashMap();
+885 | 
+886 |     // Output
+887 |     printInputDelimiter = false;
+888 |     prettyPrint = false;
+889 |     lineBreak = false;
+890 |     preferLineBreakAtEndOfFile = false;
+891 |     reportPath = null;
+892 |     tracer = TracerMode.OFF;
+893 |     colorizeErrorOutput = false;
+894 |     errorFormat = ErrorFormat.SINGLELINE;
+895 |     debugFunctionSideEffectsPath = null;
+896 |     externExports = false;
+897 |     nameReferenceReportPath = null;
+898 |     nameReferenceGraphPath = null;
+899 | 
+900 |     // Debugging
+901 |     aliasHandler = NULL_ALIAS_TRANSFORMATION_HANDLER;
+902 |   }
+
+===== M0248 =====
+Signature: com.google.javascript.jscomp.NodeUtil.isAssignmentOp(Node)
+Source: src/com/google/javascript/jscomp/NodeUtil.java
+Original range: 1436-1453
+Documentation:
+
+Method code:
+1436 |   static boolean isAssignmentOp(Node n) {
+1437 |     switch (n.getType()){
+1438 |       case Token.ASSIGN:
+1439 |       case Token.ASSIGN_BITOR:
+1440 |       case Token.ASSIGN_BITXOR:
+1441 |       case Token.ASSIGN_BITAND:
+1442 |       case Token.ASSIGN_LSH:
+1443 |       case Token.ASSIGN_RSH:
+1444 |       case Token.ASSIGN_URSH:
+1445 |       case Token.ASSIGN_ADD:
+1446 |       case Token.ASSIGN_SUB:
+1447 |       case Token.ASSIGN_MUL:
+1448 |       case Token.ASSIGN_DIV:
+1449 |       case Token.ASSIGN_MOD:
+1450 |         return true;
+1451 |     }
+1452 |     return false;
+1453 |   }
+
+===== M0249 =====
+Signature: com.google.javascript.jscomp.CodePrinter.MappedCodePrinter.getCode()
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 201-203
+Documentation:
+
+Method code:
+201 |     public String getCode() {
+202 |       return code.toString();
+203 |     }
+
+===== M0250 =====
+Signature: com.google.javascript.jscomp.ProcessTweaks.TweakFunction.TweakFunction(String)
+Source: src/com/google/javascript/jscomp/ProcessTweaks.java
+Original range: 123-125
+Documentation:
+
+Method code:
+123 |     TweakFunction(String name) {
+124 |       this(name, null, Token.ERROR, Token.ERROR, null);
+125 |     }
+
+===== M0251 =====
+Signature: com.google.javascript.jscomp.ClosureCodingConvention.ClosureCodingConvention(CodingConvention)
+Source: src/com/google/javascript/jscomp/ClosureCodingConvention.java
+Original range: 49-51
+Documentation:
+
+Method code:
+49 |   public ClosureCodingConvention(CodingConvention wrapped) {
+50 |     super(wrapped);
+51 |   }
+
+===== M0252 =====
+Signature: com.google.javascript.jscomp.AbstractMessageFormatter.AbstractMessageFormatter(SourceExcerptProvider)
+Source: src/com/google/javascript/jscomp/AbstractMessageFormatter.java
+Original range: 32-34
+Documentation:
+
+Method code:
+32 |   public AbstractMessageFormatter(SourceExcerptProvider source) {
+33 |     this.source = source;
+34 |   }
+
+===== M0253 =====
+Signature: com.google.javascript.jscomp.BasicErrorManager.getErrors()
+Source: src/com/google/javascript/jscomp/BasicErrorManager.java
+Original range: 84-87
+Documentation:
+
+Method code:
+84 |   @Override
+85 |   public JSError[] getErrors() {
+86 |     return toArray(CheckLevel.ERROR);
+87 |   }
+
+===== M0254 =====
+Signature: com.google.javascript.rhino.Node.getInputId()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 1110-1112
+Documentation:
+/**
+   * @return The Id of the CompilerInput associated with this Node.
+   */
+Method code:
+1110 |   public InputId getInputId() {
+1111 |     return ((InputId) this.getProp(INPUT_ID));
+1112 |   }
+
+===== M0255 =====
+Signature: com.google.javascript.rhino.IR.number(double)
+Source: src/com/google/javascript/rhino/IR.java
+Original range: 417-419
+Documentation:
+
+Method code:
+417 |   public static Node number(double d) {
+418 |     return Node.newNumber(d);
+419 |   }
+
+===== M0256 =====
+Signature: com.google.javascript.jscomp.DiagnosticGroups.registerGroup(String,DiagnosticGroup...)
+Source: src/com/google/javascript/jscomp/DiagnosticGroups.java
+Original range: 49-54
+Documentation:
+
+Method code:
+49 |   static DiagnosticGroup registerGroup(String name,
+50 |       DiagnosticGroup ... groups) {
+51 |     DiagnosticGroup group = new DiagnosticGroup(name, groups);
+52 |     groupsByName.put(name, group);
+53 |     return group;
+54 |   }
+
+===== M0257 =====
+Signature: com.google.javascript.jscomp.parsing.IRFactory.createTemplateNode()
+Source: src/com/google/javascript/jscomp/parsing/IRFactory.java
+Original range: 158-163
+Documentation:
+// This reduces the cost of these properties to O(nodes) to O(files).
+Method code:
+158 |   private Node createTemplateNode() {
+159 |     // The Node type choice is arbitrary.
+160 |     Node templateNode = new Node(Token.SCRIPT);
+161 |     templateNode.setStaticSourceFile(sourceFile);
+162 |     return templateNode;
+163 |   }
+
+===== M0258 =====
+Signature: com.google.javascript.jscomp.PrepareAst.PrepareAnnotations.visit(NodeTraversal,Node,Node)
+Source: src/com/google/javascript/jscomp/PrepareAst.java
+Original range: 137-149
+Documentation:
+
+Method code:
+137 |     @Override
+138 |     public void visit(NodeTraversal t, Node n, Node parent) {
+139 |       switch (n.getType()) {
+140 |         case Token.CALL:
+141 |           annotateCalls(n);
+142 |           break;
+143 | 
+144 |         case Token.FUNCTION:
+145 |           annotateFunctions(n, parent);
+146 |           annotateDispatchers(n, parent);
+147 |           break;
+148 |       }
+149 |     }
+
+===== M0259 =====
+Signature: com.google.javascript.rhino.Node.Node(int,Node,Node)
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 380-398
+Documentation:
+
+Method code:
+380 |   public Node(int nodeType, Node left, Node right) {
+381 |     Preconditions.checkArgument(left.parent == null,
+382 |         "first new child has existing parent");
+383 |     Preconditions.checkArgument(left.next == null,
+384 |         "first new child has existing sibling");
+385 |     Preconditions.checkArgument(right.parent == null,
+386 |         "second new child has existing parent");
+387 |     Preconditions.checkArgument(right.next == null,
+388 |         "second new child has existing sibling");
+389 |     type = nodeType;
+390 |     parent = null;
+391 |     first = left;
+392 |     last = right;
+393 |     left.next = right;
+394 |     left.parent = this;
+395 |     right.next = null;
+396 |     right.parent = this;
+397 |     sourcePosition = -1;
+398 |   }
+
+===== M0260 =====
+Signature: com.google.javascript.jscomp.DiagnosticType.error(String,String)
+Source: src/com/google/javascript/jscomp/DiagnosticType.java
+Original range: 53-55
+Documentation:
+/**
+   * Create a DiagnosticType at level CheckLevel.ERROR
+   *
+   * @param name An identifier
+   * @param descriptionFormat A format string
+   * @return A new DiagnosticType
+   */
+Method code:
+53 |   public static DiagnosticType error(String name, String descriptionFormat) {
+54 |     return make(name, CheckLevel.ERROR, descriptionFormat);
+55 |   }
+
+===== M0261 =====
+Signature: com.google.javascript.jscomp.JsAst.getAstRoot(AbstractCompiler)
+Source: src/com/google/javascript/jscomp/JsAst.java
+Original range: 49-56
+Documentation:
+
+Method code:
+49 |   @Override
+50 |   public Node getAstRoot(AbstractCompiler compiler) {
+51 |     if (root == null) {
+52 |       parse(compiler);
+53 |       root.setInputId(inputId);
+54 |     }
+55 |     return root;
+56 |   }
+
+===== M0262 =====
+Signature: com.google.javascript.jscomp.JsAst.parse(AbstractCompiler)
+Source: src/com/google/javascript/jscomp/JsAst.java
+Original range: 83-105
+Documentation:
+
+Method code:
+83 |   private void parse(AbstractCompiler compiler) {
+84 |     try {
+85 |       logger_.fine("Parsing: " + sourceFile.getName());
+86 |       root = ParserRunner.parse(sourceFile, sourceFile.getCode(),
+87 |           compiler.getParserConfig(),
+88 |           compiler.getDefaultErrorReporter(),
+89 |           logger_);
+90 |     } catch (IOException e) {
+91 |       compiler.report(
+92 |           JSError.make(AbstractCompiler.READ_ERROR, sourceFile.getName()));
+93 |     }
+94 | 
+95 |     if (root == null || compiler.hasHaltingErrors()) {
+96 |       // There was a parse error or IOException, so use a dummy block.
+97 |       root = IR.script();
+98 |     } else {
+99 |       compiler.prepareAst(root);
+100 |     }
+101 | 
+102 |     // Set the source name so that the compiler passes can track
+103 |     // the source file and module.
+104 |     root.setStaticSourceFile(sourceFile);
+105 |   }
+
+===== M0263 =====
+Signature: com.google.javascript.jscomp.CodePrinter.Builder.setPrettyPrint(boolean)
+Source: src/com/google/javascript/jscomp/CodePrinter.java
+Original range: 573-576
+Documentation:
+/**
+     * Sets whether pretty printing should be used.
+     * @param prettyPrint If true, pretty printing will be used.
+     */
+Method code:
+573 |     Builder setPrettyPrint(boolean prettyPrint) {
+574 |       this.prettyPrint = prettyPrint;
+575 |       return this;
+576 |     }
+
+===== M0264 =====
+Signature: com.google.javascript.rhino.Node.isNumber()
+Source: src/com/google/javascript/rhino/Node.java
+Original range: 2296-2298
+Documentation:
+
+Method code:
+2296 |   public boolean isNumber() {
+2297 |     return this.getType() == Token.NUMBER;
+2298 |   }
+

@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.lang3.LocaleUtilsTest.testParseAllLocales()",
+    "resolved_signature": "org.apache.commons.lang3.LocaleUtilsTest.testParseAllLocales()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/lang3/LocaleUtilsTest.java",
+    "begin_line": 545,
+    "end_line": 580,
+    "comment": "",
+    "snippet": "    @Test\n    public void testParseAllLocales() {\n        Locale[] locales = Locale.getAvailableLocales();\n        int failures = 0;\n        for (Locale l : locales) {\n            // Check if it's possible to recreate the Locale using just the standard constructor\n            Locale locale = new Locale(l.getLanguage(), l.getCountry(), l.getVariant());\n            if (l.equals(locale)) { // it is possible for LocaleUtils.toLocale to handle these Locales\n                String str = l.toString();\n                // Look for the script/extension suffix\n                int suff = str.indexOf(\"_#\");\n                if (suff == - 1) {\n                    suff = str.indexOf(\"#\");\n                }\n                if (suff >= 0) { // we have a suffix\n                    try {\n                        LocaleUtils.toLocale(str); // shouuld cause IAE\n                        System.out.println(\"Should not have parsed: \" + str);\n                        failures++;\n                        continue; // try next Locale\n                    } catch (IllegalArgumentException iae) {\n                        // expected; try without suffix\n                        str = str.substring(0, suff);\n                    }\n                }\n                Locale loc = LocaleUtils.toLocale(str);\n                if (!l.equals(loc)) {\n                    System.out.println(\"Failed to parse: \" + str);\n                    failures++;\n                }                    \n            }\n        }\n        if (failures > 0) {\n            fail(\"Failed \"+failures+\" test(s)\");\n        }\n    }"
+  }
+]

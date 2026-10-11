@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math.distribution.NormalDistributionTest.testExtremeValues()",
+    "resolved_signature": "org.apache.commons.math.distribution.NormalDistributionTest.testExtremeValues()",
+    "resolution": "exact",
+    "src_path": "src/test/org/apache/commons/math/distribution/NormalDistributionTest.java",
+    "begin_line": 128,
+    "end_line": 144,
+    "comment": "/**\r\n     * Check to make sure top-coding of extreme values works correctly.\r\n     * Verifies fix for JIRA MATH-167\r\n     */",
+    "snippet": "    public void testExtremeValues() throws Exception {\n        NormalDistribution distribution = (NormalDistribution) getDistribution();\n        distribution.setMean(0);\n        distribution.setStandardDeviation(1);\n        for (int i = 0; i < 100; i+=5) { // make sure no convergence exception\n            double lowerTail = distribution.cumulativeProbability((double)-i);\n            double upperTail = distribution.cumulativeProbability((double) i);\n            if (i < 10) { // make sure not top-coded\n                assertTrue(lowerTail > 0.0d);\n                assertTrue(upperTail < 1.0d);\n            }\n            else { // make sure top coding not reversed\n                assertTrue(lowerTail < 0.00001);\n                assertTrue(upperTail > 0.99999);\n            }\n        } \n   }"
+  }
+]

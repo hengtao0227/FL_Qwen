@@ -1,0 +1,61 @@
+===== M0001 =====
+Signature: org.apache.commons.math.stat.Frequency.addValue(Object)
+Source: src/java/org/apache/commons/math/stat/Frequency.java
+Original range: 108-136
+Documentation:
+/**
+     * Adds 1 to the frequency count for v.
+     * <p>
+     * If other objects have already been added to this Frequency, v must
+     * be comparable to those that have already been added.
+     * </p>
+     * 
+     * @param v the value to add.
+     * @throws IllegalArgumentException if <code>v</code> is not comparable with previous entries
+     * @throws ClassCastException if <code>v</code> is not Comparable
+     * @deprecated use {@link #addValue(Comparable)} instead
+     */
+Method code:
+108 |     @Deprecated
+109 |     public void addValue(Object v) {
+110 |     
+111 |     /**
+112 |      * Adds 1 to the frequency count for v.
+113 |      * <p>
+114 |      * If other objects have already been added to this Frequency, v must
+115 |      * be comparable to those that have already been added.
+116 |      * </p>
+117 |      * 
+118 |      * @param v the value to add.
+119 |      * @throws IllegalArgumentException if <code>v</code> is not comparable with previous entries
+120 |      */
+121 |         Object obj = v;
+122 |         if (v instanceof Integer) {
+123 |            obj = Long.valueOf(((Integer) v).longValue());
+124 |         }
+125 |         try {
+126 |             Long count = (Long) freqTable.get(obj);
+127 |             if (count == null) {
+128 |                 freqTable.put(obj, Long.valueOf(1));
+129 |             } else {
+130 |                 freqTable.put(obj, Long.valueOf(count.longValue() + 1));
+131 |             }
+132 |         } catch (ClassCastException ex) {   
+133 |             //TreeMap will throw ClassCastException if v is not comparable
+134 |             throw new IllegalArgumentException("Value not comparable to existing values.");
+135 |         }
+136 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.stat.Frequency.Frequency()
+Source: src/java/org/apache/commons/math/stat/Frequency.java
+Original range: 57-59
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+57 |     public Frequency() {
+58 |         freqTable = new TreeMap();
+59 |     }
+

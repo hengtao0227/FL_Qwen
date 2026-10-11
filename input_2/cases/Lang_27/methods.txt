@@ -1,0 +1,842 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionMatches(String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1400-1402
+Documentation:
+/**
+     * <p>
+     * Decides if the Java version matches.
+     * </p>
+     * 
+     * @param versionPrefix
+     *            the prefix for the java version
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1400 |     private static boolean getJavaVersionMatches(String versionPrefix) {
+1401 |         return isJavaVersionMatch(JAVA_VERSION_TRIMMED, versionPrefix);
+1402 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.StringUtils.isBlank(CharSequence)
+Source: src/main/java/org/apache/commons/lang3/StringUtils.java
+Original range: 231-242
+Documentation:
+/**
+     * <p>Checks if a CharSequence is whitespace, empty ("") or null.</p>
+     *
+     * <pre>
+     * StringUtils.isBlank(null)      = true
+     * StringUtils.isBlank("")        = true
+     * StringUtils.isBlank(" ")       = true
+     * StringUtils.isBlank("bob")     = false
+     * StringUtils.isBlank("  bob  ") = false
+     * </pre>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return <code>true</code> if the CharSequence is null, empty or whitespace
+     * @since 2.0
+     * @since 3.0 Changed signature from isBlank(String) to isBlank(CharSequence)
+     */
+Method code:
+231 |     public static boolean isBlank(CharSequence cs) {
+232 |         int strLen;
+233 |         if (cs == null || (strLen = cs.length()) == 0) {
+234 |             return true;
+235 |         }
+236 |         for (int i = 0; i < strLen; i++) {
+237 |             if ((Character.isWhitespace(cs.charAt(i)) == false)) {
+238 |                 return false;
+239 |             }
+240 |         }
+241 |         return true;
+242 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang3.math.NumberUtils.createDouble(String)
+Source: src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+Original range: 647-652
+Documentation:
+/**
+     * <p>Convert a <code>String</code> to a <code>Double</code>.</p>
+     * 
+     * <p>Returns <code>null</code> if the string is <code>null</code>.</p>
+     *
+     * @param str  a <code>String</code> to convert, may be null
+     * @return converted <code>Double</code>
+     * @throws NumberFormatException if the value cannot be converted
+     */
+Method code:
+647 |     public static Double createDouble(String str) {
+648 |         if (str == null) {
+649 |             return null;
+650 |         }
+651 |         return Double.valueOf(str);
+652 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang3.SystemUtils.getSystemProperty(String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1460-1469
+Documentation:
+/**
+     * <p>
+     * Gets a System property, defaulting to <code>null</code> if the property cannot be read.
+     * </p>
+     * 
+     * <p>
+     * If a <code>SecurityException</code> is caught, the return value is <code>null</code> and a message is written to
+     * <code>System.err</code>.
+     * </p>
+     * 
+     * @param property
+     *            the system property name
+     * @return the system property value or <code>null</code> if a security problem occurs
+     */
+Method code:
+1460 |     private static String getSystemProperty(String property) {
+1461 |         try {
+1462 |             return System.getProperty(property);
+1463 |         } catch (SecurityException ex) {
+1464 |             // we are not allowed to look at this property
+1465 |             System.err.println("Caught a SecurityException reading the system property '" + property
+1466 |                     + "'; the SystemUtils property value will default to null.");
+1467 |             return null;
+1468 |         }
+1469 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang3.math.NumberUtils.createLong(String)
+Source: src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+Original range: 681-686
+Documentation:
+/**
+     * <p>Convert a <code>String</code> to a <code>Long</code>.</p>
+     * 
+     * <p>Returns <code>null</code> if the string is <code>null</code>.</p>
+     *
+     * @param str  a <code>String</code> to convert, may be null
+     * @return converted <code>Long</code>
+     * @throws NumberFormatException if the value cannot be converted
+     */
+Method code:
+681 |     public static Long createLong(String str) {
+682 |         if (str == null) {
+683 |             return null;
+684 |         }
+685 |         return Long.valueOf(str);
+686 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.lang3.SystemUtils.isJavaVersionMatch(String,String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1573-1578
+Documentation:
+/**
+     * <p>
+     * Decides if the Java version matches.
+     * </p>
+     * <p>
+     * This method is package private instead of private to support unit test invocation.
+     * </p>
+     * 
+     * @param version
+     *            the actual Java version
+     * @param versionPrefix
+     *            the prefix for the expected Java version
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1573 |     static boolean isJavaVersionMatch(String version, String versionPrefix) {
+1574 |         if (version == null) {
+1575 |             return false;
+1576 |         }
+1577 |         return version.startsWith(versionPrefix);
+1578 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionTrimmed()
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1409-1419
+Documentation:
+/**
+     * Trims the text of the java version to start with numbers.
+     * 
+     * @return the trimmed java version
+     */
+Method code:
+1409 |     private static String getJavaVersionTrimmed() {
+1410 |         if (JAVA_VERSION != null) {
+1411 |             for (int i = 0; i < JAVA_VERSION.length(); i++) {
+1412 |                 char ch = JAVA_VERSION.charAt(i);
+1413 |                 if (ch >= '0' && ch <= '9') {
+1414 |                     return JAVA_VERSION.substring(i);
+1415 |                 }
+1416 |             }
+1417 |         }
+1418 |         return null;
+1419 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionAsInt()
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1387-1389
+Documentation:
+/**
+     * <p>
+     * Gets the Java version number as an <code>int</code>.
+     * </p>
+     * 
+     * <p>
+     * Example return values:
+     * </p>
+     * <ul>
+     * <li><code>120</code> for Java 1.2</li>
+     * <li><code>131</code> for Java 1.3.1</li>
+     * <li><code>160</code> for Java 1.6.0_20</li>
+     * </ul>
+     * 
+     * <p>
+     * Patch releases are not reported.
+     * </p>
+     * 
+     * @return the version, for example 131 for Java 1.3.1
+     */
+Method code:
+1387 |     private static int getJavaVersionAsInt() {
+1388 |         return toVersionInt(toJavaVersionIntArray(SystemUtils.JAVA_VERSION, JAVA_VERSION_TRIM_SIZE));
+1389 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.lang3.math.NumberUtils.createFloat(String)
+Source: src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+Original range: 631-636
+Documentation:
+/**
+     * <p>Convert a <code>String</code> to a <code>Float</code>.</p>
+     *
+     * <p>Returns <code>null</code> if the string is <code>null</code>.</p>
+     * 
+     * @param str  a <code>String</code> to convert, may be null
+     * @return converted <code>Float</code>
+     * @throws NumberFormatException if the value cannot be converted
+     */
+Method code:
+631 |     public static Float createFloat(String str) {
+632 |         if (str == null) {
+633 |             return null;
+634 |         }
+635 |         return Float.valueOf(str);
+636 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.lang3.SystemUtils.toVersionFloat(int[])
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1751-1769
+Documentation:
+/**
+     * <p>
+     * Converts given the Java version array to a <code>float</code>.
+     * </p>
+     * 
+     * <p>
+     * Example return values:
+     * </p>
+     * <ul>
+     * <li><code>1.2f</code> for Java 1.2</li>
+     * <li><code>1.31f</code> for Java 1.3.1</li>
+     * <li><code>1.6f</code> for Java 1.6.0_20</li>
+     * </ul>
+     * 
+     * <p>
+     * Patch releases are not reported.
+     * </p>
+     * 
+     * @return the version, for example 1.31f for Java 1.3.1
+     */
+Method code:
+1751 |     private static float toVersionFloat(int[] javaVersions) {
+1752 |         if (javaVersions == null || javaVersions.length == 0) {
+1753 |             return 0f;
+1754 |         }
+1755 |         if (javaVersions.length == 1) {
+1756 |             return javaVersions[0];
+1757 |         }
+1758 |         StringBuilder builder = new StringBuilder();
+1759 |         builder.append(javaVersions[0]);
+1760 |         builder.append('.');
+1761 |         for (int i = 1; i < javaVersions.length; i++) {
+1762 |             builder.append(javaVersions[i]);
+1763 |         }
+1764 |         try {
+1765 |             return Float.parseFloat(builder.toString());
+1766 |         } catch (Exception ex) {
+1767 |             return 0f;
+1768 |         }
+1769 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.lang3.SystemUtils.toVersionInt(int[])
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1791-1807
+Documentation:
+/**
+     * <p>
+     * Converts given the Java version array to an <code>int</code>.
+     * </p>
+     * 
+     * <p>
+     * Example return values:
+     * </p>
+     * <ul>
+     * <li><code>120</code> for Java 1.2</li>
+     * <li><code>131</code> for Java 1.3.1</li>
+     * <li><code>160</code> for Java 1.6.0_20</li>
+     * </ul>
+     * 
+     * <p>
+     * Patch releases are not reported.
+     * </p>
+     * 
+     * @return the version, for example 1.31f for Java 1.3.1
+     */
+Method code:
+1791 |     private static int toVersionInt(int[] javaVersions) {
+1792 |         if (javaVersions == null) {
+1793 |             return 0;
+1794 |         }
+1795 |         int intVersion = 0;
+1796 |         int len = javaVersions.length;
+1797 |         if (len >= 1) {
+1798 |             intVersion = javaVersions[0] * 100;
+1799 |         }
+1800 |         if (len >= 2) {
+1801 |             intVersion += javaVersions[1] * 10;
+1802 |         }
+1803 |         if (len >= 3) {
+1804 |             intVersion += javaVersions[2];
+1805 |         }
+1806 |         return intVersion;
+1807 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.lang3.math.NumberUtils.createBigDecimal(String)
+Source: src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+Original range: 713-722
+Documentation:
+/**
+     * <p>Convert a <code>String</code> to a <code>BigDecimal</code>.</p>
+     * 
+     * <p>Returns <code>null</code> if the string is <code>null</code>.</p>
+     *
+     * @param str  a <code>String</code> to convert, may be null
+     * @return converted <code>BigDecimal</code>
+     * @throws NumberFormatException if the value cannot be converted
+     */
+Method code:
+713 |     public static BigDecimal createBigDecimal(String str) {
+714 |         if (str == null) {
+715 |             return null;
+716 |         }
+717 |         // handle JDK1.3.1 bug where "" throws IndexOutOfBoundsException
+718 |         if (StringUtils.isBlank(str)) {
+719 |             throw new NumberFormatException("A blank string is not a valid number");
+720 |         }  
+721 |         return new BigDecimal(str);
+722 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.lang3.math.NumberUtils.isAllZeros(String)
+Source: src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+Original range: 609-619
+Documentation:
+/**
+     * <p>Utility method for {@link #createNumber(java.lang.String)}.</p>
+     *
+     * <p>Returns <code>true</code> if s is <code>null</code>.</p>
+     * 
+     * @param str  the String to check
+     * @return if it is all zeros or <code>null</code>
+     */
+Method code:
+609 |     private static boolean isAllZeros(String str) {
+610 |         if (str == null) {
+611 |             return true;
+612 |         }
+613 |         for (int i = str.length() - 1; i >= 0; i--) {
+614 |             if (str.charAt(i) != '0') {
+615 |                 return false;
+616 |             }
+617 |         }
+618 |         return str.length() > 0;
+619 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.lang3.SystemUtils.getOSMatchesName(String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1441-1443
+Documentation:
+/**
+     * Decides if the operating system matches.
+     * 
+     * @param osNamePrefix
+     *            the prefix for the os name
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1441 |     private static boolean getOSMatchesName(String osNamePrefix) {
+1442 |         return isOSNameMatch(OS_NAME, osNamePrefix);
+1443 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.lang3.SystemUtils.isOSMatch(String,String,String,String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1596-1601
+Documentation:
+/**
+     * Decides if the operating system matches.
+     * <p>
+     * This method is package private instead of private to support unit test invocation.
+     * </p>
+     * 
+     * @param osName
+     *            the actual OS name
+     * @param osVersion
+     *            the actual OS version
+     * @param osNamePrefix
+     *            the prefix for the expected OS name
+     * @param osVersionPrefix
+     *            the prefix for the expected OS version
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1596 |     static boolean isOSMatch(String osName, String osVersion, String osNamePrefix, String osVersionPrefix) {
+1597 |         if (osName == null || osVersion == null) {
+1598 |             return false;
+1599 |         }
+1600 |         return osName.startsWith(osNamePrefix) && osVersion.startsWith(osVersionPrefix);
+1601 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionAsFloat()
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1363-1365
+Documentation:
+/**
+     * <p>
+     * Gets the Java version number as a <code>float</code>.
+     * </p>
+     * 
+     * <p>
+     * Example return values:
+     * </p>
+     * <ul>
+     * <li><code>1.2f</code> for Java 1.2</li>
+     * <li><code>1.31f</code> for Java 1.3.1</li>
+     * <li><code>1.6f</code> for Java 1.6.0_20</li>
+     * </ul>
+     * 
+     * <p>
+     * Patch releases are not reported.
+     * </p>
+     * 
+     * @return the version, for example 1.31f for Java 1.3.1
+     */
+Method code:
+1363 |     private static float getJavaVersionAsFloat() {
+1364 |         return toVersionFloat(toJavaVersionIntArray(SystemUtils.JAVA_VERSION, JAVA_VERSION_TRIM_SIZE));
+1365 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.lang3.SystemUtils.isJavaVersionAtLeast(float)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1533-1535
+Documentation:
+/**
+     * <p>
+     * Is the Java version at least the requested version.
+     * </p>
+     * 
+     * <p>
+     * Example input:
+     * </p>
+     * <ul>
+     * <li><code>1.2f</code> to test for Java 1.2</li>
+     * <li><code>1.31f</code> to test for Java 1.3.1</li>
+     * </ul>
+     * 
+     * @param requiredVersion
+     *            the required version, for example 1.31f
+     * @return <code>true</code> if the actual version is equal or greater than the required version
+     */
+Method code:
+1533 |     public static boolean isJavaVersionAtLeast(float requiredVersion) {
+1534 |         return JAVA_VERSION_FLOAT >= requiredVersion;
+1535 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.lang3.math.NumberUtils.createNumber(String)
+Source: src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+Original range: 452-599
+Documentation:
+/**
+     * <p>Turns a string value into a java.lang.Number.</p>
+     *
+     * <p>First, the value is examined for a type qualifier on the end
+     * (<code>'f','F','d','D','l','L'</code>).  If it is found, it starts 
+     * trying to create successively larger types from the type specified
+     * until one is found that can represent the value.</p>
+     *
+     * <p>If a type specifier is not found, it will check for a decimal point
+     * and then try successively larger types from <code>Integer</code> to
+     * <code>BigInteger</code> and from <code>Float</code> to
+     * <code>BigDecimal</code>.</p>
+     *
+     * <p>If the string starts with <code>0x</code> or <code>-0x</code>, it
+     * will be interpreted as a hexadecimal integer.  Values with leading
+     * <code>0</code>'s will not be interpreted as octal.</p>
+     *
+     * <p>Returns <code>null</code> if the string is <code>null</code>.</p>
+     *
+     * <p>This method does not trim the input string, i.e., strings with leading
+     * or trailing spaces will generate NumberFormatExceptions.</p>
+     *
+     * @param str  String containing a number, may be null
+     * @return Number created from the string
+     * @throws NumberFormatException if the value cannot be converted
+     */
+Method code:
+452 |     public static Number createNumber(String str) throws NumberFormatException {
+453 |         if (str == null) {
+454 |             return null;
+455 |         }
+456 |         if (StringUtils.isBlank(str)) {
+457 |             throw new NumberFormatException("A blank string is not a valid number");
+458 |         }  
+459 |         if (str.startsWith("--")) {
+460 |             // this is protection for poorness in java.lang.BigDecimal.
+461 |             // it accepts this as a legal value, but it does not appear 
+462 |             // to be in specification of class. OS X Java parses it to 
+463 |             // a wrong value.
+464 |             return null;
+465 |         }
+466 |         if (str.startsWith("0x") || str.startsWith("-0x")) {
+467 |             return createInteger(str);
+468 |         }   
+469 |         char lastChar = str.charAt(str.length() - 1);
+470 |         String mant;
+471 |         String dec;
+472 |         String exp;
+473 |         int decPos = str.indexOf('.');
+474 |         int expPos = str.indexOf('e') + str.indexOf('E') + 1;
+475 | 
+476 |         if (decPos > -1) {
+477 | 
+478 |             if (expPos > -1) {
+479 |                 if (expPos < decPos) {
+480 |                     throw new NumberFormatException(str + " is not a valid number.");
+481 |                 }
+482 |                 dec = str.substring(decPos + 1, expPos);
+483 |             } else {
+484 |                 dec = str.substring(decPos + 1);
+485 |             }
+486 |             mant = str.substring(0, decPos);
+487 |         } else {
+488 |             if (expPos > -1) {
+489 |                 mant = str.substring(0, expPos);
+490 |             } else {
+491 |                 mant = str;
+492 |             }
+493 |             dec = null;
+494 |         }
+495 |         if (!Character.isDigit(lastChar) && lastChar != '.') {
+496 |             if (expPos > -1 && expPos < str.length() - 1) {
+497 |                 exp = str.substring(expPos + 1, str.length() - 1);
+498 |             } else {
+499 |                 exp = null;
+500 |             }
+501 |             //Requesting a specific type..
+502 |             String numeric = str.substring(0, str.length() - 1);
+503 |             boolean allZeros = isAllZeros(mant) && isAllZeros(exp);
+504 |             switch (lastChar) {
+505 |                 case 'l' :
+506 |                 case 'L' :
+507 |                     if (dec == null
+508 |                         && exp == null
+509 |                         && (numeric.charAt(0) == '-' && isDigits(numeric.substring(1)) || isDigits(numeric))) {
+510 |                         try {
+511 |                             return createLong(numeric);
+512 |                         } catch (NumberFormatException nfe) {
+513 |                             //Too big for a long
+514 |                         }
+515 |                         return createBigInteger(numeric);
+516 | 
+517 |                     }
+518 |                     throw new NumberFormatException(str + " is not a valid number.");
+519 |                 case 'f' :
+520 |                 case 'F' :
+521 |                     try {
+522 |                         Float f = NumberUtils.createFloat(numeric);
+523 |                         if (!(f.isInfinite() || (f.floatValue() == 0.0F && !allZeros))) {
+524 |                             //If it's too big for a float or the float value = 0 and the string
+525 |                             //has non-zeros in it, then float does not have the precision we want
+526 |                             return f;
+527 |                         }
+528 | 
+529 |                     } catch (NumberFormatException nfe) {
+530 |                         // ignore the bad number
+531 |                     }
+532 |                     //$FALL-THROUGH$
+533 |                 case 'd' :
+534 |                 case 'D' :
+535 |                     try {
+536 |                         Double d = NumberUtils.createDouble(numeric);
+537 |                         if (!(d.isInfinite() || (d.floatValue() == 0.0D && !allZeros))) {
+538 |                             return d;
+539 |                         }
+540 |                     } catch (NumberFormatException nfe) {
+541 |                         // ignore the bad number
+542 |                     }
+543 |                     try {
+544 |                         return createBigDecimal(numeric);
+545 |                     } catch (NumberFormatException e) {
+546 |                         // ignore the bad number
+547 |                     }
+548 |                     //$FALL-THROUGH$
+549 |                 default :
+550 |                     throw new NumberFormatException(str + " is not a valid number.");
+551 | 
+552 |             }
+553 |         } else {
+554 |             //User doesn't have a preference on the return type, so let's start
+555 |             //small and go from there...
+556 |             if (expPos > -1 && expPos < str.length() - 1) {
+557 |                 exp = str.substring(expPos + 1, str.length());
+558 |             } else {
+559 |                 exp = null;
+560 |             }
+561 |             if (dec == null && exp == null) {
+562 |                 //Must be an int,long,bigint
+563 |                 try {
+564 |                     return createInteger(str);
+565 |                 } catch (NumberFormatException nfe) {
+566 |                     // ignore the bad number
+567 |                 }
+568 |                 try {
+569 |                     return createLong(str);
+570 |                 } catch (NumberFormatException nfe) {
+571 |                     // ignore the bad number
+572 |                 }
+573 |                 return createBigInteger(str);
+574 | 
+575 |             } else {
+576 |                 //Must be a float,double,BigDec
+577 |                 boolean allZeros = isAllZeros(mant) && isAllZeros(exp);
+578 |                 try {
+579 |                     Float f = createFloat(str);
+580 |                     if (!(f.isInfinite() || (f.floatValue() == 0.0F && !allZeros))) {
+581 |                         return f;
+582 |                     }
+583 |                 } catch (NumberFormatException nfe) {
+584 |                     // ignore the bad number
+585 |                 }
+586 |                 try {
+587 |                     Double d = createDouble(str);
+588 |                     if (!(d.isInfinite() || (d.doubleValue() == 0.0D && !allZeros))) {
+589 |                         return d;
+590 |                     }
+591 |                 } catch (NumberFormatException nfe) {
+592 |                     // ignore the bad number
+593 |                 }
+594 | 
+595 |                 return createBigDecimal(str);
+596 | 
+597 |             }
+598 |         }
+599 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.lang3.SystemUtils.toJavaVersionIntArray(String,int)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1715-1729
+Documentation:
+/**
+     * <p>
+     * Converts the given Java version string to an <code>int[]</code> of maximum size <code>limit</code>.
+     * </p>
+     * 
+     * <p>
+     * Example return values:
+     * </p>
+     * <ul>
+     * <li><code>[1, 2, 0]</code> for Java 1.2</li>
+     * <li><code>[1, 3, 1]</code> for Java 1.3.1</li>
+     * <li><code>[1, 5, 0, 21]</code> for Java 1.5.0_21</li>
+     * </ul>
+     * 
+     * @return the version, for example [1, 5, 0, 21] for Java 1.5.0_21
+     */
+Method code:
+1715 |     private static int[] toJavaVersionIntArray(String version, int limit) {
+1716 |         if (version == null) {
+1717 |             return ArrayUtils.EMPTY_INT_ARRAY;
+1718 |         }
+1719 |         String[] strings = Pattern.compile("[^\\d]").split(version);
+1720 |         int[] ints = new int[Math.min(limit, strings.length)];
+1721 |         int j = 0;
+1722 |         for (int i = 0; i < strings.length && j < limit; i++) {
+1723 |             String s = strings[i];
+1724 |             if (s.length() > 0) {
+1725 |                 ints[j++] = Integer.parseInt(s);
+1726 |             }
+1727 |         }
+1728 |         return ints;
+1729 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.lang3.math.NumberUtils.isDigits(String)
+Source: src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+Original range: 1291-1301
+Documentation:
+/**
+     * <p>Checks whether the <code>String</code> contains only
+     * digit characters.</p>
+     *
+     * <p><code>Null</code> and empty String will return
+     * <code>false</code>.</p>
+     *
+     * @param str  the <code>String</code> to check
+     * @return <code>true</code> if str contains only unicode numeric
+     */
+Method code:
+1291 |     public static boolean isDigits(String str) {
+1292 |         if (StringUtils.isEmpty(str)) {
+1293 |             return false;
+1294 |         }
+1295 |         for (int i = 0; i < str.length(); i++) {
+1296 |             if (!Character.isDigit(str.charAt(i))) {
+1297 |                 return false;
+1298 |             }
+1299 |         }
+1300 |         return true;
+1301 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.lang3.math.NumberUtils.createBigInteger(String)
+Source: src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+Original range: 697-702
+Documentation:
+/**
+     * <p>Convert a <code>String</code> to a <code>BigInteger</code>.</p>
+     *
+     * <p>Returns <code>null</code> if the string is <code>null</code>.</p>
+     * 
+     * @param str  a <code>String</code> to convert, may be null
+     * @return converted <code>BigInteger</code>
+     * @throws NumberFormatException if the value cannot be converted
+     */
+Method code:
+697 |     public static BigInteger createBigInteger(String str) {
+698 |         if (str == null) {
+699 |             return null;
+700 |         }
+701 |         return new BigInteger(str);
+702 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.lang3.math.NumberUtils.createInteger(String)
+Source: src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+Original range: 664-670
+Documentation:
+/**
+     * <p>Convert a <code>String</code> to a <code>Integer</code>, handling
+     * hex and octal notations.</p>
+     *
+     * <p>Returns <code>null</code> if the string is <code>null</code>.</p>
+     * 
+     * @param str  a <code>String</code> to convert, may be null
+     * @return converted <code>Integer</code>
+     * @throws NumberFormatException if the value cannot be converted
+     */
+Method code:
+664 |     public static Integer createInteger(String str) {
+665 |         if (str == null) {
+666 |             return null;
+667 |         }
+668 |         // decode() handles 0xAABD and 0777 (hex and octal) as well.
+669 |         return Integer.decode(str);
+670 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.lang3.SystemUtils.isOSNameMatch(String,String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1615-1620
+Documentation:
+/**
+     * Decides if the operating system matches.
+     * <p>
+     * This method is package private instead of private to support unit test invocation.
+     * </p>
+     * 
+     * @param osName
+     *            the actual OS name
+     * @param osNamePrefix
+     *            the prefix for the expected OS name
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1615 |     static boolean isOSNameMatch(String osName, String osNamePrefix) {
+1616 |         if (osName == null) {
+1617 |             return false;
+1618 |         }
+1619 |         return osName.startsWith(osNamePrefix);
+1620 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.lang3.StringUtils.isEmpty(CharSequence)
+Source: src/main/java/org/apache/commons/lang3/StringUtils.java
+Original range: 192-194
+Documentation:
+/**
+     * <p>Checks if a CharSequence is empty ("") or null.</p>
+     *
+     * <pre>
+     * StringUtils.isEmpty(null)      = true
+     * StringUtils.isEmpty("")        = true
+     * StringUtils.isEmpty(" ")       = false
+     * StringUtils.isEmpty("bob")     = false
+     * StringUtils.isEmpty("  bob  ") = false
+     * </pre>
+     *
+     * <p>NOTE: This method changed in Lang version 2.0.
+     * It no longer trims the CharSequence.
+     * That functionality is available in isBlank().</p>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return <code>true</code> if the CharSequence is empty or null
+     * @since 3.0 Changed signature from isEmpty(String) to isEmpty(CharSequence)
+     */
+Method code:
+192 |     public static boolean isEmpty(CharSequence cs) {
+193 |         return cs == null || cs.length() == 0;
+194 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.lang3.SystemUtils.getOSMatches(String,String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1430-1432
+Documentation:
+/**
+     * Decides if the operating system matches.
+     * 
+     * @param osNamePrefix
+     *            the prefix for the os name
+     * @param osVersionPrefix
+     *            the prefix for the version
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1430 |     private static boolean getOSMatches(String osNamePrefix, String osVersionPrefix) {
+1431 |         return isOSMatch(OS_NAME, OS_VERSION, osNamePrefix, osVersionPrefix);
+1432 |     }
+

@@ -1,0 +1,82 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAddPropertyToChildOfUncollapsibleFunctionInLocalScope()",
+    "resolved_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAddPropertyToChildOfUncollapsibleFunctionInLocalScope()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CollapsePropertiesTest.java",
+    "begin_line": 609,
+    "end_line": 613,
+    "comment": "",
+    "snippet": "  public void testAddPropertyToChildOfUncollapsibleFunctionInLocalScope() {\n    testSame(\n        \"function a() {} a.b = {x: 0}; var c = a;\" +\n        \"(function() {a.b.y = 0;})(); a.b.y;\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAliasCreatedForFunctionDepth1_1()",
+    "resolved_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAliasCreatedForFunctionDepth1_1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CollapsePropertiesTest.java",
+    "begin_line": 278,
+    "end_line": 280,
+    "comment": "",
+    "snippet": "  public void testAliasCreatedForFunctionDepth1_1() {\n    testSame(\"var a = function(){}; a.b = 1; var c = a; c.b = 2; a.b != c.b;\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAliasCreatedForFunctionDepth1_2()",
+    "resolved_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAliasCreatedForFunctionDepth1_2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CollapsePropertiesTest.java",
+    "begin_line": 294,
+    "end_line": 296,
+    "comment": "",
+    "snippet": "  public void testAliasCreatedForFunctionDepth1_2() {\n    testSame(\"var a = function(){}; a.b = 1; f(a); a.b;\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAliasCreatedForFunctionDepth1_3()",
+    "resolved_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAliasCreatedForFunctionDepth1_3()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CollapsePropertiesTest.java",
+    "begin_line": 303,
+    "end_line": 305,
+    "comment": "",
+    "snippet": "  public void testAliasCreatedForFunctionDepth1_3() {\n    testSame(\"var a = function(){}; a.b = 1; new f(a); a.b;\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAddPropertyToUncollapsibleNamedCtorInLocalScopeDepth1()",
+    "resolved_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAddPropertyToUncollapsibleNamedCtorInLocalScopeDepth1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CollapsePropertiesTest.java",
+    "begin_line": 547,
+    "end_line": 555,
+    "comment": "",
+    "snippet": "  public void testAddPropertyToUncollapsibleNamedCtorInLocalScopeDepth1() {\n    // This technically should be collapsed, according to the rules.\n    // We don't collapse named constructors for legacy reasons\n    // (this pass has been around too long, and we don't know who's\n    // depending on this behavior).\n    testSame(\n          \"/** @constructor */ function a() {} var c = a; \" +\n          \"(function() {a.b = 0;})(); a.b;\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAddPropertyToUncollapsibleFunctionInLocalScopeDepth1()",
+    "resolved_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAddPropertyToUncollapsibleFunctionInLocalScopeDepth1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CollapsePropertiesTest.java",
+    "begin_line": 543,
+    "end_line": 545,
+    "comment": "",
+    "snippet": "  public void testAddPropertyToUncollapsibleFunctionInLocalScopeDepth1() {\n    testSame(\"function a() {} var c = a; (function() {a.b = 0;})(); a.b;\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAddPropertyToUncollapsibleFunctionInLocalScopeDepth2()",
+    "resolved_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAddPropertyToUncollapsibleFunctionInLocalScopeDepth2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CollapsePropertiesTest.java",
+    "begin_line": 571,
+    "end_line": 576,
+    "comment": "",
+    "snippet": "  public void testAddPropertyToUncollapsibleFunctionInLocalScopeDepth2() {\n    test(\"var a = {}; a.b = function (){}; var d = a.b;\" +\n         \"(function() {a.b.c = 0;})(); a.b.c;\",\n         \"var a$b = function (){}; var d = a$b;\" +\n         \"(function() {a$b.c = 0;})(); a$b.c;\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAliasCreatedForFunctionDepth2()",
+    "resolved_signature": "com.google.javascript.jscomp.CollapsePropertiesTest.testAliasCreatedForFunctionDepth2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/CollapsePropertiesTest.java",
+    "begin_line": 312,
+    "end_line": 318,
+    "comment": "",
+    "snippet": "  public void testAliasCreatedForFunctionDepth2() {\n    test(\n        \"var a = {}; a.b = function() {}; a.b.c = 1; var d = a.b;\" +\n        \"a.b.c != d.c;\",\n        \"var a$b = function() {}; a$b.c = 1; var d = a$b;\" +\n        \"a$b.c != d.c;\");\n  }"
+  }
+]

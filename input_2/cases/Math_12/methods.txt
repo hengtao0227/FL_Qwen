@@ -1,0 +1,1874 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.distribution.LogNormalDistribution.LogNormalDistribution(RandomGenerator,double,double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/LogNormalDistribution.java
+Original range: 125-139
+Documentation:
+/**
+     * Creates a log-normal distribution.
+     *
+     * @param rng Random number generator.
+     * @param scale Scale parameter of this distribution.
+     * @param shape Shape parameter of this distribution.
+     * @param inverseCumAccuracy Inverse cumulative probability accuracy.
+     * @throws NotStrictlyPositiveException if {@code shape <= 0}.
+     * @since 3.1
+     */
+Method code:
+125 |     public LogNormalDistribution(RandomGenerator rng,
+126 |                                  double scale,
+127 |                                  double shape,
+128 |                                  double inverseCumAccuracy)
+129 |         throws NotStrictlyPositiveException {
+130 |         super(rng);
+131 | 
+132 |         if (shape <= 0) {
+133 |             throw new NotStrictlyPositiveException(LocalizedFormats.SHAPE, shape);
+134 |         }
+135 | 
+136 |         this.scale = scale;
+137 |         this.shape = shape;
+138 |         this.solverAbsoluteAccuracy = inverseCumAccuracy;
+139 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.random.Well19937c.next(int)
+Source: src/main/java/org/apache/commons/math3/random/Well19937c.java
+Original range: 83-113
+Documentation:
+/** {@inheritDoc} */
+Method code:
+83 |     @Override
+84 |     protected int next(final int bits) {
+85 | 
+86 |         final int indexRm1 = iRm1[index];
+87 |         final int indexRm2 = iRm2[index];
+88 | 
+89 |         final int v0       = v[index];
+90 |         final int vM1      = v[i1[index]];
+91 |         final int vM2      = v[i2[index]];
+92 |         final int vM3      = v[i3[index]];
+93 | 
+94 |         final int z0 = (0x80000000 & v[indexRm1]) ^ (0x7FFFFFFF & v[indexRm2]);
+95 |         final int z1 = (v0 ^ (v0 << 25))  ^ (vM1 ^ (vM1 >>> 27));
+96 |         final int z2 = (vM2 >>> 9) ^ (vM3 ^ (vM3 >>> 1));
+97 |         final int z3 = z1      ^ z2;
+98 |         int z4 = z0 ^ (z1 ^ (z1 << 9)) ^ (z2 ^ (z2 << 21)) ^ (z3 ^ (z3 >>> 21));
+99 | 
+100 |         v[index]     = z3;
+101 |         v[indexRm1]  = z4;
+102 |         v[indexRm2] &= 0x80000000;
+103 |         index        = indexRm1;
+104 | 
+105 | 
+106 |         // add Matsumoto-Kurita tempering
+107 |         // to get a maximally-equidistributed generator
+108 |         z4 = z4 ^ ((z4 <<  7) & 0xe46e1700);
+109 |         z4 = z4 ^ ((z4 << 15) & 0x9b868000);
+110 | 
+111 |         return z4 >>> (32 - bits);
+112 | 
+113 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.random.Well19937c.Well19937c(long)
+Source: src/main/java/org/apache/commons/math3/random/Well19937c.java
+Original range: 78-80
+Documentation:
+/** Creates a new random number generator using a single long seed.
+     * @param seed the initial seed (64 bits integer)
+     */
+Method code:
+78 |     public Well19937c(long seed) {
+79 |         super(K, M1, M2, M3, seed);
+80 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.distribution.NormalDistribution.NormalDistribution(double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/NormalDistribution.java
+Original range: 69-72
+Documentation:
+/**
+     * Create a normal distribution using the given mean and standard deviation.
+     *
+     * @param mean Mean for this distribution.
+     * @param sd Standard deviation for this distribution.
+     * @throws NotStrictlyPositiveException if {@code sd <= 0}.
+     */
+Method code:
+69 |     public NormalDistribution(double mean, double sd)
+70 |         throws NotStrictlyPositiveException {
+71 |         this(mean, sd, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+72 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math3.random.Well19937c.Well19937c()
+Source: src/main/java/org/apache/commons/math3/random/Well19937c.java
+Original range: 56-58
+Documentation:
+/** Creates a new random number generator.
+     * <p>The instance is initialized using the current time as the
+     * seed.</p>
+     */
+Method code:
+56 |     public Well19937c() {
+57 |         super(K, M1, M2, M3);
+58 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math3.distribution.LogNormalDistribution.LogNormalDistribution(double,double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/LogNormalDistribution.java
+Original range: 110-113
+Documentation:
+/**
+     * Create a log-normal distribution using the specified scale, shape and
+     * inverse cumulative distribution accuracy.
+     *
+     * @param scale the scale parameter of this distribution
+     * @param shape the shape parameter of this distribution
+     * @param inverseCumAccuracy Inverse cumulative probability accuracy.
+     * @throws NotStrictlyPositiveException if {@code shape <= 0}.
+     */
+Method code:
+110 |     public LogNormalDistribution(double scale, double shape, double inverseCumAccuracy)
+111 |         throws NotStrictlyPositiveException {
+112 |         this(new Well19937c(), scale, shape, inverseCumAccuracy);
+113 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math3.random.AbstractWell.setSeed(int[])
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 152-170
+Documentation:
+/** Reinitialize the generator as if just built with the given int array seed.
+     * <p>The state of the generator is exactly the same as a new
+     * generator built with the same seed.</p>
+     * @param seed the initial seed (32 bits integers array). If null
+     * the seed of the generator will be the system time plus the system identity
+     * hash code of the instance.
+     */
+Method code:
+152 |     @Override
+153 |     public void setSeed(final int[] seed) {
+154 |         if (seed == null) {
+155 |             setSeed(System.currentTimeMillis() + System.identityHashCode(this));
+156 |             return;
+157 |         }
+158 | 
+159 |         System.arraycopy(seed, 0, v, 0, Math.min(seed.length, v.length));
+160 | 
+161 |         if (seed.length < v.length) {
+162 |             for (int i = seed.length; i < v.length; ++i) {
+163 |                 final long l = v[i - seed.length];
+164 |                 v[i] = (int) ((1812433253l * (l ^ (l >> 30)) + i) & 0xffffffffL);
+165 |             }
+166 |         }
+167 | 
+168 |         index = 0;
+169 |         clear();  // Clear normal deviate cache
+170 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math3.distribution.LogNormalDistribution.LogNormalDistribution(double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/LogNormalDistribution.java
+Original range: 96-99
+Documentation:
+/**
+     * Create a log-normal distribution using the specified scale and shape.
+     *
+     * @param scale the scale parameter of this distribution
+     * @param shape the shape parameter of this distribution
+     * @throws NotStrictlyPositiveException if {@code shape <= 0}.
+     */
+Method code:
+96 |     public LogNormalDistribution(double scale, double shape)
+97 |         throws NotStrictlyPositiveException {
+98 |         this(scale, shape, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+99 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math3.distribution.GammaDistribution.GammaDistribution(RandomGenerator,double,double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/GammaDistribution.java
+Original range: 127-152
+Documentation:
+/**
+     * Creates a Gamma distribution.
+     *
+     * @param rng Random number generator.
+     * @param shape the shape parameter
+     * @param scale the scale parameter
+     * @param inverseCumAccuracy the maximum absolute error in inverse
+     * cumulative probability estimates (defaults to
+     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * @throws NotStrictlyPositiveException if {@code shape <= 0} or
+     * {@code scale <= 0}.
+     * @since 3.1
+     */
+Method code:
+127 |     public GammaDistribution(RandomGenerator rng,
+128 |                              double shape,
+129 |                              double scale,
+130 |                              double inverseCumAccuracy)
+131 |         throws NotStrictlyPositiveException {
+132 |         super(rng);
+133 | 
+134 |         if (shape <= 0) {
+135 |             throw new NotStrictlyPositiveException(LocalizedFormats.SHAPE, shape);
+136 |         }
+137 |         if (scale <= 0) {
+138 |             throw new NotStrictlyPositiveException(LocalizedFormats.SCALE, scale);
+139 |         }
+140 | 
+141 |         this.shape = shape;
+142 |         this.scale = scale;
+143 |         this.solverAbsoluteAccuracy = inverseCumAccuracy;
+144 |         this.shiftedShape = shape + Gamma.LANCZOS_G + 0.5;
+145 |         final double aux = FastMath.E / (2.0 * FastMath.PI * shiftedShape);
+146 |         this.densityPrefactor2 = shape * FastMath.sqrt(aux) / Gamma.lanczos(shape);
+147 |         this.densityPrefactor1 = this.densityPrefactor2 / scale *
+148 |                 FastMath.pow(shiftedShape, -shape) *
+149 |                 FastMath.exp(shape + Gamma.LANCZOS_G);
+150 |         this.minY = shape + Gamma.LANCZOS_G - FastMath.log(Double.MAX_VALUE);
+151 |         this.maxLogY = FastMath.log(Double.MAX_VALUE) / (shape - 1.0);
+152 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpFracA()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6157-6159
+Documentation:
+/**
+     * Load "EXP_FRAC_A".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6157 |     static double[] loadExpFracA() {
+6158 |         return EXP_FRAC_A.clone();
+6159 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math3.random.BitsStreamGenerator.clear()
+Source: src/main/java/org/apache/commons/math3/random/BitsStreamGenerator.java
+Original range: 166-168
+Documentation:
+/**
+     * Clears the cache used by the default implementation of
+     * {@link #nextGaussian}.
+     */
+Method code:
+166 |     public void clear() {
+167 |         nextGaussian = Double.NaN;
+168 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math3.random.RandomDataGenerator.reSeed(long)
+Source: src/main/java/org/apache/commons/math3/random/RandomDataGenerator.java
+Original range: 647-649
+Documentation:
+/**
+     * Reseeds the random number generator with the supplied seed.
+     * <p>
+     * Will create and initialize if null.
+     * </p>
+     *
+     * @param seed the seed value to use
+     */
+Method code:
+647 |     public void reSeed(long seed) {
+648 |        getRan().setSeed(seed);
+649 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math3.util.FastMath.sinQ(double,double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1716-1831
+Documentation:
+/**
+     *  Compute sine over the first quadrant (0 < x < pi/2).
+     *  Use combination of table lookup and rational polynomial expansion.
+     *  @param xa number from which sine is requested
+     *  @param xb extra bits for x (may be 0.0)
+     *  @return sin(xa + xb)
+     */
+Method code:
+1716 |     private static double sinQ(double xa, double xb) {
+1717 |         int idx = (int) ((xa * 8.0) + 0.5);
+1718 |         final double epsilon = xa - EIGHTHS[idx]; //idx*0.125;
+1719 | 
+1720 |         // Table lookups
+1721 |         final double sintA = SINE_TABLE_A[idx];
+1722 |         final double sintB = SINE_TABLE_B[idx];
+1723 |         final double costA = COSINE_TABLE_A[idx];
+1724 |         final double costB = COSINE_TABLE_B[idx];
+1725 | 
+1726 |         // Polynomial eval of sin(epsilon), cos(epsilon)
+1727 |         double sinEpsA = epsilon;
+1728 |         double sinEpsB = polySine(epsilon);
+1729 |         final double cosEpsA = 1.0;
+1730 |         final double cosEpsB = polyCosine(epsilon);
+1731 | 
+1732 |         // Split epsilon   xa + xb = x
+1733 |         final double temp = sinEpsA * HEX_40000000;
+1734 |         double temp2 = (sinEpsA + temp) - temp;
+1735 |         sinEpsB +=  sinEpsA - temp2;
+1736 |         sinEpsA = temp2;
+1737 | 
+1738 |         /* Compute sin(x) by angle addition formula */
+1739 |         double result;
+1740 | 
+1741 |         /* Compute the following sum:
+1742 |          *
+1743 |          * result = sintA + costA*sinEpsA + sintA*cosEpsB + costA*sinEpsB +
+1744 |          *          sintB + costB*sinEpsA + sintB*cosEpsB + costB*sinEpsB;
+1745 |          *
+1746 |          * Ranges of elements
+1747 |          *
+1748 |          * xxxtA   0            PI/2
+1749 |          * xxxtB   -1.5e-9      1.5e-9
+1750 |          * sinEpsA -0.0625      0.0625
+1751 |          * sinEpsB -6e-11       6e-11
+1752 |          * cosEpsA  1.0
+1753 |          * cosEpsB  0           -0.0625
+1754 |          *
+1755 |          */
+1756 | 
+1757 |         //result = sintA + costA*sinEpsA + sintA*cosEpsB + costA*sinEpsB +
+1758 |         //          sintB + costB*sinEpsA + sintB*cosEpsB + costB*sinEpsB;
+1759 | 
+1760 |         //result = sintA + sintA*cosEpsB + sintB + sintB * cosEpsB;
+1761 |         //result += costA*sinEpsA + costA*sinEpsB + costB*sinEpsA + costB * sinEpsB;
+1762 |         double a = 0;
+1763 |         double b = 0;
+1764 | 
+1765 |         double t = sintA;
+1766 |         double c = a + t;
+1767 |         double d = -(c - a - t);
+1768 |         a = c;
+1769 |         b = b + d;
+1770 | 
+1771 |         t = costA * sinEpsA;
+1772 |         c = a + t;
+1773 |         d = -(c - a - t);
+1774 |         a = c;
+1775 |         b = b + d;
+1776 | 
+1777 |         b = b + sintA * cosEpsB + costA * sinEpsB;
+1778 |         /*
+1779 |     t = sintA*cosEpsB;
+1780 |     c = a + t;
+1781 |     d = -(c - a - t);
+1782 |     a = c;
+1783 |     b = b + d;
+1784 | 
+1785 |     t = costA*sinEpsB;
+1786 |     c = a + t;
+1787 |     d = -(c - a - t);
+1788 |     a = c;
+1789 |     b = b + d;
+1790 |          */
+1791 | 
+1792 |         b = b + sintB + costB * sinEpsA + sintB * cosEpsB + costB * sinEpsB;
+1793 |         /*
+1794 |     t = sintB;
+1795 |     c = a + t;
+1796 |     d = -(c - a - t);
+1797 |     a = c;
+1798 |     b = b + d;
+1799 | 
+1800 |     t = costB*sinEpsA;
+1801 |     c = a + t;
+1802 |     d = -(c - a - t);
+1803 |     a = c;
+1804 |     b = b + d;
+1805 | 
+1806 |     t = sintB*cosEpsB;
+1807 |     c = a + t;
+1808 |     d = -(c - a - t);
+1809 |     a = c;
+1810 |     b = b + d;
+1811 | 
+1812 |     t = costB*sinEpsB;
+1813 |     c = a + t;
+1814 |     d = -(c - a - t);
+1815 |     a = c;
+1816 |     b = b + d;
+1817 |          */
+1818 | 
+1819 |         if (xb != 0.0) {
+1820 |             t = ((costA + costB) * (cosEpsA + cosEpsB) -
+1821 |                  (sintA + sintB) * (sinEpsA + sinEpsB)) * xb;  // approximate cosine*xb
+1822 |             c = a + t;
+1823 |             d = -(c - a - t);
+1824 |             a = c;
+1825 |             b = b + d;
+1826 |         }
+1827 | 
+1828 |         result = a + b;
+1829 | 
+1830 |         return result;
+1831 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math3.distribution.NormalDistribution.NormalDistribution(RandomGenerator,double,double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/NormalDistribution.java
+Original range: 99-113
+Documentation:
+/**
+     * Creates a normal distribution.
+     *
+     * @param rng Random number generator.
+     * @param mean Mean for this distribution.
+     * @param sd Standard deviation for this distribution.
+     * @param inverseCumAccuracy Inverse cumulative probability accuracy.
+     * @throws NotStrictlyPositiveException if {@code sd <= 0}.
+     * @since 3.1
+     */
+Method code:
+99 |     public NormalDistribution(RandomGenerator rng,
+100 |                               double mean,
+101 |                               double sd,
+102 |                               double inverseCumAccuracy)
+103 |         throws NotStrictlyPositiveException {
+104 |         super(rng);
+105 | 
+106 |         if (sd <= 0) {
+107 |             throw new NotStrictlyPositiveException(LocalizedFormats.STANDARD_DEVIATION, sd);
+108 |         }
+109 | 
+110 |         this.mean = mean;
+111 |         standardDeviation = sd;
+112 |         solverAbsoluteAccuracy = inverseCumAccuracy;
+113 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math3.random.BitsStreamGenerator.BitsStreamGenerator()
+Source: src/main/java/org/apache/commons/math3/random/BitsStreamGenerator.java
+Original range: 37-39
+Documentation:
+/**
+     * Creates a new random number generator.
+     */
+Method code:
+37 |     public BitsStreamGenerator() {
+38 |         nextGaussian = Double.NaN;
+39 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math3.util.FastMath.cosQ(double,double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1840-1849
+Documentation:
+/**
+     * Compute cosine in the first quadrant by subtracting input from PI/2 and
+     * then calling sinQ.  This is more accurate as the input approaches PI/2.
+     *  @param xa number from which cosine is requested
+     *  @param xb extra bits for x (may be 0.0)
+     *  @return cos(xa + xb)
+     */
+Method code:
+1840 |     private static double cosQ(double xa, double xb) {
+1841 |         final double pi2a = 1.5707963267948966;
+1842 |         final double pi2b = 6.123233995736766E-17;
+1843 | 
+1844 |         final double a = pi2a - xa;
+1845 |         double b = -(a - pi2a + xa);
+1846 |         b += pi2b - xb;
+1847 | 
+1848 |         return sinQ(a, b);
+1849 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math3.util.FastMath.polySine(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1676-1689
+Documentation:
+/**
+     *  Computes sin(x) - x, where |x| < 1/16.
+     *  Use a Remez polynomial approximation.
+     *  @param x a number smaller than 1/16
+     *  @return sin(x) - x
+     */
+Method code:
+1676 |     private static double polySine(final double x)
+1677 |     {
+1678 |         double x2 = x*x;
+1679 | 
+1680 |         double p = 2.7553817452272217E-6;
+1681 |         p = p * x2 + -1.9841269659586505E-4;
+1682 |         p = p * x2 + 0.008333333333329196;
+1683 |         p = p * x2 + -0.16666666666666666;
+1684 |         //p *= x2;
+1685 |         //p *= x;
+1686 |         p = p * x2 * x;
+1687 | 
+1688 |         return p;
+1689 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math3.util.FastMath.CodyWaite.getRemB()
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3861-3863
+Documentation:
+/**
+         * @return remB
+         */
+Method code:
+3861 |         double getRemB() {
+3862 |             return finalRemB;
+3863 |         }
+
+===== M0019 =====
+Signature: org.apache.commons.math3.random.AbstractWell.setSeed(long)
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 177-180
+Documentation:
+/** Reinitialize the generator as if just built with the given long seed.
+     * <p>The state of the generator is exactly the same as a new
+     * generator built with the same seed.</p>
+     * @param seed the initial seed (64 bits integer)
+     */
+Method code:
+177 |     @Override
+178 |     public void setSeed(final long seed) {
+179 |         setSeed(new int[] { (int) (seed >>> 32), (int) (seed & 0xffffffffl) });
+180 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpFracB()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6165-6167
+Documentation:
+/**
+     * Load "EXP_FRAC_B".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6165 |     static double[] loadExpFracB() {
+6166 |         return EXP_FRAC_B.clone();
+6167 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math3.random.AbstractWell.AbstractWell(int,int,int,int,long)
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 131-133
+Documentation:
+/** Creates a new random number generator using a single long seed.
+     * @param k number of bits in the pool (not necessarily a multiple of 32)
+     * @param m1 first parameter of the algorithm
+     * @param m2 second parameter of the algorithm
+     * @param m3 third parameter of the algorithm
+     * @param seed the initial seed (64 bits integer)
+     */
+Method code:
+131 |     protected AbstractWell(final int k, final int m1, final int m2, final int m3, final long seed) {
+132 |         this(k, m1, m2, m3, new int[] { (int) (seed >>> 32), (int) (seed & 0xffffffffl) });
+133 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math3.util.FastMath.log(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1119-1121
+Documentation:
+/**
+     * Natural logarithm.
+     *
+     * @param x   a double
+     * @return log(x)
+     */
+Method code:
+1119 |     public static double log(final double x) {
+1120 |         return log(x, null);
+1121 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math3.random.RandomDataGenerator.RandomDataGenerator()
+Source: src/main/java/org/apache/commons/math3/random/RandomDataGenerator.java
+Original range: 131-132
+Documentation:
+/**
+     * Construct a RandomDataGenerator, using a default random generator as the source
+     * of randomness.
+     *
+     * <p>The default generator is a {@link Well19937c} seeded
+     * with {@code System.currentTimeMillis() + System.identityHashCode(this))}.
+     * The generator is initialized and seeded on first use.</p>
+     */
+Method code:
+131 |     public RandomDataGenerator() {
+132 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math3.random.RandomDataGenerator.getRan()
+Source: src/main/java/org/apache/commons/math3/random/RandomDataGenerator.java
+Original range: 713-718
+Documentation:
+/**
+     * Returns the RandomGenerator used to generate non-secure random data.
+     * <p>
+     * Creates and initializes a default generator if null. Uses a {@link Well19937c}
+     * generator with {@code System.currentTimeMillis() + System.identityHashCode(this))}
+     * as the default seed.
+     * </p>
+     *
+     * @return the Random used to generate random data
+     */
+Method code:
+713 |     private RandomGenerator getRan() {
+714 |         if (rand == null) {
+715 |             initRan();
+716 |         }
+717 |         return rand;
+718 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math3.distribution.AbstractRealDistribution.reseedRandomGenerator(long)
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractRealDistribution.java
+Original range: 245-248
+Documentation:
+/** {@inheritDoc} */
+Method code:
+245 |     public void reseedRandomGenerator(long seed) {
+246 |         random.setSeed(seed);
+247 |         randomData.reSeed(seed);
+248 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpIntA()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6141-6143
+Documentation:
+/**
+     * Load "EXP_INT_A".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6141 |     static double[] loadExpIntA() {
+6142 |         return EXP_INT_A.clone();
+6143 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpIntB()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6149-6151
+Documentation:
+/**
+     * Load "EXP_INT_B".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6149 |     static double[] loadExpIntB() {
+6150 |         return EXP_INT_B.clone();
+6151 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math3.util.FastMath.cos(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 2292-2338
+Documentation:
+/**
+     * Cosine function.
+     *
+     * @param x Argument.
+     * @return cos(x)
+     */
+Method code:
+2292 |     public static double cos(double x) {
+2293 |         int quadrant = 0;
+2294 | 
+2295 |         /* Take absolute value of the input */
+2296 |         double xa = x;
+2297 |         if (x < 0) {
+2298 |             xa = -xa;
+2299 |         }
+2300 | 
+2301 |         if (xa != xa || xa == Double.POSITIVE_INFINITY) {
+2302 |             return Double.NaN;
+2303 |         }
+2304 | 
+2305 |         /* Perform any argument reduction */
+2306 |         double xb = 0;
+2307 |         if (xa > 3294198.0) {
+2308 |             // PI * (2**20)
+2309 |             // Argument too big for CodyWaite reduction.  Must use
+2310 |             // PayneHanek.
+2311 |             double reduceResults[] = new double[3];
+2312 |             reducePayneHanek(xa, reduceResults);
+2313 |             quadrant = ((int) reduceResults[0]) & 3;
+2314 |             xa = reduceResults[1];
+2315 |             xb = reduceResults[2];
+2316 |         } else if (xa > 1.5707963267948966) {
+2317 |             final CodyWaite cw = new CodyWaite(xa);
+2318 |             quadrant = cw.getK() & 3;
+2319 |             xa = cw.getRemA();
+2320 |             xb = cw.getRemB();
+2321 |         }
+2322 | 
+2323 |         //if (negative)
+2324 |         //  quadrant = (quadrant + 2) % 4;
+2325 | 
+2326 |         switch (quadrant) {
+2327 |             case 0:
+2328 |                 return cosQ(xa, xb);
+2329 |             case 1:
+2330 |                 return -sinQ(xa, xb);
+2331 |             case 2:
+2332 |                 return -cosQ(xa, xb);
+2333 |             case 3:
+2334 |                 return sinQ(xa, xb);
+2335 |             default:
+2336 |                 return Double.NaN;
+2337 |         }
+2338 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math3.util.FastMath.exp(double,double,double[])
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 841-956
+Documentation:
+/**
+     * Internal helper method for exponential function.
+     * @param x original argument of the exponential function
+     * @param extra extra bits of precision on input (To Be Confirmed)
+     * @param hiPrec extra bits of precision on output (To Be Confirmed)
+     * @return exp(x)
+     */
+Method code:
+841 |     private static double exp(double x, double extra, double[] hiPrec) {
+842 |         double intPartA;
+843 |         double intPartB;
+844 |         int intVal;
+845 | 
+846 |         /* Lookup exp(floor(x)).
+847 |          * intPartA will have the upper 22 bits, intPartB will have the lower
+848 |          * 52 bits.
+849 |          */
+850 |         if (x < 0.0) {
+851 |             intVal = (int) -x;
+852 | 
+853 |             if (intVal > 746) {
+854 |                 if (hiPrec != null) {
+855 |                     hiPrec[0] = 0.0;
+856 |                     hiPrec[1] = 0.0;
+857 |                 }
+858 |                 return 0.0;
+859 |             }
+860 | 
+861 |             if (intVal > 709) {
+862 |                 /* This will produce a subnormal output */
+863 |                 final double result = exp(x+40.19140625, extra, hiPrec) / 285040095144011776.0;
+864 |                 if (hiPrec != null) {
+865 |                     hiPrec[0] /= 285040095144011776.0;
+866 |                     hiPrec[1] /= 285040095144011776.0;
+867 |                 }
+868 |                 return result;
+869 |             }
+870 | 
+871 |             if (intVal == 709) {
+872 |                 /* exp(1.494140625) is nearly a machine number... */
+873 |                 final double result = exp(x+1.494140625, extra, hiPrec) / 4.455505956692756620;
+874 |                 if (hiPrec != null) {
+875 |                     hiPrec[0] /= 4.455505956692756620;
+876 |                     hiPrec[1] /= 4.455505956692756620;
+877 |                 }
+878 |                 return result;
+879 |             }
+880 | 
+881 |             intVal++;
+882 | 
+883 |             intPartA = ExpIntTable.EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX-intVal];
+884 |             intPartB = ExpIntTable.EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX-intVal];
+885 | 
+886 |             intVal = -intVal;
+887 |         } else {
+888 |             intVal = (int) x;
+889 | 
+890 |             if (intVal > 709) {
+891 |                 if (hiPrec != null) {
+892 |                     hiPrec[0] = Double.POSITIVE_INFINITY;
+893 |                     hiPrec[1] = 0.0;
+894 |                 }
+895 |                 return Double.POSITIVE_INFINITY;
+896 |             }
+897 | 
+898 |             intPartA = ExpIntTable.EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX+intVal];
+899 |             intPartB = ExpIntTable.EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX+intVal];
+900 |         }
+901 | 
+902 |         /* Get the fractional part of x, find the greatest multiple of 2^-10 less than
+903 |          * x and look up the exp function of it.
+904 |          * fracPartA will have the upper 22 bits, fracPartB the lower 52 bits.
+905 |          */
+906 |         final int intFrac = (int) ((x - intVal) * 1024.0);
+907 |         final double fracPartA = ExpFracTable.EXP_FRAC_TABLE_A[intFrac];
+908 |         final double fracPartB = ExpFracTable.EXP_FRAC_TABLE_B[intFrac];
+909 | 
+910 |         /* epsilon is the difference in x from the nearest multiple of 2^-10.  It
+911 |          * has a value in the range 0 <= epsilon < 2^-10.
+912 |          * Do the subtraction from x as the last step to avoid possible loss of percison.
+913 |          */
+914 |         final double epsilon = x - (intVal + intFrac / 1024.0);
+915 | 
+916 |         /* Compute z = exp(epsilon) - 1.0 via a minimax polynomial.  z has
+917 |        full double precision (52 bits).  Since z < 2^-10, we will have
+918 |        62 bits of precision when combined with the contant 1.  This will be
+919 |        used in the last addition below to get proper rounding. */
+920 | 
+921 |         /* Remez generated polynomial.  Converges on the interval [0, 2^-10], error
+922 |        is less than 0.5 ULP */
+923 |         double z = 0.04168701738764507;
+924 |         z = z * epsilon + 0.1666666505023083;
+925 |         z = z * epsilon + 0.5000000000042687;
+926 |         z = z * epsilon + 1.0;
+927 |         z = z * epsilon + -3.940510424527919E-20;
+928 | 
+929 |         /* Compute (intPartA+intPartB) * (fracPartA+fracPartB) by binomial
+930 |        expansion.
+931 |        tempA is exact since intPartA and intPartB only have 22 bits each.
+932 |        tempB will have 52 bits of precision.
+933 |          */
+934 |         double tempA = intPartA * fracPartA;
+935 |         double tempB = intPartA * fracPartB + intPartB * fracPartA + intPartB * fracPartB;
+936 | 
+937 |         /* Compute the result.  (1+z)(tempA+tempB).  Order of operations is
+938 |        important.  For accuracy add by increasing size.  tempA is exact and
+939 |        much larger than the others.  If there are extra bits specified from the
+940 |        pow() function, use them. */
+941 |         final double tempC = tempB + tempA;
+942 |         final double result;
+943 |         if (extra != 0.0) {
+944 |             result = tempC*extra*z + tempC*extra + tempC*z + tempB + tempA;
+945 |         } else {
+946 |             result = tempC*z + tempB + tempA;
+947 |         }
+948 | 
+949 |         if (hiPrec != null) {
+950 |             // If requesting high precision
+951 |             hiPrec[0] = tempA;
+952 |             hiPrec[1] = tempC*extra*z + tempC*extra + tempC*z + tempB;
+953 |         }
+954 | 
+955 |         return result;
+956 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math3.distribution.NormalDistribution.NormalDistribution(double,double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/NormalDistribution.java
+Original range: 84-87
+Documentation:
+/**
+     * Create a normal distribution using the given mean, standard deviation and
+     * inverse cumulative distribution accuracy.
+     *
+     * @param mean Mean for this distribution.
+     * @param sd Standard deviation for this distribution.
+     * @param inverseCumAccuracy Inverse cumulative probability accuracy.
+     * @throws NotStrictlyPositiveException if {@code sd <= 0}.
+     * @since 2.1
+     */
+Method code:
+84 |     public NormalDistribution(double mean, double sd, double inverseCumAccuracy)
+85 |         throws NotStrictlyPositiveException {
+86 |         this(new Well19937c(), mean, sd, inverseCumAccuracy);
+87 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math3.distribution.GammaDistribution.sample()
+Source: src/main/java/org/apache/commons/math3/distribution/GammaDistribution.java
+Original range: 372-436
+Documentation:
+/**
+     * <p>This implementation uses the following algorithms: </p>
+     *
+     * <p>For 0 < shape < 1: <br/>
+     * Ahrens, J. H. and Dieter, U., <i>Computer methods for
+     * sampling from gamma, beta, Poisson and binomial distributions.</i>
+     * Computing, 12, 223-246, 1974.</p>
+     *
+     * <p>For shape >= 1: <br/>
+     * Marsaglia and Tsang, <i>A Simple Method for Generating
+     * Gamma Variables.</i> ACM Transactions on Mathematical Software,
+     * Volume 26 Issue 3, September, 2000.</p>
+     *
+     * @return random value sampled from the Gamma(shape, scale) distribution
+     */
+Method code:
+372 |     @Override
+373 |     public double sample()  {
+374 |         if (shape < 1) {
+375 |             // [1]: p. 228, Algorithm GS
+376 | 
+377 |             while (true) {
+378 |                 // Step 1:
+379 |                 final double u = random.nextDouble();
+380 |                 final double bGS = 1 + shape / FastMath.E;
+381 |                 final double p = bGS * u;
+382 | 
+383 |                 if (p <= 1) {
+384 |                     // Step 2:
+385 | 
+386 |                     final double x = FastMath.pow(p, 1 / shape);
+387 |                     final double u2 = random.nextDouble();
+388 | 
+389 |                     if (u2 > FastMath.exp(-x)) {
+390 |                         // Reject
+391 |                         continue;
+392 |                     } else {
+393 |                         return scale * x;
+394 |                     }
+395 |                 } else {
+396 |                     // Step 3:
+397 | 
+398 |                     final double x = -1 * FastMath.log((bGS - p) / shape);
+399 |                     final double u2 = random.nextDouble();
+400 | 
+401 |                     if (u2 > FastMath.pow(x, shape - 1)) {
+402 |                         // Reject
+403 |                         continue;
+404 |                     } else {
+405 |                         return scale * x;
+406 |                     }
+407 |                 }
+408 |             }
+409 |         }
+410 | 
+411 |         // Now shape >= 1
+412 | 
+413 |         final double d = shape - 0.333333333333333333;
+414 |         final double c = 1 / (3 * FastMath.sqrt(d));
+415 | 
+416 |         while (true) {
+417 |             final double x = random.nextGaussian();
+418 |             final double v = (1 + c * x) * (1 + c * x) * (1 + c * x);
+419 | 
+420 |             if (v <= 0) {
+421 |                 continue;
+422 |             }
+423 | 
+424 |             final double x2 = x * x;
+425 |             final double u = random.nextDouble();
+426 | 
+427 |             // Squeeze
+428 |             if (u < 1 - 0.0331 * x2 * x2) {
+429 |                 return scale * d * v;
+430 |             }
+431 | 
+432 |             if (FastMath.log(u) < 0.5 * x2 + d * (1 - v + FastMath.log(v))) {
+433 |                 return scale * d * v;
+434 |             }
+435 |         }
+436 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math3.util.FastMath.polyCosine(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1697-1707
+Documentation:
+/**
+     *  Computes cos(x) - 1, where |x| < 1/16.
+     *  Use a Remez polynomial approximation.
+     *  @param x a number smaller than 1/16
+     *  @return cos(x) - 1
+     */
+Method code:
+1697 |     private static double polyCosine(double x) {
+1698 |         double x2 = x*x;
+1699 | 
+1700 |         double p = 2.479773539153719E-5;
+1701 |         p = p * x2 + -0.0013888888689039883;
+1702 |         p = p * x2 + 0.041666666666621166;
+1703 |         p = p * x2 + -0.49999999999999994;
+1704 |         p *= x2;
+1705 | 
+1706 |         return p;
+1707 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math3.distribution.LogNormalDistribution.sample()
+Source: src/main/java/org/apache/commons/math3/distribution/LogNormalDistribution.java
+Original range: 309-313
+Documentation:
+/** {@inheritDoc} */
+Method code:
+309 |     @Override
+310 |     public double sample()  {
+311 |         final double n = random.nextGaussian();
+312 |         return FastMath.exp(scale + shape * n);
+313 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math3.util.FastMath.log(double,double[])
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1129-1353
+Documentation:
+/**
+     * Internal helper method for natural logarithm function.
+     * @param x original argument of the natural logarithm function
+     * @param hiPrec extra bits of precision on output (To Be Confirmed)
+     * @return log(x)
+     */
+Method code:
+1129 |     private static double log(final double x, final double[] hiPrec) {
+1130 |         if (x==0) { // Handle special case of +0/-0
+1131 |             return Double.NEGATIVE_INFINITY;
+1132 |         }
+1133 |         long bits = Double.doubleToLongBits(x);
+1134 | 
+1135 |         /* Handle special cases of negative input, and NaN */
+1136 |         if ((bits & 0x8000000000000000L) != 0 || x != x) {
+1137 |             if (x != 0.0) {
+1138 |                 if (hiPrec != null) {
+1139 |                     hiPrec[0] = Double.NaN;
+1140 |                 }
+1141 | 
+1142 |                 return Double.NaN;
+1143 |             }
+1144 |         }
+1145 | 
+1146 |         /* Handle special cases of Positive infinity. */
+1147 |         if (x == Double.POSITIVE_INFINITY) {
+1148 |             if (hiPrec != null) {
+1149 |                 hiPrec[0] = Double.POSITIVE_INFINITY;
+1150 |             }
+1151 | 
+1152 |             return Double.POSITIVE_INFINITY;
+1153 |         }
+1154 | 
+1155 |         /* Extract the exponent */
+1156 |         int exp = (int)(bits >> 52)-1023;
+1157 | 
+1158 |         if ((bits & 0x7ff0000000000000L) == 0) {
+1159 |             // Subnormal!
+1160 |             if (x == 0) {
+1161 |                 // Zero
+1162 |                 if (hiPrec != null) {
+1163 |                     hiPrec[0] = Double.NEGATIVE_INFINITY;
+1164 |                 }
+1165 | 
+1166 |                 return Double.NEGATIVE_INFINITY;
+1167 |             }
+1168 | 
+1169 |             /* Normalize the subnormal number. */
+1170 |             bits <<= 1;
+1171 |             while ( (bits & 0x0010000000000000L) == 0) {
+1172 |                 --exp;
+1173 |                 bits <<= 1;
+1174 |             }
+1175 |         }
+1176 | 
+1177 | 
+1178 |         if (exp == -1 || exp == 0) {
+1179 |             if (x < 1.01 && x > 0.99 && hiPrec == null) {
+1180 |                 /* The normal method doesn't work well in the range [0.99, 1.01], so call do a straight
+1181 |            polynomial expansion in higer precision. */
+1182 | 
+1183 |                /* Compute x - 1.0 and split it */
+1184 |                 double xa = x - 1.0;
+1185 |                 double xb = xa - x + 1.0;
+1186 |                 double tmp = xa * HEX_40000000;
+1187 |                 double aa = xa + tmp - tmp;
+1188 |                 double ab = xa - aa;
+1189 |                 xa = aa;
+1190 |                 xb = ab;
+1191 | 
+1192 |                 final double[] lnCoef_last = LN_QUICK_COEF[LN_QUICK_COEF.length - 1];
+1193 |                 double ya = lnCoef_last[0];
+1194 |                 double yb = lnCoef_last[1];
+1195 | 
+1196 |                 for (int i = LN_QUICK_COEF.length - 2; i >= 0; i--) {
+1197 |                     /* Multiply a = y * x */
+1198 |                     aa = ya * xa;
+1199 |                     ab = ya * xb + yb * xa + yb * xb;
+1200 |                     /* split, so now y = a */
+1201 |                     tmp = aa * HEX_40000000;
+1202 |                     ya = aa + tmp - tmp;
+1203 |                     yb = aa - ya + ab;
+1204 | 
+1205 |                     /* Add  a = y + lnQuickCoef */
+1206 |                     final double[] lnCoef_i = LN_QUICK_COEF[i];
+1207 |                     aa = ya + lnCoef_i[0];
+1208 |                     ab = yb + lnCoef_i[1];
+1209 |                     /* Split y = a */
+1210 |                     tmp = aa * HEX_40000000;
+1211 |                     ya = aa + tmp - tmp;
+1212 |                     yb = aa - ya + ab;
+1213 |                 }
+1214 | 
+1215 |                 /* Multiply a = y * x */
+1216 |                 aa = ya * xa;
+1217 |                 ab = ya * xb + yb * xa + yb * xb;
+1218 |                 /* split, so now y = a */
+1219 |                 tmp = aa * HEX_40000000;
+1220 |                 ya = aa + tmp - tmp;
+1221 |                 yb = aa - ya + ab;
+1222 | 
+1223 |                 return ya + yb;
+1224 |             }
+1225 |         }
+1226 | 
+1227 |         // lnm is a log of a number in the range of 1.0 - 2.0, so 0 <= lnm < ln(2)
+1228 |         final double[] lnm = lnMant.LN_MANT[(int)((bits & 0x000ffc0000000000L) >> 42)];
+1229 | 
+1230 |         /*
+1231 |     double epsilon = x / Double.longBitsToDouble(bits & 0xfffffc0000000000L);
+1232 | 
+1233 |     epsilon -= 1.0;
+1234 |          */
+1235 | 
+1236 |         // y is the most significant 10 bits of the mantissa
+1237 |         //double y = Double.longBitsToDouble(bits & 0xfffffc0000000000L);
+1238 |         //double epsilon = (x - y) / y;
+1239 |         final double epsilon = (bits & 0x3ffffffffffL) / (TWO_POWER_52 + (bits & 0x000ffc0000000000L));
+1240 | 
+1241 |         double lnza = 0.0;
+1242 |         double lnzb = 0.0;
+1243 | 
+1244 |         if (hiPrec != null) {
+1245 |             /* split epsilon -> x */
+1246 |             double tmp = epsilon * HEX_40000000;
+1247 |             double aa = epsilon + tmp - tmp;
+1248 |             double ab = epsilon - aa;
+1249 |             double xa = aa;
+1250 |             double xb = ab;
+1251 | 
+1252 |             /* Need a more accurate epsilon, so adjust the division. */
+1253 |             final double numer = bits & 0x3ffffffffffL;
+1254 |             final double denom = TWO_POWER_52 + (bits & 0x000ffc0000000000L);
+1255 |             aa = numer - xa*denom - xb * denom;
+1256 |             xb += aa / denom;
+1257 | 
+1258 |             /* Remez polynomial evaluation */
+1259 |             final double[] lnCoef_last = LN_HI_PREC_COEF[LN_HI_PREC_COEF.length-1];
+1260 |             double ya = lnCoef_last[0];
+1261 |             double yb = lnCoef_last[1];
+1262 | 
+1263 |             for (int i = LN_HI_PREC_COEF.length - 2; i >= 0; i--) {
+1264 |                 /* Multiply a = y * x */
+1265 |                 aa = ya * xa;
+1266 |                 ab = ya * xb + yb * xa + yb * xb;
+1267 |                 /* split, so now y = a */
+1268 |                 tmp = aa * HEX_40000000;
+1269 |                 ya = aa + tmp - tmp;
+1270 |                 yb = aa - ya + ab;
+1271 | 
+1272 |                 /* Add  a = y + lnHiPrecCoef */
+1273 |                 final double[] lnCoef_i = LN_HI_PREC_COEF[i];
+1274 |                 aa = ya + lnCoef_i[0];
+1275 |                 ab = yb + lnCoef_i[1];
+1276 |                 /* Split y = a */
+1277 |                 tmp = aa * HEX_40000000;
+1278 |                 ya = aa + tmp - tmp;
+1279 |                 yb = aa - ya + ab;
+1280 |             }
+1281 | 
+1282 |             /* Multiply a = y * x */
+1283 |             aa = ya * xa;
+1284 |             ab = ya * xb + yb * xa + yb * xb;
+1285 | 
+1286 |             /* split, so now lnz = a */
+1287 |             /*
+1288 |       tmp = aa * 1073741824.0;
+1289 |       lnza = aa + tmp - tmp;
+1290 |       lnzb = aa - lnza + ab;
+1291 |              */
+1292 |             lnza = aa + ab;
+1293 |             lnzb = -(lnza - aa - ab);
+1294 |         } else {
+1295 |             /* High precision not required.  Eval Remez polynomial
+1296 |          using standard double precision */
+1297 |             lnza = -0.16624882440418567;
+1298 |             lnza = lnza * epsilon + 0.19999954120254515;
+1299 |             lnza = lnza * epsilon + -0.2499999997677497;
+1300 |             lnza = lnza * epsilon + 0.3333333333332802;
+1301 |             lnza = lnza * epsilon + -0.5;
+1302 |             lnza = lnza * epsilon + 1.0;
+1303 |             lnza = lnza * epsilon;
+1304 |         }
+1305 | 
+1306 |         /* Relative sizes:
+1307 |          * lnzb     [0, 2.33E-10]
+1308 |          * lnm[1]   [0, 1.17E-7]
+1309 |          * ln2B*exp [0, 1.12E-4]
+1310 |          * lnza      [0, 9.7E-4]
+1311 |          * lnm[0]   [0, 0.692]
+1312 |          * ln2A*exp [0, 709]
+1313 |          */
+1314 | 
+1315 |         /* Compute the following sum:
+1316 |          * lnzb + lnm[1] + ln2B*exp + lnza + lnm[0] + ln2A*exp;
+1317 |          */
+1318 | 
+1319 |         //return lnzb + lnm[1] + ln2B*exp + lnza + lnm[0] + ln2A*exp;
+1320 |         double a = LN_2_A*exp;
+1321 |         double b = 0.0;
+1322 |         double c = a+lnm[0];
+1323 |         double d = -(c-a-lnm[0]);
+1324 |         a = c;
+1325 |         b = b + d;
+1326 | 
+1327 |         c = a + lnza;
+1328 |         d = -(c - a - lnza);
+1329 |         a = c;
+1330 |         b = b + d;
+1331 | 
+1332 |         c = a + LN_2_B*exp;
+1333 |         d = -(c - a - LN_2_B*exp);
+1334 |         a = c;
+1335 |         b = b + d;
+1336 | 
+1337 |         c = a + lnm[1];
+1338 |         d = -(c - a - lnm[1]);
+1339 |         a = c;
+1340 |         b = b + d;
+1341 | 
+1342 |         c = a + lnzb;
+1343 |         d = -(c - a - lnzb);
+1344 |         a = c;
+1345 |         b = b + d;
+1346 | 
+1347 |         if (hiPrec != null) {
+1348 |             hiPrec[0] = a;
+1349 |             hiPrec[1] = b;
+1350 |         }
+1351 | 
+1352 |         return a + b;
+1353 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadLnMant()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6173-6175
+Documentation:
+/**
+     * Load "LN_MANT".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6173 |     static double[][] loadLnMant() {
+6174 |         return LN_MANT.clone();
+6175 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math3.random.AbstractWell.AbstractWell(int,int,int,int)
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 71-73
+Documentation:
+/** Creates a new random number generator.
+     * <p>The instance is initialized using the current time plus the
+     * system identity hash code of this instance as the seed.</p>
+     * @param k number of bits in the pool (not necessarily a multiple of 32)
+     * @param m1 first parameter of the algorithm
+     * @param m2 second parameter of the algorithm
+     * @param m3 third parameter of the algorithm
+     */
+Method code:
+71 |     protected AbstractWell(final int k, final int m1, final int m2, final int m3) {
+72 |         this(k, m1, m2, m3, null);
+73 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math3.random.AbstractWell.AbstractWell(int,int,int,int,int[])
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 94-122
+Documentation:
+/** Creates a new random number generator using an int array seed.
+     * @param k number of bits in the pool (not necessarily a multiple of 32)
+     * @param m1 first parameter of the algorithm
+     * @param m2 second parameter of the algorithm
+     * @param m3 third parameter of the algorithm
+     * @param seed the initial seed (32 bits integers array), if null
+     * the seed of the generator will be related to the current time
+     */
+Method code:
+94 |     protected AbstractWell(final int k, final int m1, final int m2, final int m3, final int[] seed) {
+95 | 
+96 |         // the bits pool contains k bits, k = r w - p where r is the number
+97 |         // of w bits blocks, w is the block size (always 32 in the original paper)
+98 |         // and p is the number of unused bits in the last block
+99 |         final int w = 32;
+100 |         final int r = (k + w - 1) / w;
+101 |         this.v      = new int[r];
+102 |         this.index  = 0;
+103 | 
+104 |         // precompute indirection index tables. These tables are used for optimizing access
+105 |         // they allow saving computations like "(j + r - 2) % r" with costly modulo operations
+106 |         iRm1 = new int[r];
+107 |         iRm2 = new int[r];
+108 |         i1   = new int[r];
+109 |         i2   = new int[r];
+110 |         i3   = new int[r];
+111 |         for (int j = 0; j < r; ++j) {
+112 |             iRm1[j] = (j + r - 1) % r;
+113 |             iRm2[j] = (j + r - 2) % r;
+114 |             i1[j]   = (j + m1)    % r;
+115 |             i2[j]   = (j + m2)    % r;
+116 |             i3[j]   = (j + m3)    % r;
+117 |         }
+118 | 
+119 |         // initialize the pool content
+120 |         setSeed(seed);
+121 | 
+122 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math3.util.FastMath.sin(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 2225-2284
+Documentation:
+/**
+     * Sine function.
+     *
+     * @param x Argument.
+     * @return sin(x)
+     */
+Method code:
+2225 |     public static double sin(double x) {
+2226 |         boolean negative = false;
+2227 |         int quadrant = 0;
+2228 |         double xa;
+2229 |         double xb = 0.0;
+2230 | 
+2231 |         /* Take absolute value of the input */
+2232 |         xa = x;
+2233 |         if (x < 0) {
+2234 |             negative = true;
+2235 |             xa = -xa;
+2236 |         }
+2237 | 
+2238 |         /* Check for zero and negative zero */
+2239 |         if (xa == 0.0) {
+2240 |             long bits = Double.doubleToLongBits(x);
+2241 |             if (bits < 0) {
+2242 |                 return -0.0;
+2243 |             }
+2244 |             return 0.0;
+2245 |         }
+2246 | 
+2247 |         if (xa != xa || xa == Double.POSITIVE_INFINITY) {
+2248 |             return Double.NaN;
+2249 |         }
+2250 | 
+2251 |         /* Perform any argument reduction */
+2252 |         if (xa > 3294198.0) {
+2253 |             // PI * (2**20)
+2254 |             // Argument too big for CodyWaite reduction.  Must use
+2255 |             // PayneHanek.
+2256 |             double reduceResults[] = new double[3];
+2257 |             reducePayneHanek(xa, reduceResults);
+2258 |             quadrant = ((int) reduceResults[0]) & 3;
+2259 |             xa = reduceResults[1];
+2260 |             xb = reduceResults[2];
+2261 |         } else if (xa > 1.5707963267948966) {
+2262 |             final CodyWaite cw = new CodyWaite(xa);
+2263 |             quadrant = cw.getK() & 3;
+2264 |             xa = cw.getRemA();
+2265 |             xb = cw.getRemB();
+2266 |         }
+2267 | 
+2268 |         if (negative) {
+2269 |             quadrant ^= 2;  // Flip bit 1
+2270 |         }
+2271 | 
+2272 |         switch (quadrant) {
+2273 |             case 0:
+2274 |                 return sinQ(xa, xb);
+2275 |             case 1:
+2276 |                 return cosQ(xa, xb);
+2277 |             case 2:
+2278 |                 return -sinQ(xa, xb);
+2279 |             case 3:
+2280 |                 return -cosQ(xa, xb);
+2281 |             default:
+2282 |                 return Double.NaN;
+2283 |         }
+2284 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math3.util.FastMath.sqrt(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 378-380
+Documentation:
+/** Compute the square root of a number.
+     * <p><b>Note:</b> this implementation currently delegates to {@link Math#sqrt}
+     * @param a number on which evaluation is done
+     * @return square root of a
+     */
+Method code:
+378 |     public static double sqrt(final double a) {
+379 |         return Math.sqrt(a);
+380 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math3.util.FastMath.CodyWaite.getRemA()
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3855-3857
+Documentation:
+/**
+         * @return remA
+         */
+Method code:
+3855 |         double getRemA() {
+3856 |             return finalRemA;
+3857 |         }
+
+===== M0041 =====
+Signature: org.apache.commons.math3.distribution.NormalDistribution.sample()
+Source: src/main/java/org/apache/commons/math3/distribution/NormalDistribution.java
+Original range: 254-257
+Documentation:
+/** {@inheritDoc} */
+Method code:
+254 |     @Override
+255 |     public double sample()  {
+256 |         return standardDeviation * random.nextGaussian() + mean;
+257 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.math3.util.FastMath.exp(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 830-832
+Documentation:
+/**
+     * Exponential function.
+     *
+     * Computes exp(x), function result is nearly rounded.   It will be correctly
+     * rounded to the theoretical value for 99.9% of input values, otherwise it will
+     * have a 1 UPL error.
+     *
+     * Method:
+     *    Lookup intVal = exp(int(x))
+     *    Lookup fracVal = exp(int(x-int(x) / 1024.0) * 1024.0 );
+     *    Compute z as the exponential of the remaining bits by a polynomial minus one
+     *    exp(x) = intVal * fracVal * (1 + z)
+     *
+     * Accuracy:
+     *    Calculation is done with 63 bits of precision, so result should be correctly
+     *    rounded for 99.9% of input values, with less than 1 ULP error otherwise.
+     *
+     * @param x   a double
+     * @return double e<sup>x</sup>
+     */
+Method code:
+830 |     public static double exp(double x) {
+831 |         return exp(x, 0.0, null);
+832 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.math3.distribution.AbstractRealDistribution.AbstractRealDistribution(RandomGenerator)
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractRealDistribution.java
+Original range: 76-78
+Documentation:
+/**
+     * @param rng Random number generator.
+     * @since 3.1
+     */
+Method code:
+76 |     protected AbstractRealDistribution(RandomGenerator rng) {
+77 |         random = rng;
+78 |     }
+
+===== M0044 =====
+Signature: org.apache.commons.math3.util.FastMath.CodyWaite.CodyWaite(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3808-3844
+Documentation:
+/**
+         * @param xa Argument.
+         */
+Method code:
+3808 |         CodyWaite(double xa) {
+3809 |             // Estimate k.
+3810 |             //k = (int)(xa / 1.5707963267948966);
+3811 |             int k = (int)(xa * 0.6366197723675814);
+3812 | 
+3813 |             // Compute remainder.
+3814 |             double remA;
+3815 |             double remB;
+3816 |             while (true) {
+3817 |                 double a = -k * 1.570796251296997;
+3818 |                 remA = xa + a;
+3819 |                 remB = -(remA - xa - a);
+3820 | 
+3821 |                 a = -k * 7.549789948768648E-8;
+3822 |                 double b = remA;
+3823 |                 remA = a + b;
+3824 |                 remB += -(remA - b - a);
+3825 | 
+3826 |                 a = -k * 6.123233995736766E-17;
+3827 |                 b = remA;
+3828 |                 remA = a + b;
+3829 |                 remB += -(remA - b - a);
+3830 | 
+3831 |                 if (remA > 0) {
+3832 |                     break;
+3833 |                 }
+3834 | 
+3835 |                 // Remainder is negative, so decrement k and try again.
+3836 |                 // This should only happen if the input is very close
+3837 |                 // to an even multiple of pi/2.
+3838 |                 --k;
+3839 |             }
+3840 | 
+3841 |             this.finalK = k;
+3842 |             this.finalRemA = remA;
+3843 |             this.finalRemB = remB;
+3844 |         }
+
+===== M0045 =====
+Signature: org.apache.commons.math3.util.FastMath.pow(double,double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1442-1600
+Documentation:
+/**
+     * Power function.  Compute x^y.
+     *
+     * @param x   a double
+     * @param y   a double
+     * @return double
+     */
+Method code:
+1442 |     public static double pow(double x, double y) {
+1443 |         final double lns[] = new double[2];
+1444 | 
+1445 |         if (y == 0.0) {
+1446 |             return 1.0;
+1447 |         }
+1448 | 
+1449 |         if (x != x) { // X is NaN
+1450 |             return x;
+1451 |         }
+1452 | 
+1453 | 
+1454 |         if (x == 0) {
+1455 |             long bits = Double.doubleToLongBits(x);
+1456 |             if ((bits & 0x8000000000000000L) != 0) {
+1457 |                 // -zero
+1458 |                 long yi = (long) y;
+1459 | 
+1460 |                 if (y < 0 && y == yi && (yi & 1) == 1) {
+1461 |                     return Double.NEGATIVE_INFINITY;
+1462 |                 }
+1463 | 
+1464 |                 if (y > 0 && y == yi && (yi & 1) == 1) {
+1465 |                     return -0.0;
+1466 |                 }
+1467 |             }
+1468 | 
+1469 |             if (y < 0) {
+1470 |                 return Double.POSITIVE_INFINITY;
+1471 |             }
+1472 |             if (y > 0) {
+1473 |                 return 0.0;
+1474 |             }
+1475 | 
+1476 |             return Double.NaN;
+1477 |         }
+1478 | 
+1479 |         if (x == Double.POSITIVE_INFINITY) {
+1480 |             if (y != y) { // y is NaN
+1481 |                 return y;
+1482 |             }
+1483 |             if (y < 0.0) {
+1484 |                 return 0.0;
+1485 |             } else {
+1486 |                 return Double.POSITIVE_INFINITY;
+1487 |             }
+1488 |         }
+1489 | 
+1490 |         if (y == Double.POSITIVE_INFINITY) {
+1491 |             if (x * x == 1.0) {
+1492 |                 return Double.NaN;
+1493 |             }
+1494 | 
+1495 |             if (x * x > 1.0) {
+1496 |                 return Double.POSITIVE_INFINITY;
+1497 |             } else {
+1498 |                 return 0.0;
+1499 |             }
+1500 |         }
+1501 | 
+1502 |         if (x == Double.NEGATIVE_INFINITY) {
+1503 |             if (y != y) { // y is NaN
+1504 |                 return y;
+1505 |             }
+1506 | 
+1507 |             if (y < 0) {
+1508 |                 long yi = (long) y;
+1509 |                 if (y == yi && (yi & 1) == 1) {
+1510 |                     return -0.0;
+1511 |                 }
+1512 | 
+1513 |                 return 0.0;
+1514 |             }
+1515 | 
+1516 |             if (y > 0)  {
+1517 |                 long yi = (long) y;
+1518 |                 if (y == yi && (yi & 1) == 1) {
+1519 |                     return Double.NEGATIVE_INFINITY;
+1520 |                 }
+1521 | 
+1522 |                 return Double.POSITIVE_INFINITY;
+1523 |             }
+1524 |         }
+1525 | 
+1526 |         if (y == Double.NEGATIVE_INFINITY) {
+1527 | 
+1528 |             if (x * x == 1.0) {
+1529 |                 return Double.NaN;
+1530 |             }
+1531 | 
+1532 |             if (x * x < 1.0) {
+1533 |                 return Double.POSITIVE_INFINITY;
+1534 |             } else {
+1535 |                 return 0.0;
+1536 |             }
+1537 |         }
+1538 | 
+1539 |         /* Handle special case x<0 */
+1540 |         if (x < 0) {
+1541 |             // y is an even integer in this case
+1542 |             if (y >= TWO_POWER_53 || y <= -TWO_POWER_53) {
+1543 |                 return pow(-x, y);
+1544 |             }
+1545 | 
+1546 |             if (y == (long) y) {
+1547 |                 // If y is an integer
+1548 |                 return ((long)y & 1) == 0 ? pow(-x, y) : -pow(-x, y);
+1549 |             } else {
+1550 |                 return Double.NaN;
+1551 |             }
+1552 |         }
+1553 | 
+1554 |         /* Split y into ya and yb such that y = ya+yb */
+1555 |         double ya;
+1556 |         double yb;
+1557 |         if (y < 8e298 && y > -8e298) {
+1558 |             double tmp1 = y * HEX_40000000;
+1559 |             ya = y + tmp1 - tmp1;
+1560 |             yb = y - ya;
+1561 |         } else {
+1562 |             double tmp1 = y * 9.31322574615478515625E-10;
+1563 |             double tmp2 = tmp1 * 9.31322574615478515625E-10;
+1564 |             ya = (tmp1 + tmp2 - tmp1) * HEX_40000000 * HEX_40000000;
+1565 |             yb = y - ya;
+1566 |         }
+1567 | 
+1568 |         /* Compute ln(x) */
+1569 |         final double lores = log(x, lns);
+1570 |         if (Double.isInfinite(lores)){ // don't allow this to be converted to NaN
+1571 |             return lores;
+1572 |         }
+1573 | 
+1574 |         double lna = lns[0];
+1575 |         double lnb = lns[1];
+1576 | 
+1577 |         /* resplit lns */
+1578 |         double tmp1 = lna * HEX_40000000;
+1579 |         double tmp2 = lna + tmp1 - tmp1;
+1580 |         lnb += lna - tmp2;
+1581 |         lna = tmp2;
+1582 | 
+1583 |         // y*ln(x) = (aa+ab)
+1584 |         final double aa = lna * ya;
+1585 |         final double ab = lna * yb + lnb * ya + lnb * yb;
+1586 | 
+1587 |         lna = aa+ab;
+1588 |         lnb = -(lna - aa - ab);
+1589 | 
+1590 |         double z = 1.0 / 120.0;
+1591 |         z = z * lnb + (1.0 / 24.0);
+1592 |         z = z * lnb + (1.0 / 6.0);
+1593 |         z = z * lnb + 0.5;
+1594 |         z = z * lnb + 1.0;
+1595 |         z = z * lnb;
+1596 | 
+1597 |         final double result = exp(lna, z, null);
+1598 |         //result = result + result * z;
+1599 |         return result;
+1600 |     }
+
+===== M0046 =====
+Signature: org.apache.commons.math3.util.FastMath.CodyWaite.getK()
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3849-3851
+Documentation:
+/**
+         * @return k
+         */
+Method code:
+3849 |         int getK() {
+3850 |             return finalK;
+3851 |         }
+
+===== M0047 =====
+Signature: org.apache.commons.math3.random.BitsStreamGenerator.nextDouble()
+Source: src/main/java/org/apache/commons/math3/random/BitsStreamGenerator.java
+Original range: 86-90
+Documentation:
+/** {@inheritDoc} */
+Method code:
+86 |     public double nextDouble() {
+87 |         final long high = ((long) next(26)) << 26;
+88 |         final int  low  = next(26);
+89 |         return (high | low) * 0x1.0p-52d;
+90 |     }
+
+===== M0048 =====
+Signature: org.apache.commons.math3.distribution.GammaDistribution.GammaDistribution(double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/GammaDistribution.java
+Original range: 92-94
+Documentation:
+/**
+     * Creates a new gamma distribution with specified values of the shape and
+     * scale parameters.
+     *
+     * @param shape the shape parameter
+     * @param scale the scale parameter
+     * @throws NotStrictlyPositiveException if {@code shape <= 0} or
+     * {@code scale <= 0}.
+     */
+Method code:
+92 |     public GammaDistribution(double shape, double scale) throws NotStrictlyPositiveException {
+93 |         this(shape, scale, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+94 |     }
+
+===== M0049 =====
+Signature: org.apache.commons.math3.random.RandomDataGenerator.initRan()
+Source: src/main/java/org/apache/commons/math3/random/RandomDataGenerator.java
+Original range: 724-726
+Documentation:
+/**
+     * Sets the default generator to a {@link Well19937c} generator seeded with
+     * {@code System.currentTimeMillis() + System.identityHashCode(this))}.
+     */
+Method code:
+724 |     private void initRan() {
+725 |         rand = new Well19937c(System.currentTimeMillis() + System.identityHashCode(this));
+726 |     }
+
+===== M0050 =====
+Signature: org.apache.commons.math3.distribution.GammaDistribution.GammaDistribution(double,double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/GammaDistribution.java
+Original range: 109-112
+Documentation:
+/**
+     * Creates a new gamma distribution with specified values of the shape and
+     * scale parameters.
+     *
+     * @param shape the shape parameter
+     * @param scale the scale parameter
+     * @param inverseCumAccuracy the maximum absolute error in inverse
+     * cumulative probability estimates (defaults to
+     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * @throws NotStrictlyPositiveException if {@code shape <= 0} or
+     * {@code scale <= 0}.
+     * @since 2.1
+     */
+Method code:
+109 |     public GammaDistribution(double shape, double scale, double inverseCumAccuracy)
+110 |         throws NotStrictlyPositiveException {
+111 |         this(new Well19937c(), shape, scale, inverseCumAccuracy);
+112 |     }
+
+===== M0051 =====
+Signature: org.apache.commons.math3.random.RandomDataImpl.RandomDataImpl()
+Source: src/main/java/org/apache/commons/math3/random/RandomDataImpl.java
+Original range: 114-116
+Documentation:
+/**
+     * Construct a RandomDataImpl, using a default random generator as the source
+     * of randomness.
+     *
+     * <p>The default generator is a {@link Well19937c} seeded
+     * with {@code System.currentTimeMillis() + System.identityHashCode(this))}.
+     * The generator is initialized and seeded on first use.</p>
+     */
+Method code:
+114 |     public RandomDataImpl() {
+115 |         delegate = new RandomDataGenerator();
+116 |     }
+
+===== M0052 =====
+Signature: org.apache.commons.math3.random.BitsStreamGenerator.nextGaussian()
+Source: src/main/java/org/apache/commons/math3/random/BitsStreamGenerator.java
+Original range: 98-117
+Documentation:
+/** {@inheritDoc} */
+Method code:
+98 |     public double nextGaussian() {
+99 | 
+100 |         final double random;
+101 |         if (Double.isNaN(nextGaussian)) {
+102 |             // generate a new pair of gaussian numbers
+103 |             final double x = nextDouble();
+104 |             final double y = nextDouble();
+105 |             final double alpha = 2 * FastMath.PI * x;
+106 |             final double r      = FastMath.sqrt(-2 * FastMath.log(y));
+107 |             random       = r * FastMath.cos(alpha);
+108 |             nextGaussian = r * FastMath.sin(alpha);
+109 |         } else {
+110 |             // use the second element of the pair already generated
+111 |             random = nextGaussian;
+112 |             nextGaussian = Double.NaN;
+113 |         }
+114 | 
+115 |         return random;
+116 | 
+117 |     }
+
+===== M0053 =====
+Signature: org.apache.commons.math3.special.Gamma.lanczos(double)
+Source: src/main/java/org/apache/commons/math3/special/Gamma.java
+Original range: 512-518
+Documentation:
+/**
+     * <p>
+     * Returns the Lanczos approximation used to compute the gamma function.
+     * The Lanczos approximation is related to the Gamma function by the
+     * following equation
+     * <center>
+     * {@code gamma(x) = sqrt(2 * pi) / x * (x + g + 0.5) ^ (x + 0.5)
+     *                   * exp(-x - g - 0.5) * lanczos(x)},
+     * </center>
+     * where {@code g} is the Lanczos constant.
+     * </p>
+     *
+     * @param x Argument.
+     * @return The Lanczos approximation.
+     * @see <a href="http://mathworld.wolfram.com/LanczosApproximation.html">Lanczos Approximation</a>
+     * equations (1) through (5), and Paul Godfrey's
+     * <a href="http://my.fit.edu/~gabdo/gamma.txt">Note on the computation
+     * of the convergent Lanczos complex Gamma approximation</a>
+     * @since 3.1
+     */
+Method code:
+512 |     public static double lanczos(final double x) {
+513 |         double sum = 0.0;
+514 |         for (int i = LANCZOS.length - 1; i > 0; --i) {
+515 |             sum = sum + (LANCZOS[i] / (x + i));
+516 |         }
+517 |         return sum + LANCZOS[0];
+518 |     }
+
+===== M0054 =====
+Signature: org.apache.commons.math3.random.RandomDataImpl.reSeed(long)
+Source: src/main/java/org/apache/commons/math3/random/RandomDataImpl.java
+Original range: 460-462
+Documentation:
+/**
+     * Reseeds the random number generator with the supplied seed.
+     * <p>
+     * Will create and initialize if null.
+     * </p>
+     *
+     * @param seed
+     *            the seed value to use
+     */
+Method code:
+460 |     public void reSeed(long seed) {
+461 |         delegate.reSeed(seed);
+462 |     }
+

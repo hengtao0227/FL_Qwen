@@ -1,0 +1,83 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.util.MathArrays.linearCombination(double[],double[])
+Source: src/main/java/org/apache/commons/math3/util/MathArrays.java
+Original range: 814-872
+Documentation:
+/**
+     * Compute a linear combination accurately.
+     * This method computes the sum of the products
+     * <code>a<sub>i</sub> b<sub>i</sub></code> to high accuracy.
+     * It does so by using specific multiplication and addition algorithms to
+     * preserve accuracy and reduce cancellation effects.
+     * <br/>
+     * It is based on the 2005 paper
+     * <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.2.1547">
+     * Accurate Sum and Dot Product</a> by Takeshi Ogita, Siegfried M. Rump,
+     * and Shin'ichi Oishi published in SIAM J. Sci. Comput.
+     *
+     * @param a Factors.
+     * @param b Factors.
+     * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
+     * @throws DimensionMismatchException if arrays dimensions don't match
+     */
+Method code:
+814 |     public static double linearCombination(final double[] a, final double[] b)
+815 |         throws DimensionMismatchException {
+816 |         final int len = a.length;
+817 |         if (len != b.length) {
+818 |             throw new DimensionMismatchException(len, b.length);
+819 |         }
+820 | 
+821 |             // Revert to scalar multiplication.
+822 | 
+823 |         final double[] prodHigh = new double[len];
+824 |         double prodLowSum = 0;
+825 | 
+826 |         for (int i = 0; i < len; i++) {
+827 |             final double ai = a[i];
+828 |             final double ca = SPLIT_FACTOR * ai;
+829 |             final double aHigh = ca - (ca - ai);
+830 |             final double aLow = ai - aHigh;
+831 | 
+832 |             final double bi = b[i];
+833 |             final double cb = SPLIT_FACTOR * bi;
+834 |             final double bHigh = cb - (cb - bi);
+835 |             final double bLow = bi - bHigh;
+836 |             prodHigh[i] = ai * bi;
+837 |             final double prodLow = aLow * bLow - (((prodHigh[i] -
+838 |                                                     aHigh * bHigh) -
+839 |                                                    aLow * bHigh) -
+840 |                                                   aHigh * bLow);
+841 |             prodLowSum += prodLow;
+842 |         }
+843 | 
+844 | 
+845 |         final double prodHighCur = prodHigh[0];
+846 |         double prodHighNext = prodHigh[1];
+847 |         double sHighPrev = prodHighCur + prodHighNext;
+848 |         double sPrime = sHighPrev - prodHighNext;
+849 |         double sLowSum = (prodHighNext - (sHighPrev - sPrime)) + (prodHighCur - sPrime);
+850 | 
+851 |         final int lenMinusOne = len - 1;
+852 |         for (int i = 1; i < lenMinusOne; i++) {
+853 |             prodHighNext = prodHigh[i + 1];
+854 |             final double sHighCur = sHighPrev + prodHighNext;
+855 |             sPrime = sHighCur - prodHighNext;
+856 |             sLowSum += (prodHighNext - (sHighCur - sPrime)) + (sHighPrev - sPrime);
+857 |             sHighPrev = sHighCur;
+858 |         }
+859 | 
+860 |         double result = sHighPrev + (prodLowSum + sLowSum);
+861 | 
+862 |         if (Double.isNaN(result)) {
+863 |             // either we have split infinite numbers or some coefficients were NaNs,
+864 |             // just rely on the naive implementation and let IEEE754 handle this
+865 |             result = 0;
+866 |             for (int i = 0; i < len; ++i) {
+867 |                 result += a[i] * b[i];
+868 |             }
+869 |         }
+870 | 
+871 |         return result;
+872 |     }
+

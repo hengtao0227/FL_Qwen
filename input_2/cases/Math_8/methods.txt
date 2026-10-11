@@ -1,0 +1,543 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.random.Well19937c.next(int)
+Source: src/main/java/org/apache/commons/math3/random/Well19937c.java
+Original range: 83-113
+Documentation:
+/** {@inheritDoc} */
+Method code:
+83 |     @Override
+84 |     protected int next(final int bits) {
+85 | 
+86 |         final int indexRm1 = iRm1[index];
+87 |         final int indexRm2 = iRm2[index];
+88 | 
+89 |         final int v0       = v[index];
+90 |         final int vM1      = v[i1[index]];
+91 |         final int vM2      = v[i2[index]];
+92 |         final int vM3      = v[i3[index]];
+93 | 
+94 |         final int z0 = (0x80000000 & v[indexRm1]) ^ (0x7FFFFFFF & v[indexRm2]);
+95 |         final int z1 = (v0 ^ (v0 << 25))  ^ (vM1 ^ (vM1 >>> 27));
+96 |         final int z2 = (vM2 >>> 9) ^ (vM3 ^ (vM3 >>> 1));
+97 |         final int z3 = z1      ^ z2;
+98 |         int z4 = z0 ^ (z1 ^ (z1 << 9)) ^ (z2 ^ (z2 << 21)) ^ (z3 ^ (z3 >>> 21));
+99 | 
+100 |         v[index]     = z3;
+101 |         v[indexRm1]  = z4;
+102 |         v[indexRm2] &= 0x80000000;
+103 |         index        = indexRm1;
+104 | 
+105 | 
+106 |         // add Matsumoto-Kurita tempering
+107 |         // to get a maximally-equidistributed generator
+108 |         z4 = z4 ^ ((z4 <<  7) & 0xe46e1700);
+109 |         z4 = z4 ^ ((z4 << 15) & 0x9b868000);
+110 | 
+111 |         return z4 >>> (32 - bits);
+112 | 
+113 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.distribution.DiscreteRealDistribution.DiscreteRealDistribution(RandomGenerator,double[],double[])
+Source: src/main/java/org/apache/commons/math3/distribution/DiscreteRealDistribution.java
+Original range: 84-99
+Documentation:
+/**
+     * Create a discrete distribution using the given random number generator
+     * and probability mass function definition.
+     *
+     * @param rng random number generator.
+     * @param singletons array of random variable values.
+     * @param probabilities array of probabilities.
+     * @throws DimensionMismatchException if
+     * {@code singletons.length != probabilities.length}
+     * @throws NotPositiveException if probability of at least one value is
+     * negative.
+     * @throws MathArithmeticException if the probabilities sum to zero.
+     * @throws MathIllegalArgumentException if probability of at least one value
+     * is infinite.
+     */
+Method code:
+84 |     public DiscreteRealDistribution(final RandomGenerator rng,
+85 |                                     final double[] singletons, final double[] probabilities)
+86 |         throws DimensionMismatchException, NotPositiveException, MathArithmeticException, MathIllegalArgumentException {
+87 |         super(rng);
+88 |         if (singletons.length != probabilities.length) {
+89 |             throw new DimensionMismatchException(probabilities.length, singletons.length);
+90 |         }
+91 | 
+92 |         List<Pair<Double, Double>> samples = new ArrayList<Pair<Double, Double>>(singletons.length);
+93 | 
+94 |         for (int i = 0; i < singletons.length; i++) {
+95 |             samples.add(new Pair<Double, Double>(singletons[i], probabilities[i]));
+96 |         }
+97 | 
+98 |         innerDistribution = new DiscreteDistribution<Double>(rng, samples);
+99 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.random.BitsStreamGenerator.nextDouble()
+Source: src/main/java/org/apache/commons/math3/random/BitsStreamGenerator.java
+Original range: 89-93
+Documentation:
+/** {@inheritDoc} */
+Method code:
+89 |     public double nextDouble() {
+90 |         final long high = ((long) next(26)) << 26;
+91 |         final int  low  = next(26);
+92 |         return (high | low) * 0x1.0p-52d;
+93 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.random.AbstractWell.setSeed(int[])
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 152-170
+Documentation:
+/** Reinitialize the generator as if just built with the given int array seed.
+     * <p>The state of the generator is exactly the same as a new
+     * generator built with the same seed.</p>
+     * @param seed the initial seed (32 bits integers array). If null
+     * the seed of the generator will be the system time plus the system identity
+     * hash code of the instance.
+     */
+Method code:
+152 |     @Override
+153 |     public void setSeed(final int[] seed) {
+154 |         if (seed == null) {
+155 |             setSeed(System.currentTimeMillis() + System.identityHashCode(this));
+156 |             return;
+157 |         }
+158 | 
+159 |         System.arraycopy(seed, 0, v, 0, Math.min(seed.length, v.length));
+160 | 
+161 |         if (seed.length < v.length) {
+162 |             for (int i = seed.length; i < v.length; ++i) {
+163 |                 final long l = v[i - seed.length];
+164 |                 v[i] = (int) ((1812433253l * (l ^ (l >> 30)) + i) & 0xffffffffL);
+165 |             }
+166 |         }
+167 | 
+168 |         index = 0;
+169 |         clear();  // Clear normal deviate cache
+170 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math3.random.RandomDataGenerator.RandomDataGenerator()
+Source: src/main/java/org/apache/commons/math3/random/RandomDataGenerator.java
+Original range: 131-132
+Documentation:
+/**
+     * Construct a RandomDataGenerator, using a default random generator as the source
+     * of randomness.
+     *
+     * <p>The default generator is a {@link Well19937c} seeded
+     * with {@code System.currentTimeMillis() + System.identityHashCode(this))}.
+     * The generator is initialized and seeded on first use.</p>
+     */
+Method code:
+131 |     public RandomDataGenerator() {
+132 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math3.random.AbstractWell.AbstractWell(int,int,int,int,int[])
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 94-122
+Documentation:
+/** Creates a new random number generator using an int array seed.
+     * @param k number of bits in the pool (not necessarily a multiple of 32)
+     * @param m1 first parameter of the algorithm
+     * @param m2 second parameter of the algorithm
+     * @param m3 third parameter of the algorithm
+     * @param seed the initial seed (32 bits integers array), if null
+     * the seed of the generator will be related to the current time
+     */
+Method code:
+94 |     protected AbstractWell(final int k, final int m1, final int m2, final int m3, final int[] seed) {
+95 | 
+96 |         // the bits pool contains k bits, k = r w - p where r is the number
+97 |         // of w bits blocks, w is the block size (always 32 in the original paper)
+98 |         // and p is the number of unused bits in the last block
+99 |         final int w = 32;
+100 |         final int r = (k + w - 1) / w;
+101 |         this.v      = new int[r];
+102 |         this.index  = 0;
+103 | 
+104 |         // precompute indirection index tables. These tables are used for optimizing access
+105 |         // they allow saving computations like "(j + r - 2) % r" with costly modulo operations
+106 |         iRm1 = new int[r];
+107 |         iRm2 = new int[r];
+108 |         i1   = new int[r];
+109 |         i2   = new int[r];
+110 |         i3   = new int[r];
+111 |         for (int j = 0; j < r; ++j) {
+112 |             iRm1[j] = (j + r - 1) % r;
+113 |             iRm2[j] = (j + r - 2) % r;
+114 |             i1[j]   = (j + m1)    % r;
+115 |             i2[j]   = (j + m2)    % r;
+116 |             i3[j]   = (j + m3)    % r;
+117 |         }
+118 | 
+119 |         // initialize the pool content
+120 |         setSeed(seed);
+121 | 
+122 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math3.random.BitsStreamGenerator.BitsStreamGenerator()
+Source: src/main/java/org/apache/commons/math3/random/BitsStreamGenerator.java
+Original range: 40-42
+Documentation:
+/**
+     * Creates a new random number generator.
+     */
+Method code:
+40 |     public BitsStreamGenerator() {
+41 |         nextGaussian = Double.NaN;
+42 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math3.distribution.DiscreteDistribution.DiscreteDistribution(RandomGenerator,List<Pair<T, Double>>)
+Source: src/main/java/org/apache/commons/math3/distribution/DiscreteDistribution.java
+Original range: 85-102
+Documentation:
+/**
+     * Create a discrete distribution using the given random number generator
+     * and probability mass function definition.
+     *
+     * @param rng random number generator.
+     * @param samples definition of probability mass function in the format of
+     * list of pairs.
+     * @throws NotPositiveException if probability of at least one value is
+     * negative.
+     * @throws MathArithmeticException if the probabilities sum to zero.
+     * @throws MathIllegalArgumentException if probability of at least one value
+     * is infinite.
+     */
+Method code:
+85 |     public DiscreteDistribution(final RandomGenerator rng, final List<Pair<T, Double>> samples)
+86 |         throws NotPositiveException, MathArithmeticException, MathIllegalArgumentException {
+87 |         random = rng;
+88 | 
+89 |         singletons = new ArrayList<T>(samples.size());
+90 |         final double[] probs = new double[samples.size()];
+91 | 
+92 |         for (int i = 0; i < samples.size(); i++) {
+93 |             final Pair<T, Double> sample = samples.get(i);
+94 |             singletons.add(sample.getKey());
+95 |             if (sample.getValue() < 0) {
+96 |                 throw new NotPositiveException(sample.getValue());
+97 |             }
+98 |             probs[i] = sample.getValue();
+99 |         }
+100 | 
+101 |         probabilities = MathArrays.normalizeArray(probs, 1.0);
+102 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math3.util.MathArrays.normalizeArray(double[],double)
+Source: src/main/java/org/apache/commons/math3/util/MathArrays.java
+Original range: 1247-1277
+Documentation:
+/**
+      * Normalizes an array to make it sum to a specified value.
+      * Returns the result of the transformation <pre>
+      *    x |-> x * normalizedSum / sum
+      * </pre>
+      * applied to each non-NaN element x of the input array, where sum is the
+      * sum of the non-NaN entries in the input array.</p>
+      *
+      * <p>Throws IllegalArgumentException if {@code normalizedSum} is infinite
+      * or NaN and ArithmeticException if the input array contains any infinite elements
+      * or sums to 0.</p>
+      *
+      * <p>Ignores (i.e., copies unchanged to the output array) NaNs in the input array.</p>
+      *
+      * @param values Input array to be normalized
+      * @param normalizedSum Target sum for the normalized array
+      * @return the normalized array.
+      * @throws MathArithmeticException if the input array contains infinite
+      * elements or sums to zero.
+      * @throws MathIllegalArgumentException if the target sum is infinite or {@code NaN}.
+      * @since 2.1
+      */
+Method code:
+1247 |      public static double[] normalizeArray(double[] values, double normalizedSum)
+1248 |          throws MathIllegalArgumentException, MathArithmeticException {
+1249 |          if (Double.isInfinite(normalizedSum)) {
+1250 |              throw new MathIllegalArgumentException(LocalizedFormats.NORMALIZE_INFINITE);
+1251 |          }
+1252 |          if (Double.isNaN(normalizedSum)) {
+1253 |              throw new MathIllegalArgumentException(LocalizedFormats.NORMALIZE_NAN);
+1254 |          }
+1255 |          double sum = 0d;
+1256 |          final int len = values.length;
+1257 |          double[] out = new double[len];
+1258 |          for (int i = 0; i < len; i++) {
+1259 |              if (Double.isInfinite(values[i])) {
+1260 |                  throw new MathIllegalArgumentException(LocalizedFormats.INFINITE_ARRAY_ELEMENT, values[i], i);
+1261 |              }
+1262 |              if (!Double.isNaN(values[i])) {
+1263 |                  sum += values[i];
+1264 |              }
+1265 |          }
+1266 |          if (sum == 0) {
+1267 |              throw new MathArithmeticException(LocalizedFormats.ARRAY_SUMS_TO_ZERO);
+1268 |          }
+1269 |          for (int i = 0; i < len; i++) {
+1270 |              if (Double.isNaN(values[i])) {
+1271 |                  out[i] = Double.NaN;
+1272 |              } else {
+1273 |                  out[i] = values[i] * normalizedSum / sum;
+1274 |              }
+1275 |          }
+1276 |          return out;
+1277 |      }
+
+===== M0010 =====
+Signature: org.apache.commons.math3.distribution.DiscreteDistribution.sample()
+Source: src/main/java/org/apache/commons/math3/distribution/DiscreteDistribution.java
+Original range: 156-171
+Documentation:
+/**
+     * Generate a random value sampled from this distribution.
+     *
+     * @return a random value.
+     */
+Method code:
+156 |     public T sample() {
+157 |         final double randomValue = random.nextDouble();
+158 |         double sum = 0;
+159 | 
+160 |         for (int i = 0; i < probabilities.length; i++) {
+161 |             sum += probabilities[i];
+162 |             if (randomValue < sum) {
+163 |                 return singletons.get(i);
+164 |             }
+165 |         }
+166 | 
+167 |         /* This should never happen, but it ensures we will return a correct
+168 |          * object in case the loop above has some floating point inequality
+169 |          * problem on the final iteration. */
+170 |         return singletons.get(singletons.size() - 1);
+171 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math3.util.Pair.getValue()
+Source: src/main/java/org/apache/commons/math3/util/Pair.java
+Original range: 73-75
+Documentation:
+/**
+     * Get the value.
+     *
+     * @return the value (second element of the pair).
+     */
+Method code:
+73 |     public V getValue() {
+74 |         return value;
+75 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math3.random.Well19937c.Well19937c()
+Source: src/main/java/org/apache/commons/math3/random/Well19937c.java
+Original range: 56-58
+Documentation:
+/** Creates a new random number generator.
+     * <p>The instance is initialized using the current time as the
+     * seed.</p>
+     */
+Method code:
+56 |     public Well19937c() {
+57 |         super(K, M1, M2, M3);
+58 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math3.random.BitsStreamGenerator.clear()
+Source: src/main/java/org/apache/commons/math3/random/BitsStreamGenerator.java
+Original range: 169-171
+Documentation:
+/**
+     * Clears the cache used by the default implementation of
+     * {@link #nextGaussian}.
+     */
+Method code:
+169 |     public void clear() {
+170 |         nextGaussian = Double.NaN;
+171 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math3.random.AbstractWell.setSeed(long)
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 177-180
+Documentation:
+/** Reinitialize the generator as if just built with the given long seed.
+     * <p>The state of the generator is exactly the same as a new
+     * generator built with the same seed.</p>
+     * @param seed the initial seed (64 bits integer)
+     */
+Method code:
+177 |     @Override
+178 |     public void setSeed(final long seed) {
+179 |         setSeed(new int[] { (int) (seed >>> 32), (int) (seed & 0xffffffffl) });
+180 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math3.util.Pair.getKey()
+Source: src/main/java/org/apache/commons/math3/util/Pair.java
+Original range: 64-66
+Documentation:
+/**
+     * Get the key.
+     *
+     * @return the key (first element of the pair).
+     */
+Method code:
+64 |     public K getKey() {
+65 |         return key;
+66 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math3.distribution.DiscreteDistribution.DiscreteDistribution(List<Pair<T, Double>>)
+Source: src/main/java/org/apache/commons/math3/distribution/DiscreteDistribution.java
+Original range: 67-70
+Documentation:
+/**
+     * Create a discrete distribution using the given probability mass function
+     * definition.
+     *
+     * @param samples definition of probability mass function in the format of
+     * list of pairs.
+     * @throws NotPositiveException if probability of at least one value is
+     * negative.
+     * @throws MathArithmeticException if the probabilities sum to zero.
+     * @throws MathIllegalArgumentException if probability of at least one value
+     * is infinite.
+     */
+Method code:
+67 |     public DiscreteDistribution(final List<Pair<T, Double>> samples)
+68 |         throws NotPositiveException, MathArithmeticException, MathIllegalArgumentException {
+69 |         this(new Well19937c(), samples);
+70 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math3.distribution.DiscreteRealDistribution.DiscreteRealDistribution(double[],double[])
+Source: src/main/java/org/apache/commons/math3/distribution/DiscreteRealDistribution.java
+Original range: 64-67
+Documentation:
+/**
+     * Create a discrete distribution using the given probability mass function
+     * definition.
+     *
+     * @param singletons array of random variable values.
+     * @param probabilities array of probabilities.
+     * @throws DimensionMismatchException if
+     * {@code singletons.length != probabilities.length}
+     * @throws NotPositiveException if probability of at least one value is
+     * negative.
+     * @throws MathArithmeticException if the probabilities sum to zero.
+     * @throws MathIllegalArgumentException if probability of at least one value
+     * is infinite.
+     */
+Method code:
+64 |     public DiscreteRealDistribution(final double[] singletons, final double[] probabilities)
+65 |         throws DimensionMismatchException, NotPositiveException, MathArithmeticException, MathIllegalArgumentException {
+66 |         this(new Well19937c(), singletons, probabilities);
+67 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math3.distribution.DiscreteDistribution.sample(int)
+Source: src/main/java/org/apache/commons/math3/distribution/DiscreteDistribution.java
+Original range: 181-195
+Documentation:
+/**
+     * Generate a random sample from the distribution.
+     *
+     * @param sampleSize the number of random values to generate.
+     * @return an array representing the random sample.
+     * @throws NotStrictlyPositiveException if {@code sampleSize} is not
+     * positive.
+     */
+Method code:
+181 |     public T[] sample(int sampleSize) throws NotStrictlyPositiveException {
+182 |         if (sampleSize <= 0) {
+183 |             throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_SAMPLES,
+184 |                     sampleSize);
+185 |         }
+186 | 
+187 |         final T[]out = (T[]) java.lang.reflect.Array.newInstance(singletons.get(0).getClass(), sampleSize);
+188 | 
+189 |         for (int i = 0; i < sampleSize; i++) {
+190 |             out[i] = sample();
+191 |         }
+192 | 
+193 |         return out;
+194 | 
+195 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math3.util.Pair.Pair(K,V)
+Source: src/main/java/org/apache/commons/math3/util/Pair.java
+Original range: 45-48
+Documentation:
+/**
+     * Create an entry representing a mapping from the specified key to the
+     * specified value.
+     *
+     * @param k Key (first element of the pair).
+     * @param v Value (second element of the pair).
+     */
+Method code:
+45 |     public Pair(K k, V v) {
+46 |         key = k;
+47 |         value = v;
+48 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math3.distribution.AbstractRealDistribution.AbstractRealDistribution(RandomGenerator)
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractRealDistribution.java
+Original range: 76-78
+Documentation:
+/**
+     * @param rng Random number generator.
+     * @since 3.1
+     */
+Method code:
+76 |     protected AbstractRealDistribution(RandomGenerator rng) {
+77 |         random = rng;
+78 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math3.random.RandomDataImpl.RandomDataImpl()
+Source: src/main/java/org/apache/commons/math3/random/RandomDataImpl.java
+Original range: 114-116
+Documentation:
+/**
+     * Construct a RandomDataImpl, using a default random generator as the source
+     * of randomness.
+     *
+     * <p>The default generator is a {@link Well19937c} seeded
+     * with {@code System.currentTimeMillis() + System.identityHashCode(this))}.
+     * The generator is initialized and seeded on first use.</p>
+     */
+Method code:
+114 |     public RandomDataImpl() {
+115 |         delegate = new RandomDataGenerator();
+116 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math3.random.AbstractWell.AbstractWell(int,int,int,int)
+Source: src/main/java/org/apache/commons/math3/random/AbstractWell.java
+Original range: 71-73
+Documentation:
+/** Creates a new random number generator.
+     * <p>The instance is initialized using the current time plus the
+     * system identity hash code of this instance as the seed.</p>
+     * @param k number of bits in the pool (not necessarily a multiple of 32)
+     * @param m1 first parameter of the algorithm
+     * @param m2 second parameter of the algorithm
+     * @param m3 third parameter of the algorithm
+     */
+Method code:
+71 |     protected AbstractWell(final int k, final int m1, final int m2, final int m3) {
+72 |         this(k, m1, m2, m3, null);
+73 |     }
+

@@ -1,0 +1,42 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testInExpression2()",
+    "resolved_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testInExpression2()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/DeadAssignmentsEliminationTest.java",
+    "begin_line": 456,
+    "end_line": 488,
+    "comment": "",
+    "snippet": "  public void testInExpression2() {\n    // This can be improved.  \"a = 1\" is dead but \"a\" is read in the following\n    // expression.\n    inFunction(\n        \"var a; a = 1; if ((a = 2) || (a = 3) || (a)) {}\",\n        \"var a; a = 1; if ((    2) || (a = 3) || (a)) {}\");\n\n    inFunction(\n        \"var a; (a = 1) || (a = 2)\",\n        \"var a; 1 || 2\");\n\n    inFunction(\"var a; (a = 1) || (a = 2); return a\");\n\n    inFunction(\n        \"var a; a = 1; a ? a = 2 : a;\",\n        \"var a; a = 1; a ?     2 : a;\");\n\n    inFunction(\"var a; a = 1; a ? a = 2 : a; return a\");\n\n    inFunction(\n        \"var a; a = 1; a ? a : a = 2;\",\n        \"var a; a = 1; a ? a : 2;\");\n\n    inFunction(\"var a; a = 1; a ? a : a =2; return a\");\n\n    inFunction(\n        \"var a; (a = 1) ? a = 2 : a = 3;\",\n        \"var a;      1  ?     2 :     3;\");\n\n    // This can be improved.  \"a = 1\" is dead but \"a\" is read in the following\n    // expression.\n    inFunction(\"var a; (a = 1) ? a = 2 : a = 3; return a\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue384b()",
+    "resolved_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue384b()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/DeadAssignmentsEliminationTest.java",
+    "begin_line": 500,
+    "end_line": 505,
+    "comment": "",
+    "snippet": "  public void testIssue384b() {\n    inFunction(\n            \" var a, b;\\n\" +\n            \" (f(b = true) || f(b = false)) ? (a = b) : (a = null);\\n\" +\n            \" return a;\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue384c()",
+    "resolved_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue384c()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/DeadAssignmentsEliminationTest.java",
+    "begin_line": 507,
+    "end_line": 512,
+    "comment": "",
+    "snippet": "  public void testIssue384c() {\n    inFunction(\n            \" var a, b;\\n\" +\n            \" (a ? f(b = true) : f(b = false)) && (a = b);\\n\" +\n            \" return a;\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue384d()",
+    "resolved_signature": "com.google.javascript.jscomp.DeadAssignmentsEliminationTest.testIssue384d()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/DeadAssignmentsEliminationTest.java",
+    "begin_line": 514,
+    "end_line": 519,
+    "comment": "",
+    "snippet": "  public void testIssue384d() {\n    inFunction(\n            \" var a, b;\\n\" +\n            \" (f(b = true) || f(b = false)) && (a = b);\\n\" +\n            \" return a;\");\n  }"
+  }
+]

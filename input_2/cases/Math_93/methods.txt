@@ -1,0 +1,100 @@
+===== M0001 =====
+Signature: org.apache.commons.math.util.MathUtils.factorial(int)
+Source: src/java/org/apache/commons/math/util/MathUtils.java
+Original range: 344-351
+Documentation:
+/**
+     * Returns n!. Shorthand for <code>n</code> <a
+     * href="http://mathworld.wolfram.com/Factorial.html"> Factorial</a>, the
+     * product of the numbers <code>1,...,n</code>.
+     * <p>
+     * <Strong>Preconditions</strong>:
+     * <ul>
+     * <li> <code>n >= 0</code> (otherwise
+     * <code>IllegalArgumentException</code> is thrown)</li>
+     * <li> The result is small enough to fit into a <code>long</code>. The
+     * largest value of <code>n</code> for which <code>n!</code> <
+     * Long.MAX_VALUE</code> is 20. If the computed value exceeds <code>Long.MAX_VALUE</code>
+     * an <code>ArithMeticException </code> is thrown.</li>
+     * </ul>
+     * </p>
+     * 
+     * @param n argument
+     * @return <code>n!</code>
+     * @throws ArithmeticException if the result is too large to be represented
+     *         by a long integer.
+     * @throws IllegalArgumentException if n < 0
+     */
+Method code:
+344 |     public static long factorial(final int n) {
+345 |         long result = Math.round(factorialDouble(n));
+346 |         if (result == Long.MAX_VALUE) {
+347 |             throw new ArithmeticException(
+348 |                     "factorial value is too large to fit in a long");
+349 |         }
+350 |         return factorials[n];
+351 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.util.MathUtils.factorialLog(int)
+Source: src/java/org/apache/commons/math/util/MathUtils.java
+Original range: 393-402
+Documentation:
+/**
+     * Returns the natural logarithm of n!.
+     * <p>
+     * <Strong>Preconditions</strong>:
+     * <ul>
+     * <li> <code>n >= 0</code> (otherwise
+     * <code>IllegalArgumentException</code> is thrown)</li>
+     * </ul></p>
+     * 
+     * @param n argument
+     * @return <code>n!</code>
+     * @throws IllegalArgumentException if preconditions are not met.
+     */
+Method code:
+393 |     public static double factorialLog(final int n) {
+394 |         if (n < 0) {
+395 |             throw new IllegalArgumentException("must have n > 0 for n!");
+396 |         }
+397 |         double logSum = 0;
+398 |         for (int i = 2; i <= n; i++) {
+399 |             logSum += Math.log((double)i);
+400 |         }
+401 |         return logSum;
+402 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.util.MathUtils.factorialDouble(int)
+Source: src/java/org/apache/commons/math/util/MathUtils.java
+Original range: 373-378
+Documentation:
+/**
+     * Returns n!. Shorthand for <code>n</code> <a
+     * href="http://mathworld.wolfram.com/Factorial.html"> Factorial</a>, the
+     * product of the numbers <code>1,...,n</code> as a <code>double</code>.
+     * <p>
+     * <Strong>Preconditions</strong>:
+     * <ul>
+     * <li> <code>n >= 0</code> (otherwise
+     * <code>IllegalArgumentException</code> is thrown)</li>
+     * <li> The result is small enough to fit into a <code>double</code>. The
+     * largest value of <code>n</code> for which <code>n!</code> <
+     * Double.MAX_VALUE</code> is 170. If the computed value exceeds
+     * Double.MAX_VALUE, Double.POSITIVE_INFINITY is returned</li>
+     * </ul>
+     * </p>
+     * 
+     * @param n argument
+     * @return <code>n!</code>
+     * @throws IllegalArgumentException if n < 0
+     */
+Method code:
+373 |     public static double factorialDouble(final int n) {
+374 |         if (n < 0) {
+375 |             throw new IllegalArgumentException("must have n >= 0 for n!");
+376 |         }
+377 |         return Math.floor(Math.exp(factorialLog(n)) + 0.5);
+378 |     }
+

@@ -1,0 +1,43 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.ArrayUtils.addAll(T[],T...)
+Source: src/java/org/apache/commons/lang3/ArrayUtils.java
+Original range: 2952-2965
+Documentation:
+/**
+     * <p>Adds all the elements of the given arrays into a new array.</p>
+     * <p>The new array contains all of the element of <code>array1</code> followed
+     * by all of the elements <code>array2</code>. When an array is returned, it is always
+     * a new array.</p>
+     *
+     * <pre>
+     * ArrayUtils.addAll(null, null)     = null
+     * ArrayUtils.addAll(array1, null)   = cloned copy of array1
+     * ArrayUtils.addAll(null, array2)   = cloned copy of array2
+     * ArrayUtils.addAll([], [])         = []
+     * ArrayUtils.addAll([null], [null]) = [null, null]
+     * ArrayUtils.addAll(["a", "b", "c"], ["1", "2", "3"]) = ["a", "b", "c", "1", "2", "3"]
+     * </pre>
+     *
+     * @param array1  the first array whose elements are added to the new array, may be <code>null</code>
+     * @param array2  the second array whose elements are added to the new array, may be <code>null</code>
+     * @return The new array, <code>null</code> if both arrays are <code>null</code>.
+     *      The type of the new array is the type of the first array,
+     *      unless the first array is null, in which case the type is the same as the second array.
+     * @since 2.1
+     */
+Method code:
+2952 |     @SuppressWarnings("unchecked")
+2953 |     public static <T> T[] addAll(T[] array1, T... array2) {
+2954 |         if (array1 == null) {
+2955 |             return clone(array2);
+2956 |         } else if (array2 == null) {
+2957 |             return clone(array1);
+2958 |         }
+2959 |         final Class<?> type1 = array1.getClass().getComponentType();
+2960 |         T[] joinedArray = (T[]) Array.newInstance(type1, array1.length + array2.length);
+2961 |         System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+2962 |             System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+2963 |             // Check if problem is incompatible types
+2964 |         return joinedArray;
+2965 |     }
+

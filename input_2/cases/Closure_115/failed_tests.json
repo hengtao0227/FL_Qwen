@@ -1,0 +1,52 @@
+[
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testBug4944818()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testBug4944818()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 2059,
+    "end_line": 2094,
+    "comment": "",
+    "snippet": "  public void testBug4944818() {\n    test(\n        \"var getDomServices_ = function(self) {\\n\" +\n        \"  if (!self.domServices_) {\\n\" +\n        \"    self.domServices_ = goog$component$DomServices.get(\" +\n        \"        self.appContext_);\\n\" +\n        \"  }\\n\" +\n        \"\\n\" +\n        \"  return self.domServices_;\\n\" +\n        \"};\\n\" +\n        \"\\n\" +\n        \"var getOwnerWin_ = function(self) {\\n\" +\n        \"  return getDomServices_(self).getDomHelper().getWindow();\\n\" +\n        \"};\\n\" +\n        \"\\n\" +\n        \"HangoutStarter.prototype.launchHangout = function() {\\n\" +\n        \"  var self = a.b;\\n\" +\n        \"  var myUrl = new goog.Uri(getOwnerWin_(self).location.href);\\n\" +\n        \"};\",\n        \"HangoutStarter.prototype.launchHangout = function() { \" +\n        \"  var self$$2 = a.b;\" +\n        \"  var JSCompiler_temp_const$$0 = goog.Uri;\" +\n        \"  var JSCompiler_inline_result$$1;\" +\n        \"  {\" +\n        \"  var self$$inline_2 = self$$2;\" +\n        \"  if (!self$$inline_2.domServices_) {\" +\n        \"    self$$inline_2.domServices_ = goog$component$DomServices.get(\" +\n        \"        self$$inline_2.appContext_);\" +\n        \"  }\" +\n        \"  JSCompiler_inline_result$$1=self$$inline_2.domServices_;\" +\n        \"  }\" +\n        \"  var myUrl = new JSCompiler_temp_const$$0(\" +\n        \"      JSCompiler_inline_result$$1.getDomHelper().\" +\n        \"          getWindow().location.href)\" +\n        \"}\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testDoubleInlining1()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testDoubleInlining1()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 1097,
+    "end_line": 1103,
+    "comment": "",
+    "snippet": "  public void testDoubleInlining1() {\n    allowBlockInlining = false;\n    test(\"var foo = function(a) { return getWindow(a); };\" +\n         \"var bar = function(b) { return b; };\" +\n         \"foo(bar(x));\",\n         \"getWindow(x)\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified8()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified8()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 596,
+    "end_line": 599,
+    "comment": "",
+    "snippet": "  public void testNoInlineIfParametersModified8() {\n    // OK, object parameter modified.\n    test(\"function f(a){return a.x=2}f(o)\", \"o.x=2\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified9()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testNoInlineIfParametersModified9()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 601,
+    "end_line": 604,
+    "comment": "",
+    "snippet": "  public void testNoInlineIfParametersModified9() {\n    // OK, array parameter modified.\n    test(\"function f(a){return a[2]=2}f(o)\", \"o[2]=2\");\n  }"
+  },
+  {
+    "requested_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions6()",
+    "resolved_signature": "com.google.javascript.jscomp.InlineFunctionsTest.testInlineFunctions6()",
+    "resolution": "exact",
+    "src_path": "test/com/google/javascript/jscomp/InlineFunctionsTest.java",
+    "begin_line": 150,
+    "end_line": 156,
+    "comment": "",
+    "snippet": "  public void testInlineFunctions6() {\n    // more complex inlines\n    test(\"function BAR_FN(x, y, z) { return z(foo(x + y)) }\" +\n         \"alert(BAR_FN(1, 2, baz))\",\n\n         \"alert(baz(foo(1+2)))\");\n  }"
+  }
+]

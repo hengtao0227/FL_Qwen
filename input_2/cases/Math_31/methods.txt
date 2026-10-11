@@ -1,0 +1,2819 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.util.ResizableDoubleArray.getElements()
+Source: src/main/java/org/apache/commons/math3/util/ResizableDoubleArray.java
+Original range: 598-603
+Documentation:
+/**
+     * Returns a double array containing the elements of this
+     * <code>ResizableArray</code>.  This method returns a copy, not a
+     * reference to the underlying array, so that changes made to the returned
+     *  array have no effect on this <code>ResizableArray.</code>
+     * @return the double array.
+     */
+Method code:
+598 |     public synchronized double[] getElements() {
+599 |         double[] elementArray = new double[numElements];
+600 |         System.arraycopy( internalArray, startIndex, elementArray, 0,
+601 |                 numElements);
+602 |         return elementArray;
+603 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.distribution.AbstractIntegerDistribution.AbstractIntegerDistribution()
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractIntegerDistribution.java
+Original range: 47-47
+Documentation:
+/** Default constructor. */
+Method code:
+47 |     protected AbstractIntegerDistribution() { }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpIntA()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6141-6143
+Documentation:
+/**
+     * Load "EXP_INT_A".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6141 |     static double[] loadExpIntA() {
+6142 |         return EXP_INT_A.clone();
+6143 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.ExceptionContext(Throwable)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 64-69
+Documentation:
+/** Simple constructor.
+     * @param throwable the exception this context refers too
+     */
+Method code:
+64 |     public ExceptionContext(final Throwable throwable) {
+65 |         this.throwable = throwable;
+66 |         msgPatterns    = new ArrayList<Localizable>();
+67 |         msgArguments   = new ArrayList<Object[]>();
+68 |         context        = new HashMap<String, Object>();
+69 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.getFunctionValueAccuracy()
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 139-141
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+139 |     public double getFunctionValueAccuracy() {
+140 |         return functionValueAccuracy;
+141 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math3.util.FastMath.abs(long)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3001-3003
+Documentation:
+/**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x)
+     */
+Method code:
+3001 |     public static long abs(final long x) {
+3002 |         return (x < 0l) ? -x : x;
+3003 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math3.util.Incrementor.Incrementor(int)
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 60-68
+Documentation:
+/**
+     * Defines a maximal count.
+     *
+     * @param max Maximal count.
+     */
+Method code:
+60 |     public Incrementor(int max) {
+61 |         this(max,
+62 |              new MaxCountExceededCallback() {
+63 |                  /** {@inheritDoc} */
+64 |                  public void trigger(int max) {
+65 |                      throw new MaxCountExceededException(max);
+66 |                  }
+67 |              });
+68 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math3.distribution.FDistribution.getSupportUpperBound()
+Source: src/main/java/org/apache/commons/math3/distribution/FDistribution.java
+Original range: 259-261
+Documentation:
+/**
+     * {@inheritDoc}
+     *
+     * The upper bound of the support is always positive infinity
+     * no matter the parameters.
+     *
+     * @return upper bound of the support (always Double.POSITIVE_INFINITY)
+     */
+Method code:
+259 |     public double getSupportUpperBound() {
+260 |         return Double.POSITIVE_INFINITY;
+261 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math3.distribution.FDistribution.cumulativeProbability(double)
+Source: src/main/java/org/apache/commons/math3/distribution/FDistribution.java
+Original range: 142-155
+Documentation:
+/**
+     * {@inheritDoc}
+     *
+     * The implementation of this method is based on
+     * <ul>
+     *  <li>
+     *   <a href="http://mathworld.wolfram.com/F-Distribution.html">
+     *   F-Distribution</a>, equation (4).
+     *  </li>
+     * </ul>
+     */
+Method code:
+142 |     public double cumulativeProbability(double x)  {
+143 |         double ret;
+144 |         if (x <= 0) {
+145 |             ret = 0;
+146 |         } else {
+147 |             double n = numeratorDegreesOfFreedom;
+148 |             double m = denominatorDegreesOfFreedom;
+149 | 
+150 |             ret = Beta.regularizedBeta((n * x) / (m + n * x),
+151 |                 0.5 * n,
+152 |                 0.5 * m);
+153 |         }
+154 |         return ret;
+155 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.setup(int,FUNC,double,double,double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 168-182
+Documentation:
+/**
+     * Prepare for computation.
+     * Subclasses must call this method if they override any of the
+     * {@code solve} methods.
+     *
+     * @param f Function to solve.
+     * @param min Lower bound for the interval.
+     * @param max Upper bound for the interval.
+     * @param startValue Start value to use.
+     * @param maxEval Maximum number of evaluations.
+     */
+Method code:
+168 |     protected void setup(int maxEval,
+169 |                          FUNC f,
+170 |                          double min, double max,
+171 |                          double startValue) {
+172 |         // Checks.
+173 |         MathUtils.checkNotNull(f);
+174 | 
+175 |         // Reset.
+176 |         searchMin = min;
+177 |         searchMax = max;
+178 |         searchStart = startValue;
+179 |         function = f;
+180 |         evaluations.setMaximalCount(maxEval);
+181 |         evaluations.resetCount();
+182 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math3.util.ResizableDoubleArray.setInitialCapacity(int)
+Source: src/main/java/org/apache/commons/math3/util/ResizableDoubleArray.java
+Original range: 754-764
+Documentation:
+/**
+     * Sets the initial capacity.  Should only be invoked by constructors.
+     *
+     * @param initialCapacity of the array
+     * @throws IllegalArgumentException if <code>initialCapacity</code> is not
+     *         positive.
+     */
+Method code:
+754 |     protected void setInitialCapacity(int initialCapacity) {
+755 |         if (initialCapacity > 0) {
+756 |             synchronized(this) {
+757 |                 this.initialCapacity = initialCapacity;
+758 |             }
+759 |         } else {
+760 |             throw new MathIllegalArgumentException(
+761 |                     LocalizedFormats.INITIAL_CAPACITY_NOT_POSITIVE,
+762 |                     initialCapacity);
+763 |         }
+764 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math3.util.Incrementor.Incrementor()
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 51-53
+Documentation:
+/**
+     * Default constructor.
+     * For the new instance to be useful, the maximal count must be set
+     * by calling {@link #setMaximalCount(int) setMaximalCount}.
+     */
+Method code:
+51 |     public Incrementor() {
+52 |         this(0);
+53 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math3.distribution.FDistribution.getNumeratorDegreesOfFreedom()
+Source: src/main/java/org/apache/commons/math3/distribution/FDistribution.java
+Original range: 162-164
+Documentation:
+/**
+     * Access the numerator degrees of freedom.
+     *
+     * @return the numerator degrees of freedom.
+     */
+Method code:
+162 |     public double getNumeratorDegreesOfFreedom() {
+163 |         return numeratorDegreesOfFreedom;
+164 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math3.util.FastMath.exp(double,double,double[])
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 817-932
+Documentation:
+/**
+     * Internal helper method for exponential function.
+     * @param x original argument of the exponential function
+     * @param extra extra bits of precision on input (To Be Confirmed)
+     * @param hiPrec extra bits of precision on output (To Be Confirmed)
+     * @return exp(x)
+     */
+Method code:
+817 |     private static double exp(double x, double extra, double[] hiPrec) {
+818 |         double intPartA;
+819 |         double intPartB;
+820 |         int intVal;
+821 | 
+822 |         /* Lookup exp(floor(x)).
+823 |          * intPartA will have the upper 22 bits, intPartB will have the lower
+824 |          * 52 bits.
+825 |          */
+826 |         if (x < 0.0) {
+827 |             intVal = (int) -x;
+828 | 
+829 |             if (intVal > 746) {
+830 |                 if (hiPrec != null) {
+831 |                     hiPrec[0] = 0.0;
+832 |                     hiPrec[1] = 0.0;
+833 |                 }
+834 |                 return 0.0;
+835 |             }
+836 | 
+837 |             if (intVal > 709) {
+838 |                 /* This will produce a subnormal output */
+839 |                 final double result = exp(x+40.19140625, extra, hiPrec) / 285040095144011776.0;
+840 |                 if (hiPrec != null) {
+841 |                     hiPrec[0] /= 285040095144011776.0;
+842 |                     hiPrec[1] /= 285040095144011776.0;
+843 |                 }
+844 |                 return result;
+845 |             }
+846 | 
+847 |             if (intVal == 709) {
+848 |                 /* exp(1.494140625) is nearly a machine number... */
+849 |                 final double result = exp(x+1.494140625, extra, hiPrec) / 4.455505956692756620;
+850 |                 if (hiPrec != null) {
+851 |                     hiPrec[0] /= 4.455505956692756620;
+852 |                     hiPrec[1] /= 4.455505956692756620;
+853 |                 }
+854 |                 return result;
+855 |             }
+856 | 
+857 |             intVal++;
+858 | 
+859 |             intPartA = ExpIntTable.EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX-intVal];
+860 |             intPartB = ExpIntTable.EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX-intVal];
+861 | 
+862 |             intVal = -intVal;
+863 |         } else {
+864 |             intVal = (int) x;
+865 | 
+866 |             if (intVal > 709) {
+867 |                 if (hiPrec != null) {
+868 |                     hiPrec[0] = Double.POSITIVE_INFINITY;
+869 |                     hiPrec[1] = 0.0;
+870 |                 }
+871 |                 return Double.POSITIVE_INFINITY;
+872 |             }
+873 | 
+874 |             intPartA = ExpIntTable.EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX+intVal];
+875 |             intPartB = ExpIntTable.EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX+intVal];
+876 |         }
+877 | 
+878 |         /* Get the fractional part of x, find the greatest multiple of 2^-10 less than
+879 |          * x and look up the exp function of it.
+880 |          * fracPartA will have the upper 22 bits, fracPartB the lower 52 bits.
+881 |          */
+882 |         final int intFrac = (int) ((x - intVal) * 1024.0);
+883 |         final double fracPartA = ExpFracTable.EXP_FRAC_TABLE_A[intFrac];
+884 |         final double fracPartB = ExpFracTable.EXP_FRAC_TABLE_B[intFrac];
+885 | 
+886 |         /* epsilon is the difference in x from the nearest multiple of 2^-10.  It
+887 |          * has a value in the range 0 <= epsilon < 2^-10.
+888 |          * Do the subtraction from x as the last step to avoid possible loss of percison.
+889 |          */
+890 |         final double epsilon = x - (intVal + intFrac / 1024.0);
+891 | 
+892 |         /* Compute z = exp(epsilon) - 1.0 via a minimax polynomial.  z has
+893 |        full double precision (52 bits).  Since z < 2^-10, we will have
+894 |        62 bits of precision when combined with the contant 1.  This will be
+895 |        used in the last addition below to get proper rounding. */
+896 | 
+897 |         /* Remez generated polynomial.  Converges on the interval [0, 2^-10], error
+898 |        is less than 0.5 ULP */
+899 |         double z = 0.04168701738764507;
+900 |         z = z * epsilon + 0.1666666505023083;
+901 |         z = z * epsilon + 0.5000000000042687;
+902 |         z = z * epsilon + 1.0;
+903 |         z = z * epsilon + -3.940510424527919E-20;
+904 | 
+905 |         /* Compute (intPartA+intPartB) * (fracPartA+fracPartB) by binomial
+906 |        expansion.
+907 |        tempA is exact since intPartA and intPartB only have 22 bits each.
+908 |        tempB will have 52 bits of precision.
+909 |          */
+910 |         double tempA = intPartA * fracPartA;
+911 |         double tempB = intPartA * fracPartB + intPartB * fracPartA + intPartB * fracPartB;
+912 | 
+913 |         /* Compute the result.  (1+z)(tempA+tempB).  Order of operations is
+914 |        important.  For accuracy add by increasing size.  tempA is exact and
+915 |        much larger than the others.  If there are extra bits specified from the
+916 |        pow() function, use them. */
+917 |         final double tempC = tempB + tempA;
+918 |         final double result;
+919 |         if (extra != 0.0) {
+920 |             result = tempC*extra*z + tempC*extra + tempC*z + tempB + tempA;
+921 |         } else {
+922 |             result = tempC*z + tempB + tempA;
+923 |         }
+924 | 
+925 |         if (hiPrec != null) {
+926 |             // If requesting high precision
+927 |             hiPrec[0] = tempA;
+928 |             hiPrec[1] = tempC*extra*z + tempC*extra + tempC*z + tempB;
+929 |         }
+930 | 
+931 |         return result;
+932 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.getStartValue()
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 121-123
+Documentation:
+/**
+     * @return the initial guess.
+     */
+Method code:
+121 |     public double getStartValue() {
+122 |         return searchStart;
+123 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math3.distribution.AbstractIntegerDistribution.checkedCumulativeProbability(int)
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractIntegerDistribution.java
+Original range: 198-207
+Documentation:
+/**
+     * Computes the cumulative probability function and checks for {@code NaN}
+     * values returned. Throws {@code MathInternalError} if the value is
+     * {@code NaN}. Rethrows any exception encountered evaluating the cumulative
+     * probability function. Throws {@code MathInternalError} if the cumulative
+     * probability function returns {@code NaN}.
+     *
+     * @param argument input value
+     * @return the cumulative probability
+     * @throws MathInternalError if the cumulative probability is {@code NaN}
+     */
+Method code:
+198 |     private double checkedCumulativeProbability(int argument)
+199 |         throws MathInternalError {
+200 |         double result = Double.NaN;
+201 |         result = cumulativeProbability(argument);
+202 |         if (Double.isNaN(result)) {
+203 |             throw new MathInternalError(LocalizedFormats
+204 |                     .DISCRETE_CUMULATIVE_PROBABILITY_RETURNED_NAN, argument);
+205 |         }
+206 |         return result;
+207 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math3.util.FastMath.floor(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3331-3352
+Documentation:
+/** Get the largest whole number smaller than x.
+     * @param x number from which floor is requested
+     * @return a double number f such that f is an integer f <= x < f + 1.0
+     */
+Method code:
+3331 |     public static double floor(double x) {
+3332 |         long y;
+3333 | 
+3334 |         if (x != x) { // NaN
+3335 |             return x;
+3336 |         }
+3337 | 
+3338 |         if (x >= TWO_POWER_52 || x <= -TWO_POWER_52) {
+3339 |             return x;
+3340 |         }
+3341 | 
+3342 |         y = (long) x;
+3343 |         if (x < 0 && y != x) {
+3344 |             y--;
+3345 |         }
+3346 | 
+3347 |         if (y == 0) {
+3348 |             return x*y;
+3349 |         }
+3350 | 
+3351 |         return y;
+3352 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.addMessage(Localizable,Object...)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 85-89
+Documentation:
+/**
+     * Adds a message.
+     *
+     * @param pattern Message pattern.
+     * @param arguments Values for replacing the placeholders in the message
+     * pattern.
+     */
+Method code:
+85 |     public void addMessage(Localizable pattern,
+86 |                            Object ... arguments) {
+87 |         msgPatterns.add(pattern);
+88 |         msgArguments.add(ArgUtils.flatten(arguments));
+89 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math3.exception.util.LocalizedFormats.LocalizedFormats(String)
+Source: src/main/java/org/apache/commons/math3/exception/util/LocalizedFormats.java
+Original range: 367-369
+Documentation:
+/** Simple constructor.
+     * @param sourceFormat source English format to use when no
+     * localized version is available
+     */
+Method code:
+367 |     private LocalizedFormats(final String sourceFormat) {
+368 |         this.sourceFormat = sourceFormat;
+369 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math3.distribution.FDistribution.getNumericalMean()
+Source: src/main/java/org/apache/commons/math3/distribution/FDistribution.java
+Original range: 190-198
+Documentation:
+/**
+     * {@inheritDoc}
+     *
+     * For denominator degrees of freedom parameter {@code b}, the mean is
+     * <ul>
+     *  <li>if {@code b > 2} then {@code b / (b - 2)},</li>
+     *  <li>else undefined ({@code Double.NaN}).
+     * </ul>
+     */
+Method code:
+190 |     public double getNumericalMean() {
+191 |         final double denominatorDF = getDenominatorDegreesOfFreedom();
+192 | 
+193 |         if (denominatorDF > 2) {
+194 |             return denominatorDF / (denominatorDF - 2);
+195 |         }
+196 | 
+197 |         return Double.NaN;
+198 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.getLocalizedMessage()
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 136-138
+Documentation:
+/**
+     * Gets the message in the default locale.
+     *
+     * @return the localized message.
+     */
+Method code:
+136 |     public String getLocalizedMessage() {
+137 |         return getMessage(Locale.getDefault());
+138 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math3.util.FastMath.log(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1095-1097
+Documentation:
+/**
+     * Natural logarithm.
+     *
+     * @param x   a double
+     * @return log(x)
+     */
+Method code:
+1095 |     public static double log(final double x) {
+1096 |         return log(x, null);
+1097 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math3.distribution.FDistribution.getSolverAbsoluteAccuracy()
+Source: src/main/java/org/apache/commons/math3/distribution/FDistribution.java
+Original range: 176-179
+Documentation:
+/** {@inheritDoc} */
+Method code:
+176 |     @Override
+177 |     protected double getSolverAbsoluteAccuracy() {
+178 |         return solverAbsoluteAccuracy;
+179 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpFracB()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6165-6167
+Documentation:
+/**
+     * Load "EXP_FRAC_B".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6165 |     static double[] loadExpFracB() {
+6166 |         return EXP_FRAC_B.clone();
+6167 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.incrementEvaluationCount()
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 292-298
+Documentation:
+/**
+     * Increment the evaluation count by one.
+     * Method {@link #computeObjectiveValue(double)} calls this method internally.
+     * It is provided for subclasses that do not exclusively use
+     * {@code computeObjectiveValue} to solve the function.
+     * See e.g. {@link AbstractDifferentiableUnivariateSolver}.
+     */
+Method code:
+292 |     protected void incrementEvaluationCount() {
+293 |         try {
+294 |             evaluations.incrementCount();
+295 |         } catch (MaxCountExceededException e) {
+296 |             throw new TooManyEvaluationsException(e.getMax());
+297 |         }
+298 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math3.util.FastMath.ceil(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3358-3377
+Documentation:
+/** Get the smallest whole number larger than x.
+     * @param x number from which ceil is requested
+     * @return a double number c such that c is an integer c - 1.0 < x <= c
+     */
+Method code:
+3358 |     public static double ceil(double x) {
+3359 |         double y;
+3360 | 
+3361 |         if (x != x) { // NaN
+3362 |             return x;
+3363 |         }
+3364 | 
+3365 |         y = floor(x);
+3366 |         if (y == x) {
+3367 |             return y;
+3368 |         }
+3369 | 
+3370 |         y += 1.0;
+3371 | 
+3372 |         if (y == 0) {
+3373 |             return x*y;
+3374 |         }
+3375 | 
+3376 |         return y;
+3377 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math3.exception.util.LocalizedFormats.getLocalizedString(Locale)
+Source: src/main/java/org/apache/commons/math3/exception/util/LocalizedFormats.java
+Original range: 377-395
+Documentation:
+/** {@inheritDoc} */
+Method code:
+377 |     public String getLocalizedString(final Locale locale) {
+378 |         try {
+379 |             final String path = LocalizedFormats.class.getName().replaceAll("\\.", "/");
+380 |             ResourceBundle bundle =
+381 |                     ResourceBundle.getBundle("assets/" + path, locale);
+382 |             if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {
+383 |                 // the value of the resource is the translated format
+384 |                 return bundle.getString(toString());
+385 |             }
+386 | 
+387 |         } catch (MissingResourceException mre) {
+388 |             // do nothing here
+389 |         }
+390 | 
+391 |         // either the locale is not supported or the resource is unknown
+392 |         // don't translate and fall back to using the source format
+393 |         return sourceFormat;
+394 | 
+395 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.computeObjectiveValue(double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 151-155
+Documentation:
+/**
+     * Compute the objective function value.
+     *
+     * @param point Point at which the objective function must be evaluated.
+     * @return the objective function value at specified point.
+     * @throws TooManyEvaluationsException if the maximal number of evaluations
+     * is exceeded.
+     */
+Method code:
+151 |     protected double computeObjectiveValue(double point)
+152 |         throws TooManyEvaluationsException {
+153 |         incrementEvaluationCount();
+154 |         return function.value(point);
+155 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.BaseAbstractUnivariateSolver(double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 64-68
+Documentation:
+/**
+     * Construct a solver with given absolute accuracy.
+     *
+     * @param absoluteAccuracy Maximum absolute error.
+     */
+Method code:
+64 |     protected BaseAbstractUnivariateSolver(final double absoluteAccuracy) {
+65 |         this(DEFAULT_RELATIVE_ACCURACY,
+66 |              absoluteAccuracy,
+67 |              DEFAULT_FUNCTION_VALUE_ACCURACY);
+68 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math3.special.Gamma.logGamma(double)
+Source: src/main/java/org/apache/commons/math3/special/Gamma.java
+Original range: 92-106
+Documentation:
+/**
+     * Returns the natural logarithm of the gamma function &#915;(x).
+     *
+     * The implementation of this method is based on:
+     * <ul>
+     * <li><a href="http://mathworld.wolfram.com/GammaFunction.html">
+     * Gamma Function</a>, equation (28).</li>
+     * <li><a href="http://mathworld.wolfram.com/LanczosApproximation.html">
+     * Lanczos Approximation</a>, equations (1) through (5).</li>
+     * <li><a href="http://my.fit.edu/~gabdo/gamma.txt">Paul Godfrey, A note on
+     * the computation of the convergent Lanczos complex Gamma approximation
+     * </a></li>
+     * </ul>
+     *
+     * @param x Value.
+     * @return log(&#915;(x))
+     */
+Method code:
+92 |     public static double logGamma(double x) {
+93 |         double ret;
+94 | 
+95 |         if (Double.isNaN(x) || (x <= 0.0)) {
+96 |             ret = Double.NaN;
+97 |         } else {
+98 |             double g = 607.0 / 128.0;
+99 |             double sum = lanczos(x);
+100 |             double tmp = x + g + .5;
+101 |             ret = ((x + .5) * FastMath.log(tmp)) - tmp +
+102 |                 HALF_LOG_2_PI + FastMath.log(sum / x);
+103 |         }
+104 | 
+105 |         return ret;
+106 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math3.special.Beta.regularizedBeta(double,double,double)
+Source: src/main/java/org/apache/commons/math3/special/Beta.java
+Original range: 49-51
+Documentation:
+/**
+     * Returns the
+     * <a href="http://mathworld.wolfram.com/RegularizedBetaFunction.html">
+     * regularized beta function</a> I(x, a, b).
+     *
+     * @param x Value.
+     * @param a Parameter {@code a}.
+     * @param b Parameter {@code b}.
+     * @return the regularized beta function I(x, a, b).
+     * @throws org.apache.commons.math3.exception.MaxCountExceededException
+     * if the algorithm fails to converge.
+     */
+Method code:
+49 |     public static double regularizedBeta(double x, double a, double b) {
+50 |         return regularizedBeta(x, a, b, DEFAULT_EPSILON, Integer.MAX_VALUE);
+51 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math3.analysis.solvers.BrentSolver.BrentSolver(double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BrentSolver.java
+Original range: 52-54
+Documentation:
+/**
+     * Construct a solver.
+     *
+     * @param absoluteAccuracy Absolute accuracy.
+     */
+Method code:
+52 |     public BrentSolver(double absoluteAccuracy) {
+53 |         super(absoluteAccuracy);
+54 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math3.special.Beta.logBeta(double,double,double,int)
+Source: src/main/java/org/apache/commons/math3/special/Beta.java
+Original range: 190-206
+Documentation:
+/**
+     * Returns the natural logarithm of the beta function B(a, b).
+     *
+     * The implementation of this method is based on:
+     * <ul>
+     * <li><a href="http://mathworld.wolfram.com/BetaFunction.html">
+     * Beta Function</a>, equation (1).</li>
+     * </ul>
+     *
+     * @param a Parameter {@code a}.
+     * @param b Parameter {@code b}.
+     * @param epsilon When the absolute value of the nth item in the
+     * series is less than epsilon the approximation ceases to calculate
+     * further elements in the series.
+     * @param maxIterations Maximum number of "iterations" to complete.
+     * @return log(B(a, b)).
+     */
+Method code:
+190 |     public static double logBeta(double a, double b,
+191 |                                  double epsilon,
+192 |                                  int maxIterations) {
+193 |         double ret;
+194 | 
+195 |         if (Double.isNaN(a) ||
+196 |             Double.isNaN(b) ||
+197 |             a <= 0.0 ||
+198 |             b <= 0.0) {
+199 |             ret = Double.NaN;
+200 |         } else {
+201 |             ret = Gamma.logGamma(a) + Gamma.logGamma(b) -
+202 |                 Gamma.logGamma(a + b);
+203 |         }
+204 | 
+205 |         return ret;
+206 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math3.random.RandomDataImpl.RandomDataImpl()
+Source: src/main/java/org/apache/commons/math3/random/RandomDataImpl.java
+Original range: 168-169
+Documentation:
+/**
+     * Construct a RandomDataImpl, using a default random generator as the source
+     * of randomness.
+     *
+     * <p>The default generator is a {@link Well19937c} seeded
+     * with {@code System.currentTimeMillis() + System.identityHashCode(this))}.
+     * The generator is initialized and seeded on first use.</p>
+     */
+Method code:
+168 |     public RandomDataImpl() {
+169 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math3.util.Precision.equals(double,double,double)
+Source: src/main/java/org/apache/commons/math3/util/Precision.java
+Original range: 264-266
+Documentation:
+/**
+     * Returns {@code true} if there is no double value strictly between the
+     * arguments or the difference between them is within the range of allowed
+     * error (inclusive).
+     *
+     * @param x First value.
+     * @param y Second value.
+     * @param eps Amount of allowed absolute error.
+     * @return {@code true} if the values are two adjacent floating point
+     * numbers or they are within range of each other.
+     */
+Method code:
+264 |     public static boolean equals(double x, double y, double eps) {
+265 |         return equals(x, y, 1) || FastMath.abs(y - x) <= eps;
+266 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.getMax()
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 115-117
+Documentation:
+/**
+     * @return the higher end of the search interval.
+     */
+Method code:
+115 |     public double getMax() {
+116 |         return searchMax;
+117 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math3.distribution.FDistribution.FDistribution(double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/FDistribution.java
+Original range: 65-70
+Documentation:
+/**
+     * Create a F distribution using the given degrees of freedom.
+     * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
+     * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
+     * @throws NotStrictlyPositiveException if
+     * {@code numeratorDegreesOfFreedom <= 0} or
+     * {@code denominatorDegreesOfFreedom <= 0}.
+     */
+Method code:
+65 |     public FDistribution(double numeratorDegreesOfFreedom,
+66 |                              double denominatorDegreesOfFreedom)
+67 |         throws NotStrictlyPositiveException {
+68 |         this(numeratorDegreesOfFreedom, denominatorDegreesOfFreedom,
+69 |              DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+70 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpIntB()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6149-6151
+Documentation:
+/**
+     * Load "EXP_INT_B".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6149 |     static double[] loadExpIntB() {
+6150 |         return EXP_INT_B.clone();
+6151 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math3.util.FastMath.exp(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 806-808
+Documentation:
+/**
+     * Exponential function.
+     *
+     * Computes exp(x), function result is nearly rounded.   It will be correctly
+     * rounded to the theoretical value for 99.9% of input values, otherwise it will
+     * have a 1 UPL error.
+     *
+     * Method:
+     *    Lookup intVal = exp(int(x))
+     *    Lookup fracVal = exp(int(x-int(x) / 1024.0) * 1024.0 );
+     *    Compute z as the exponential of the remaining bits by a polynomial minus one
+     *    exp(x) = intVal * fracVal * (1 + z)
+     *
+     * Accuracy:
+     *    Calculation is done with 63 bits of precision, so result should be correctly
+     *    rounded for 99.9% of input values, with less than 1 ULP error otherwise.
+     *
+     * @param x   a double
+     * @return double e<sup>x</sup>
+     */
+Method code:
+806 |     public static double exp(double x) {
+807 |         return exp(x, 0.0, null);
+808 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.getMin()
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 109-111
+Documentation:
+/**
+     * @return the lower end of the search interval.
+     */
+Method code:
+109 |     public double getMin() {
+110 |         return searchMin;
+111 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math3.special.Gamma.lanczos(double)
+Source: src/main/java/org/apache/commons/math3/special/Gamma.java
+Original range: 349-355
+Documentation:
+/**
+     * <p>
+     * Returns the Lanczos approximation used to compute the gamma function.
+     * The Lanczos approximation is related to the Gamma function by the
+     * following equation
+     * <center>
+     * {@code gamma(x) = sqrt(2 * pi) / x * (x + g + 0.5) ^ (x + 0.5)
+     *                   * exp(-x - g - 0.5) * lanczos(x)},
+     * </center>
+     * where {@code g} is a constant, returned by {@link #getLanczosG()}.
+     * </p>
+     *
+     * @param x the argument
+     * @return the Lanczos approximation
+     * @see <a href="http://mathworld.wolfram.com/LanczosApproximation.html">Lanczos Approximation</a>,
+     * equations (1) through (5), and Paul Godfrey's
+     * <a href="http://my.fit.edu/~gabdo/gamma.txt">Note on the computation
+     * of the convergent Lanczos complex Gamma approximation</a>
+     */
+Method code:
+349 |     public static double lanczos(final double x) {
+350 |         double sum = 0.0;
+351 |         for (int i = LANCZOS.length - 1; i > 0; --i) {
+352 |             sum = sum + (LANCZOS[i] / (x + i));
+353 |         }
+354 |         return sum + LANCZOS[0];
+355 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.BaseAbstractUnivariateSolver(double,double,double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 90-96
+Documentation:
+/**
+     * Construct a solver with given accuracies.
+     *
+     * @param relativeAccuracy Maximum relative error.
+     * @param absoluteAccuracy Maximum absolute error.
+     * @param functionValueAccuracy Maximum function value error.
+     */
+Method code:
+90 |     protected BaseAbstractUnivariateSolver(final double relativeAccuracy,
+91 |                                                final double absoluteAccuracy,
+92 |                                                final double functionValueAccuracy) {
+93 |         this.absoluteAccuracy = absoluteAccuracy;
+94 |         this.relativeAccuracy = relativeAccuracy;
+95 |         this.functionValueAccuracy = functionValueAccuracy;
+96 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.math3.distribution.AbstractIntegerDistribution.inverseCumulativeProbability(double)
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractIntegerDistribution.java
+Original range: 74-117
+Documentation:
+/**
+     * {@inheritDoc}
+     *
+     * The default implementation returns
+     * <ul>
+     * <li>{@link #getSupportLowerBound()} for {@code p = 0},</li>
+     * <li>{@link #getSupportUpperBound()} for {@code p = 1}, and</li>
+     * <li>{@link #solveInverseCumulativeProbability(double, int, int)} for
+     *     {@code 0 < p < 1}.</li>
+     * </ul>
+     */
+Method code:
+74 |     public int inverseCumulativeProbability(final double p) throws OutOfRangeException {
+75 |         if (p < 0.0 || p > 1.0) {
+76 |             throw new OutOfRangeException(p, 0, 1);
+77 |         }
+78 | 
+79 |         int lower = getSupportLowerBound();
+80 |         if (p == 0.0) {
+81 |             return lower;
+82 |         }
+83 |         if (lower == Integer.MIN_VALUE) {
+84 |             if (checkedCumulativeProbability(lower) >= p) {
+85 |                 return lower;
+86 |             }
+87 |         } else {
+88 |             lower -= 1; // this ensures cumulativeProbability(lower) < p, which
+89 |                         // is important for the solving step
+90 |         }
+91 | 
+92 |         int upper = getSupportUpperBound();
+93 |         if (p == 1.0) {
+94 |             return upper;
+95 |         }
+96 | 
+97 |         // use the one-sided Chebyshev inequality to narrow the bracket
+98 |         // cf. AbstractRealDistribution.inverseCumulativeProbability(double)
+99 |         final double mu = getNumericalMean();
+100 |         final double sigma = FastMath.sqrt(getNumericalVariance());
+101 |         final boolean chebyshevApplies = !(Double.isInfinite(mu) || Double.isNaN(mu) ||
+102 |                 Double.isInfinite(sigma) || Double.isNaN(sigma) || sigma == 0.0);
+103 |         if (chebyshevApplies) {
+104 |             double k = FastMath.sqrt((1.0 - p) / p);
+105 |             double tmp = mu - k * sigma;
+106 |             if (tmp > lower) {
+107 |                 lower = ((int) Math.ceil(tmp)) - 1;
+108 |             }
+109 |             k = 1.0 / k;
+110 |             tmp = mu + k * sigma;
+111 |             if (tmp < upper) {
+112 |                 upper = ((int) Math.ceil(tmp)) - 1;
+113 |             }
+114 |         }
+115 | 
+116 |         return solveInverseCumulativeProbability(p, lower, upper);
+117 |     }
+
+===== M0044 =====
+Signature: org.apache.commons.math3.distribution.AbstractRealDistribution.anonymous_L149.value(double)
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractRealDistribution.java
+Original range: 151-153
+Documentation:
+
+Method code:
+151 |             public double value(final double x) {
+152 |                 return cumulativeProbability(x) - p;
+153 |             }
+
+===== M0045 =====
+Signature: org.apache.commons.math3.util.MathUtils.checkNotNull(Object)
+Source: src/main/java/org/apache/commons/math3/util/MathUtils.java
+Original range: 255-260
+Documentation:
+/**
+     * Checks that an object is not null.
+     *
+     * @param o Object to be checked.
+     * @throws NullArgumentException if {@code o} is {@code null}.
+     */
+Method code:
+255 |     public static void checkNotNull(Object o)
+256 |         throws NullArgumentException {
+257 |         if (o == null) {
+258 |             throw new NullArgumentException();
+259 |         }
+260 |     }
+
+===== M0046 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.MathIllegalStateException()
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 68-70
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+68 |     public MathIllegalStateException() {
+69 |         this(LocalizedFormats.ILLEGAL_STATE);
+70 |     }
+
+===== M0047 =====
+Signature: org.apache.commons.math3.util.FastMath.log(double,double[])
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1105-1325
+Documentation:
+/**
+     * Internal helper method for natural logarithm function.
+     * @param x original argument of the natural logarithm function
+     * @param hiPrec extra bits of precision on output (To Be Confirmed)
+     * @return log(x)
+     */
+Method code:
+1105 |     private static double log(final double x, final double[] hiPrec) {
+1106 |         if (x==0) { // Handle special case of +0/-0
+1107 |             return Double.NEGATIVE_INFINITY;
+1108 |         }
+1109 |         long bits = Double.doubleToLongBits(x);
+1110 | 
+1111 |         /* Handle special cases of negative input, and NaN */
+1112 |         if ((bits & 0x8000000000000000L) != 0 || x != x) {
+1113 |             if (x != 0.0) {
+1114 |                 if (hiPrec != null) {
+1115 |                     hiPrec[0] = Double.NaN;
+1116 |                 }
+1117 | 
+1118 |                 return Double.NaN;
+1119 |             }
+1120 |         }
+1121 | 
+1122 |         /* Handle special cases of Positive infinity. */
+1123 |         if (x == Double.POSITIVE_INFINITY) {
+1124 |             if (hiPrec != null) {
+1125 |                 hiPrec[0] = Double.POSITIVE_INFINITY;
+1126 |             }
+1127 | 
+1128 |             return Double.POSITIVE_INFINITY;
+1129 |         }
+1130 | 
+1131 |         /* Extract the exponent */
+1132 |         int exp = (int)(bits >> 52)-1023;
+1133 | 
+1134 |         if ((bits & 0x7ff0000000000000L) == 0) {
+1135 |             // Subnormal!
+1136 |             if (x == 0) {
+1137 |                 // Zero
+1138 |                 if (hiPrec != null) {
+1139 |                     hiPrec[0] = Double.NEGATIVE_INFINITY;
+1140 |                 }
+1141 | 
+1142 |                 return Double.NEGATIVE_INFINITY;
+1143 |             }
+1144 | 
+1145 |             /* Normalize the subnormal number. */
+1146 |             bits <<= 1;
+1147 |             while ( (bits & 0x0010000000000000L) == 0) {
+1148 |                 exp--;
+1149 |                 bits <<= 1;
+1150 |             }
+1151 |         }
+1152 | 
+1153 | 
+1154 |         if (exp == -1 || exp == 0) {
+1155 |             if (x < 1.01 && x > 0.99 && hiPrec == null) {
+1156 |                 /* The normal method doesn't work well in the range [0.99, 1.01], so call do a straight
+1157 |            polynomial expansion in higer precision. */
+1158 | 
+1159 |                /* Compute x - 1.0 and split it */
+1160 |                 double xa = x - 1.0;
+1161 |                 double xb = xa - x + 1.0;
+1162 |                 double tmp = xa * HEX_40000000;
+1163 |                 double aa = xa + tmp - tmp;
+1164 |                 double ab = xa - aa;
+1165 |                 xa = aa;
+1166 |                 xb = ab;
+1167 | 
+1168 |                 double ya = LN_QUICK_COEF[LN_QUICK_COEF.length-1][0];
+1169 |                 double yb = LN_QUICK_COEF[LN_QUICK_COEF.length-1][1];
+1170 | 
+1171 |                 for (int i = LN_QUICK_COEF.length - 2; i >= 0; i--) {
+1172 |                     /* Multiply a = y * x */
+1173 |                     aa = ya * xa;
+1174 |                     ab = ya * xb + yb * xa + yb * xb;
+1175 |                     /* split, so now y = a */
+1176 |                     tmp = aa * HEX_40000000;
+1177 |                     ya = aa + tmp - tmp;
+1178 |                     yb = aa - ya + ab;
+1179 | 
+1180 |                     /* Add  a = y + lnQuickCoef */
+1181 |                     aa = ya + LN_QUICK_COEF[i][0];
+1182 |                     ab = yb + LN_QUICK_COEF[i][1];
+1183 |                     /* Split y = a */
+1184 |                     tmp = aa * HEX_40000000;
+1185 |                     ya = aa + tmp - tmp;
+1186 |                     yb = aa - ya + ab;
+1187 |                 }
+1188 | 
+1189 |                 /* Multiply a = y * x */
+1190 |                 aa = ya * xa;
+1191 |                 ab = ya * xb + yb * xa + yb * xb;
+1192 |                 /* split, so now y = a */
+1193 |                 tmp = aa * HEX_40000000;
+1194 |                 ya = aa + tmp - tmp;
+1195 |                 yb = aa - ya + ab;
+1196 | 
+1197 |                 return ya + yb;
+1198 |             }
+1199 |         }
+1200 | 
+1201 |         // lnm is a log of a number in the range of 1.0 - 2.0, so 0 <= lnm < ln(2)
+1202 |         double lnm[] = lnMant.LN_MANT[(int)((bits & 0x000ffc0000000000L) >> 42)];
+1203 | 
+1204 |         /*
+1205 |     double epsilon = x / Double.longBitsToDouble(bits & 0xfffffc0000000000L);
+1206 | 
+1207 |     epsilon -= 1.0;
+1208 |          */
+1209 | 
+1210 |         // y is the most significant 10 bits of the mantissa
+1211 |         //double y = Double.longBitsToDouble(bits & 0xfffffc0000000000L);
+1212 |         //double epsilon = (x - y) / y;
+1213 |         double epsilon = (bits & 0x3ffffffffffL) / (TWO_POWER_52 + (bits & 0x000ffc0000000000L));
+1214 | 
+1215 |         double lnza = 0.0;
+1216 |         double lnzb = 0.0;
+1217 | 
+1218 |         if (hiPrec != null) {
+1219 |             /* split epsilon -> x */
+1220 |             double tmp = epsilon * HEX_40000000;
+1221 |             double aa = epsilon + tmp - tmp;
+1222 |             double ab = epsilon - aa;
+1223 |             double xa = aa;
+1224 |             double xb = ab;
+1225 | 
+1226 |             /* Need a more accurate epsilon, so adjust the division. */
+1227 |             double numer = bits & 0x3ffffffffffL;
+1228 |             double denom = TWO_POWER_52 + (bits & 0x000ffc0000000000L);
+1229 |             aa = numer - xa*denom - xb * denom;
+1230 |             xb += aa / denom;
+1231 | 
+1232 |             /* Remez polynomial evaluation */
+1233 |             double ya = LN_HI_PREC_COEF[LN_HI_PREC_COEF.length-1][0];
+1234 |             double yb = LN_HI_PREC_COEF[LN_HI_PREC_COEF.length-1][1];
+1235 | 
+1236 |             for (int i = LN_HI_PREC_COEF.length - 2; i >= 0; i--) {
+1237 |                 /* Multiply a = y * x */
+1238 |                 aa = ya * xa;
+1239 |                 ab = ya * xb + yb * xa + yb * xb;
+1240 |                 /* split, so now y = a */
+1241 |                 tmp = aa * HEX_40000000;
+1242 |                 ya = aa + tmp - tmp;
+1243 |                 yb = aa - ya + ab;
+1244 | 
+1245 |                 /* Add  a = y + lnHiPrecCoef */
+1246 |                 aa = ya + LN_HI_PREC_COEF[i][0];
+1247 |                 ab = yb + LN_HI_PREC_COEF[i][1];
+1248 |                 /* Split y = a */
+1249 |                 tmp = aa * HEX_40000000;
+1250 |                 ya = aa + tmp - tmp;
+1251 |                 yb = aa - ya + ab;
+1252 |             }
+1253 | 
+1254 |             /* Multiply a = y * x */
+1255 |             aa = ya * xa;
+1256 |             ab = ya * xb + yb * xa + yb * xb;
+1257 | 
+1258 |             /* split, so now lnz = a */
+1259 |             /*
+1260 |       tmp = aa * 1073741824.0;
+1261 |       lnza = aa + tmp - tmp;
+1262 |       lnzb = aa - lnza + ab;
+1263 |              */
+1264 |             lnza = aa + ab;
+1265 |             lnzb = -(lnza - aa - ab);
+1266 |         } else {
+1267 |             /* High precision not required.  Eval Remez polynomial
+1268 |          using standard double precision */
+1269 |             lnza = -0.16624882440418567;
+1270 |             lnza = lnza * epsilon + 0.19999954120254515;
+1271 |             lnza = lnza * epsilon + -0.2499999997677497;
+1272 |             lnza = lnza * epsilon + 0.3333333333332802;
+1273 |             lnza = lnza * epsilon + -0.5;
+1274 |             lnza = lnza * epsilon + 1.0;
+1275 |             lnza = lnza * epsilon;
+1276 |         }
+1277 | 
+1278 |         /* Relative sizes:
+1279 |          * lnzb     [0, 2.33E-10]
+1280 |          * lnm[1]   [0, 1.17E-7]
+1281 |          * ln2B*exp [0, 1.12E-4]
+1282 |          * lnza      [0, 9.7E-4]
+1283 |          * lnm[0]   [0, 0.692]
+1284 |          * ln2A*exp [0, 709]
+1285 |          */
+1286 | 
+1287 |         /* Compute the following sum:
+1288 |          * lnzb + lnm[1] + ln2B*exp + lnza + lnm[0] + ln2A*exp;
+1289 |          */
+1290 | 
+1291 |         //return lnzb + lnm[1] + ln2B*exp + lnza + lnm[0] + ln2A*exp;
+1292 |         double a = LN_2_A*exp;
+1293 |         double b = 0.0;
+1294 |         double c = a+lnm[0];
+1295 |         double d = -(c-a-lnm[0]);
+1296 |         a = c;
+1297 |         b = b + d;
+1298 | 
+1299 |         c = a + lnza;
+1300 |         d = -(c - a - lnza);
+1301 |         a = c;
+1302 |         b = b + d;
+1303 | 
+1304 |         c = a + LN_2_B*exp;
+1305 |         d = -(c - a - LN_2_B*exp);
+1306 |         a = c;
+1307 |         b = b + d;
+1308 | 
+1309 |         c = a + lnm[1];
+1310 |         d = -(c - a - lnm[1]);
+1311 |         a = c;
+1312 |         b = b + d;
+1313 | 
+1314 |         c = a + lnzb;
+1315 |         d = -(c - a - lnzb);
+1316 |         a = c;
+1317 |         b = b + d;
+1318 | 
+1319 |         if (hiPrec != null) {
+1320 |             hiPrec[0] = a;
+1321 |             hiPrec[1] = b;
+1322 |         }
+1323 | 
+1324 |         return a + b;
+1325 |     }
+
+===== M0048 =====
+Signature: org.apache.commons.math3.distribution.BinomialDistribution.getSupportLowerBound()
+Source: src/main/java/org/apache/commons/math3/distribution/BinomialDistribution.java
+Original range: 136-138
+Documentation:
+/**
+     * {@inheritDoc}
+     *
+     * The lower bound of the support is always 0 except for the probability
+     * parameter {@code p = 1}.
+     *
+     * @return lower bound of the support (0 or the number of trials)
+     */
+Method code:
+136 |     public int getSupportLowerBound() {
+137 |         return probabilityOfSuccess < 1.0 ? 0 : numberOfTrials;
+138 |     }
+
+===== M0049 =====
+Signature: org.apache.commons.math3.util.Incrementor.incrementCount()
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 149-153
+Documentation:
+/**
+     * Adds one to the current iteration count.
+     * At counter exhaustion, this method will call the
+     * {@link MaxCountExceededCallback#trigger(int) trigger} method of the
+     * callback object passed to the
+     * {@link #Incrementor(int,MaxCountExceededCallback) constructor}.
+     * If not explictly set, a default callback is used that will throw
+     * a {@code MaxCountExceededException}.
+     *
+     * @throws MaxCountExceededException at counter exhaustion, unless a
+     * custom {@link MaxCountExceededCallback callback} has been set at
+     * construction.
+     */
+Method code:
+149 |     public void incrementCount() {
+150 |         if (++count > maximalCount) {
+151 |             maxCountCallback.trigger(maximalCount);
+152 |         }
+153 |     }
+
+===== M0050 =====
+Signature: org.apache.commons.math3.distribution.FDistribution.getSupportLowerBound()
+Source: src/main/java/org/apache/commons/math3/distribution/FDistribution.java
+Original range: 247-249
+Documentation:
+/**
+     * {@inheritDoc}
+     *
+     * The lower bound of the support is always 0 no matter the parameters.
+     *
+     * @return lower bound of the support (always 0)
+     */
+Method code:
+247 |     public double getSupportLowerBound() {
+248 |         return 0;
+249 |     }
+
+===== M0051 =====
+Signature: org.apache.commons.math3.util.FastMath.abs(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 3019-3021
+Documentation:
+/**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x)
+     */
+Method code:
+3019 |     public static double abs(double x) {
+3020 |         return (x < 0.0) ? -x : (x == 0.0) ? 0.0 : x; // -0.0 => +0.0
+3021 |     }
+
+===== M0052 =====
+Signature: org.apache.commons.math3.util.ContinuedFraction.evaluate(double,double,int)
+Source: src/main/java/org/apache/commons/math3/util/ContinuedFraction.java
+Original range: 123-199
+Documentation:
+/**
+     * <p>
+     * Evaluates the continued fraction at the value x.
+     * </p>
+     *
+     * <p>
+     * The implementation of this method is based on the modified Lentz algorithm as described
+     * on page 18 ff. in:
+     * <ul>
+     * <li>
+     *   I. J. Thompson,  A. R. Barnett. "Coulomb and Bessel Functions of Complex Arguments and Order."
+     *   <a target="_blank" href="http://www.fresco.org.uk/papers/Thompson-JCP64p490.pdf">
+     *   http://www.fresco.org.uk/papers/Thompson-JCP64p490.pdf</a>
+     * </li>
+     * </ul>
+     * Note: the implementation uses the terms a<sub>i</sub> and b<sub>i</sub> as defined in
+     * <a href="http://mathworld.wolfram.com/ContinuedFraction.html">Continued Fraction / MathWorld</a>.
+     * </p>
+     *
+     * @param x the evaluation point.
+     * @param epsilon maximum error allowed.
+     * @param maxIterations maximum number of convergents
+     * @return the value of the continued fraction evaluated at x.
+     * @throws ConvergenceException if the algorithm fails to converge.
+     */
+Method code:
+123 |     public double evaluate(double x, double epsilon, int maxIterations) {
+124 |         final double small = 1e-50;
+125 |         double hPrev = getA(0, x);
+126 | 
+127 |         // use the value of small as epsilon criteria for zero checks
+128 |         if (Precision.equals(hPrev, 0.0, small)) {
+129 |             hPrev = small;
+130 |         }
+131 | 
+132 |         int n = 1;
+133 |         double dPrev = 0.0;
+134 |         double p0 = 1.0;
+135 |         double q1 = 1.0;
+136 |         double cPrev = hPrev;
+137 |         double hN = hPrev;
+138 | 
+139 |         while (n < maxIterations) {
+140 |             final double a = getA(n, x);
+141 |             final double b = getB(n, x);
+142 | 
+143 |             double cN = a * hPrev + b * p0;
+144 |             double q2 = a * q1 + b * dPrev;
+145 |             if (Double.isInfinite(cN) || Double.isInfinite(q2)) {
+146 |                 double scaleFactor = 1d;
+147 |                 double lastScaleFactor = 1d;
+148 |                 final int maxPower = 5;
+149 |                 final double scale = FastMath.max(a,b);
+150 |                 if (scale <= 0) {  // Can't scale
+151 |                     throw new ConvergenceException(LocalizedFormats.CONTINUED_FRACTION_INFINITY_DIVERGENCE, x);
+152 |                 }
+153 |                 for (int i = 0; i < maxPower; i++) {
+154 |                     lastScaleFactor = scaleFactor;
+155 |                     scaleFactor *= scale;
+156 |                     if (a != 0.0 && a > b) {
+157 |                         cN = hPrev / lastScaleFactor + (b / scaleFactor * p0);
+158 |                         q2 = q1 / lastScaleFactor + (b / scaleFactor * dPrev);
+159 |                     } else if (b != 0) {
+160 |                         cN = (a / scaleFactor * hPrev) + p0 / lastScaleFactor;
+161 |                         q2 = (a / scaleFactor * q1) + dPrev / lastScaleFactor;
+162 |                     }
+163 |                     if (!(Double.isInfinite(cN) || Double.isInfinite(q2))) {
+164 |                         break;
+165 |                     }
+166 |                 }
+167 |             }
+168 | 
+169 |             final double deltaN = cN / q2 / cPrev;
+170 |             hN = cPrev * deltaN;
+171 | 
+172 |             if (Double.isInfinite(hN)) {
+173 |                 throw new ConvergenceException(LocalizedFormats.CONTINUED_FRACTION_INFINITY_DIVERGENCE,
+174 |                                                x);
+175 |             }
+176 |             if (Double.isNaN(hN)) {
+177 |                 throw new ConvergenceException(LocalizedFormats.CONTINUED_FRACTION_NAN_DIVERGENCE,
+178 |                                                x);
+179 |             }
+180 | 
+181 |             if (FastMath.abs(deltaN - 1.0) < epsilon) {
+182 |                 break;
+183 |             }
+184 | 
+185 |             dPrev = q1;
+186 |             cPrev = cN / q2;
+187 |             p0 = hPrev;
+188 |             hPrev = cN;
+189 |             q1 = q2;
+190 |             n++;
+191 |         }
+192 | 
+193 |         if (n >= maxIterations) {
+194 |             throw new MaxCountExceededException(LocalizedFormats.NON_CONVERGENT_CONTINUED_FRACTION,
+195 |                                                 maxIterations, x);
+196 |         }
+197 | 
+198 |         return hN;
+199 |     }
+
+===== M0053 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.getContext()
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 73-75
+Documentation:
+/** {@inheritDoc} */
+Method code:
+73 |     public ExceptionContext getContext() {
+74 |         return context;
+75 |     }
+
+===== M0054 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.solve(int,FUNC,double,double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 194-196
+Documentation:
+/** {@inheritDoc} */
+Method code:
+194 |     public double solve(int maxEval, FUNC f, double min, double max) {
+195 |         return solve(maxEval, f, min, max, min + 0.5 * (max - min));
+196 |     }
+
+===== M0055 =====
+Signature: org.apache.commons.math3.distribution.FDistribution.FDistribution(double,double,double)
+Source: src/main/java/org/apache/commons/math3/distribution/FDistribution.java
+Original range: 85-100
+Documentation:
+/**
+     * Create an F distribution using the given degrees of freedom
+     * and inverse cumulative probability accuracy.
+     * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
+     * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
+     * @param inverseCumAccuracy the maximum absolute error in inverse
+     * cumulative probability estimates.
+     * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY})
+     * @throws NotStrictlyPositiveException if
+     * {@code numeratorDegreesOfFreedom <= 0} or
+     * {@code denominatorDegreesOfFreedom <= 0}.
+     * @since 2.1
+     */
+Method code:
+85 |     public FDistribution(double numeratorDegreesOfFreedom,
+86 |                              double denominatorDegreesOfFreedom,
+87 |                              double inverseCumAccuracy)
+88 |         throws NotStrictlyPositiveException {
+89 |         if (numeratorDegreesOfFreedom <= 0) {
+90 |             throw new NotStrictlyPositiveException(LocalizedFormats.DEGREES_OF_FREEDOM,
+91 |                                                    numeratorDegreesOfFreedom);
+92 |         }
+93 |         if (denominatorDegreesOfFreedom <= 0) {
+94 |             throw new NotStrictlyPositiveException(LocalizedFormats.DEGREES_OF_FREEDOM,
+95 |                                                    denominatorDegreesOfFreedom);
+96 |         }
+97 |         this.numeratorDegreesOfFreedom = numeratorDegreesOfFreedom;
+98 |         this.denominatorDegreesOfFreedom = denominatorDegreesOfFreedom;
+99 |         solverAbsoluteAccuracy = inverseCumAccuracy;
+100 |     }
+
+===== M0056 =====
+Signature: org.apache.commons.math3.util.ResizableDoubleArray.addElement(double)
+Source: src/main/java/org/apache/commons/math3/util/ResizableDoubleArray.java
+Original range: 300-309
+Documentation:
+/**
+     * Adds an element to the end of this expandable array.
+     *
+     * @param value to be added to end of array
+     */
+Method code:
+300 |     public synchronized void addElement(double value) {
+301 |         numElements++;
+302 |         if ((startIndex + numElements) > internalArray.length) {
+303 |             expand();
+304 |         }
+305 |         internalArray[startIndex + (numElements - 1)] = value;
+306 |         if (shouldContract()) {
+307 |             contract();
+308 |         }
+309 |     }
+
+===== M0057 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.solve(int,FUNC,double,double,double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 185-191
+Documentation:
+/** {@inheritDoc} */
+Method code:
+185 |     public double solve(int maxEval, FUNC f, double min, double max, double startValue) {
+186 |         // Initialization.
+187 |         setup(maxEval, f, min, max, startValue);
+188 | 
+189 |         // Perform computation.
+190 |         return doSolve();
+191 |     }
+
+===== M0058 =====
+Signature: org.apache.commons.math3.exception.util.ArgUtils.flatten(Object[])
+Source: src/main/java/org/apache/commons/math3/exception/util/ArgUtils.java
+Original range: 41-55
+Documentation:
+/**
+     * Transform a multidimensional array into a one-dimensional list.
+     *
+     * @param array Array (possibly multidimensional).
+     * @return a list of all the {@code Object} instances contained in
+     * {@code array}.
+     */
+Method code:
+41 |     public static Object[] flatten(Object[] array) {
+42 |         final List<Object> list = new ArrayList<Object>();
+43 |         if (array != null) {
+44 |             for (Object o : array) {
+45 |                 if (o instanceof Object[]) {
+46 |                     for (Object oR : flatten((Object[]) o)) {
+47 |                         list.add(oR);
+48 |                     }
+49 |                 } else {
+50 |                     list.add(o);
+51 |                 }
+52 |             }
+53 |         }
+54 |         return list.toArray();
+55 |     }
+
+===== M0059 =====
+Signature: org.apache.commons.math3.distribution.BinomialDistribution.BinomialDistribution(int,double)
+Source: src/main/java/org/apache/commons/math3/distribution/BinomialDistribution.java
+Original range: 49-60
+Documentation:
+/**
+     * Create a binomial distribution with the given number of trials and
+     * probability of success.
+     *
+     * @param trials Number of trials.
+     * @param p Probability of success.
+     * @throws NotPositiveException if {@code trials < 0}.
+     * @throws OutOfRangeException if {@code p < 0} or {@code p > 1}.
+     */
+Method code:
+49 |     public BinomialDistribution(int trials, double p) {
+50 |         if (trials < 0) {
+51 |             throw new NotPositiveException(LocalizedFormats.NUMBER_OF_TRIALS,
+52 |                                            trials);
+53 |         }
+54 |         if (p < 0 || p > 1) {
+55 |             throw new OutOfRangeException(p, 0, 1);
+56 |         }
+57 | 
+58 |         probabilityOfSuccess = p;
+59 |         numberOfTrials = trials;
+60 |     }
+
+===== M0060 =====
+Signature: org.apache.commons.math3.util.Incrementor.Incrementor(int,MaxCountExceededCallback)
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 77-81
+Documentation:
+/**
+     * Defines a maximal count and a callback method to be triggered at
+     * counter exhaustion.
+     *
+     * @param max Maximal count.
+     * @param cb Function to be called when the maximal count has been reached.
+     */
+Method code:
+77 |     public Incrementor(int max,
+78 |                        MaxCountExceededCallback cb) {
+79 |         maximalCount = max;
+80 |         maxCountCallback = cb;
+81 |     }
+
+===== M0061 =====
+Signature: org.apache.commons.math3.distribution.BinomialDistribution.getSupportUpperBound()
+Source: src/main/java/org/apache/commons/math3/distribution/BinomialDistribution.java
+Original range: 148-150
+Documentation:
+/**
+     * {@inheritDoc}
+     *
+     * The upper bound of the support is the number of trials except for the
+     * probability parameter {@code p = 0}.
+     *
+     * @return upper bound of the support (number of trials or 0)
+     */
+Method code:
+148 |     public int getSupportUpperBound() {
+149 |         return probabilityOfSuccess > 0.0 ? numberOfTrials : 0;
+150 |     }
+
+===== M0062 =====
+Signature: org.apache.commons.math3.special.Beta.anonymous_L131.getB(int,double)
+Source: src/main/java/org/apache/commons/math3/special/Beta.java
+Original range: 133-147
+Documentation:
+
+Method code:
+133 |                 @Override
+134 |                 protected double getB(int n, double x) {
+135 |                     double ret;
+136 |                     double m;
+137 |                     if (n % 2 == 0) { // even
+138 |                         m = n / 2.0;
+139 |                         ret = (m * (b - m) * x) /
+140 |                             ((a + (2 * m) - 1) * (a + (2 * m)));
+141 |                     } else {
+142 |                         m = (n - 1.0) / 2.0;
+143 |                         ret = -((a + m) * (a + b + m) * x) /
+144 |                                 ((a + (2 * m)) * (a + (2 * m) + 1.0));
+145 |                     }
+146 |                     return ret;
+147 |                 }
+
+===== M0063 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadExpFracA()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6157-6159
+Documentation:
+/**
+     * Load "EXP_FRAC_A".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6157 |     static double[] loadExpFracA() {
+6158 |         return EXP_FRAC_A.clone();
+6159 |     }
+
+===== M0064 =====
+Signature: org.apache.commons.math3.exception.ConvergenceException.ConvergenceException(Localizable,Object...)
+Source: src/main/java/org/apache/commons/math3/exception/ConvergenceException.java
+Original range: 47-50
+Documentation:
+/**
+     * Construct the exception with a specific context and arguments.
+     *
+     * @param pattern Message pattern providing the specific context of
+     * the error.
+     * @param args Arguments.
+     */
+Method code:
+47 |     public ConvergenceException(Localizable pattern,
+48 |                                 Object ... args) {
+49 |         getContext().addMessage(pattern, args);
+50 |     }
+
+===== M0065 =====
+Signature: org.apache.commons.math3.util.FastMath.sqrt(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 374-376
+Documentation:
+/** Compute the square root of a number.
+     * <p><b>Note:</b> this implementation currently delegates to {@link Math#sqrt}
+     * @param a number on which evaluation is done
+     * @return square root of a
+     */
+Method code:
+374 |     public static double sqrt(final double a) {
+375 |         return Math.sqrt(a);
+376 |     }
+
+===== M0066 =====
+Signature: org.apache.commons.math3.analysis.solvers.BrentSolver.doSolve()
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BrentSolver.java
+Original range: 81-119
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+81 |     @Override
+82 |     protected double doSolve() {
+83 |         double min = getMin();
+84 |         double max = getMax();
+85 |         final double initial = getStartValue();
+86 |         final double functionValueAccuracy = getFunctionValueAccuracy();
+87 | 
+88 |         verifySequence(min, initial, max);
+89 | 
+90 |         // Return the initial guess if it is good enough.
+91 |         double yInitial = computeObjectiveValue(initial);
+92 |         if (FastMath.abs(yInitial) <= functionValueAccuracy) {
+93 |             return initial;
+94 |         }
+95 | 
+96 |         // Return the first endpoint if it is good enough.
+97 |         double yMin = computeObjectiveValue(min);
+98 |         if (FastMath.abs(yMin) <= functionValueAccuracy) {
+99 |             return min;
+100 |         }
+101 | 
+102 |         // Reduce interval if min and initial bracket the root.
+103 |         if (yInitial * yMin < 0) {
+104 |             return brent(min, initial, yMin, yInitial);
+105 |         }
+106 | 
+107 |         // Return the second endpoint if it is good enough.
+108 |         double yMax = computeObjectiveValue(max);
+109 |         if (FastMath.abs(yMax) <= functionValueAccuracy) {
+110 |             return max;
+111 |         }
+112 | 
+113 |         // Reduce interval if initial and max bracket the root.
+114 |         if (yInitial * yMax < 0) {
+115 |             return brent(initial, max, yInitial, yMax);
+116 |         }
+117 | 
+118 |         throw new NoBracketingException(min, max, yMin, yMax);
+119 |     }
+
+===== M0067 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.MathIllegalStateException(Localizable,Object...)
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 44-48
+Documentation:
+/**
+     * Simple constructor.
+     *
+     * @param pattern Message pattern explaining the cause of the error.
+     * @param args Arguments.
+     */
+Method code:
+44 |     public MathIllegalStateException(Localizable pattern,
+45 |                                      Object ... args) {
+46 |         context = new ExceptionContext(this);
+47 |         context.addMessage(pattern, args);
+48 |     }
+
+===== M0068 =====
+Signature: org.apache.commons.math3.util.ResizableDoubleArray.ResizableDoubleArray(int)
+Source: src/main/java/org/apache/commons/math3/util/ResizableDoubleArray.java
+Original range: 160-163
+Documentation:
+/**
+     * Create a ResizableArray with the specified initial capacity.  Other
+     * properties take default values:
+      * <ul>
+     * <li><code>expansionMode = MULTIPLICATIVE_MODE</code></li>
+     * <li><code>expansionFactor = 2.5</code></li>
+     * <li><code>contractionFactor = 2.0</code></li>
+     * </ul>
+     * @param initialCapacity The initial size of the internal storage array
+     * @throws IllegalArgumentException if initialCapacity is not > 0
+     */
+Method code:
+160 |     public ResizableDoubleArray(int initialCapacity) {
+161 |         setInitialCapacity(initialCapacity);
+162 |         internalArray = new double[this.initialCapacity];
+163 |     }
+
+===== M0069 =====
+Signature: org.apache.commons.math3.util.ContinuedFraction.ContinuedFraction()
+Source: src/main/java/org/apache/commons/math3/util/ContinuedFraction.java
+Original range: 44-46
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+44 |     protected ContinuedFraction() {
+45 |         super();
+46 |     }
+
+===== M0070 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.getMessage(Locale)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 146-148
+Documentation:
+/**
+     * Gets the message in a specified locale.
+     *
+     * @param locale Locale in which the message should be translated.
+     * @return the localized message.
+     */
+Method code:
+146 |     public String getMessage(final Locale locale) {
+147 |         return buildMessage(locale, ": ");
+148 |     }
+
+===== M0071 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.buildMessage(Locale,String)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 169-187
+Documentation:
+/**
+     * Builds a message string.
+     *
+     * @param locale Locale in which the message should be translated.
+     * @param separator Message separator.
+     * @return a localized message string.
+     */
+Method code:
+169 |     private String buildMessage(Locale locale,
+170 |                                 String separator) {
+171 |         final StringBuilder sb = new StringBuilder();
+172 |         int count = 0;
+173 |         final int len = msgPatterns.size();
+174 |         for (int i = 0; i < len; i++) {
+175 |             final Localizable pat = msgPatterns.get(i);
+176 |             final Object[] args = msgArguments.get(i);
+177 |             final MessageFormat fmt = new MessageFormat(pat.getLocalizedString(locale),
+178 |                                                         locale);
+179 |             sb.append(fmt.format(args));
+180 |             if (++count < len) {
+181 |                 // Add a separator if there are other messages.
+182 |                 sb.append(separator);
+183 |             }
+184 |         }
+185 | 
+186 |         return sb.toString();
+187 |     }
+
+===== M0072 =====
+Signature: org.apache.commons.math3.distribution.FDistribution.getNumericalVariance()
+Source: src/main/java/org/apache/commons/math3/distribution/FDistribution.java
+Original range: 213-219
+Documentation:
+/**
+     * {@inheritDoc}
+     *
+     * For numerator degrees of freedom parameter {@code a} and denominator
+     * degrees of freedom parameter {@code b}, the variance is
+     * <ul>
+     *  <li>
+     *    if {@code b > 4} then
+     *    {@code [2 * b^2 * (a + b - 2)] / [a * (b - 2)^2 * (b - 4)]},
+     *  </li>
+     *  <li>else undefined ({@code Double.NaN}).
+     * </ul>
+     */
+Method code:
+213 |     public double getNumericalVariance() {
+214 |         if (!numericalVarianceIsCalculated) {
+215 |             numericalVariance = calculateNumericalVariance();
+216 |             numericalVarianceIsCalculated = true;
+217 |         }
+218 |         return numericalVariance;
+219 |     }
+
+===== M0073 =====
+Signature: org.apache.commons.math3.util.FastMathLiteralArrays.loadLnMant()
+Source: src/main/java/org/apache/commons/math3/util/FastMathLiteralArrays.java
+Original range: 6173-6175
+Documentation:
+/**
+     * Load "LN_MANT".
+     *
+     * @return a clone of the data array.
+     */
+Method code:
+6173 |     static double[][] loadLnMant() {
+6174 |         return LN_MANT.clone();
+6175 |     }
+
+===== M0074 =====
+Signature: org.apache.commons.math3.util.FastMath.pow(double,double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 1419-1577
+Documentation:
+/**
+     * Power function.  Compute x^y.
+     *
+     * @param x   a double
+     * @param y   a double
+     * @return double
+     */
+Method code:
+1419 |     public static double pow(double x, double y) {
+1420 |         final double lns[] = new double[2];
+1421 | 
+1422 |         if (y == 0.0) {
+1423 |             return 1.0;
+1424 |         }
+1425 | 
+1426 |         if (x != x) { // X is NaN
+1427 |             return x;
+1428 |         }
+1429 | 
+1430 | 
+1431 |         if (x == 0) {
+1432 |             long bits = Double.doubleToLongBits(x);
+1433 |             if ((bits & 0x8000000000000000L) != 0) {
+1434 |                 // -zero
+1435 |                 long yi = (long) y;
+1436 | 
+1437 |                 if (y < 0 && y == yi && (yi & 1) == 1) {
+1438 |                     return Double.NEGATIVE_INFINITY;
+1439 |                 }
+1440 | 
+1441 |                 if (y > 0 && y == yi && (yi & 1) == 1) {
+1442 |                     return -0.0;
+1443 |                 }
+1444 |             }
+1445 | 
+1446 |             if (y < 0) {
+1447 |                 return Double.POSITIVE_INFINITY;
+1448 |             }
+1449 |             if (y > 0) {
+1450 |                 return 0.0;
+1451 |             }
+1452 | 
+1453 |             return Double.NaN;
+1454 |         }
+1455 | 
+1456 |         if (x == Double.POSITIVE_INFINITY) {
+1457 |             if (y != y) { // y is NaN
+1458 |                 return y;
+1459 |             }
+1460 |             if (y < 0.0) {
+1461 |                 return 0.0;
+1462 |             } else {
+1463 |                 return Double.POSITIVE_INFINITY;
+1464 |             }
+1465 |         }
+1466 | 
+1467 |         if (y == Double.POSITIVE_INFINITY) {
+1468 |             if (x * x == 1.0) {
+1469 |                 return Double.NaN;
+1470 |             }
+1471 | 
+1472 |             if (x * x > 1.0) {
+1473 |                 return Double.POSITIVE_INFINITY;
+1474 |             } else {
+1475 |                 return 0.0;
+1476 |             }
+1477 |         }
+1478 | 
+1479 |         if (x == Double.NEGATIVE_INFINITY) {
+1480 |             if (y != y) { // y is NaN
+1481 |                 return y;
+1482 |             }
+1483 | 
+1484 |             if (y < 0) {
+1485 |                 long yi = (long) y;
+1486 |                 if (y == yi && (yi & 1) == 1) {
+1487 |                     return -0.0;
+1488 |                 }
+1489 | 
+1490 |                 return 0.0;
+1491 |             }
+1492 | 
+1493 |             if (y > 0)  {
+1494 |                 long yi = (long) y;
+1495 |                 if (y == yi && (yi & 1) == 1) {
+1496 |                     return Double.NEGATIVE_INFINITY;
+1497 |                 }
+1498 | 
+1499 |                 return Double.POSITIVE_INFINITY;
+1500 |             }
+1501 |         }
+1502 | 
+1503 |         if (y == Double.NEGATIVE_INFINITY) {
+1504 | 
+1505 |             if (x * x == 1.0) {
+1506 |                 return Double.NaN;
+1507 |             }
+1508 | 
+1509 |             if (x * x < 1.0) {
+1510 |                 return Double.POSITIVE_INFINITY;
+1511 |             } else {
+1512 |                 return 0.0;
+1513 |             }
+1514 |         }
+1515 | 
+1516 |         /* Handle special case x<0 */
+1517 |         if (x < 0) {
+1518 |             // y is an even integer in this case
+1519 |             if (y >= TWO_POWER_52 || y <= -TWO_POWER_52) {
+1520 |                 return pow(-x, y);
+1521 |             }
+1522 | 
+1523 |             if (y == (long) y) {
+1524 |                 // If y is an integer
+1525 |                 return ((long)y & 1) == 0 ? pow(-x, y) : -pow(-x, y);
+1526 |             } else {
+1527 |                 return Double.NaN;
+1528 |             }
+1529 |         }
+1530 | 
+1531 |         /* Split y into ya and yb such that y = ya+yb */
+1532 |         double ya;
+1533 |         double yb;
+1534 |         if (y < 8e298 && y > -8e298) {
+1535 |             double tmp1 = y * HEX_40000000;
+1536 |             ya = y + tmp1 - tmp1;
+1537 |             yb = y - ya;
+1538 |         } else {
+1539 |             double tmp1 = y * 9.31322574615478515625E-10;
+1540 |             double tmp2 = tmp1 * 9.31322574615478515625E-10;
+1541 |             ya = (tmp1 + tmp2 - tmp1) * HEX_40000000 * HEX_40000000;
+1542 |             yb = y - ya;
+1543 |         }
+1544 | 
+1545 |         /* Compute ln(x) */
+1546 |         final double lores = log(x, lns);
+1547 |         if (Double.isInfinite(lores)){ // don't allow this to be converted to NaN
+1548 |             return lores;
+1549 |         }
+1550 | 
+1551 |         double lna = lns[0];
+1552 |         double lnb = lns[1];
+1553 | 
+1554 |         /* resplit lns */
+1555 |         double tmp1 = lna * HEX_40000000;
+1556 |         double tmp2 = lna + tmp1 - tmp1;
+1557 |         lnb += lna - tmp2;
+1558 |         lna = tmp2;
+1559 | 
+1560 |         // y*ln(x) = (aa+ab)
+1561 |         final double aa = lna * ya;
+1562 |         final double ab = lna * yb + lnb * ya + lnb * yb;
+1563 | 
+1564 |         lna = aa+ab;
+1565 |         lnb = -(lna - aa - ab);
+1566 | 
+1567 |         double z = 1.0 / 120.0;
+1568 |         z = z * lnb + (1.0 / 24.0);
+1569 |         z = z * lnb + (1.0 / 6.0);
+1570 |         z = z * lnb + 0.5;
+1571 |         z = z * lnb + 1.0;
+1572 |         z = z * lnb;
+1573 | 
+1574 |         final double result = exp(lna, z, null);
+1575 |         //result = result + result * z;
+1576 |         return result;
+1577 |     }
+
+===== M0075 =====
+Signature: org.apache.commons.math3.analysis.solvers.BaseAbstractUnivariateSolver.verifySequence(double,double,double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/BaseAbstractUnivariateSolver.java
+Original range: 265-269
+Documentation:
+/**
+     * Check that {@code lower < initial < upper}.
+     *
+     * @param lower Lower endpoint.
+     * @param initial Initial value.
+     * @param upper Upper endpoint.
+     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException
+     * if {@code lower >= initial} or {@code initial >= upper}.
+     */
+Method code:
+265 |     protected void verifySequence(final double lower,
+266 |                                   final double initial,
+267 |                                   final double upper) {
+268 |         UnivariateSolverUtils.verifySequence(lower, initial, upper);
+269 |     }
+
+===== M0076 =====
+Signature: org.apache.commons.math3.util.Incrementor.setMaximalCount(int)
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 90-92
+Documentation:
+/**
+     * Sets the upper limit for the counter.
+     * This does not automatically reset the current count to zero (see
+     * {@link #resetCount()}).
+     *
+     * @param max Upper limit of the counter.
+     */
+Method code:
+90 |     public void setMaximalCount(int max) {
+91 |         maximalCount = max;
+92 |     }
+
+===== M0077 =====
+Signature: org.apache.commons.math3.util.Incrementor.resetCount()
+Source: src/main/java/org/apache/commons/math3/util/Incrementor.java
+Original range: 158-160
+Documentation:
+/**
+     * Resets the counter to 0.
+     */
+Method code:
+158 |     public void resetCount() {
+159 |         count = 0;
+160 |     }
+
+===== M0078 =====
+Signature: org.apache.commons.math3.distribution.BinomialDistribution.getNumericalMean()
+Source: src/main/java/org/apache/commons/math3/distribution/BinomialDistribution.java
+Original range: 113-115
+Documentation:
+/**
+     * {@inheritDoc}
+     *
+     * For {@code n} trials and probability parameter {@code p}, the mean is
+     * {@code n * p}.
+     */
+Method code:
+113 |     public double getNumericalMean() {
+114 |         return numberOfTrials * probabilityOfSuccess;
+115 |     }
+
+===== M0079 =====
+Signature: org.apache.commons.math3.distribution.BinomialDistribution.getNumericalVariance()
+Source: src/main/java/org/apache/commons/math3/distribution/BinomialDistribution.java
+Original range: 123-126
+Documentation:
+/**
+     * {@inheritDoc}
+     *
+     * For {@code n} trials and probability parameter {@code p}, the variance is
+     * {@code n * p * (1 - p)}.
+     */
+Method code:
+123 |     public double getNumericalVariance() {
+124 |         final double p = probabilityOfSuccess;
+125 |         return numberOfTrials * p * (1 - p);
+126 |     }
+
+===== M0080 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.getMessage()
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 127-129
+Documentation:
+/**
+     * Gets the default message.
+     *
+     * @return the message.
+     */
+Method code:
+127 |     public String getMessage() {
+128 |         return getMessage(Locale.US);
+129 |     }
+
+===== M0081 =====
+Signature: org.apache.commons.math3.util.ResizableDoubleArray.contract()
+Source: src/main/java/org/apache/commons/math3/util/ResizableDoubleArray.java
+Original range: 431-440
+Documentation:
+/**
+     * Contracts the storage array to the (size of the element set) + 1 - to
+     * avoid a zero length array. This function also resets the startIndex to
+     * zero.
+     */
+Method code:
+431 |     public synchronized void contract() {
+432 |         double[] tempArray = new double[numElements + 1];
+433 | 
+434 |         // Copy and swap - copy only the element array from the src array.
+435 |         System.arraycopy(internalArray, startIndex, tempArray, 0, numElements);
+436 |         internalArray = tempArray;
+437 | 
+438 |         // Reset the start index to zero
+439 |         startIndex = 0;
+440 |     }
+
+===== M0082 =====
+Signature: org.apache.commons.math3.analysis.solvers.AbstractUnivariateSolver.AbstractUnivariateSolver(double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/AbstractUnivariateSolver.java
+Original range: 36-38
+Documentation:
+/**
+     * Construct a solver with given absolute accuracy.
+     *
+     * @param absoluteAccuracy Maximum absolute error.
+     */
+Method code:
+36 |     protected AbstractUnivariateSolver(final double absoluteAccuracy) {
+37 |         super(absoluteAccuracy);
+38 |     }
+
+===== M0083 =====
+Signature: org.apache.commons.math3.util.ResizableDoubleArray.expand()
+Source: src/main/java/org/apache/commons/math3/util/ResizableDoubleArray.java
+Original range: 525-543
+Documentation:
+/**
+     * Expands the internal storage array using the expansion factor.
+     * <p>
+     * if <code>expansionMode</code> is set to MULTIPLICATIVE_MODE,
+     * the new array size will be <code>internalArray.length * expansionFactor.</code>
+     * If <code>expansionMode</code> is set to ADDITIVE_MODE,  the length
+     * after expansion will be <code>internalArray.length + expansionFactor</code>
+     * </p>
+     */
+Method code:
+525 |     protected synchronized void expand() {
+526 | 
+527 |         // notice the use of FastMath.ceil(), this guarantees that we will always
+528 |         // have an array of at least currentSize + 1.   Assume that the
+529 |         // current initial capacity is 1 and the expansion factor
+530 |         // is 1.000000000000000001.  The newly calculated size will be
+531 |         // rounded up to 2 after the multiplication is performed.
+532 |         int newSize = 0;
+533 |         if (expansionMode == MULTIPLICATIVE_MODE) {
+534 |             newSize = (int) FastMath.ceil(internalArray.length * expansionFactor);
+535 |         } else {
+536 |             newSize = internalArray.length + FastMath.round(expansionFactor);
+537 |         }
+538 |         double[] tempArray = new double[newSize];
+539 | 
+540 |         // Copy and swap
+541 |         System.arraycopy(internalArray, 0, tempArray, 0, internalArray.length);
+542 |         internalArray = tempArray;
+543 |     }
+
+===== M0084 =====
+Signature: org.apache.commons.math3.analysis.solvers.UnivariateSolverUtils.solve(UnivariateFunction,double,double,double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/UnivariateSolverUtils.java
+Original range: 70-78
+Documentation:
+/**
+     * Convenience method to find a zero of a univariate real function.  A default
+     * solver is used.
+     *
+     * @param function Function.
+     * @param x0 Lower bound for the interval.
+     * @param x1 Upper bound for the interval.
+     * @param absoluteAccuracy Accuracy to be used by the solver.
+     * @return a value where the function is zero.
+     * @throws IllegalArgumentException if {@code function} is {@code null},
+     * the endpoints do not specify a valid interval, or the absolute accuracy
+     * is not valid for the default solver.
+     */
+Method code:
+70 |     public static double solve(UnivariateFunction function,
+71 |                                double x0, double x1,
+72 |                                double absoluteAccuracy) {
+73 |         if (function == null) {
+74 |             throw new NullArgumentException(LocalizedFormats.FUNCTION);
+75 |         }
+76 |         final UnivariateSolver solver = new BrentSolver(absoluteAccuracy);
+77 |         return solver.solve(Integer.MAX_VALUE, function, x0, x1);
+78 |     }
+
+===== M0085 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.getMessage()
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 78-81
+Documentation:
+/** {@inheritDoc} */
+Method code:
+78 |     @Override
+79 |     public String getMessage() {
+80 |         return context.getMessage();
+81 |     }
+
+===== M0086 =====
+Signature: org.apache.commons.math3.distribution.FDistribution.calculateNumericalVariance()
+Source: src/main/java/org/apache/commons/math3/distribution/FDistribution.java
+Original range: 226-238
+Documentation:
+/**
+     * used by {@link #getNumericalVariance()}
+     *
+     * @return the variance of this distribution
+     */
+Method code:
+226 |     protected double calculateNumericalVariance() {
+227 |         final double denominatorDF = getDenominatorDegreesOfFreedom();
+228 | 
+229 |         if (denominatorDF > 4) {
+230 |             final double numeratorDF = getNumeratorDegreesOfFreedom();
+231 |             final double denomDFMinusTwo = denominatorDF - 2;
+232 | 
+233 |             return ( 2 * (denominatorDF * denominatorDF) * (numeratorDF + denominatorDF - 2) ) /
+234 |                    ( (numeratorDF * (denomDFMinusTwo * denomDFMinusTwo) * (denominatorDF - 4)) );
+235 |         }
+236 | 
+237 |         return Double.NaN;
+238 |     }
+
+===== M0087 =====
+Signature: org.apache.commons.math3.util.ResizableDoubleArray.shouldContract()
+Source: src/main/java/org/apache/commons/math3/util/ResizableDoubleArray.java
+Original range: 799-805
+Documentation:
+/**
+     * Returns true if the internal storage array has too many unused
+     * storage positions.
+     *
+     * @return true if array satisfies the contraction criteria
+     */
+Method code:
+799 |     private synchronized boolean shouldContract() {
+800 |         if (expansionMode == MULTIPLICATIVE_MODE) {
+801 |             return (internalArray.length / ((float) numElements)) > contractionCriteria;
+802 |         } else {
+803 |             return (internalArray.length - numElements) > contractionCriteria;
+804 |         }
+805 |     }
+
+===== M0088 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.getLocalizedMessage()
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 84-87
+Documentation:
+/** {@inheritDoc} */
+Method code:
+84 |     @Override
+85 |     public String getLocalizedMessage() {
+86 |         return context.getLocalizedMessage();
+87 |     }
+
+===== M0089 =====
+Signature: org.apache.commons.math3.analysis.solvers.UnivariateSolverUtils.verifyInterval(double,double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/UnivariateSolverUtils.java
+Original range: 334-340
+Documentation:
+/**
+     * Check that the endpoints specify an interval.
+     *
+     * @param lower Lower endpoint.
+     * @param upper Upper endpoint.
+     * @throws NumberIsTooLargeException if {@code lower >= upper}.
+     */
+Method code:
+334 |     public static void verifyInterval(final double lower,
+335 |                                       final double upper) {
+336 |         if (lower >= upper) {
+337 |             throw new NumberIsTooLargeException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
+338 |                                                 lower, upper, false);
+339 |         }
+340 |     }
+
+===== M0090 =====
+Signature: org.apache.commons.math3.util.Precision.equals(double,double,int)
+Source: src/main/java/org/apache/commons/math3/util/Precision.java
+Original range: 300-315
+Documentation:
+/**
+     * Returns true if both arguments are equal or within the range of allowed
+     * error (inclusive).
+     * Two float numbers are considered equal if there are {@code (maxUlps - 1)}
+     * (or fewer) floating point numbers between them, i.e. two adjacent floating
+     * point numbers are considered equal.
+     * Adapted from <a
+     * href="http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm">
+     * Bruce Dawson</a>
+     *
+     * @param x first value
+     * @param y second value
+     * @param maxUlps {@code (maxUlps - 1)} is the number of floating point
+     * values between {@code x} and {@code y}.
+     * @return {@code true} if there are fewer than {@code maxUlps} floating
+     * point values between {@code x} and {@code y}.
+     */
+Method code:
+300 |     public static boolean equals(double x, double y, int maxUlps) {
+301 |         long xInt = Double.doubleToLongBits(x);
+302 |         long yInt = Double.doubleToLongBits(y);
+303 | 
+304 |         // Make lexicographically ordered as a two's-complement integer.
+305 |         if (xInt < 0) {
+306 |             xInt = SGN_MASK - xInt;
+307 |         }
+308 |         if (yInt < 0) {
+309 |             yInt = SGN_MASK - yInt;
+310 |         }
+311 | 
+312 |         final boolean isEqual = FastMath.abs(xInt - yInt) <= maxUlps;
+313 | 
+314 |         return isEqual && !Double.isNaN(x) && !Double.isNaN(y);
+315 |     }
+
+===== M0091 =====
+Signature: org.apache.commons.math3.distribution.BinomialDistribution.cumulativeProbability(int)
+Source: src/main/java/org/apache/commons/math3/distribution/BinomialDistribution.java
+Original range: 94-105
+Documentation:
+/** {@inheritDoc} */
+Method code:
+94 |     public double cumulativeProbability(int x) {
+95 |         double ret;
+96 |         if (x < 0) {
+97 |             ret = 0.0;
+98 |         } else if (x >= numberOfTrials) {
+99 |             ret = 1.0;
+100 |         } else {
+101 |             ret = 1.0 - Beta.regularizedBeta(probabilityOfSuccess,
+102 |                     x + 1.0, numberOfTrials - x);
+103 |         }
+104 |         return ret;
+105 |     }
+
+===== M0092 =====
+Signature: org.apache.commons.math3.distribution.AbstractRealDistribution.inverseCumulativeProbability(double)
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractRealDistribution.java
+Original range: 78-181
+Documentation:
+/**
+     * {@inheritDoc}
+     *
+     * The default implementation returns
+     * <ul>
+     * <li>{@link #getSupportLowerBound()} for {@code p = 0},</li>
+     * <li>{@link #getSupportUpperBound()} for {@code p = 1}.</li>
+     * </ul>
+     */
+Method code:
+78 |     public double inverseCumulativeProbability(final double p) throws OutOfRangeException {
+79 |         /*
+80 |          * IMPLEMENTATION NOTES
+81 |          * --------------------
+82 |          * Where applicable, use is made of the one-sided Chebyshev inequality
+83 |          * to bracket the root. This inequality states that
+84 |          * P(X - mu >= k * sig) <= 1 / (1 + k^2),
+85 |          * mu: mean, sig: standard deviation. Equivalently
+86 |          * 1 - P(X < mu + k * sig) <= 1 / (1 + k^2),
+87 |          * F(mu + k * sig) >= k^2 / (1 + k^2).
+88 |          *
+89 |          * For k = sqrt(p / (1 - p)), we find
+90 |          * F(mu + k * sig) >= p,
+91 |          * and (mu + k * sig) is an upper-bound for the root.
+92 |          *
+93 |          * Then, introducing Y = -X, mean(Y) = -mu, sd(Y) = sig, and
+94 |          * P(Y >= -mu + k * sig) <= 1 / (1 + k^2),
+95 |          * P(-X >= -mu + k * sig) <= 1 / (1 + k^2),
+96 |          * P(X <= mu - k * sig) <= 1 / (1 + k^2),
+97 |          * F(mu - k * sig) <= 1 / (1 + k^2).
+98 |          *
+99 |          * For k = sqrt((1 - p) / p), we find
+100 |          * F(mu - k * sig) <= p,
+101 |          * and (mu - k * sig) is a lower-bound for the root.
+102 |          *
+103 |          * In cases where the Chebyshev inequality does not apply, geometric
+104 |          * progressions 1, 2, 4, ... and -1, -2, -4, ... are used to bracket
+105 |          * the root.
+106 |          */
+107 |         if (p < 0.0 || p > 1.0) {
+108 |             throw new OutOfRangeException(p, 0, 1);
+109 |         }
+110 | 
+111 |         double lowerBound = getSupportLowerBound();
+112 |         if (p == 0.0) {
+113 |             return lowerBound;
+114 |         }
+115 | 
+116 |         double upperBound = getSupportUpperBound();
+117 |         if (p == 1.0) {
+118 |             return upperBound;
+119 |         }
+120 | 
+121 |         final double mu = getNumericalMean();
+122 |         final double sig = FastMath.sqrt(getNumericalVariance());
+123 |         final boolean chebyshevApplies;
+124 |         chebyshevApplies = !(Double.isInfinite(mu) || Double.isNaN(mu) ||
+125 |                              Double.isInfinite(sig) || Double.isNaN(sig));
+126 | 
+127 |         if (lowerBound == Double.NEGATIVE_INFINITY) {
+128 |             if (chebyshevApplies) {
+129 |                 lowerBound = mu - sig * FastMath.sqrt((1. - p) / p);
+130 |             } else {
+131 |                 lowerBound = -1.0;
+132 |                 while (cumulativeProbability(lowerBound) >= p) {
+133 |                     lowerBound *= 2.0;
+134 |                 }
+135 |             }
+136 |         }
+137 | 
+138 |         if (upperBound == Double.POSITIVE_INFINITY) {
+139 |             if (chebyshevApplies) {
+140 |                 upperBound = mu + sig * FastMath.sqrt(p / (1. - p));
+141 |             } else {
+142 |                 upperBound = 1.0;
+143 |                 while (cumulativeProbability(upperBound) < p) {
+144 |                     upperBound *= 2.0;
+145 |                 }
+146 |             }
+147 |         }
+148 | 
+149 |         final UnivariateFunction toSolve = new UnivariateFunction() {
+150 | 
+151 |             public double value(final double x) {
+152 |                 return cumulativeProbability(x) - p;
+153 |             }
+154 |         };
+155 | 
+156 |         double x = UnivariateSolverUtils.solve(toSolve,
+157 |                                                    lowerBound,
+158 |                                                    upperBound,
+159 |                                                    getSolverAbsoluteAccuracy());
+160 | 
+161 |         if (!isSupportConnected()) {
+162 |             /* Test for plateau. */
+163 |             final double dx = getSolverAbsoluteAccuracy();
+164 |             if (x - dx >= getSupportLowerBound()) {
+165 |                 double px = cumulativeProbability(x);
+166 |                 if (cumulativeProbability(x - dx) == px) {
+167 |                     upperBound = x;
+168 |                     while (upperBound - lowerBound > dx) {
+169 |                         final double midPoint = 0.5 * (lowerBound + upperBound);
+170 |                         if (cumulativeProbability(midPoint) < px) {
+171 |                             lowerBound = midPoint;
+172 |                         } else {
+173 |                             upperBound = midPoint;
+174 |                         }
+175 |                     }
+176 |                     return upperBound;
+177 |                 }
+178 |             }
+179 |         }
+180 |         return x;
+181 |     }
+
+===== M0093 =====
+Signature: org.apache.commons.math3.util.ArithmeticUtils.factorial(int)
+Source: src/main/java/org/apache/commons/math3/util/ArithmeticUtils.java
+Original range: 298-307
+Documentation:
+/**
+     * Returns n!. Shorthand for {@code n} <a
+     * href="http://mathworld.wolfram.com/Factorial.html"> Factorial</a>, the
+     * product of the numbers {@code 1,...,n}.
+     * <p>
+     * <Strong>Preconditions</strong>:
+     * <ul>
+     * <li> {@code n >= 0} (otherwise
+     * {@code IllegalArgumentException} is thrown)</li>
+     * <li> The result is small enough to fit into a {@code long}. The
+     * largest value of {@code n} for which {@code n!} <
+     * Long.MAX_VALUE} is 20. If the computed value exceeds {@code Long.MAX_VALUE}
+     * an {@code ArithMeticException } is thrown.</li>
+     * </ul>
+     * </p>
+     *
+     * @param n argument
+     * @return {@code n!}
+     * @throws MathArithmeticException if the result is too large to be represented
+     * by a {@code long}.
+     * @throws NotPositiveException if {@code n < 0}.
+     * @throws MathArithmeticException if {@code n > 20}: The factorial value is too
+     * large to fit in a {@code long}.
+     */
+Method code:
+298 |     public static long factorial(final int n) {
+299 |         if (n < 0) {
+300 |             throw new NotPositiveException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER,
+301 |                                            n);
+302 |         }
+303 |         if (n > 20) {
+304 |             throw new MathArithmeticException();
+305 |         }
+306 |         return FACTORIALS[n];
+307 |     }
+
+===== M0094 =====
+Signature: org.apache.commons.math3.analysis.solvers.UnivariateSolverUtils.verifySequence(double,double,double)
+Source: src/main/java/org/apache/commons/math3/analysis/solvers/UnivariateSolverUtils.java
+Original range: 351-356
+Documentation:
+/**
+     * Check that {@code lower < initial < upper}.
+     *
+     * @param lower Lower endpoint.
+     * @param initial Initial value.
+     * @param upper Upper endpoint.
+     * @throws NumberIsTooLargeException if {@code lower >= initial} or
+     * {@code initial >= upper}.
+     */
+Method code:
+351 |     public static void verifySequence(final double lower,
+352 |                                       final double initial,
+353 |                                       final double upper) {
+354 |         verifyInterval(lower, initial);
+355 |         verifyInterval(initial, upper);
+356 |     }
+
+===== M0095 =====
+Signature: org.apache.commons.math3.special.Beta.anonymous_L131.getA(int,double)
+Source: src/main/java/org/apache/commons/math3/special/Beta.java
+Original range: 149-152
+Documentation:
+
+Method code:
+149 |                 @Override
+150 |                 protected double getA(int n, double x) {
+151 |                     return 1.0;
+152 |                 }
+
+===== M0096 =====
+Signature: org.apache.commons.math3.special.Beta.regularizedBeta(double,double,double,double,int)
+Source: src/main/java/org/apache/commons/math3/special/Beta.java
+Original range: 115-160
+Documentation:
+/**
+     * Returns the regularized beta function I(x, a, b).
+     *
+     * The implementation of this method is based on:
+     * <ul>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/RegularizedBetaFunction.html">
+     * Regularized Beta Function</a>.</li>
+     * <li>
+     * <a href="http://functions.wolfram.com/06.21.10.0001.01">
+     * Regularized Beta Function</a>.</li>
+     * </ul>
+     *
+     * @param x the value.
+     * @param a Parameter {@code a}.
+     * @param b Parameter {@code b}.
+     * @param epsilon When the absolute value of the nth item in the
+     * series is less than epsilon the approximation ceases to calculate
+     * further elements in the series.
+     * @param maxIterations Maximum number of "iterations" to complete.
+     * @return the regularized beta function I(x, a, b)
+     * @throws org.apache.commons.math3.exception.MaxCountExceededException
+     * if the algorithm fails to converge.
+     */
+Method code:
+115 |     public static double regularizedBeta(double x,
+116 |                                          final double a, final double b,
+117 |                                          double epsilon, int maxIterations) {
+118 |         double ret;
+119 | 
+120 |         if (Double.isNaN(x) ||
+121 |             Double.isNaN(a) ||
+122 |             Double.isNaN(b) ||
+123 |             x < 0 ||
+124 |             x > 1 ||
+125 |             a <= 0.0 ||
+126 |             b <= 0.0) {
+127 |             ret = Double.NaN;
+128 |         } else if (x > (a + 1.0) / (a + b + 2.0)) {
+129 |             ret = 1.0 - regularizedBeta(1.0 - x, b, a, epsilon, maxIterations);
+130 |         } else {
+131 |             ContinuedFraction fraction = new ContinuedFraction() {
+132 | 
+133 |                 @Override
+134 |                 protected double getB(int n, double x) {
+135 |                     double ret;
+136 |                     double m;
+137 |                     if (n % 2 == 0) { // even
+138 |                         m = n / 2.0;
+139 |                         ret = (m * (b - m) * x) /
+140 |                             ((a + (2 * m) - 1) * (a + (2 * m)));
+141 |                     } else {
+142 |                         m = (n - 1.0) / 2.0;
+143 |                         ret = -((a + m) * (a + b + m) * x) /
+144 |                                 ((a + (2 * m)) * (a + (2 * m) + 1.0));
+145 |                     }
+146 |                     return ret;
+147 |                 }
+148 | 
+149 |                 @Override
+150 |                 protected double getA(int n, double x) {
+151 |                     return 1.0;
+152 |                 }
+153 |             };
+154 |             ret = FastMath.exp((a * FastMath.log(x)) + (b * FastMath.log(1.0 - x)) -
+155 |                 FastMath.log(a) - logBeta(a, b, epsilon, maxIterations)) *
+156 |                 1.0 / fraction.evaluate(x, epsilon, maxIterations);
+157 |         }
+158 | 
+159 |         return ret;
+160 |     }
+
+===== M0097 =====
+Signature: org.apache.commons.math3.distribution.FDistribution.getDenominatorDegreesOfFreedom()
+Source: src/main/java/org/apache/commons/math3/distribution/FDistribution.java
+Original range: 171-173
+Documentation:
+/**
+     * Access the denominator degrees of freedom.
+     *
+     * @return the denominator degrees of freedom.
+     */
+Method code:
+171 |     public double getDenominatorDegreesOfFreedom() {
+172 |         return denominatorDegreesOfFreedom;
+173 |     }
+
+===== M0098 =====
+Signature: org.apache.commons.math3.distribution.AbstractRealDistribution.AbstractRealDistribution()
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractRealDistribution.java
+Original range: 53-53
+Documentation:
+/** Default constructor. */
+Method code:
+53 |     protected AbstractRealDistribution() { }
+
+===== M0099 =====
+Signature: org.apache.commons.math3.distribution.AbstractIntegerDistribution.solveInverseCumulativeProbability(double,int,int)
+Source: src/main/java/org/apache/commons/math3/distribution/AbstractIntegerDistribution.java
+Original range: 131-151
+Documentation:
+/**
+     * This is a utility function used by {@link
+     * #inverseCumulativeProbability(double)}. It assumes {@code 0 < p < 1} and
+     * that the inverse cumulative probability lies in the bracket {@code
+     * (lower, upper]}. The implementation does simple bisection to find the
+     * smallest {@code p}-quantile <code>inf{x in Z | P(X<=x) >= p}</code>.
+     *
+     * @param p the cumulative probability
+     * @param lower a value satisfying {@code cumulativeProbability(lower) < p}
+     * @param upper a value satisfying {@code p <= cumulativeProbability(upper)}
+     * @return the smallest {@code p}-quantile of this distribution
+     */
+Method code:
+131 |     protected int solveInverseCumulativeProbability(final double p, int lower, int upper) {
+132 |         while (lower + 1 < upper) {
+133 |             int xm = (lower + upper) / 2;
+134 |             if (xm < lower || xm > upper) {
+135 |                 /*
+136 |                  * Overflow.
+137 |                  * There will never be an overflow in both calculation methods
+138 |                  * for xm at the same time
+139 |                  */
+140 |                 xm = lower + (upper - lower) / 2;
+141 |             }
+142 | 
+143 |             double pm = checkedCumulativeProbability(xm);
+144 |             if (pm >= p) {
+145 |                 upper = xm;
+146 |             } else {
+147 |                 lower = xm;
+148 |             }
+149 |         }
+150 |         return upper;
+151 |     }
+

@@ -1,0 +1,122 @@
+===== M0001 =====
+Signature: org.apache.commons.lang.ClassUtils.addAbbreviation(String,String)
+Source: src/java/org/apache/commons/lang/ClassUtils.java
+Original range: 115-118
+Documentation:
+/**
+     * Add primitive type abbreviation to maps of abbreviations.
+     *
+     * @param primitive Canonical name of primitive type
+     * @param abbreviation Corresponding abbreviation of primitive type
+     */
+Method code:
+115 |     private static void addAbbreviation(String primitive, String abbreviation) {
+116 |         abbreviationMap.put(primitive, abbreviation);
+117 |         reverseAbbreviationMap.put(abbreviation, primitive);
+118 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang.ClassUtils.getShortClassName(String)
+Source: src/java/org/apache/commons/lang/ClassUtils.java
+Original range: 183-204
+Documentation:
+/**
+     * <p>Gets the class name minus the package name from a String.</p>
+     *
+     * <p>The string passed in is assumed to be a class name - it is not checked.</p>
+     *
+     * @param className  the className to get the short name for
+     * @return the class name of the class without the package name or an empty string
+     */
+Method code:
+183 |     public static String getShortClassName(String className) {
+184 |         if (className == null) {
+185 |             return StringUtils.EMPTY;
+186 |         }
+187 |         if (className.length() == 0) {
+188 |             return StringUtils.EMPTY;
+189 |         }
+190 | 
+191 | 
+192 |         // Handle array encoding
+193 |             // Strip Object type encoding
+194 | 
+195 | 
+196 |         int lastDotIdx = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
+197 |         int innerIdx = className.indexOf(
+198 |                 INNER_CLASS_SEPARATOR_CHAR, lastDotIdx == -1 ? 0 : lastDotIdx + 1);
+199 |         String out = className.substring(lastDotIdx + 1);
+200 |         if (innerIdx != -1) {
+201 |             out = out.replace(INNER_CLASS_SEPARATOR_CHAR, PACKAGE_SEPARATOR_CHAR);
+202 |         }
+203 |         return out;
+204 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang.ClassUtils.getPackageName(Class<?>)
+Source: src/java/org/apache/commons/lang/ClassUtils.java
+Original range: 228-233
+Documentation:
+/**
+     * <p>Gets the package name of a <code>Class</code>.</p>
+     *
+     * @param cls  the class to get the package name for, may be <code>null</code>.
+     * @return the package name or an empty string
+     */
+Method code:
+228 |     public static String getPackageName(Class<?> cls) {
+229 |         if (cls == null) {
+230 |             return StringUtils.EMPTY;
+231 |         }
+232 |         return getPackageName(cls.getName());
+233 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang.ClassUtils.getPackageName(String)
+Source: src/java/org/apache/commons/lang/ClassUtils.java
+Original range: 244-257
+Documentation:
+/**
+     * <p>Gets the package name from a <code>String</code>.</p>
+     *
+     * <p>The string passed in is assumed to be a class name - it is not checked.</p>
+     * <p>If the class is unpackaged, return an empty string.</p>
+     *
+     * @param className  the className to get the package name for, may be <code>null</code>
+     * @return the package name or an empty string
+     */
+Method code:
+244 |     public static String getPackageName(String className) {
+245 |         if (className == null) {
+246 |             return StringUtils.EMPTY;
+247 |         }
+248 | 
+249 |         // Strip array encoding
+250 |         // Strip Object type encoding
+251 | 
+252 |         int i = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
+253 |         if (i == -1) {
+254 |             return StringUtils.EMPTY;
+255 |         }
+256 |         return className.substring(0, i);
+257 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang.ClassUtils.getShortClassName(Class<?>)
+Source: src/java/org/apache/commons/lang/ClassUtils.java
+Original range: 168-173
+Documentation:
+/**
+     * <p>Gets the class name minus the package name from a <code>Class</code>.</p>
+     *
+     * @param cls  the class to get the short name for.
+     * @return the class name without the package name or an empty string
+     */
+Method code:
+168 |     public static String getShortClassName(Class<?> cls) {
+169 |         if (cls == null) {
+170 |             return StringUtils.EMPTY;
+171 |         }
+172 |         return getShortClassName(cls.getName());
+173 |     }
+

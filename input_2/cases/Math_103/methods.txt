@@ -1,0 +1,404 @@
+===== M0001 =====
+Signature: org.apache.commons.math.MathException.printStackTrace(PrintStream)
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 250-257
+Documentation:
+/**
+     * Prints the stack trace of this exception to the specified stream.
+     *
+     * @param out  the <code>PrintStream</code> to use for output
+     */
+Method code:
+250 |     public void printStackTrace(PrintStream out) {
+251 |         synchronized (out) {
+252 |             PrintWriter pw = new PrintWriter(out, false);
+253 |             printStackTrace(pw);
+254 |             // Flush the PrintWriter before it's GC'ed.
+255 |             pw.flush();
+256 |         }
+257 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.MathException.getCause()
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 234-236
+Documentation:
+/**
+     * Gets the cause of this throwable.
+     * 
+     * @return  the cause of this throwable, or <code>null</code>
+     */
+Method code:
+234 |     public Throwable getCause() {
+235 |         return rootCause;
+236 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.MathException.printStackTrace(PrintWriter)
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 264-272
+Documentation:
+/**
+     * Prints the stack trace of this exception to the specified writer.
+     *
+     * @param out  the <code>PrintWriter</code> to use for output
+     */
+Method code:
+264 |     public void printStackTrace(PrintWriter out) {
+265 |         synchronized (out) {
+266 |             super.printStackTrace(out);
+267 |             if (rootCause != null && JDK_SUPPORTS_NESTED == false) {
+268 |                 out.print("Caused by: ");
+269 |                 rootCause.printStackTrace(out);
+270 |             }
+271 |         }
+272 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.special.Gamma.logGamma(double)
+Source: src/java/org/apache/commons/math/special/Gamma.java
+Original range: 87-107
+Documentation:
+/**
+     * Returns the natural logarithm of the gamma function &#915;(x).
+     *
+     * The implementation of this method is based on:
+     * <ul>
+     * <li><a href="http://mathworld.wolfram.com/GammaFunction.html">
+     * Gamma Function</a>, equation (28).</li>
+     * <li><a href="http://mathworld.wolfram.com/LanczosApproximation.html">
+     * Lanczos Approximation</a>, equations (1) through (5).</li>
+     * <li><a href="http://my.fit.edu/~gabdo/gamma.txt">Paul Godfrey, A note on
+     * the computation of the convergent Lanczos complex Gamma approximation
+     * </a></li>
+     * </ul>
+     * 
+     * @param x the value.
+     * @return log(&#915;(x))
+     */
+Method code:
+87 |     public static double logGamma(double x) {
+88 |         double ret;
+89 | 
+90 |         if (Double.isNaN(x) || (x <= 0.0)) {
+91 |             ret = Double.NaN;
+92 |         } else {
+93 |             double g = 607.0 / 128.0;
+94 |             
+95 |             double sum = 0.0;
+96 |             for (int i = lanczos.length - 1; i > 0; --i) {
+97 |                 sum = sum + (lanczos[i] / (x + i));
+98 |             }
+99 |             sum = sum + lanczos[0];
+100 | 
+101 |             double tmp = x + g + .5;
+102 |             ret = ((x + .5) * Math.log(tmp)) - tmp +
+103 |                 HALF_LOG_2_PI + Math.log(sum / x);
+104 |         }
+105 | 
+106 |         return ret;
+107 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.special.Gamma.regularizedGammaP(double,double,double,int)
+Source: src/java/org/apache/commons/math/special/Gamma.java
+Original range: 150-187
+Documentation:
+/**
+     * Returns the regularized gamma function P(a, x).
+     * 
+     * The implementation of this method is based on:
+     * <ul>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/RegularizedGammaFunction.html">
+     * Regularized Gamma Function</a>, equation (1).</li>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/IncompleteGammaFunction.html">
+     * Incomplete Gamma Function</a>, equation (4).</li>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/ConfluentHypergeometricFunctionoftheFirstKind.html">
+     * Confluent Hypergeometric Function of the First Kind</a>, equation (1).
+     * </li>
+     * </ul>
+     * 
+     * @param a the a parameter.
+     * @param x the value.
+     * @param epsilon When the absolute value of the nth item in the
+     *                series is less than epsilon the approximation ceases
+     *                to calculate further elements in the series.
+     * @param maxIterations Maximum number of "iterations" to complete. 
+     * @return the regularized gamma function P(a, x)
+     * @throws MathException if the algorithm fails to converge.
+     */
+Method code:
+150 |     public static double regularizedGammaP(double a, 
+151 |                                            double x, 
+152 |                                            double epsilon, 
+153 |                                            int maxIterations) 
+154 |         throws MathException
+155 |     {
+156 |         double ret;
+157 | 
+158 |         if (Double.isNaN(a) || Double.isNaN(x) || (a <= 0.0) || (x < 0.0)) {
+159 |             ret = Double.NaN;
+160 |         } else if (x == 0.0) {
+161 |             ret = 0.0;
+162 |         } else if (a >= 1.0 && x > a) {
+163 |             // use regularizedGammaQ because it should converge faster in this
+164 |             // case.
+165 |             ret = 1.0 - regularizedGammaQ(a, x, epsilon, maxIterations);
+166 |         } else {
+167 |             // calculate series
+168 |             double n = 0.0; // current element index
+169 |             double an = 1.0 / a; // n-th element in the series
+170 |             double sum = an; // partial sum
+171 |             while (Math.abs(an) > epsilon && n < maxIterations) {
+172 |                 // compute next element in the series
+173 |                 n = n + 1.0;
+174 |                 an = an * (x / (a + n));
+175 | 
+176 |                 // update partial sum
+177 |                 sum = sum + an;
+178 |             }
+179 |             if (n >= maxIterations) {
+180 |                 throw new MaxIterationsExceededException(maxIterations);
+181 |             } else {
+182 |                 ret = Math.exp(-x + (a * Math.log(x)) - logGamma(a)) * sum;
+183 |             }
+184 |         }
+185 | 
+186 |         return ret;
+187 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.MaxIterationsExceededException.MaxIterationsExceededException(int)
+Source: src/java/org/apache/commons/math/MaxIterationsExceededException.java
+Original range: 35-39
+Documentation:
+/**
+     * Constructs an exception with specified formatted detail message.
+     * Message formatting is delegated to {@link java.text.MessageFormat}.
+     * @param maxIterations maximal number of iterations allowed
+     */
+Method code:
+35 |     public MaxIterationsExceededException(int maxIterations) {
+36 |         super("Maximal number of iterations ({0}) exceeded",
+37 |               new Object[] { new Integer(maxIterations) });
+38 |         this.maxIterations = maxIterations;
+39 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.setStandardDeviation(double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 92-98
+Documentation:
+/**
+     * Modify the standard deviation.
+     * @param sd standard deviation for this distribution
+     * @throws IllegalArgumentException if <code>sd</code> is not positive.
+     */
+Method code:
+92 |     public void setStandardDeviation(double sd) {
+93 |         if (sd <= 0.0) {
+94 |             throw new IllegalArgumentException(
+95 |                 "Standard deviation must be positive.");
+96 |         }       
+97 |         standardDeviation = sd;
+98 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.cumulativeProbability(double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 108-111
+Documentation:
+/**
+     * For this disbution, X, this method returns P(X &lt; <code>x</code>).
+     * @param x the value at which the CDF is evaluated.
+     * @return CDF evaluted at <code>x</code>. 
+     * @throws MathException if the algorithm fails to converge; unless
+     * x is more than 20 standard deviations from the mean, in which case the
+     * convergence exception is caught and 0 or 1 is returned.
+     */
+Method code:
+108 |     public double cumulativeProbability(double x) throws MathException {
+109 |             return 0.5 * (1.0 + Erf.erf((x - mean) /
+110 |                     (standardDeviation * Math.sqrt(2.0))));
+111 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math.MathException.buildMessage(String,Object[],Locale)
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 111-116
+Documentation:
+/**
+     * Builds a message string by from a pattern and its arguments.
+     * @param pattern format specifier
+     * @param arguments format arguments
+     * @param locale Locale in which the message should be translated
+     * @return a message string
+     */
+Method code:
+111 |     private static String buildMessage(String pattern, Object[] arguments, Locale locale) {
+112 |         // do it the hard way, for Java 1.3. compatibility
+113 |         MessageFormat mf = new MessageFormat(translate(pattern, locale));
+114 |         mf.setLocale(locale);
+115 |         return mf.format(arguments);        
+116 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math.ConvergenceException.ConvergenceException(String,Object[])
+Source: src/java/org/apache/commons/math/ConvergenceException.java
+Original range: 43-45
+Documentation:
+/**
+     * Constructs an exception with specified formatted detail message.
+     * Message formatting is delegated to {@link java.text.MessageFormat}.
+     * @param pattern format specifier
+     * @param arguments format arguments
+     */
+Method code:
+43 |     public ConvergenceException(String pattern, Object[] arguments) {
+44 |         super(pattern, arguments);
+45 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math.distribution.AbstractDistribution.AbstractDistribution()
+Source: src/java/org/apache/commons/math/distribution/AbstractDistribution.java
+Original range: 37-39
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+37 |     protected AbstractDistribution() {
+38 |         super();
+39 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math.MathException.MathException(String,Object[])
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 150-155
+Documentation:
+/**
+     * Constructs a new <code>MathException</code> with specified
+     * formatted detail message.
+     * Message formatting is delegated to {@link java.text.MessageFormat}.
+     * @param pattern format specifier
+     * @param arguments format arguments
+     */
+Method code:
+150 |     public MathException(String pattern, Object[] arguments) {
+151 |       super(buildMessage(pattern, arguments, Locale.US));
+152 |       this.pattern   = pattern;
+153 |       this.arguments = arguments;
+154 |       this.rootCause = null;
+155 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math.distribution.AbstractContinuousDistribution.AbstractContinuousDistribution()
+Source: src/java/org/apache/commons/math/distribution/AbstractContinuousDistribution.java
+Original range: 44-46
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+44 |     protected AbstractContinuousDistribution() {
+45 |         super();
+46 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math.special.Erf.erf(double)
+Source: src/java/org/apache/commons/math/special/Erf.java
+Original range: 55-61
+Documentation:
+/**
+     * Returns the error function erf(x).
+     * 
+     * The implementation of this method is based on:
+     * <ul>
+     * <li>
+     * <a href="http://mathworld.wolfram.com/Erf.html">
+     * Erf</a>, equation (3).</li>
+     * </ul>
+     * 
+     * @param x the value.
+     * @return the error function erf(x)
+     * @throws MathException if the algorithm fails to converge.
+     */
+Method code:
+55 |     public static double erf(double x) throws MathException {
+56 |         double ret = Gamma.regularizedGammaP(0.5, x * x, 1.0e-15, 10000);
+57 |         if (x < 0) {
+58 |             ret = -ret;
+59 |         }
+60 |         return ret;
+61 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.NormalDistributionImpl(double,double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 49-53
+Documentation:
+/**
+     * Create a normal distribution using the given mean and standard deviation.
+     * @param mean mean for this distribution
+     * @param sd standard deviation for this distribution
+     */
+Method code:
+49 |     public NormalDistributionImpl(double mean, double sd){
+50 |         super();
+51 |         setMean(mean);
+52 |         setStandardDeviation(sd);
+53 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math.MathException.translate(String,Locale)
+Source: src/java/org/apache/commons/math/MathException.java
+Original range: 81-102
+Documentation:
+/**
+     * Translate a string to a given locale.
+     * @param s string to translate
+     * @param locale locale into which to translate the string
+     * @return translated string or original string
+     * for unsupported locales or unknown strings
+     */
+Method code:
+81 |     private static String translate(String s, Locale locale) {
+82 |         try {
+83 |             if ((cachedResources == null) || (! cachedResources.getLocale().equals(locale))) {
+84 |                 // caching the resource bundle
+85 |                 cachedResources =
+86 |                     ResourceBundle.getBundle("org.apache.commons.math.MessagesResources", locale);
+87 |             }
+88 | 
+89 |             if (cachedResources.getLocale().getLanguage().equals(locale.getLanguage())) {
+90 |                 // the value of the resource is the translated string
+91 |                 return cachedResources.getString(s);
+92 |             }
+93 |             
+94 |         } catch (MissingResourceException mre) {
+95 |             // do nothing here
+96 |         }
+97 | 
+98 |         // the locale is not supported or the resource is unknown
+99 |         // don't translate and fall back to using the string as is
+100 |         return s;
+101 | 
+102 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math.distribution.NormalDistributionImpl.setMean(double)
+Source: src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java
+Original range: 75-77
+Documentation:
+/**
+     * Modify the mean.
+     * @param mean for this distribution
+     */
+Method code:
+75 |     public void setMean(double mean) {
+76 |         this.mean = mean;
+77 |     }
+

@@ -1,0 +1,131 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.LocaleUtils.availableLocaleList()
+Source: src/main/java/org/apache/commons/lang3/LocaleUtils.java
+Original range: 213-215
+Documentation:
+/**
+     * <p>Obtains an unmodifiable list of installed locales.</p>
+     * 
+     * <p>This method is a wrapper around {@link Locale#getAvailableLocales()}.
+     * It is more efficient, as the JDK method must create a new array each
+     * time it is called.</p>
+     *
+     * @return the unmodifiable list of available locales
+     */
+Method code:
+213 |     public static List<Locale> availableLocaleList() {
+214 |         return SyncAvoid.AVAILABLE_LOCALE_LIST;
+215 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.LocaleUtils.toLocale(String)
+Source: src/main/java/org/apache/commons/lang3/LocaleUtils.java
+Original range: 88-149
+Documentation:
+/**
+     * <p>Converts a String to a Locale.</p>
+     *
+     * <p>This method takes the string format of a locale and creates the
+     * locale object from it.</p>
+     *
+     * <pre>
+     *   LocaleUtils.toLocale("en")         = new Locale("en", "")
+     *   LocaleUtils.toLocale("en_GB")      = new Locale("en", "GB")
+     *   LocaleUtils.toLocale("en_GB_xxx")  = new Locale("en", "GB", "xxx")   (#)
+     * </pre>
+     *
+     * <p>(#) The behaviour of the JDK variant constructor changed between JDK1.3 and JDK1.4.
+     * In JDK1.3, the constructor upper cases the variant, in JDK1.4, it doesn't.
+     * Thus, the result from getVariant() may vary depending on your JDK.</p>
+     *
+     * <p>This method validates the input strictly.
+     * The language code must be lowercase.
+     * The country code must be uppercase.
+     * The separator must be an underscore.
+     * The length must be correct.
+     * </p>
+     *
+     * @param str  the locale String to convert, null returns null
+     * @return a Locale, null if null input
+     * @throws IllegalArgumentException if the string is an invalid format
+     */
+Method code:
+88 |     public static Locale toLocale(final String str) {
+89 |         if (str == null) {
+90 |             return null;
+91 |         }
+92 |         final int len = str.length();
+93 |         if (len < 2) {
+94 |             throw new IllegalArgumentException("Invalid locale format: " + str);
+95 |         }
+96 |         final char ch0 = str.charAt(0);
+97 |         if (ch0 == '_') {
+98 |             if (len < 3) {
+99 |                 throw new IllegalArgumentException("Invalid locale format: " + str);
+100 |             }
+101 |             final char ch1 = str.charAt(1);
+102 |             final char ch2 = str.charAt(2);
+103 |             if (!Character.isUpperCase(ch1) || !Character.isUpperCase(ch2)) {
+104 |                 throw new IllegalArgumentException("Invalid locale format: " + str);
+105 |             }
+106 |             if (len == 3) {
+107 |                 return new Locale("", str.substring(1, 3));
+108 |             }
+109 |             if (len < 5) {
+110 |                 throw new IllegalArgumentException("Invalid locale format: " + str);
+111 |             }
+112 |             if (str.charAt(3) != '_') {
+113 |                 throw new IllegalArgumentException("Invalid locale format: " + str);
+114 |             }
+115 |             return new Locale("", str.substring(1, 3), str.substring(4));
+116 |         } else {
+117 |             final char ch1 = str.charAt(1);
+118 |             if (!Character.isLowerCase(ch0) || !Character.isLowerCase(ch1)) {
+119 |                 throw new IllegalArgumentException("Invalid locale format: " + str);
+120 |             }
+121 |             if (len == 2) {
+122 |                 return new Locale(str);
+123 |             }
+124 |             if (len < 5) {
+125 |                 throw new IllegalArgumentException("Invalid locale format: " + str);
+126 |             }
+127 |             if (str.charAt(2) != '_') {
+128 |                 throw new IllegalArgumentException("Invalid locale format: " + str);
+129 |             }
+130 |             final char ch3 = str.charAt(3);
+131 |             if (ch3 == '_') {
+132 |                 return new Locale(str.substring(0, 2), "", str.substring(4));
+133 |             }
+134 |             final char ch4 = str.charAt(4);
+135 |             if (!Character.isUpperCase(ch3) || !Character.isUpperCase(ch4)) {
+136 |                 throw new IllegalArgumentException("Invalid locale format: " + str);
+137 |             }
+138 |             if (len == 5) {
+139 |                 return new Locale(str.substring(0, 2), str.substring(3, 5));
+140 |             }
+141 |             if (len < 7) {
+142 |                 throw new IllegalArgumentException("Invalid locale format: " + str);
+143 |             }
+144 |             if (str.charAt(5) != '_') {
+145 |                 throw new IllegalArgumentException("Invalid locale format: " + str);
+146 |             }
+147 |             return new Locale(str.substring(0, 2), str.substring(3, 5), str.substring(6));
+148 |         }
+149 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang3.LocaleUtils.isAvailableLocale(Locale)
+Source: src/main/java/org/apache/commons/lang3/LocaleUtils.java
+Original range: 238-240
+Documentation:
+/**
+     * <p>Checks if the locale specified is in the list of available locales.</p>
+     *
+     * @param locale the Locale object to check if it is available
+     * @return true if the locale is a known locale
+     */
+Method code:
+238 |     public static boolean isAvailableLocale(final Locale locale) {
+239 |         return availableLocaleList().contains(locale);
+240 |     }
+

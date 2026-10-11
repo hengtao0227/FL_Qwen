@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math.util.MultidimensionalCounterTest.testIterationConsistency()",
+    "resolved_signature": "org.apache.commons.math.util.MultidimensionalCounterTest.testIterationConsistency()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math/util/MultidimensionalCounterTest.java",
+    "begin_line": 122,
+    "end_line": 180,
+    "comment": "",
+    "snippet": "    @Test\n    public void testIterationConsistency() {\n        final MultidimensionalCounter c = new MultidimensionalCounter(2, 3, 4);\n        final int[][] expected = new int[][] {\n            { 0, 0, 0 },\n            { 0, 0, 1 },\n            { 0, 0, 2 },\n            { 0, 0, 3 },\n            { 0, 1, 0 },\n            { 0, 1, 1 },\n            { 0, 1, 2 },\n            { 0, 1, 3 },\n            { 0, 2, 0 },\n            { 0, 2, 1 },\n            { 0, 2, 2 },\n            { 0, 2, 3 },\n            { 1, 0, 0 },\n            { 1, 0, 1 },\n            { 1, 0, 2 },\n            { 1, 0, 3 },\n            { 1, 1, 0 },\n            { 1, 1, 1 },\n            { 1, 1, 2 },\n            { 1, 1, 3 },\n            { 1, 2, 0 },\n            { 1, 2, 1 },\n            { 1, 2, 2 },\n            { 1, 2, 3 }\n        };\n\n        final int totalSize = c.getSize();\n        final int nDim = c.getDimension();\n        final MultidimensionalCounter.Iterator iter = c.iterator();\n        for (int i = 0; i < totalSize; i++) {\n            if (!iter.hasNext()) {\n                Assert.fail(\"Too short\");\n            }\n            final int uniDimIndex = iter.next();\n            Assert.assertEquals(\"Wrong iteration at \" + i, i, uniDimIndex);\n\n            for (int dimIndex = 0; dimIndex < nDim; dimIndex++) {\n                Assert.assertEquals(\"Wrong multidimensional index for [\" + i + \"][\" + dimIndex + \"]\",\n                                    expected[i][dimIndex], iter.getCount(dimIndex));\n            }\n\n            Assert.assertEquals(\"Wrong unidimensional index for [\" + i + \"]\",\n                                c.getCount(expected[i]), uniDimIndex);\n\n            final int[] indices = c.getCounts(uniDimIndex);\n            for (int dimIndex = 0; dimIndex < nDim; dimIndex++) {\n                Assert.assertEquals(\"Wrong multidimensional index for [\" + i + \"][\" + dimIndex + \"]\",\n                                    expected[i][dimIndex], indices[dimIndex]);\n            }\n        }\n\n        if (iter.hasNext()) {\n            Assert.fail(\"Too long\");\n        }\n    }"
+  }
+]

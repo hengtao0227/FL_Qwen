@@ -1,0 +1,12 @@
+[
+  {
+    "requested_signature": "org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest.testSmallDistances()",
+    "resolved_signature": "org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest.testSmallDistances()",
+    "resolution": "exact",
+    "src_path": "src/test/java/org/apache/commons/math/stat/clustering/KMeansPlusPlusClustererTest.java",
+    "begin_line": 214,
+    "end_line": 250,
+    "comment": "/**\r\n     * Test points that are very close together. See issue MATH-546.\r\n     */",
+    "snippet": "    @Test\n    public void testSmallDistances() {\n        // Create a bunch of CloseIntegerPoints. Most are identical, but one is different by a\n        // small distance.\n        int[] repeatedArray = { 0 };\n        int[] uniqueArray = { 1 };\n        CloseIntegerPoint repeatedPoint =\n            new CloseIntegerPoint(new EuclideanIntegerPoint(repeatedArray));\n        CloseIntegerPoint uniquePoint =\n            new CloseIntegerPoint(new EuclideanIntegerPoint(uniqueArray));\n\n        Collection<CloseIntegerPoint> points = new ArrayList<CloseIntegerPoint>();\n        final int NUM_REPEATED_POINTS = 10 * 1000;\n        for (int i = 0; i < NUM_REPEATED_POINTS; ++i) {\n            points.add(repeatedPoint);\n        }\n        points.add(uniquePoint);\n\n        // Ask a KMeansPlusPlusClusterer to run zero iterations (i.e., to simply choose initial\n        // cluster centers).\n        final long RANDOM_SEED = 0;\n        final int NUM_CLUSTERS = 2;\n        final int NUM_ITERATIONS = 0;\n        KMeansPlusPlusClusterer<CloseIntegerPoint> clusterer =\n            new KMeansPlusPlusClusterer<CloseIntegerPoint>(new Random(RANDOM_SEED));\n        List<Cluster<CloseIntegerPoint>> clusters =\n            clusterer.cluster(points, NUM_CLUSTERS, NUM_ITERATIONS);\n\n        // Check that one of the chosen centers is the unique point.\n        boolean uniquePointIsCenter = false;\n        for (Cluster<CloseIntegerPoint> cluster : clusters) {\n            if (cluster.getCenter().equals(uniquePoint)) {\n                uniquePointIsCenter = true;\n            }\n        }\n        assertTrue(uniquePointIsCenter);\n    }"
+  }
+]

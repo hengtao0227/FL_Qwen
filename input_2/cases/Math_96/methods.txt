@@ -1,0 +1,200 @@
+===== M0001 =====
+Signature: org.apache.commons.math.complex.Complex.isNaN()
+Source: src/java/org/apache/commons/math/complex/Complex.java
+Original range: 309-311
+Documentation:
+/**
+     * Returns true if either or both parts of this complex number is NaN;
+     * false otherwise
+     *
+     * @return  true if either or both parts of this complex number is NaN;
+     * false otherwise
+     */
+Method code:
+309 |     public boolean isNaN() {
+310 |         return Double.isNaN(real) || Double.isNaN(imaginary);        
+311 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math.complex.Complex.getReal()
+Source: src/java/org/apache/commons/math/complex/Complex.java
+Original range: 298-300
+Documentation:
+/**
+     * Access the real part.
+     *
+     * @return the real part
+     */
+Method code:
+298 |     public double getReal() {
+299 |         return real;
+300 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math.complex.Complex.multiply(Complex)
+Source: src/java/org/apache/commons/math/complex/Complex.java
+Original range: 354-365
+Documentation:
+/**
+     * Return the product of this complex number and the given complex number.
+     * <p>
+     * Implements preliminary checks for NaN and infinity followed by
+     * the definitional formula:
+     * <pre><code>
+     * (a + bi)(c + di) = (ac - bd) + (ad + bc)i
+     * </code></pre>
+     * </p>
+     * <p>
+     * Returns {@link #NaN} if either this or <code>rhs</code> has one or more
+     * NaN parts.
+     * </p>
+     * Returns {@link #INF} if neither this nor <code>rhs</code> has one or more
+     * NaN parts and if either this or <code>rhs</code> has one or more
+     * infinite parts (same result is returned regardless of the sign of the
+     * components).
+     * </p>
+     * <p>
+     * Returns finite values in components of the result per the
+     * definitional formula in all remaining cases.
+     *  </p>
+     * 
+     * @param rhs the other complex number
+     * @return the complex number product
+     * @throws NullPointerException if <code>rhs</code> is null
+     */
+Method code:
+354 |     public Complex multiply(Complex rhs) {
+355 |         if (isNaN() || rhs.isNaN()) {
+356 |             return NaN;
+357 |         }
+358 |         if (Double.isInfinite(real) || Double.isInfinite(imaginary) ||
+359 |             Double.isInfinite(rhs.real)|| Double.isInfinite(rhs.imaginary)) {
+360 |             // we don't use Complex.isInfinite() to avoid testing for NaN again
+361 |             return INF;
+362 |         }
+363 |         return createComplex(real * rhs.real - imaginary * rhs.imaginary,
+364 |                 real * rhs.imaginary + imaginary * rhs.real);
+365 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math.complex.Complex.Complex(double,double)
+Source: src/java/org/apache/commons/math/complex/Complex.java
+Original range: 75-79
+Documentation:
+/**
+     * Create a complex number given the real and imaginary parts.
+     *
+     * @param real the real part
+     * @param imaginary the imaginary part
+     */
+Method code:
+75 |     public Complex(double real, double imaginary) {
+76 |         super();
+77 |         this.real = real;
+78 |         this.imaginary = imaginary;
+79 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math.util.MathUtils.hash(double)
+Source: src/java/org/apache/commons/math/util/MathUtils.java
+Original range: 458-461
+Documentation:
+/**
+     * Returns an integer hash code representing the given double value.
+     * 
+     * @param value the value to be hashed
+     * @return the hash code
+     */
+Method code:
+458 |     public static int hash(double value) {
+459 |         long bits = Double.doubleToLongBits(value);
+460 |         return (int)(bits ^ (bits >>> 32));
+461 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math.complex.Complex.createComplex(double,double)
+Source: src/java/org/apache/commons/math/complex/Complex.java
+Original range: 871-873
+Documentation:
+/**
+     * Create a complex number given the real and imaginary parts.
+     *
+     * @param real the real part
+     * @param imaginary the imaginary part
+     * @return a new complex number instance
+     * @since 1.2
+     */
+Method code:
+871 |     protected Complex createComplex(double real, double imaginary) {
+872 |         return new Complex(real, imaginary);
+873 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math.complex.Complex.hashCode()
+Source: src/java/org/apache/commons/math/complex/Complex.java
+Original range: 276-282
+Documentation:
+/**
+     * Get a hashCode for the complex number.
+     * <p>
+     * All NaN values have the same hash code.</p>
+     * 
+     * @return a hash code value for this object
+     */
+Method code:
+276 |     public int hashCode() {
+277 |         if (isNaN()) {
+278 |             return 7;
+279 |         }
+280 |         return 37 * (17 * MathUtils.hash(imaginary) + 
+281 |             MathUtils.hash(real));
+282 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math.complex.Complex.equals(Object)
+Source: src/java/org/apache/commons/math/complex/Complex.java
+Original range: 245-267
+Documentation:
+/**
+     * Test for the equality of two Complex objects.
+     * <p>
+     * If both the real and imaginary parts of two Complex numbers
+     * are exactly the same, and neither is <code>Double.NaN</code>, the two
+     * Complex objects are considered to be equal.</p>
+     * <p>
+     * All <code>NaN</code> values are considered to be equal - i.e, if either
+     * (or both) real and imaginary parts of the complex number are equal
+     * to <code>Double.NaN</code>, the complex number is equal to 
+     * <code>Complex.NaN</code>.</p>
+     *
+     * @param other Object to test for equality to this
+     * @return true if two Complex objects are equal, false if
+     *         object is null, not an instance of Complex, or
+     *         not equal to this Complex instance
+     * 
+     */
+Method code:
+245 |     public boolean equals(Object other) {
+246 |         boolean ret;
+247 |         
+248 |         if (this == other) { 
+249 |             ret = true;
+250 |         } else if (other == null) {
+251 |             ret = false;
+252 |         } else  {
+253 |             try {
+254 |                 Complex rhs = (Complex)other;
+255 |                 if (rhs.isNaN()) {
+256 |                     ret = this.isNaN();
+257 |                 } else {
+258 |                     ret = (Double.doubleToRawLongBits(real) == Double.doubleToRawLongBits(rhs.getReal())) && (Double.doubleToRawLongBits(imaginary) == Double.doubleToRawLongBits(rhs.getImaginary())); 
+259 |                 }
+260 |             } catch (ClassCastException ex) {
+261 |                 // ignore exception
+262 |                 ret = false;
+263 |             }
+264 |         }
+265 |       
+266 |         return ret;
+267 |     }
+

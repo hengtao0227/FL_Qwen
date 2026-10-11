@@ -1,0 +1,411 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.SystemUtils.isOSNameMatch(String,String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1615-1620
+Documentation:
+/**
+     * Decides if the operating system matches.
+     * <p>
+     * This method is package private instead of private to support unit test invocation.
+     * </p>
+     * 
+     * @param osName
+     *            the actual OS name
+     * @param osNamePrefix
+     *            the prefix for the expected OS name
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1615 |     static boolean isOSNameMatch(String osName, String osNamePrefix) {
+1616 |         if (osName == null) {
+1617 |             return false;
+1618 |         }
+1619 |         return osName.startsWith(osNamePrefix);
+1620 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionTrimmed()
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1409-1419
+Documentation:
+/**
+     * Trims the text of the java version to start with numbers.
+     * 
+     * @return the trimmed java version
+     */
+Method code:
+1409 |     private static String getJavaVersionTrimmed() {
+1410 |         if (JAVA_VERSION != null) {
+1411 |             for (int i = 0; i < JAVA_VERSION.length(); i++) {
+1412 |                 char ch = JAVA_VERSION.charAt(i);
+1413 |                 if (ch >= '0' && ch <= '9') {
+1414 |                     return JAVA_VERSION.substring(i);
+1415 |                 }
+1416 |             }
+1417 |         }
+1418 |         return null;
+1419 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionAsInt()
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1387-1389
+Documentation:
+/**
+     * <p>
+     * Gets the Java version number as an <code>int</code>.
+     * </p>
+     * 
+     * <p>
+     * Example return values:
+     * </p>
+     * <ul>
+     * <li><code>120</code> for Java 1.2</li>
+     * <li><code>131</code> for Java 1.3.1</li>
+     * <li><code>160</code> for Java 1.6.0_20</li>
+     * </ul>
+     * 
+     * <p>
+     * Patch releases are not reported.
+     * </p>
+     * 
+     * @return the version, for example 131 for Java 1.3.1
+     */
+Method code:
+1387 |     private static int getJavaVersionAsInt() {
+1388 |         return toVersionInt(toJavaVersionIntArray(SystemUtils.JAVA_VERSION, JAVA_VERSION_TRIM_SIZE));
+1389 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionAsFloat()
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1363-1365
+Documentation:
+/**
+     * <p>
+     * Gets the Java version number as a <code>float</code>.
+     * </p>
+     * 
+     * <p>
+     * Example return values:
+     * </p>
+     * <ul>
+     * <li><code>1.2f</code> for Java 1.2</li>
+     * <li><code>1.31f</code> for Java 1.3.1</li>
+     * <li><code>1.6f</code> for Java 1.6.0_20</li>
+     * </ul>
+     * 
+     * <p>
+     * Patch releases are not reported.
+     * </p>
+     * 
+     * @return the version, for example 1.31f for Java 1.3.1
+     */
+Method code:
+1363 |     private static float getJavaVersionAsFloat() {
+1364 |         return toVersionFloat(toJavaVersionIntArray(SystemUtils.JAVA_VERSION, JAVA_VERSION_TRIM_SIZE));
+1365 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.lang3.SystemUtils.getOSMatches(String,String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1430-1432
+Documentation:
+/**
+     * Decides if the operating system matches.
+     * 
+     * @param osNamePrefix
+     *            the prefix for the os name
+     * @param osVersionPrefix
+     *            the prefix for the version
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1430 |     private static boolean getOSMatches(String osNamePrefix, String osVersionPrefix) {
+1431 |         return isOSMatch(OS_NAME, OS_VERSION, osNamePrefix, osVersionPrefix);
+1432 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.lang3.SystemUtils.isOSMatch(String,String,String,String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1596-1601
+Documentation:
+/**
+     * Decides if the operating system matches.
+     * <p>
+     * This method is package private instead of private to support unit test invocation.
+     * </p>
+     * 
+     * @param osName
+     *            the actual OS name
+     * @param osVersion
+     *            the actual OS version
+     * @param osNamePrefix
+     *            the prefix for the expected OS name
+     * @param osVersionPrefix
+     *            the prefix for the expected OS version
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1596 |     static boolean isOSMatch(String osName, String osVersion, String osNamePrefix, String osVersionPrefix) {
+1597 |         if (osName == null || osVersion == null) {
+1598 |             return false;
+1599 |         }
+1600 |         return osName.startsWith(osNamePrefix) && osVersion.startsWith(osVersionPrefix);
+1601 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.lang3.SystemUtils.toJavaVersionIntArray(String,int)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1715-1729
+Documentation:
+/**
+     * <p>
+     * Converts the given Java version string to an <code>int[]</code> of maximum size <code>limit</code>.
+     * </p>
+     * 
+     * <p>
+     * Example return values:
+     * </p>
+     * <ul>
+     * <li><code>[1, 2, 0]</code> for Java 1.2</li>
+     * <li><code>[1, 3, 1]</code> for Java 1.3.1</li>
+     * <li><code>[1, 5, 0, 21]</code> for Java 1.5.0_21</li>
+     * </ul>
+     * 
+     * @return the version, for example [1, 5, 0, 21] for Java 1.5.0_21
+     */
+Method code:
+1715 |     private static int[] toJavaVersionIntArray(String version, int limit) {
+1716 |         if (version == null) {
+1717 |             return ArrayUtils.EMPTY_INT_ARRAY;
+1718 |         }
+1719 |         String[] strings = Pattern.compile("[^\\d]").split(version);
+1720 |         int[] ints = new int[Math.min(limit, strings.length)];
+1721 |         int j = 0;
+1722 |         for (int i = 0; i < strings.length && j < limit; i++) {
+1723 |             String s = strings[i];
+1724 |             if (s.length() > 0) {
+1725 |                 ints[j++] = Integer.parseInt(s);
+1726 |             }
+1727 |         }
+1728 |         return ints;
+1729 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.lang3.SystemUtils.getSystemProperty(String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1460-1469
+Documentation:
+/**
+     * <p>
+     * Gets a System property, defaulting to <code>null</code> if the property cannot be read.
+     * </p>
+     * 
+     * <p>
+     * If a <code>SecurityException</code> is caught, the return value is <code>null</code> and a message is written to
+     * <code>System.err</code>.
+     * </p>
+     * 
+     * @param property
+     *            the system property name
+     * @return the system property value or <code>null</code> if a security problem occurs
+     */
+Method code:
+1460 |     private static String getSystemProperty(String property) {
+1461 |         try {
+1462 |             return System.getProperty(property);
+1463 |         } catch (SecurityException ex) {
+1464 |             // we are not allowed to look at this property
+1465 |             System.err.println("Caught a SecurityException reading the system property '" + property
+1466 |                     + "'; the SystemUtils property value will default to null.");
+1467 |             return null;
+1468 |         }
+1469 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.lang3.SystemUtils.getJavaVersionMatches(String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1400-1402
+Documentation:
+/**
+     * <p>
+     * Decides if the Java version matches.
+     * </p>
+     * 
+     * @param versionPrefix
+     *            the prefix for the java version
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1400 |     private static boolean getJavaVersionMatches(String versionPrefix) {
+1401 |         return isJavaVersionMatch(JAVA_VERSION_TRIMMED, versionPrefix);
+1402 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.lang3.SystemUtils.toVersionFloat(int[])
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1751-1769
+Documentation:
+/**
+     * <p>
+     * Converts given the Java version array to a <code>float</code>.
+     * </p>
+     * 
+     * <p>
+     * Example return values:
+     * </p>
+     * <ul>
+     * <li><code>1.2f</code> for Java 1.2</li>
+     * <li><code>1.31f</code> for Java 1.3.1</li>
+     * <li><code>1.6f</code> for Java 1.6.0_20</li>
+     * </ul>
+     * 
+     * <p>
+     * Patch releases are not reported.
+     * </p>
+     * 
+     * @return the version, for example 1.31f for Java 1.3.1
+     */
+Method code:
+1751 |     private static float toVersionFloat(int[] javaVersions) {
+1752 |         if (javaVersions == null || javaVersions.length == 0) {
+1753 |             return 0f;
+1754 |         }
+1755 |         if (javaVersions.length == 1) {
+1756 |             return javaVersions[0];
+1757 |         }
+1758 |         StringBuilder builder = new StringBuilder();
+1759 |         builder.append(javaVersions[0]);
+1760 |         builder.append('.');
+1761 |         for (int i = 1; i < javaVersions.length; i++) {
+1762 |             builder.append(javaVersions[i]);
+1763 |         }
+1764 |         try {
+1765 |             return Float.parseFloat(builder.toString());
+1766 |         } catch (Exception ex) {
+1767 |             return 0f;
+1768 |         }
+1769 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.lang3.SystemUtils.getOSMatchesName(String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1441-1443
+Documentation:
+/**
+     * Decides if the operating system matches.
+     * 
+     * @param osNamePrefix
+     *            the prefix for the os name
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1441 |     private static boolean getOSMatchesName(String osNamePrefix) {
+1442 |         return isOSNameMatch(OS_NAME, osNamePrefix);
+1443 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.lang3.SystemUtils.isJavaVersionMatch(String,String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1573-1578
+Documentation:
+/**
+     * <p>
+     * Decides if the Java version matches.
+     * </p>
+     * <p>
+     * This method is package private instead of private to support unit test invocation.
+     * </p>
+     * 
+     * @param version
+     *            the actual Java version
+     * @param versionPrefix
+     *            the prefix for the expected Java version
+     * @return true if matches, or false if not or can't determine
+     */
+Method code:
+1573 |     static boolean isJavaVersionMatch(String version, String versionPrefix) {
+1574 |         if (version == null) {
+1575 |             return false;
+1576 |         }
+1577 |         return version.startsWith(versionPrefix);
+1578 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.lang3.SystemUtils.toJavaVersionInt(String)
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1672-1674
+Documentation:
+/**
+     * <p>
+     * Converts the given Java version string to an <code>int</code>.
+     * </p>
+     * 
+     * <p>
+     * Example return values:
+     * </p>
+     * <ul>
+     * <li><code>120</code> for Java 1.2</li>
+     * <li><code>131</code> for Java 1.3.1</li>
+     * <li><code>160</code> for Java 1.6.0_20</li>
+     * </ul>
+     * 
+     * <p>
+     * Patch releases are not reported.
+     * </p>
+     * <p>
+     * This method is package private instead of private to support unit test invocation.
+     * </p>
+     * 
+     * @return the version, for example 131 for Java 1.3.1
+     */
+Method code:
+1672 |     static float toJavaVersionInt(String version) {
+1673 |         return toVersionInt(toJavaVersionIntArray(version, JAVA_VERSION_TRIM_SIZE));
+1674 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.lang3.SystemUtils.toVersionInt(int[])
+Source: src/main/java/org/apache/commons/lang3/SystemUtils.java
+Original range: 1791-1807
+Documentation:
+/**
+     * <p>
+     * Converts given the Java version array to an <code>int</code>.
+     * </p>
+     * 
+     * <p>
+     * Example return values:
+     * </p>
+     * <ul>
+     * <li><code>120</code> for Java 1.2</li>
+     * <li><code>131</code> for Java 1.3.1</li>
+     * <li><code>160</code> for Java 1.6.0_20</li>
+     * </ul>
+     * 
+     * <p>
+     * Patch releases are not reported.
+     * </p>
+     * 
+     * @return the version, for example 1.31f for Java 1.3.1
+     */
+Method code:
+1791 |     private static int toVersionInt(int[] javaVersions) {
+1792 |         if (javaVersions == null) {
+1793 |             return 0;
+1794 |         }
+1795 |         int intVersion = 0;
+1796 |         int len = javaVersions.length;
+1797 |         if (len >= 1) {
+1798 |             intVersion = javaVersions[0] * 100;
+1799 |         }
+1800 |         if (len >= 2) {
+1801 |             intVersion += javaVersions[1] * 10;
+1802 |         }
+1803 |         if (len >= 3) {
+1804 |             intVersion += javaVersions[2];
+1805 |         }
+1806 |         return intVersion;
+1807 |     }
+

@@ -1,0 +1,90 @@
+===== M0001 =====
+Signature: org.apache.commons.lang.builder.EqualsBuilder.isEquals()
+Source: src/java/org/apache/commons/lang/builder/EqualsBuilder.java
+Original range: 830-832
+Documentation:
+/**
+     * <p>Returns <code>true</code> if the fields that have been checked
+     * are all equal.</p>
+     *
+     * @return boolean
+     */
+Method code:
+830 |     public boolean isEquals() {
+831 |         return this.isEquals;
+832 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang.builder.EqualsBuilder.append(Object,Object)
+Source: src/java/org/apache/commons/lang/builder/EqualsBuilder.java
+Original range: 367-409
+Documentation:
+/**
+     * <p>Test if two <code>Object</code>s are equal using their
+     * <code>equals</code> method.</p>
+     *
+     * @param lhs  the left hand object
+     * @param rhs  the right hand object
+     * @return EqualsBuilder - used to chain calls.
+     */
+Method code:
+367 |     public EqualsBuilder append(Object lhs, Object rhs) {
+368 |         if (isEquals == false) {
+369 |             return this;
+370 |         }
+371 |         if (lhs == rhs) {
+372 |             return this;
+373 |         }
+374 |         if (lhs == null || rhs == null) {
+375 |             this.setEquals(false);
+376 |             return this;
+377 |         }
+378 |         Class lhsClass = lhs.getClass();
+379 |         if (!lhsClass.isArray()) {
+380 |             // The simple case, not an array, just test the element
+381 |             isEquals = lhs.equals(rhs);
+382 |         } else if (lhs.getClass() != rhs.getClass()) {
+383 |             // Here when we compare different dimensions, for example: a boolean[][] to a boolean[] 
+384 |             this.setEquals(false);
+385 |         }
+386 |         // 'Switch' on type of array, to dispatch to the correct handler
+387 |         // This handles multi dimensional arrays of the same depth
+388 |         else if (lhs instanceof long[]) {
+389 |             append((long[]) lhs, (long[]) rhs);
+390 |         } else if (lhs instanceof int[]) {
+391 |             append((int[]) lhs, (int[]) rhs);
+392 |         } else if (lhs instanceof short[]) {
+393 |             append((short[]) lhs, (short[]) rhs);
+394 |         } else if (lhs instanceof char[]) {
+395 |             append((char[]) lhs, (char[]) rhs);
+396 |         } else if (lhs instanceof byte[]) {
+397 |             append((byte[]) lhs, (byte[]) rhs);
+398 |         } else if (lhs instanceof double[]) {
+399 |             append((double[]) lhs, (double[]) rhs);
+400 |         } else if (lhs instanceof float[]) {
+401 |             append((float[]) lhs, (float[]) rhs);
+402 |         } else if (lhs instanceof boolean[]) {
+403 |             append((boolean[]) lhs, (boolean[]) rhs);
+404 |         } else {
+405 |             // Not an array of primitives
+406 |             append((Object[]) lhs, (Object[]) rhs);
+407 |         }
+408 |         return this;
+409 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang.builder.EqualsBuilder.EqualsBuilder()
+Source: src/java/org/apache/commons/lang/builder/EqualsBuilder.java
+Original range: 100-102
+Documentation:
+/**
+     * <p>Constructor for EqualsBuilder.</p>
+     *
+     * <p>Starts off assuming that equals is <code>true</code>.</p>
+     * @see Object#equals(Object)
+     */
+Method code:
+100 |     public EqualsBuilder() {
+101 |         // do nothing for now.
+102 |     }
+

@@ -1,0 +1,102 @@
+[
+  {
+    "requested_signature": "org.mockito.internal.util.reflection.GenericMasterTest.shouldDealWithNestedGenerics()",
+    "resolved_signature": "org.mockito.internal.util.reflection.GenericMasterTest.shouldDealWithNestedGenerics()",
+    "resolution": "exact",
+    "src_path": "test/org/mockito/internal/util/reflection/GenericMasterTest.java",
+    "begin_line": 36,
+    "end_line": 40,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldDealWithNestedGenerics() throws Exception {\n        assertEquals(Set.class, m.getGenericType(field(\"nested\")));\n        assertEquals(Set.class, m.getGenericType(field(\"multiNested\")));\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.annotation.CaptorAnnotationBasicTest.shouldUseAnnotatedCaptor()",
+    "resolved_signature": "org.mockitousage.annotation.CaptorAnnotationBasicTest.shouldUseAnnotatedCaptor()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/annotation/CaptorAnnotationBasicTest.java",
+    "begin_line": 64,
+    "end_line": 73,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldUseAnnotatedCaptor() {\n        //when\n        createPerson(\"Wes\", \"Williams\");\n        \n        //then\n        verify(peopleRepository).save(captor.capture());\n        assertEquals(\"Wes\", captor.getValue().getName());\n        assertEquals(\"Williams\", captor.getValue().getSurname());\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.annotation.CaptorAnnotationBasicTest.shouldUseCaptorInOrdinaryWay()",
+    "resolved_signature": "org.mockitousage.annotation.CaptorAnnotationBasicTest.shouldUseCaptorInOrdinaryWay()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/annotation/CaptorAnnotationBasicTest.java",
+    "begin_line": 50,
+    "end_line": 60,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldUseCaptorInOrdinaryWay() {\n        //when\n        createPerson(\"Wes\", \"Williams\");\n        \n        //then\n        ArgumentCaptor<Person> captor = ArgumentCaptor.forClass(Person.class);\n        verify(peopleRepository).save(captor.capture());\n        assertEquals(\"Wes\", captor.getValue().getName());\n        assertEquals(\"Williams\", captor.getValue().getSurname());\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.annotation.CaptorAnnotationBasicTest.shouldCaptureGenericList()",
+    "resolved_signature": "org.mockitousage.annotation.CaptorAnnotationBasicTest.shouldCaptureGenericList()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/annotation/CaptorAnnotationBasicTest.java",
+    "begin_line": 91,
+    "end_line": 102,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldCaptureGenericList() {\n        //given\n        List<String> list = new LinkedList<String>();\n        mock.listArgMethod(list);\n                \n        //when\n        verify(mock).listArgMethod(genericListCaptor.capture());\n        \n        //then\n        assertSame(list, genericListCaptor.getValue());\n    } "
+  },
+  {
+    "requested_signature": "org.mockitousage.annotation.CaptorAnnotationBasicTest.shouldUseGenericlessAnnotatedCaptor()",
+    "resolved_signature": "org.mockitousage.annotation.CaptorAnnotationBasicTest.shouldUseGenericlessAnnotatedCaptor()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/annotation/CaptorAnnotationBasicTest.java",
+    "begin_line": 77,
+    "end_line": 86,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldUseGenericlessAnnotatedCaptor() {\n        //when\n        createPerson(\"Wes\", \"Williams\");\n        \n        //then\n        verify(peopleRepository).save((Person) genericLessCaptor.capture());\n        assertEquals(\"Wes\", ((Person) genericLessCaptor.getValue()).getName());\n        assertEquals(\"Williams\", ((Person) genericLessCaptor.getValue()).getSurname());\n    }  "
+  },
+  {
+    "requested_signature": "org.mockitousage.annotation.CaptorAnnotationTest.shouldScreamWhenWrongTypeForCaptor()",
+    "resolved_signature": "org.mockitousage.annotation.CaptorAnnotationTest.shouldScreamWhenWrongTypeForCaptor()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/annotation/CaptorAnnotationTest.java",
+    "begin_line": 78,
+    "end_line": 84,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldScreamWhenWrongTypeForCaptor() {\n        try {\n            MockitoAnnotations.initMocks(new WrongType());\n            fail();\n        } catch (MockitoException e) {}\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.annotation.CaptorAnnotationTest.testNormalUsage()",
+    "resolved_signature": "org.mockitousage.annotation.CaptorAnnotationTest.testNormalUsage()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/annotation/CaptorAnnotationTest.java",
+    "begin_line": 49,
+    "end_line": 71,
+    "comment": "",
+    "snippet": "    @Test\n    public void testNormalUsage() {\n\n        MockitoAnnotations.initMocks(this);\n\n        // check if assigned correctly\n        assertNotNull(finalCaptor);\n        assertNotNull(genericsCaptor);\n        assertNotNull(nonGenericCaptorIsAllowed);\n        assertNull(notAMock);\n\n        // use captors in the field to be sure they are cool\n        String argForFinalCaptor = \"Hello\";\n        ArrayList<List<String>> argForGenericsCaptor = new ArrayList<List<String>>();\n\n        mockInterface.testMe(argForFinalCaptor, argForGenericsCaptor);\n\n        Mockito.verify(mockInterface).testMe(finalCaptor.capture(), genericsCaptor.capture());\n\n        assertEquals(argForFinalCaptor, finalCaptor.getValue());\n        assertEquals(argForGenericsCaptor, genericsCaptor.getValue());\n\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.annotation.CaptorAnnotationTest.shouldScreamWhenMoreThanOneMockitoAnnotaton()",
+    "resolved_signature": "org.mockitousage.annotation.CaptorAnnotationTest.shouldScreamWhenMoreThanOneMockitoAnnotaton()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/annotation/CaptorAnnotationTest.java",
+    "begin_line": 92,
+    "end_line": 101,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldScreamWhenMoreThanOneMockitoAnnotaton() {\n        try {\n            MockitoAnnotations.initMocks(new ToManyAnnotations());\n            fail();\n        } catch (MockitoException e) {\n            assertContains(\"missingGenericsField\", e.getMessage());\n            assertContains(\"multiple Mockito annotations\", e.getMessage());            \n        }\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.annotation.CaptorAnnotationTest.shouldScreamWhenInitializingCaptorsForNullClass()",
+    "resolved_signature": "org.mockitousage.annotation.CaptorAnnotationTest.shouldScreamWhenInitializingCaptorsForNullClass()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/annotation/CaptorAnnotationTest.java",
+    "begin_line": 103,
+    "end_line": 110,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldScreamWhenInitializingCaptorsForNullClass() throws Exception {\n        try {\n            MockitoAnnotations.initMocks(null);\n            fail();\n        } catch (MockitoException e) {\n        }\n    }"
+  },
+  {
+    "requested_signature": "org.mockitousage.annotation.CaptorAnnotationTest.shouldLookForAnnotatedCaptorsInSuperClasses()",
+    "resolved_signature": "org.mockitousage.annotation.CaptorAnnotationTest.shouldLookForAnnotatedCaptorsInSuperClasses()",
+    "resolution": "exact",
+    "src_path": "test/org/mockitousage/annotation/CaptorAnnotationTest.java",
+    "begin_line": 112,
+    "end_line": 120,
+    "comment": "",
+    "snippet": "    @Test\n    public void shouldLookForAnnotatedCaptorsInSuperClasses() throws Exception {\n        Sub sub = new Sub();\n        MockitoAnnotations.initMocks(sub);\n\n        assertNotNull(sub.getCaptor());\n        assertNotNull(sub.getBaseCaptor());\n        assertNotNull(sub.getSuperBaseCaptor());\n    }"
+  }
+]

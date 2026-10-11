@@ -1,0 +1,392 @@
+===== M0001 =====
+Signature: org.jfree.data.category.DefaultIntervalCategoryDataset.setCategoryKeys(Comparable[])
+Source: source/org/jfree/data/category/DefaultIntervalCategoryDataset.java
+Original range: 334-351
+Documentation:
+/**
+     * Sets the categories for the dataset.
+     *
+     * @param categoryKeys  an array of objects representing the categories in 
+     *                      the dataset.
+     *                      
+     * @see #getRowKeys()
+     * @see #setSeriesKeys(Comparable[])
+     */
+Method code:
+334 |     public void setCategoryKeys(Comparable[] categoryKeys) {
+335 |         if (categoryKeys == null) {
+336 |             throw new IllegalArgumentException("Null 'categoryKeys' argument.");
+337 |         }
+338 |         if (categoryKeys.length != this.startData[0].length) {
+339 |             throw new IllegalArgumentException(
+340 |                     "The number of categories does not match the data.");
+341 |         }
+342 |         for (int i = 0; i < categoryKeys.length; i++) {
+343 |             if (categoryKeys[i] == null) {
+344 |                 throw new IllegalArgumentException(
+345 |                     "DefaultIntervalCategoryDataset.setCategoryKeys(): "
+346 |                     + "null category not permitted.");
+347 |             }
+348 |         }
+349 |         this.categoryKeys = categoryKeys;
+350 |         fireDatasetChanged();
+351 |     }
+
+===== M0002 =====
+Signature: org.jfree.data.category.DefaultIntervalCategoryDataset.clone()
+Source: source/org/jfree/data/category/DefaultIntervalCategoryDataset.java
+Original range: 745-753
+Documentation:
+/**
+     * Returns a clone of this dataset.
+     * 
+     * @return A clone.
+     * 
+     * @throws CloneNotSupportedException if there is a problem cloning the
+     *         dataset.
+     */
+Method code:
+745 |     public Object clone() throws CloneNotSupportedException {
+746 |         DefaultIntervalCategoryDataset clone 
+747 |                 = (DefaultIntervalCategoryDataset) super.clone();
+748 |         clone.categoryKeys = (Comparable[]) this.categoryKeys.clone();
+749 |         clone.seriesKeys = (Comparable[]) this.seriesKeys.clone();
+750 |         clone.startData = clone(this.startData);
+751 |         clone.endData = clone(this.endData);
+752 |         return clone;
+753 |     }
+
+===== M0003 =====
+Signature: org.jfree.data.general.DatasetGroup.DatasetGroup()
+Source: source/org/jfree/data/general/DatasetGroup.java
+Original range: 62-65
+Documentation:
+/**
+     * Constructs a new group.
+     */
+Method code:
+62 |     public DatasetGroup() {
+63 |         super();
+64 |         this.id = "NOID";
+65 |     }
+
+===== M0004 =====
+Signature: org.jfree.data.category.DefaultIntervalCategoryDataset.DefaultIntervalCategoryDataset(double[][],double[][])
+Source: source/org/jfree/data/category/DefaultIntervalCategoryDataset.java
+Original range: 90-93
+Documentation:
+/**
+     * Creates a new dataset using the specified data values and automatically
+     * generated series and category keys.
+     *
+     * @param starts  the starting values for the intervals (<code>null</code>
+     *                not permitted).
+     * @param ends  the ending values for the intervals (<code>null</code> not
+     *                permitted).
+     */
+Method code:
+90 |     public DefaultIntervalCategoryDataset(double[][] starts, double[][] ends) {
+91 |         this(DataUtilities.createNumberArray2D(starts),
+92 |                 DataUtilities.createNumberArray2D(ends));
+93 |     }
+
+===== M0005 =====
+Signature: org.jfree.data.DataUtilities.createNumberArray2D(double[][])
+Source: source/org/jfree/data/DataUtilities.java
+Original range: 124-134
+Documentation:
+/**
+     * Constructs an array of arrays of <code>Number</code> objects from a 
+     * corresponding structure containing <code>double</code> primitives.
+     *
+     * @param data  the data (<code>null</code> not permitted).
+     *
+     * @return An array of <code>Double</code>.
+     */
+Method code:
+124 |     public static Number[][] createNumberArray2D(double[][] data) {
+125 |         if (data == null) {
+126 |             throw new IllegalArgumentException("Null 'data' argument.");   
+127 |         }
+128 |         int l1 = data.length;
+129 |         Number[][] result = new Number[l1][];
+130 |         for (int i = 0; i < l1; i++) {
+131 |             result[i] = createNumberArray(data[i]);
+132 |         }
+133 |         return result;
+134 |     }
+
+===== M0006 =====
+Signature: org.jfree.data.general.AbstractDataset.clone()
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 204-208
+Documentation:
+/**
+     * Returns a clone of the dataset. The cloned dataset will NOT include the 
+     * {@link DatasetChangeListener} references that have been registered with 
+     * this dataset.
+     * 
+     * @return A clone.
+     * 
+     * @throws CloneNotSupportedException  if the dataset does not support 
+     *                                     cloning.
+     */
+Method code:
+204 |     public Object clone() throws CloneNotSupportedException {
+205 |         AbstractDataset clone = (AbstractDataset) super.clone();
+206 |         clone.listenerList = new EventListenerList();
+207 |         return clone;    
+208 |     }
+
+===== M0007 =====
+Signature: org.jfree.data.category.DefaultIntervalCategoryDataset.DefaultIntervalCategoryDataset(Number[][],Number[][])
+Source: source/org/jfree/data/category/DefaultIntervalCategoryDataset.java
+Original range: 106-108
+Documentation:
+/**
+     * Constructs a dataset and populates it with data from the array.
+     * <p>
+     * The arrays are indexed as data[series][category].  Series and category
+     * names are automatically generated - you can change them using the
+     * {@link #setSeriesKeys(Comparable[])} and 
+     * {@link #setCategoryKeys(Comparable[])} methods.
+     *
+     * @param starts  the start values data.
+     * @param ends  the end values data.
+     */
+Method code:
+106 |     public DefaultIntervalCategoryDataset(Number[][] starts, Number[][] ends) {
+107 |         this(null, null, starts, ends);
+108 |     }
+
+===== M0008 =====
+Signature: org.jfree.data.general.AbstractDataset.AbstractDataset()
+Source: source/org/jfree/data/general/AbstractDataset.java
+Original range: 94-97
+Documentation:
+/**
+     * Constructs a dataset. By default, the dataset is assigned to its own 
+     * group.
+     */
+Method code:
+94 |     protected AbstractDataset() {
+95 |         this.group = new DatasetGroup();
+96 |         this.listenerList = new EventListenerList();
+97 |     }
+
+===== M0009 =====
+Signature: org.jfree.data.category.DefaultIntervalCategoryDataset.getCategoryIndex(Comparable)
+Source: source/org/jfree/data/category/DefaultIntervalCategoryDataset.java
+Original range: 572-581
+Documentation:
+/**
+     * Returns the index for the given category.
+     *
+     * @param category  the category (<code>null</code> not permitted).
+     *
+     * @return The index.
+     * 
+     * @see #getColumnIndex(Comparable)
+     */
+Method code:
+572 |     public int getCategoryIndex(Comparable category) {
+573 |         int result = -1;
+574 |         for (int i = 0; i < this.categoryKeys.length; i++) {
+575 |             if (category.equals(this.categoryKeys[i])) {
+576 |                 result = i;
+577 |                 break;
+578 |             }
+579 |         }
+580 |         return result;
+581 |     }
+
+===== M0010 =====
+Signature: org.jfree.data.category.DefaultIntervalCategoryDataset.getColumnIndex(Comparable)
+Source: source/org/jfree/data/category/DefaultIntervalCategoryDataset.java
+Original range: 624-629
+Documentation:
+/**
+     * Returns a column index.
+     *
+     * @param columnKey  the column key (<code>null</code> not permitted).
+     *
+     * @return The column index.
+     * 
+     * @see #getCategoryIndex(Comparable)
+     */
+Method code:
+624 |     public int getColumnIndex(Comparable columnKey) {
+625 |         if (columnKey == null) {
+626 |             throw new IllegalArgumentException("Null 'columnKey' argument.");
+627 |         }
+628 |         return getCategoryIndex(columnKey);
+629 |     }
+
+===== M0011 =====
+Signature: org.jfree.data.category.DefaultIntervalCategoryDataset.DefaultIntervalCategoryDataset(Comparable[],Comparable[],Number[][],Number[][])
+Source: source/org/jfree/data/category/DefaultIntervalCategoryDataset.java
+Original range: 142-212
+Documentation:
+/**
+     * Constructs a DefaultIntervalCategoryDataset, populates it with data
+     * from the arrays, and uses the supplied names for the series and the
+     * supplied objects for the categories.
+     *
+     * @param seriesKeys  the series keys (if <code>null</code>, series keys
+     *         will be generated automatically).
+     * @param categoryKeys  the category keys (if <code>null</code>, category 
+     *         keys will be generated automatically).
+     * @param starts  the start values data, indexed as data[series][category].
+     * @param ends  the end values data, indexed as data[series][category].
+     */
+Method code:
+142 |     public DefaultIntervalCategoryDataset(Comparable[] seriesKeys,
+143 |                                           Comparable[] categoryKeys,
+144 |                                           Number[][] starts,
+145 |                                           Number[][] ends) {
+146 | 
+147 |         this.startData = starts;
+148 |         this.endData = ends;
+149 | 
+150 |         if (starts != null && ends != null) {
+151 | 
+152 |             String baseName = "org.jfree.data.resources.DataPackageResources";
+153 |             ResourceBundle resources = ResourceBundle.getBundle(baseName);
+154 | 
+155 |             int seriesCount = starts.length;
+156 |             if (seriesCount != ends.length) {
+157 |                 String errMsg = "DefaultIntervalCategoryDataset: the number "
+158 |                     + "of series in the start value dataset does "
+159 |                     + "not match the number of series in the end "
+160 |                     + "value dataset.";
+161 |                 throw new IllegalArgumentException(errMsg);
+162 |             }
+163 |             if (seriesCount > 0) {
+164 | 
+165 |                 // set up the series names...
+166 |                 if (seriesKeys != null) {
+167 | 
+168 |                     if (seriesKeys.length != seriesCount) {
+169 |                         throw new IllegalArgumentException(
+170 |                                 "The number of series keys does not "
+171 |                                 + "match the number of series in the data.");
+172 |                     }
+173 | 
+174 |                     this.seriesKeys = seriesKeys;
+175 |                 }
+176 |                 else {
+177 |                     String prefix = resources.getString(
+178 |                             "series.default-prefix") + " ";
+179 |                     this.seriesKeys = generateKeys(seriesCount, prefix);
+180 |                 }
+181 | 
+182 |                 // set up the category names...
+183 |                 int categoryCount = starts[0].length;
+184 |                 if (categoryCount != ends[0].length) {
+185 |                     String errMsg = "DefaultIntervalCategoryDataset: the "
+186 |                                 + "number of categories in the start value "
+187 |                                 + "dataset does not match the number of "
+188 |                                 + "categories in the end value dataset.";
+189 |                     throw new IllegalArgumentException(errMsg);
+190 |                 }
+191 |                 if (categoryKeys != null) {
+192 |                     if (categoryKeys.length != categoryCount) {
+193 |                         throw new IllegalArgumentException(
+194 |                                 "The number of category keys does not match "
+195 |                                 + "the number of categories in the data.");
+196 |                     }
+197 |                     this.categoryKeys = categoryKeys;
+198 |                 }
+199 |                 else {
+200 |                     String prefix = resources.getString(
+201 |                             "categories.default-prefix") + " ";
+202 |                     this.categoryKeys = generateKeys(categoryCount, prefix);
+203 |                 }
+204 | 
+205 |             }
+206 |             else {
+207 |                 this.seriesKeys = null;
+208 |                 this.categoryKeys = null;
+209 |             }
+210 |         }
+211 | 
+212 |     }
+
+===== M0012 =====
+Signature: org.jfree.data.general.AbstractSeriesDataset.AbstractSeriesDataset()
+Source: source/org/jfree/data/general/AbstractSeriesDataset.java
+Original range: 64-66
+Documentation:
+/**
+     * Creates a new dataset.
+     */
+Method code:
+64 |     protected AbstractSeriesDataset() {
+65 |         super();
+66 |     }
+
+===== M0013 =====
+Signature: org.jfree.data.category.DefaultIntervalCategoryDataset.getSeriesIndex(Comparable)
+Source: source/org/jfree/data/category/DefaultIntervalCategoryDataset.java
+Original range: 240-249
+Documentation:
+/**
+     * Returns a series index.
+     *
+     * @param seriesKey  the series key.
+     *
+     * @return The series index.
+     * 
+     * @see #getRowIndex(Comparable)
+     * @see #getSeriesKey(int)
+     */
+Method code:
+240 |     public int getSeriesIndex(Comparable seriesKey) {
+241 |         int result = -1;
+242 |         for (int i = 0; i < this.seriesKeys.length; i++) {
+243 |             if (seriesKey.equals(this.seriesKeys[i])) {
+244 |                 result = i;
+245 |                 break;
+246 |             }
+247 |         }
+248 |         return result;
+249 |     }
+
+===== M0014 =====
+Signature: org.jfree.data.category.DefaultIntervalCategoryDataset.getRowIndex(Comparable)
+Source: source/org/jfree/data/category/DefaultIntervalCategoryDataset.java
+Original range: 640-642
+Documentation:
+/**
+     * Returns a row index.
+     *
+     * @param rowKey  the row key.
+     *
+     * @return The row index.
+     * 
+     * @see #getSeriesIndex(Comparable)
+     */
+Method code:
+640 |     public int getRowIndex(Comparable rowKey) {
+641 |         return getSeriesIndex(rowKey);
+642 |     }
+
+===== M0015 =====
+Signature: org.jfree.data.category.DefaultIntervalCategoryDataset.getColumnCount()
+Source: source/org/jfree/data/category/DefaultIntervalCategoryDataset.java
+Original range: 689-691
+Documentation:
+/**
+     * Returns the number of categories in the dataset.  This method is part of 
+     * the {@link CategoryDataset} interface.
+     *
+     * @return The number of categories in the dataset.
+     * 
+     * @see #getCategoryCount()
+     * @see #getRowCount()
+     */
+Method code:
+689 |     public int getColumnCount() {
+690 |         return this.categoryKeys.length;
+691 |     }
+

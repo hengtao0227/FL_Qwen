@@ -1,0 +1,2140 @@
+===== M0001 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.ArrayRealVector(int)
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 64-66
+Documentation:
+/**
+     * Construct a vector of zeroes.
+     *
+     * @param size Size of the vector.
+     */
+Method code:
+64 |     public ArrayRealVector(int size) {
+65 |         data = new double[size];
+66 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.Array2DRowRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 55-58
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension Number of rows in the new matrix.
+     * @param columnDimension Number of columns in the new matrix.
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
+     * if the row or column dimension is not positive.
+     */
+Method code:
+55 |     public Array2DRowRealMatrix(final int rowDimension, final int columnDimension) {
+56 |         super(rowDimension, columnDimension);
+57 |         data = new double[rowDimension][columnDimension];
+58 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkColumnIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 405-410
+Documentation:
+/**
+     * Check if a column index is valid.
+     *
+     * @param m Matrix.
+     * @param column Column index to check.
+     * @throws OutOfRangeException if {@code column} is not a valid index.
+     */
+Method code:
+405 |     public static void checkColumnIndex(final AnyMatrix m, final int column) {
+406 |         if (column < 0 || column >= m.getColumnDimension()) {
+407 |             throw new OutOfRangeException(LocalizedFormats.COLUMN_INDEX,
+408 |                                            column, 0, m.getColumnDimension() - 1);
+409 |         }
+410 |     }
+
+===== M0004 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.setSubMatrix(double[][],int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 259-290
+Documentation:
+/** {@inheritDoc} */
+Method code:
+259 |     @Override
+260 |     public void setSubMatrix(final double[][] subMatrix,
+261 |                              final int row, final int column) {
+262 |         if (data == null) {
+263 |             if (row > 0) {
+264 |                 throw new MathIllegalStateException(LocalizedFormats.FIRST_ROWS_NOT_INITIALIZED_YET, row);
+265 |             }
+266 |             if (column > 0) {
+267 |                 throw new MathIllegalStateException(LocalizedFormats.FIRST_COLUMNS_NOT_INITIALIZED_YET, column);
+268 |             }
+269 |             MathUtils.checkNotNull(subMatrix);
+270 |             final int nRows = subMatrix.length;
+271 |             if (nRows == 0) {
+272 |                 throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+273 |             }
+274 | 
+275 |             final int nCols = subMatrix[0].length;
+276 |             if (nCols == 0) {
+277 |                 throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+278 |             }
+279 |             data = new double[subMatrix.length][nCols];
+280 |             for (int i = 0; i < data.length; ++i) {
+281 |                 if (subMatrix[i].length != nCols) {
+282 |                     throw new DimensionMismatchException(subMatrix[i].length, nCols);
+283 |                 }
+284 |                 System.arraycopy(subMatrix[i], 0, data[i + row], column, nCols);
+285 |             }
+286 |         } else {
+287 |             super.setSubMatrix(subMatrix, row, column);
+288 |         }
+289 | 
+290 |     }
+
+===== M0005 =====
+Signature: org.apache.commons.math3.linear.RealVectorFormat.getInstance()
+Source: src/main/java/org/apache/commons/math3/linear/RealVectorFormat.java
+Original range: 161-163
+Documentation:
+/**
+     * Returns the default real vector format for the current locale.
+     * @return the default real vector format.
+     */
+Method code:
+161 |     public static RealVectorFormat getInstance() {
+162 |         return getInstance(Locale.getDefault());
+163 |     }
+
+===== M0006 =====
+Signature: org.apache.commons.math3.exception.util.LocalizedFormats.getLocalizedString(Locale)
+Source: src/main/java/org/apache/commons/math3/exception/util/LocalizedFormats.java
+Original range: 376-394
+Documentation:
+/** {@inheritDoc} */
+Method code:
+376 |     public String getLocalizedString(final Locale locale) {
+377 |         try {
+378 |             final String path = LocalizedFormats.class.getName().replaceAll("\\.", "/");
+379 |             ResourceBundle bundle =
+380 |                     ResourceBundle.getBundle("assets/" + path, locale);
+381 |             if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {
+382 |                 // the value of the resource is the translated format
+383 |                 return bundle.getString(toString());
+384 |             }
+385 | 
+386 |         } catch (MissingResourceException mre) {
+387 |             // do nothing here
+388 |         }
+389 | 
+390 |         // either the locale is not supported or the resource is unknown
+391 |         // don't translate and fall back to using the source format
+392 |         return sourceFormat;
+393 | 
+394 |     }
+
+===== M0007 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.normalize(LinearConstraint)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 264-272
+Documentation:
+/**
+     * Get a new equation equivalent to this one with a positive right hand side.
+     * @param constraint reference constraint
+     * @return new equation
+     */
+Method code:
+264 |     private LinearConstraint normalize(final LinearConstraint constraint) {
+265 |         if (constraint.getValue() < 0) {
+266 |             return new LinearConstraint(constraint.getCoefficients().mapMultiply(-1),
+267 |                                         constraint.getRelationship().oppositeRelationship(),
+268 |                                         -1 * constraint.getValue());
+269 |         }
+270 |         return new LinearConstraint(constraint.getCoefficients(),
+271 |                                     constraint.getRelationship(), constraint.getValue());
+272 |     }
+
+===== M0008 =====
+Signature: org.apache.commons.math3.optimization.linear.AbstractLinearOptimizer.optimize(LinearObjectiveFunction,Collection<LinearConstraint>,GoalType,boolean)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/AbstractLinearOptimizer.java
+Original range: 133-149
+Documentation:
+/** {@inheritDoc} */
+Method code:
+133 |     public PointValuePair optimize(final LinearObjectiveFunction f,
+134 |                                        final Collection<LinearConstraint> constraints,
+135 |                                        final GoalType goalType, final boolean restrictToNonNegative)
+136 |          throws MathIllegalStateException {
+137 | 
+138 |         // store linear problem characteristics
+139 |         this.function          = f;
+140 |         this.linearConstraints = constraints;
+141 |         this.goal              = goalType;
+142 |         this.nonNegative       = restrictToNonNegative;
+143 | 
+144 |         iterations  = 0;
+145 | 
+146 |         // solve the problem
+147 |         return doOptimize();
+148 | 
+149 |     }
+
+===== M0009 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.getLocalizedMessage()
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 84-87
+Documentation:
+/** {@inheritDoc} */
+Method code:
+84 |     @Override
+85 |     public String getLocalizedMessage() {
+86 |         return context.getLocalizedMessage();
+87 |     }
+
+===== M0010 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.setRowVector(int,RealVector)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 490-500
+Documentation:
+/** {@inheritDoc} */
+Method code:
+490 |     public void setRowVector(final int row, final RealVector vector) {
+491 |         MatrixUtils.checkRowIndex(this, row);
+492 |         final int nCols = getColumnDimension();
+493 |         if (vector.getDimension() != nCols) {
+494 |             throw new MatrixDimensionMismatchException(1, vector.getDimension(),
+495 |                                                        1, nCols);
+496 |         }
+497 |         for (int i = 0; i < nCols; ++i) {
+498 |             setEntry(row, i, vector.getEntry(i));
+499 |         }
+500 |     }
+
+===== M0011 =====
+Signature: org.apache.commons.math3.util.Precision.compareTo(double,double,double)
+Source: src/main/java/org/apache/commons/math3/util/Precision.java
+Original range: 87-94
+Documentation:
+/**
+     * Compares two numbers given some amount of allowed error.
+     *
+     * @param x the first number
+     * @param y the second number
+     * @param eps the amount of error to allow when checking for equality
+     * @return <ul><li>0 if  {@link #equals(double, double, double) equals(x, y, eps)}</li>
+     *       <li>&lt; 0 if !{@link #equals(double, double, double) equals(x, y, eps)} &amp;&amp; x &lt; y</li>
+     *       <li>> 0 if !{@link #equals(double, double, double) equals(x, y, eps)} &amp;&amp; x > y</li></ul>
+     */
+Method code:
+87 |     public static int compareTo(double x, double y, double eps) {
+88 |         if (equals(x, y, eps)) {
+89 |             return 0;
+90 |         } else if (x < y) {
+91 |             return -1;
+92 |         }
+93 |         return 1;
+94 |     }
+
+===== M0012 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.MathIllegalStateException()
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 68-70
+Documentation:
+/**
+     * Default constructor.
+     */
+Method code:
+68 |     public MathIllegalStateException() {
+69 |         this(LocalizedFormats.ILLEGAL_STATE);
+70 |     }
+
+===== M0013 =====
+Signature: org.apache.commons.math3.optimization.linear.LinearObjectiveFunction.getCoefficients()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/LinearObjectiveFunction.java
+Original range: 74-76
+Documentation:
+/**
+     * Get the coefficients of the linear equation being optimized.
+     * @return coefficients of the linear equation being optimized
+     */
+Method code:
+74 |     public RealVector getCoefficients() {
+75 |         return coefficients;
+76 |     }
+
+===== M0014 =====
+Signature: org.apache.commons.math3.util.Precision.equals(double,double,int)
+Source: src/main/java/org/apache/commons/math3/util/Precision.java
+Original range: 299-314
+Documentation:
+/**
+     * Returns true if both arguments are equal or within the range of allowed
+     * error (inclusive).
+     * Two float numbers are considered equal if there are {@code (maxUlps - 1)}
+     * (or fewer) floating point numbers between them, i.e. two adjacent floating
+     * point numbers are considered equal.
+     * Adapted from <a
+     * href="http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm">
+     * Bruce Dawson</a>
+     *
+     * @param x first value
+     * @param y second value
+     * @param maxUlps {@code (maxUlps - 1)} is the number of floating point
+     * values between {@code x} and {@code y}.
+     * @return {@code true} if there are fewer than {@code maxUlps} floating
+     * point values between {@code x} and {@code y}.
+     */
+Method code:
+299 |     public static boolean equals(double x, double y, int maxUlps) {
+300 |         long xInt = Double.doubleToLongBits(x);
+301 |         long yInt = Double.doubleToLongBits(y);
+302 | 
+303 |         // Make lexicographically ordered as a two's-complement integer.
+304 |         if (xInt < 0) {
+305 |             xInt = SGN_MASK - xInt;
+306 |         }
+307 |         if (yInt < 0) {
+308 |             yInt = SGN_MASK - yInt;
+309 |         }
+310 | 
+311 |         final boolean isEqual = FastMath.abs(xInt - yInt) <= maxUlps;
+312 | 
+313 |         return isEqual && !Double.isNaN(x) && !Double.isNaN(y);
+314 |     }
+
+===== M0015 =====
+Signature: org.apache.commons.math3.optimization.linear.AbstractLinearOptimizer.setMaxIterations(int)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/AbstractLinearOptimizer.java
+Original range: 107-109
+Documentation:
+/** {@inheritDoc} */
+Method code:
+107 |     public void setMaxIterations(int maxIterations) {
+108 |         this.maxIterations = maxIterations;
+109 |     }
+
+===== M0016 =====
+Signature: org.apache.commons.math3.optimization.linear.LinearConstraint.LinearConstraint(double[],Relationship,double)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/LinearConstraint.java
+Original range: 79-82
+Documentation:
+/**
+     * Build a constraint involving a single linear equation.
+     * <p>
+     * A linear constraint with a single linear equation has one of the forms:
+     * <ul>
+     *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> = v</li>
+     *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> &lt;= v</li>
+     *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> >= v</li>
+     * </ul>
+     * </p>
+     * @param coefficients The coefficients of the constraint (left hand side)
+     * @param relationship The type of (in)equality used in the constraint
+     * @param value The value of the constraint (right hand side)
+     */
+Method code:
+79 |     public LinearConstraint(final double[] coefficients, final Relationship relationship,
+80 |                             final double value) {
+81 |         this(new ArrayRealVector(coefficients), relationship, value);
+82 |     }
+
+===== M0017 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.dropPhase1Objective()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 332-374
+Documentation:
+/**
+     * Removes the phase 1 objective function, positive cost non-artificial variables,
+     * and the non-basic artificial variables from this tableau.
+     */
+Method code:
+332 |     protected void dropPhase1Objective() {
+333 |         if (getNumObjectiveFunctions() == 1) {
+334 |             return;
+335 |         }
+336 | 
+337 |         Set<Integer> columnsToDrop = new TreeSet<Integer>();
+338 |         columnsToDrop.add(0);
+339 | 
+340 |         // positive cost non-artificial variables
+341 |         for (int i = getNumObjectiveFunctions(); i < getArtificialVariableOffset(); i++) {
+342 |             final double entry = tableau.getEntry(0, i);
+343 |             if (Precision.compareTo(entry, 0d, epsilon) > 0) {
+344 |                 columnsToDrop.add(i);
+345 |             }
+346 |         }
+347 | 
+348 |         // non-basic artificial variables
+349 |         for (int i = 0; i < getNumArtificialVariables(); i++) {
+350 |             int col = i + getArtificialVariableOffset();
+351 |             if (getBasicRow(col) == null) {
+352 |                 columnsToDrop.add(col);
+353 |             }
+354 |         }
+355 | 
+356 |         double[][] matrix = new double[getHeight() - 1][getWidth() - columnsToDrop.size()];
+357 |         for (int i = 1; i < getHeight(); i++) {
+358 |             int col = 0;
+359 |             for (int j = 0; j < getWidth(); j++) {
+360 |                 if (!columnsToDrop.contains(j)) {
+361 |                     matrix[i - 1][col++] = tableau.getEntry(i, j);
+362 |                 }
+363 |             }
+364 |         }
+365 | 
+366 |         // remove the columns in reverse order so the indices are correct
+367 |         Integer[] drop = columnsToDrop.toArray(new Integer[columnsToDrop.size()]);
+368 |         for (int i = drop.length - 1; i >= 0; i--) {
+369 |             columnLabels.remove((int) drop[i]);
+370 |         }
+371 | 
+372 |         this.tableau = new Array2DRowRealMatrix(matrix);
+373 |         this.numArtificialVariables = 0;
+374 |     }
+
+===== M0018 =====
+Signature: org.apache.commons.math3.util.FastMath.abs(double)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 2926-2928
+Documentation:
+/**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x)
+     */
+Method code:
+2926 |     public static double abs(double x) {
+2927 |         return (x < 0.0) ? -x : (x == 0.0) ? 0.0 : x; // -0.0 => +0.0
+2928 |     }
+
+===== M0019 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.getEntry(int)
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 588-596
+Documentation:
+/** {@inheritDoc} */
+Method code:
+588 |     @Override
+589 |     public double getEntry(int index) {
+590 |         try {
+591 |             return data[index];
+592 |         } catch (IndexOutOfBoundsException e) {
+593 |             throw new OutOfRangeException(LocalizedFormats.INDEX, index, 0,
+594 |                 getDimension() - 1);
+595 |         }
+596 |     }
+
+===== M0020 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.MathIllegalStateException(Localizable,Object...)
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 44-48
+Documentation:
+/**
+     * Simple constructor.
+     *
+     * @param pattern Message pattern explaining the cause of the error.
+     * @param args Arguments.
+     */
+Method code:
+44 |     public MathIllegalStateException(Localizable pattern,
+45 |                                      Object ... args) {
+46 |         context = new ExceptionContext(this);
+47 |         context.addMessage(pattern, args);
+48 |     }
+
+===== M0021 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getWidth()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 477-479
+Documentation:
+/**
+     * Get the width of the tableau.
+     * @return width of the tableau
+     */
+Method code:
+477 |     protected final int getWidth() {
+478 |         return tableau.getColumnDimension();
+479 |     }
+
+===== M0022 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.getMessage()
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 127-129
+Documentation:
+/**
+     * Gets the default message.
+     *
+     * @return the message.
+     */
+Method code:
+127 |     public String getMessage() {
+128 |         return getMessage(Locale.US);
+129 |     }
+
+===== M0023 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.subtract(RealVector)
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 315-337
+Documentation:
+/** {@inheritDoc} */
+Method code:
+315 |     @Override
+316 |     public ArrayRealVector subtract(RealVector v) {
+317 |         if (v instanceof ArrayRealVector) {
+318 |             final double[] vData = ((ArrayRealVector) v).data;
+319 |             final int dim = vData.length;
+320 |             checkVectorDimensions(dim);
+321 |             ArrayRealVector result = new ArrayRealVector(dim);
+322 |             double[] resultData = result.data;
+323 |             for (int i = 0; i < dim; i++) {
+324 |                 resultData[i] = data[i] - vData[i];
+325 |             }
+326 |             return result;
+327 |         } else {
+328 |             checkVectorDimensions(v);
+329 |             double[] out = data.clone();
+330 |             Iterator<Entry> it = v.sparseIterator();
+331 |             while (it.hasNext()) {
+332 |                 final Entry e = it.next();
+333 |                 out[e.getIndex()] -= e.getValue();
+334 |             }
+335 |             return new ArrayRealVector(out, false);
+336 |         }
+337 |     }
+
+===== M0024 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.Array2DRowRealMatrix(double[][])
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 73-76
+Documentation:
+/**
+     * Create a new {@code RealMatrix} using the input array as the underlying
+     * data array.
+     * <p>The input array is copied, not referenced. This constructor has
+     * the same effect as calling {@link #Array2DRowRealMatrix(double[][], boolean)}
+     * with the second argument set to {@code true}.</p>
+     *
+     * @param d Data for the new matrix.
+     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws NoDataException if {@code d} row or colum dimension is zero.
+     * @throws NullArgumentException if {@code d} is {@code null}.
+     * @see #Array2DRowRealMatrix(double[][], boolean)
+     */
+Method code:
+73 |     public Array2DRowRealMatrix(final double[][] d)
+74 |         throws DimensionMismatchException, NoDataException, NullArgumentException {
+75 |         copyIn(d);
+76 |     }
+
+===== M0025 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(String,String,String,String,String,String)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 112-117
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix and separator.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param rowPrefix row prefix to use instead of the default "{"
+     * @param rowSuffix row suffix to use instead of the default "}"
+     * @param rowSeparator tow separator to use instead of the default ";"
+     * @param columnSeparator column separator to use instead of the default ", "
+     */
+Method code:
+112 |     public RealMatrixFormat(final String prefix, final String suffix,
+113 |                             final String rowPrefix, final String rowSuffix,
+114 |                             final String rowSeparator, final String columnSeparator) {
+115 |         this(prefix, suffix, rowPrefix, rowSuffix, rowSeparator, columnSeparator,
+116 |                 CompositeFormat.getDefaultNumberFormat());
+117 |     }
+
+===== M0026 =====
+Signature: org.apache.commons.math3.optimization.linear.LinearObjectiveFunction.getConstantTerm()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/LinearObjectiveFunction.java
+Original range: 82-84
+Documentation:
+/**
+     * Get the constant of the linear equation being optimized.
+     * @return constant of the linear equation being optimized
+     */
+Method code:
+82 |     public double getConstantTerm() {
+83 |         return constantTerm;
+84 |     }
+
+===== M0027 =====
+Signature: org.apache.commons.math3.optimization.linear.AbstractLinearOptimizer.restrictToNonNegative()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/AbstractLinearOptimizer.java
+Original range: 81-83
+Documentation:
+/**
+     * @return {@code true} if the variables are restricted to non-negative values.
+     */
+Method code:
+81 |     protected boolean restrictToNonNegative() {
+82 |         return nonNegative;
+83 |     }
+
+===== M0028 =====
+Signature: org.apache.commons.math3.optimization.linear.AbstractLinearOptimizer.incrementIterationsCounter()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/AbstractLinearOptimizer.java
+Original range: 125-130
+Documentation:
+/** Increment the iterations counter by 1.
+     * @exception MaxCountExceededException if the maximal number
+     * of iterations is exceeded
+     */
+Method code:
+125 |     protected void incrementIterationsCounter()
+126 |         throws MaxCountExceededException {
+127 |         if (++iterations > maxIterations) {
+128 |             throw new MaxCountExceededException(maxIterations);
+129 |         }
+130 |     }
+
+===== M0029 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexSolver.SimplexSolver(double,int)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexSolver.java
+Original range: 59-62
+Documentation:
+/**
+     * Build a simplex solver with a specified accepted amount of error
+     * @param epsilon the amount of error to accept for algorithm convergence
+     * @param maxUlps amount of error to accept in floating point comparisons
+     */
+Method code:
+59 |     public SimplexSolver(final double epsilon, final int maxUlps) {
+60 |         this.epsilon = epsilon;
+61 |         this.maxUlps = maxUlps;
+62 |     }
+
+===== M0030 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getRowDimension()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 321-324
+Documentation:
+/** {@inheritDoc} */
+Method code:
+321 |     @Override
+322 |     public int getRowDimension() {
+323 |         return (data == null) ? 0 : data.length;
+324 |     }
+
+===== M0031 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getRhsOffset()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 528-530
+Documentation:
+/**
+     * Get the offset of the right hand side.
+     * @return offset of the right hand side
+     */
+Method code:
+528 |     protected final int getRhsOffset() {
+529 |         return getWidth() - 1;
+530 |     }
+
+===== M0032 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getDataRef()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 254-256
+Documentation:
+/**
+     * Get a reference to the underlying data array.
+     *
+     * @return 2-dimensional array of entries.
+     */
+Method code:
+254 |     public double[][] getDataRef() {
+255 |         return data;
+256 |     }
+
+===== M0033 =====
+Signature: org.apache.commons.math3.linear.RealVectorFormat.RealVectorFormat(NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealVectorFormat.java
+Original range: 81-83
+Documentation:
+/**
+     * Create an instance with a custom number format for components.
+     * @param format the custom format for components.
+     */
+Method code:
+81 |     public RealVectorFormat(final NumberFormat format) {
+82 |         this(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_SEPARATOR, format);
+83 |     }
+
+===== M0034 =====
+Signature: org.apache.commons.math3.util.Precision.compareTo(double,double,int)
+Source: src/main/java/org/apache/commons/math3/util/Precision.java
+Original range: 113-120
+Documentation:
+/**
+     * Compares two numbers given some amount of allowed error.
+     * Two float numbers are considered equal if there are {@code (maxUlps - 1)}
+     * (or fewer) floating point numbers between them, i.e. two adjacent floating
+     * point numbers are considered equal.
+     * Adapted from <a
+     * href="http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm">
+     * Bruce Dawson</a>
+     *
+     * @param x first value
+     * @param y second value
+     * @param maxUlps {@code (maxUlps - 1)} is the number of floating point
+     * values between {@code x} and {@code y}.
+     * @return <ul><li>0 if  {@link #equals(double, double, int) equals(x, y, maxUlps)}</li>
+     *       <li>&lt; 0 if !{@link #equals(double, double, int) equals(x, y, maxUlps)} &amp;&amp; x &lt; y</li>
+     *       <li>> 0 if !{@link #equals(double, double, int) equals(x, y, maxUlps)} &amp;&amp; x > y</li></ul>
+     */
+Method code:
+113 |     public static int compareTo(final double x, final double y, final int maxUlps) {
+114 |         if (equals(x, y, maxUlps)) {
+115 |             return 0;
+116 |         } else if (x < y) {
+117 |             return -1;
+118 |         }
+119 |         return 1;
+120 |     }
+
+===== M0035 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.addMessage(Localizable,Object...)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 85-89
+Documentation:
+/**
+     * Adds a message.
+     *
+     * @param pattern Message pattern.
+     * @param arguments Values for replacing the placeholders in the message
+     * pattern.
+     */
+Method code:
+85 |     public void addMessage(Localizable pattern,
+86 |                            Object ... arguments) {
+87 |         msgPatterns.add(pattern);
+88 |         msgArguments.add(ArgUtils.flatten(arguments));
+89 |     }
+
+===== M0036 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.divideRow(int,double)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 445-449
+Documentation:
+/**
+     * Subtracts a multiple of one row from another.
+     * <p>
+     * After application of this operation, the following will hold:
+     *   minuendRow = minuendRow - multiple * subtrahendRow
+     * </p>
+     * @param dividendRow index of the row
+     * @param divisor value of the divisor
+     */
+Method code:
+445 |     protected void divideRow(final int dividendRow, final double divisor) {
+446 |         for (int j = 0; j < getWidth(); j++) {
+447 |             tableau.setEntry(dividendRow, j, tableau.getEntry(dividendRow, j) / divisor);
+448 |         }
+449 |     }
+
+===== M0037 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getNumArtificialVariables()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 567-569
+Documentation:
+/**
+     * Get the number of artificial variables.
+     * @return number of artificial variables
+     */
+Method code:
+567 |     protected final int getNumArtificialVariables() {
+568 |         return numArtificialVariables;
+569 |     }
+
+===== M0038 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getNumSlackVariables()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 559-561
+Documentation:
+/**
+     * Get the number of slack variables.
+     * @return number of slack variables
+     */
+Method code:
+559 |     protected final int getNumSlackVariables() {
+560 |         return numSlackVariables;
+561 |     }
+
+===== M0039 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getEntry(int,int)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 494-496
+Documentation:
+/** Get an entry of the tableau.
+     * @param row row index
+     * @param column column index
+     * @return entry at (row, column)
+     */
+Method code:
+494 |     protected final double getEntry(final int row, final int column) {
+495 |         return tableau.getEntry(row, column);
+496 |     }
+
+===== M0040 =====
+Signature: org.apache.commons.math3.exception.util.ArgUtils.flatten(Object[])
+Source: src/main/java/org/apache/commons/math3/exception/util/ArgUtils.java
+Original range: 41-55
+Documentation:
+/**
+     * Transform a multidimensional array into a one-dimensional list.
+     *
+     * @param array Array (possibly multidimensional).
+     * @return a list of all the {@code Object} instances contained in
+     * {@code array}.
+     */
+Method code:
+41 |     public static Object[] flatten(Object[] array) {
+42 |         final List<Object> list = new ArrayList<Object>();
+43 |         if (array != null) {
+44 |             for (Object o : array) {
+45 |                 if (o instanceof Object[]) {
+46 |                     for (Object oR : flatten((Object[]) o)) {
+47 |                         list.add(oR);
+48 |                     }
+49 |                 } else {
+50 |                     list.add(o);
+51 |                 }
+52 |             }
+53 |         }
+54 |         return list.toArray();
+55 |     }
+
+===== M0041 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getFormat()
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 206-208
+Documentation:
+/**
+     * Get the components format.
+     * @return components format.
+     */
+Method code:
+206 |     public NumberFormat getFormat() {
+207 |         return format;
+208 |     }
+
+===== M0042 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getEntry(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 293-297
+Documentation:
+/** {@inheritDoc} */
+Method code:
+293 |     @Override
+294 |     public double getEntry(final int row, final int column) {
+295 |         MatrixUtils.checkMatrixIndex(this, row, column);
+296 |         return data[row][column];
+297 |     }
+
+===== M0043 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getHeight()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 485-487
+Documentation:
+/**
+     * Get the height of the tableau.
+     * @return height of the tableau
+     */
+Method code:
+485 |     protected final int getHeight() {
+486 |         return tableau.getRowDimension();
+487 |     }
+
+===== M0044 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexSolver.solvePhase1(SimplexTableau)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexSolver.java
+Original range: 193-209
+Documentation:
+/**
+     * Solves Phase 1 of the Simplex method.
+     * @param tableau simple tableau for the problem
+     * @throws MaxCountExceededException if the maximal iteration count has been exceeded
+     * @throws UnboundedSolutionException if the model is found not to have a bounded solution
+     * @throws NoFeasibleSolutionException if there is no feasible solution
+     */
+Method code:
+193 |     protected void solvePhase1(final SimplexTableau tableau)
+194 |         throws MaxCountExceededException, UnboundedSolutionException, NoFeasibleSolutionException {
+195 | 
+196 |         // make sure we're in Phase 1
+197 |         if (tableau.getNumArtificialVariables() == 0) {
+198 |             return;
+199 |         }
+200 | 
+201 |         while (!tableau.isOptimal()) {
+202 |             doIteration(tableau);
+203 |         }
+204 | 
+205 |         // if W is not zero then we have no feasible solution
+206 |         if (!Precision.equals(tableau.getEntry(0, tableau.getRhsOffset()), 0d, epsilon)) {
+207 |             throw new NoFeasibleSolutionException();
+208 |         }
+209 |     }
+
+===== M0045 =====
+Signature: org.apache.commons.math3.util.MathUtils.checkNotNull(Object)
+Source: src/main/java/org/apache/commons/math3/util/MathUtils.java
+Original range: 255-260
+Documentation:
+/**
+     * Checks that an object is not null.
+     *
+     * @param o Object to be checked.
+     * @throws NullArgumentException if {@code o} is {@code null}.
+     */
+Method code:
+255 |     public static void checkNotNull(Object o)
+256 |         throws NullArgumentException {
+257 |         if (o == null) {
+258 |             throw new NullArgumentException();
+259 |         }
+260 |     }
+
+===== M0046 =====
+Signature: org.apache.commons.math3.optimization.linear.AbstractLinearOptimizer.getFunction()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/AbstractLinearOptimizer.java
+Original range: 95-97
+Documentation:
+/**
+     * @return the optimization type.
+     */
+Method code:
+95 |     protected LinearObjectiveFunction getFunction() {
+96 |         return function;
+97 |     }
+
+===== M0047 =====
+Signature: org.apache.commons.math3.util.Precision.equals(double,double,double)
+Source: src/main/java/org/apache/commons/math3/util/Precision.java
+Original range: 263-265
+Documentation:
+/**
+     * Returns {@code true} if there is no double value strictly between the
+     * arguments or the difference between them is within the range of allowed
+     * error (inclusive).
+     *
+     * @param x First value.
+     * @param y Second value.
+     * @param eps Amount of allowed absolute error.
+     * @return {@code true} if the values are two adjacent floating point
+     * numbers or they are within range of each other.
+     */
+Method code:
+263 |     public static boolean equals(double x, double y, double eps) {
+264 |         return equals(x, y, 1) || FastMath.abs(y - x) <= eps;
+265 |     }
+
+===== M0048 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.copyIn(double[][])
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 524-527
+Documentation:
+/**
+     * Replace data with a fresh copy of the input array.
+     *
+     * @param in Data to copy.
+     * @throws NoDataException if the input array is empty.
+     * @throws DimensionMismatchException if the input array is not rectangular.
+     * @throws NullArgumentException if
+     * the input array is {@code null}.
+     */
+Method code:
+524 |     private void copyIn(final double[][] in)
+525 |         throws DimensionMismatchException, NoDataException, NullArgumentException {
+526 |         setSubMatrix(in, 0, 0);
+527 |     }
+
+===== M0049 =====
+Signature: org.apache.commons.math3.util.CompositeFormat.getDefaultNumberFormat()
+Source: src/main/java/org/apache/commons/math3/util/CompositeFormat.java
+Original range: 42-44
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance()} with the only customizing that the
+     * maximum number of fraction digits is set to 2.
+     * @return the default number format.
+     */
+Method code:
+42 |     public static NumberFormat getDefaultNumberFormat() {
+43 |         return getDefaultNumberFormat(Locale.getDefault());
+44 |     }
+
+===== M0050 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexSolver.doIteration(SimplexTableau)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexSolver.java
+Original range: 162-184
+Documentation:
+/**
+     * Runs one iteration of the Simplex method on the given model.
+     * @param tableau simple tableau for the problem
+     * @throws MaxCountExceededException if the maximal iteration count has been exceeded
+     * @throws UnboundedSolutionException if the model is found not to have a bounded solution
+     */
+Method code:
+162 |     protected void doIteration(final SimplexTableau tableau)
+163 |         throws MaxCountExceededException, UnboundedSolutionException {
+164 | 
+165 |         incrementIterationsCounter();
+166 | 
+167 |         Integer pivotCol = getPivotColumn(tableau);
+168 |         Integer pivotRow = getPivotRow(tableau, pivotCol);
+169 |         if (pivotRow == null) {
+170 |             throw new UnboundedSolutionException();
+171 |         }
+172 | 
+173 |         // set the pivot element to 1
+174 |         double pivotVal = tableau.getEntry(pivotRow, pivotCol);
+175 |         tableau.divideRow(pivotRow, pivotVal);
+176 | 
+177 |         // set the rest of the pivot column to 0
+178 |         for (int i = 0; i < tableau.getHeight(); i++) {
+179 |             if (i != pivotRow) {
+180 |                 final double multiplier = tableau.getEntry(i, pivotCol);
+181 |                 tableau.subtractRow(i, pivotRow, multiplier);
+182 |             }
+183 |         }
+184 |     }
+
+===== M0051 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.isOptimal()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 388-396
+Documentation:
+/**
+     * Returns whether the problem is at an optimal state.
+     * @return whether the model has been solved
+     */
+Method code:
+388 |     boolean isOptimal() {
+389 |         for (int i = getNumObjectiveFunctions(); i < getWidth() - 1; i++) {
+390 |             final double entry = tableau.getEntry(0, i);
+391 |             if (Precision.compareTo(entry, 0d, epsilon) < 0) {
+392 |                 return false;
+393 |             }
+394 |         }
+395 |         return true;
+396 |     }
+
+===== M0052 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.getRowVector(int)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 485-487
+Documentation:
+/** {@inheritDoc} */
+Method code:
+485 |     public RealVector getRowVector(final int row) {
+486 |         return new ArrayRealVector(getRow(row), false);
+487 |     }
+
+===== M0053 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.AbstractRealMatrix()
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 52-52
+Documentation:
+/**
+     * Creates a matrix with no data
+     */
+Method code:
+52 |     protected AbstractRealMatrix() {}
+
+===== M0054 =====
+Signature: org.apache.commons.math3.optimization.linear.LinearConstraint.getRelationship()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/LinearConstraint.java
+Original range: 175-177
+Documentation:
+/**
+     * Get the relationship between left and right hand sides.
+     * @return relationship between left and right hand sides
+     */
+Method code:
+175 |     public Relationship getRelationship() {
+176 |         return relationship;
+177 |     }
+
+===== M0055 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.getColumnDimension()
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 327-330
+Documentation:
+/** {@inheritDoc} */
+Method code:
+327 |     @Override
+328 |     public int getColumnDimension() {
+329 |         return ((data == null) || (data[0] == null)) ? 0 : data[0].length;
+330 |     }
+
+===== M0056 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getConstraintTypeCounts(Relationship)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 287-295
+Documentation:
+/**
+     * Get a count of constraints corresponding to a specified relationship.
+     * @param relationship relationship to count
+     * @return number of constraint with the specified relationship
+     */
+Method code:
+287 |     private int getConstraintTypeCounts(final Relationship relationship) {
+288 |         int count = 0;
+289 |         for (final LinearConstraint constraint : constraints) {
+290 |             if (constraint.getRelationship() == relationship) {
+291 |                 ++count;
+292 |             }
+293 |         }
+294 |         return count;
+295 |     }
+
+===== M0057 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.subtractRow(int,int,double)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 461-471
+Documentation:
+/**
+     * Subtracts a multiple of one row from another.
+     * <p>
+     * After application of this operation, the following will hold:
+     *   minuendRow = minuendRow - multiple * subtrahendRow
+     * </p>
+     * @param minuendRow row index
+     * @param subtrahendRow row index
+     * @param multiple multiplication factor
+     */
+Method code:
+461 |     protected void subtractRow(final int minuendRow, final int subtrahendRow,
+462 |                                final double multiple) {
+463 |         for (int i = 0; i < getWidth(); i++) {
+464 |             double result = tableau.getEntry(minuendRow, i) - tableau.getEntry(subtrahendRow, i) * multiple;
+465 |             // cut-off values smaller than the CUTOFF_THRESHOLD, otherwise may lead to numerical instabilities
+466 |             if (FastMath.abs(result) < CUTOFF_THRESHOLD) {
+467 |                 result = 0.0;
+468 |             }
+469 |             tableau.setEntry(minuendRow, i, result);
+470 |         }
+471 |     }
+
+===== M0058 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.ExceptionContext(Throwable)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 64-69
+Documentation:
+/** Simple constructor.
+     * @param throwable the exception this context refers too
+     */
+Method code:
+64 |     public ExceptionContext(final Throwable throwable) {
+65 |         this.throwable = throwable;
+66 |         msgPatterns    = new ArrayList<Localizable>();
+67 |         msgArguments   = new ArrayList<Object[]>();
+68 |         context        = new HashMap<String, Object>();
+69 |     }
+
+===== M0059 =====
+Signature: org.apache.commons.math3.optimization.linear.AbstractLinearOptimizer.getConstraints()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/AbstractLinearOptimizer.java
+Original range: 102-104
+Documentation:
+/**
+     * @return the optimization type.
+     */
+Method code:
+102 |     protected Collection<LinearConstraint> getConstraints() {
+103 |         return Collections.unmodifiableCollection(linearConstraints);
+104 |     }
+
+===== M0060 =====
+Signature: org.apache.commons.math3.linear.RealVectorFormat.RealVectorFormat(String,String,String,NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealVectorFormat.java
+Original range: 105-114
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix, separator and format
+     * for components.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param separator separator to use instead of the default "; "
+     * @param format the custom format for components.
+     */
+Method code:
+105 |     public RealVectorFormat(final String prefix, final String suffix,
+106 |                             final String separator, final NumberFormat format) {
+107 |         this.prefix      = prefix;
+108 |         this.suffix      = suffix;
+109 |         this.separator   = separator;
+110 |         trimmedPrefix    = prefix.trim();
+111 |         trimmedSuffix    = suffix.trim();
+112 |         trimmedSeparator = separator.trim();
+113 |         this.format      = format;
+114 |     }
+
+===== M0061 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getSlackVariableOffset()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 512-514
+Documentation:
+/**
+     * Get the offset of the first slack variable.
+     * @return offset of the first slack variable
+     */
+Method code:
+512 |     protected final int getSlackVariableOffset() {
+513 |         return getNumObjectiveFunctions() + numDecisionVariables;
+514 |     }
+
+===== M0062 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getArtificialVariableOffset()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 520-522
+Documentation:
+/**
+     * Get the offset of the first artificial variable.
+     * @return offset of the first artificial variable
+     */
+Method code:
+520 |     protected final int getArtificialVariableOffset() {
+521 |         return getNumObjectiveFunctions() + numDecisionVariables + numSlackVariables;
+522 |     }
+
+===== M0063 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.getLocalizedMessage()
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 136-138
+Documentation:
+/**
+     * Gets the message in the default locale.
+     *
+     * @return the localized message.
+     */
+Method code:
+136 |     public String getLocalizedMessage() {
+137 |         return getMessage(Locale.getDefault());
+138 |     }
+
+===== M0064 =====
+Signature: org.apache.commons.math3.optimization.linear.AbstractLinearOptimizer.getGoalType()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/AbstractLinearOptimizer.java
+Original range: 88-90
+Documentation:
+/**
+     * @return the optimization type.
+     */
+Method code:
+88 |     protected GoalType getGoalType() {
+89 |         return goal;
+90 |     }
+
+===== M0065 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getNumObjectiveFunctions()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 278-280
+Documentation:
+/**
+     * Get the number of objective functions in this tableau.
+     * @return 2 for Phase 1.  1 for Phase 2.
+     */
+Method code:
+278 |     protected final int getNumObjectiveFunctions() {
+279 |         return this.numArtificialVariables > 0 ? 2 : 1;
+280 |     }
+
+===== M0066 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkMatrixIndex(AnyMatrix,int,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 377-381
+Documentation:
+/**
+     * Check if matrix indices are valid.
+     *
+     * @param m Matrix.
+     * @param row Row index to check.
+     * @param column Column index to check.
+     * @throws OutOfRangeException if {@code row} or {@code column} is not
+     * a valid index.
+     */
+Method code:
+377 |     public static void checkMatrixIndex(final AnyMatrix m,
+378 |                                         final int row, final int column) {
+379 |         checkRowIndex(m, row);
+380 |         checkColumnIndex(m, column);
+381 |     }
+
+===== M0067 =====
+Signature: org.apache.commons.math3.optimization.linear.AbstractLinearOptimizer.AbstractLinearOptimizer()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/AbstractLinearOptimizer.java
+Original range: 74-76
+Documentation:
+/** Simple constructor with default settings.
+     * <p>The maximal number of evaluation is set to its default value.</p>
+     */
+Method code:
+74 |     protected AbstractLinearOptimizer() {
+75 |         setMaxIterations(DEFAULT_MAX_ITERATIONS);
+76 |     }
+
+===== M0068 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.copyArray(double[],double[])
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 380-382
+Documentation:
+/**
+     * @param src the source array
+     * @param dest the destination array
+     */
+Method code:
+380 |     private void copyArray(final double[] src, final double[] dest) {
+381 |         System.arraycopy(src, 0, dest, getNumObjectiveFunctions(), src.length);
+382 |     }
+
+===== M0069 =====
+Signature: org.apache.commons.math3.linear.MatrixUtils.checkRowIndex(AnyMatrix,int)
+Source: src/main/java/org/apache/commons/math3/linear/MatrixUtils.java
+Original range: 390-396
+Documentation:
+/**
+     * Check if a row index is valid.
+     *
+     * @param m Matrix.
+     * @param row Row index to check.
+     * @throws OutOfRangeException if {@code row} is not a valid index.
+     */
+Method code:
+390 |     public static void checkRowIndex(final AnyMatrix m, final int row) {
+391 |         if (row < 0 ||
+392 |             row >= m.getRowDimension()) {
+393 |             throw new OutOfRangeException(LocalizedFormats.ROW_INDEX,
+394 |                                           row, 0, m.getRowDimension() - 1);
+395 |         }
+396 |     }
+
+===== M0070 =====
+Signature: org.apache.commons.math3.optimization.linear.LinearObjectiveFunction.LinearObjectiveFunction(RealVector,double)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/LinearObjectiveFunction.java
+Original range: 65-68
+Documentation:
+/**
+     * @param coefficients The coefficients for the linear equation being optimized
+     * @param constantTerm The constant term of the linear equation
+     */
+Method code:
+65 |     public LinearObjectiveFunction(RealVector coefficients, double constantTerm) {
+66 |         this.coefficients = coefficients;
+67 |         this.constantTerm = constantTerm;
+68 |     }
+
+===== M0071 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.AbstractRealMatrix(int,int)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 61-68
+Documentation:
+/**
+     * Create a new RealMatrix with the supplied row and column dimensions.
+     *
+     * @param rowDimension  the number of rows in the new matrix
+     * @param columnDimension  the number of columns in the new matrix
+     * @throws NotStrictlyPositiveException if row or column dimension is not positive
+     */
+Method code:
+61 |     protected AbstractRealMatrix(final int rowDimension, final int columnDimension) {
+62 |         if (rowDimension < 1) {
+63 |             throw new NotStrictlyPositiveException(rowDimension);
+64 |         }
+65 |         if (columnDimension < 1) {
+66 |             throw new NotStrictlyPositiveException(columnDimension);
+67 |         }
+68 |     }
+
+===== M0072 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.createTableau(boolean)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 183-244
+Documentation:
+/**
+     * Create the tableau by itself.
+     * @param maximize if true, goal is to maximize the objective function
+     * @return created tableau
+     */
+Method code:
+183 |     protected RealMatrix createTableau(final boolean maximize) {
+184 | 
+185 |         // create a matrix of the correct size
+186 |         int width = numDecisionVariables + numSlackVariables +
+187 |         numArtificialVariables + getNumObjectiveFunctions() + 1; // + 1 is for RHS
+188 |         int height = constraints.size() + getNumObjectiveFunctions();
+189 |         Array2DRowRealMatrix matrix = new Array2DRowRealMatrix(height, width);
+190 | 
+191 |         // initialize the objective function rows
+192 |         if (getNumObjectiveFunctions() == 2) {
+193 |             matrix.setEntry(0, 0, -1);
+194 |         }
+195 |         int zIndex = (getNumObjectiveFunctions() == 1) ? 0 : 1;
+196 |         matrix.setEntry(zIndex, zIndex, maximize ? 1 : -1);
+197 |         RealVector objectiveCoefficients =
+198 |             maximize ? f.getCoefficients().mapMultiply(-1) : f.getCoefficients();
+199 |         copyArray(objectiveCoefficients.toArray(), matrix.getDataRef()[zIndex]);
+200 |         matrix.setEntry(zIndex, width - 1,
+201 |             maximize ? f.getConstantTerm() : -1 * f.getConstantTerm());
+202 | 
+203 |         if (!restrictToNonNegative) {
+204 |             matrix.setEntry(zIndex, getSlackVariableOffset() - 1,
+205 |                 getInvertedCoefficientSum(objectiveCoefficients));
+206 |         }
+207 | 
+208 |         // initialize the constraint rows
+209 |         int slackVar = 0;
+210 |         int artificialVar = 0;
+211 |         for (int i = 0; i < constraints.size(); i++) {
+212 |             LinearConstraint constraint = constraints.get(i);
+213 |             int row = getNumObjectiveFunctions() + i;
+214 | 
+215 |             // decision variable coefficients
+216 |             copyArray(constraint.getCoefficients().toArray(), matrix.getDataRef()[row]);
+217 | 
+218 |             // x-
+219 |             if (!restrictToNonNegative) {
+220 |                 matrix.setEntry(row, getSlackVariableOffset() - 1,
+221 |                     getInvertedCoefficientSum(constraint.getCoefficients()));
+222 |             }
+223 | 
+224 |             // RHS
+225 |             matrix.setEntry(row, width - 1, constraint.getValue());
+226 | 
+227 |             // slack variables
+228 |             if (constraint.getRelationship() == Relationship.LEQ) {
+229 |                 matrix.setEntry(row, getSlackVariableOffset() + slackVar++, 1);  // slack
+230 |             } else if (constraint.getRelationship() == Relationship.GEQ) {
+231 |                 matrix.setEntry(row, getSlackVariableOffset() + slackVar++, -1); // excess
+232 |             }
+233 | 
+234 |             // artificial variables
+235 |             if ((constraint.getRelationship() == Relationship.EQ) ||
+236 |                     (constraint.getRelationship() == Relationship.GEQ)) {
+237 |                 matrix.setEntry(0, getArtificialVariableOffset() + artificialVar, 1);
+238 |                 matrix.setEntry(row, getArtificialVariableOffset() + artificialVar++, 1);
+239 |                 matrix.setRowVector(0, matrix.getRowVector(0).subtract(matrix.getRowVector(row)));
+240 |             }
+241 |         }
+242 | 
+243 |         return matrix;
+244 |     }
+
+===== M0073 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.ArrayRealVector(double[])
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 85-87
+Documentation:
+/**
+     * Construct a vector from an array, copying the input array.
+     *
+     * @param d Array.
+     * @throws NullArgumentException if {@code d} is {@code null}.
+     */
+Method code:
+85 |     public ArrayRealVector(double[] d) {
+86 |         data = d.clone();
+87 |     }
+
+===== M0074 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.SimplexTableau(LinearObjectiveFunction,Collection<LinearConstraint>,GoalType,boolean,double,int)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 135-153
+Documentation:
+/**
+     * Build a tableau for a linear problem.
+     * @param f linear objective function
+     * @param constraints linear constraints
+     * @param goalType type of optimization goal: either {@link GoalType#MAXIMIZE}
+     * or {@link GoalType#MINIMIZE}
+     * @param restrictToNonNegative whether to restrict the variables to non-negative values
+     * @param epsilon amount of error to accept when checking for optimality
+     * @param maxUlps amount of error to accept in floating point comparisons
+     */
+Method code:
+135 |     SimplexTableau(final LinearObjectiveFunction f,
+136 |                    final Collection<LinearConstraint> constraints,
+137 |                    final GoalType goalType, final boolean restrictToNonNegative,
+138 |                    final double epsilon,
+139 |                    final int maxUlps) {
+140 |         this.f                      = f;
+141 |         this.constraints            = normalizeConstraints(constraints);
+142 |         this.restrictToNonNegative  = restrictToNonNegative;
+143 |         this.epsilon                = epsilon;
+144 |         this.maxUlps                = maxUlps;
+145 |         this.numDecisionVariables   = f.getCoefficients().getDimension() +
+146 |                                       (restrictToNonNegative ? 0 : 1);
+147 |         this.numSlackVariables      = getConstraintTypeCounts(Relationship.LEQ) +
+148 |                                       getConstraintTypeCounts(Relationship.GEQ);
+149 |         this.numArtificialVariables = getConstraintTypeCounts(Relationship.EQ) +
+150 |                                       getConstraintTypeCounts(Relationship.GEQ);
+151 |         this.tableau = createTableau(goalType == GoalType.MAXIMIZE);
+152 |         initializeColumnLabels();
+153 |     }
+
+===== M0075 =====
+Signature: org.apache.commons.math3.optimization.linear.Relationship.Relationship(String)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/Relationship.java
+Original range: 42-44
+Documentation:
+/** Simple constructor.
+     * @param stringValue display string for the relationship
+     */
+Method code:
+42 |     private Relationship(String stringValue) {
+43 |         this.stringValue = stringValue;
+44 |     }
+
+===== M0076 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getBasicRow(int)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 315-326
+Documentation:
+/**
+     * Checks whether the given column is basic.
+     * @param col index of the column to check
+     * @return the row that the variable is basic in.  null if the column is not basic
+     */
+Method code:
+315 |     protected Integer getBasicRow(final int col) {
+316 |         Integer row = null;
+317 |         for (int i = 0; i < getHeight(); i++) {
+318 |             final double entry = getEntry(i, col);
+319 |             if (Precision.equals(entry, 1d, maxUlps) && (row == null)) {
+320 |                 row = i;
+321 |             } else if (!Precision.equals(entry, 0d, maxUlps)) {
+322 |                 return null;
+323 |             }
+324 |         }
+325 |         return row;
+326 |     }
+
+===== M0077 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexSolver.getPivotRow(SimplexTableau,int)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexSolver.java
+Original range: 90-154
+Documentation:
+/**
+     * Returns the row with the minimum ratio as given by the minimum ratio test (MRT).
+     * @param tableau simple tableau for the problem
+     * @param col the column to test the ratio of.  See {@link #getPivotColumn(SimplexTableau)}
+     * @return row with the minimum ratio
+     */
+Method code:
+90 |     private Integer getPivotRow(SimplexTableau tableau, final int col) {
+91 |         // create a list of all the rows that tie for the lowest score in the minimum ratio test
+92 |         List<Integer> minRatioPositions = new ArrayList<Integer>();
+93 |         double minRatio = Double.MAX_VALUE;
+94 |         for (int i = tableau.getNumObjectiveFunctions(); i < tableau.getHeight(); i++) {
+95 |             final double rhs = tableau.getEntry(i, tableau.getWidth() - 1);
+96 |             final double entry = tableau.getEntry(i, col);
+97 | 
+98 |             if (Precision.compareTo(entry, 0d, maxUlps) > 0) {
+99 |                 final double ratio = rhs / entry;
+100 |                 // check if the entry is strictly equal to the current min ratio
+101 |                 // do not use a ulp/epsilon check
+102 |                 final int cmp = Double.compare(ratio, minRatio);
+103 |                 if (cmp == 0) {
+104 |                     minRatioPositions.add(i);
+105 |                 } else if (cmp < 0) {
+106 |                     minRatio = ratio;
+107 |                     minRatioPositions = new ArrayList<Integer>();
+108 |                     minRatioPositions.add(i);
+109 |                 }
+110 |             }
+111 |         }
+112 | 
+113 |         if (minRatioPositions.size() == 0) {
+114 |             return null;
+115 |         } else if (minRatioPositions.size() > 1) {
+116 |             // there's a degeneracy as indicated by a tie in the minimum ratio test
+117 | 
+118 |             // 1. check if there's an artificial variable that can be forced out of the basis
+119 |                 for (Integer row : minRatioPositions) {
+120 |                     for (int i = 0; i < tableau.getNumArtificialVariables(); i++) {
+121 |                         int column = i + tableau.getArtificialVariableOffset();
+122 |                         final double entry = tableau.getEntry(row, column);
+123 |                         if (Precision.equals(entry, 1d, maxUlps) && row.equals(tableau.getBasicRow(column))) {
+124 |                             return row;
+125 |                         }
+126 |                     }
+127 |                 }
+128 | 
+129 |             // 2. apply Bland's rule to prevent cycling:
+130 |             //    take the row for which the corresponding basic variable has the smallest index
+131 |             //
+132 |             // see http://www.stanford.edu/class/msande310/blandrule.pdf
+133 |             // see http://en.wikipedia.org/wiki/Bland%27s_rule (not equivalent to the above paper)
+134 |             //
+135 |             // Additional heuristic: if we did not get a solution after half of maxIterations
+136 |             //                       revert to the simple case of just returning the top-most row
+137 |             // This heuristic is based on empirical data gathered while investigating MATH-828.
+138 |                 Integer minRow = null;
+139 |                 int minIndex = tableau.getWidth();
+140 |                 for (Integer row : minRatioPositions) {
+141 |                     int i = tableau.getNumObjectiveFunctions();
+142 |                     for (; i < tableau.getWidth() - 1 && minRow != row; i++) {
+143 |                         if (row == tableau.getBasicRow(i)) {
+144 |                             if (i < minIndex) {
+145 |                                 minIndex = i;
+146 |                                 minRow = row;
+147 |                             }
+148 |                         }
+149 |                     }
+150 |                 }
+151 |                 return minRow;
+152 |         }
+153 |         return minRatioPositions.get(0);
+154 |     }
+
+===== M0078 =====
+Signature: org.apache.commons.math3.exception.MaxCountExceededException.MaxCountExceededException(Localizable,Number,Object...)
+Source: src/main/java/org/apache/commons/math3/exception/MaxCountExceededException.java
+Original range: 51-56
+Documentation:
+/**
+     * Construct the exception with a specific context.
+     *
+     * @param specific Specific context pattern.
+     * @param max Maximum.
+     * @param args Additional arguments.
+     */
+Method code:
+51 |     public MaxCountExceededException(Localizable specific,
+52 |                                      Number max,
+53 |                                      Object ... args) {
+54 |         getContext().addMessage(specific, max, args);
+55 |         this.max = max;
+56 |     }
+
+===== M0079 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 98-101
+Documentation:
+/**
+     * Create an instance with a custom number format for components.
+     * @param format the custom format for components.
+     */
+Method code:
+98 |     public RealMatrixFormat(final NumberFormat format) {
+99 |         this(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_ROW_PREFIX, DEFAULT_ROW_SUFFIX,
+100 |                 DEFAULT_ROW_SEPARATOR, DEFAULT_COLUMN_SEPARATOR, format);
+101 |     }
+
+===== M0080 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.getContext()
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 73-75
+Documentation:
+/** {@inheritDoc} */
+Method code:
+73 |     public ExceptionContext getContext() {
+74 |         return context;
+75 |     }
+
+===== M0081 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexSolver.SimplexSolver()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexSolver.java
+Original range: 50-52
+Documentation:
+/**
+     * Build a simplex solver with default settings.
+     */
+Method code:
+50 |     public SimplexSolver() {
+51 |         this(DEFAULT_EPSILON, DEFAULT_ULPS);
+52 |     }
+
+===== M0082 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getInstance(Locale)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 223-225
+Documentation:
+/**
+     * Returns the default real vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the real vector format specific to the given locale.
+     */
+Method code:
+223 |     public static RealMatrixFormat getInstance(final Locale locale) {
+224 |         return new RealMatrixFormat(CompositeFormat.getDefaultNumberFormat(locale));
+225 |     }
+
+===== M0083 =====
+Signature: org.apache.commons.math3.util.FastMath.abs(long)
+Source: src/main/java/org/apache/commons/math3/util/FastMath.java
+Original range: 2908-2910
+Documentation:
+/**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x)
+     */
+Method code:
+2908 |     public static long abs(final long x) {
+2909 |         return (x < 0l) ? -x : x;
+2910 |     }
+
+===== M0084 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.buildMessage(Locale,String)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 169-187
+Documentation:
+/**
+     * Builds a message string.
+     *
+     * @param locale Locale in which the message should be translated.
+     * @param separator Message separator.
+     * @return a localized message string.
+     */
+Method code:
+169 |     private String buildMessage(Locale locale,
+170 |                                 String separator) {
+171 |         final StringBuilder sb = new StringBuilder();
+172 |         int count = 0;
+173 |         final int len = msgPatterns.size();
+174 |         for (int i = 0; i < len; i++) {
+175 |             final Localizable pat = msgPatterns.get(i);
+176 |             final Object[] args = msgArguments.get(i);
+177 |             final MessageFormat fmt = new MessageFormat(pat.getLocalizedString(locale),
+178 |                                                         locale);
+179 |             sb.append(fmt.format(args));
+180 |             if (++count < len) {
+181 |                 // Add a separator if there are other messages.
+182 |                 sb.append(separator);
+183 |             }
+184 |         }
+185 | 
+186 |         return sb.toString();
+187 |     }
+
+===== M0085 =====
+Signature: org.apache.commons.math3.optimization.linear.LinearConstraint.LinearConstraint(RealVector,Relationship,double)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/LinearConstraint.java
+Original range: 98-103
+Documentation:
+/**
+     * Build a constraint involving a single linear equation.
+     * <p>
+     * A linear constraint with a single linear equation has one of the forms:
+     * <ul>
+     *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> = v</li>
+     *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> &lt;= v</li>
+     *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> >= v</li>
+     * </ul>
+     * </p>
+     * @param coefficients The coefficients of the constraint (left hand side)
+     * @param relationship The type of (in)equality used in the constraint
+     * @param value The value of the constraint (right hand side)
+     */
+Method code:
+98 |     public LinearConstraint(final RealVector coefficients, final Relationship relationship,
+99 |                             final double value) {
+100 |         this.coefficients = coefficients;
+101 |         this.relationship = relationship;
+102 |         this.value        = value;
+103 |     }
+
+===== M0086 =====
+Signature: org.apache.commons.math3.linear.Array2DRowRealMatrix.setEntry(int,int,double)
+Source: src/main/java/org/apache/commons/math3/linear/Array2DRowRealMatrix.java
+Original range: 300-304
+Documentation:
+/** {@inheritDoc} */
+Method code:
+300 |     @Override
+301 |     public void setEntry(final int row, final int column, final double value) {
+302 |         MatrixUtils.checkMatrixIndex(this, row, column);
+303 |         data[row][column] = value;
+304 |     }
+
+===== M0087 =====
+Signature: org.apache.commons.math3.optimization.linear.LinearConstraint.getValue()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/LinearConstraint.java
+Original range: 183-185
+Documentation:
+/**
+     * Get the value of the constraint (right hand side).
+     * @return value of the constraint (right hand side)
+     */
+Method code:
+183 |     public double getValue() {
+184 |         return value;
+185 |     }
+
+===== M0088 =====
+Signature: org.apache.commons.math3.exception.MathIllegalStateException.getMessage()
+Source: src/main/java/org/apache/commons/math3/exception/MathIllegalStateException.java
+Original range: 78-81
+Documentation:
+/** {@inheritDoc} */
+Method code:
+78 |     @Override
+79 |     public String getMessage() {
+80 |         return context.getMessage();
+81 |     }
+
+===== M0089 =====
+Signature: org.apache.commons.math3.exception.util.LocalizedFormats.LocalizedFormats(String)
+Source: src/main/java/org/apache/commons/math3/exception/util/LocalizedFormats.java
+Original range: 366-368
+Documentation:
+/** Simple constructor.
+     * @param sourceFormat source English format to use when no
+     * localized version is available
+     */
+Method code:
+366 |     private LocalizedFormats(final String sourceFormat) {
+367 |         this.sourceFormat = sourceFormat;
+368 |     }
+
+===== M0090 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.ArrayRealVector(double[],boolean)
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 103-108
+Documentation:
+/**
+     * Create a new ArrayRealVector using the input array as the underlying
+     * data array.
+     * If an array is built specially in order to be embedded in a
+     * ArrayRealVector and not used directly, the {@code copyArray} may be
+     * set to {@code false}. This will prevent the copying and improve
+     * performance as no new array will be built and no data will be copied.
+     *
+     * @param d Data for the new vector.
+     * @param copyArray if {@code true}, the input array will be copied,
+     * otherwise it will be referenced.
+     * @throws NullArgumentException if {@code d} is {@code null}.
+     * @see #ArrayRealVector(double[])
+     */
+Method code:
+103 |     public ArrayRealVector(double[] d, boolean copyArray) {
+104 |         if (d == null) {
+105 |             throw new NullArgumentException();
+106 |         }
+107 |         data = copyArray ? d.clone() :  d;
+108 |     }
+
+===== M0091 =====
+Signature: org.apache.commons.math3.util.CompositeFormat.getDefaultNumberFormat(Locale)
+Source: src/main/java/org/apache/commons/math3/util/CompositeFormat.java
+Original range: 53-57
+Documentation:
+/**
+     * Create a default number format.  The default number format is based on
+     * {@link NumberFormat#getInstance(java.util.Locale)} with the only
+     * customizing that the maximum number of fraction digits is set to 2.
+     * @param locale the specific locale used by the format.
+     * @return the default number format specific to the given locale.
+     */
+Method code:
+53 |     public static NumberFormat getDefaultNumberFormat(final Locale locale) {
+54 |         final NumberFormat nf = NumberFormat.getInstance(locale);
+55 |         nf.setMaximumFractionDigits(10);
+56 |         return nf;
+57 |     }
+
+===== M0092 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.initializeColumnLabels()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 158-176
+Documentation:
+/**
+     * Initialize the labels for the columns.
+     */
+Method code:
+158 |     protected void initializeColumnLabels() {
+159 |       if (getNumObjectiveFunctions() == 2) {
+160 |         columnLabels.add("W");
+161 |       }
+162 |       columnLabels.add("Z");
+163 |       for (int i = 0; i < getOriginalNumDecisionVariables(); i++) {
+164 |         columnLabels.add("x" + i);
+165 |       }
+166 |       if (!restrictToNonNegative) {
+167 |         columnLabels.add(NEGATIVE_VAR_COLUMN_LABEL);
+168 |       }
+169 |       for (int i = 0; i < getNumSlackVariables(); i++) {
+170 |         columnLabels.add("s" + i);
+171 |       }
+172 |       for (int i = 0; i < getNumArtificialVariables(); i++) {
+173 |         columnLabels.add("a" + i);
+174 |       }
+175 |       columnLabels.add("RHS");
+176 |     }
+
+===== M0093 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexSolver.getPivotColumn(SimplexTableau)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexSolver.java
+Original range: 69-82
+Documentation:
+/**
+     * Returns the column with the most negative coefficient in the objective function row.
+     * @param tableau simple tableau for the problem
+     * @return column with the most negative coefficient
+     */
+Method code:
+69 |     private Integer getPivotColumn(SimplexTableau tableau) {
+70 |         double minValue = 0;
+71 |         Integer minPos = null;
+72 |         for (int i = tableau.getNumObjectiveFunctions(); i < tableau.getWidth() - 1; i++) {
+73 |             final double entry = tableau.getEntry(0, i);
+74 |             // check if the entry is strictly smaller than the current minimum
+75 |             // do not use a ulp/epsilon check
+76 |             if (entry < minValue) {
+77 |                 minValue = entry;
+78 |                 minPos = i;
+79 |             }
+80 |         }
+81 |         return minPos;
+82 |     }
+
+===== M0094 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.getOriginalNumDecisionVariables()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 551-553
+Documentation:
+/**
+     * Get the original number of decision variables.
+     * @return original number of decision variables
+     * @see #getNumDecisionVariables()
+     */
+Method code:
+551 |     protected final int getOriginalNumDecisionVariables() {
+552 |         return f.getCoefficients().getDimension();
+553 |     }
+
+===== M0095 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.getDimension()
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 599-602
+Documentation:
+/** {@inheritDoc} */
+Method code:
+599 |     @Override
+600 |     public int getDimension() {
+601 |         return data.length;
+602 |     }
+
+===== M0096 =====
+Signature: org.apache.commons.math3.optimization.linear.LinearConstraint.getCoefficients()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/LinearConstraint.java
+Original range: 167-169
+Documentation:
+/**
+     * Get the coefficients of the constraint (left hand side).
+     * @return coefficients of the constraint (left hand side)
+     */
+Method code:
+167 |     public RealVector getCoefficients() {
+168 |         return coefficients;
+169 |     }
+
+===== M0097 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.checkVectorDimensions(int)
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 741-746
+Documentation:
+/**
+     * Check if instance dimension is equal to some expected value.
+     *
+     * @param n Expected dimension.
+     * @throws DimensionMismatchException if the dimension is
+     * inconsistent with vector size.
+     */
+Method code:
+741 |     @Override
+742 |     protected void checkVectorDimensions(int n) {
+743 |         if (data.length != n) {
+744 |             throw new DimensionMismatchException(data.length, n);
+745 |         }
+746 |     }
+
+===== M0098 =====
+Signature: org.apache.commons.math3.optimization.linear.LinearObjectiveFunction.LinearObjectiveFunction(double[],double)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/LinearObjectiveFunction.java
+Original range: 57-59
+Documentation:
+/**
+     * @param coefficients The coefficients for the linear equation being optimized
+     * @param constantTerm The constant term of the linear equation
+     */
+Method code:
+57 |     public LinearObjectiveFunction(double[] coefficients, double constantTerm) {
+58 |         this(new ArrayRealVector(coefficients), constantTerm);
+59 |     }
+
+===== M0099 =====
+Signature: org.apache.commons.math3.exception.util.ExceptionContext.getMessage(Locale)
+Source: src/main/java/org/apache/commons/math3/exception/util/ExceptionContext.java
+Original range: 146-148
+Documentation:
+/**
+     * Gets the message in a specified locale.
+     *
+     * @param locale Locale in which the message should be translated.
+     * @return the localized message.
+     */
+Method code:
+146 |     public String getMessage(final Locale locale) {
+147 |         return buildMessage(locale, ": ");
+148 |     }
+
+===== M0100 =====
+Signature: org.apache.commons.math3.linear.ArrayRealVector.toArray()
+Source: src/main/java/org/apache/commons/math3/linear/ArrayRealVector.java
+Original range: 711-714
+Documentation:
+/** {@inheritDoc} */
+Method code:
+711 |     @Override
+712 |     public double[] toArray(){
+713 |         return data.clone();
+714 |     }
+
+===== M0101 =====
+Signature: org.apache.commons.math3.linear.AbstractRealMatrix.getRow(int)
+Source: src/main/java/org/apache/commons/math3/linear/AbstractRealMatrix.java
+Original range: 521-530
+Documentation:
+/** {@inheritDoc} */
+Method code:
+521 |     public double[] getRow(final int row) {
+522 |         MatrixUtils.checkRowIndex(this, row);
+523 |         final int nCols = getColumnDimension();
+524 |         final double[] out = new double[nCols];
+525 |         for (int i = 0; i < nCols; ++i) {
+526 |             out[i] = getEntry(row, i);
+527 |         }
+528 | 
+529 |         return out;
+530 |     }
+
+===== M0102 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.getInstance()
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 214-216
+Documentation:
+/**
+     * Returns the default real vector format for the current locale.
+     * @return the default real vector format.
+     */
+Method code:
+214 |     public static RealMatrixFormat getInstance() {
+215 |         return getInstance(Locale.getDefault());
+216 |     }
+
+===== M0103 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexSolver.doOptimize()
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexSolver.java
+Original range: 212-230
+Documentation:
+/** {@inheritDoc} */
+Method code:
+212 |     @Override
+213 |     public PointValuePair doOptimize()
+214 |         throws MaxCountExceededException, UnboundedSolutionException, NoFeasibleSolutionException {
+215 |         final SimplexTableau tableau =
+216 |             new SimplexTableau(getFunction(),
+217 |                                getConstraints(),
+218 |                                getGoalType(),
+219 |                                restrictToNonNegative(),
+220 |                                epsilon,
+221 |                                maxUlps);
+222 | 
+223 |         solvePhase1(tableau);
+224 |         tableau.dropPhase1Objective();
+225 | 
+226 |         while (!tableau.isOptimal()) {
+227 |             doIteration(tableau);
+228 |         }
+229 |         return tableau.getSolution();
+230 |     }
+
+===== M0104 =====
+Signature: org.apache.commons.math3.optimization.linear.SimplexTableau.normalizeConstraints(Collection<LinearConstraint>)
+Source: src/main/java/org/apache/commons/math3/optimization/linear/SimplexTableau.java
+Original range: 251-257
+Documentation:
+/**
+     * Get new versions of the constraints which have positive right hand sides.
+     * @param originalConstraints original (not normalized) constraints
+     * @return new versions of the constraints
+     */
+Method code:
+251 |     public List<LinearConstraint> normalizeConstraints(Collection<LinearConstraint> originalConstraints) {
+252 |         List<LinearConstraint> normalized = new ArrayList<LinearConstraint>();
+253 |         for (LinearConstraint constraint : originalConstraints) {
+254 |             normalized.add(normalize(constraint));
+255 |         }
+256 |         return normalized;
+257 |     }
+
+===== M0105 =====
+Signature: org.apache.commons.math3.linear.RealVectorFormat.getInstance(Locale)
+Source: src/main/java/org/apache/commons/math3/linear/RealVectorFormat.java
+Original range: 170-172
+Documentation:
+/**
+     * Returns the default real vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the real vector format specific to the given locale.
+     */
+Method code:
+170 |     public static RealVectorFormat getInstance(final Locale locale) {
+171 |         return new RealVectorFormat(CompositeFormat.getDefaultNumberFormat(locale));
+172 |     }
+
+===== M0106 =====
+Signature: org.apache.commons.math3.linear.RealMatrixFormat.RealMatrixFormat(String,String,String,String,String,String,NumberFormat)
+Source: src/main/java/org/apache/commons/math3/linear/RealMatrixFormat.java
+Original range: 130-143
+Documentation:
+/**
+     * Create an instance with custom prefix, suffix, separator and format
+     * for components.
+     * @param prefix prefix to use instead of the default "{"
+     * @param suffix suffix to use instead of the default "}"
+     * @param rowPrefix row prefix to use instead of the default "{"
+     * @param rowSuffix row suffix to use instead of the default "}"
+     * @param rowSeparator tow separator to use instead of the default ";"
+     * @param columnSeparator column separator to use instead of the default ", "
+     * @param format the custom format for components.
+     */
+Method code:
+130 |     public RealMatrixFormat(final String prefix, final String suffix,
+131 |                             final String rowPrefix, final String rowSuffix,
+132 |                             final String rowSeparator, final String columnSeparator,
+133 |                             final NumberFormat format) {
+134 |         this.prefix            = prefix;
+135 |         this.suffix            = suffix;
+136 |         this.rowPrefix         = rowPrefix;
+137 |         this.rowSuffix         = rowSuffix;
+138 |         this.rowSeparator      = rowSeparator;
+139 |         this.columnSeparator   = columnSeparator;
+140 |         this.format            = format;
+141 |         // disable grouping to prevent parsing problems
+142 |         this.format.setGroupingUsed(false);
+143 |     }
+
+===== M0107 =====
+Signature: org.apache.commons.math3.exception.MaxCountExceededException.MaxCountExceededException(Number)
+Source: src/main/java/org/apache/commons/math3/exception/MaxCountExceededException.java
+Original range: 41-43
+Documentation:
+/**
+     * Construct the exception.
+     *
+     * @param max Maximum.
+     */
+Method code:
+41 |     public MaxCountExceededException(Number max) {
+42 |         this(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
+43 |     }
+

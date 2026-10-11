@@ -1,0 +1,114 @@
+===== M0001 =====
+Signature: org.apache.commons.lang3.text.translate.NumericEntityUnescaper.translate(CharSequence,int,Writer)
+Source: src/main/java/org/apache/commons/lang3/text/translate/NumericEntityUnescaper.java
+Original range: 34-67
+Documentation:
+/**
+     * {@inheritDoc}
+     */
+Method code:
+34 |     @Override
+35 |     public int translate(CharSequence input, int index, Writer out) throws IOException {
+36 |         // TODO: Protect from ArrayIndexOutOfBounds
+37 |         if(input.charAt(index) == '&' && input.charAt(index + 1) == '#') {
+38 |             int start = index + 2;
+39 |             boolean isHex = false;
+40 | 
+41 |             char firstChar = input.charAt(start);
+42 |             if(firstChar == 'x' || firstChar == 'X') {
+43 |                 start++;
+44 |                 isHex = true;
+45 |             }
+46 | 
+47 |             int end = start;
+48 |             while(input.charAt(end) != ';') {
+49 |                 end++;
+50 |             }
+51 | 
+52 |             int entityValue;
+53 |             try {
+54 |                 if(isHex) {
+55 |                     entityValue = Integer.parseInt(input.subSequence(start, end).toString(), 16);
+56 |                 } else {
+57 |                     entityValue = Integer.parseInt(input.subSequence(start, end).toString(), 10);
+58 |                 }
+59 |             } catch(NumberFormatException nfe) {
+60 |                 return 0;
+61 |             }
+62 | 
+63 |                 out.write(entityValue);
+64 |             return 2 + (end - start) + (isHex ? 1 : 0) + 1;
+65 |         }
+66 |         return 0;
+67 |     }
+
+===== M0002 =====
+Signature: org.apache.commons.lang3.text.translate.CharSequenceTranslator.translate(CharSequence,Writer)
+Source: src/main/java/org/apache/commons/lang3/text/translate/CharSequenceTranslator.java
+Original range: 76-105
+Documentation:
+/**
+     * Translate an input onto a Writer. This is intentionally final as its algorithm is 
+     * tightly coupled with the abstract method of this class. 
+     *
+     * @param input CharSequence that is being translated
+     * @param out Writer to translate the text to
+     * @throws IOException if and only if the Writer produces an IOException
+     */
+Method code:
+76 |     public final void translate(CharSequence input, Writer out) throws IOException {
+77 |         if (out == null) {
+78 |             throw new IllegalArgumentException("The Writer must not be null");
+79 |         }
+80 |         if (input == null) {
+81 |             return;
+82 |         }
+83 |         int sz = Character.codePointCount(input, 0, input.length());
+84 |         for (int i = 0; i < sz; i++) {
+85 | 
+86 |             // consumed is the number of codepoints consumed
+87 |             int consumed = translate(input, i, out);
+88 | 
+89 |             if(consumed == 0) { 
+90 |                 out.write( Character.toChars( Character.codePointAt(input, i) ) );
+91 |             } else {
+92 |                 // contract with translators is that they have to understand codepoints and they just took care of a surrogate pair
+93 |                 for(int j=0; j<consumed; j++) {
+94 |                     if(i < sz - 2) {
+95 |                         i += Character.charCount( Character.codePointAt(input, i) );
+96 |                     } else {
+97 |                         // If the String ends with a high surrogate, just add the 1 and don't worry about such things
+98 |                         i++;
+99 |                     }
+100 |                 }
+101 |                 // for loop will increment 1 anyway, so remove 1 to account for that
+102 |                 i--;
+103 |             }
+104 |         }
+105 |     }
+
+===== M0003 =====
+Signature: org.apache.commons.lang3.text.translate.CharSequenceTranslator.translate(CharSequence)
+Source: src/main/java/org/apache/commons/lang3/text/translate/CharSequenceTranslator.java
+Original range: 53-65
+Documentation:
+/**
+     * Helper for non-Writer usage. 
+     * @param input CharSequence to be translated
+     * @return String output of translation
+     */
+Method code:
+53 |     public final String translate(CharSequence input) {
+54 |         if (input == null) {
+55 |             return null;
+56 |         }
+57 |         try {
+58 |             StringWriter writer = new StringWriter(input.length() * 2);  // TODO: Make the 2 part of the API???
+59 |             translate(input, writer);
+60 |             return writer.toString();
+61 |         } catch (IOException ioe) {
+62 |             // this should never ever happen while writing to a StringWriter
+63 |             throw new RuntimeException(ioe);
+64 |         }
+65 |     }
+
